@@ -43,7 +43,7 @@
                             </div>
                         </li>
                     </ul>
-                    <a href="{{ url('/wishlist') }}" class="text-decoration-none px-1 py-1"
+                    <a href="{{ url('/wishlist') }}" class="text-decoration-none p-1"
                         style="text-decoration: none;">
                         <i class="fa-regular fa-bookmark" style="color: #ff0060;"></i>
                     </a>
