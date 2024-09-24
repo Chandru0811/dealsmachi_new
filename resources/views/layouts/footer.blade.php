@@ -5,9 +5,9 @@
                 <div class="row justify-content-between">
                     <!-- Logo and Social Media Icons -->
                     <div class="col-md-3 text-md-start text-center mb-4 mb-md-0">
-                        <div class="dealslah-text">
-                            <p class="text-light fw-medium" style="font-size: 1.55rem">
-                                DEALSMACCHI !
+                        <div class="dealsmachi-text">
+                            <p class="text-light fw-medium" style="font-size: 1.5rem">
+                                DEALSMACHI
                             </p>
                         </div>
                         <div class="social-icons">
@@ -21,8 +21,6 @@
                             <a href="https://www.youtube.com/channel/UCIbNIWhaDnRs-gFuJ0sTNCQ/videos"
                                 class="text-decoration-none me-2"><i class="fab fa-youtube"
                                     style="font-size: 20px"></i></a>
-                            <a href="https://www.tiktok.com/@ecsaio" class="text-decoration-none me-2"><i
-                                    class="fab fa-tiktok" style="font-size: 20px"></i></a>
                             <a href="https://x.com/ecscloudinfote2" class="text-decoration-none"><i
                                     class="fab fa-x-twitter" style="font-size: 20px"></i></a>
                         </div>

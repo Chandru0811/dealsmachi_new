@@ -5,8 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     @section('head_links')
-        <title>Dealslah – Dealslah | Terms And Conditions</title>
-        <meta name="description" content="Terms And Conditions for Dealslah." />
+        <title>DealsMachi – DealsMachi | Terms And Conditions</title>
+        <meta name="description" content="Terms And Conditions for DealsMachi." />
         <link rel="canonical" href="https://dealslah.com/terms_conditions" />
         <link rel="icon" href="{{ asset('assets/images/home/favicon.ico') }}" />
 
@@ -35,17 +35,17 @@
     <section class="home-section">
         @include('layouts.header')
         <div class="container home-content" style="margin-top: 100px">
-            <h1>Terms and Conditions for Dealslah</h1>
+            <h1>Terms and Conditions for DealsMachi</h1>
             <div class="mt-5">
                 <h2>1. Introduction</h2>
                 <ul>
                     <li>
-                        <span class="fw-bold">Agreement :</span>This agreement governs your use of Dealslah, a website
+                        <span class="fw-bold">Agreement :</span>This agreement governs your use of DealsMachi, a website
                         that
                         provides deals and offers from various merchants.
                     </li>
                     <li>
-                        <span class="fw-bold">Acceptance :</span> By using Dealslah, you agree to these terms and
+                        <span class="fw-bold">Acceptance :</span> By using DealsMachi, you agree to these terms and
                         conditions.
                     </li>
                 </ul>
@@ -55,7 +55,7 @@
                 <ul>
                     <li>
                         <span class="fw-bold">Registration :</span>You may need to create an account to access certain
-                        features of Dealslah.
+                        features of DealsMachi.
                     </li>
                     <li>
                         <span class="fw-bold">Account Information :</span> You agree to provide accurate and up-to-date
@@ -73,10 +73,10 @@
                 <ul>
                     <li>
                         <span class="fw-bold">Accuracy :</span>While we strive for accuracy, we cannot guarantee the
-                        accuracy or completeness of the deals and offers listed on Dealslah
+                        accuracy or completeness of the deals and offers listed on DealsMachi
                     </li>
                     <li>
-                        <span class="fw-bold">Merchant Responsibility :</span>Dealslah is not responsible for the
+                        <span class="fw-bold">Merchant Responsibility :</span>DealsMachi is not responsible for the
                         quality,
                         availability, or delivery of products or services offered by merchants.
                     </li>
@@ -92,7 +92,7 @@
                         <span class="fw-bold">Prohibited Conduct :</span>You agree not to:
                         <ul>
                             <li>
-                                Use Dealslah for any unlawful or harmful purpose.
+                                Use DealsMachi for any unlawful or harmful purpose.
                             </li>
                             <li>
                                 Post or transmit any offensive, harmful, or misleading content.
@@ -104,7 +104,7 @@
                     </li>
                     <li>
                         <span class="fw-bold">Intellectual Property:</span>
-                        You acknowledge that Dealslah and its content are
+                        You acknowledge that DealsMachi and its content are
                         protected by intellectual property rights.
                     </li>
                 </ul>
@@ -114,12 +114,12 @@
                 <ul>
                     <li>
                         <span class="fw-bold">No Warranty:</span>
-                        Dealslah provides the website on an "as is" basis without
+                        DealsMachi provides the website on an "as is" basis without
                         warranties.
                     </li>
                     <li>
                         <span class="fw-bold">Liability:</span>
-                        Dealslah shall not be liable for any indirect, incidental, or
+                        DealsMachi shall not be liable for any indirect, incidental, or
                         consequential damages arising from your use of the website.
                     </li>
                 </ul>
@@ -129,7 +129,7 @@
                 <ul>
                     <li>
                         <span class="fw-bold">Indemnify:</span>
-                        You agree to indemnify and hold Dealslah harmless from any
+                        You agree to indemnify and hold DealsMachi harmless from any
                         claims arising from your use of the website.
                     </li>
                 </ul>
@@ -138,9 +138,9 @@
                 <h2>7. Governing</h2>
                 <ul>
                     <li>
-                        <span class="fw-bold">Singapore Law:</span>
+                        <span class="fw-bold">Chennai Law:</span>
                         This agreement shall be governed by and construed in
-                        accordance with the laws of Singapore.
+                        accordance with the laws of Chennai.
                     </li>
                 </ul>
             </div>
@@ -149,7 +149,7 @@
                 <ul>
                     <li>
                         <span class="fw-bold">Modifications:</span>
-                        Dealslah may modify these terms and conditions from
+                        DealsMachi may modify these terms and conditions from
                         time to time.
                     </li>
                     <li>
@@ -164,7 +164,7 @@
                     <li>
                         <span class="fw-bold">Contact:</span>
                         For inquiries or concerns, please contact us at
-                        mailto:info@dealslah.com
+                        mailto:info@dealsmachi.com
                     </li>
                 </ul>
                 <h2>Additional Considerations:</h2>

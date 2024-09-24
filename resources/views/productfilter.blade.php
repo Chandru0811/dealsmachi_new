@@ -5,9 +5,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     @section('head_links')
-        <title>Dealslah Shop Smart, Save Big !</title>
+        <title>DealsMachi Shop Smart, Save Big !</title>
         <link rel="canonical" href="https://dealslah.com/productfilter" />
-        <meta name="description" content="Dealslah Shop Smart, Save Big!" />
+        <meta name="description" content="DealsMachi Shop Smart, Save Big!" />
         <link rel="icon" href="{{ asset('assets/images/home/favicon.ico') }}" />
 
         <!-- Vendor CSS Files -->
@@ -239,28 +239,28 @@
                                         <input class="form-check-input" type="checkbox" value=""
                                             id="priceFilter1">
                                         <label class="form-check-label categoryLable" for="priceFilter1">
-                                            $0.00 - $150.00
+                                            ₹0.00 - ₹150.00
                                         </label>
                                     </div>
                                     <div class="form-check pt-3">
                                         <input class="form-check-input" type="checkbox" value=""
                                             id="priceFilter2">
                                         <label class="form-check-label categoryLable" for="priceFilter2">
-                                            $150.00 - $350.00
+                                            ₹150.00 - ₹350.00
                                         </label>
                                     </div>
                                     <div class="form-check pt-3">
                                         <input class="form-check-input" type="checkbox" value=""
                                             id="priceFilter3">
                                         <label class="form-check-label categoryLable" for="priceFilter3">
-                                            $150.00 - $504.00
+                                            ₹150.00 - ₹504.00
                                         </label>
                                     </div>
                                     <div class="form-check pt-3">
                                         <input class="form-check-input" type="checkbox" value=""
                                             id="priceFilter4">
                                         <label class="form-check-label categoryLable" for="priceFilter4">
-                                            $450.00 +
+                                            ₹450.00 +
                                         </label>
                                     </div>
                                 </div>
@@ -418,29 +418,29 @@
                                 <div class="textline2"></div>
                             </div>
                             <div class="form-check pt-3">
-                                <input class="form-check-input" type="checkbox" value="" id="$0.00 - $150.00">
-                                <label class="form-check-label categoryLable" for="$0.00 - $150.00">
-                                    $0.00 - $150.00
+                                <input class="form-check-input" type="checkbox" value="" id="₹0.00 - ₹150.00">
+                                <label class="form-check-label categoryLable" for="₹0.00 - ₹150.00">
+                                    ₹0.00 - ₹150.00
                                 </label>
                             </div>
                             <div class="form-check pt-3">
                                 <input class="form-check-input" type="checkbox" value=""
-                                    id="$150.00 - $350.00">
-                                <label class="form-check-label categoryLable" for="$150.00 - $350.00">
-                                    $150.00 - $350.00
+                                    id="₹150.00 - ₹350.00">
+                                <label class="form-check-label categoryLable" for="₹150.00 - ₹350.00">
+                                    ₹150.00 - ₹350.00
                                 </label>
                             </div>
                             <div class="form-check pt-3">
                                 <input class="form-check-input" type="checkbox" value=""
-                                    id="$150.00 - $504.00">
-                                <label class="form-check-label categoryLable" for="$150.00 - $504.00">
-                                    $150.00 - $504.00
+                                    id="₹150.00 - ₹504.00">
+                                <label class="form-check-label categoryLable" for="₹150.00 - ₹504.00">
+                                    ₹150.00 - ₹504.00
                                 </label>
                             </div>
                             <div class="form-check pt-3">
-                                <input class="form-check-input" type="checkbox" value="" id=" $450.00 +">
-                                <label class="form-check-label categoryLable" for=" $450.00 +">
-                                    $450.00 +
+                                <input class="form-check-input" type="checkbox" value="" id=" ₹450.00 +">
+                                <label class="form-check-label categoryLable" for=" ₹450.00 +">
+                                    ₹450.00 +
                                 </label>
                             </div>
                         </div>
@@ -477,23 +477,23 @@
                                             <i class="fa-solid fa-star" style="color: #ffc200"></i>
                                         </span>
                                         <p class="px-3 fw-normal">
-                                            Dealslah, deals that matter in Singapore! Get the best of
+                                            DealsMachi, deals that matter in Chennai! Get the best of
                                             Electronics, Food, Travel, Makeup, Spa and other hot deals.
                                         </p>
                                         <div class="card-divider"></div>
                                         <p class="px-3 fw-medium d-flex align-items-center justify-content-between"
-                                            style="color:  #ff0060 "><span>$150 </span><span
-                                                class="mx-3 px-2 couponBadge">DEALSLAH25</span></p>
+                                            style="color:  #ff0060 "><span>₹150 </span><span
+                                                class="mx-3 px-2 couponBadge">DEALSMACHI25</span></p>
                                         <div class="card-divider"></div>
                                         <div class="px-3">
                                             <p>Regular Price</p>
-                                            <p><s>$200 </s></p>
+                                            <p><s>₹200 </s></p>
                                         </div>
                                         <div class="card-divider"></div>
                                         <p class="px-3 fw-medium"
                                             style="color:  #ff0060 ;font-weight: 400 !important;"><i
                                                 class="fa-solid fa-location-dot"></i>
-                                            &nbsp;Singapore</p>
+                                            &nbsp;Chennai</p>
                                     </div>
                                 </div>
                             </a>
@@ -520,23 +520,23 @@
                                             <i class="fa-solid fa-star" style="color: #ffc200"></i>
                                         </span>
                                         <p class="px-3 fw-normal">
-                                            Dealslah, deals that matter in Singapore! Get the best of
+                                            DealsMachi, deals that matter in Chennai! Get the best of
                                             Electronics, Food, Travel, Makeup, Spa and other hot deals.
                                         </p>
                                         <div class="card-divider"></div>
                                         <p class="px-3 fw-medium d-flex align-items-center justify-content-between"
-                                            style="color:  #ff0060 "><span>$150 </span><span
-                                                class="mx-3 px-2 couponBadge">DEALSLAH25</span></p>
+                                            style="color:  #ff0060 "><span>₹150 </span><span
+                                                class="mx-3 px-2 couponBadge">DEALSMACHI25</span></p>
                                         <div class="card-divider"></div>
                                         <div class="px-3">
                                             <p>Regular Price</p>
-                                            <p><s>$200 </s></p>
+                                            <p><s>₹200 </s></p>
                                         </div>
                                         <div class="card-divider"></div>
                                         <p class="px-3 fw-medium"
                                             style="color:  #ff0060 ;font-weight: 400 !important;";font-weight: 400
                                             !important;><i class="fa-solid fa-location-dot"></i>
-                                            &nbsp;Singapore</p>
+                                            &nbsp;Chennai</p>
                                     </div>
                                 </div>
                             </a>
@@ -563,23 +563,23 @@
                                             <i class="fa-solid fa-star" style="color: #ffc200"></i>
                                         </span>
                                         <p class="px-3 fw-normal">
-                                            Dealslah, deals that matter in Singapore! Get the best of
+                                            DealsMachi, deals that matter in Chennai! Get the best of
                                             Electronics, Food, Travel, Makeup, Spa and other hot deals.
                                         </p>
                                         <div class="card-divider"></div>
                                         <p class="px-3 fw-medium d-flex align-items-center justify-content-between"
-                                            style="color:  #ff0060 "><span>$150 </span><span
-                                                class="mx-3 px-2 couponBadge">DEALSLAH25</span></p>
+                                            style="color:  #ff0060 "><span>₹150 </span><span
+                                                class="mx-3 px-2 couponBadge">DEALSMACHI25</span></p>
                                         <div class="card-divider"></div>
                                         <div class="px-3">
                                             <p>Regular Price</p>
-                                            <p><s>$200 </s></p>
+                                            <p><s>₹200 </s></p>
                                         </div>
                                         <div class="card-divider"></div>
                                         <p class="px-3 fw-medium"
                                             style="color:  #ff0060 ;font-weight: 400 !important;"><i
                                                 class="fa-solid fa-location-dot"></i>
-                                            &nbsp;Singapore</p>
+                                            &nbsp;Chennai</p>
                                     </div>
                                 </div>
                             </a>
@@ -606,23 +606,23 @@
                                             <i class="fa-solid fa-star" style="color: #ffc200"></i>
                                         </span>
                                         <p class="px-3 fw-normal">
-                                            Dealslah, deals that matter in Singapore! Get the best of
+                                            DealsMachi, deals that matter in Chennai! Get the best of
                                             Electronics, Food, Travel, Makeup, Spa and other hot deals.
                                         </p>
                                         <div class="card-divider"></div>
                                         <p class="px-3 fw-medium d-flex align-items-center justify-content-between"
-                                            style="color:  #ff0060 "><span>$150 </span><span
-                                                class="mx-3 px-2 couponBadge">DEALSLAH25</span></p>
+                                            style="color:  #ff0060 "><span>₹150 </span><span
+                                                class="mx-3 px-2 couponBadge">DEALSMACHI25</span></p>
                                         <div class="card-divider"></div>
                                         <div class="px-3">
                                             <p>Regular Price</p>
-                                            <p><s>$200 </s></p>
+                                            <p><s>₹200 </s></p>
                                         </div>
                                         <div class="card-divider"></div>
                                         <p class="px-3 fw-medium"
                                             style="color:  #ff0060 ;font-weight: 400 !important;"><i
                                                 class="fa-solid fa-location-dot"></i>
-                                            &nbsp;Singapore</p>
+                                            &nbsp;Chennai</p>
                                     </div>
                                 </div>
                             </a>
@@ -650,23 +650,23 @@
                                             <i class="fa-solid fa-star" style="color: #ffc200"></i>
                                         </span>
                                         <p class="px-3 fw-normal">
-                                            Dealslah, deals that matter in Singapore! Get the best of
+                                            DealsMachi, deals that matter in Chennai! Get the best of
                                             Electronics, Food, Travel, Makeup, Spa and other hot deals.
                                         </p>
                                         <div class="card-divider"></div>
                                         <p class="px-3 fw-medium d-flex align-items-center justify-content-between"
-                                            style="color:  #ff0060 "><span>$150 </span><span
-                                                class="mx-3 px-2 couponBadge">DEALSLAH25</span></p>
+                                            style="color:  #ff0060 "><span>₹150 </span><span
+                                                class="mx-3 px-2 couponBadge">DEALSMACHI25</span></p>
                                         <div class="card-divider"></div>
                                         <div class="px-3">
                                             <p>Regular Price</p>
-                                            <p><s>$200 </s></p>
+                                            <p><s>₹200 </s></p>
                                         </div>
                                         <div class="card-divider"></div>
                                         <p class="px-3 fw-medium"
                                             style="color:  #ff0060 ;font-weight: 400 !important;"><i
                                                 class="fa-solid fa-location-dot"></i>
-                                            &nbsp;Singapore</p>
+                                            &nbsp;Chennai</p>
                                     </div>
                                 </div>
                             </a>
@@ -694,23 +694,23 @@
                                             <i class="fa-solid fa-star" style="color: #ffc200"></i>
                                         </span>
                                         <p class="px-3 fw-normal">
-                                            Dealslah, deals that matter in Singapore! Get the best of
+                                            DealsMachi, deals that matter in Chennai! Get the best of
                                             Electronics, Food, Travel, Makeup, Spa and other hot deals.
                                         </p>
                                         <div class="card-divider"></div>
                                         <p class="px-3 fw-medium d-flex align-items-center justify-content-between"
-                                            style="color:  #ff0060 "><span>$150 </span><span
-                                                class="mx-3 px-2 couponBadge">DEALSLAH25</span></p>
+                                            style="color:  #ff0060 "><span>₹150 </span><span
+                                                class="mx-3 px-2 couponBadge">DEALSMACHI25</span></p>
                                         <div class="card-divider"></div>
                                         <div class="px-3">
                                             <p>Regular Price</p>
-                                            <p><s>$200 </s></p>
+                                            <p><s>₹200 </s></p>
                                         </div>
                                         <div class="card-divider"></div>
                                         <p class="px-3 fw-medium"
                                             style="color:  #ff0060 ;font-weight: 400 !important;"><i
                                                 class="fa-solid fa-location-dot"></i>
-                                            &nbsp;Singapore</p>
+                                            &nbsp;Chennai</p>
                                     </div>
                                 </div>
                             </a>
@@ -738,23 +738,23 @@
                                             <i class="fa-solid fa-star" style="color: #ffc200"></i>
                                         </span>
                                         <p class="px-3 fw-normal">
-                                            Dealslah, deals that matter in Singapore! Get the best of
+                                            DealsMachi, deals that matter in Chennai! Get the best of
                                             Electronics, Food, Travel, Makeup, Spa and other hot deals.
                                         </p>
                                         <div class="card-divider"></div>
                                         <p class="px-3 fw-medium d-flex align-items-center justify-content-between"
-                                            style="color:  #ff0060 "><span>$150 </span><span
-                                                class="mx-3 px-2 couponBadge">DEALSLAH25</span></p>
+                                            style="color:  #ff0060 "><span>₹150 </span><span
+                                                class="mx-3 px-2 couponBadge">DEALSMACHI25</span></p>
                                         <div class="card-divider"></div>
                                         <div class="px-3">
                                             <p>Regular Price</p>
-                                            <p><s>$200 </s></p>
+                                            <p><s>₹200 </s></p>
                                         </div>
                                         <div class="card-divider"></div>
                                         <p class="px-3 fw-medium"
                                             style="color:  #ff0060 ;font-weight: 400 !important;"><i
                                                 class="fa-solid fa-location-dot"></i>
-                                            &nbsp;Singapore</p>
+                                            &nbsp;Chennai</p>
                                     </div>
                                 </div>
                             </a>
@@ -781,23 +781,23 @@
                                             <i class="fa-solid fa-star" style="color: #ffc200"></i>
                                         </span>
                                         <p class="px-3 fw-normal">
-                                            Dealslah, deals that matter in Singapore! Get the best of
+                                            DealsMachi, deals that matter in Chennai! Get the best of
                                             Electronics, Food, Travel, Makeup, Spa and other hot deals.
                                         </p>
                                         <div class="card-divider"></div>
                                         <p class="px-3 fw-medium d-flex align-items-center justify-content-between"
-                                            style="color:  #ff0060 "><span>$150</span><span
-                                                class="mx-3 px-2 couponBadge">DEALSLAH25</span></p>
+                                            style="color:  #ff0060 "><span>₹150</span><span
+                                                class="mx-3 px-2 couponBadge">DEALSMACHI25</span></p>
                                         <div class="card-divider"></div>
                                         <div class="px-3">
                                             <p>Regular Price</p>
-                                            <p><s>$200</s></p>
+                                            <p><s>₹200</s></p>
                                         </div>
                                         <div class="card-divider"></div>
                                         <p class="px-3 fw-medium"
                                             style="color:  #ff0060 ;font-weight: 400 !important;"><i
                                                 class="fa-solid fa-location-dot"></i>
-                                            &nbsp;Singapore</p>
+                                            &nbsp;Chennai</p>
                                     </div>
                                 </div>
                             </a>
@@ -826,23 +826,23 @@
                                             <i class="fa-solid fa-star" style="color: #ffc200"></i>
                                         </span>
                                         <p class="px-3 fw-normal">
-                                            Dealslah, deals that matter in Singapore! Get the best of
+                                            DealsMachi, deals that matter in Chennai! Get the best of
                                             Electronics, Food, Travel, Makeup, Spa and other hot deals.
                                         </p>
                                         <div class="card-divider"></div>
                                         <p class="px-3 fw-medium d-flex align-items-center justify-content-between"
-                                            style="color:  #ff0060 "><span>$150</span><span
-                                                class="mx-3 px-2 couponBadge">DEALSLAH25</span></p>
+                                            style="color:  #ff0060 "><span>₹150</span><span
+                                                class="mx-3 px-2 couponBadge">DEALSMACHI25</span></p>
                                         <div class="card-divider"></div>
                                         <div class="px-3">
                                             <p>Regular Price</p>
-                                            <p><s>$200</s></p>
+                                            <p><s>₹200</s></p>
                                         </div>
                                         <div class="card-divider"></div>
                                         <p class="px-3 fw-medium"
                                             style="color:  #ff0060 ;font-weight: 400 !important;"><i
                                                 class="fa-solid fa-location-dot"></i>
-                                            &nbsp;Singapore</p>
+                                            &nbsp;Chennai</p>
                                     </div>
                                 </div>
                             </a>
@@ -869,23 +869,23 @@
                                             <i class="fa-solid fa-star" style="color: #ffc200"></i>
                                         </span>
                                         <p class="px-3 fw-normal">
-                                            Dealslah, deals that matter in Singapore! Get the best of
+                                            DealsMachi, deals that matter in Chennai! Get the best of
                                             Electronics, Food, Travel, Makeup, Spa and other hot deals.
                                         </p>
                                         <div class="card-divider"></div>
                                         <p class="px-3 fw-medium d-flex align-items-center justify-content-between"
-                                            style="color:  #ff0060 "><span>$150 </span><span
-                                                class="mx-3 px-2 couponBadge">DEALSLAH25</span></p>
+                                            style="color:  #ff0060 "><span>₹150 </span><span
+                                                class="mx-3 px-2 couponBadge">DEALSMACHI25</span></p>
                                         <div class="card-divider"></div>
                                         <div class="px-3">
                                             <p>Regular Price</p>
-                                            <p><s>$200 </s></p>
+                                            <p><s>₹200 </s></p>
                                         </div>
                                         <div class="card-divider"></div>
                                         <p class="px-3 fw-medium"
                                             style="color:  #ff0060 ;font-weight: 400 !important;"><i
                                                 class="fa-solid fa-location-dot"></i>
-                                            &nbsp;Singapore</p>
+                                            &nbsp;Chennai</p>
                                     </div>
                                 </div>
                             </a>
@@ -912,23 +912,23 @@
                                             <i class="fa-solid fa-star" style="color: #ffc200"></i>
                                         </span>
                                         <p class="px-3 fw-normal">
-                                            Dealslah, deals that matter in Singapore! Get the best of
+                                            DealsMachi, deals that matter in Chennai! Get the best of
                                             Electronics, Food, Travel, Makeup, Spa and other hot deals.
                                         </p>
                                         <div class="card-divider"></div>
                                         <p class="px-3 fw-medium d-flex align-items-center justify-content-between"
-                                            style="color:  #ff0060 "><span>$150 </span><span
-                                                class="mx-3 px-2 couponBadge">DEALSLAH25</span></p>
+                                            style="color:  #ff0060 "><span>₹150 </span><span
+                                                class="mx-3 px-2 couponBadge">DEALSMACHI25</span></p>
                                         <div class="card-divider"></div>
                                         <div class="px-3">
                                             <p>Regular Price</p>
-                                            <p><s>$200 </s></p>
+                                            <p><s>₹200 </s></p>
                                         </div>
                                         <div class="card-divider"></div>
                                         <p class="px-3 fw-medium"
                                             style="color:  #ff0060 ;font-weight: 400 !important;"><i
                                                 class="fa-solid fa-location-dot"></i>
-                                            &nbsp;Singapore</p>
+                                            &nbsp;Chennai</p>
                                     </div>
                                 </div>
                             </a>
@@ -955,23 +955,23 @@
                                             <i class="fa-solid fa-star" style="color: #ffc200"></i>
                                         </span>
                                         <p class="px-3 fw-normal">
-                                            Dealslah, deals that matter in Singapore! Get the best of
+                                            DealsMachi, deals that matter in Chennai! Get the best of
                                             Electronics, Food, Travel, Makeup, Spa and other hot deals.
                                         </p>
                                         <div class="card-divider"></div>
                                         <p class="px-3 fw-medium d-flex align-items-center justify-content-between"
-                                            style="color:  #ff0060 "><span>$150 </span><span
-                                                class="mx-3 px-2 couponBadge">DEALSLAH25</span></p>
+                                            style="color:  #ff0060 "><span>₹150 </span><span
+                                                class="mx-3 px-2 couponBadge">DEALSMACHI25</span></p>
                                         <div class="card-divider"></div>
                                         <div class="px-3">
                                             <p>Regular Price</p>
-                                            <p><s>$200 </s></p>
+                                            <p><s>₹200 </s></p>
                                         </div>
                                         <div class="card-divider"></div>
                                         <p class="px-3 fw-medium"
                                             style="color:  #ff0060 ;font-weight: 400 !important;"><i
                                                 class="fa-solid fa-location-dot"></i>
-                                            &nbsp;Singapore</p>
+                                            &nbsp;Chennai</p>
                                     </div>
                                 </div>
                             </a>

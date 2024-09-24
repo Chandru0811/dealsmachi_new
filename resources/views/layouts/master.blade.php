@@ -5,9 +5,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     @section('head_links')
-        <title>Dealslah – Deals that matter in Singapore</title>
+        <title>DealsMachi – Deals that matter in Chennai</title>
         <meta name="description"
-            content="Get the best deals in Singapore. Electronics, Beauty, Travel and every category you can imagine! Get our apps and stay ahead of every else in deals." />
+            content="Get the best deals in Chennai. Electronics, Beauty, Travel and every category you can imagine! Get our apps and stay ahead of every else in deals." />
         <link rel="canonical" href="https://dealslah.com/" />
         <link rel="icon" href="{{ asset('assets/images/home/favicon.ico') }}" />
 

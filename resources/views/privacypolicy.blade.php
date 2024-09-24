@@ -5,8 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     @section('head_links')
-        <title>Dealslah – Dealslah Machi | Privacy Policy</title>
-        <meta name="description" content="Privacy Policy for Dealslah Machi." />
+        <title>DealsMachi – DealsMachi Machi | Privacy Policy</title>
+        <meta name="description" content="Privacy Policy for DealsMachi Machi." />
         <link rel="canonical" href="https://dealslah.com/privacyPolicy" />
         <link rel="icon" href="{{ asset('assets/images/home/favicon.ico') }}" />
 
@@ -143,14 +143,14 @@
                 <h2>9. Contact Us</h2>
                 <p>If you have any questions about this Privacy Policy or our practices, please
                     contact us at:</p>
-                <br / <br/ <div>
+                <br/> <br/> <div>
                 <p class="fw-medium">Cloud ECS Infotech Pvt Ltd</p>
                 <p class="fw-medium">766, Sakthi Tower Ln,</p>
                 <p class="fw-medium">Anna Salai,</p>
                 <p class="fw-medium">Thousand Lights,</p>
                 <p class="fw-medium">Chennai,</p>
                 <p class="fw-medium">Tamil Nadu 600002</p>
-                <p mailto:class="fw-medium">info@dealslahmachi.com</p>
+                <p mailto:class="fw-medium">info@dealsmachi.com</p>
                 <p class="fw-medium">9361365818</p>
             </div>
         </div>

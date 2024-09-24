@@ -5,9 +5,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     @section('head_links')
-    <title>Dealslah Shop Smart, Save Big !</title>
+    <title>DealsMachi Shop Smart, Save Big !</title>
     <link rel="canonical" href="https://dealslah.com/productview" />
-    <meta name="description" content="Dealslah Shop Smart, Save Big!" />
+    <meta name="description" content="DealsMachi Shop Smart, Save Big!" />
 
     <link rel="icon" href="{{ asset('assets/images/home/favicon.ico') }}" />
 
