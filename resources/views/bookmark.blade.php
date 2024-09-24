@@ -45,7 +45,7 @@
                         <div class="card sub_topCard h-100">
                             <div style="min-height: 50px">
                                 <span class="badge trending-badge">EARLY BIRD</span>
-                                <img src="{{ asset('assets/images/home/card_image_1.png') }}"
+                                <img src="{{ asset('assets/images/home/card_image_1.webp') }}"
                                     class="img-fluid card-img-top1" alt="card_image" />
                             </div>
                             <div class="card-body card_section">
@@ -85,7 +85,7 @@
                         <div class="card sub_topCard h-100">
                             <div style="min-height: 50px">
                                 <span class="badge trending-badge">TRENDING</span>
-                                <img src="{{ asset('assets/images/home/card_image_3.png') }}"
+                                <img src="{{ asset('assets/images/home/card_image_3.webp') }}"
                                     class="img-fluid card-img-top1" alt="card_image" />
                             </div>
                             <div class="card-body card_section">
@@ -126,7 +126,7 @@
                         <div class="card sub_topCard h-100">
                             <div style="min-height: 50px">
                                 <span class="badge trending-badge">POPULAR</span>
-                                <img src="{{ asset('assets/images/home/card_image_2.png') }}"
+                                <img src="{{ asset('assets/images/home/card_image_2.webp') }}"
                                     class="img-fluid card-img-top1" alt="card_image" />
                             </div>
                             <div class="card-body card_section">
@@ -167,7 +167,7 @@
                         <div class="card sub_topCard h-100">
                             <div style="min-height: 50px">
                                 <span class="badge trending-badge">LIMITED TIME</span>
-                                <img src="{{ asset('assets/images/home/card_image_4.png') }}"
+                                <img src="{{ asset('assets/images/home/card_image_4.webp') }}"
                                     class="img-fluid card-img-top1" alt="card_image" />
                             </div>
                             <div class="card-body card_section">
@@ -208,7 +208,7 @@
                         <div class="card sub_topCard h-100">
                             <div style="min-height: 50px">
                                 <span class="badge trending-badge">LAST CHANCE</span>
-                                <img src="{{ asset('assets/images/home/kids_wear_2.png') }}"
+                                <img src="{{ asset('assets/images/home/kids_wear_2.webp') }}"
                                     class="img-fluid card-img-top1" alt="card_image" />
                             </div>
                             <div class="card-body card_section">
@@ -249,7 +249,7 @@
                         <div class="card sub_topCard h-100">
                             <div style="min-height: 50px">
                                 <span class="badge trending-badge">EARLY BIRD</span>
-                                <img src="{{ asset('assets/images/home/beauty2.png') }}"
+                                <img src="{{ asset('assets/images/home/beauty2.webp') }}"
                                     class="img-fluid card-img-top1" alt="card_image" />
                             </div>
                             <div class="card-body card_section">
@@ -289,7 +289,7 @@
                         <div class="card sub_topCard h-100">
                             <div style="min-height: 50px">
                                 <span class="badge trending-badge">TRENDING</span>
-                                <img src="{{ asset('assets/images/home/restaurant.png') }}"
+                                <img src="{{ asset('assets/images/home/restaurant.webp') }}"
                                     class="img-fluid card-img-top1" alt="card_image" />
                             </div>
                             <div class="card-body card_section">
@@ -329,7 +329,7 @@
                         <div class="card sub_topCard h-100">
                             <div style="min-height: 50px">
                                 <span class="badge trending-badge">POPULAR</span>
-                                <img src="{{ asset('assets/images/home/spa_two.png') }}"
+                                <img src="{{ asset('assets/images/home/spa_two.webp') }}"
                                     class="img-fluid card-img-top1" alt="card_image" />
                             </div>
                             <div class="card-body card_section">

@@ -100,7 +100,7 @@
                                         <div class="col-lg-5 col-12 d-flex flex-column justify-content-center">
                                             <div class="d-flex justify-content-between">
                                                 <p class="productViewStar" style="cursor: pointer">
-                                                    Click to Rate
+                                                    Rate Now
                                                     <span>
                                                         <i class="fa-solid fa-star" style="color: #fdbf46;"></i>
                                                         <i class="fa-solid fa-star" style="color: #fdbf46;"></i>
@@ -114,7 +114,7 @@
                                                         class="p-1 px-2" data-bs-toggle="tooltip"
                                                         data-bs-placement="top" title="Bookmark">
                                                         <i
-                                                            class="fa-regular fa-bookmark wishlist-icon"onclick="toggleBookmark(this)"></i>
+                                                            class="fa-regular fa-bookmark wishlist-icon" onclick="toggleBookmark(this)"></i>
                                                     </p>&nbsp;&nbsp;&nbsp;
                                                     <p style="border: 1px solid #0000004D; border-radius: 5px; height: fit-content;cursor:pointer"
                                                         class="p-1 px-2" data-bs-toggle="tooltip"
@@ -123,7 +123,7 @@
                                                     </p>
                                                 </div>
                                             </div>
-                                            <img src="{{ asset('assets/images/product_view/product_main_image.png') }}"
+                                            <img src="{{ asset('assets/images/product_view/product_main_image.webp') }}"
                                                 alt="Adverstiment" class="img-fluid">
                                         </div>
                                     </div>
@@ -189,20 +189,20 @@
                                         <!-- Photos Tab -->
                                         <div class="tab-pane sub-tabs fade" id="photos" role="tabpanel"
                                             aria-labelledby="photos-tab">
-                                            <p class="text-end text-primary add_photos"><i
+                                            <p class="text-end add_photos"><i
                                                     class="fa-solid fa-plus"></i> Add
                                                 Photos</p>
                                             <div class="row">
                                                 <div class="col-md-4 text-center">
-                                                    <img src="{{ asset('assets/images/product_view/product_view_1.png') }}"
+                                                    <img src="{{ asset('assets/images/product_view/product_view_1.webp') }}"
                                                         alt="Product View Image 1" class="img-fluid pb-3">
                                                 </div>
                                                 <div class="col-md-4 text-center">
-                                                    <img src="{{ asset('assets/images/product_view/product_view_2.png') }}"
+                                                    <img src="{{ asset('assets/images/product_view/product_view_2.webp') }}"
                                                         alt="Product View Image 2" class="img-fluid pb-3">
                                                 </div>
                                                 <div class="col-md-4 text-center">
-                                                    <img src="{{ asset('assets/images/product_view/product_view_3.png') }}"
+                                                    <img src="{{ asset('assets/images/product_view/product_view_3.webp') }}"
                                                         alt="Product View Image 3" class="img-fluid pb-3">
                                                 </div>
                                             </div>
@@ -248,7 +248,7 @@
                                                     <div class="card h-100 p-3">
                                                         <div class="row">
                                                             <div class="col-2">
-                                                                <img src="{{ asset('assets/images/product_view/profile.png') }}"
+                                                                <img src="{{ asset('assets/images/product_view/profile.webp') }}"
                                                                     alt="Profile 1" class="img-fluid">
                                                             </div>
                                                             <div class="col-10">
@@ -282,7 +282,7 @@
                                                     <div class="card h-100 p-3">
                                                         <div class="row">
                                                             <div class="col-2">
-                                                                <img src="{{ asset('assets/images/product_view/profile.png') }}"
+                                                                <img src="{{ asset('assets/images/product_view/profile.webp') }}"
                                                                     alt="Profile 1" class="img-fluid">
                                                             </div>
                                                             <div class="col-10">
@@ -314,7 +314,7 @@
                                                     <div class="card h-100 p-3">
                                                         <div class="row">
                                                             <div class="col-2">
-                                                                <img src="{{ asset('assets/images/product_view/profile.png') }}"
+                                                                <img src="{{ asset('assets/images/product_view/profile.webp') }}"
                                                                     alt="Profile 1" class="img-fluid">
                                                             </div>
                                                             <div class="col-10">
@@ -344,7 +344,7 @@
                                                     <div class="card h-100 p-3">
                                                         <div class="row">
                                                             <div class="col-2">
-                                                                <img src="{{ asset('assets/images/product_view/profile.png') }}"
+                                                                <img src="{{ asset('assets/images/product_view/profile.webp') }}"
                                                                     alt="Profile 1" class="img-fluid">
                                                             </div>
                                                             <div class="col-10">
@@ -376,7 +376,7 @@
                                                     <div class="card p-3">
                                                         <div class="row">
                                                             <div class="col-2">
-                                                                <img src="{{ asset('assets/images/product_view/profile.png') }}"
+                                                                <img src="{{ asset('assets/images/product_view/profile.webp') }}"
                                                                     alt="Profile 1" class="img-fluid">
                                                             </div>
                                                             <div class="col-10">
@@ -408,7 +408,7 @@
                                                     <div class="card p-3">
                                                         <div class="row">
                                                             <div class="col-2">
-                                                                <img src="{{ asset('assets/images/product_view/profile.png') }}"
+                                                                <img src="{{ asset('assets/images/product_view/profile.webp') }}"
                                                                     alt="Profile 1" class="img-fluid">
                                                             </div>
                                                             <div class="col-10">
@@ -439,7 +439,7 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            <a href="javascript:void(0);" id="read-more-btn">Read More</a>
+                                            <a href="javascript:void(0);" id="read-more-btn" style="color: #ff0060;">Read More</a>
                                         </div>
                                     </div>
                                 </div>
@@ -462,14 +462,14 @@
                                                 </div>
                                                 <hr>
                                                 <div class="row">
-                                                    <div class="col-md-12 col-lg-6 col-12">
+                                                    <div class="col-md-12 col-lg-5 col-5">
                                                         <a href="#" class="contactCard">
                                                             <i class="fa fa-location"
                                                                 style="color: #000;"></i>&nbsp;&nbsp;
                                                             Get Directions
                                                         </a>
                                                     </div>
-                                                    <div class="col-md-12 col-lg-6 col-12">
+                                                    <div class="col-md-12 col-lg-7 col-7">
                                                         <a href="#" class="contactCard">
                                                             <i class="fa-regular fa-envelope"
                                                                 style="color: #000;"></i>&nbsp;&nbsp;
@@ -495,7 +495,7 @@
                                             </div>
                                         </div>
                                         <div class="text-center">
-                                            <img src="{{ asset('assets/images/product_view/adverstiment.png') }}"
+                                            <img src="{{ asset('assets/images/product_view/adverstiment.webp') }}"
                                                 alt="Adverstiment" class="img-fluid">
                                         </div>
                                     </div>

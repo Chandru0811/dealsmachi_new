@@ -9,12 +9,11 @@
                          role="button" data-bs-toggle="dropdown" aria-expanded="false" style="cursor: pointer;">
                          <div class="icons">
                              <i class="fa-duotone fa-solid fa-laptop"
-                                 style="--fa-primary-color: #ff0060 ; --fa-secondary-color: #ff0060 ;"></i>
+                                 style="--fa-primary-color: #ff0060; --fa-secondary-color: #ff0060;"></i>
                          </div>
                          Electronics
                      </a>
-                     <ul class="dropdown-menu dropdown-menu-md-end" aria-labelledby="electronicsDropdown"
-                         style="cursor: pointer;">
+                     <ul class="dropdown-menu" aria-labelledby="electronicsDropdown" style="cursor: pointer;">
                          <li><a class="dropdown-item" href="{{ url('/products') }}" data-bs-toggle="tooltip"
                                  data-bs-placement="top" title="Coming Soon.....">Mobile Phones</a></li>
                          <li><a class="dropdown-item" href="{{ url('/products') }}">Laptops & Computers</a></li>
@@ -34,14 +33,13 @@
                  </div>
              </div>
 
-
              <div class="col-custom d-flex flex-column align-items-center">
                  <div class="nav-item dropdown">
                      <a class="nav-link categoryTitle dropdown-toggle" href="#" id="restaurantsDropdown"
                          role="button" data-bs-toggle="dropdown" aria-expanded="false" style="cursor: default">
                          <div class="icons">
                              <i class="fa-duotone fa-solid fa-utensils"
-                                 style="--fa-primary-color: #ff0060 ; --fa-secondary-color: #ff0060 ;"></i>
+                                 style="--fa-primary-color: #ff0060; --fa-secondary-color: #ff0060;"></i>
                          </div>
                          Restaurants
                      </a>
@@ -72,7 +70,7 @@
                          aria-expanded="false" data-bs-toggle="dropdown" style="cursor: default">
                          <div class="icons">
                              <i class="fa-duotone fa-solid fa-lips"
-                                 style="--fa-primary-color: #ff0060 ; --fa-secondary-color: #ff0060 ;"></i>
+                                 style="--fa-primary-color: #ff0060; --fa-secondary-color: #ff0060;"></i>
                          </div>
                          Beauty
                      </a>
@@ -96,15 +94,16 @@
 
              <div class="col-custom d-flex flex-column align-items-center">
                  <div class="nav-item dropdown">
-                     <a class="nav-link categoryTitle dropdown-toggle" href="#" id="massageDropdown" role="button" data-bs-toggle="dropdown"
-                         aria-expanded="false" style="cursor: default">
+                     <a class="nav-link categoryTitle dropdown-toggle" href="#" id="massageDropdown"
+                         role="button" data-bs-toggle="dropdown" aria-expanded="false" style="cursor: default">
                          <div class="icons">
                              <i class="fa-duotone fa-solid fa-spa"
-                                 style="--fa-primary-color: #ff0060 ; --fa-secondary-color: #ff0060 ;"></i>
+                                 style="--fa-primary-color: #ff0060; --fa-secondary-color: #ff0060;"></i>
                          </div>
                          Massage
                      </a>
-                     <ul class="dropdown-menu dropdown-menu-end dropdown-menu-md-end" aria-labelledby="massageDropdown" style="cursor: pointer">
+                     <ul class="dropdown-menu dropdown-menu-end dropdown-menu-md-end"
+                         aria-labelledby="massageDropdown" style="cursor: pointer">
                          <li><a class="dropdown-item" href="{{ url('/products') }}">Skincare</a></li>
                          <li><a class="dropdown-item" href="{{ url('/products') }}">Makeup</a></li>
                          <li><a class="dropdown-item" href="{{ url('/products') }}">Hair Care</a></li>
@@ -123,15 +122,16 @@
 
              <div class="col-custom d-flex flex-column align-items-center">
                  <div class="nav-item dropdown">
-                     <a class="nav-link categoryTitle dropdown-toggle" href="#" id="groceriesDropdown" role="button"
-                         aria-expanded="false" data-bs-toggle="dropdown" style="cursor: default">
+                     <a class="nav-link categoryTitle dropdown-toggle" href="#" id="groceriesDropdown"
+                         role="button" aria-expanded="false" data-bs-toggle="dropdown" style="cursor: default">
                          <div class="icons">
                              <i class="fa-duotone fa-solid fa-cart-shopping"
-                                 style="--fa-primary-color: #ff0060 ; --fa-secondary-color: #ff0060 ;"></i>
+                                 style="--fa-primary-color: #ff0060; --fa-secondary-color: #ff0060;"></i>
                          </div>
                          Groceries
                      </a>
-                     <ul class="dropdown-menu dropdown-menu-end dropdown-menu-md-end" aria-labelledby="groceriesDropdown" style="cursor: pointer">
+                     <ul class="dropdown-menu dropdown-menu-lg-end dropdown-menu-md-end"
+                         aria-labelledby="groceriesDropdown" style="cursor: pointer">
                          <li><a class="dropdown-item" href="{{ url('/products') }}">Fruits & Vegetables</a></li>
                          <li><a class="dropdown-item" href="{{ url('/products') }}">Dairy Products</a></li>
                          <li><a class="dropdown-item" href="{{ url('/products') }}">Bakery Items</a></li>
@@ -155,11 +155,11 @@
                          aria-expanded="false" data-bs-toggle="dropdown" style="cursor: default">
                          <div class="icons">
                              <i class="fa-duotone fa-solid fa-dumbbell"
-                                 style="--fa-primary-color: #ff0060 ; --fa-secondary-color: #ff0060 ;"></i>
+                                 style="--fa-primary-color: #ff0060; --fa-secondary-color: #ff0060;"></i>
                          </div>
                          Wellness
                      </a>
-                     <ul class="dropdown-menu dropdown-menu-md-end" aria-labelledby="wellnessDropdown" style="cursor: pointer">
+                     <ul class="dropdown-menu dropdown-menu-end" style="cursor: pointer">
                          <li><a class="dropdown-item" href="{{ url('/products') }}">Mental Health</a></li>
                          <li><a class="dropdown-item" href="{{ url('/products') }}">Physical Health</a></li>
                          <li><a class="dropdown-item" href="{{ url('/products') }}">Nutritional Counseling</a></li>
@@ -178,146 +178,150 @@
                      <a class="nav-link categoryTitle dropdown-toggle" href="#" role="button"
                          aria-expanded="false">
                          <div style="width: 100px;height: 100px">
-                             <img src="{{ asset('assets/images/home/travels.png') }}" alt="travels"
-                                 class="img-fluid" />
-                         </div>
-                         Travels
-                     </a>
-                     <ul class="dropdown-menu">
-                         <li><a class="dropdown-item" href="#">Flight Bookings</a></li>
-                         <li><a class="dropdown-item" href="#">Hotel Reservations</a></li>
-                         <li><a class="dropdown-item" href="#">Car Rentals</a></li>
-                         <li><a class="dropdown-item" href="#">Holiday Packages</a></li>
-                         <li><a class="dropdown-item" href="#">Travel Insurance</a></li>
-                         <li><a class="dropdown-item" href="#">Tour Guides & Experiences</a></li>
-                         <li><a class="dropdown-item" href="#">Visa Assistance</a></li>
-                         <li><a class="dropdown-item" href="#">Cruise Trips</a></li>
-                         <li><a class="dropdown-item" href="#">Adventure Travel</a></li>
-                         <li><a class="dropdown-item" href="#">Airport Transfers</a></li>
-                         <li><a class="dropdown-item" href="#">Luxury Travel</a></li>
-                         <li><a class="dropdown-item" href="#">Travel Accessories</a></li>
-                         <li><a class="dropdown-item" href="#">Last-Minute Deals</a></li>
-                     </ul>
-
-                 </div>
-             </div>
-
-             <div class="col-custom d-flex flex-column align-items-center">
-                 <div class="nav-item dropdown">
-                     <a class="nav-link categoryTitle dropdown-toggle" href="#" role="button"
-                         aria-expanded="false">
-                         <div style="width: 100px;height: 100px">
-                             <img src="{{ asset('assets/images/home/logistics.png') }}" alt="logistics"
-                                 class="img-fluid" />
-                         </div>
-                         Logistics
-                     </a>
-                     <ul class="dropdown-menu">
-                         <li><a class="dropdown-item" href="#">Freight Forwarding</a></li>
-                         <li><a class="dropdown-item" href="#">Warehousing & Storage</a></li>
-                         <li><a class="dropdown-item" href="#">Transportation Services</a></li>
-                         <li><a class="dropdown-item" href="#">Supply Chain Management</a></li>
-                         <li><a class="dropdown-item" href="#">Inventory Management</a></li>
-                         <li><a class="dropdown-item" href="#">Customs Brokerage</a></li>
-                         <li><a class="dropdown-item" href="#">Logistics Technology</a></li>
-                         <li><a class="dropdown-item" href="#">Packaging Solutions</a></li>
-                         <li><a class="dropdown-item" href="#">Order Fulfillment</a></li>
-                         <li><a class="dropdown-item" href="#">Last-Mile Delivery</a></li>
-                         <li><a class="dropdown-item" href="#">Fleet Management</a></li>
-                         <li><a class="dropdown-item" href="#">Cold Chain Logistics</a></li>
-                         <li><a class="dropdown-item" href="#">Reverse Logistics</a></li>
-                     </ul>
-                 </div>
-             </div> --}}
-
-             <div class="col-custom d-flex flex-column align-items-center">
-                 <div class="nav-item dropdown">
-                     <a class="nav-link categoryTitle dropdown-toggle" href="#" id="healthCareDropdown" role="button"
-                         aria-expanded="false" data-bs-toggle="dropdown" style="cursor: default">
-                         <div class="icons">
-                             <i class="fa-duotone fa-solid fa-user-doctor"
-                                 style="--fa-primary-color: #ff0060 ; --fa-secondary-color: #ff0060 ;"></i>
-                         </div>
-                         Health Care
-                     </a>
-                     <ul class="dropdown-menu dropdown-menu-md-end" aria-labelledby="healthCareDropdown" style="cursor: pointer">
-                         <li><a class="dropdown-item" href="{{ url('/products') }}">Vitamins & Supplements</a></li>
-                         <li><a class="dropdown-item" href="{{ url('/products') }}">Personal Hygiene</a></li>
-                         <li><a class="dropdown-item" href="{{ url('/products') }}">Over-the-Counter Medications</a>
-                         </li>
-                         <li><a class="dropdown-item" href="{{ url('/products') }}">First Aid</a></li>
-                         <li><a class="dropdown-item" href="{{ url('/products') }}">Fitness & Exercise</a></li>
-                         <li><a class="dropdown-item" href="{{ url('/products') }}">Medical Devices</a></li>
-                         <li><a class="dropdown-item" href="{{ url('/products') }}">Healthy Snacks</a></li>
-                         <li><a class="dropdown-item" href="{{ url('/products') }}">Weight Management</a></li>
-                         <li><a class="dropdown-item" href="{{ url('/products') }}">Herbal Remedies</a></li>
-                         <li><a class="dropdown-item" href="{{ url('/products') }}">Home Health Care</a></li>
-                         <li><a class="dropdown-item" href="{{ url('/products') }}">Wellness & Relaxation</a></li>
-                         <li><a class="dropdown-item" href="{{ url('/products') }}">Sleep Aids</a></li>
-                         <li><a class="dropdown-item" href="{{ url('/products') }}">Dental Care</a></li>
-                     </ul>
-                 </div>
-             </div>
-
-             <div class="col-custom d-flex flex-column align-items-center">
-                 <div class="nav-item dropdown">
-                     <a class="nav-link categoryTitle dropdown-toggle" href="#" id="travelsDropdown" role="button"
-                         aria-expanded="false" data-bs-toggle="dropdown" style="cursor: default">
-                         <div class="icons">
-                             <i class="fa-duotone fa-solid fa-plane"
-                                 style="--fa-primary-color: #ff0060 ; --fa-secondary-color: #ff0060 ;"></i>
-                         </div>
-                         Travel
-                     </a>
-                     <ul class="dropdown-menu dropdown-menu-md-end" aria-labelledby="travelsDropdown" style="cursor: pointer">
-                         <li><a class="dropdown-item" href="{{ url('/products') }}">Flights</a></li>
-                         <li><a class="dropdown-item" href="{{ url('/products') }}">Hotels</a></li>
-                         <li><a class="dropdown-item" href="{{ url('/products') }}">Tours</a></li>
-                         <li><a class="dropdown-item" href="{{ url('/products') }}">Car Rentals</a></li>
-                         <li><a class="dropdown-item" href="{{ url('/products') }}">Travel Insurance</a></li>
-                     </ul>
-                 </div>
-             </div>
-
-             <div class="col-custom d-flex flex-column align-items-center">
-                 <div class="nav-item dropdown">
-                     <a class="nav-link categoryTitle dropdown-toggle" href="#" id="logisticsDropdown" role="button"
-                         aria-expanded="false" data-bs-toggle="dropdown" style="cursor: default">
-                         <div class="icons">
-                             <i class="fa-duotone fa-solid fa-truck"
-                                 style="--fa-primary-color: #ff0060 ; --fa-secondary-color: #ff0060 ;"></i>
-                         </div>
-                         Logistics
-                     </a>
-                     <ul class="dropdown-menu dropdown-menu-md-end" aria-labelledby="logisticsDropdown" style="cursor: pointer">
-                         <li><a class="dropdown-item" href="{{ url('/products') }}">Freight Services</a></li>
-                         <li><a class="dropdown-item" href="{{ url('/products') }}">Courier Services</a></li>
-                         <li><a class="dropdown-item" href="{{ url('/products') }}">Warehousing</a></li>
-                         <li><a class="dropdown-item" href="{{ url('/products') }}">Supply Chain Management</a></li>
-                         <li><a class="dropdown-item" href="{{ url('/products') }}">Logistics Consulting</a></li>
-                     </ul>
-                 </div>
-             </div>
-
-             <div class="col-custom d-flex flex-column align-items-center">
-                 <div class="nav-item dropdown">
-                     <a class="nav-link categoryTitle dropdown-toggle" href="#" id="servicesDropdown" role="button" data-bs-toggle="dropdown"
-                         aria-expanded="false" style="cursor: default">
-                         <div class="icons">
-                             <i class="fa-duotone fa-solid fa-wrench"
-                                 style="--fa-primary-color: #ff0060 ; --fa-secondary-color: #ff0060 ;"></i>
-                         </div>
-                         Services
-                     </a>
-                     <ul class="dropdown-menu dropdown-menu-md-end" aria-labelledby="servicesDropdown" style="cursor: pointer">
-                         <li><a class="dropdown-item" data-bs-placement="top" title="Coming Soon....."
-                                 href="{{ url('/products') }}">Electrician</a></li>
-                         <li><a class="dropdown-item" href="{{ url('/products') }}">Plumber</a></li>
-                         <li><a class="dropdown-item" href="{{ url('/products') }}">Water Supply</a></li>
-                     </ul>
-                 </div>
-             </div>
+                             <img src="{{ asset('assets/images/home/travels.webp') }}" alt="travels"
+             class="img-fluid" />
          </div>
+         Travels
+         </a>
+         <ul class="dropdown-menu">
+             <li><a class="dropdown-item" href="#">Flight Bookings</a></li>
+             <li><a class="dropdown-item" href="#">Hotel Reservations</a></li>
+             <li><a class="dropdown-item" href="#">Car Rentals</a></li>
+             <li><a class="dropdown-item" href="#">Holiday Packages</a></li>
+             <li><a class="dropdown-item" href="#">Travel Insurance</a></li>
+             <li><a class="dropdown-item" href="#">Tour Guides & Experiences</a></li>
+             <li><a class="dropdown-item" href="#">Visa Assistance</a></li>
+             <li><a class="dropdown-item" href="#">Cruise Trips</a></li>
+             <li><a class="dropdown-item" href="#">Adventure Travel</a></li>
+             <li><a class="dropdown-item" href="#">Airport Transfers</a></li>
+             <li><a class="dropdown-item" href="#">Luxury Travel</a></li>
+             <li><a class="dropdown-item" href="#">Travel Accessories</a></li>
+             <li><a class="dropdown-item" href="#">Last-Minute Deals</a></li>
+         </ul>
+
+     </div>
+     </div>
+
+     <div class="col-custom d-flex flex-column align-items-center">
+         <div class="nav-item dropdown">
+             <a class="nav-link categoryTitle dropdown-toggle" href="#" role="button"
+                 aria-expanded="false">
+                 <div style="width: 100px;height: 100px">
+                     <img src="{{ asset('assets/images/home/logistics.webp') }}" alt="logistics"
+                         class="img-fluid" />
+                 </div>
+                 Logistics
+             </a>
+             <ul class="dropdown-menu">
+                 <li><a class="dropdown-item" href="#">Freight Forwarding</a></li>
+                 <li><a class="dropdown-item" href="#">Warehousing & Storage</a></li>
+                 <li><a class="dropdown-item" href="#">Transportation Services</a></li>
+                 <li><a class="dropdown-item" href="#">Supply Chain Management</a></li>
+                 <li><a class="dropdown-item" href="#">Inventory Management</a></li>
+                 <li><a class="dropdown-item" href="#">Customs Brokerage</a></li>
+                 <li><a class="dropdown-item" href="#">Logistics Technology</a></li>
+                 <li><a class="dropdown-item" href="#">Packaging Solutions</a></li>
+                 <li><a class="dropdown-item" href="#">Order Fulfillment</a></li>
+                 <li><a class="dropdown-item" href="#">Last-Mile Delivery</a></li>
+                 <li><a class="dropdown-item" href="#">Fleet Management</a></li>
+                 <li><a class="dropdown-item" href="#">Cold Chain Logistics</a></li>
+                 <li><a class="dropdown-item" href="#">Reverse Logistics</a></li>
+             </ul>
+         </div>
+     </div> --}}
+
+     <div class="col-custom d-flex flex-column align-items-center">
+         <div class="nav-item dropdown">
+             <a class="nav-link categoryTitle dropdown-toggle" href="#" id="healthCareDropdown"
+                 role="button" aria-expanded="false" data-bs-toggle="dropdown" style="cursor: default">
+                 <div class="icons">
+                     <i class="fa-duotone fa-solid fa-user-doctor"
+                         style="--fa-primary-color: #ff0060; --fa-secondary-color: #ff0060;"></i>
+                 </div>
+                 Health Care
+             </a>
+             <ul class="dropdown-menu dropdown-menu-md-end" aria-labelledby="healthCareDropdown"
+                 style="cursor: pointer">
+                 <li><a class="dropdown-item" href="{{ url('/products') }}">Vitamins & Supplements</a></li>
+                 <li><a class="dropdown-item" href="{{ url('/products') }}">Personal Hygiene</a></li>
+                 <li><a class="dropdown-item" href="{{ url('/products') }}">Over-the-Counter Medications</a>
+                 </li>
+                 <li><a class="dropdown-item" href="{{ url('/products') }}">First Aid</a></li>
+                 <li><a class="dropdown-item" href="{{ url('/products') }}">Fitness & Exercise</a></li>
+                 <li><a class="dropdown-item" href="{{ url('/products') }}">Medical Devices</a></li>
+                 <li><a class="dropdown-item" href="{{ url('/products') }}">Healthy Snacks</a></li>
+                 <li><a class="dropdown-item" href="{{ url('/products') }}">Weight Management</a></li>
+                 <li><a class="dropdown-item" href="{{ url('/products') }}">Herbal Remedies</a></li>
+                 <li><a class="dropdown-item" href="{{ url('/products') }}">Home Health Care</a></li>
+                 <li><a class="dropdown-item" href="{{ url('/products') }}">Wellness & Relaxation</a></li>
+                 <li><a class="dropdown-item" href="{{ url('/products') }}">Sleep Aids</a></li>
+                 <li><a class="dropdown-item" href="{{ url('/products') }}">Dental Care</a></li>
+             </ul>
+         </div>
+     </div>
+
+     <div class="col-custom d-flex flex-column align-items-center">
+         <div class="nav-item dropdown">
+             <a class="nav-link categoryTitle dropdown-toggle" href="#" id="travelsDropdown"
+                 role="button" aria-expanded="false" data-bs-toggle="dropdown" style="cursor: default">
+                 <div class="icons">
+                     <i class="fa-duotone fa-solid fa-plane"
+                         style="--fa-primary-color: #ff0060; --fa-secondary-color: #ff0060;"></i>
+                 </div>
+                 Travel
+             </a>
+             <ul class="dropdown-menu dropdown-menu-md-end" aria-labelledby="travelsDropdown"
+                 style="cursor: pointer">
+                 <li><a class="dropdown-item" href="{{ url('/products') }}">Flights</a></li>
+                 <li><a class="dropdown-item" href="{{ url('/products') }}">Hotels</a></li>
+                 <li><a class="dropdown-item" href="{{ url('/products') }}">Tours</a></li>
+                 <li><a class="dropdown-item" href="{{ url('/products') }}">Car Rentals</a></li>
+                 <li><a class="dropdown-item" href="{{ url('/products') }}">Travel Insurance</a></li>
+             </ul>
+         </div>
+     </div>
+
+     <div class="col-custom d-flex flex-column align-items-center">
+         <div class="nav-item dropdown">
+             <a class="nav-link categoryTitle dropdown-toggle" href="#" id="logisticsDropdown"
+                 role="button" aria-expanded="false" data-bs-toggle="dropdown" style="cursor: default">
+                 <div class="icons">
+                     <i class="fa-duotone fa-solid fa-truck"
+                         style="--fa-primary-color: #ff0060; --fa-secondary-color: #ff0060;"></i>
+                 </div>
+                 Logistics
+             </a>
+             <ul class="dropdown-menu dropdown-menu-md-end" aria-labelledby="logisticsDropdown"
+                 style="cursor: pointer">
+                 <li><a class="dropdown-item" href="{{ url('/products') }}">Freight Services</a></li>
+                 <li><a class="dropdown-item" href="{{ url('/products') }}">Courier Services</a></li>
+                 <li><a class="dropdown-item" href="{{ url('/products') }}">Warehousing</a></li>
+                 <li><a class="dropdown-item" href="{{ url('/products') }}">Supply Chain Management</a></li>
+                 <li><a class="dropdown-item" href="{{ url('/products') }}">Logistics Consulting</a></li>
+             </ul>
+         </div>
+     </div>
+
+     <div class="col-custom d-flex flex-column align-items-center">
+         <div class="nav-item dropdown">
+             <a class="nav-link categoryTitle dropdown-toggle" href="#" id="servicesDropdown"
+                 role="button" data-bs-toggle="dropdown" aria-expanded="false" style="cursor: default">
+                 <div class="icons">
+                     <i class="fa-duotone fa-solid fa-wrench"
+                         style="--fa-primary-color: #ff0060; --fa-secondary-color: #ff0060;"></i>
+                 </div>
+                 Services
+             </a>
+             <ul class="dropdown-menu dropdown-menu-md-end" aria-labelledby="servicesDropdown"
+                 style="cursor: pointer">
+                 <li><a class="dropdown-item" data-bs-placement="top" title="Coming Soon....."
+                         href="{{ url('/products') }}">Electrician</a></li>
+                 <li><a class="dropdown-item" href="{{ url('/products') }}">Plumber</a></li>
+                 <li><a class="dropdown-item" href="{{ url('/products') }}">Water Supply</a></li>
+             </ul>
+         </div>
+     </div>
+     </div>
      </div>
      <div class="container slider-content">
          <div class="owl-carousel carousel_slider owl-theme">
@@ -352,7 +356,7 @@
                      <div class="card topCard card-img-top1 h-100">
                          <div style="min-height: 150px">
                              <span class="badge trending-badge">TRENDING</span>
-                             <img src="{{ asset('assets/images/home/card_image_2.png') }}"
+                             <img src="{{ asset('assets/images/home/card_image_2.webp') }}"
                                  class="img-fluid card-img-top" alt="card_image" />
                              <span class="content-badge">Men's Wear</span>
                          </div>
@@ -364,7 +368,7 @@
                      <div class="card topCard card-img-top1 h-100">
                          <div style="min-height: 150px">
                              <span class="badge trending-badge">POPULAR</span>
-                             <img src="{{ asset('assets/images/home/card_image_4.png') }}"
+                             <img src="{{ asset('assets/images/home/card_image_4.webp') }}"
                                  class="img-fluid card-img-top" alt="card_image" />
                              <span class="content-badge">Beauty Spa</span>
                          </div>
@@ -376,7 +380,7 @@
                      <div class="card topCard card-img-top1 h-100">
                          <div style="min-height: 150px">
                              <span class="badge trending-badge">EARLY BIRD</span>
-                             <img src="{{ asset('assets/images/home/card_image_1.png') }}"
+                             <img src="{{ asset('assets/images/home/card_image_1.webp') }}"
                                  class="img-fluid card-img-top" alt="card_image" />
                              <span class="content-badge">Kids Wear</span>
                          </div>
@@ -388,7 +392,7 @@
                      <div class="card topCard card-img-top1 h-100">
                          <div style="min-height: 150px">
                              <span class="badge trending-badge">LAST CHANCE</span>
-                             <img src="{{ asset('assets/images/home/card_image_5.png') }}"
+                             <img src="{{ asset('assets/images/home/card_image_5.webp') }}"
                                  class="img-fluid card-img-top" alt="card_image" />
                              <span class="content-badge">Beauty Spa</span>
                          </div>
@@ -406,14 +410,14 @@
                      <div class="card sub_topCard h-100">
                          <div style="min-height: 50px">
                              <span class="badge trending-badge">TRENDING</span>
-                             <img src="{{ asset('assets/images/home/kids_wear_2.png') }}"
+                             <img src="{{ asset('assets/images/home/kids_wear_2.webp') }}"
                                  class="img-fluid card-img-top1" alt="card_image" />
                          </div>
                          <div class="card-body card_section">
                              <div class="mt-3 d-flex align-items-center justify-content-between">
                                  <h5 class="card-title ps-3">Kids Wear</h5>
                                  <span class="badge mx-3 p-0 trending-wishlist-badge"><i
-                                         class="fa-regular fa-bookmark wishlist-icon"onclick="toggleBookmark(this)"></i>
+                                         class="fa-regular fa-bookmark wishlist-icon" onclick="toggleBookmark(this)"></i>
                                  </span>
                              </div>
                              <span class="px-3">
@@ -429,7 +433,7 @@
                              </p>
                              <div class="card-divider"></div>
                              <p class="ps-3 fw-medium d-flex align-items-center justify-content-between"
-                                 style="color:  #ff0060 "><span>$150</span><span
+                                 style="color:  #ff0060"><span>$150</span><span
                                      class="mx-3 px-2 couponBadge">DEALSLAH25</span></p>
                              <div class="card-divider"></div>
                              <div class="ps-3">
@@ -437,7 +441,7 @@
                                  <p><s>$200</s></p>
                              </div>
                              <div class="card-divider"></div>
-                             <p class="ps-3 fw-medium" style="color:  #ff0060 ;font-weight: 400 !important;"><i
+                             <p class="ps-3 fw-medium" style="color:  #ff0060;font-weight: 400 !important;"><i
                                      class="fa-solid fa-location-dot"></i>
                                  &nbsp;Singapore</p>
                          </div>
@@ -449,14 +453,14 @@
                      <div class="card sub_topCard h-100">
                          <div style="min-height: 50px">
                              <span class="badge trending-badge">POPULAR</span>
-                             <img src="{{ asset('assets/images/home/beauty2.png') }}"
+                             <img src="{{ asset('assets/images/home/beauty2.webp') }}"
                                  class="img-fluid card-img-top1" alt="card_image" />
                          </div>
                          <div class="card-body card_section">
                              <div class="mt-3 d-flex align-items-center justify-content-between">
                                  <h5 class="card-title  ps-3">Beauty Spa</h5>
                                  <span class="badge p-0 mx-3 trending-wishlist-badge"><i
-                                         class="fa-regular fa-bookmark wishlist-icon"onclick="toggleBookmark(this)"></i>
+                                         class="fa-regular fa-bookmark wishlist-icon" onclick="toggleBookmark(this)"></i>
                                  </span>
                              </div>
                              <span class="px-3">
@@ -472,7 +476,7 @@
                              </p>
                              <div class="card-divider"></div>
                              <p class="ps-3 fw-medium d-flex align-items-center justify-content-between"
-                                 style="color:  #ff0060 "><span>$150</span><span
+                                 style="color:  #ff0060"><span>$150</span><span
                                      class="mx-3 px-2 couponBadge">DEALSLAH25</span></p>
                              <div class="card-divider"></div>
                              <div class="ps-3">
@@ -481,7 +485,7 @@
                              </div>
                              <div class="card-divider"></div>
                              <p class="ps-3 fw-medium"
-                                 style="color:  #ff0060 ;font-weight: 400 !important;";font-weight: 400 !important;><i
+                                 style="color:  #ff0060;font-weight: 400 !important;" ;font-weight: 400 !important;><i
                                      class="fa-solid fa-location-dot"></i>
                                  &nbsp;Singapore</p>
                          </div>
@@ -493,14 +497,14 @@
                      <div class="card sub_topCard h-100">
                          <div style="min-height: 50px">
                              <span class="badge trending-badge">LIMITED TIME</span>
-                             <img src="{{ asset('assets/images/home/restaurant.png') }}"
+                             <img src="{{ asset('assets/images/home/restaurant.webp') }}"
                                  class="img-fluid card-img-top1" alt="card_image" />
                          </div>
                          <div class="card-body card_section">
                              <div class="mt-3 d-flex align-items-center justify-content-between">
                                  <h5 class="card-title ps-3">Restaurants</h5>
                                  <span class="badge p-0 mx-3 trending-wishlist-badge"><i
-                                         class="fa-regular fa-bookmark wishlist-icon"onclick="toggleBookmark(this)"></i>
+                                         class="fa-regular fa-bookmark wishlist-icon" onclick="toggleBookmark(this)"></i>
                                  </span>
                              </div>
                              <span class="px-3">
@@ -516,7 +520,7 @@
                              </p>
                              <div class="card-divider"></div>
                              <p class="ps-3 fw-medium d-flex align-items-center justify-content-between"
-                                 style="color:  #ff0060 "><span>$150</span><span
+                                 style="color:  #ff0060"><span>$150</span><span
                                      class="mx-3 px-2 couponBadge">DEALSLAH25</span></p>
                              <div class="card-divider"></div>
                              <div class="ps-3">
@@ -524,7 +528,7 @@
                                  <p><s>$200</s></p>
                              </div>
                              <div class="card-divider"></div>
-                             <p class="ps-3 fw-medium" style="color:  #ff0060 ;font-weight: 400 !important;"><i
+                             <p class="ps-3 fw-medium" style="color:  #ff0060;font-weight: 400 !important;"><i
                                      class="fa-solid fa-location-dot"></i>
                                  &nbsp;Singapore</p>
                          </div>
@@ -536,14 +540,14 @@
                      <div class="card sub_topCard h-100">
                          <div style="min-height: 50px">
                              <span class="badge trending-badge">LAST CHANCE</span>
-                             <img src="{{ asset('assets/images/home/spa_two.png') }}"
+                             <img src="{{ asset('assets/images/home/spa_two.webp') }}"
                                  class="img-fluid card-img-top1" alt="card_image" />
                          </div>
                          <div class="card-body card_section">
                              <div class="mt-3 d-flex align-items-center justify-content-between">
                                  <h5 class="card-title ps-3">Beauty Spa</h5>
                                  <span class="badge p-0 mx-3 trending-wishlist-badge"><i
-                                         class="fa-regular fa-bookmark wishlist-icon"onclick="toggleBookmark(this)"></i>
+                                         class="fa-regular fa-bookmark wishlist-icon" onclick="toggleBookmark(this)"></i>
                                  </span>
                              </div>
                              <span class="px-3">
@@ -559,7 +563,7 @@
                              </p>
                              <div class="card-divider"></div>
                              <p class="ps-3 fw-medium d-flex align-items-center justify-content-between"
-                                 style="color:  #ff0060 "><span>$150</span><span
+                                 style="color:  #ff0060"><span>$150</span><span
                                      class="mx-3 px-2 couponBadge">DEALSLAH25</span></p>
                              <div class="card-divider"></div>
                              <div class="ps-3">
@@ -567,7 +571,7 @@
                                  <p><s>$200</s></p>
                              </div>
                              <div class="card-divider"></div>
-                             <p class="ps-3 fw-medium" style="color:  #ff0060 ;font-weight: 400 !important;"><i
+                             <p class="ps-3 fw-medium" style="color:  #ff0060;font-weight: 400 !important;"><i
                                      class="fa-solid fa-location-dot"></i>
                                  &nbsp;Singapore</p>
                          </div>
@@ -580,14 +584,14 @@
                      <div class="card sub_topCard h-100">
                          <div style="min-height: 50px">
                              <span class="badge trending-badge">EARLY BIRD</span>
-                             <img src="{{ asset('assets/images/home/card_image_1.png') }}"
+                             <img src="{{ asset('assets/images/home/card_image_1.webp') }}"
                                  class="img-fluid card-img-top1" alt="card_image" />
                          </div>
                          <div class="card-body card_section">
                              <div class="mt-3 d-flex align-items-center justify-content-between">
                                  <h5 class="card-title ps-3">Kids Wear</h5>
                                  <span class="badge p-0 mx-3 trending-wishlist-badge"><i
-                                         class="fa-regular fa-bookmark wishlist-icon"onclick="toggleBookmark(this)"></i>
+                                         class="fa-regular fa-bookmark wishlist-icon" onclick="toggleBookmark(this)"></i>
                                  </span>
                              </div>
                              <span class="px-3">
@@ -603,7 +607,7 @@
                              </p>
                              <div class="card-divider"></div>
                              <p class="ps-3 fw-medium d-flex align-items-center justify-content-between"
-                                 style="color:  #ff0060 "><span>$150</span><span
+                                 style="color:  #ff0060"><span>$150</span><span
                                      class="mx-3 px-2 couponBadge">DEALSLAH25</span></p>
                              <div class="card-divider"></div>
                              <div class="ps-3">
@@ -611,7 +615,7 @@
                                  <p><s>$200</s></p>
                              </div>
                              <div class="card-divider"></div>
-                             <p class="ps-3 fw-medium" style="color:  #ff0060 ;font-weight: 400 !important;"><i
+                             <p class="ps-3 fw-medium" style="color:  #ff0060;font-weight: 400 !important;"><i
                                      class="fa-solid fa-location-dot"></i>
                                  &nbsp;Singapore</p>
                          </div>
@@ -623,7 +627,7 @@
                      <div class="card sub_topCard h-100">
                          <div style="min-height: 50px">
                              <span class="badge trending-badge">TRENDING</span>
-                             <img src="{{ asset('assets/images/home/card_image_3.png') }}"
+                             <img src="{{ asset('assets/images/home/card_image_3.webp') }}"
                                  class="img-fluid card-img-top1" alt="card_image" />
                          </div>
                          <div class="card-body card_section">
@@ -631,7 +635,7 @@
                              <div class="mt-3 d-flex align-items-center justify-content-between">
                                  <h5 class="card-title ps-3">Beauty Spa</h5>
                                  <span class="badge p-0 mx-3 trending-wishlist-badge"><i
-                                         class="fa-regular fa-bookmark wishlist-icon"onclick="toggleBookmark(this)"></i>
+                                         class="fa-regular fa-bookmark wishlist-icon" onclick="toggleBookmark(this)"></i>
                                  </span>
                              </div>
                              <span class="px-3">
@@ -647,7 +651,7 @@
                              </p>
                              <div class="card-divider"></div>
                              <p class="ps-3 fw-medium d-flex align-items-center justify-content-between"
-                                 style="color:  #ff0060 "><span>$150</span><span
+                                 style="color:  #ff0060"><span>$150</span><span
                                      class="mx-3 px-2 couponBadge">DEALSLAH25</span></p>
                              <div class="card-divider"></div>
                              <div class="ps-3">
@@ -655,7 +659,7 @@
                                  <p><s>$200</s></p>
                              </div>
                              <div class="card-divider"></div>
-                             <p class="ps-3 fw-medium" style="color:  #ff0060 ;font-weight: 400 !important;"><i
+                             <p class="ps-3 fw-medium" style="color:  #ff0060;font-weight: 400 !important;"><i
                                      class="fa-solid fa-location-dot"></i>
                                  &nbsp;Singapore</p>
                          </div>
@@ -667,7 +671,7 @@
                      <div class="card sub_topCard h-100">
                          <div style="min-height: 50px">
                              <span class="badge trending-badge">POPULAR</span>
-                             <img src="{{ asset('assets/images/home/card_image_2.png') }}"
+                             <img src="{{ asset('assets/images/home/card_image_2.webp') }}"
                                  class="img-fluid card-img-top1" alt="card_image" />
                          </div>
                          <div class="card-body card_section">
@@ -675,7 +679,7 @@
                              <div class="mt-3 d-flex align-items-center justify-content-between">
                                  <h5 class="card-title ps-3">Men's Wear</h5>
                                  <span class="badge p-0 mx-3 trending-wishlist-badge"><i
-                                         class="fa-regular fa-bookmark wishlist-icon"onclick="toggleBookmark(this)"></i>
+                                         class="fa-regular fa-bookmark wishlist-icon" onclick="toggleBookmark(this)"></i>
                                  </span>
                              </div>
                              <span class="px-3">
@@ -691,7 +695,7 @@
                              </p>
                              <div class="card-divider"></div>
                              <p class="ps-3 fw-medium d-flex align-items-center justify-content-between"
-                                 style="color:  #ff0060 "><span>$150</span><span
+                                 style="color:  #ff0060"><span>$150</span><span
                                      class="mx-3 px-2 couponBadge">DEALSLAH25</span></p>
                              <div class="card-divider"></div>
                              <div class="ps-3">
@@ -699,7 +703,7 @@
                                  <p><s>$200</s></p>
                              </div>
                              <div class="card-divider"></div>
-                             <p class="ps-3 fw-medium" style="color:  #ff0060 ;font-weight: 400 !important;"><i
+                             <p class="ps-3 fw-medium" style="color:  #ff0060;font-weight: 400 !important;"><i
                                      class="fa-solid fa-location-dot"></i>
                                  &nbsp;Singapore</p>
                          </div>
@@ -711,14 +715,14 @@
                      <div class="card sub_topCard h-100">
                          <div style="min-height: 50px">
                              <span class="badge trending-badge">LIMITED TIME</span>
-                             <img src="{{ asset('assets/images/home/card_image_4.png') }}"
+                             <img src="{{ asset('assets/images/home/card_image_4.webp') }}"
                                  class="img-fluid card-img-top1" alt="card_image" />
                          </div>
                          <div class="card-body card_section">
                              <div class="mt-3 d-flex align-items-center justify-content-between">
                                  <h5 class="card-title ps-3">Beauty Spa</h5>
                                  <span class="badge p-0 mx-3 trending-wishlist-badge"><i
-                                         class="fa-regular fa-bookmark wishlist-icon"onclick="toggleBookmark(this)"></i>
+                                         class="fa-regular fa-bookmark wishlist-icon" onclick="toggleBookmark(this)"></i>
                                  </span>
                              </div>
                              <span class="px-3">
@@ -734,7 +738,7 @@
                              </p>
                              <div class="card-divider"></div>
                              <p class="ps-3 fw-medium d-flex align-items-center justify-content-between"
-                                 style="color:  #ff0060 "><span>$150</span><span
+                                 style="color:  #ff0060"><span>$150</span><span
                                      class="mx-3 px-2 couponBadge">DEALSLAH25</span></p>
                              <div class="card-divider"></div>
                              <div class="ps-3">
@@ -742,7 +746,7 @@
                                  <p><s>$200</s></p>
                              </div>
                              <div class="card-divider"></div>
-                             <p class="ps-3 fw-medium" style="color:  #ff0060 ;font-weight: 400 !important;"><i
+                             <p class="ps-3 fw-medium" style="color:  #ff0060;font-weight: 400 !important;"><i
                                      class="fa-solid fa-location-dot"></i>
                                  &nbsp;Singapore</p>
                          </div>
@@ -755,7 +759,7 @@
                      <div class="card sub_topCard h-100">
                          <div style="min-height: 50px">
                              <span class="badge trending-badge">LAST CHANCE</span>
-                             <img src="{{ asset('assets/images/home/kids_wear_2.png') }}"
+                             <img src="{{ asset('assets/images/home/kids_wear_2.webp') }}"
                                  class="img-fluid card-img-top1" alt="card_image" />
                          </div>
                          <div class="card-body card_section">
@@ -763,7 +767,7 @@
                              <div class="mt-3 d-flex align-items-center justify-content-between">
                                  <h5 class="card-title ps-3">Kids Wear</h5>
                                  <span class="badge p-0 mx-3 trending-wishlist-badge"><i
-                                         class="fa-regular fa-bookmark wishlist-icon"onclick="toggleBookmark(this)"></i>
+                                         class="fa-regular fa-bookmark wishlist-icon" onclick="toggleBookmark(this)"></i>
                                  </span>
                              </div>
                              <span class="px-3">
@@ -779,7 +783,7 @@
                              </p>
                              <div class="card-divider"></div>
                              <p class="ps-3 fw-medium d-flex align-items-center justify-content-between"
-                                 style="color:  #ff0060 "><span>$150</span><span
+                                 style="color:  #ff0060"><span>$150</span><span
                                      class="mx-3 px-2 couponBadge">DEALSLAH25</span></p>
                              <div class="card-divider"></div>
                              <div class="ps-3">
@@ -787,7 +791,7 @@
                                  <p><s>$200</s></p>
                              </div>
                              <div class="card-divider"></div>
-                             <p class="ps-3 fw-medium" style="color:  #ff0060 ;font-weight: 400 !important;"><i
+                             <p class="ps-3 fw-medium" style="color:  #ff0060;font-weight: 400 !important;"><i
                                      class="fa-solid fa-location-dot"></i>
                                  &nbsp;Singapore</p>
                          </div>
@@ -799,14 +803,14 @@
                      <div class="card sub_topCard h-100">
                          <div style="min-height: 50px">
                              <span class="badge trending-badge">EARLY BIRD</span>
-                             <img src="{{ asset('assets/images/home/beauty2.png') }}"
+                             <img src="{{ asset('assets/images/home/beauty2.webp') }}"
                                  class="img-fluid card-img-top1" alt="card_image" />
                          </div>
                          <div class="card-body card_section">
                              <div class="mt-3 d-flex align-items-center justify-content-between">
                                  <h5 class="card-title ps-3">Beauty Spa</h5>
                                  <span class="badge p-0 mx-3 trending-wishlist-badge"><i
-                                         class="fa-regular fa-bookmark wishlist-icon"onclick="toggleBookmark(this)"></i>
+                                         class="fa-regular fa-bookmark wishlist-icon" onclick="toggleBookmark(this)"></i>
                                  </span>
                              </div>
                              <span class="px-3">
@@ -822,7 +826,7 @@
                              </p>
                              <div class="card-divider"></div>
                              <p class="ps-3 fw-medium d-flex align-items-center justify-content-between"
-                                 style="color:  #ff0060 "><span>$150</span><span
+                                 style="color:  #ff0060"><span>$150</span><span
                                      class="mx-3 px-2 couponBadge">DEALSLAH25</span></p>
                              <div class="card-divider"></div>
                              <div class="ps-3">
@@ -830,7 +834,7 @@
                                  <p><s>$200</s></p>
                              </div>
                              <div class="card-divider"></div>
-                             <p class="ps-3 fw-medium" style="color:  #ff0060 ;font-weight: 400 !important;"><i
+                             <p class="ps-3 fw-medium" style="color:  #ff0060;font-weight: 400 !important;"><i
                                      class="fa-solid fa-location-dot"></i>
                                  &nbsp;Singapore</p>
                          </div>
@@ -842,14 +846,14 @@
                      <div class="card sub_topCard h-100">
                          <div style="min-height: 50px">
                              <span class="badge trending-badge">TRENDING</span>
-                             <img src="{{ asset('assets/images/home/restaurant.png') }}"
+                             <img src="{{ asset('assets/images/home/restaurant.webp') }}"
                                  class="img-fluid card-img-top1" alt="card_image" />
                          </div>
                          <div class="card-body card_section">
                              <div class="mt-3 d-flex align-items-center justify-content-between">
                                  <h5 class="card-title ps-3">Restaurants</h5>
                                  <span class="badge p-0 mx-3 trending-wishlist-badge"><i
-                                         class="fa-regular fa-bookmark wishlist-icon"onclick="toggleBookmark(this)"></i>
+                                         class="fa-regular fa-bookmark wishlist-icon" onclick="toggleBookmark(this)"></i>
                                  </span>
                              </div>
                              <span class="px-3">
@@ -865,7 +869,7 @@
                              </p>
                              <div class="card-divider"></div>
                              <p class="ps-3 fw-medium d-flex align-items-center justify-content-between"
-                                 style="color:  #ff0060 "><span>$150</span><span
+                                 style="color:  #ff0060"><span>$150</span><span
                                      class="mx-3 px-2 couponBadge">DEALSLAH25</span></p>
                              <div class="card-divider"></div>
                              <div class="ps-3">
@@ -873,7 +877,7 @@
                                  <p><s>$200</s></p>
                              </div>
                              <div class="card-divider"></div>
-                             <p class="ps-3 fw-medium" style="color:  #ff0060 ;font-weight: 400 !important;"><i
+                             <p class="ps-3 fw-medium" style="color:  #ff0060;font-weight: 400 !important;"><i
                                      class="fa-solid fa-location-dot"></i>
                                  &nbsp;Singapore</p>
                          </div>
@@ -885,14 +889,14 @@
                      <div class="card sub_topCard h-100">
                          <div style="min-height: 50px">
                              <span class="badge trending-badge">POPULAR</span>
-                             <img src="{{ asset('assets/images/home/spa_two.png') }}"
+                             <img src="{{ asset('assets/images/home/spa_two.webp') }}"
                                  class="img-fluid card-img-top1" alt="card_image" />
                          </div>
                          <div class="card-body card_section">
                              <div class="mt-3 d-flex align-items-center justify-content-between">
                                  <h5 class="card-title ps-3">Beauty Spa</h5>
                                  <span class="badge p-0 mx-3 trending-wishlist-badge"><i
-                                         class="fa-regular fa-bookmark wishlist-icon"onclick="toggleBookmark(this)"></i>
+                                         class="fa-regular fa-bookmark wishlist-icon" onclick="toggleBookmark(this)"></i>
                                  </span>
                              </div>
                              <span class="px-3">
@@ -908,7 +912,7 @@
                              </p>
                              <div class="card-divider"></div>
                              <p class="ps-3 fw-medium d-flex align-items-center justify-content-between"
-                                 style="color:  #ff0060 "><span>$150</span><span
+                                 style="color:  #ff0060"><span>$150</span><span
                                      class="mx-3 px-2 couponBadge">DEALSLAH25</span></p>
                              <div class="card-divider"></div>
                              <div class="ps-3">
@@ -916,7 +920,7 @@
                                  <p><s>$200</s></p>
                              </div>
                              <div class="card-divider"></div>
-                             <p class="ps-3 fw-medium" style="color:  #ff0060 ;font-weight: 400 !important;"><i
+                             <p class="ps-3 fw-medium" style="color:  #ff0060;font-weight: 400 !important;"><i
                                      class="fa-solid fa-location-dot"></i>
                                  &nbsp;Singapore</p>
                          </div>
