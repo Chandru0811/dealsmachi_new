@@ -258,6 +258,16 @@
 .categoryIcons {
     margin-top: 85px;
 }
+
+.dropdown-menu li a:hover {
+    background-color: #ff0060;
+    color: #fff;
+}
+
+.dropdown-menu li a:active {
+    background-color: #ff0060; 
+    color: #fff;
+}
 /* Category & Banner End  */
 
 /* App & PlayStore Start */
@@ -435,7 +445,7 @@ footer hr {
 }
 @media screen and (max-width: 992px) and (min-width: 767px) {
 .dealslah-text p{
-    font-size: 1.5rem !important;
+    font-size: 1.4rem !important;
 }
 
 .social-icons a i{

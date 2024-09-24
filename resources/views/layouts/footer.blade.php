@@ -1,13 +1,13 @@
-    <!-- Footer Start  -->
-    <section class="footer">
+<!-- Footer Start  -->
+<section class="footer">
         <footer class="text-lg-start">
             <div class="container py-2">
                 <div class="row justify-content-between">
                     <!-- Logo and Social Media Icons -->
                     <div class="col-md-3 text-md-start text-center mb-4 mb-md-0">
                         <div class="dealslah-text">
-                            <p class="display-6 text-light fw-medium" style="font-size: 2rem">
-                                DEALSLAH !
+                            <p class="text-light fw-medium" style="font-size: 1.55rem">
+                                DEALSMACCHI !
                             </p>
                         </div>
                         <div class="social-icons">
@@ -114,10 +114,10 @@
             <hr />
             <div class="text-center text-light">
                 <p class="d-flex justify-content-center" style="font-weight: 300">
-                    Terms and Conditions | Privacy Policy | 2024 &copy; Copyright
-                    Dealslah Pte Ltd. All Rights Reserved.
+                    <a href="/termsandconditions" class="text-decoration-none text-white mx-1">Terms and Conditions</a> | <a href="/privacypolicy" class="text-decoration-none text-white mx-1">Privacy Policy</a> | <span class="ps-1" style="cursor: pointer;">2024 &copy; Copyright
+                    Cloud ECS Infotech Pvt Ltd. All Rights Reserved.</span>
                 </p>
             </div>
         </footer>
-    </section>
-    <!-- Footer End  -->
+</section>
+<!-- Footer End  -->

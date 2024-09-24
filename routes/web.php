@@ -17,3 +17,11 @@ Route::get('/products_listing', function () {
 Route::get('/wishlist', function () {
     return view('bookmark');
 });
+
+Route::get('/privacypolicy', function () {
+    return view('privacypolicy');
+});
+
+Route::get('/termsandconditions', function () {
+    return view('termsandconditions');
+});
