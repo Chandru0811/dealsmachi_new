@@ -14,25 +14,24 @@
                          Electronics
                      </a>
                      <ul class="dropdown-menu" aria-labelledby="electronicsDropdown" style="cursor: pointer;">
-                         <li><a class="dropdown-item" href="{{ url('/products') }}" data-bs-toggle="tooltip"
+                         <li><a class="dropdown-item" href="{{ url('/products_listing') }}" data-bs-toggle="tooltip"
                                  data-bs-placement="top" title="Coming Soon.....">Mobile Phones</a></li>
-                         <li><a class="dropdown-item" href="{{ url('/products') }}">Laptops & Computers</a></li>
-                         <li><a class="dropdown-item" href="{{ url('/products') }}">Tablets</a></li>
-                         <li><a class="dropdown-item" href="{{ url('/products') }}">Television & Home Entertainment</a>
+                         <li><a class="dropdown-item" href="{{ url('/products_listing') }}">Laptops & Computers</a></li>
+                         <li><a class="dropdown-item" href="{{ url('/products_listing') }}">Tablets</a></li>
+                         <li><a class="dropdown-item" href="{{ url('/products_listing') }}">Television & Home Entertainment</a>
                          </li>
-                         <li><a class="dropdown-item" href="{{ url('/products') }}">Cameras & Photography</a></li>
-                         <li><a class="dropdown-item" href="{{ url('/products') }}">Audio & Headphones</a></li>
-                         <li><a class="dropdown-item" href="{{ url('/products') }}">Wearable Tech</a></li>
-                         <li><a class="dropdown-item" href="{{ url('/products') }}">Gaming Consoles</a></li>
-                         <li><a class="dropdown-item" href="{{ url('/products') }}">Smart Home Devices</a></li>
-                         <li><a class="dropdown-item" href="{{ url('/products') }}">Printers & Scanners</a></li>
-                         <li><a class="dropdown-item" href="{{ url('/products') }}">Networking Equipment</a></li>
-                         <li><a class="dropdown-item" href="{{ url('/products') }}">Computer Accessories</a></li>
-                         <li><a class="dropdown-item" href="{{ url('/products') }}">Drones & Action Cameras</a></li>
+                         <li><a class="dropdown-item" href="{{ url('/products_listing') }}">Cameras & Photography</a></li>
+                         <li><a class="dropdown-item" href="{{ url('/products_listing') }}">Audio & Headphones</a></li>
+                         <li><a class="dropdown-item" href="{{ url('/products_listing') }}">Wearable Tech</a></li>
+                         <li><a class="dropdown-item" href="{{ url('/products_listing') }}">Gaming Consoles</a></li>
+                         <li><a class="dropdown-item" href="{{ url('/products_listing') }}">Smart Home Devices</a></li>
+                         <li><a class="dropdown-item" href="{{ url('/products_listing') }}">Printers & Scanners</a></li>
+                         <li><a class="dropdown-item" href="{{ url('/products_listing') }}">Networking Equipment</a></li>
+                         <li><a class="dropdown-item" href="{{ url('/products_listing') }}">Computer Accessories</a></li>
+                         <li><a class="dropdown-item" href="{{ url('/products_listing') }}">Drones & Action Cameras</a></li>
                      </ul>
                  </div>
              </div>
-
              <div class="col-custom d-flex flex-column align-items-center">
                  <div class="nav-item dropdown">
                      <a class="nav-link categoryTitle dropdown-toggle" href="#" id="restaurantsDropdown"
@@ -46,24 +45,23 @@
                      <ul class="dropdown-menu dropdown-menu-md-end" aria-labelledby="restaurantsDropdown"
                          style="cursor: pointer">
                          <li><a class="dropdown-item" data-bs-placement="top" title="Coming Soon....."
-                                 href="{{ url('/products') }}">Fine Dining</a></li>
-                         <li><a class="dropdown-item" href="{{ url('/products') }}">Casual Dining</a></li>
-                         <li><a class="dropdown-item" href="{{ url('/products') }}">Fast Food</a></li>
-                         <li><a class="dropdown-item" href="{{ url('/products') }}">Buffets</a></li>
-                         <li><a class="dropdown-item" href="{{ url('/products') }}">Takeout & Delivery</a></li>
-                         <li><a class="dropdown-item" href="{{ url('/products') }}">Cafés & Bakeries</a></li>
-                         <li><a class="dropdown-item" href="{{ url('/products') }}">Food Trucks</a></li>
-                         <li><a class="dropdown-item" href="{{ url('/products') }}">Healthy Eating</a></li>
-                         <li><a class="dropdown-item" href="{{ url('/products') }}">Vegetarian & Vegan</a></li>
-                         <li><a class="dropdown-item" href="{{ url('/products') }}">Local Cuisine</a></li>
+                                 href="{{ url('/products_listing') }}">Fine Dining</a></li>
+                         <li><a class="dropdown-item" href="{{ url('/products_listing') }}">Casual Dining</a></li>
+                         <li><a class="dropdown-item" href="{{ url('/products_listing') }}">Fast Food</a></li>
+                         <li><a class="dropdown-item" href="{{ url('/products_listing') }}">Buffets</a></li>
+                         <li><a class="dropdown-item" href="{{ url('/products_listing') }}">Takeout & Delivery</a></li>
+                         <li><a class="dropdown-item" href="{{ url('/products_listing') }}">Cafés & Bakeries</a></li>
+                         <li><a class="dropdown-item" href="{{ url('/products_listing') }}">Food Trucks</a></li>
+                         <li><a class="dropdown-item" href="{{ url('/products_listing') }}">Healthy Eating</a></li>
+                         <li><a class="dropdown-item" href="{{ url('/products_listing') }}">Vegetarian & Vegan</a></li>
+                         <li><a class="dropdown-item" href="{{ url('/products_listing') }}">Local Cuisine</a></li>
                          <li><a class="dropdown-item" data-bs-placement="top" title="Coming Soon....."
-                                 href="{{ url('/products') }}">International Cuisine</a></li>
-                         <li><a class="dropdown-item" href="{{ url('/products') }}">Wine & Dine</a></li>
-                         <li><a class="dropdown-item" href="{{ url('/products') }}">Special Events & Catering</a></li>
+                                 href="{{ url('/products_listing') }}">International Cuisine</a></li>
+                         <li><a class="dropdown-item" href="{{ url('/products_listing') }}">Wine & Dine</a></li>
+                         <li><a class="dropdown-item" href="{{ url('/products_listing') }}">Special Events & Catering</a></li>
                      </ul>
                  </div>
              </div>
-
              <div class="col-custom d-flex flex-column align-items-center">
                  <div class="nav-item dropdown dropdown-menu-md-end">
                      <a class="nav-link categoryTitle dropdown-toggle" href="#" id="beautyDropdown" role="button"
@@ -76,22 +74,21 @@
                      </a>
                      <ul class="dropdown-menu dropdown-menu-md-end" aria-labelledby="beautyDropdown"
                          style="cursor: pointer">
-                         <li><a class="dropdown-item" href="{{ url('/products') }}">Skincare</a></li>
-                         <li><a class="dropdown-item" href="{{ url('/products') }}">Makeup</a></li>
-                         <li><a class="dropdown-item" href="{{ url('/products') }}">Hair Care</a></li>
-                         <li><a class="dropdown-item" href="{{ url('/products') }}">Fragrances</a></li>
-                         <li><a class="dropdown-item" href="{{ url('/products') }}">Body Care</a></li>
-                         <li><a class="dropdown-item" href="{{ url('/products') }}">Nail Care</a></li>
-                         <li><a class="dropdown-item" href="{{ url('/products') }}">Men's Grooming</a></li>
-                         <li><a class="dropdown-item" href="{{ url('/products') }}">Beauty Tools</a></li>
-                         <li><a class="dropdown-item" href="{{ url('/products') }}">Organic & Natural Beauty</a></li>
-                         <li><a class="dropdown-item" href="{{ url('/products') }}">Anti-Aging Products</a></li>
-                         <li><a class="dropdown-item" href="{{ url('/products') }}">Sun Care</a></li>
-                         <li><a class="dropdown-item" href="{{ url('/products') }}">Eyewear & Accessories</a></li>
+                         <li><a class="dropdown-item" href="{{ url('/products_listing') }}">Skincare</a></li>
+                         <li><a class="dropdown-item" href="{{ url('/products_listing') }}">Makeup</a></li>
+                         <li><a class="dropdown-item" href="{{ url('/products_listing') }}">Hair Care</a></li>
+                         <li><a class="dropdown-item" href="{{ url('/products_listing') }}">Fragrances</a></li>
+                         <li><a class="dropdown-item" href="{{ url('/products_listing') }}">Body Care</a></li>
+                         <li><a class="dropdown-item" href="{{ url('/products_listing') }}">Nail Care</a></li>
+                         <li><a class="dropdown-item" href="{{ url('/products_listing') }}">Men's Grooming</a></li>
+                         <li><a class="dropdown-item" href="{{ url('/products_listing') }}">Beauty Tools</a></li>
+                         <li><a class="dropdown-item" href="{{ url('/products_listing') }}">Organic & Natural Beauty</a></li>
+                         <li><a class="dropdown-item" href="{{ url('/products_listing') }}">Anti-Aging Products</a></li>
+                         <li><a class="dropdown-item" href="{{ url('/products_listing') }}">Sun Care</a></li>
+                         <li><a class="dropdown-item" href="{{ url('/products_listing') }}">Eyewear & Accessories</a></li>
                      </ul>
                  </div>
              </div>
-
              <div class="col-custom d-flex flex-column align-items-center">
                  <div class="nav-item dropdown">
                      <a class="nav-link categoryTitle dropdown-toggle" href="#" id="massageDropdown"
@@ -104,22 +101,21 @@
                      </a>
                      <ul class="dropdown-menu dropdown-menu-end dropdown-menu-md-end"
                          aria-labelledby="massageDropdown" style="cursor: pointer">
-                         <li><a class="dropdown-item" href="{{ url('/products') }}">Skincare</a></li>
-                         <li><a class="dropdown-item" href="{{ url('/products') }}">Makeup</a></li>
-                         <li><a class="dropdown-item" href="{{ url('/products') }}">Hair Care</a></li>
-                         <li><a class="dropdown-item" href="{{ url('/products') }}">Fragrances</a></li>
-                         <li><a class="dropdown-item" href="{{ url('/products') }}">Body Care</a></li>
-                         <li><a class="dropdown-item" href="{{ url('/products') }}">Nail Care</a></li>
-                         <li><a class="dropdown-item" href="{{ url('/products') }}">Men's Grooming</a></li>
-                         <li><a class="dropdown-item" href="{{ url('/products') }}">Beauty Tools</a></li>
-                         <li><a class="dropdown-item" href="{{ url('/products') }}">Organic & Natural Beauty</a></li>
-                         <li><a class="dropdown-item" href="{{ url('/products') }}">Anti-Aging Products</a></li>
-                         <li><a class="dropdown-item" href="{{ url('/products') }}">Sun Care</a></li>
-                         <li><a class="dropdown-item" href="{{ url('/products') }}">Eyewear & Accessories</a></li>
+                         <li><a class="dropdown-item" href="{{ url('/products_listing') }}">Skincare</a></li>
+                         <li><a class="dropdown-item" href="{{ url('/products_listing') }}">Makeup</a></li>
+                         <li><a class="dropdown-item" href="{{ url('/products_listing') }}">Hair Care</a></li>
+                         <li><a class="dropdown-item" href="{{ url('/products_listing') }}">Fragrances</a></li>
+                         <li><a class="dropdown-item" href="{{ url('/products_listing') }}">Body Care</a></li>
+                         <li><a class="dropdown-item" href="{{ url('/products_listing') }}">Nail Care</a></li>
+                         <li><a class="dropdown-item" href="{{ url('/products_listing') }}">Men's Grooming</a></li>
+                         <li><a class="dropdown-item" href="{{ url('/products_listing') }}">Beauty Tools</a></li>
+                         <li><a class="dropdown-item" href="{{ url('/products_listing') }}">Organic & Natural Beauty</a></li>
+                         <li><a class="dropdown-item" href="{{ url('/products_listing') }}">Anti-Aging Products</a></li>
+                         <li><a class="dropdown-item" href="{{ url('/products_listing') }}">Sun Care</a></li>
+                         <li><a class="dropdown-item" href="{{ url('/products_listing') }}">Eyewear & Accessories</a></li>
                      </ul>
                  </div>
              </div>
-
              <div class="col-custom d-flex flex-column align-items-center">
                  <div class="nav-item dropdown">
                      <a class="nav-link categoryTitle dropdown-toggle" href="#" id="groceriesDropdown"
@@ -132,23 +128,22 @@
                      </a>
                      <ul class="dropdown-menu dropdown-menu-lg-end dropdown-menu-md-end"
                          aria-labelledby="groceriesDropdown" style="cursor: pointer">
-                         <li><a class="dropdown-item" href="{{ url('/products') }}">Fruits & Vegetables</a></li>
-                         <li><a class="dropdown-item" href="{{ url('/products') }}">Dairy Products</a></li>
-                         <li><a class="dropdown-item" href="{{ url('/products') }}">Bakery Items</a></li>
-                         <li><a class="dropdown-item" href="{{ url('/products') }}">Meat & Seafood</a></li>
-                         <li><a class="dropdown-item" href="{{ url('/products') }}">Frozen Foods</a></li>
-                         <li><a class="dropdown-item" href="{{ url('/products') }}">Snacks & Beverages</a></li>
-                         <li><a class="dropdown-item" href="{{ url('/products') }}">Grains & Cereals</a></li>
-                         <li><a class="dropdown-item" href="{{ url('/products') }}">Condiments & Sauces</a></li>
-                         <li><a class="dropdown-item" href="{{ url('/products') }}">Organic & Health Foods</a></li>
-                         <li><a class="dropdown-item" href="{{ url('/products') }}">Household Essentials</a></li>
-                         <li><a class="dropdown-item" href="{{ url('/products') }}">Personal Care Products</a></li>
-                         <li><a class="dropdown-item" href="{{ url('/products') }}">Baby & Kids</a></li>
-                         <li><a class="dropdown-item" href="{{ url('/products') }}">International Foods</a></li>
+                         <li><a class="dropdown-item" href="{{ url('/products_listing') }}">Fruits & Vegetables</a></li>
+                         <li><a class="dropdown-item" href="{{ url('/products_listing') }}">Dairy Products</a></li>
+                         <li><a class="dropdown-item" href="{{ url('/products_listing') }}">Bakery Items</a></li>
+                         <li><a class="dropdown-item" href="{{ url('/products_listing') }}">Meat & Seafood</a></li>
+                         <li><a class="dropdown-item" href="{{ url('/products_listing') }}">Frozen Foods</a></li>
+                         <li><a class="dropdown-item" href="{{ url('/products_listing') }}">Snacks & Beverages</a></li>
+                         <li><a class="dropdown-item" href="{{ url('/products_listing') }}">Grains & Cereals</a></li>
+                         <li><a class="dropdown-item" href="{{ url('/products_listing') }}">Condiments & Sauces</a></li>
+                         <li><a class="dropdown-item" href="{{ url('/products_listing') }}">Organic & Health Foods</a></li>
+                         <li><a class="dropdown-item" href="{{ url('/products_listing') }}">Household Essentials</a></li>
+                         <li><a class="dropdown-item" href="{{ url('/products_listing') }}">Personal Care Products</a></li>
+                         <li><a class="dropdown-item" href="{{ url('/products_listing') }}">Baby & Kids</a></li>
+                         <li><a class="dropdown-item" href="{{ url('/products_listing') }}">International Foods</a></li>
                      </ul>
                  </div>
              </div>
-
              <div class="col-custom d-flex flex-column align-items-center">
                  <div class="nav-item dropdown">
                      <a class="nav-link categoryTitle dropdown-toggle" href="#" id="wellnessDropdown" role="button"
@@ -160,168 +155,110 @@
                          Wellness
                      </a>
                      <ul class="dropdown-menu dropdown-menu-end" style="cursor: pointer">
-                         <li><a class="dropdown-item" href="{{ url('/products') }}">Mental Health</a></li>
-                         <li><a class="dropdown-item" href="{{ url('/products') }}">Physical Health</a></li>
-                         <li><a class="dropdown-item" href="{{ url('/products') }}">Nutritional Counseling</a></li>
-                         <li><a class="dropdown-item" href="{{ url('/products') }}">Fitness</a></li>
-                         <li><a class="dropdown-item" href="{{ url('/products') }}">Community Wellness Programs</a>
-                         </li>
-                         <li><a class="dropdown-item" href="{{ url('/products') }}">Nature-Based Wellness
-                                 Programs</a></li>
+                         <li><a class="dropdown-item" href="{{ url('/products_listing') }}">Mental Health</a></li>
+                         <li><a class="dropdown-item" href="{{ url('/products_listing') }}">Physical Health</a></li>
+                         <li><a class="dropdown-item" href="{{ url('/products_listing') }}">Nutritional Counseling</a></li>
+                         <li><a class="dropdown-item" href="{{ url('/products_listing') }}">Fitness</a></li>
+                         <li><a class="dropdown-item" href="{{ url('/products_listing') }}">Community Wellness Programs</a></li>
+                         <li><a class="dropdown-item" href="{{ url('/products_listing') }}">Nature-Based Wellness Programs</a></li>
                      </ul>
 
                  </div>
              </div>
-
-             {{-- <div class="col-custom d-flex flex-column align-items-center">
+             <div class="col-custom d-flex flex-column align-items-center">
                  <div class="nav-item dropdown">
-                     <a class="nav-link categoryTitle dropdown-toggle" href="#" role="button"
-                         aria-expanded="false">
-                         <div style="width: 100px;height: 100px">
-                             <img src="{{ asset('assets/images/home/travels.webp') }}" alt="travels"
-             class="img-fluid" />
-         </div>
-         Travels
-         </a>
-         <ul class="dropdown-menu">
-             <li><a class="dropdown-item" href="#">Flight Bookings</a></li>
-             <li><a class="dropdown-item" href="#">Hotel Reservations</a></li>
-             <li><a class="dropdown-item" href="#">Car Rentals</a></li>
-             <li><a class="dropdown-item" href="#">Holiday Packages</a></li>
-             <li><a class="dropdown-item" href="#">Travel Insurance</a></li>
-             <li><a class="dropdown-item" href="#">Tour Guides & Experiences</a></li>
-             <li><a class="dropdown-item" href="#">Visa Assistance</a></li>
-             <li><a class="dropdown-item" href="#">Cruise Trips</a></li>
-             <li><a class="dropdown-item" href="#">Adventure Travel</a></li>
-             <li><a class="dropdown-item" href="#">Airport Transfers</a></li>
-             <li><a class="dropdown-item" href="#">Luxury Travel</a></li>
-             <li><a class="dropdown-item" href="#">Travel Accessories</a></li>
-             <li><a class="dropdown-item" href="#">Last-Minute Deals</a></li>
-         </ul>
-
-     </div>
-     </div>
-
-     <div class="col-custom d-flex flex-column align-items-center">
-         <div class="nav-item dropdown">
-             <a class="nav-link categoryTitle dropdown-toggle" href="#" role="button"
-                 aria-expanded="false">
-                 <div style="width: 100px;height: 100px">
-                     <img src="{{ asset('assets/images/home/logistics.webp') }}" alt="logistics"
-                         class="img-fluid" />
+                     <a class="nav-link categoryTitle dropdown-toggle" href="#" id="healthCareDropdown"
+                         role="button" aria-expanded="false" data-bs-toggle="dropdown" style="cursor: default">
+                         <div class="icons">
+                             <i class="fa-duotone fa-solid fa-user-doctor"
+                                 style="--fa-primary-color: #ff0060; --fa-secondary-color: #ff0060;"></i>
+                         </div>
+                         Health Care
+                     </a>
+                     <ul class="dropdown-menu dropdown-menu-md-end" aria-labelledby="healthCareDropdown"
+                         style="cursor: pointer">
+                         <li><a class="dropdown-item" href="{{ url('/products_listing') }}">Vitamins & Supplements</a></li>
+                         <li><a class="dropdown-item" href="{{ url('/products_listing') }}">Personal Hygiene</a></li>
+                         <li><a class="dropdown-item" href="{{ url('/products_listing') }}">Over-the-Counter Medications</a>
+                         </li>
+                         <li><a class="dropdown-item" href="{{ url('/products_listing') }}">First Aid</a></li>
+                         <li><a class="dropdown-item" href="{{ url('/products_listing') }}">Fitness & Exercise</a></li>
+                         <li><a class="dropdown-item" href="{{ url('/products_listing') }}">Medical Devices</a></li>
+                         <li><a class="dropdown-item" href="{{ url('/products_listing') }}">Healthy Snacks</a></li>
+                         <li><a class="dropdown-item" href="{{ url('/products_listing') }}">Weight Management</a></li>
+                         <li><a class="dropdown-item" href="{{ url('/products_listing') }}">Herbal Remedies</a></li>
+                         <li><a class="dropdown-item" href="{{ url('/products_listing') }}">Home Health Care</a></li>
+                         <li><a class="dropdown-item" href="{{ url('/products_listing') }}">Wellness & Relaxation</a></li>
+                         <li><a class="dropdown-item" href="{{ url('/products_listing') }}">Sleep Aids</a></li>
+                         <li><a class="dropdown-item" href="{{ url('/products_listing') }}">Dental Care</a></li>
+                     </ul>
                  </div>
-                 Logistics
-             </a>
-             <ul class="dropdown-menu">
-                 <li><a class="dropdown-item" href="#">Freight Forwarding</a></li>
-                 <li><a class="dropdown-item" href="#">Warehousing & Storage</a></li>
-                 <li><a class="dropdown-item" href="#">Transportation Services</a></li>
-                 <li><a class="dropdown-item" href="#">Supply Chain Management</a></li>
-                 <li><a class="dropdown-item" href="#">Inventory Management</a></li>
-                 <li><a class="dropdown-item" href="#">Customs Brokerage</a></li>
-                 <li><a class="dropdown-item" href="#">Logistics Technology</a></li>
-                 <li><a class="dropdown-item" href="#">Packaging Solutions</a></li>
-                 <li><a class="dropdown-item" href="#">Order Fulfillment</a></li>
-                 <li><a class="dropdown-item" href="#">Last-Mile Delivery</a></li>
-                 <li><a class="dropdown-item" href="#">Fleet Management</a></li>
-                 <li><a class="dropdown-item" href="#">Cold Chain Logistics</a></li>
-                 <li><a class="dropdown-item" href="#">Reverse Logistics</a></li>
-             </ul>
-         </div>
-     </div> --}}
-
-     <div class="col-custom d-flex flex-column align-items-center">
-         <div class="nav-item dropdown">
-             <a class="nav-link categoryTitle dropdown-toggle" href="#" id="healthCareDropdown"
-                 role="button" aria-expanded="false" data-bs-toggle="dropdown" style="cursor: default">
-                 <div class="icons">
-                     <i class="fa-duotone fa-solid fa-user-doctor"
-                         style="--fa-primary-color: #ff0060; --fa-secondary-color: #ff0060;"></i>
+             </div>
+             <div class="col-custom d-flex flex-column align-items-center">
+                 <div class="nav-item dropdown">
+                     <a class="nav-link categoryTitle dropdown-toggle" href="#" id="travelsDropdown"
+                         role="button" aria-expanded="false" data-bs-toggle="dropdown" style="cursor: default">
+                         <div class="icons">
+                             <i class="fa-duotone fa-solid fa-plane"
+                                 style="--fa-primary-color: #ff0060; --fa-secondary-color: #ff0060;"></i>
+                         </div>
+                         Travel
+                     </a>
+                     <ul class="dropdown-menu dropdown-menu-md-end" aria-labelledby="travelsDropdown"
+                         style="cursor: pointer">
+                         <li><a class="dropdown-item" href="{{ url('/products_listing') }}">Flights</a></li>
+                         <li><a class="dropdown-item" href="{{ url('/products_listing') }}">Hotels</a></li>
+                         <li><a class="dropdown-item" href="{{ url('/products_listing') }}">Tours</a></li>
+                         <li><a class="dropdown-item" href="{{ url('/products_listing') }}">Car Rentals</a></li>
+                         <li><a class="dropdown-item" href="{{ url('/products_listing') }}">Travel Insurance</a></li>
+                     </ul>
                  </div>
-                 Health Care
-             </a>
-             <ul class="dropdown-menu dropdown-menu-md-end" aria-labelledby="healthCareDropdown"
-                 style="cursor: pointer">
-                 <li><a class="dropdown-item" href="{{ url('/products') }}">Vitamins & Supplements</a></li>
-                 <li><a class="dropdown-item" href="{{ url('/products') }}">Personal Hygiene</a></li>
-                 <li><a class="dropdown-item" href="{{ url('/products') }}">Over-the-Counter Medications</a>
-                 </li>
-                 <li><a class="dropdown-item" href="{{ url('/products') }}">First Aid</a></li>
-                 <li><a class="dropdown-item" href="{{ url('/products') }}">Fitness & Exercise</a></li>
-                 <li><a class="dropdown-item" href="{{ url('/products') }}">Medical Devices</a></li>
-                 <li><a class="dropdown-item" href="{{ url('/products') }}">Healthy Snacks</a></li>
-                 <li><a class="dropdown-item" href="{{ url('/products') }}">Weight Management</a></li>
-                 <li><a class="dropdown-item" href="{{ url('/products') }}">Herbal Remedies</a></li>
-                 <li><a class="dropdown-item" href="{{ url('/products') }}">Home Health Care</a></li>
-                 <li><a class="dropdown-item" href="{{ url('/products') }}">Wellness & Relaxation</a></li>
-                 <li><a class="dropdown-item" href="{{ url('/products') }}">Sleep Aids</a></li>
-                 <li><a class="dropdown-item" href="{{ url('/products') }}">Dental Care</a></li>
-             </ul>
-         </div>
-     </div>
-
-     <div class="col-custom d-flex flex-column align-items-center">
-         <div class="nav-item dropdown">
-             <a class="nav-link categoryTitle dropdown-toggle" href="#" id="travelsDropdown"
-                 role="button" aria-expanded="false" data-bs-toggle="dropdown" style="cursor: default">
-                 <div class="icons">
-                     <i class="fa-duotone fa-solid fa-plane"
-                         style="--fa-primary-color: #ff0060; --fa-secondary-color: #ff0060;"></i>
+             </div>
+             <div class="col-custom d-flex flex-column align-items-center">
+                 <div class="nav-item dropdown">
+                     <a class="nav-link categoryTitle dropdown-toggle" href="#" id="logisticsDropdown"
+                         role="button" aria-expanded="false" data-bs-toggle="dropdown" style="cursor: default">
+                         <div class="icons">
+                             <i class="fa-duotone fa-solid fa-truck"
+                                 style="--fa-primary-color: #ff0060; --fa-secondary-color: #ff0060;"></i>
+                         </div>
+                         Logistics
+                     </a>
+                     <ul class="dropdown-menu dropdown-menu-md-end" aria-labelledby="logisticsDropdown"
+                         style="cursor: pointer">
+                         <li><a class="dropdown-item" href="{{ url('/products_listing') }}">House Moving</a></li>
+                         <li><a class="dropdown-item" href="{{ url('/products_listing') }}">Office Moving</a></li>
+                         <li><a class="dropdown-item" href="{{ url('/products_listing') }}">Item Moving</a></li>
+                         <li><a class="dropdown-item" href="{{ url('/products_listing') }}">Goods Disposal</a></li>
+                         <li><a class="dropdown-item" href="{{ url('/products_listing') }}">eCommerce Logistics</a></li>
+                         <li><a class="dropdown-item" href="{{ url('/products_listing') }}">eCommerce Delivery</a></li>
+                         <li><a class="dropdown-item" href="{{ url('/products_listing') }}">Warehouse Logistics</a></li>
+                         <li><a class="dropdown-item" href="{{ url('/products_listing') }}">Global Logistics</a></li>
+                         <li><a class="dropdown-item" href="{{ url('/products_listing') }}">Singapore to India</a></li>
+                         <li><a class="dropdown-item" href="{{ url('/products_listing') }}">India to Singapore</a></li>
+                     </ul>
                  </div>
-                 Travel
-             </a>
-             <ul class="dropdown-menu dropdown-menu-md-end" aria-labelledby="travelsDropdown"
-                 style="cursor: pointer">
-                 <li><a class="dropdown-item" href="{{ url('/products') }}">Flights</a></li>
-                 <li><a class="dropdown-item" href="{{ url('/products') }}">Hotels</a></li>
-                 <li><a class="dropdown-item" href="{{ url('/products') }}">Tours</a></li>
-                 <li><a class="dropdown-item" href="{{ url('/products') }}">Car Rentals</a></li>
-                 <li><a class="dropdown-item" href="{{ url('/products') }}">Travel Insurance</a></li>
-             </ul>
-         </div>
-     </div>
-
-     <div class="col-custom d-flex flex-column align-items-center">
-         <div class="nav-item dropdown">
-             <a class="nav-link categoryTitle dropdown-toggle" href="#" id="logisticsDropdown"
-                 role="button" aria-expanded="false" data-bs-toggle="dropdown" style="cursor: default">
-                 <div class="icons">
-                     <i class="fa-duotone fa-solid fa-truck"
-                         style="--fa-primary-color: #ff0060; --fa-secondary-color: #ff0060;"></i>
+             </div>
+             <div class="col-custom d-flex flex-column align-items-center">
+                 <div class="nav-item dropdown">
+                     <a class="nav-link categoryTitle dropdown-toggle" href="#" id="servicesDropdown"
+                         role="button" data-bs-toggle="dropdown" aria-expanded="false" style="cursor: default">
+                         <div class="icons">
+                             <i class="fa-duotone fa-solid fa-wrench"
+                                 style="--fa-primary-color: #ff0060; --fa-secondary-color: #ff0060;"></i>
+                         </div>
+                         Services
+                     </a>
+                     <ul class="dropdown-menu dropdown-menu-md-end" aria-labelledby="servicesDropdown"
+                         style="cursor: pointer">
+                         <li><a class="dropdown-item" data-bs-placement="top" title="Coming Soon....."
+                                 href="{{ url('/products_listing') }}">Electrician</a></li>
+                         <li><a class="dropdown-item" href="{{ url('/products_listing') }}">Plumber</a></li>
+                         <li><a class="dropdown-item" href="{{ url('/products_listing') }}">Water Supply</a></li>
+                     </ul>
                  </div>
-                 Logistics
-             </a>
-             <ul class="dropdown-menu dropdown-menu-md-end" aria-labelledby="logisticsDropdown"
-                 style="cursor: pointer">
-                 <li><a class="dropdown-item" href="{{ url('/products') }}">Freight Services</a></li>
-                 <li><a class="dropdown-item" href="{{ url('/products') }}">Courier Services</a></li>
-                 <li><a class="dropdown-item" href="{{ url('/products') }}">Warehousing</a></li>
-                 <li><a class="dropdown-item" href="{{ url('/products') }}">Supply Chain Management</a></li>
-                 <li><a class="dropdown-item" href="{{ url('/products') }}">Logistics Consulting</a></li>
-             </ul>
+             </div>
          </div>
-     </div>
-
-     <div class="col-custom d-flex flex-column align-items-center">
-         <div class="nav-item dropdown">
-             <a class="nav-link categoryTitle dropdown-toggle" href="#" id="servicesDropdown"
-                 role="button" data-bs-toggle="dropdown" aria-expanded="false" style="cursor: default">
-                 <div class="icons">
-                     <i class="fa-duotone fa-solid fa-wrench"
-                         style="--fa-primary-color: #ff0060; --fa-secondary-color: #ff0060;"></i>
-                 </div>
-                 Services
-             </a>
-             <ul class="dropdown-menu dropdown-menu-md-end" aria-labelledby="servicesDropdown"
-                 style="cursor: pointer">
-                 <li><a class="dropdown-item" data-bs-placement="top" title="Coming Soon....."
-                         href="{{ url('/products') }}">Electrician</a></li>
-                 <li><a class="dropdown-item" href="{{ url('/products') }}">Plumber</a></li>
-                 <li><a class="dropdown-item" href="{{ url('/products') }}">Water Supply</a></li>
-             </ul>
-         </div>
-     </div>
-     </div>
      </div>
      <div class="container slider-content">
          <div class="owl-carousel carousel_slider owl-theme">
@@ -416,8 +353,8 @@
                          <div class="card-body card_section">
                              <div class="mt-3 d-flex align-items-center justify-content-between">
                                  <h5 class="card-title ps-3">Kids Wear</h5>
-                                 <span class="badge mx-3 p-0 trending-wishlist-badge"><i
-                                         class="fa-regular fa-bookmark wishlist-icon" onclick="toggleBookmark(this)"></i>
+                                 <span class="badge p-0 mx-3 trending-wishlist-badge">
+                                     <i class="fa-regular fa-bookmark wishlist-icon" onclick="toggleBookmark(this, event)"></i>
                                  </span>
                              </div>
                              <span class="px-3">
@@ -459,8 +396,8 @@
                          <div class="card-body card_section">
                              <div class="mt-3 d-flex align-items-center justify-content-between">
                                  <h5 class="card-title  ps-3">Beauty Spa</h5>
-                                 <span class="badge p-0 mx-3 trending-wishlist-badge"><i
-                                         class="fa-regular fa-bookmark wishlist-icon" onclick="toggleBookmark(this)"></i>
+                                 <span class="badge p-0 mx-3 trending-wishlist-badge">
+                                     <i class="fa-regular fa-bookmark wishlist-icon" onclick="toggleBookmark(this, event)"></i>
                                  </span>
                              </div>
                              <span class="px-3">
@@ -503,8 +440,8 @@
                          <div class="card-body card_section">
                              <div class="mt-3 d-flex align-items-center justify-content-between">
                                  <h5 class="card-title ps-3">Restaurants</h5>
-                                 <span class="badge p-0 mx-3 trending-wishlist-badge"><i
-                                         class="fa-regular fa-bookmark wishlist-icon" onclick="toggleBookmark(this)"></i>
+                                 <span class="badge p-0 mx-3 trending-wishlist-badge">
+                                     <i class="fa-regular fa-bookmark wishlist-icon" onclick="toggleBookmark(this, event)"></i>
                                  </span>
                              </div>
                              <span class="px-3">
@@ -546,8 +483,8 @@
                          <div class="card-body card_section">
                              <div class="mt-3 d-flex align-items-center justify-content-between">
                                  <h5 class="card-title ps-3">Beauty Spa</h5>
-                                 <span class="badge p-0 mx-3 trending-wishlist-badge"><i
-                                         class="fa-regular fa-bookmark wishlist-icon" onclick="toggleBookmark(this)"></i>
+                                 <span class="badge p-0 mx-3 trending-wishlist-badge">
+                                     <i class="fa-regular fa-bookmark wishlist-icon" onclick="toggleBookmark(this, event)"></i>
                                  </span>
                              </div>
                              <span class="px-3">
@@ -578,7 +515,6 @@
                      </div>
                  </a>
              </div>
-
              <div class="col-md-3 col-12 mb-3 d-flex align-items-center justify-content-center">
                  <a href="{{ url('/products') }}" style="text-decoration: none;">
                      <div class="card sub_topCard h-100">
@@ -590,8 +526,8 @@
                          <div class="card-body card_section">
                              <div class="mt-3 d-flex align-items-center justify-content-between">
                                  <h5 class="card-title ps-3">Kids Wear</h5>
-                                 <span class="badge p-0 mx-3 trending-wishlist-badge"><i
-                                         class="fa-regular fa-bookmark wishlist-icon" onclick="toggleBookmark(this)"></i>
+                                 <span class="badge p-0 mx-3 trending-wishlist-badge">
+                                     <i class="fa-regular fa-bookmark wishlist-icon" onclick="toggleBookmark(this, event)"></i>
                                  </span>
                              </div>
                              <span class="px-3">
@@ -634,8 +570,8 @@
                              <h5 class="card-title mt-3 ps-3"></h5>
                              <div class="mt-3 d-flex align-items-center justify-content-between">
                                  <h5 class="card-title ps-3">Beauty Spa</h5>
-                                 <span class="badge p-0 mx-3 trending-wishlist-badge"><i
-                                         class="fa-regular fa-bookmark wishlist-icon" onclick="toggleBookmark(this)"></i>
+                                 <span class="badge p-0 mx-3 trending-wishlist-badge">
+                                     <i class="fa-regular fa-bookmark wishlist-icon" onclick="toggleBookmark(this, event)"></i>
                                  </span>
                              </div>
                              <span class="px-3">
@@ -678,8 +614,8 @@
                              <h5 class="card-title mt-3 ps-3"></h5>
                              <div class="mt-3 d-flex align-items-center justify-content-between">
                                  <h5 class="card-title ps-3">Men's Wear</h5>
-                                 <span class="badge p-0 mx-3 trending-wishlist-badge"><i
-                                         class="fa-regular fa-bookmark wishlist-icon" onclick="toggleBookmark(this)"></i>
+                                 <span class="badge p-0 mx-3 trending-wishlist-badge">
+                                     <i class="fa-regular fa-bookmark wishlist-icon" onclick="toggleBookmark(this, event)"></i>
                                  </span>
                              </div>
                              <span class="px-3">
@@ -721,8 +657,8 @@
                          <div class="card-body card_section">
                              <div class="mt-3 d-flex align-items-center justify-content-between">
                                  <h5 class="card-title ps-3">Beauty Spa</h5>
-                                 <span class="badge p-0 mx-3 trending-wishlist-badge"><i
-                                         class="fa-regular fa-bookmark wishlist-icon" onclick="toggleBookmark(this)"></i>
+                                 <span class="badge p-0 mx-3 trending-wishlist-badge">
+                                     <i class="fa-regular fa-bookmark wishlist-icon" onclick="toggleBookmark(this, event)"></i>
                                  </span>
                              </div>
                              <span class="px-3">
@@ -753,7 +689,6 @@
                      </div>
                  </a>
              </div>
-
              <div class="col-md-3 col-12 mb-3 d-flex align-items-center justify-content-center">
                  <a href="{{ url('/products') }}" style="text-decoration: none;">
                      <div class="card sub_topCard h-100">
@@ -766,8 +701,8 @@
                              <h5 class="card-title mt-3 ps-3"></h5>
                              <div class="mt-3 d-flex align-items-center justify-content-between">
                                  <h5 class="card-title ps-3">Kids Wear</h5>
-                                 <span class="badge p-0 mx-3 trending-wishlist-badge"><i
-                                         class="fa-regular fa-bookmark wishlist-icon" onclick="toggleBookmark(this)"></i>
+                                 <span class="badge p-0 mx-3 trending-wishlist-badge">
+                                     <i class="fa-regular fa-bookmark wishlist-icon" onclick="toggleBookmark(this, event)"></i>
                                  </span>
                              </div>
                              <span class="px-3">
@@ -809,8 +744,8 @@
                          <div class="card-body card_section">
                              <div class="mt-3 d-flex align-items-center justify-content-between">
                                  <h5 class="card-title ps-3">Beauty Spa</h5>
-                                 <span class="badge p-0 mx-3 trending-wishlist-badge"><i
-                                         class="fa-regular fa-bookmark wishlist-icon" onclick="toggleBookmark(this)"></i>
+                                 <span class="badge p-0 mx-3 trending-wishlist-badge">
+                                     <i class="fa-regular fa-bookmark wishlist-icon" onclick="toggleBookmark(this, event)"></i>
                                  </span>
                              </div>
                              <span class="px-3">
@@ -852,8 +787,8 @@
                          <div class="card-body card_section">
                              <div class="mt-3 d-flex align-items-center justify-content-between">
                                  <h5 class="card-title ps-3">Restaurants</h5>
-                                 <span class="badge p-0 mx-3 trending-wishlist-badge"><i
-                                         class="fa-regular fa-bookmark wishlist-icon" onclick="toggleBookmark(this)"></i>
+                                 <span class="badge p-0 mx-3 trending-wishlist-badge">
+                                     <i class="fa-regular fa-bookmark wishlist-icon" onclick="toggleBookmark(this, event)"></i>
                                  </span>
                              </div>
                              <span class="px-3">
@@ -895,8 +830,8 @@
                          <div class="card-body card_section">
                              <div class="mt-3 d-flex align-items-center justify-content-between">
                                  <h5 class="card-title ps-3">Beauty Spa</h5>
-                                 <span class="badge p-0 mx-3 trending-wishlist-badge"><i
-                                         class="fa-regular fa-bookmark wishlist-icon" onclick="toggleBookmark(this)"></i>
+                                 <span class="badge p-0 mx-3 trending-wishlist-badge">
+                                     <i class="fa-regular fa-bookmark wishlist-icon" onclick="toggleBookmark(this, event)"></i>
                                  </span>
                              </div>
                              <span class="px-3">

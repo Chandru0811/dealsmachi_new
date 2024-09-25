@@ -349,7 +349,12 @@ document.getElementById('applyButton').addEventListener('click', function () {
 });
 
 // <!-- Book Mark Icon -->
-function toggleBookmark(element) {
+function toggleBookmark(element, event) {
+    // Prevent the click from propagating to the anchor tag
+    event.preventDefault();
+    event.stopPropagation();
+
+    // Toggle the bookmark icon class
     if (element.classList.contains('fa-regular')) {
         element.classList.remove('fa-regular');
         element.classList.add('fa-solid');
