@@ -22,7 +22,7 @@
 <body>
     <section class="home-section">
         @include('layouts.header')
-        <div class="home-content container" style="margin-top: 100px">
+        <div class="home-content" style="margin-top: 100px">
             <div class="container">
                 <div class="mb-4">
                     <h1 class="mb-3">DealsMachi Privacy Policy</h1>
