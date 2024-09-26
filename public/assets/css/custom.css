@@ -318,7 +318,7 @@
 
 .sub_topCard:hover {
     transform: translateY(-2px);
-    box-shadow: 2px 2px 5px #ff00604d;
+    box-shadow: 2px 2px 5px #ff006041;
     border: 1px solid #ff0060;
     cursor: pointer;
 }
@@ -1171,18 +1171,19 @@ footer hr {
     transform: rotate(180deg);
 }
 
-@media all and (min-width: 768px) {
-    .dropdown > .dropdown-menu,
-    .dropdown.open > .dropdown-menu {
+@media (min-width: 992px) {
+    /* Hide dropdown initially on large screens */
+    .dropdown-menu {
         display: block !important;
-        opacity: 0 !important;
-        visibility: hidden !important;
-        transition: all ease 0.2s !important;
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.2s ease, visibility 0.2s ease;
     }
-    .dropdown:hover > .dropdown-menu,
-    .dropdown.open:hover > .dropdown-menu {
-        opacity: 1 !important;
-        visibility: visible !important;
+
+    /* Show dropdown on hover */
+    .dropdown:hover .dropdown-menu {
+        opacity: 1;
+        visibility: visible;
     }
 }
 

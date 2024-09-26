@@ -6,7 +6,7 @@
              <div class="col-custom d-flex flex-column align-items-center">
                  <div class="nav-item dropdown">
                      <a class="nav-link categoryTitle dropdown-toggle" href="#" id="electronicsDropdown"
-                         role="button" data-bs-toggle="dropdown" aria-expanded="false" style="cursor: pointer;">
+                         role="button" aria-expanded="false" style="cursor: pointer;">
                          <div class="icons">
                              <i class="fa-duotone fa-solid fa-laptop"
                                  style="--fa-primary-color: #ff0060; --fa-secondary-color: #ff0060;"></i>
@@ -35,7 +35,7 @@
              <div class="col-custom d-flex flex-column align-items-center">
                  <div class="nav-item dropdown">
                      <a class="nav-link categoryTitle dropdown-toggle" href="#" id="restaurantsDropdown"
-                         role="button" data-bs-toggle="dropdown" aria-expanded="false" style="cursor: default">
+                         role="button" aria-expanded="false" style="cursor: default">
                          <div class="icons">
                              <i class="fa-duotone fa-solid fa-utensils"
                                  style="--fa-primary-color: #ff0060; --fa-secondary-color: #ff0060;"></i>
@@ -65,7 +65,7 @@
              <div class="col-custom d-flex flex-column align-items-center">
                  <div class="nav-item dropdown dropdown-menu-md-end">
                      <a class="nav-link categoryTitle dropdown-toggle" href="#" id="beautyDropdown" role="button"
-                         aria-expanded="false" data-bs-toggle="dropdown" style="cursor: default">
+                         aria-expanded="false" style="cursor: default">
                          <div class="icons">
                              <i class="fa-duotone fa-solid fa-lips"
                                  style="--fa-primary-color: #ff0060; --fa-secondary-color: #ff0060;"></i>
@@ -92,14 +92,14 @@
              <div class="col-custom d-flex flex-column align-items-center">
                  <div class="nav-item dropdown">
                      <a class="nav-link categoryTitle dropdown-toggle" href="#" id="massageDropdown"
-                         role="button" data-bs-toggle="dropdown" aria-expanded="false" style="cursor: default">
+                         role="button" aria-expanded="false" style="cursor: default">
                          <div class="icons">
                              <i class="fa-duotone fa-solid fa-spa"
                                  style="--fa-primary-color: #ff0060; --fa-secondary-color: #ff0060;"></i>
                          </div>
                          Massage
                      </a>
-                     <ul class="dropdown-menu dropdown-menu-end dropdown-menu-md-end"
+                     <ul class="dropdown-menu dropdown-menu-end"
                          aria-labelledby="massageDropdown" style="cursor: pointer">
                          <li><a class="dropdown-item" href="{{ url('/products_listing') }}">Skincare</a></li>
                          <li><a class="dropdown-item" href="{{ url('/products_listing') }}">Makeup</a></li>
@@ -119,14 +119,14 @@
              <div class="col-custom d-flex flex-column align-items-center">
                  <div class="nav-item dropdown">
                      <a class="nav-link categoryTitle dropdown-toggle" href="#" id="groceriesDropdown"
-                         role="button" aria-expanded="false" data-bs-toggle="dropdown" style="cursor: default">
+                         role="button" aria-expanded="false" style="cursor: default">
                          <div class="icons">
                              <i class="fa-duotone fa-solid fa-cart-shopping"
                                  style="--fa-primary-color: #ff0060; --fa-secondary-color: #ff0060;"></i>
                          </div>
                          Groceries
                      </a>
-                     <ul class="dropdown-menu dropdown-menu-lg-end dropdown-menu-md-end"
+                     <ul class="dropdown-menu dropdown-menu-end"
                          aria-labelledby="groceriesDropdown" style="cursor: pointer">
                          <li><a class="dropdown-item" href="{{ url('/products_listing') }}">Fruits & Vegetables</a></li>
                          <li><a class="dropdown-item" href="{{ url('/products_listing') }}">Dairy Products</a></li>
@@ -147,7 +147,7 @@
              <div class="col-custom d-flex flex-column align-items-center">
                  <div class="nav-item dropdown">
                      <a class="nav-link categoryTitle dropdown-toggle" href="#" id="wellnessDropdown" role="button"
-                         aria-expanded="false" data-bs-toggle="dropdown" style="cursor: default">
+                         aria-expanded="false" style="cursor: default">
                          <div class="icons">
                              <i class="fa-duotone fa-solid fa-dumbbell"
                                  style="--fa-primary-color: #ff0060; --fa-secondary-color: #ff0060;"></i>
@@ -168,7 +168,7 @@
              <div class="col-custom d-flex flex-column align-items-center">
                  <div class="nav-item dropdown">
                      <a class="nav-link categoryTitle dropdown-toggle" href="#" id="healthCareDropdown"
-                         role="button" aria-expanded="false" data-bs-toggle="dropdown" style="cursor: default">
+                         role="button" aria-expanded="false" style="cursor: default">
                          <div class="icons">
                              <i class="fa-duotone fa-solid fa-user-doctor"
                                  style="--fa-primary-color: #ff0060; --fa-secondary-color: #ff0060;"></i>
@@ -197,7 +197,7 @@
              <div class="col-custom d-flex flex-column align-items-center">
                  <div class="nav-item dropdown">
                      <a class="nav-link categoryTitle dropdown-toggle" href="#" id="travelsDropdown"
-                         role="button" aria-expanded="false" data-bs-toggle="dropdown" style="cursor: default">
+                         role="button" aria-expanded="false" style="cursor: default">
                          <div class="icons">
                              <i class="fa-duotone fa-solid fa-plane"
                                  style="--fa-primary-color: #ff0060; --fa-secondary-color: #ff0060;"></i>
@@ -217,14 +217,14 @@
              <div class="col-custom d-flex flex-column align-items-center">
                  <div class="nav-item dropdown">
                      <a class="nav-link categoryTitle dropdown-toggle" href="#" id="logisticsDropdown"
-                         role="button" aria-expanded="false" data-bs-toggle="dropdown" style="cursor: default">
+                         role="button" aria-expanded="false" style="cursor: default">
                          <div class="icons">
                              <i class="fa-duotone fa-solid fa-truck"
                                  style="--fa-primary-color: #ff0060; --fa-secondary-color: #ff0060;"></i>
                          </div>
                          Logistics
                      </a>
-                     <ul class="dropdown-menu dropdown-menu-md-end" aria-labelledby="logisticsDropdown"
+                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="logisticsDropdown"
                          style="cursor: pointer">
                          <li><a class="dropdown-item" href="{{ url('/products_listing') }}">House Moving</a></li>
                          <li><a class="dropdown-item" href="{{ url('/products_listing') }}">Office Moving</a></li>
@@ -242,14 +242,14 @@
              <div class="col-custom d-flex flex-column align-items-center">
                  <div class="nav-item dropdown">
                      <a class="nav-link categoryTitle dropdown-toggle" href="#" id="servicesDropdown"
-                         role="button" data-bs-toggle="dropdown" aria-expanded="false" style="cursor: default">
+                         role="button" aria-expanded="false" style="cursor: default">
                          <div class="icons">
                              <i class="fa-duotone fa-solid fa-wrench"
                                  style="--fa-primary-color: #ff0060; --fa-secondary-color: #ff0060;"></i>
                          </div>
                          Services
                      </a>
-                     <ul class="dropdown-menu dropdown-menu-md-end" aria-labelledby="servicesDropdown"
+                     <ul class="dropdown-menu dropdown-menu-end aria-labelledby="servicesDropdown"
                          style="cursor: pointer">
                          <li><a class="dropdown-item" data-bs-placement="top" title="Coming Soon....."
                                  href="{{ url('/products_listing') }}">Electrician</a></li>

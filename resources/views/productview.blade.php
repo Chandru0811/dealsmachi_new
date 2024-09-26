@@ -5,25 +5,26 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     @section('head_links')
-    <title>DealsMachi Shop Smart, Save Big !</title>
-    <link rel="canonical" href="https://dealsmachi.com/productview" />
-    <meta name="description" content="DealsMachi Shop Smart, Save Big!" />
+        <title>DealsMachi Shop Smart, Save Big !</title>
+        <link rel="canonical" href="https://dealsmachi.com/productview" />
+        <meta name="description" content="DealsMachi Shop Smart, Save Big!" />
 
-    <link rel="icon" href="{{ asset('assets/images/home/favicon.ico') }}" />
+        <link rel="icon" href="{{ asset('assets/images/home/favicon.ico') }}" />
 
-    <!-- Boostrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+        <!-- Boostrap CSS -->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+            integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
 
-    <!-- Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Kanit:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+        <!-- Google Fonts -->
+        <!-- Google Fonts -->
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link
+        href="https://fonts.googleapis.com/css2?family=Kanit&display=swap"
         rel="stylesheet">
 
-    <!-- Custom CSS -->
-    <link rel="stylesheet" href="{{ asset('assets/css/custom.css') }}">
+        <!-- Custom CSS -->
+        <link rel="stylesheet" href="{{ asset('assets/css/custom.css') }}">
     @show
 </head>
 
@@ -104,16 +105,16 @@
                                                         <i class="fa-solid fa-star" style="color: #fdbf46;"></i>
                                                     </span>
                                                 </p>
-                                                <div class="d-flex mt-1 gap-3">
-                                                    <p style="cursor:pointer"
-                                                        data-bs-toggle="tooltip"
-                                                        data-bs-placement="top" title="Bookmark">
-                                                        <i
-                                                            class="fa-regular fa-bookmark" style="color: #ff0060;" onclick="toggleBookmark(this)"></i>
-                                                    </p>
-                                                    <p style="cursor:pointer"
-                                                        data-bs-toggle="tooltip"
-                                                        data-bs-placement="top" title="Share">
+                                                <div class="d-flex productViewIcons">
+                                                    <p style="height:fit-content;cursor:pointer" class="p-1 px-2"
+                                                        data-bs-toggle="tooltip" data-bs-placement="top"
+                                                        title="Bookmark">
+                                                        <i class="fa-regular fa-bookmark wishlist-icon"
+                                                            style="color: #ff0060;"
+                                                            onclick="toggleBookmark(this, event)"></i>
+                                                    </p>&nbsp;&nbsp;&nbsp;
+                                                    <p style="height: fit-content;cursor:pointer" class="p-1 px-2"
+                                                        data-bs-toggle="tooltip" data-bs-placement="top" title="Share">
                                                         <i class="fa-solid fa-share-nodes" style="color: #ff0060;"></i>
                                                     </p>
                                                 </div>
@@ -184,8 +185,7 @@
                                         <!-- Photos Tab -->
                                         <div class="tab-pane sub-tabs fade" id="photos" role="tabpanel"
                                             aria-labelledby="photos-tab">
-                                            <p class="text-end add_photos"><i
-                                                    class="fa-solid fa-plus"></i> Add
+                                            <p class="text-end add_photos"><i class="fa-solid fa-plus"></i> Add
                                                 Photos</p>
                                             <div class="row">
                                                 <div class="col-md-4 text-center">
@@ -434,7 +434,8 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            <a href="javascript:void(0);" id="read-more-btn" style="color: #ff0060;">Read More</a>
+                                            <a href="javascript:void(0);" id="read-more-btn"
+                                                style="color: #ff0060;">Read More</a>
                                         </div>
                                     </div>
                                 </div>
