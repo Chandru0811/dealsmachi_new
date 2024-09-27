@@ -112,7 +112,7 @@
 
         <hr />
         <div class="text-center text-light">
-            <p class="d-flex justify-content-center" style="font-weight: 300">
+            <p class="d-flex justify-content-center footerCopyrights" style="font-weight: 300">
                 <a href="/termsandconditions" class="text-decoration-none text-white mx-1">Terms and Conditions</a> | <a
                     href="/privacypolicy" class="text-decoration-none text-white mx-1">Privacy Policy</a> | <span
                     class="ps-1" style="cursor: pointer;">2024 &copy; Copyright
