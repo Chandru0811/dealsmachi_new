@@ -137,11 +137,12 @@
                 <p>If you have any questions about this Privacy Policy or our practices, please
                     contact us at:</p>
                 <br /><div>
-                <p class="fw-medium">DealsMachi Pte Ltd</p>
-                <p class="fw-medium">The Alexcier,</p>
-                <p class="fw-medium">237 Alexandra Road,</p>
-                <p class="fw-medium">#04-10,</p>
-                <p class="fw-medium">Singapore-159929</p>
+                <p class="fw-medium">Cloud ECS Infotech Pvt Ltd</p>
+                <p class="fw-medium">766, Sakthi Tower Ln,</p>
+                <p class="fw-medium">Anna Salai,</p>
+                <p class="fw-medium">Thousand Lights,</p>
+                <p class="fw-medium">Chennai,</p>
+                <p class="fw-medium">Tamil Nadu - 600002.</p>
                 <p class="fw-medium">info@dealsmachi.com</p>
                 <p class="fw-medium">+65 8894 1306</p>
             </div>

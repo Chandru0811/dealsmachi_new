@@ -5,28 +5,28 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     @section('head_links')
-        <title>DealsMachi – Deals that matter in Singapore</title>
+        <title>DealsMachi – Deals that matter in Chennai</title>
         <meta name="description"
-            content="Get the best deals in Singapore. Electronics, Beauty, Travel and every category you can imagine! Get our apps and stay ahead of every else in deals." />
+            content="Get the best deals in Chennai. Electronics, Beauty, Travel and every category you can imagine! Get our apps and stay ahead of every else in deals." />
         <link rel="canonical" href="https://dealsmachi.com/" />
         <link rel="icon" href="{{ asset('assets/images/home/favicon.ico') }}" />
 
-        <meta property="og:title" content="DealsMachi - Deals that Matter in Singapore !" />
-        <meta property="og:description" content="Shop Big, Earn Big Save Big, DealsMachi – Deals that matters in Singapore" />
+        <meta property="og:title" content="DealsMachi - Deals that Matter in Chennai !" />
+        <meta property="og:description" content="Shop Big, Earn Big Save Big, DealsMachi – Deals that matters in Chennai" />
         <meta property="og:url" content="https://dealsmachi.com" />
         <meta property="og:site_name" content="DealsMachi" />
         <meta property="og:image" content="{{ asset('assets/images/social/DealsMachi_og.png') }}" />
 
         <meta property="og:image:width" content="512" />
         <meta property="og:image:height" content="512" />
-        <meta property="og:image:alt" content="Get the best deals and discounts in Singapore" />
+        <meta property="og:image:alt" content="Get the best deals and discounts in Chennai" />
         <meta property="og:image:type" content="image/png" />
 
 
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content="DealsMachi - Deals that Matter in Singapore !" />
+        <meta name="twitter:title" content="DealsMachi - Deals that Matter in Chennai !" />
         <meta name="twitter:description"
-            content="Shop Big, Earn Big Save Big, DealsMachi – Deals that matters in Singapore" />
+            content="Shop Big, Earn Big Save Big, DealsMachi – Deals that matters in Chennai" />
         <meta name="twitter:site" content="@dealsmachi" />
 
         <meta name="twitter:image" content="{{ asset('assets/images/social/DealsMachi_twitter.png') }}" />

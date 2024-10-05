@@ -131,9 +131,9 @@
                 <h2>7. Governing</h2>
                 <ul>
                     <li>
-                        <span class="fw-regular">Singapore Law: </span>
+                        <span class="fw-regular">Chennai Law: </span>
                         This agreement shall be governed by and construed in
-                        accordance with the laws of Singapore.
+                        accordance with the laws of Chennai.
                     </li>
                 </ul>
             </div>

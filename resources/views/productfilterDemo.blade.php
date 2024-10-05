@@ -422,7 +422,7 @@
                                         <i class="fa-solid fa-star" style="color: #ffc200"></i>
                                     </span>
                                     <p class="px-3 fw-normal truncated-description">
-                                        DealsMachi, deals that matter in Singapore! Get the best of
+                                        DealsMachi, deals that matter in Chennai! Get the best of
                                         Electronics, Food, Travel, Makeup, Spa and other hot deals.
                                     </p>
                                     <div class="card-divider"></div>
@@ -437,7 +437,7 @@
                                     <div class="card-divider"></div>
                                     <p class="ps-3 fw-medium" style="color:  #ff0060 ;font-weight: 400 !important;"><i
                                             class="fa-solid fa-location-dot"></i>
-                                        &nbsp;Singapore</p>
+                                        &nbsp;Chennai</p>
                                 </div>
                             </div>
                         </a>
@@ -465,7 +465,7 @@
                                         <i class="fa-solid fa-star" style="color: #ffc200"></i>
                                     </span>
                                     <p class="px-3 fw-normal truncated-description">
-                                        DealsMachi, deals that matter in Singapore! Get the best of
+                                        DealsMachi, deals that matter in Chennai! Get the best of
                                         Electronics, Food, Travel, Makeup, Spa and other hot deals.
                                     </p>
                                     <div class="card-divider"></div>
@@ -481,7 +481,7 @@
                                     <p class="ps-3 fw-medium"
                                         style="color:  #ff0060 ;font-weight: 400 !important;";font-weight: 400 !important;>
                                         <i class="fa-solid fa-location-dot"></i>
-                                        &nbsp;Singapore</p>
+                                        &nbsp;Chennai</p>
                                 </div>
                             </div>
                         </a>
@@ -509,7 +509,7 @@
                                         <i class="fa-solid fa-star" style="color: #ffc200"></i>
                                     </span>
                                     <p class="px-3 fw-normal truncated-description">
-                                        DealsMachi, deals that matter in Singapore! Get the best of
+                                        DealsMachi, deals that matter in Chennai! Get the best of
                                         Electronics, Food, Travel, Makeup, Spa and other hot deals.
                                     </p>
                                     <div class="card-divider"></div>
@@ -524,7 +524,7 @@
                                     <div class="card-divider"></div>
                                     <p class="ps-3 fw-medium" style="color:  #ff0060 ;font-weight: 400 !important;"><i
                                             class="fa-solid fa-location-dot"></i>
-                                        &nbsp;Singapore</p>
+                                        &nbsp;Chennai</p>
                                 </div>
                             </div>
                         </a>
@@ -553,7 +553,7 @@
                                         <i class="fa-solid fa-star" style="color: #ffc200"></i>
                                     </span>
                                     <p class="px-3 fw-normal truncated-description">
-                                        DealsMachi, deals that matter in Singapore! Get the best of
+                                        DealsMachi, deals that matter in Chennai! Get the best of
                                         Electronics, Food, Travel, Makeup, Spa and other hot deals.
                                     </p>
                                     <div class="card-divider"></div>
@@ -568,7 +568,7 @@
                                     <div class="card-divider"></div>
                                     <p class="ps-3 fw-medium" style="color:  #ff0060 ;font-weight: 400 !important;"><i
                                             class="fa-solid fa-location-dot"></i>
-                                        &nbsp;Singapore</p>
+                                        &nbsp;Chennai</p>
                                 </div>
                             </div>
                         </a>
@@ -597,7 +597,7 @@
                                         <i class="fa-solid fa-star" style="color: #ffc200"></i>
                                     </span>
                                     <p class="px-3 fw-normal truncated-description">
-                                        DealsMachi, deals that matter in Singapore! Get the best of
+                                        DealsMachi, deals that matter in Chennai! Get the best of
                                         Electronics, Food, Travel, Makeup, Spa and other hot deals.
                                     </p>
                                     <div class="card-divider"></div>
@@ -612,7 +612,7 @@
                                     <div class="card-divider"></div>
                                     <p class="ps-3 fw-medium" style="color:  #ff0060 ;font-weight: 400 !important;"><i
                                             class="fa-solid fa-location-dot"></i>
-                                        &nbsp;Singapore</p>
+                                        &nbsp;Chennai</p>
                                 </div>
                             </div>
                         </a>
@@ -640,7 +640,7 @@
                                         <i class="fa-solid fa-star" style="color: #ffc200"></i>
                                     </span>
                                     <p class="px-3 fw-normal truncated-description">
-                                        DealsMachi, deals that matter in Singapore! Get the best of
+                                        DealsMachi, deals that matter in Chennai! Get the best of
                                         Electronics, Food, Travel, Makeup, Spa and other hot deals.
                                     </p>
                                     <div class="card-divider"></div>
@@ -655,7 +655,7 @@
                                     <div class="card-divider"></div>
                                     <p class="ps-3 fw-medium" style="color:  #ff0060 ;font-weight: 400 !important;"><i
                                             class="fa-solid fa-location-dot"></i>
-                                        &nbsp;Singapore</p>
+                                        &nbsp;Chennai</p>
                                 </div>
                             </div>
                         </a>
@@ -683,7 +683,7 @@
                                         <i class="fa-solid fa-star" style="color: #ffc200"></i>
                                     </span>
                                     <p class="px-3 fw-normal truncated-description">
-                                        DealsMachi, deals that matter in Singapore! Get the best of
+                                        DealsMachi, deals that matter in Chennai! Get the best of
                                         Electronics, Food, Travel, Makeup, Spa and other hot deals.
                                     </p>
                                     <div class="card-divider"></div>
@@ -698,7 +698,7 @@
                                     <div class="card-divider"></div>
                                     <p class="ps-3 fw-medium" style="color:  #ff0060 ;font-weight: 400 !important;"><i
                                             class="fa-solid fa-location-dot"></i>
-                                        &nbsp;Singapore</p>
+                                        &nbsp;Chennai</p>
                                 </div>
                             </div>
                         </a>
@@ -726,7 +726,7 @@
                                         <i class="fa-solid fa-star" style="color: #ffc200"></i>
                                     </span>
                                     <p class="px-3 fw-normal truncated-description">
-                                        DealsMachi, deals that matter in Singapore! Get the best of
+                                        DealsMachi, deals that matter in Chennai! Get the best of
                                         Electronics, Food, Travel, Makeup, Spa and other hot deals.
                                     </p>
                                     <div class="card-divider"></div>
@@ -741,7 +741,7 @@
                                     <div class="card-divider"></div>
                                     <p class="ps-3 fw-medium" style="color:  #ff0060 ;font-weight: 400 !important;"><i
                                             class="fa-solid fa-location-dot"></i>
-                                        &nbsp;Singapore</p>
+                                        &nbsp;Chennai</p>
                                 </div>
                             </div>
                         </a>
@@ -770,7 +770,7 @@
                                         <i class="fa-solid fa-star" style="color: #ffc200"></i>
                                     </span>
                                     <p class="px-3 fw-normal truncated-description">
-                                        DealsMachi, deals that matter in Singapore! Get the best of
+                                        DealsMachi, deals that matter in Chennai! Get the best of
                                         Electronics, Food, Travel, Makeup, Spa and other hot deals.
                                     </p>
                                     <div class="card-divider"></div>
@@ -785,7 +785,7 @@
                                     <div class="card-divider"></div>
                                     <p class="ps-3 fw-medium" style="color:  #ff0060 ;font-weight: 400 !important;"><i
                                             class="fa-solid fa-location-dot"></i>
-                                        &nbsp;Singapore</p>
+                                        &nbsp;Chennai</p>
                                 </div>
                             </div>
                         </a>
@@ -813,7 +813,7 @@
                                         <i class="fa-solid fa-star" style="color: #ffc200"></i>
                                     </span>
                                     <p class="px-3 fw-normal truncated-description">
-                                        DealsMachi, deals that matter in Singapore! Get the best of
+                                        DealsMachi, deals that matter in Chennai! Get the best of
                                         Electronics, Food, Travel, Makeup, Spa and other hot deals.
                                     </p>
                                     <div class="card-divider"></div>
@@ -828,7 +828,7 @@
                                     <div class="card-divider"></div>
                                     <p class="ps-3 fw-medium" style="color:  #ff0060 ;font-weight: 400 !important;"><i
                                             class="fa-solid fa-location-dot"></i>
-                                        &nbsp;Singapore</p>
+                                        &nbsp;Chennai</p>
                                 </div>
                             </div>
                         </a>
@@ -857,7 +857,7 @@
                                         <i class="fa-solid fa-star" style="color: #ffc200"></i>
                                     </span>
                                     <p class="px-3 fw-normal truncated-description">
-                                        DealsMachi, deals that matter in Singapore! Get the best of
+                                        DealsMachi, deals that matter in Chennai! Get the best of
                                         Electronics, Food, Travel, Makeup, Spa and other hot deals.
                                     </p>
                                     <div class="card-divider"></div>
@@ -872,7 +872,7 @@
                                     <div class="card-divider"></div>
                                     <p class="ps-3 fw-medium" style="color:  #ff0060 ;font-weight: 400 !important;"><i
                                             class="fa-solid fa-location-dot"></i>
-                                        &nbsp;Singapore</p>
+                                        &nbsp;Chennai</p>
                                 </div>
                             </div>
                         </a>
@@ -900,7 +900,7 @@
                                         <i class="fa-solid fa-star" style="color: #ffc200"></i>
                                     </span>
                                     <p class="px-3 fw-normal truncated-description">
-                                        DealsMachi, deals that matter in Singapore! Get the best of
+                                        DealsMachi, deals that matter in Chennai! Get the best of
                                         Electronics, Food, Travel, Makeup, Spa and other hot deals.
                                     </p>
                                     <div class="card-divider"></div>
@@ -915,7 +915,7 @@
                                     <div class="card-divider"></div>
                                     <p class="ps-3 fw-medium" style="color:  #ff0060 ;font-weight: 400 !important;"><i
                                             class="fa-solid fa-location-dot"></i>
-                                        &nbsp;Singapore</p>
+                                        &nbsp;Chennai</p>
                                 </div>
                             </div>
                         </a>
