@@ -1,0 +1,87 @@
+<?php
+
+namespace App\Http\Controllers\Api\Admin;
+
+use App\Http\Controllers\Controller;
+use App\Models\Product;
+use Illuminate\Http\Request;
+use App\Models\Shop;
+use App\Traits\ApiResponses;
+use App\Models\ShopPolicy;
+use App\Models\ShopHour;
+
+class ShopController extends Controller
+{
+    use ApiResponses;
+
+    public function index()
+    {
+        $shops = Shop::orderBy('id', 'desc')->get();
+        return $this->success('Shops retrieved successfully.', $shops);
+    }
+
+    public function getshopbasics($id)
+    {
+        $shop = Shop::select('name', 'legal_name', 'slug', 'email', 'mobile', 'external_url', 'shop_type', 'logo', 'banner', 'shop_ratings', 'description', 'active')->where('id',$id)->first();
+        return $this->success('Shop retrieved successfully.', $shop);
+    }
+
+    public function getshoplocation($id)
+    {
+        $shop = Shop::select('street', 'street2', 'city', 'zip_code', 'state', 'country')->where('id',$id)->first();
+        return $this->success('Shop retrieved successfully.', $shop);
+    }
+
+    public function getshoppayment($id)
+    {
+        $shop = Shop::select('payment_id', 'account_holder', 'account_type', 'account_number', 'bank_name', 'bank_address', 'bank_code')->where('id',$id)->first();
+        return $this->success('Shop retrieved successfully.', $shop);
+    }
+
+    public function getshophours($id)
+    {
+        $shophours = ShopHour::where('shop_id',$id)->first();
+        return $this->success('Shop retrieved successfully.', $shophours);
+    }
+
+    public function getshoppolicy($id)
+    {
+        $shoppolicy = ShopPolicy::where('shop_id',$id)->first();
+        return $this->success('Shop retrieved successfully.', $shoppolicy);
+    }
+
+    public function activateshop($id)
+    {
+        Shop::where('id', $id)->update(['active' => '1']);
+        return $this->ok('Shop Activated Successfully.');
+    }
+
+    public function deactivateshop($id)
+    {
+        Shop::where('id', $id)->update(['active' => '0']);
+        return $this->ok('Shop Deactivated Successfully.');
+    }
+
+    public function indexproduct()
+    {
+        $products = Product::orderBy('id', 'desc')->get();
+        return $this->success('Products Retrieved Successfully!', $products);
+    }
+
+    public function showproduct(string $id)
+    {
+        $product = Product::with(['category', 'category.categoryGroup'])->find($id);
+
+        if (!$product) {
+            return $this->error('Product Not Found.', ['error' => 'Product Not Found']);
+        }
+
+        $product->categoryName = $product->category ? $product->category->name : null;
+        $product->categoryGroupName = $product->category && $product->category->categoryGroup ? $product->category->categoryGroup->name : null;
+        $product->categoryGroupId = $product->category && $product->category->categoryGroup ? $product->category->categoryGroup->id : null;
+
+        unset($product->category);
+
+        return $this->success('Product Retrieved Successfully!', $product);
+    }
+}

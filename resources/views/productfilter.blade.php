@@ -1,1003 +1,392 @@
-<!DOCTYPE html>
-<html lang="en">
+@extends('layouts.master')
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    @section('head_links')
-    <title>DealsMachi Shop Smart, Save Big !</title>
-    <link rel="canonical" href="https://dealsmachi.com/productfilter" />
-    <meta name="description" content="DealsMachi Shop Smart, Save Big!" />
-    <link rel="icon" href="{{ asset('assets/images/home/favicon.ico') }}" />
-
-    <!-- Boostrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
-
-        <!-- Google Fonts -->
-        <link rel="preconnect" href="https://fonts.googleapis.com">
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link
-        href="https://fonts.googleapis.com/css2?family=Kanit&display=swap"
-        rel="stylesheet">
-
-    <!-- Custom CSS -->
-    <link rel="stylesheet" href="{{ asset('assets/css/custom.css') }}">
-    @show
-</head>
-
-<body>
-    <section class="home-section">
-        @include('layouts.header')
-        <div class="home-content" style="margin-top: 100px">
-            <div>
-                <div class="p-4 topFilter">
-                    <div class="row d-flex align-items-center">
-                        <!-- Beauty Spa and Hair Section -->
-                        <div class="col-12 col-md-5 mb-3 mb-md-0">
+@section('content')
+    <div class="categoryIcons">
+        <form method="GET" action="{{ route('search') }}" id="filterForm">
+            <div class="p-4 topFilter">
+                <div class="row d-flex align-items-center">
+                    <!-- Beauty Spa and Hair Section -->
+                    <div class="col-12 col-md-6 mb-3 mb-md-0">
+                        @if (!empty($categorygroup) && !empty($category))
                             <div class="d-flex justify-content-start px-5">
-                                <p class="topText mb-0">Beauty Spa <i class="arrow-icon me-2 fa-solid fa-angle-right"></i>
-                                </p>
-                                <p class="selectText mb-0">Hair</p>
+                                <a href="/" class="text-decoration-none">
+                                    <p class="topText mb-0">{{ $categorygroup->name ?? '' }}
+                                        <i class="arrow-icon me-2 fa-solid fa-angle-right"></i>
+                                    </p>
+                                </a>
+                                <p class="selectText mb-0" style="cursor: default">{{ $category->name ?? '' }}</p>
                             </div>
-                        </div>
-                        <div class="col-12 col-md-7">
-                            <div class="d-flex justify-content-md-end justify-content-center align-items-center">
-                                <div class="d-flex align-items-center me-3">
-                                    <p class="mb-0 dropdownheading me-2">Per Page:</p>
-                                    <select class="form-select dropdownproduct" aria-label="Default select example"
-                                        style="color: #8A8FB9">
-                                        <option selected>5</option>
-                                        <option value="10" class="filterdropdown">10</option>
-                                        <option value="15" class="filterdropdown">15</option>
-                                        <option value="25" class="filterdropdown">25</option>
-                                    </select>
-                                </div>
-                                <div class="d-flex align-items-center">
-                                    <p class="mb-0 dropdownheading me-2">Sort By:</p>
-                                    <select class="form-select dropdownproduct" aria-label="Default select example"
-                                        style="color: #8A8FB9">
-                                        <option selected>Best Match</option>
-                                        <option value="Trending" class="filterdropdown">Trending</option>
-                                        <option value="Popular" class="filterdropdown">Popular</option>
-                                        <option value="Early Bird" class="filterdropdown">Early Bird</option>
-                                        <option value="Limited Chance" class="filterdropdown">Limited Chance</option>
-                                        <option value="Limited Time" class="filterdropdown">Limited Time</option>
-                                    </select>
-                                </div>
+                        @endif
+                    </div>
+
+                    <div class="col-12 col-md-6">
+                        <div class="d-flex justify-content-md-end justify-content-center align-items-center">
+                            <div class="d-flex align-items-center me-3">
+                                <p class="mb-0 dropdownheading me-2">Per Page:</p>
+                                <select class="form-select dropdownproduct" aria-label="Default select example"
+                                    name="per_page" onchange="this.form.submit()" style="color: #8A8FB9">
+                                    <option value="5" {{ request()->input('per_page') == 5 ? 'selected' : '' }}>5
+                                    </option>
+                                    <option value="10" {{ request()->input('per_page', 10) == 10 ? 'selected' : '' }}>10
+                                    </option>
+                                    <option value="15" {{ request()->input('per_page') == 15 ? 'selected' : '' }}>15
+                                    </option>
+                                    <option value="25" {{ request()->input('per_page') == 25 ? 'selected' : '' }}>25
+                                    </option>
+                                </select>
+                            </div>
+                            <div class="d-flex align-items-center">
+                                <p class="mb-0 dropdownheading me-2">Sort By:</p>
+                                <select class="form-select dropdownproduct" aria-label="Default select example"
+                                    name="short_by" onchange="this.form.submit()" style="color: #8A8FB9">
+                                    <option value="" class="filterdropdown"></option>
+                                    @foreach ($shortby as $dealsoption)
+                                        <option value="{{ $dealsoption->slug }}" class="filterdropdown"
+                                            {{ request()->input('short_by') == $dealsoption->slug ? 'selected' : '' }}>
+                                            {{ $dealsoption->name }}
+                                        </option>
+                                    @endforeach
+                                </select>
                             </div>
                         </div>
                     </div>
+
                 </div>
-                <div class="col-2 d-lg-none filter-button d-flex justify-content-center align-items-center mb-3 mx-3 mt-2"
-                    style="width: fit-content !important">
-                    <button class="btn btn-sm" type="button" data-bs-toggle="offcanvas" data-bs-target="#filterOffcanvas"
-                        aria-controls="filterOffcanvas" style="border: none;width: fit-content !important">
-                        <i class="fa-solid fa-filter" style="color: #fff"></i> <span class="text-white ms-1">Filters</span>
-                    </button>
-                </div>
-                <div class="row filterindSection m-0 mt-3">
-                    {{-- Offcanvas --}}
+            </div>
+            <!-- Filter Button for Mobile -->
+            <div class="col-2 d-lg-none filter-button d-flex justify-content-center align-items-center mb-3 mx-3 mt-2"
+                style="width: fit-content !important">
+                <button class="btn btn-sm" type="button" data-bs-toggle="offcanvas" data-bs-target="#filterOffcanvas"
+                    aria-controls="filterOffcanvas" style="border: none;width: fit-content !important">
+                    <i class="fa-solid fa-filter" style="color: #fff"></i> <span class="text-white ms-1">Filters</span>
+                </button>
+            </div>
+
+            <!-- Filters Section -->
+            <div class="row filterindSection m-0 mt-3">
+                @if ($deals->isNotEmpty())
+                    {{-- Offcanvas for Mobile --}}
                     <div class="offcanvas offcanvas-start" tabindex="-1" id="filterOffcanvas"
                         aria-labelledby="filterOffcanvasLabel">
                         <div class="offcanvas-header">
+                            <h5 class="offcanvas-title" id="filterOffcanvasLabel">Filter Results</h5>
                             <button type="button" class="btn-close" data-bs-dismiss="offcanvas"
                                 aria-label="Close"></button>
                         </div>
-                        <div class="offcanvas-body " style="overflow-y: auto">
-
+                        <div class="offcanvas-body" style="overflow-y: auto">
                             <div class="row">
                                 <div class="col-6">
-                                    <p class="canvas_topText2"> Filter Results</p>
+                                    <p class="canvas_topText2">Filter Results</p>
                                 </div>
                                 <div class="col-6">
-                                    <p class="canvas_selectText2">350 deals available</p>
+                                    <p class="canvas_selectText2">{{ $totaldeals }} deals available</p>
                                 </div>
                             </div>
-                            <!-- Filter Content (The code you provided) -->
-                            <div class="col-12">
-                                <div class="productFilter">
-                                    <div class="px-5 pb-3">
-                                        <div class="d-flex flex-column">
-                                            <p class="topText3 mb-1" style="border-bottom: 1px solid; width:fit-content">
-                                                Brand</p>
-                                        </div>
-                                        <div class="form-check pt-3">
-                                            <input class="form-check-input" type="checkbox" value=""
-                                                id="coasterFurniture">
-                                            <label class="form-check-label categoryLable" for="coasterFurniture">
-                                                Coaster Furniture
-                                            </label>
-                                        </div>
-                                        <div class="form-check pt-3">
-                                            <input class="form-check-input" type="checkbox" value=""
-                                                id="highFashion">
-                                            <label class="form-check-label categoryLable" for="highFashion">
-                                                Fusion Dot High Fashion
-                                            </label>
-                                        </div>
-                                        <div class="form-check pt-3">
-                                            <input class="form-check-input" type="checkbox" value=""
-                                                id="furnitureRestore">
-                                            <label class="form-check-label categoryLable" for="furnitureRestore">
-                                                Unique Furniture Restore
-                                            </label>
-                                        </div>
-                                        <div class="form-check pt-3">
-                                            <input class="form-check-input" type="checkbox" value=""
-                                                id="furnitureFlipping">
-                                            <label class="form-check-label categoryLable" for="furnitureFlipping">
-                                                Dream Furniture Flipping
-                                            </label>
-                                        </div>
-                                        <div class="form-check pt-3">
-                                            <input class="form-check-input" type="checkbox" value=""
-                                                id="Young Repurposed">
-                                            <label class="form-check-label categoryLable" for="youngPurposed">
-                                                Young Repurposed
-                                            </label>
-                                        </div>
-                                        <div class="form-check pt-3">
-                                            <input class="form-check-input" type="checkbox" value=""
-                                                id="diyFurniture">
-                                            <label class="form-check-label categoryLable" for="diyFurniture">
-                                                Green DIY furniture
-                                            </label>
-                                        </div>
-                                    </div>
-                                    <div class="px-5 pb-3">
-                                        <div class="d-flex flex-column">
-                                            <p class="topText3 mb-1">Discount Offer</p>
-                                            <div class="textline2"></div>
-                                        </div>
-                                        <div class="form-check pt-3">
-                                            <input class="form-check-input" type="checkbox" value=""
-                                                id="20%Cashbook">
-                                            <label class="form-check-label categoryLable" for="20%Cashbook">
-                                                20% Cashback
-                                            </label>
-                                        </div>
-                                        <div class="form-check pt-3">
-                                            <input class="form-check-input" type="checkbox" value=""
-                                                id="5%Cashbook">
-                                            <label class="form-check-label categoryLable" for="5%Cashbook">
-                                                5% Cashback Offer
-                                            </label>
-                                        </div>
-                                        <div class="form-check pt-3">
-                                            <input class="form-check-input" type="checkbox" value=""
-                                                id="25%Cashbook">
-                                            <label class="form-check-label categoryLable" for="25%Cashbook">
-                                                25% Discount Offer
-                                            </label>
-                                        </div>
-                                    </div>
-                                    <div class="px-5 pb-3">
-                                        <div class="d-flex flex-column">
-                                            <p class="topText3 mb-1">Rating Item</p>
-                                            <div class="textline2"></div>
-                                        </div>
-                                        <div class="form-check d-flex align-items-center pt-3">
-                                            <input class="form-check-input yellow-checkbox me-2" type="checkbox"
-                                                value="" id="rating1">
-                                            <label class="form-check-label categoryLable" for="rating1">
-                                                <i class="fa-solid fa-star" style="color: #FFC107"></i>
-                                                <i class="fa-solid fa-star" style="color: #FFC107"></i>
-                                                <i class="fa-solid fa-star" style="color: #FFC107"></i>
-                                                <i class="fa-solid fa-star" style="color: #FFC107"></i>
-                                                <i class="fa-solid fa-star" style="color: #B2B2B2"></i>
-                                                <span class="topText4">(2341)</span>
-                                            </label>
-                                        </div>
-                                        <div class="form-check d-flex align-items-center pt-3">
-                                            <input class="form-check-input yellow-checkbox me-2" type="checkbox"
-                                                value="" id="rating2">
-                                            <label class="form-check-label categoryLable" for="rating2">
-                                                <i class="fa-solid fa-star" style="color: #FFC107"></i>
-                                                <i class="fa-solid fa-star" style="color: #FFC107"></i>
-                                                <i class="fa-solid fa-star" style="color: #FFC107"></i>
-                                                <i class="fa-solid fa-star" style="color: #B2B2B2"></i>
-                                                <i class="fa-solid fa-star" style="color: #B2B2B2"></i>
-                                                <span class="topText4">(1726)</span>
-                                            </label>
-                                        </div>
-                                        <div class="form-check d-flex align-items-center pt-3">
-                                            <input class="form-check-input yellow-checkbox me-2" type="checkbox"
-                                                value="" id="rating3">
-                                            <label class="form-check-label categoryLable" for="rating3">
-                                                <i class="fa-solid fa-star" style="color: #FFC107"></i>
-                                                <i class="fa-solid fa-star" style="color: #FFC107"></i>
-                                                <i class="fa-solid fa-star" style="color: #B2B2B2"></i>
-                                                <i class="fa-solid fa-star" style="color: #B2B2B2"></i>
-                                                <i class="fa-solid fa-star" style="color: #B2B2B2"></i>
-                                                <span class="topText4">(258)</span>
-                                            </label>
-                                        </div>
-                                        <div class="form-check d-flex align-items-center pt-3">
-                                            <input class="form-check-input yellow-checkbox me-2" type="checkbox"
-                                                value="" id="rating4">
-                                            <label class="form-check-label categoryLable" for="rating4">
-                                                <i class="fa-solid fa-star" style="color: #FFC107"></i>
-                                                <i class="fa-solid fa-star" style="color: #B2B2B2"></i>
-                                                <i class="fa-solid fa-star" style="color: #B2B2B2"></i>
-                                                <i class="fa-solid fa-star" style="color: #B2B2B2"></i>
-                                                <i class="fa-solid fa-star" style="color: #B2B2B2"></i>
-                                                <span class="topText4">(25)</span>
-                                            </label>
-                                        </div>
-                                    </div>
-                                    <div class="px-5 pb-4">
-                                        <div class="d-flex flex-column">
-                                            <p class="topText3 mb-1">Price Filter</p>
-                                            <div class="textline2"></div>
-                                        </div>
-                                        <div class="form-check pt-3">
-                                            <input class="form-check-input" type="checkbox" value=""
-                                                id="priceFilter1">
-                                            <label class="form-check-label categoryLable" for="priceFilter1">
-                                                ₹0.00 - ₹150.00
-                                            </label>
-                                        </div>
-                                        <div class="form-check pt-3">
-                                            <input class="form-check-input" type="checkbox" value=""
-                                                id="priceFilter2">
-                                            <label class="form-check-label categoryLable" for="priceFilter2">
-                                                ₹150.00 - ₹350.00
-                                            </label>
-                                        </div>
-                                        <div class="form-check pt-3">
-                                            <input class="form-check-input" type="checkbox" value=""
-                                                id="priceFilter3">
-                                            <label class="form-check-label categoryLable" for="priceFilter3">
-                                                ₹150.00 - ₹504.00
-                                            </label>
-                                        </div>
-                                        <div class="form-check pt-3">
-                                            <input class="form-check-input" type="checkbox" value=""
-                                                id="priceFilter4">
-                                            <label class="form-check-label categoryLable" for="priceFilter4">
-                                                ₹450.00 +
-                                            </label>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="px-5 sticky-bottom d-flex justify-content-center align-items-center mb-3">
-                            <!-- Buttons inside your offcanvas -->
-                            <button class="btn btn-button clear-button" type="button" id="clearButton">Clear
-                                All</button>
-                            &nbsp;&nbsp;
-                            <button class="btn btn-button apply-button" type="button" id="applyButton">Apply</button>
 
-                        </div>
-                    </div>
-                    <!-- Filter Sidebar for larger screens (Visible only on large screens) -->
-                    <div class="col-md-3 col-12 d-none d-lg-block">
-                        <div class="productFilter filterlarge">
-                            <div class="d-flex justify-content-center align-items-center pb-3">
-                                <p class="me-2 topText2"> Filter Results</p>
-                                &nbsp;&nbsp;
-                                <p class="selectText2">350 deals available</p>
-                            </div>
+                            <!-- Brand Filter -->
                             <div class="px-5 pb-3">
                                 <div class="d-flex flex-column">
-                                    <p class="topText3 mb-1" style="border-bottom: 1px solid; width:fit-content">Brand</p>
+                                    <p class="topText3 mb-1" style="border-bottom: 1px solid black; width:fit-content">Brand
+                                    </p>
                                 </div>
-                                <div class="form-check pt-3">
-                                    <input class="form-check-input" type="checkbox" value=""
-                                        id="Coaster Furniture">
-                                    <label class="form-check-label categoryLable" for="Coaster Furniture">
-                                        Coaster Furniture
-                                    </label>
-                                </div>
-                                <div class="form-check pt-3">
-                                    <input class="form-check-input" type="checkbox" value=""
-                                        id="Fusion Dot High Fashion">
-                                    <label class="form-check-label categoryLable" for="Fusion Dot High Fashion">
-                                        Fusion Dot High Fashion
-                                    </label>
-                                </div>
-                                <div class="form-check pt-3">
-                                    <input class="form-check-input" type="checkbox" value=""
-                                        id="Unique Furniture Restore">
-                                    <label class="form-check-label categoryLable" for="Unique Furniture Restore">
-                                        Unique Furniture Restore
-                                    </label>
-                                </div>
-                                <div class="form-check pt-3">
-                                    <input class="form-check-input" type="checkbox" value=""
-                                        id="Dream Furniture Flipping">
-                                    <label class="form-check-label categoryLable" for="Dream Furniture Flipping">
-                                        Dream Furniture Flipping
-                                    </label>
-                                </div>
-                                <div class="form-check pt-3">
-                                    <input class="form-check-input" type="checkbox" value=""
-                                        id="Young Repurposed">
-                                    <label class="form-check-label categoryLable" for="Young Repurposed">
-                                        Young Repurposed
-                                    </label>
-                                </div>
-                                <div class="form-check pt-3">
-                                    <input class="form-check-input" type="checkbox" value=""
-                                        id="Green DIY furniture">
-                                    <label class="form-check-label categoryLable" for="Green DIY furniture">
-                                        Green DIY furniture
-                                    </label>
-                                </div>
+                                @foreach ($brands as $brand)
+                                    <div class="form-check pt-3">
+                                        <input class="form-check-input" type="checkbox" name="brand[]"
+                                            value="{{ $brand }}" id="brand_{{ $loop->index }}"
+                                            {{ in_array($brand, request()->input('brand', [])) ? 'checked' : '' }}>
+                                        <label class="form-check-label categoryLable" for="brand_{{ $loop->index }}">
+                                            {{ str_replace('_', ' ', $brand) }}
+                                        </label>
+                                    </div>
+                                @endforeach
                             </div>
+
+                            <!-- Discount Filter -->
                             <div class="px-5 pb-3">
                                 <div class="d-flex flex-column">
-                                    <p class="topText3 mb-1">Discount Offer</p>
+                                    <p class="topText3">Discount Offer</p>
                                     <div class="textline2"></div>
                                 </div>
-                                <div class="form-check pt-3">
-                                    <input class="form-check-input" type="checkbox" value="" id="20% Cashback">
-                                    <label class="form-check-label categoryLable" for="20% Cashback">
-                                        20% Cashback
-                                    </label>
-                                </div>
-                                <div class="form-check pt-3">
-                                    <input class="form-check-input" type="checkbox" value=""
-                                        id="5% Cashback Offer">
-                                    <label class="form-check-label categoryLable" for="5% Cashback Offer">
-                                        5% Cashback Offer
-                                    </label>
-                                </div>
-                                <div class="form-check pt-3">
-                                    <input class="form-check-input" type="checkbox" value=""
-                                        id="25% Discount Offer">
-                                    <label class="form-check-label categoryLable" for="25% Discount Offer">
-                                        25% Discount Offer
-                                    </label>
-                                </div>
+                                @foreach ($discounts as $discount)
+                                    <div class="form-check pt-3">
+                                        <input class="form-check-input" type="checkbox" name="discount[]"
+                                            value="{{ $discount }}" id="discount_{{ $loop->index }}"
+                                            {{ in_array($discount, request()->input('discount', [])) ? 'checked' : '' }}>
+                                        <label class="form-check-label categoryLable" for="discount_{{ $loop->index }}">
+                                            {{ number_format($discount, 0) }}%
+                                        </label>
+                                    </div>
+                                @endforeach
                             </div>
+
+                            <!-- Rating Item Filter -->
                             <div class="px-5 pb-3">
                                 <div class="d-flex flex-column">
                                     <p class="topText3 mb-1">Rating Item</p>
                                     <div class="textline2"></div>
                                 </div>
-                                <div class="form-check d-flex align-items-center pt-3">
-                                    <input class="form-check-input yellow-checkbox me-2" type="checkbox" value=""
-                                        id="rating 1">
-                                    <label class="form-check-label categoryLable" for="rating 1">
-                                        <i class="fa-solid fa-star" style="color: #FFC107"></i>
-                                        <i class="fa-solid fa-star" style="color: #FFC107"></i>
-                                        <i class="fa-solid fa-star" style="color: #FFC107"></i>
-                                        <i class="fa-solid fa-star" style="color: #FFC107"></i>
-                                        <i class="fa-solid fa-star" style="color: #B2B2B2"></i>
-                                        <span class="topText4">(2341)</span>
-                                    </label>
-                                </div>
-                                <div class="form-check d-flex align-items-center pt-3">
-                                    <input class="form-check-input yellow-checkbox me-2" type="checkbox" value=""
-                                        id="rating 2">
-                                    <label class="form-check-label categoryLable" for="rating 2">
-                                        <i class="fa-solid fa-star" style="color: #FFC107"></i>
-                                        <i class="fa-solid fa-star" style="color: #FFC107"></i>
-                                        <i class="fa-solid fa-star" style="color: #FFC107"></i>
-                                        <i class="fa-solid fa-star" style="color: #B2B2B2"></i>
-                                        <i class="fa-solid fa-star" style="color: #B2B2B2"></i>
-                                        <span class="topText4">(1726)</span>
-                                    </label>
-                                </div>
-                                <div class="form-check d-flex align-items-center pt-3">
-                                    <input class="form-check-input yellow-checkbox me-2" type="checkbox" value=""
-                                        id="rating 3">
-                                    <label class="form-check-label categoryLable" for="rating 3">
-                                        <i class="fa-solid fa-star" style="color: #FFC107"></i>
-                                        <i class="fa-solid fa-star" style="color: #FFC107"></i>
-                                        <i class="fa-solid fa-star" style="color: #B2B2B2"></i>
-                                        <i class="fa-solid fa-star" style="color: #B2B2B2"></i>
-                                        <i class="fa-solid fa-star" style="color: #B2B2B2"></i>
-                                        <span class="topText4">(258)</span>
-                                    </label>
-                                </div>
-                                <div class="form-check d-flex align-items-center pt-3">
-                                    <input class="form-check-input yellow-checkbox me-2" type="checkbox" value=""
-                                        id="rating 4">
-                                    <label class="form-check-label categoryLable" for="rating 4">
-                                        <i class="fa-solid fa-star" style="color: #FFC107"></i>
-                                        <i class="fa-solid fa-star" style="color: #B2B2B2"></i>
-                                        <i class="fa-solid fa-star" style="color: #B2B2B2"></i>
-                                        <i class="fa-solid fa-star" style="color: #B2B2B2"></i>
-                                        <i class="fa-solid fa-star" style="color: #B2B2B2"></i>
-                                        <span class="topText4">(25)</span>
-                                    </label>
-                                </div>
+
+                                @foreach ($rating_items as $item)
+                                    <div class="form-check d-flex align-items-center pt-3">
+                                        <input class="form-check-input yellow-checkbox me-2" type="checkbox"
+                                            name="rating_item[]" value="{{ $item->shop_ratings }}"
+                                            id="rating_{{ $loop->index }}"
+                                            {{ in_array($item->shop_ratings, request()->input('rating_item', [])) ? 'checked' : '' }}>
+                                        <label class="form-check-label categoryLable" for="rating_{{ $loop->index }}">
+                                            @for ($i = 1; $i <= 5; $i++)
+                                                @if ($i <= round($item->shop_ratings))
+                                                    <i class="fa-solid fa-star" style="color: #FFC107"></i>
+                                                @else
+                                                    <i class="fa-solid fa-star" style="color: #B2B2B2"></i>
+                                                @endif
+                                            @endfor
+                                            <span class="topText4">({{ $item->rating_count }})</span>
+                                        </label>
+                                    </div>
+                                @endforeach
                             </div>
+
+                            <!-- Price Filter -->
                             <div class="px-5 pb-4">
                                 <div class="d-flex flex-column">
                                     <p class="topText3 mb-1">Price Filter</p>
                                     <div class="textline2"></div>
                                 </div>
-                                <div class="form-check pt-3">
-                                    <input class="form-check-input" type="checkbox" value="" id="₹0.00 - ₹150.00">
-                                    <label class="form-check-label categoryLable" for="₹0.00 - ₹150.00">
-                                        ₹0.00 - ₹150.00
-                                    </label>
+                                @foreach ($priceRanges as $priceRange)
+                                    <div class="form-check pt-3">
+                                        <input class="form-check-input" type="checkbox" name="price_range[]"
+                                            value="{{ $priceRange['label'] }}" id="{{ $priceRange['label'] }}">
+                                        <label class="form-check-label categoryLable" for="{{ $priceRange['label'] }}">
+                                            {{ $priceRange['label'] }}
+                                        </label>
+                                    </div>
+                                @endforeach
+                            </div>
+                        </div>
+                        <div class="px-5 sticky-bottom d-flex justify-content-center align-items-center mb-3">
+                            <!-- Buttons inside your offcanvas -->
+                            <button type="button" class="btn btn-button clear-button" id="clearButton">Clear
+                                All</button>
+                            &nbsp;&nbsp;
+                            <button type="submit" class="btn btn-button apply-button" id="applyButton">Apply</button>
+                        </div>
+                    </div>
+
+                    <!-- Filter Sidebar for Larger Screens -->
+                    @if (!$deals->isEmpty())
+                        <div class="col-md-3 col-12 d-none d-lg-block">
+                            <div class="productFilter filterlarge">
+                                <div class="d-flex justify-content-center align-items-center pb-3">
+                                    <p class="me-2 topText2">Filter Results</p>
+                                    &nbsp;&nbsp;
+                                    <p class="selectText2">{{ $totaldeals }} deals available</p>
                                 </div>
-                                <div class="form-check pt-3">
-                                    <input class="form-check-input" type="checkbox" value=""
-                                        id="₹150.00 - ₹350.00">
-                                    <label class="form-check-label categoryLable" for="₹150.00 - ₹350.00">
-                                        ₹150.00 - ₹350.00
-                                    </label>
+
+                                <!-- Brand Filter -->
+                                <div class="px-5 pb-3">
+                                    <div class="d-flex flex-column">
+                                        <p class="topText3 mb-1"
+                                            style="border-bottom: 1px solid black; width:fit-content">
+                                            Brand</p>
+                                    </div>
+                                    @foreach ($brands as $brand)
+                                        <div class="form-check pt-3">
+                                            <input class="form-check-input" type="checkbox" name="brand[]"
+                                                value="{{ $brand }}" id="brand_large_{{ $loop->index }}"
+                                                {{ in_array($brand, request()->input('brand', [])) ? 'checked' : '' }}>
+                                            <label class="form-check-label categoryLable"
+                                                for="brand_large_{{ $loop->index }}">
+                                                {{ str_replace('_', ' ', $brand) }}
+                                            </label>
+                                        </div>
+                                    @endforeach
                                 </div>
-                                <div class="form-check pt-3">
-                                    <input class="form-check-input" type="checkbox" value=""
-                                        id="₹150.00 - ₹504.00">
-                                    <label class="form-check-label categoryLable" for="₹150.00 - ₹504.00">
-                                        ₹150.00 - ₹504.00
-                                    </label>
+
+                                <!-- Discount Filter -->
+                                <div class="px-5 pb-3">
+                                    <div class="d-flex flex-column">
+                                        <p class="topText3">Discount Offer</p>
+                                        <div class="textline2"></div>
+                                    </div>
+                                    @foreach ($discounts as $discount)
+                                        <div class="form-check pt-3">
+                                            <input class="form-check-input" type="checkbox" name="discount[]"
+                                                value="{{ $discount }}" id="discount_large_{{ $loop->index }}"
+                                                {{ in_array($discount, request()->input('discount', [])) ? 'checked' : '' }}>
+                                            <label class="form-check-label categoryLable"
+                                                for="discount_large_{{ $loop->index }}">
+                                                {{ number_format($discount, 0) }}%
+                                            </label>
+                                        </div>
+                                    @endforeach
                                 </div>
-                                <div class="form-check pt-3">
-                                    <input class="form-check-input" type="checkbox" value="" id=" ₹450.00 +">
-                                    <label class="form-check-label categoryLable" for=" ₹450.00 +">
-                                        ₹450.00 +
-                                    </label>
+
+                                <!-- Rating Item Filter -->
+                                <div class="px-5 pb-3">
+                                    <div class="d-flex flex-column">
+                                        <p class="topText3 mb-1">Rating Item</p>
+                                        <div class="textline2"></div>
+                                    </div>
+
+                                    @foreach ($rating_items as $item)
+                                        <div class="form-check d-flex align-items-center pt-3">
+                                            <input class="form-check-input yellow-checkbox me-2" type="checkbox"
+                                                name="rating_item[]" value="{{ $item->shop_ratings }}"
+                                                id="rating_large_{{ $loop->index }}"
+                                                {{ in_array($item->shop_ratings, request()->input('rating_item', [])) ? 'checked' : '' }}>
+                                            <label class="form-check-label categoryLable"
+                                                for="rating_large_{{ $loop->index }}">
+                                                @for ($i = 1; $i <= 5; $i++)
+                                                    @if ($i <= round($item->shop_ratings))
+                                                        <i class="fa-solid fa-star" style="color: #FFC107"></i>
+                                                    @else
+                                                        <i class="fa-solid fa-star" style="color: #B2B2B2"></i>
+                                                    @endif
+                                                @endfor
+                                                <span class="topText4">({{ $item->rating_count }})</span>
+                                            </label>
+                                        </div>
+                                    @endforeach
+                                </div>
+
+                                <!-- Price Filter -->
+                                <div class="px-5 pb-4">
+                                    <div class="d-flex flex-column">
+                                        <p class="topText3 mb-1">Price Filter</p>
+                                        <div class="textline2"></div>
+                                    </div>
+                                    @foreach ($priceRanges as $priceRange)
+                                        <div class="form-check pt-3">
+                                            <input class="form-check-input" type="checkbox" name="price_range[]"
+                                                value="{{ $priceRange['label'] }}" id="price_large_{{ $loop->index }}">
+                                            <label class="form-check-label categoryLable"
+                                                for="price_large_{{ $loop->index }}">
+                                                {{ $priceRange['label'] }}
+                                            </label>
+                                        </div>
+                                    @endforeach
+                                </div>
+
+                                <div class="px-5 sticky-bottom d-flex justify-content-center align-items-center mb-3">
+                                    <!-- Buttons for Large Screen -->
+                                    <button type="button" class="btn btn-button clear-button"
+                                        id="clearButtonLarge">Clear
+                                        All</button>
+                                    &nbsp;&nbsp;
+                                    <button type="submit" class="btn btn-button apply-button"
+                                        id="applyButtonLarge">Apply</button>
                                 </div>
                             </div>
                         </div>
-                        <div class="px-3 sticky-bottom d-flex justify-content-center align-items-center mb-3">
-                            <button class="btn btn-button clear-button">Clear All</button>
-                            &nbsp;&nbsp;
-                            <button class="btn btn-button apply-button">Apply</button>
-                        </div>
-                    </div>
+                    @endif
 
                     <div class="col-md-12 col-lg-9 col-12">
                         <div class="row pb-4">
-                            <div class="col-md-4 col-lg-3 col-12 mb-3 d-flex align-items-center justify-content-center">
-                                <a href="{{ url('/products') }}" style="text-decoration: none;">
-                                    <div class="card sub_topCard h-100">
-                                        <div style="min-height: 50px">
-                                            <span class="badge trending-badge">TRENDING</span>
-                                            <img src="{{ asset('assets/images/home/kids_wear_2.webp') }}"
-                                                class="img-fluid card-img-top1" alt="card_image" />
-                                        </div>
-                                        <div class="card-body card_section">
-                                            <div class="mt-3 d-flex align-items-center justify-content-between">
-                                                <h5 class="card-title px-3">Kids Wear</h5>
-                                                <span class="badge p-0 mx-3 trending-wishlist-badge">
-                                                    <i class="fa-regular fa-bookmark wishlist-icon" onclick="toggleBookmark(this, event)"></i>
-                                                </span>
+
+                            @foreach ($deals as $product)
+                                <div
+                                    class="col-md-4 col-lg-3 col-12 mb-3 d-flex justify-content-center align-items-stretch">
+                                    <a href="{{ url('/deal/' . $product->id) }}"
+                                        style="text-decoration: none; width: 100%;">
+                                        <div class="card sub_topCard h-100 d-flex flex-column">
+                                            <div style="min-height: 50px">
+                                                <span class="badge trending-badge">TRENDING</span>
+                                                <img src="{{ asset($product->image_url1) }}"
+                                                    class="img-fluid card-img-top1" alt="card_image" />
                                             </div>
-                                            <span class="px-3">
-                                                <i class="fa-solid fa-star" style="color: #ffc200"></i>
-                                                <i class="fa-solid fa-star" style="color: #ffc200"></i>
-                                                <i class="fa-solid fa-star" style="color: #ffc200"></i>
-                                                <i class="fa-solid fa-star" style="color: #ffc200"></i>
-                                                <i class="fa-solid fa-star" style="color: #ffc200"></i>
-                                            </span>
-                                            <p class="px-3 fw-normal">
-                                                DealsMachi, deals that matter in Chennai! Get the best of
-                                                Electronics, Food, Travel, Makeup, Spa and other hot deals.
-                                            </p>
-                                            <div class="card-divider"></div>
-                                            <p class="px-3 fw-medium d-flex align-items-center justify-content-between"
-                                                style="color:  #ff0060 "><span>₹150 </span><span
-                                                    class="mx-3 px-2 couponBadge">DEALSMACHI25</span></p>
-                                            <div class="card-divider"></div>
-                                            <div class="px-3">
-                                                <p>Regular Price</p>
-                                                <p><s>₹200 </s></p>
+                                            <div
+                                                class="card-body card_section flex-grow-1 d-flex flex-column justify-content-between">
+                                                <div>
+                                                    <div class="mt-3 d-flex align-items-center justify-content-between">
+                                                        <h5 class="card-title ps-3">{{ $product->name }}</h5>
+                                                        <span class="badge mx-3 p-0 trending-bookmark-badge">
+                                                            @if (count($product->bookmark) === 0)
+                                                                <form action="{{ route('bookmarks.add', $product->id) }}"
+                                                                    method="POST" class="d-inline">
+                                                                    @csrf
+                                                                    <button type="submit" class="bookmark-icon"
+                                                                        style="border: none; background: none;">
+                                                                        <i class="fa-regular fa-bookmark"
+                                                                            style="color: #ff0060;"></i>
+                                                                    </button>
+                                                                </form>
+                                                            @else
+                                                                <form
+                                                                    action="{{ route('bookmarks.remove', $product->id) }}"
+                                                                    method="POST" class="d-inline">
+                                                                    @csrf
+                                                                    @method('DELETE')
+                                                                    <button type="submit" class="bookmark-icon"
+                                                                        style="border: none; background: none;">
+                                                                        <i class="fa-solid fa-bookmark"
+                                                                            style="color: #ff0060;"></i>
+                                                                    </button>
+                                                                </form>
+                                                            @endif
+
+                                                        </span>
+                                                    </div>
+                                                    <span class="px-3">
+                                                        <i class="fa-solid fa-star" style="color: #ffc200"></i>
+                                                        <i class="fa-solid fa-star" style="color: #ffc200"></i>
+                                                        <i class="fa-solid fa-star" style="color: #ffc200"></i>
+                                                        <i class="fa-solid fa-star" style="color: #ffc200"></i>
+                                                        <i class="fa-solid fa-star" style="color: #ffc200"></i>
+                                                    </span>
+                                                    <p class="px-3 fw-normal truncated-description">
+                                                        {{ $product->description }}
+                                                    </p>
+                                                </div>
+                                                <div>
+                                                    <div class="card-divider"></div>
+                                                    <p class="ps-3 fw-medium d-flex align-items-center justify-content-between"
+                                                        style="color: #ff0060">
+                                                        <span>${{ $product->discounted_price }}</span>
+                                                        <span
+                                                            class="mx-3 px-2 couponBadge">DEALSMACHI{{ round($product->discount_percentage) }}</span>
+                                                    </p>
+                                                    <div class="card-divider"></div>
+                                                    <div class="ps-3">
+                                                        <p>Regular Price</p>
+                                                        <p><s>${{ $product->original_price }}</s></p>
+                                                    </div>
+                                                    <div class="card-divider"></div>
+                                                    <p class="ps-3 fw-medium"
+                                                        style="color: #ff0060; font-weight: 400 !important;">
+                                                        <i class="fa-solid fa-location-dot"></i>&nbsp;Singapore
+                                                    </p>
+                                                </div>
                                             </div>
-                                            <div class="card-divider"></div>
-                                            <p class="px-3 fw-medium"
-                                                style="color:  #ff0060 ;font-weight: 400 !important;"><i
-                                                    class="fa-solid fa-location-dot"></i>
-                                                &nbsp;Chennai</p>
                                         </div>
-                                    </div>
-                                </a>
-                            </div>
-                            <div class="col-md-4 col-lg-3 col-12 mb-3 d-flex align-items-center justify-content-center">
-                                <a href="{{ url('/products') }}" style="text-decoration: none;">
-                                    <div class="card sub_topCard h-100">
-                                        <div style="min-height: 50px">
-                                            <span class="badge trending-badge">POPULAR</span>
-                                            <img src="{{ asset('assets/images/home/beauty2.webp') }}"
-                                                class="img-fluid card-img-top1" alt="card_image" />
-                                        </div>
-                                        <div class="card-body card_section">
-                                            <div class="mt-3 d-flex align-items-center justify-content-between">
-                                                <h5 class="card-title  px-3">Beauty Spa</h5>
-                                                <span class="badge p-0 mx-3 trending-wishlist-badge">
-                                                    <i class="fa-regular fa-bookmark wishlist-icon" onclick="toggleBookmark(this, event)"></i>
-                                                </span>
-                                            </div>
-                                            <span class="px-3">
-                                                <i class="fa-solid fa-star" style="color: #ffc200"></i>
-                                                <i class="fa-solid fa-star" style="color: #ffc200"></i>
-                                                <i class="fa-solid fa-star" style="color: #ffc200"></i>
-                                                <i class="fa-solid fa-star" style="color: #ffc200"></i>
-                                                <i class="fa-solid fa-star" style="color: #ffc200"></i>
-                                            </span>
-                                            <p class="px-3 fw-normal">
-                                                DealsMachi, deals that matter in Chennai! Get the best of
-                                                Electronics, Food, Travel, Makeup, Spa and other hot deals.
-                                            </p>
-                                            <div class="card-divider"></div>
-                                            <p class="px-3 fw-medium d-flex align-items-center justify-content-between"
-                                                style="color:  #ff0060 "><span>₹150 </span><span
-                                                    class="mx-3 px-2 couponBadge">DEALSMACHI25</span></p>
-                                            <div class="card-divider"></div>
-                                            <div class="px-3">
-                                                <p>Regular Price</p>
-                                                <p><s>₹200 </s></p>
-                                            </div>
-                                            <div class="card-divider"></div>
-                                            <p class="px-3 fw-medium"
-                                                style="color:  #ff0060 ;font-weight: 400 !important;" ;font-weight: 400
-                                                !important;><i class="fa-solid fa-location-dot"></i>
-                                                &nbsp;Chennai</p>
-                                        </div>
-                                    </div>
-                                </a>
-                            </div>
-                            <div class="col-md-4 col-lg-3 col-12 mb-3 d-flex align-items-center justify-content-center">
-                                <a href="{{ url('/products') }}" style="text-decoration: none;">
-                                    <div class="card sub_topCard h-100">
-                                        <div style="min-height: 50px">
-                                            <span class="badge trending-badge">LIMITED TIME</span>
-                                            <img src="{{ asset('assets/images/home/restaurant.webp') }}"
-                                                class="img-fluid card-img-top1" alt="card_image" />
-                                        </div>
-                                        <div class="card-body card_section">
-                                            <div class="mt-3 d-flex align-items-center justify-content-between">
-                                                <h5 class="card-title px-3">Restaurants</h5>
-                                                <span class="badge p-0 mx-3 trending-wishlist-badge">
-                                                    <i class="fa-regular fa-bookmark wishlist-icon" onclick="toggleBookmark(this, event)"></i>
-                                                </span>
-                                            </div>
-                                            <span class="px-3">
-                                                <i class="fa-solid fa-star" style="color: #ffc200"></i>
-                                                <i class="fa-solid fa-star" style="color: #ffc200"></i>
-                                                <i class="fa-solid fa-star" style="color: #ffc200"></i>
-                                                <i class="fa-solid fa-star" style="color: #ffc200"></i>
-                                                <i class="fa-solid fa-star" style="color: #ffc200"></i>
-                                            </span>
-                                            <p class="px-3 fw-normal">
-                                                DealsMachi, deals that matter in Chennai! Get the best of
-                                                Electronics, Food, Travel, Makeup, Spa and other hot deals.
-                                            </p>
-                                            <div class="card-divider"></div>
-                                            <p class="px-3 fw-medium d-flex align-items-center justify-content-between"
-                                                style="color:  #ff0060 "><span>₹150 </span><span
-                                                    class="mx-3 px-2 couponBadge">DEALSMACHI25</span></p>
-                                            <div class="card-divider"></div>
-                                            <div class="px-3">
-                                                <p>Regular Price</p>
-                                                <p><s>₹200 </s></p>
-                                            </div>
-                                            <div class="card-divider"></div>
-                                            <p class="px-3 fw-medium"
-                                                style="color:  #ff0060 ;font-weight: 400 !important;"><i
-                                                    class="fa-solid fa-location-dot"></i>
-                                                &nbsp;Chennai</p>
-                                        </div>
-                                    </div>
-                                </a>
-                            </div>
-                            <div class="col-md-4 col-lg-3 col-12 mb-3 d-flex align-items-center justify-content-center">
-                                <a href="{{ url('/products') }}" style="text-decoration: none;">
-                                    <div class="card sub_topCard h-100">
-                                        <div style="min-height: 50px">
-                                            <span class="badge trending-badge">LAST CHANCE</span>
-                                            <img src="{{ asset('assets/images/home/spa_two.webp') }}"
-                                                class="img-fluid card-img-top1" alt="card_image" />
-                                        </div>
-                                        <div class="card-body card_section">
-                                            <div class="mt-3 d-flex align-items-center justify-content-between">
-                                                <h5 class="card-title px-3">Beauty Spa</h5>
-                                                <span class="badge p-0 mx-3 trending-wishlist-badge">
-                                                    <i class="fa-regular fa-bookmark wishlist-icon" onclick="toggleBookmark(this, event)"></i>
-                                                </span>
-                                            </div>
-                                            <span class="px-3">
-                                                <i class="fa-solid fa-star" style="color: #ffc200"></i>
-                                                <i class="fa-solid fa-star" style="color: #ffc200"></i>
-                                                <i class="fa-solid fa-star" style="color: #ffc200"></i>
-                                                <i class="fa-solid fa-star" style="color: #ffc200"></i>
-                                                <i class="fa-solid fa-star" style="color: #ffc200"></i>
-                                            </span>
-                                            <p class="px-3 fw-normal">
-                                                DealsMachi, deals that matter in Chennai! Get the best of
-                                                Electronics, Food, Travel, Makeup, Spa and other hot deals.
-                                            </p>
-                                            <div class="card-divider"></div>
-                                            <p class="px-3 fw-medium d-flex align-items-center justify-content-between"
-                                                style="color:  #ff0060 "><span>₹150 </span><span
-                                                    class="mx-3 px-2 couponBadge">DEALSMACHI25</span></p>
-                                            <div class="card-divider"></div>
-                                            <div class="px-3">
-                                                <p>Regular Price</p>
-                                                <p><s>₹200 </s></p>
-                                            </div>
-                                            <div class="card-divider"></div>
-                                            <p class="px-3 fw-medium"
-                                                style="color:  #ff0060 ;font-weight: 400 !important;"><i
-                                                    class="fa-solid fa-location-dot"></i>
-                                                &nbsp;Chennai</p>
-                                        </div>
-                                    </div>
-                                </a>
-                            </div>
-                            <div class="col-md-4 col-lg-3 col-12 mb-3 d-flex align-items-center justify-content-center">
-                                <a href="{{ url('/products') }}" style="text-decoration: none;">
-                                    <div class="card sub_topCard h-100">
-                                        <div style="min-height: 50px">
-                                            <span class="badge trending-badge">EARLY BIRD</span>
-                                            <img src="{{ asset('assets/images/home/card_image_1.webp') }}"
-                                                class="img-fluid card-img-top1" alt="card_image" />
-                                        </div>
-                                        <div class="card-body card_section">
-                                            <div class="mt-3 d-flex align-items-center justify-content-between">
-                                                <h5 class="card-title px-3">Kids Wear</h5>
-                                                <span class="badge p-0 mx-3 trending-wishlist-badge">
-                                                    <i class="fa-regular fa-bookmark wishlist-icon" onclick="toggleBookmark(this, event)"></i>
-                                                </span>
-                                            </div>
-                                            <span class="px-3">
-                                                <i class="fa-solid fa-star" style="color: #ffc200"></i>
-                                                <i class="fa-solid fa-star" style="color: #ffc200"></i>
-                                                <i class="fa-solid fa-star" style="color: #ffc200"></i>
-                                                <i class="fa-solid fa-star" style="color: #ffc200"></i>
-                                                <i class="fa-solid fa-star" style="color: #ffc200"></i>
-                                            </span>
-                                            <p class="px-3 fw-normal">
-                                                DealsMachi, deals that matter in Chennai! Get the best of
-                                                Electronics, Food, Travel, Makeup, Spa and other hot deals.
-                                            </p>
-                                            <div class="card-divider"></div>
-                                            <p class="px-3 fw-medium d-flex align-items-center justify-content-between"
-                                                style="color:  #ff0060 "><span>₹150 </span><span
-                                                    class="mx-3 px-2 couponBadge">DEALSMACHI25</span></p>
-                                            <div class="card-divider"></div>
-                                            <div class="px-3">
-                                                <p>Regular Price</p>
-                                                <p><s>₹200 </s></p>
-                                            </div>
-                                            <div class="card-divider"></div>
-                                            <p class="px-3 fw-medium"
-                                                style="color:  #ff0060 ;font-weight: 400 !important;"><i
-                                                    class="fa-solid fa-location-dot"></i>
-                                                &nbsp;Chennai</p>
-                                        </div>
-                                    </div>
-                                </a>
-                            </div>
-                            <div class="col-md-4 col-lg-3 col-12 mb-3 d-flex align-items-center justify-content-center">
-                                <a href="{{ url('/products') }}" style="text-decoration: none;">
-                                    <div class="card sub_topCard h-100">
-                                        <div style="min-height: 50px">
-                                            <span class="badge trending-badge">TRENDING</span>
-                                            <img src="{{ asset('assets/images/home/card_image_3.webp') }}"
-                                                class="img-fluid card-img-top1" alt="card_image" />
-                                        </div>
-                                        <div class="card-body card_section">
-                                            <h5 class="card-title mt-3 px-3"></h5>
-                                            <div class="mt-3 d-flex align-items-center justify-content-between">
-                                                <h5 class="card-title px-3">Beauty Spa</h5>
-                                                <span class="badge p-0 mx-3 trending-wishlist-badge">
-                                                    <i class="fa-regular fa-bookmark wishlist-icon" onclick="toggleBookmark(this, event)"></i>
-                                                </span>
-                                            </div>
-                                            <span class="px-3">
-                                                <i class="fa-solid fa-star" style="color: #ffc200"></i>
-                                                <i class="fa-solid fa-star" style="color: #ffc200"></i>
-                                                <i class="fa-solid fa-star" style="color: #ffc200"></i>
-                                                <i class="fa-solid fa-star" style="color: #ffc200"></i>
-                                                <i class="fa-solid fa-star" style="color: #ffc200"></i>
-                                            </span>
-                                            <p class="px-3 fw-normal">
-                                                DealsMachi, deals that matter in Chennai! Get the best of
-                                                Electronics, Food, Travel, Makeup, Spa and other hot deals.
-                                            </p>
-                                            <div class="card-divider"></div>
-                                            <p class="px-3 fw-medium d-flex align-items-center justify-content-between"
-                                                style="color:  #ff0060 "><span>₹150 </span><span
-                                                    class="mx-3 px-2 couponBadge">DEALSMACHI25</span></p>
-                                            <div class="card-divider"></div>
-                                            <div class="px-3">
-                                                <p>Regular Price</p>
-                                                <p><s>₹200 </s></p>
-                                            </div>
-                                            <div class="card-divider"></div>
-                                            <p class="px-3 fw-medium"
-                                                style="color:  #ff0060 ;font-weight: 400 !important;"><i
-                                                    class="fa-solid fa-location-dot"></i>
-                                                &nbsp;Chennai</p>
-                                        </div>
-                                    </div>
-                                </a>
-                            </div>
-                            <div class="col-md-4 col-lg-3 col-12 mb-3 d-flex align-items-center justify-content-center">
-                                <a href="{{ url('/products') }}" style="text-decoration: none;">
-                                    <div class="card sub_topCard h-100">
-                                        <div style="min-height: 50px">
-                                            <span class="badge trending-badge">POPULAR</span>
-                                            <img src="{{ asset('assets/images/home/card_image_2.webp') }}"
-                                                class="img-fluid card-img-top1" alt="card_image" />
-                                        </div>
-                                        <div class="card-body card_section">
-                                            <h5 class="card-title mt-3 px-3"></h5>
-                                            <div class="mt-3 d-flex align-items-center justify-content-between">
-                                                <h5 class="card-title px-3">Men's Wear</h5>
-                                                <span class="badge p-0 mx-3 trending-wishlist-badge">
-                                                    <i class="fa-regular fa-bookmark wishlist-icon" onclick="toggleBookmark(this, event)"></i>
-                                                </span>
-                                            </div>
-                                            <span class="px-3">
-                                                <i class="fa-solid fa-star" style="color: #ffc200"></i>
-                                                <i class="fa-solid fa-star" style="color: #ffc200"></i>
-                                                <i class="fa-solid fa-star" style="color: #ffc200"></i>
-                                                <i class="fa-solid fa-star" style="color: #ffc200"></i>
-                                                <i class="fa-solid fa-star" style="color: #ffc200"></i>
-                                            </span>
-                                            <p class="px-3 fw-normal">
-                                                DealsMachi, deals that matter in Chennai! Get the best of
-                                                Electronics, Food, Travel, Makeup, Spa and other hot deals.
-                                            </p>
-                                            <div class="card-divider"></div>
-                                            <p class="px-3 fw-medium d-flex align-items-center justify-content-between"
-                                                style="color:  #ff0060 "><span>₹150 </span><span
-                                                    class="mx-3 px-2 couponBadge">DEALSMACHI25</span></p>
-                                            <div class="card-divider"></div>
-                                            <div class="px-3">
-                                                <p>Regular Price</p>
-                                                <p><s>₹200 </s></p>
-                                            </div>
-                                            <div class="card-divider"></div>
-                                            <p class="px-3 fw-medium"
-                                                style="color:  #ff0060 ;font-weight: 400 !important;"><i
-                                                    class="fa-solid fa-location-dot"></i>
-                                                &nbsp;Chennai</p>
-                                        </div>
-                                    </div>
-                                </a>
-                            </div>
-                            <div class="col-md-4 col-lg-3 col-12 mb-3 d-flex align-items-center justify-content-center">
-                                <a href="{{ url('/products') }}" style="text-decoration: none;">
-                                    <div class="card sub_topCard h-100">
-                                        <div style="min-height: 50px">
-                                            <span class="badge trending-badge">LIMITED TIME</span>
-                                            <img src="{{ asset('assets/images/home/card_image_4.webp') }}"
-                                                class="img-fluid card-img-top1" alt="card_image" />
-                                        </div>
-                                        <div class="card-body card_section">
-                                            <div class="mt-3 d-flex align-items-center justify-content-between">
-                                                <h5 class="card-title px-3">Beauty Spa</h5>
-                                                <span class="badge p-0 mx-3 trending-wishlist-badge">
-                                                    <i class="fa-regular fa-bookmark wishlist-icon" onclick="toggleBookmark(this, event)"></i>
-                                                </span>
-                                            </div>
-                                            <span class="px-3">
-                                                <i class="fa-solid fa-star" style="color: #ffc200"></i>
-                                                <i class="fa-solid fa-star" style="color: #ffc200"></i>
-                                                <i class="fa-solid fa-star" style="color: #ffc200"></i>
-                                                <i class="fa-solid fa-star" style="color: #ffc200"></i>
-                                                <i class="fa-solid fa-star" style="color: #ffc200"></i>
-                                            </span>
-                                            <p class="px-3 fw-normal">
-                                                DealsMachi, deals that matter in Chennai! Get the best of
-                                                Electronics, Food, Travel, Makeup, Spa and other hot deals.
-                                            </p>
-                                            <div class="card-divider"></div>
-                                            <p class="px-3 fw-medium d-flex align-items-center justify-content-between"
-                                                style="color:  #ff0060 "><span>₹150</span><span
-                                                    class="mx-3 px-2 couponBadge">DEALSMACHI25</span></p>
-                                            <div class="card-divider"></div>
-                                            <div class="px-3">
-                                                <p>Regular Price</p>
-                                                <p><s>₹200</s></p>
-                                            </div>
-                                            <div class="card-divider"></div>
-                                            <p class="px-3 fw-medium"
-                                                style="color:  #ff0060 ;font-weight: 400 !important;"><i
-                                                    class="fa-solid fa-location-dot"></i>
-                                                &nbsp;Chennai</p>
-                                        </div>
-                                    </div>
-                                </a>
-                            </div>
-                            <div class="col-md-4 col-lg-3 col-12 mb-3 d-flex align-items-center justify-content-center">
-                                <a href="{{ url('/products') }}" style="text-decoration: none;">
-                                    <div class="card sub_topCard h-100">
-                                        <div style="min-height: 50px">
-                                            <span class="badge trending-badge">LAST CHANCE</span>
-                                            <img src="{{ asset('assets/images/home/kids_wear_2.webp') }}"
-                                                class="img-fluid card-img-top1" alt="card_image" />
-                                        </div>
-                                        <div class="card-body card_section">
-                                            <h5 class="card-title mt-3 px-3"></h5>
-                                            <div class="mt-3 d-flex align-items-center justify-content-between">
-                                                <h5 class="card-title px-3">Kids Wear</h5>
-                                                <span class="badge p-0 mx-3 trending-wishlist-badge">
-                                                    <i class="fa-regular fa-bookmark wishlist-icon" onclick="toggleBookmark(this, event)"></i>
-                                                </span>
-                                            </div>
-                                            <span class="px-3">
-                                                <i class="fa-solid fa-star" style="color: #ffc200"></i>
-                                                <i class="fa-solid fa-star" style="color: #ffc200"></i>
-                                                <i class="fa-solid fa-star" style="color: #ffc200"></i>
-                                                <i class="fa-solid fa-star" style="color: #ffc200"></i>
-                                                <i class="fa-solid fa-star" style="color: #ffc200"></i>
-                                            </span>
-                                            <p class="px-3 fw-normal">
-                                                DealsMachi, deals that matter in Chennai! Get the best of
-                                                Electronics, Food, Travel, Makeup, Spa and other hot deals.
-                                            </p>
-                                            <div class="card-divider"></div>
-                                            <p class="px-3 fw-medium d-flex align-items-center justify-content-between"
-                                                style="color:  #ff0060 "><span>₹150</span><span
-                                                    class="mx-3 px-2 couponBadge">DEALSMACHI25</span></p>
-                                            <div class="card-divider"></div>
-                                            <div class="px-3">
-                                                <p>Regular Price</p>
-                                                <p><s>₹200</s></p>
-                                            </div>
-                                            <div class="card-divider"></div>
-                                            <p class="px-3 fw-medium"
-                                                style="color:  #ff0060 ;font-weight: 400 !important;"><i
-                                                    class="fa-solid fa-location-dot"></i>
-                                                &nbsp;Chennai</p>
-                                        </div>
-                                    </div>
-                                </a>
-                            </div>
-                            <div class="col-md-4 col-lg-3 col-12 mb-3 d-flex align-items-center justify-content-center">
-                                <a href="{{ url('/products') }}" style="text-decoration: none;">
-                                    <div class="card sub_topCard h-100">
-                                        <div style="min-height: 50px">
-                                            <span class="badge trending-badge">EARLY BIRD</span>
-                                            <img src="{{ asset('assets/images/home/beauty2.webp') }}"
-                                                class="img-fluid card-img-top1" alt="card_image" />
-                                        </div>
-                                        <div class="card-body card_section">
-                                            <div class="mt-3 d-flex align-items-center justify-content-between">
-                                                <h5 class="card-title px-3">Beauty Spa</h5>
-                                                <span class="badge p-0 mx-3 trending-wishlist-badge">
-                                                    <i class="fa-regular fa-bookmark wishlist-icon" onclick="toggleBookmark(this, event)"></i>
-                                                </span>
-                                            </div>
-                                            <span class="px-3">
-                                                <i class="fa-solid fa-star" style="color: #ffc200"></i>
-                                                <i class="fa-solid fa-star" style="color: #ffc200"></i>
-                                                <i class="fa-solid fa-star" style="color: #ffc200"></i>
-                                                <i class="fa-solid fa-star" style="color: #ffc200"></i>
-                                                <i class="fa-solid fa-star" style="color: #ffc200"></i>
-                                            </span>
-                                            <p class="px-3 fw-normal">
-                                                DealsMachi, deals that matter in Chennai! Get the best of
-                                                Electronics, Food, Travel, Makeup, Spa and other hot deals.
-                                            </p>
-                                            <div class="card-divider"></div>
-                                            <p class="px-3 fw-medium d-flex align-items-center justify-content-between"
-                                                style="color:  #ff0060 "><span>₹150 </span><span
-                                                    class="mx-3 px-2 couponBadge">DEALSMACHI25</span></p>
-                                            <div class="card-divider"></div>
-                                            <div class="px-3">
-                                                <p>Regular Price</p>
-                                                <p><s>₹200 </s></p>
-                                            </div>
-                                            <div class="card-divider"></div>
-                                            <p class="px-3 fw-medium"
-                                                style="color:  #ff0060 ;font-weight: 400 !important;"><i
-                                                    class="fa-solid fa-location-dot"></i>
-                                                &nbsp;Chennai</p>
-                                        </div>
-                                    </div>
-                                </a>
-                            </div>
-                            <div class="col-md-4 col-lg-3 col-12 mb-3 d-flex align-items-center justify-content-center">
-                                <a href="{{ url('/products') }}" style="text-decoration: none;">
-                                    <div class="card sub_topCard h-100">
-                                        <div style="min-height: 50px">
-                                            <span class="badge trending-badge">TRENDING</span>
-                                            <img src="{{ asset('assets/images/home/restaurant.webp') }}"
-                                                class="img-fluid card-img-top1" alt="card_image" />
-                                        </div>
-                                        <div class="card-body card_section">
-                                            <div class="mt-3 d-flex align-items-center justify-content-between">
-                                                <h5 class="card-title px-3">Restaurants</h5>
-                                                <span class="badge p-0 mx-3 trending-wishlist-badge">
-                                                    <i class="fa-regular fa-bookmark wishlist-icon" onclick="toggleBookmark(this, event)"></i>
-                                                </span>
-                                            </div>
-                                            <span class="px-3">
-                                                <i class="fa-solid fa-star" style="color: #ffc200"></i>
-                                                <i class="fa-solid fa-star" style="color: #ffc200"></i>
-                                                <i class="fa-solid fa-star" style="color: #ffc200"></i>
-                                                <i class="fa-solid fa-star" style="color: #ffc200"></i>
-                                                <i class="fa-solid fa-star" style="color: #ffc200"></i>
-                                            </span>
-                                            <p class="px-3 fw-normal">
-                                                DealsMachi, deals that matter in Chennai! Get the best of
-                                                Electronics, Food, Travel, Makeup, Spa and other hot deals.
-                                            </p>
-                                            <div class="card-divider"></div>
-                                            <p class="px-3 fw-medium d-flex align-items-center justify-content-between"
-                                                style="color:  #ff0060 "><span>₹150 </span><span
-                                                    class="mx-3 px-2 couponBadge">DEALSMACHI25</span></p>
-                                            <div class="card-divider"></div>
-                                            <div class="px-3">
-                                                <p>Regular Price</p>
-                                                <p><s>₹200 </s></p>
-                                            </div>
-                                            <div class="card-divider"></div>
-                                            <p class="px-3 fw-medium"
-                                                style="color:  #ff0060 ;font-weight: 400 !important;"><i
-                                                    class="fa-solid fa-location-dot"></i>
-                                                &nbsp;Chennai</p>
-                                        </div>
-                                    </div>
-                                </a>
-                            </div>
-                            <div class="col-md-4 col-lg-3 col-12 mb-3 d-flex align-items-center justify-content-center">
-                                <a href="{{ url('/products') }}" style="text-decoration: none;">
-                                    <div class="card sub_topCard h-100">
-                                        <div style="min-height: 50px">
-                                            <span class="badge trending-badge">POPULAR</span>
-                                            <img src="{{ asset('assets/images/home/spa_two.webp') }}"
-                                                class="img-fluid card-img-top1" alt="card_image" />
-                                        </div>
-                                        <div class="card-body card_section">
-                                            <div class="mt-3 d-flex align-items-center justify-content-between">
-                                                <h5 class="card-title px-3">Beauty Spa</h5>
-                                                <span class="badge p-0 mx-3 trending-wishlist-badge">
-                                                    <i class="fa-regular fa-bookmark wishlist-icon" onclick="toggleBookmark(this, event)"></i>
-                                                </span>
-                                            </div>
-                                            <span class="px-3">
-                                                <i class="fa-solid fa-star" style="color: #ffc200"></i>
-                                                <i class="fa-solid fa-star" style="color: #ffc200"></i>
-                                                <i class="fa-solid fa-star" style="color: #ffc200"></i>
-                                                <i class="fa-solid fa-star" style="color: #ffc200"></i>
-                                                <i class="fa-solid fa-star" style="color: #ffc200"></i>
-                                            </span>
-                                            <p class="px-3 fw-normal">
-                                                DealsMachi, deals that matter in Chennai! Get the best of
-                                                Electronics, Food, Travel, Makeup, Spa and other hot deals.
-                                            </p>
-                                            <div class="card-divider"></div>
-                                            <p class="px-3 fw-medium d-flex align-items-center justify-content-between"
-                                                style="color:  #ff0060 "><span>₹150 </span><span
-                                                    class="mx-3 px-2 couponBadge">DEALSMACHI25</span></p>
-                                            <div class="card-divider"></div>
-                                            <div class="px-3">
-                                                <p>Regular Price</p>
-                                                <p><s>₹200 </s></p>
-                                            </div>
-                                            <div class="card-divider"></div>
-                                            <p class="px-3 fw-medium"
-                                                style="color:  #ff0060 ;font-weight: 400 !important;"><i
-                                                    class="fa-solid fa-location-dot"></i>
-                                                &nbsp;Chennai</p>
-                                        </div>
-                                    </div>
-                                </a>
-                            </div>
+                                    </a>
+                                </div>
+                            @endforeach
+
+
                         </div>
                     </div>
-                </div>
+                @else
+                    <div class="col-12 d-flex justify-content-center align-items-center text-center"
+                        style="min-height: 60vh;">
+                        <div class="col-12 col-md-12" style="color: rgb(128, 128, 128);">
+                            <h2 >Something Awesome is Coming Soon!</h2>
+                        </div>
+                    </div>
+                @endif
             </div>
-            @include('layouts.footer')
-        </div>
-    </section>
+        </form>
+    </div>
 
-    <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous">
+    <script>
+        document.getElementById('clearButton').addEventListener('click', function() {
+            document.getElementById('filterForm').reset();
+            window.location.href = "{{ route('search') }}";
+        });
+
+        document.getElementById('clearButtonLarge').addEventListener('click', function() {
+            document.getElementById('filterForm').reset();
+            window.location.href = "{{ route('search') }}"
+        });
     </script>
 
-    <!-- Fontawesome -->
-    <script src="https://kit.fontawesome.com/5b8838406b.js" crossorigin="anonymous"></script>
-
-    <!-- Custom JS -->
-    <script src="{{ asset('assets/js/custom.js') }}"></script>
-</body>
-
-</html>
+@endsection
