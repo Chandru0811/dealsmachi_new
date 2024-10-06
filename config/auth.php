@@ -40,6 +40,11 @@ return [
             'driver' => 'session',
             'provider' => 'users',
         ],
+
+        'api' => [
+            'driver' => 'passport',  // Ensure the driver is set to 'passport'
+            'provider' => 'users',
+        ],
     ],
 
     /*
