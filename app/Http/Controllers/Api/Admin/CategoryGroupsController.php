@@ -61,7 +61,7 @@ class CategoryGroupsController extends Controller
 
         if ($request->hasFile('image')) {
             $image = $request->file('image');
-            $imagePath = base_path('assets/images/category_groups');
+            $imagePath = 'assets/images/category_groups';
 
             if (!file_exists($imagePath)) {
                 mkdir($imagePath, 0755, true);
@@ -95,11 +95,11 @@ class CategoryGroupsController extends Controller
     public function update(Request $request, $id)
     {
         $categoryGroup = CategoryGroup::find($id);
-    
+
         if (!$categoryGroup) {
             return response()->json(['error' => 'Category Group not found.'], 404);
         }
-    
+
         $validator = Validator::make($request->all(), [
             'name'        => 'required|string|max:200|unique:category_groups,name,' . $id . ',id,deleted_at,NULL',
             'slug'        => 'required|string|max:200|unique:category_groups,slug,' . $id . ',id,deleted_at,NULL',
@@ -118,36 +118,36 @@ class CategoryGroupsController extends Controller
             'order.required' => 'The order field is required.',
             'order.integer' => 'The order field must be an integer.',
         ]);
-    
+
         if ($validator->fails()) {
             return response()->json(['errors' => $validator->errors()], 422);
         }
-    
+
         $validatedData = $validator->validated();
-    
+
         if ($request->hasFile('image')) {
             $image = $request->file('image');
-            $imagePath = base_path('assets/images/category_groups');
-    
+            $imagePath = 'assets/images/category_groups';
+
             if (!file_exists($imagePath)) {
                 mkdir($imagePath, 0755, true);
             }
-    
+
             if ($categoryGroup->image_path && file_exists(public_path($categoryGroup->image_path))) {
                 unlink(public_path($categoryGroup->image_path));
             }
-    
+
             $imageName = time() . '_' . $image->getClientOriginalName();
             $image->move($imagePath, $imageName);
-    
+
             $validatedData['image_path'] = $imagePath . '/' . $imageName;
         }
-    
+
         $categoryGroup->update($validatedData);
-    
+
         return $this->success('Category Group Updated Successfully!', $categoryGroup);
     }
-    
+
     public function delete($id)
     {
         $categoryGroup = CategoryGroup::find($id);

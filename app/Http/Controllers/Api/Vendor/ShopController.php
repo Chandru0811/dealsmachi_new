@@ -103,7 +103,7 @@ class ShopController extends Controller
             }
 
             $image = $request->file('logo');
-            $imagePath = base_path('assets/images/shops/' . $shop->id . '/logo');
+            $imagePath = 'assets/images/shops/' . $shop->id . '/logo';
 
             if (!file_exists($imagePath)) {
                 mkdir($imagePath, 0755, true);
@@ -121,7 +121,7 @@ class ShopController extends Controller
             }
 
             $image = $request->file('banner');
-            $imagePath = base_path('assets/images/shops/' . $shop->id . '/banner');
+            $imagePath = 'assets/images/shops/' . $shop->id . '/banner';
 
             if (!file_exists($imagePath)) {
                 mkdir($imagePath, 0755, true);

@@ -64,7 +64,7 @@ class CategoriesController extends Controller
         if ($request->hasFile('icon')) {
             $image = $request->file('icon');
 
-            $imagePath = base_path('assets/images/categories');
+            $imagePath = 'assets/images/categories';
 
             if (!file_exists($imagePath)) {
                 mkdir($imagePath, 0755, true);
@@ -74,7 +74,7 @@ class CategoriesController extends Controller
 
             $image->move($imagePath, $imageName);
 
-            $validatedData['icon'] = 'assets/images/categories/' . $imageName;
+            $validatedData['icon'] = $imagePath . '/' . $imageName;
         }
 
         $category = Category::create($validatedData);
@@ -133,7 +133,7 @@ class CategoriesController extends Controller
 
         if ($request->hasFile('icon')) {
             $image = $request->file('icon');
-            $imagePath = base_path('assets/images/categories');
+            $imagePath = 'assets/images/categories';
 
             if (!file_exists($imagePath)) {
                 mkdir($imagePath, 0755, true);

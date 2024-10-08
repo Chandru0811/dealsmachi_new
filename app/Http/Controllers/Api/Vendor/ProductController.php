@@ -127,7 +127,7 @@ class ProductController extends Controller
 
         $validatedData = $validator->validated();
         $shopId = $request->input('shop_id');
-        $imagePath = base_path('assets/images/products/' . $shopId);
+        $imagePath = 'assets/images/products/' . $shopId;
 
         if (!file_exists($imagePath)) {
             mkdir($imagePath, 0755, true);
@@ -279,7 +279,7 @@ class ProductController extends Controller
 
         $validatedData = $validator->validated();
         $shopId = $request->input('shop_id');
-        $imagePath = base_path('assets/images/products/' . $shopId);
+        $imagePath = 'assets/images/products/' . $shopId;
 
         if (!file_exists($imagePath)) {
             mkdir($imagePath, 0755, true);
@@ -393,7 +393,7 @@ class ProductController extends Controller
 
         if ($request->hasFile('icon')) {
             $image = $request->file('icon');
-            $imagePath = base_path('assets/images/categories');
+            $imagePath = 'assets/images/categories';
 
             if (!file_exists(public_path($imagePath))) {
                 mkdir(public_path($imagePath), 0755, true);
