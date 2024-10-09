@@ -19,7 +19,7 @@
                                 <span class="badge mx-3 p-0 trending-bookmark-badge">
                                     @if ($bookmarkedProducts->contains($product->id))
                                     {{-- Bookmarked: show solid icon --}}
-                                    <form action="{{ route('bookmarks.remove', $product->id) }}" method="POST"
+                                    <form id="bookmarkForm" action="{{ route('bookmarks.remove', $product->id) }}" method="POST"
                                         class="d-inline">
                                         @csrf
                                         @method('DELETE') <!-- Use DELETE method for removal -->
@@ -30,7 +30,7 @@
                                     </form>
                                     @else
                                     {{-- Not bookmarked: show regular icon --}}
-                                    <form action="{{ route('bookmarks.add', $product->id) }}" method="POST"
+                                    <form id="bookmarkForm" action="{{ route('bookmarks.add', $product->id) }}" method="POST"
                                         class="d-inline">
                                         @csrf
                                         <button type="submit" class="bookmark-icon"
@@ -67,7 +67,7 @@
                                 <span>₹{{ $product->discounted_price }}</span>
                                 <span id="mySpan" class="mx-3 px-2 couponBadge"
                                     onclick="copySpanText(this, event)" data-bs-toggle="tooltip"
-                                    data-bs-placement="bottom" title="Copy to Clipboard" style="position:relative;">
+                                    data-bs-placement="bottom" title="Click to Copy" style="position:relative;">
                                     DEALSMACHI{{ round($product->discount_percentage) }}
                                     <!-- Tooltip container -->
                                     <span class="tooltip-text"

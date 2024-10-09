@@ -610,7 +610,7 @@ function copyLinkToClipboard() {
     document.body.appendChild(tempInput);
 
     tempInput.select();
-    tempInput.setSelectionRange(0, 99999); 
+    tempInput.setSelectionRange(0, 99999);
 
     document.execCommand("copy");
 
@@ -658,3 +658,19 @@ document.addEventListener("DOMContentLoaded", function () {
             console.error("Error fetching total items:", error);
         });
 });
+
+function toggleNumber(event) {
+    event.preventDefault();
+    const link = event.currentTarget;
+
+    const fullNumber = link.getAttribute("data-full-number");
+    const maskedNumber = link.getAttribute("data-masked-number");
+
+    if (link.textContent === maskedNumber) {
+        link.textContent = fullNumber;
+        link.href = `tel:${fullNumber}`;
+    } else {
+        link.textContent = maskedNumber;
+        link.href = `tel:${fullNumber}`;
+    }
+}

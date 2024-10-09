@@ -21,6 +21,8 @@
                             <a href="https://www.youtube.com/channel/UCIbNIWhaDnRs-gFuJ0sTNCQ/videos"
                                 class="text-decoration-none me-2"><i class="fab fa-youtube"
                                     style="font-size: 15px"></i></a>
+                            <a href="https://www.tiktok.com/@ecsaio" class="text-decoration-none me-2"><i
+                                    class="fab fa-tiktok" style="font-size: 15px"></i></a>
                             <a href="#" class="text-decoration-none me-2"><i class="fab fa-whatsapp"
                                     style="font-size: 15px"></i></a>
                             <a href="https://x.com/ecscloudinfote2" class="text-decoration-none"><i
@@ -61,7 +63,7 @@
                             <li>
                                 <a href="{{ url('/') }}" class="text-light text-decoration-none">Electronics</a>
                             </li>
-                            
+
                             <li>
                                 <a href="{{ url('/') }}" class="text-light text-decoration-none">Restaurants</a>
                             </li>
