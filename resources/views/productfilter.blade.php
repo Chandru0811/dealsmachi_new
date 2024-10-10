@@ -2,7 +2,7 @@
 
 @section('content')
     <div class="categoryIcons">
-        <form method="GET" action="{{ route('search') }}" id="filterForm">
+        <form method="GET" action="{{ !empty($category) ? route('subcategorybasedproducts', ['slug' => $category->slug]) : route('search') }}" id="filterForm">
             <div class="p-4 topFilter">
                 <div class="row d-flex align-items-center">
                     <!-- Beauty Spa and Hair Section -->
@@ -365,18 +365,219 @@
 
                         </div>
                     </div>
-                @else
-                    <div class="col-12 d-flex justify-content-center align-items-center text-center"
-                        style="min-height: 60vh;">
-                        <div class="col-12 col-md-12" style="color: rgb(128, 128, 128);">
-                            <h2 >Something Awesome is Coming Soon!</h2>
+                    @else
+                    <div class="offcanvas offcanvas-start" tabindex="-1" id="filterOffcanvas"
+                        aria-labelledby="filterOffcanvasLabel">
+                        <div class="offcanvas-header">
+                            <h5 class="offcanvas-title" id="filterOffcanvasLabel">Filter Results</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                        </div>
+                        <div class="offcanvas-body" style="overflow-y: auto">
+                            <div class="row">
+                                <div class="col-6">
+                                    <p class="canvas_topText2">Filter Results</p>
+                                </div>
+                                <div class="col-6">
+                                    <p class="canvas_selectText2">{{ $totaldeals }} deals available</p>
+                                </div>
+                            </div>
+
+                            <!-- Brand Filter -->
+                            <div class="px-5 pb-3">
+                                <div class="d-flex flex-column">
+                                    <p class="topText3 mb-1" style="border-bottom: 1px solid black; width:fit-content">Brand
+                                    </p>
+                                </div>
+                                @foreach ($brands as $brand)
+                                <div class="form-check pt-3">
+                                    <input class="form-check-input" type="checkbox" name="brand[]" value="{{ $brand }}"
+                                        id="brand_{{ $loop->index }}"
+                                        {{ in_array($brand, request()->input('brand', [])) ? 'checked' : '' }}>
+                                    <label class="form-check-label categoryLable" for="brand_{{ $loop->index }}">
+                                        {{ str_replace('_', ' ', $brand) }}
+                                    </label>
+                                </div>
+                                @endforeach
+                            </div>
+
+                            <!-- Discount Filter -->
+                            <div class="px-5 pb-3">
+                                <div class="d-flex flex-column">
+                                    <p class="topText3">Discount Offer</p>
+                                    <div class="textline2"></div>
+                                </div>
+                                @foreach ($discounts as $discount)
+                                <div class="form-check pt-3">
+                                    <input class="form-check-input" type="checkbox" name="discount[]" value="{{ $discount }}"
+                                        id="discount_{{ $loop->index }}"
+                                        {{ in_array($discount, request()->input('discount', [])) ? 'checked' : '' }}>
+                                    <label class="form-check-label categoryLable" for="discount_{{ $loop->index }}">
+                                        {{ number_format($discount, 0) }}%
+                                    </label>
+                                </div>
+                                @endforeach
+                            </div>
+
+                            <!-- Rating Item Filter -->
+                            <div class="px-5 pb-3">
+                                <div class="d-flex flex-column">
+                                    <p class="topText3 mb-1">Rating Item</p>
+                                    <div class="textline2"></div>
+                                </div>
+
+                                @foreach ($rating_items as $item)
+                                <div class="form-check d-flex align-items-center pt-3">
+                                    <input class="form-check-input yellow-checkbox me-2" type="checkbox" name="rating_item[]"
+                                        value="{{ $item->shop_ratings }}" id="rating_{{ $loop->index }}"
+                                        {{ in_array($item->shop_ratings, request()->input('rating_item', [])) ? 'checked' : '' }}>
+                                    <label class="form-check-label categoryLable" for="rating_{{ $loop->index }}">
+                                        @for ($i = 1; $i <= 5; $i++) @if ($i <=round($item->shop_ratings))
+                                            <i class="fa-solid fa-star" style="color: #FFC107"></i>
+                                            @else
+                                            <i class="fa-solid fa-star" style="color: #B2B2B2"></i>
+                                            @endif
+                                            @endfor
+                                            <span class="topText4">({{ $item->rating_count }})</span>
+                                    </label>
+                                </div>
+                                @endforeach
+                            </div>
+
+                            <!-- Price Filter -->
+                            <div class="px-5 pb-4">
+                                <div class="d-flex flex-column">
+                                    <p class="topText3 mb-1">Price Filter</p>
+                                    <div class="textline2"></div>
+                                </div>
+                                @foreach ($priceRanges as $priceRange)
+                                <div class="form-check pt-3">
+                                    <input class="form-check-input" type="checkbox" name="price_range[]"
+                                        value="{{ $priceRange['label'] }}" id="{{ $priceRange['label'] }}">
+                                    <label class="form-check-label categoryLable" for="{{ $priceRange['label'] }}">
+                                        {{ $priceRange['label'] }}
+                                    </label>
+                                </div>
+                                @endforeach
+                            </div>
+                        </div>
+                        <div class="px-5 sticky-bottom d-flex justify-content-center align-items-center mb-3">
+                            <!-- Buttons inside your offcanvas -->
+                            <button type="button" class="btn btn-button clear-button" id="clearButton">Clear
+                                All</button>
+                            &nbsp;&nbsp;
+                            <button type="submit" class="btn btn-button apply-button" id="applyButton">Apply</button>
                         </div>
                     </div>
-                @endif
+                    <!-- Filter Sidebar for Larger Screens -->
+                    <div class="col-md-3 col-12 d-none d-lg-block">
+                        <div class="productFilter filterlarge">
+                            <div class="d-flex justify-content-center align-items-center pb-3">
+                                <p class="me-2 topText2">Filter Results</p>
+                                &nbsp;&nbsp;
+                                <p class="selectText2">{{ $totaldeals }} deals available</p>
+                            </div>
+
+                            <!-- Brand Filter -->
+                            <div class="px-5 pb-3">
+                                <div class="d-flex flex-column">
+                                    <p class="topText3 mb-1" style="border-bottom: 1px solid black; width:fit-content">
+                                        Brand</p>
+                                </div>
+                                @foreach ($brands as $brand)
+                                <div class="form-check pt-3">
+                                    <input class="form-check-input" type="checkbox" name="brand[]" value="{{ $brand }}"
+                                        id="brand_large_{{ $loop->index }}"
+                                        {{ in_array($brand, request()->input('brand', [])) ? 'checked' : '' }}>
+                                    <label class="form-check-label categoryLable" for="brand_large_{{ $loop->index }}">
+                                        {{ str_replace('_', ' ', $brand) }}
+                                    </label>
+                                </div>
+                                @endforeach
+                            </div>
+
+                            <!-- Discount Filter -->
+                            <div class="px-5 pb-3">
+                                <div class="d-flex flex-column">
+                                    <p class="topText3">Discount Offer</p>
+                                    <div class="textline2"></div>
+                                </div>
+                                @foreach ($discounts as $discount)
+                                <div class="form-check pt-3">
+                                    <input class="form-check-input" type="checkbox" name="discount[]" value="{{ $discount }}"
+                                        id="discount_large_{{ $loop->index }}"
+                                        {{ in_array($discount, request()->input('discount', [])) ? 'checked' : '' }}>
+                                    <label class="form-check-label categoryLable" for="discount_large_{{ $loop->index }}">
+                                        {{ number_format($discount, 0) }}%
+                                    </label>
+                                </div>
+                                @endforeach
+                            </div>
+
+                            <!-- Rating Item Filter -->
+                            <div class="px-5 pb-3">
+                                <div class="d-flex flex-column">
+                                    <p class="topText3 mb-1">Rating Item</p>
+                                    <div class="textline2"></div>
+                                </div>
+
+                                @foreach ($rating_items as $item)
+                                <div class="form-check d-flex align-items-center pt-3">
+                                    <input class="form-check-input yellow-checkbox me-2" type="checkbox" name="rating_item[]"
+                                        value="{{ $item->shop_ratings }}" id="rating_large_{{ $loop->index }}"
+                                        {{ in_array($item->shop_ratings, request()->input('rating_item', [])) ? 'checked' : '' }}>
+                                    <label class="form-check-label categoryLable" for="rating_large_{{ $loop->index }}">
+                                        @for ($i = 1; $i <= 5; $i++) @if ($i <=round($item->shop_ratings))
+                                            <i class="fa-solid fa-star" style="color: #FFC107"></i>
+                                            @else
+                                            <i class="fa-solid fa-star" style="color: #B2B2B2"></i>
+                                            @endif
+                                            @endfor
+                                            <span class="topText4">({{ $item->rating_count }})</span>
+                                    </label>
+                                </div>
+                                @endforeach
+                            </div>
+
+                            <!-- Price Filter -->
+                            <div class="px-5 pb-4">
+                                <div class="d-flex flex-column">
+                                    <p class="topText3 mb-1">Price Filter</p>
+                                    <div class="textline2"></div>
+                                </div>
+                                @foreach ($priceRanges as $priceRange)
+                                <div class="form-check pt-3">
+                                    <input class="form-check-input" type="checkbox" name="price_range[]"
+                                        value="{{ $priceRange['label'] }}" id="price_large_{{ $loop->index }}">
+                                    <label class="form-check-label categoryLable" for="price_large_{{ $loop->index }}">
+                                        {{ $priceRange['label'] }}
+                                    </label>
+                                </div>
+                                @endforeach
+                            </div>
+
+                            <div class="px-5 sticky-bottom d-flex justify-content-center align-items-center mb-3">
+                                <!-- Buttons for Large Screen -->
+                                <button type="button" class="btn btn-button clear-button" id="clearButtonLarge">Clear
+                                    All</button>
+                                &nbsp;&nbsp;
+                                <button type="submit" class="btn btn-button apply-button" id="applyButtonLarge">Apply</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12 col-lg-9 col-12">
+                        <div class="row pb-4">
+                            <div class="col-12 d-flex justify-content-center align-items-center text-center"
+                                style="min-height: 60vh;">
+                                <div class="col-12 col-md-12" style="color: rgb(128, 128, 128);">
+                                    <h2>Something Awesome is Coming Soon!</h2>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    @endif
             </div>
         </form>
     </div>
-
     <script>
         document.getElementById('clearButton').addEventListener('click', function() {
             document.getElementById('filterForm').reset();
@@ -385,7 +586,7 @@
 
         document.getElementById('clearButtonLarge').addEventListener('click', function() {
             document.getElementById('filterForm').reset();
-            window.location.href = "{{ route('search') }}"
+            window.location.href = "{{ !empty($category) ? route('subcategorybasedproducts', ['slug' => $category->slug]) : route('search') }}";
         });
     </script>
 

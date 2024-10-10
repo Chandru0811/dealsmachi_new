@@ -8,14 +8,16 @@
                         class="mx-2 img-fluid header-logo" width="200" />
                 </a>
                 <div class="d-flex align-items-center mb-1">
-                    {{-- <span class="navbar-text d-xl-none align-items-center justify-content-end">
+                    <span class="navbar-text d-xl-none align-items-center justify-content-end">
+                        <a href="https://dealsmachi.com/dealsmachiVendor/" style="text-decoration: none">
                         <button
                             class="btn btn-button userlogin-button py-1 px-2 d-flex justify-content-center align-items-center"
                             type="submit">
-                            Login
+                            Post your Deal
                         </button>
-                    </span> --}}
-                    {{-- &nbsp;&nbsp;&nbsp; --}}
+                        </a>
+                    </span>
+                    &nbsp;&nbsp;&nbsp;
                     <button class="btn btn-button" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Bookmark"
                         style="border: none; position: relative;">
                         <a href="{{ url('/bookmarks') }}" class="text-decoration-none d-xl-none"
@@ -70,16 +72,17 @@
                             class="totalItemsCount position-absolute total-count top-0  translate-middle d-none d-xl-block">
                         </span>
                     </button>
-
-                    {{-- <span class="navbar-text d-none d-xl-inline align-items-center justify-content-end"
+                    <span class="navbar-text d-none d-xl-inline align-items-center justify-content-end"
                         style="margin-left: 10px">
+                        <a href="https://dealsmachi.com/dealsmachiVendor/" style="text-decoration: none">
                         <button
                             class="btn btn-button login-button userlogin-button-large py-2 px-4 d-flex justify-content-center align-items-center"
                             type="submit">
-                            Login
+                            Post your Deal
                         </button>
+                    </a>
                     </span>
-                    &nbsp;&nbsp; --}}
+                    &nbsp;&nbsp;
                 </div>
             </div>
         </nav>
