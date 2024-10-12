@@ -322,7 +322,7 @@
 
 .sub_topCard:hover {
     transform: translateY(-2px);
-    box-shadow: 2px 2px 5px #ff4d85;
+    box-shadow: 2px 2px 5px #ff4d8546;
     border: 1px solid #ff0060;
     cursor: pointer;
 }
