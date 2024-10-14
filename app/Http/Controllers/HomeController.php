@@ -70,32 +70,57 @@ class HomeController extends Controller
         $today = now()->toDateString();
         $deals = collect();
         if ($slug == 'trending') {
-            $deals = Product::where('active', 1)
+            $deals = Product::where('active', 1)->with('shop')
                 ->withCount(['views' => function ($query) use ($today) {
                     $query->whereDate('viewed_at', $today);
                 }])->with(['shop:id,country,state,city,street,street2,zip_code,shop_ratings'])
                 ->orderBy('views_count', 'desc')
                 ->paginate($perPage);
-        } elseif ($slug == 'popular') {
+        
+            $deals->getCollection()->transform(function ($product) {
+                $product->label = 'TRENDING';
+                return $product;
+            });
+        }elseif ($slug == 'popular') {
             $deals = Product::where('active', 1)
                 ->withCount('views')->with(['shop:id,country,state,city,street,street2,zip_code,shop_ratings'])
                 ->orderBy('views_count', 'desc')
                 ->paginate($perPage);
+
+                $deals->getCollection()->transform(function ($product) {
+                    $product->label = 'POPULAR';
+                    return $product;
+                });
         } elseif ($slug == 'early_bird') {
             $deals = Product::where('active', 1)->with(['shop:id,country,state,city,street,street2,zip_code,shop_ratings'])
                 ->whereDate('start_date', now())
                 ->paginate($perPage);
+
+                $deals->getCollection()->transform(function ($product) {
+                    $product->label = 'EARLY BIRD';
+                    return $product;
+                });
         } elseif ($slug == 'last_chance') {
             $deals = Product::where('active', 1)->with(['shop:id,country,state,city,street,street2,zip_code,shop_ratings'])
                 ->whereDate('end_date', now())
                 ->paginate($perPage);
+
+                $deals->getCollection()->transform(function ($product) {
+                    $product->label = 'LAST CHANCE';
+                    return $product;
+                });
         } elseif ($slug == 'limited_time') {
             $deals = Product::where('active', 1)->with(['shop:id,country,state,city,street,street2,zip_code,shop_ratings'])
                 ->whereRaw('DATEDIFF(end_date, start_date) <= ?', [2])
                 ->paginate($perPage);
+
+                $deals->getCollection()->transform(function ($product) {
+                    $product->label = 'LIMITED TIME';
+                    return $product;
+                });
         }
 
-        $brands = Product::where('active', 1)->distinct()->pluck('brand');
+        $brands = Product::where('active', 1)->whereNotNull('brand')->where('brand', '!=', '')->distinct()->pluck('brand');
         $discounts = Product::where('active', 1)->distinct()->pluck('discount_percentage');
         $rating_items = Shop::where('active', 1)->select('shop_ratings', DB::raw('count(*) as rating_count'))->groupBy('shop_ratings')->get();
         $priceRanges = [];
@@ -108,14 +133,12 @@ class HomeController extends Controller
 
             if ($end > $maxPrice) {
                 $priceRanges[] = [
-                    'label' => "$start+",
-                    'range' => [$start, $maxPrice]
+                    'label' => 'Rs ' . number_format($start, 2) . ' - Rs ' . number_format($end, 2)
                 ];
                 break;
             }
             $priceRanges[] = [
-                'label' => "$$start - $$end",
-                'range' => [$start, $end]
+                'label' => 'Rs ' . number_format($start, 2) . ' - Rs ' . number_format($end, 2)
             ];
         }
 
@@ -205,12 +228,12 @@ class HomeController extends Controller
 
             if ($end > $maxPrice) {
                 $priceRanges[] = [
-                    'label' => '$' . number_format($start, 2) . ' - $' . number_format($end, 2)
+                    'label' => 'Rs ' . number_format($start, 2) . ' - Rs ' . number_format($end, 2)
                 ];
                 break;
             }
             $priceRanges[] = [
-                'label' => '$' . number_format($start, 2) . ' - $' . number_format($end, 2)
+                'label' => 'Rs ' . number_format($start, 2) . ' - Rs ' . number_format($end, 2)
             ];
         }
 
@@ -272,7 +295,7 @@ class HomeController extends Controller
             $priceRange = $request->input('price_range');
 
 
-            $priceRange = str_replace(['$', ',', ' '], '', $priceRange[0]);
+            $priceRange = str_replace(['Rs ', ',', ' '], '', $priceRange[0]);
             $priceRange = explode('-', $priceRange);
 
 
@@ -335,12 +358,12 @@ class HomeController extends Controller
 
             if ($end > $maxPrice) {
                 $priceRanges[] = [
-                    'label' => '$' . number_format($start, 2) . ' - $' . number_format($end, 2)
+                    'label' => 'Rs ' . number_format($start, 2) . ' - Rs ' . number_format($end, 2)
                 ];
                 break;
             }
             $priceRanges[] = [
-                'label' => '$' . number_format($start, 2) . ' - $' . number_format($end, 2)
+                'label' => 'Rs ' . number_format($start, 2) . ' - Rs ' . number_format($end, 2)
             ];
         }
 

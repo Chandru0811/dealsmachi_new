@@ -11,11 +11,12 @@
                             </p>
                         </div>
                         <div class="social-icons">
-                            <a href="https://www.facebook.com/ecscloud/" class="text-decoration-none me-2"><i
-                                    class="fab fa-facebook" style="font-size: 15px"></i></a>
-                            <a href="https://www.instagram.com/ecscloudinfotech/" class="text-decoration-none me-2"><i
+                            <a href="https://www.facebook.com/profile.php?id=61566743978973"
+                                class="text-decoration-none me-2"><i class="fab fa-facebook"
+                                    style="font-size: 15px"></i></a>
+                            <a href="https://www.instagram.com/dealsmachi/" class="text-decoration-none me-2"><i
                                     class="fab fa-instagram" style="font-size: 15px"></i></a>
-                            <a href="https://sg.linkedin.com/company/ecs-cloud-infotech"
+                            <a href="https://www.linkedin.com/in/deals-machi-2b4944331"
                                 class="text-decoration-none me-2"><i class="fab fa-linkedin"
                                     style="font-size: 15px"></i></a>
                             <a href="https://www.youtube.com/channel/UCIbNIWhaDnRs-gFuJ0sTNCQ/videos"
@@ -25,7 +26,7 @@
                                     class="fab fa-tiktok" style="font-size: 15px"></i></a>
                             <a href="#" class="text-decoration-none me-2"><i class="fab fa-whatsapp"
                                     style="font-size: 15px"></i></a>
-                            <a href="https://x.com/ecscloudinfote2" class="text-decoration-none"><i
+                            <a href="https://x.com/dealsmachi_in" class="text-decoration-none"><i
                                     class="fab fa-x-twitter" style="font-size: 15px"></i></a>
                         </div>
                     </div>
@@ -49,7 +50,7 @@
                                 <a href="#" class="text-light text-decoration-none">Contact Us</a>
                             </li>
                             <li>
-                                <a href="#" class="text-light text-decoration-none">Post your deal</a>
+                                <a href="https://dealslah.com/dealslahVendor/" class="text-light text-decoration-none">Post your deal</a>
                             </li>
                         </ul>
                     </div>
