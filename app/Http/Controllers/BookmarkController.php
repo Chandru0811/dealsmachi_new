@@ -12,7 +12,6 @@ class BookmarkController extends Controller
     public function add(Request $request, $deal_id)
     {
         $deal = Product::findOrFail($deal_id);
-
         $user_id = Auth::check() ? Auth::id() : null;
 
         if ($user_id) {
@@ -22,7 +21,10 @@ class BookmarkController extends Controller
         }
 
         if ($existing_bookmark) {
-            return response()->json(['message' => 'Deal already bookmarked'], 409);
+            if ($request->ajax()) {
+                return response()->json(['message' => 'Deal already bookmarked']);
+            }
+            return redirect()->back()->with('message', 'Deal already bookmarked');
         }
 
         Bookmark::updateOrCreate(
@@ -33,8 +35,14 @@ class BookmarkController extends Controller
             ]
         );
 
-        return redirect()->back()->with('message', 'Deal Added to Bookmark Successfully!');
+        if ($request->ajax()) {
+            $bookmarkCount = $this->getBookmarkCount($request);
+            return response()->json(['message' => 'Deal added to bookmarks successfully!', 'total_items' => $bookmarkCount]);
+        }
+
+        return redirect()->back()->with('message', 'Deal added to bookmarks successfully!');
     }
+
 
     public function remove(Request $request, $deal_id)
     {
@@ -48,12 +56,36 @@ class BookmarkController extends Controller
 
         if ($bookmark) {
             $bookmark->delete();
-            return redirect()->back()->with('message', 'Item Removed from Bookmark!');
+
+            if ($request->ajax()) {
+                $bookmarkCount = $this->getBookmarkCount($request);
+                return response()->json(['message' => 'Item removed from bookmarks!', 'total_items' => $bookmarkCount]);
+            }
+
+            return redirect()->back()->with('message', 'Item removed from bookmarks!');
+        }
+
+        if ($request->ajax()) {
+            return response()->json(['message' => 'Bookmark not found'], 404);
         }
 
         return redirect()->back()->with('message', 'Bookmark not found');
     }
 
+    private function getBookmarkCount(Request $request)
+    {
+        $user_id = Auth::check() ? Auth::id() : null;
+
+        $bookmarkCount = Bookmark::where(function ($query) use ($user_id, $request) {
+            if ($user_id) {
+                $query->where('user_id', $user_id);
+            } else {
+                $query->whereNull('user_id')->where('ip_address', $request->ip());
+            }
+        })->count();
+
+        return $bookmarkCount;
+    }
 
     public function totalItems(Request $request)
     {
@@ -80,8 +112,9 @@ class BookmarkController extends Controller
             } else {
                 $query->whereNull('user_id')->where('ip_address', $request->ip());
             }
-        })->with('deal')->paginate(10);
+        })->with(['deal', 'deal.shop'])->paginate(10);
 
         return view('bookmark', compact('bookmarks'));
     }
+    
 }

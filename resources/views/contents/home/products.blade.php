@@ -2,8 +2,8 @@
     <h5 class="pt-0 pb-2">Products</h5>
     <div class="row pb-4">
         @foreach ($products as $product)
-        <div class="col-md-4 col-lg-3 col-12 mb-3 d-flex align-items-stretch">
-            <a href="{{ url('/deal/' . $product->id) }}" style="text-decoration: none; width: 100%;">
+        <div class="col-md-4 col-lg-3 col-12 mb-3 d-flex align-items-stretch justify-content-center">
+            <a href="{{ url('/deal/' . $product->id) }}" style="text-decoration: none;">
                 <div class="card sub_topCard h-100 d-flex flex-column">
                     <div style="min-height: 50px">
                         @if ($product->label !== '')
@@ -18,43 +18,34 @@
                                 <h5 class="card-title ps-3">{{ $product->name }}</h5>
                                 <span class="badge mx-3 p-0 trending-bookmark-badge">
                                     @if ($bookmarkedProducts->contains($product->id))
-                                    {{-- Bookmarked: show solid icon --}}
-                                    <form id="bookmarkForm" action="{{ route('bookmarks.remove', $product->id) }}" method="POST"
-                                        class="d-inline">
-                                        @csrf
-                                        @method('DELETE') <!-- Use DELETE method for removal -->
-                                        <button type="submit" class="bookmark-icon"
-                                            style="border: none; background: none;">
-                                            <i class="fa-solid fa-bookmark" style="color: #ff0060;"></i>
-                                        </button>
-                                    </form>
+                                    <button type="button" class="bookmark-button remove-bookmark" data-deal-id="{{ $product->id }}" style="border: none; background: none;">
+                                        <p style="height:fit-content;cursor:pointer" class="p-1 px-2" data-bs-toggle="tooltip" data-bs-placement="top" title="Bookmark">
+                                            <i class="fa-solid fa-bookmark bookmark-icon" style="color: #ff0060;"></i>
+                                        </p>
+                                    </button>
                                     @else
-                                    {{-- Not bookmarked: show regular icon --}}
-                                    <form id="bookmarkForm" action="{{ route('bookmarks.add', $product->id) }}" method="POST"
-                                        class="d-inline">
-                                        @csrf
-                                        <button type="submit" class="bookmark-icon"
-                                            style="border: none; background: none;">
-                                            <i class="fa-regular fa-bookmark" style="color: #ff0060;"></i>
-                                        </button>
-                                    </form>
+                                    <button type="button" class="bookmark-button add-bookmark" data-deal-id="{{ $product->id }}" style="border: none; background: none;">
+                                        <p style="height:fit-content;cursor:pointer" class="p-1 px-2" data-bs-toggle="tooltip" data-bs-placement="top" title="Bookmark">
+                                            <i class="fa-regular fa-bookmark bookmark-icon" style="color: #ff0060;"></i>
+                                        </p>
+                                    </button>
                                     @endif
                                 </span>
                             </div>
                             <span class="px-3">
                                 @php
-                                $fullStars = floor($product->shop_ratings); // Get integer part for full stars
-                                $hasHalfStar = ($product->shop_ratings - $fullStars) >= 0.5; // Check for half star
-                                $remaining = 5 - ($hasHalfStar ? $fullStars + 1 : $fullStars); // Calculate remaining stars
+                                $fullStars = floor($product->shop_ratings);
+                                $hasHalfStar = ($product->shop_ratings - $fullStars) >= 0.5;
+                                $remaining = 5 - ($hasHalfStar ? $fullStars + 1 : $fullStars);
                                 @endphp
                                 @for ($i = 0; $i < $fullStars; $i++)
-                                    <i class="fa-solid fa-star" style="color: #ffc200;"></i> <!-- Filled stars -->
+                                    <i class="fa-solid fa-star" style="color: #ffc200;"></i>
                                     @endfor
                                     @if ($hasHalfStar)
-                                    <i class="fa-solid fa-star-half-stroke" style="color: #ffc200;"></i> <!-- Half star -->
+                                    <i class="fa-solid fa-star-half-stroke" style="color: #ffc200;"></i>
                                     @endif
                                     @for ($i = 0; $i < $remaining; $i++)
-                                        <i class="fa-regular fa-star" style="color: #ffc200;"></i> <!-- Empty stars -->
+                                        <i class="fa-regular fa-star" style="color: #ffc200;"></i>
                                         @endfor
                             </span>
 
@@ -64,11 +55,11 @@
                             <div class="card-divider"></div>
                             <p class="ps-3 fw-medium d-flex align-items-center justify-content-between"
                                 style="color: #ff0060">
-                                <span>₹{{ $product->discounted_price }}</span>
+                                <span>Rs {{ $product->discounted_price }}</span>
                                 <span id="mySpan" class="mx-3 px-2 couponBadge"
                                     onclick="copySpanText(this, event)" data-bs-toggle="tooltip"
                                     data-bs-placement="bottom" title="Click to Copy" style="position:relative;">
-                                    DEALSMACHI{{ round($product->discount_percentage) }}
+                                    DEALSLAH{{ round($product->discount_percentage) }}
                                     <!-- Tooltip container -->
                                     <span class="tooltip-text"
                                         style="visibility: hidden; background-color: black; color: #fff; text-align: center; border-radius: 6px; padding: 5px; position: absolute; z-index: 1; bottom: 125%; left: 50%; margin-left: -60px;">
@@ -79,7 +70,7 @@
                             <div class="card-divider"></div>
                             <div class="ps-3">
                                 <p>Regular Price</p>
-                                <p><s>₹{{ $product->original_price }}</s></p>
+                                <p><s>Rs {{ $product->original_price }}</s></p>
                             </div>
                             <div class="card-divider"></div>
                             <p class="ps-3 fw-medium" style="color: #ff0060; font-weight: 400 !important;">
@@ -93,10 +84,3 @@
         @endforeach
     </div>
 </div>
-
-<script>
-    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
-    var tooltipList = tooltipTriggerList.map(function(tooltipTriggerEl) {
-        return new bootstrap.Tooltip(tooltipTriggerEl)
-    })
-</script>

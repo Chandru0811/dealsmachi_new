@@ -25,7 +25,7 @@
                 ],
             ],
             [
-                'productId' => '2',
+                'productId' => '3',
                 'reviews' => [
                     [
                         'reviewerName' => 'Goh Meih Lin',
@@ -46,7 +46,7 @@
                 ],
             ],
             [
-                'productId' => '3',
+                'productId' => '4',
                 'reviews' => [
                     [
                         'reviewerName' => 'Liu Zhang',
@@ -67,7 +67,7 @@
                 ],
             ],
             [
-                'productId' => '4',
+                'productId' => '6',
                 'reviews' => [
                     [
                         'reviewerName' => 'Wang Fang',
@@ -88,7 +88,7 @@
                 ],
             ],
             [
-                'productId' => '5',
+                'productId' => '11',
                 'reviews' => [
                     [
                         'reviewerName' => 'Chen Ming',
@@ -135,9 +135,7 @@
                                                 Closed Today
                                             @endif
                                         </p>
-                                        <p class="info"><i class="fa-solid fa-circle"
-                                                style="color: #fdbf46; font-size: 8px;"></i>&nbsp;&nbsp;1 Years in Business
-                                        </p>
+                                        
                                     </div>
                                     <div class="d-flex">
                                         <p>602 <span style="font-size: 11px; color: #5C5C5C;">people</span></p>
@@ -149,24 +147,31 @@
                                         <div class="col-6">
                                             <div class="row">
                                                 <div class="col-2 pe-0">
-                                                    <i class="fa-solid fa-location-dot fa-lg" style="color:
-#ff0060;"></i>
+                                                    <i class="fa-solid fa-location-dot fa-lg" style="color: #ff0060;"></i>
                                                 </div>
                                                 <div class="col-10 ps-2" style="font-size: 12px; color: #5C5C5C;">
+                                                <a href="{{ $product->shop->map_url }}" class="text-muted" target="_blank" style="text-decoration: none;">
                                                     {{ $product->shop->street }}, {{ $product->shop->street2 }},
                                                     {{ $product->shop->city }}-{{ $product->shop->zip_code }},
-                                                    {{ $product->shop->state }}, {{ $product->shop->country }}.
+                                                    {{ $product->shop->country }}.
+                                                    </a>
                                                 </div>
+                                                
                                             </div>
                                         </div>
                                         <div class="col-6">
                                             <div class="row">
                                                 <div class="col-2 pe-0">
-                                                    <i class="fa-solid fa-user-group fa-lg" style="color:
-#ff0060;"></i>
+                                                    <i class="fa-solid fa-phone fa-lg" style="color: #ff0060;"></i>
                                                 </div>
-                                                <div class="col-10 ps-4" style="font-size: 12px; color: #5C5C5C;">
-                                                    24 people recently enquired
+                                                <div class="col-10 ps-2" style="font-size: 18px; color: #5C5C5C;">
+                                                    <a href="{{ $product->shop->mobile }}"
+                                                        class="text-decoration-none text-black"
+                                                        data-full-number="{{ $product->shop->mobile }}"
+                                                        data-masked-number="{{ substr($product->shop->mobile, 0, 4) . str_repeat('x', strlen($product->shop->mobile) - 4) }}"
+                                                        onclick="toggleNumber(event)">
+                                                        {{ substr($product->shop->mobile, 0, 4) . str_repeat('x', strlen($product->shop->mobile) - 4) }}
+                                                    </a>
                                                 </div>
                                             </div>
                                         </div>
@@ -201,42 +206,30 @@
                                     </p>
                                     <div class="d-flex productViewIcons">
                                         @if (count($product->bookmark) === 0)
-                                            <form action="{{ route('bookmarks.add', $product->id) }}" method="POST"
-                                                class="d-inline">
-                                                @csrf
-                                                <button type="submit" class="bookmark-icon"
-                                                    style="border: none; background: none;">
-                                                    <p style="height:fit-content;cursor:pointer" class="p-1 px-2"
-                                                        data-bs-toggle="tooltip" data-bs-placement="top" title="Bookmark">
-                                                        <i class="fa-regular fa-bookmark bookmark-icon"
-                                                            style="color:
-#ff0060;"></i>
-                                                    </p>
-                                                </button>
-                                            </form>
+                                            <button type="button" class="bookmark-button add-bookmark"
+                                                data-deal-id="{{ $product->id }}" style="border: none; background: none;">
+                                                <p style="height:fit-content;cursor:pointer" class="p-1 px-2"
+                                                    data-bs-toggle="tooltip" data-bs-placement="top" title="Bookmark">
+                                                    <i class="fa-regular fa-bookmark bookmark-icon"
+                                                        style="color: #ff0060;"></i>
+                                                </p>
+                                            </button>
                                         @else
-                                            <form action="{{ route('bookmarks.remove', $product->id) }}" method="POST"
-                                                class="d-inline">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button type="submit" class="bookmark-icon"
-                                                    style="border: none; background: none;">
-                                                    <p style="height:fit-content;cursor:pointer" class="p-1 px-2"
-                                                        data-bs-toggle="tooltip" data-bs-placement="top" title="Bookmark">
-                                                        <i class="fa-solid fa-bookmark bookmark-icon"
-                                                            style="color:
-#ff0060;"></i>
-                                                    </p>
-                                                </button>
-                                            </form>
+                                            <button type="button" class="bookmark-button remove-bookmark"
+                                                data-deal-id="{{ $product->id }}" style="border: none; background: none;">
+                                                <p style="height:fit-content;cursor:pointer" class="p-1 px-2"
+                                                    data-bs-toggle="tooltip" data-bs-placement="top" title="Bookmark">
+                                                    <i class="fa-solid fa-bookmark bookmark-icon"
+                                                        style="color: #ff0060;"></i>
+                                                </p>
+                                            </button>
                                         @endif
 
                                         &nbsp;&nbsp;&nbsp;
                                         <p id="shareButton" style="height: fit-content; cursor:pointer" class="p-1 px-2"
                                             onclick="copyLinkToClipboard()" data-bs-toggle="tooltip"
                                             data-bs-placement="bottom" title="Share">
-                                            <i class="fa-solid fa-share-nodes" style="color:
-#ff0060;"></i>
+                                            <i class="fa-solid fa-share-nodes" style="color: #ff0060;"></i>
                                         </p>
 
                                     </div>
@@ -244,6 +237,43 @@
                                 <img src="{{ asset($product->image_url1) }}" alt="Adverstiment" class="img-fluid">
                             </div>
                         </div>
+                        <div class="d-flex flex-wrap">
+                            <div class="btn-group my-2 me-2" onclick="shareOnFacebook()">
+                                <button type="button" class="btn" style="background-color: #166bd9;color: #fff">
+                                    <i class="fa-brands fa-facebook"></i>
+                                </button>
+                                <button type="button" style="background-color: #1877f2;color: #fff"
+                                    class="btn">Facebook <span class="badge text-bg-light">4</span></button>
+                            </div>
+                            <div class="btn-group my-2 me-2" onclick="shareOnTwitter()">
+                                <button type="button" class="btn" style="background-color: #000;color: #fff">
+                                    <i class="fa-brands fa-x-twitter"></i>
+                                </button>
+                                <button type="button" style="background-color: #000;color: #fff" class="btn">Twitter
+                            </div>
+                            <div class="btn-group my-2 me-2" onclick="shareOnWhatsApp()">
+                                <button type="button" class="btn" style="background-color: #21bd5c;color: #fff">
+                                    <i class="fa-brands fa-whatsapp"></i>
+                                </button>
+                                <button type="button" style="background-color: #25d366;color: #fff"
+                                    class="btn">Whatsapp
+                            </div>
+                            <div class="btn-group my-2 me-2" onclick="shareOnLinkedIn()">
+                                <button type="button" class="btn" style="background-color: #148cc8;color: #fff">
+                                    <i class="fa-brands fa-linkedin"></i>
+                                </button>
+                                <button type="button" style="background-color: #169cdf;color: #fff"
+                                    class="btn">Linkedin</button>
+                            </div>
+                            <div class="btn-group my-2 me-2" onclick="shareOnInstagram()">
+                                <button type="button" class="btn" style="background-color: #C13584;color: #fff">
+                                    <i class="fa-brands fa-instagram"></i>
+                                </button>
+                                <button type="button" style="background-color: #E1306C;color: #fff"
+                                    class="btn">Instagram </button>
+                            </div>
+                        </div>
+
                     </div>
                     <div class="productViewTabs">
                         <!-- Tabs navigation -->
@@ -292,15 +322,12 @@
                             <div class="tab-pane sub-tabs fade" id="quickinfo" role="tabpanel"
                                 aria-labelledby="quickinfo-tab">
                                 <div class="row">
-                                    <div class="col-12 col-md-4 pe-5">
+                                    <div class="col-12 col-md-6 pe-5">
                                         <p class="fw-medium info-head">Business Summary</p>
                                         <p class="quickInfo">{{ $product->shop->description }}</p>
                                     </div>
-                                    <div class="col-12 col-md-4">
-                                        <p class="fw-medium info-head">Year of Establishment</p>
-                                        <p class="quickInfo">2023</p>
-                                    </div>
-                                    <div class="col-12 col-md-4">
+                                    
+                                    <div class="col-12 col-md-6">
                                         <p class="fw-medium info-head">Timings</p>
                                         <div class="row">
                                             <div class="col-4">
@@ -460,8 +487,7 @@
                                     @endphp
 
                                     <div class="d-flex align-items-center mb-4"
-                                        style="border-bottom: 1.5px solid
-#ff0060;">
+                                        style="border-bottom: 1.5px solid #ff0060;">
                                         <h2 class="ratingNum">{{ $averageRating }}</h2>
                                         <p class="px-1 mb-0"><i class="fa-solid fa-star fa-lg"
                                                 style="color: #fdbf46;"></i></p>
@@ -486,7 +512,8 @@
                                                                 </div>
                                                                 <div class="col-10">
                                                                     <p class="fw-medium mb-0">
-                                                                        {{ $review['reviewerName'] }}</p>
+                                                                        {{ $review['reviewerName'] }}
+                                                                    </p>
                                                                     <div class="d-flex justify-content-between">
                                                                         <p class="mb-0">
                                                                             @php
@@ -536,57 +563,60 @@
                 <div class="col-md-4 col-12 mb-3">
                     <div class="mx-2">
                         <div class="row productViewCard mb-3">
-                            <div class="card p-3" style="border-radius: 5px; border-color:
-#ff0060;">
-                                <div class="container">
-                                    <div class="d-flex">
-                                        <p class="fw-medium">Contact:</p>&nbsp;&nbsp;
-                                        <p class="fw-light">
-                                            <a href="{{ $product->shop->mobile }}"
-                                                class="text-decoration-none text-black"
-                                                data-full-number="{{ $product->shop->mobile }}"
-                                                data-masked-number="{{ substr($product->shop->mobile, 0, 4) . str_repeat('x', strlen($product->shop->mobile) - 4) }}"
-                                                onclick="toggleNumber(event)">
-                                                {{ substr($product->shop->mobile, 0, 4) . str_repeat('x', strlen($product->shop->mobile) - 4) }}
-                                            </a>
+                            <div class="card social-media-card p-0">
+                                <div class="card-body p-0">
+                                    <div class="d-flex align-items-center justify-content-between">
 
+                                        <span class=" text-center w-100 my-2 py-3 ms-2"
+                                            style="cursor: pointer; background-color: #627aad;">
+                                            <a href ="https://www.facebook.com/profile.php?id=61567112492283" style="text-decoration:none;"><i
+                                                    class="fa-brands social-Icon fa-facebook-f"></i>
+                                                <p class="mb-0 count-Text">145k</p>
+                                                <p class="mb-0 count-Text2">Fans</p>
+                                            </a>
+                                        </span>
 
-                                        </p>
-                                    </div>
-                                    <hr>
-                                    <div class="d-flex">
-                                        <p class="fw-medium">Address:</p>&nbsp;&nbsp;
-                                        <p class="fw-light">
-                                            {{ $product->shop->street }}, {{ $product->shop->street2 }},
-                                            {{ $product->shop->city }}-{{ $product->shop->zip_code }},
-                                            {{ $product->shop->state }}, {{ $product->shop->country }}.
-                                        </p>
-                                    </div>
-                                    <hr>
-                                    <div class="row">
-                                        <div class="col-md-12 col-lg-6 col-12">
-                                            <a href="{{ $product->shop->map_url }}" class="contactCard" target="_blank">
-                                                <i class="fa fa-location" style="color: #000;"></i>&nbsp;&nbsp;
-                                                Get Directions
+                                        <span class=" text-center w-100 my-2  py-3 ms-2"
+                                            style="cursor: pointer;background-color: #FF0000;">
+                                            <a href ="#" style="text-decoration:none;"><i
+                                                    class="fa-brands social-Icon fa-youtube"></i>
+                                                <p class="mb-0 count-Text">13,786</p>
+                                                <p class="mb-0 count-Text2">Subscribes</p>
                                             </a>
-                                        </div>
-                                        <div class="col-md-12 col-lg-6 col-12">
-                                            <a href="mailto:{{ $product->shop->email }}" class="contactCard">
-                                                <i class="fa-regular fa-envelope" style="color: #000;"></i>&nbsp;&nbsp;
-                                                Send Enquiry by mail
+                                        </span>
+
+                                        <span class=" text-center w-100 my-2 py-3 mx-2"
+                                            style="cursor: pointer;background: linear-gradient(
+                                                        45deg, 
+                                                        #f09433, 
+                                                        #e6683c, 
+                                                        #dc2743, 
+                                                        #cc2366, 
+                                                        #bc1888
+                                                    );">
+                                            <a href ="https://www.instagram.com/dealslah/" style="text-decoration:none;">
+                                                <i class="fa-brands social-Icon fa-instagram"></i>
+                                                <p class="mb-0 count-Text">63,537</p>
+                                                <p class="mb-0 count-Text2">Followers</p>
                                             </a>
-                                        </div>
+                                        </span>
+
                                     </div>
+                                    <a href ="#" style="text-decoration:none;">
+                                        <div class="d-flex align-items-center justify-content-center">
+                                            <img src="{{ asset('assets/images/home/Whatsapp-Banner.webp') }}"
+                                                alt="Whatsapp Banner" class="img-fluid px-2 pb-2">
+                                        </div>
+                                    </a>
                                 </div>
                             </div>
+
                         </div>
                         <div style="position: sticky; top: 110px;">
                             <div class="row mb-4">
-                                <div class="card p-4" style="border-color:
-#ff0060;">
+                                <div class="card p-4" style="border-color:#ff0060;">
                                     <h6 class="fw-medium mb-3">Get the list of best <span
-                                            style="color:
-#ff0060;">”{{ $product->name }}”</span></h6>
+                                            style="color:#ff0060;">”{{ $product->name }}”</span></h6>
                                     <form id="enquiryFormMain">
                                         <div>
                                             <label class="form-label">Name*</label>
@@ -625,7 +655,7 @@
                                         {{-- @else
                                     <div class="text-center">
                                         <img src="{{ asset('assets/images/product_view/advertisement.webp') }}" alt="Default Advertisement" class="img-fluid">
-                                    </div> --}}
+                    </div> --}}
                                     @endif
                                 @endif
                             @endforeach
@@ -649,8 +679,7 @@
                     <div class="modal-content">
                         <div class="modal-header">
                             <h5 class="modal-title" id="enquiryModalLabel">Get the list of best <span
-                                    style="color:
-#ff0060;">”{{ $product->name }}”</span></h5>
+                                    style="color:#ff0060;">”{{ $product->name }}”</span></h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal"
                                 aria-label="Close"></button>
                         </div>

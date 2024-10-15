@@ -10,7 +10,9 @@ use App\Models\Category;
 use App\Traits\ApiResponses;
 use App\Models\Product;
 use App\Models\Bookmark;
+use App\Models\DealClick;
 use App\Models\Shop;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 
@@ -22,7 +24,6 @@ class HomeController extends Controller
     {
         $categoryGroups = CategoryGroup::where('active', 1)->with('categories')->get();
         $hotpicks = DealCategory::where('active', 1)->get();
-
 
         $products = Product::select(
             'products.*',
@@ -41,7 +42,7 @@ class HomeController extends Controller
             ->where('products.active', 1)
             ->get();
 
-        $bookmarkedproducts = collect();
+        $bookmarkedProducts = collect();
 
         if (Auth::check()) {
             $userId = Auth::id();
@@ -50,13 +51,30 @@ class HomeController extends Controller
             $ipAddress = $request->ip();
             $bookmarkedProducts = Bookmark::where('ip_address', $ipAddress)->pluck('deal_id');
         }
-        // dd($bookmarkedProducts);
+
         return view('home', compact('categoryGroups', 'hotpicks', 'products', 'bookmarkedProducts'));
     }
-
-
-    public function productdescription($id)
+    
+    public function clickcounts(Request $request)
     {
+        $dealId = $request->id;
+        $userId = Auth::check() ? Auth::id() : null;
+        $ipAddress = $request->ip();
+    
+        DealClick::create([
+            'deal_id' => $dealId, 
+            'user_id' => $userId, 
+            'ip_address' => $ipAddress,
+            'clicked_at' => Carbon::now(), 
+        ]);
+    
+        return $this->ok('DealClicks Added Successfully!');
+    }
+    
+    public function productdescription($id, Request $request)
+    {
+        $this->clickcounts($request);
+        
         $product = Product::with(['shop', 'shop.hour', 'shop.policy'])->where('id', $id)
             ->where('active', 1)
             ->first();
@@ -154,38 +172,44 @@ class HomeController extends Controller
     {
         $perPage = $request->input('per_page', 10);
         $category = Category::where('slug', $slug)->first();
-
-        $query = Product::with('bookmark')->whereHas('category', function ($query) use ($slug) {
+    
+        $query = Product::with('shop','bookmark')->whereHas('category', function ($query) use ($slug) {
             $query->where('slug', $slug);
         })->with(['shop:id,country,state,city,street,street2,zip_code,shop_ratings'])
           ->where('active', 1);
-
+    
         if ($request->has('brand') && is_array($request->brand)) {
             $query->whereIn('brand', $request->brand);
         }
-
+    
         if ($request->has('discount') && is_array($request->discount)) {
             $query->whereIn('discount_percentage', $request->discount);
         }
-
+    
         if ($request->has('price_range')) {
-            $priceRange = str_replace(['$', ',', ' '], '', $request->input('price_range')[0]);
-            $priceRange = explode('-', $priceRange);
-
-            $minPrice = isset($priceRange[0]) ? (float)$priceRange[0] : null;
-            $maxPrice = isset($priceRange[1]) ? (float)$priceRange[1] : null;
-
-            $query->where(function ($priceQuery) use ($minPrice, $maxPrice) {
-                if ($maxPrice !== null) {
-                    $priceQuery->whereBetween('original_price', [$minPrice, $maxPrice])
-                               ->orWhereBetween('discounted_price', [$minPrice, $maxPrice]);
-                } else {
-                    $priceQuery->where('original_price', '>=', $minPrice)
-                               ->orWhere('discounted_price', '>=', $minPrice);
+            $priceRanges = $request->input('price_range');
+        
+            // Apply price range filters for each selected range
+            $query->where(function ($priceQuery) use ($priceRanges) {
+                foreach ($priceRanges as $range) {
+                    // Clean and split the price range
+                    $cleanRange = str_replace(['Rs ', ',', ' '], '', $range);
+                    $priceRange = explode('-', $cleanRange);
+        
+                    $minPrice = isset($priceRange[0]) ? (float)$priceRange[0] : null;
+                    $maxPrice = isset($priceRange[1]) ? (float)$priceRange[1] : null;
+        
+                    // Apply the range filter
+                    if ($maxPrice !== null) {
+                        $priceQuery->orWhereBetween('discounted_price', [$minPrice, $maxPrice]);
+                    } else {
+                        $priceQuery->orWhere('discounted_price', '>=', $minPrice);
+                    }
                 }
             });
         }
-
+        
+    
         if ($request->has('rating_item') && is_array($request->rating_item)) {
             $ratings = $request->rating_item;
             if (!empty($ratings)) {
@@ -194,7 +218,7 @@ class HomeController extends Controller
                 });
             }
         }
-
+    
         if ($request->has('short_by')) {
             $shortby = $request->input('short_by');
             if ($shortby == 'trending') {
@@ -211,21 +235,21 @@ class HomeController extends Controller
                 $query->whereRaw('DATEDIFF(end_date, start_date) <= ?', [2]);
             }
         }
-
+    
         $deals = $query->paginate($perPage);
-
-        $brands = Product::where('active', 1)->where('category_id', $category->id)->distinct()->pluck('brand');
+    
+        $brands = Product::where('active', 1)->where('category_id', $category->id)->whereNotNull('brand')->where('brand', '!=', '')->distinct()->pluck('brand');
         $discounts = Product::where('active', 1)->where('category_id', $category->id)->distinct()->pluck('discount_percentage');
         $rating_items = Shop::where('active', 1)->select('shop_ratings', DB::raw('count(*) as rating_count'))->groupBy('shop_ratings')->get();
-
+    
         $priceRanges = [];
         $priceStep = 2000;
         $minPrice = Product::min(DB::raw('LEAST(original_price, discounted_price)'));
         $maxPrice = Product::max(DB::raw('GREATEST(original_price, discounted_price)'));
-
+    
         for ($start = $minPrice; $start <= $maxPrice; $start += $priceStep) {
             $end = $start + $priceStep;
-
+    
             if ($end > $maxPrice) {
                 $priceRanges[] = [
                     'label' => 'Rs ' . number_format($start, 2) . ' - Rs ' . number_format($end, 2)
@@ -236,13 +260,13 @@ class HomeController extends Controller
                 'label' => 'Rs ' . number_format($start, 2) . ' - Rs ' . number_format($end, 2)
             ];
         }
-
+    
         $shortby = DealCategory::where('active', 1)->get();
         $totaldeals = $deals->total();
         $categorygroup = CategoryGroup::where('id', $category->category_group_id)->first();
-
+    
         return view('productfilter', compact('deals', 'brands', 'discounts', 'rating_items', 'priceRanges', 'shortby', 'totaldeals', 'category', 'categorygroup'));
-    }
+    }    
 
     public function search(Request $request)
     {
@@ -291,32 +315,29 @@ class HomeController extends Controller
         }
 
         if ($request->has('price_range')) {
-
-            $priceRange = $request->input('price_range');
-
-
-            $priceRange = str_replace(['Rs ', ',', ' '], '', $priceRange[0]);
-            $priceRange = explode('-', $priceRange);
-
-
-            $minPrice = isset($priceRange[0]) ? (float)$priceRange[0] : null;
-            $maxPrice = isset($priceRange[1]) ? (float)$priceRange[1] : null;
-
-
-            $query->where(function ($priceQuery) use ($minPrice, $maxPrice) {
-                if ($maxPrice !== null) {
-
-                    $priceQuery->whereBetween('original_price', [$minPrice, $maxPrice])
-                               ->orWhereBetween('discounted_price', [$minPrice, $maxPrice]);
-                } else {
-
-                    $priceQuery->where('original_price', '>=', $minPrice)
-                               ->orWhere('discounted_price', '>=', $minPrice);
+            $priceRanges = $request->input('price_range');
+        
+            // Apply price range filters for each selected range
+            $query->where(function ($priceQuery) use ($priceRanges) {
+                foreach ($priceRanges as $range) {
+                    // Clean and split the price range
+                    $cleanRange = str_replace(['Rs ', ',', ' '], '', $range);
+                    $priceRange = explode('-', $cleanRange);
+        
+                    $minPrice = isset($priceRange[0]) ? (float)$priceRange[0] : null;
+                    $maxPrice = isset($priceRange[1]) ? (float)$priceRange[1] : null;
+        
+                    // Apply the range filter
+                    if ($maxPrice !== null) {
+                        $priceQuery->orWhereBetween('discounted_price', [$minPrice, $maxPrice]);
+                    } else {
+                        $priceQuery->orWhere('discounted_price', '>=', $minPrice);
+                    }
                 }
             });
         }
-
-
+        
+        
         if ($request->has('short_by')) {
             $shortby = $request->input('short_by');
             if ($shortby == 'trending') {
@@ -341,7 +362,7 @@ class HomeController extends Controller
 
         $deals = $query->paginate($perPage);
 
-        $brands = Product::where('active', 1)->distinct()->pluck('brand');
+        $brands = Product::where('active', 1)->whereNotNull('brand')->where('brand', '!=', '')->distinct()->pluck('brand');
         $discounts = Product::where('active', 1)->distinct()->pluck('discount_percentage');
         $rating_items = Shop::where('active', 1)
             ->select('shop_ratings', DB::raw('count(*) as rating_count'))
@@ -374,4 +395,5 @@ class HomeController extends Controller
 
         return view('productfilter', compact('deals', 'brands', 'discounts', 'rating_items', 'priceRanges', 'shortby', 'totaldeals', 'category', 'categorygroup'));
     }
+
 }

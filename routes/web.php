@@ -12,7 +12,7 @@ Route::get('deal/{id}', [HomeController::class, 'productdescription']);
 Route::get('bookmarks', [BookmarkController::class, 'index'])->name('bookmarks.index');
 Route::post('bookmark/{deal_id}/add', [BookmarkController::class, 'add'])->name('bookmarks.add');
 Route::delete('bookmark/{deal_id}/remove', [BookmarkController::class, 'remove'])->name('bookmarks.remove');
-Route::get('totalbookmark', [BookmarkController::class, 'totalItems']);
+Route::get('totalbookmark', [BookmarkController::class, 'totalItems'])->name('bookmarks.totalItems');
 Route::get('search', [HomeController::class, 'search'])->name('search');
 Route::get('/privacyPolicy', function () {
     return view('privacyPolicy');

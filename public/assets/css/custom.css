@@ -1488,3 +1488,61 @@ footer hr {
         max-width: 100%;
     }
 } */
+
+.social-media-card {
+    border: 1px solid #ff0060;
+    position: sticky;
+    top: 85px;
+}
+
+.social-Icon {
+    font-size: 26px;
+    color: #fff;
+}
+
+.count-Text {
+    font-size: 22px;
+    color: #fff;
+    line-height: 0.5;
+    padding-top: 15px;
+}
+
+.count-Text2 {
+    font-size: 12px;
+    padding-top: 5px;
+    color: #fff;
+}
+
+.filter-social-media-card {
+    border: 1px solid #ff0060;
+    position: sticky;
+    top: 85px;
+}
+
+.filter-social-Icon {
+    font-size: 26px;
+    color: #fff;
+}
+
+.filter-count-Text {
+    font-size: 16px;
+    color: #fff;
+    line-height: 0.5;
+    padding-top: 15px;
+}
+
+.filter-count-Text2 {
+    font-size: 10px;
+    padding-top: 5px;
+    color: #fff;
+}
+
+@media (min-width: 320px) and (max-width: 576px) {
+    .home-productViewCard {
+        margin-right: 5px;
+        margin-left: 7px;
+        display: flex;
+        align-items: center;
+    }
+}
+

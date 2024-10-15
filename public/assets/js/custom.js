@@ -85,7 +85,7 @@ $(document).ready(function() {
             email: $currentForm.find("[name='email']").val(),
             phone: $currentForm.find("[name='phone']").val(),
             company_id: 40,
-            company: "ECSCloudInfotech",
+            company: "Dealsmachi",
             lead_status: "PENDING",
             lead_source: "Product Page",
             country_code: "65",
@@ -674,3 +674,114 @@ function toggleNumber(event) {
         link.href = `tel:${fullNumber}`;
     }
 }
+
+$(document).ready(function() {
+    // Setup CSRF token for AJAX
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
+
+    // Function to update the bookmark count
+    function updateBookmarkCount(count) {
+        $('.totalItemsCount').each(function() {
+            $(this).text(count);
+        });
+    }
+
+    // Add Bookmark
+    $('.add-bookmark').on('click', function(e) {
+        e.preventDefault();
+        let dealId = $(this).data('deal-id');
+
+        $.ajax({
+            url: `/bookmark/${dealId}/add`,
+            method: 'POST',
+            success: function(response) {
+                updateBookmarkCount(response.total_items);
+                // Toggle the bookmark button to remove state
+                let button = $(`.add-bookmark[data-deal-id="${dealId}"]`);
+                button.removeClass('add-bookmark').addClass('remove-bookmark');
+                button.html(`
+                    <p style="height:fit-content;cursor:pointer" class="p-1 px-2">
+                        <i class="fa-solid fa-bookmark bookmark-icon" style="color: #ff0060;"></i>
+                    </p>
+                `);
+            },
+            error: function(xhr) {
+                // Handle error (optional)
+            }
+        });
+    });
+
+    // Remove Bookmark
+    $(document).on('click', '.remove-bookmark', function(e) {
+        e.preventDefault();
+        let dealId = $(this).data('deal-id');
+
+        $.ajax({
+            url: `/bookmark/${dealId}/remove`,
+            method: 'DELETE',
+            success: function(response) {
+                updateBookmarkCount(response.total_items);
+                // Toggle the bookmark button to add state
+                let button = $(`.remove-bookmark[data-deal-id="${dealId}"]`);
+                button.removeClass('remove-bookmark').addClass('add-bookmark');
+                button.html(`
+                    <p style="height:fit-content;cursor:pointer" class="p-1 px-2">
+                        <i class="fa-regular fa-bookmark bookmark-icon" style="color: #ff0060;"></i>
+                    </p>
+                `);
+            },
+            error: function(xhr) {
+                // Handle error (optional)
+            }
+        });
+    });
+
+    // Initial Load of Bookmark Count
+    function loadBookmarkCount() {
+        $.ajax({
+            url: '/totalbookmark',
+            method: 'GET',
+            success: function(response) {
+                updateBookmarkCount(response.total_items);
+            },
+            error: function(xhr) {
+                console.error('Failed to load bookmark count.');
+            }
+        });
+    }
+
+    loadBookmarkCount();
+
+    // Disable or remove tooltip from bookmark buttons
+    // Option 1: Disable the tooltip functionality
+    $('.bookmark-button').tooltip('disable');
+
+    // Option 2: Remove the tooltip attribute entirely
+    $('.bookmark-button [data-bs-toggle="tooltip"]').removeAttr('data-bs-toggle');
+});
+
+
+$('input[name="price_range[]"]').on('change', function () {
+    let selectedRanges = $('input[name="price_range[]"]:checked').map(function () {
+        return this.value;
+    }).get();
+
+    // Send an AJAX request
+    $.ajax({
+        url: '/your-api-endpoint',  // Replace with your API endpoint
+        method: 'GET',  // Or 'POST', depending on your setup
+        data: {
+            price_range: selectedRanges,
+        },
+        success: function (response) {
+            // Handle successful response
+        },
+        error: function (error) {
+            // Handle errors
+        }
+    });
+});
