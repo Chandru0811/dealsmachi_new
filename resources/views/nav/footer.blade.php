@@ -22,8 +22,6 @@
                             <a href="https://www.youtube.com/@Dealsmachi"
                                 class="text-decoration-none me-2"><i class="fab fa-youtube"
                                     style="font-size: 15px"></i></a>
-                            <a href="https://www.tiktok.com/@ecsaio" class="text-decoration-none me-2"><i
-                                    class="fab fa-tiktok" style="font-size: 15px"></i></a>
                             <a href="#" class="text-decoration-none me-2"><i class="fab fa-whatsapp"
                                     style="font-size: 15px"></i></a>
                             <a href="https://x.com/dealsmachi_in" class="text-decoration-none"><i
