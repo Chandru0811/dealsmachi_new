@@ -15,6 +15,8 @@ use App\Http\Controllers\Api\AppController;
 
 Route::post('login', [AuthController::class, 'login']);
 Route::post('register', [AuthController::class, 'register']);
+Route::post('forgot-password', [AuthController::class, 'forgetpassword']);
+Route::post('reset-password', [AuthController::class, 'resetpassword']);
 
 //user
 Route::get('appHome', [AppController::class, 'homepage']);
@@ -24,13 +26,17 @@ Route::get('deal/details/{id}', [AppController::class, 'dealDescription']);
 Route::get('search', [AppController::class, 'search']);
 Route::post('dealbookmark/add/{id}', [AppController::class, 'addBookmark']);
 Route::post('dealbookmark/remove/{id}', [AppController::class, 'removeBookmark']);
+Route::get('hotpick/{slug}', [AppController::class, 'dealcategorybasedproductsformobile']);
 Route::get('dealbookmarks', [AppController::class, 'getBookmarks']);
 Route::get('bookmark/totalitems', [AppController::class, 'totalItems']);
+Route::post('deal/clicked', [AppController::class, 'clickcounts']);
 
 Route::middleware('auth:api')->group(function () {
     Route::get('/user', function (Request $request) {
         return $request->user();
     });
+
+    Route::post('logout', [AuthController::class, 'logout']);
 
     //Admin
     Route::middleware('role:1')->prefix('admin')->group(function () {
@@ -58,6 +64,7 @@ Route::middleware('auth:api')->group(function () {
         Route::get('shop/{id}/payment', [AdminShopController::class, 'getshoppayment']);
         Route::get('shop/{id}/policy', [AdminShopController::class, 'getshoppolicy']);
         Route::get('shop/{id}/hours', [AdminShopController::class, 'getshophours']);
+        Route::get('shop/{id}/products', [AdminShopController::class, 'getshopproducts']);
         Route::post('shop/{id}/activate', [AdminShopController::class, 'activateshop']);
         Route::post('shop/{id}/deactivate', [AdminShopController::class, 'deactivateshop']);
 

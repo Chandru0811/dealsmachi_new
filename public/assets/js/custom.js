@@ -785,3 +785,32 @@ $('input[name="price_range[]"]').on('change', function () {
         }
     });
 });
+
+// Link Shared Capture the current page URL dynamically
+const currentUrl = encodeURIComponent(window.location.href);
+
+function shareOnFacebook() {
+    const facebookShareUrl = `https://www.facebook.com/sharer/sharer.php?u=${currentUrl}`;
+    window.open(facebookShareUrl, '_blank');
+}
+
+function shareOnLinkedIn() {
+    const linkedInShareUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${currentUrl}`;
+    window.open(linkedInShareUrl, '_blank');
+}
+
+function shareOnTwitter() {
+    const twitterShareUrl = `https://twitter.com/intent/tweet?url=${currentUrl}&text=Check+out+this+amazing+page!`;
+    window.open(twitterShareUrl, '_blank');
+}
+
+function shareOnWhatsApp() {
+    const whatsappShareUrl = `https://api.whatsapp.com/send?text=Check+out+this+amazing+deal:+${currentUrl}`;
+    window.open(whatsappShareUrl, '_blank');
+}
+
+function shareOnInstagram() {
+alert("Instagram does not support direct message and link sharing. Copy the message below and share it manually:");
+navigator.clipboard.writeText(`https://ecsaio.com/`);
+window.open("https://www.instagram.com", "_blank");
+}

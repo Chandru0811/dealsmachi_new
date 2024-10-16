@@ -1490,7 +1490,6 @@ footer hr {
 } */
 
 .social-media-card {
-    border: 1px solid #ff0060;
     position: sticky;
     top: 85px;
 }
@@ -1514,7 +1513,6 @@ footer hr {
 }
 
 .filter-social-media-card {
-    border: 1px solid #ff0060;
     position: sticky;
     top: 85px;
 }

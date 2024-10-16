@@ -4,9 +4,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DealsMachi | Login </title>
-    <link rel="canonical" href="https://dealsmachi.com/login" />
-    <meta name="description" content="DealsMachi Shop Smart, Save Big!" />
+    <title>Dealslah | Login </title>
+    <link rel="canonical" href="https://dealslah.com/login" />
+    <meta name="description" content="Dealslah Shop Smart, Save Big!" />
     <link rel="icon" href="{{ asset('assets/images/home/favicon.ico') }}" />
 
     <!-- Vendor CSS Files -->
@@ -55,7 +55,7 @@
                     </div>
                     <div class="mb-3 text-center fw-light">
                         <p>Don't have an account? <a href="{{ url('register') }}" class="text-decoration-none"
-                                style="color:  #ff0060;">Register</a></p>
+                                style="color:  #ef4444;">Register</a></p>
                     </div>
                 </form>
             </div>

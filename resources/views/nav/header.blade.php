@@ -25,7 +25,7 @@
                             <i class="fa-regular fa-bookmark fa-xl" style="color: #ff0060;"></i>
                         </a>
                         <span
-                            class="totalItemsCount position-absolute total-count top-0 start-105 translate-middle d-xl-none">
+                            class="totalItemsCount total-count translate-middle d-xl-none" style="position: absolute;top: 2px">
                             <!-- Count will be displayed here -->
                         </span>
                     </button>
@@ -69,7 +69,7 @@
                             <i class="fa-regular fa-bookmark fa-xl" style="color: #ff0060;"></i>
                         </a>
                         <span
-                            class="totalItemsCount position-absolute total-count top-0  translate-middle d-none d-xl-block">
+                            class="totalItemsCount total-count translate-middle d-none d-xl-block" style="position: absolute;top: 2px">
                         </span>
                     </button>
                     <span class="navbar-text d-none d-xl-inline align-items-center justify-content-end"

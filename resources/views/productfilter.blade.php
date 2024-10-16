@@ -450,16 +450,16 @@
                             <span class="d-flex justify-content-center align-items-center">
                                 <a href="https://www.facebook.com/profile.php?id=61567112492283" target="_blank" style="text-decoration:none;"><i
                                         class="fa-brands filter-social-Icon fa-facebook-f ps-2"></i>
-                                    <p class="mb-0 filter-count-Text">145k</p>
+                                    <p class="mb-0 filter-count-Text">1k</p>
                                     <p class="mb-0 filter-count-Text2">Fans</p>
                                 </a>
                             </span>
                         </div>
                         <div class="col-md-6 col-sm-6 col-12 p-2" style="cursor: pointer; background-color: #FF0000; border-top-right-radius: 5px;">
                             <span class="d-flex justify-content-center align-items-center">
-                                <a href="#" target="_blank" style="text-decoration:none;"><i
+                                <a href ="https://www.youtube.com/@Dealsmachi" target="_blank" style="text-decoration:none;"><i
                                         class="fa-brands filter-social-Icon fa-youtube ps-2"></i>
-                                    <p class="mb-0 filter-count-Text">13,786</p>
+                                    <p class="mb-0 filter-count-Text">1.2k</p>
                                     <p class="mb-0 filter-count-Text2">Subscribes</p>
                                 </a>
                             </span>
@@ -475,7 +475,7 @@
                             <span class="d-flex justify-content-center align-items-center">
                                 <a href="https://www.instagram.com/dealslah/" target="_blank" style="text-decoration:none;">
                                     <i class="fa-brands filter-social-Icon fa-instagram ps-2"></i>
-                                    <p class="mb-0 filter-count-Text">63,537</p>
+                                    <p class="mb-0 filter-count-Text">1.4k</p>
                                     <p class="mb-0 filter-count-Text2">Followers</p>
                                 </a>
                             </span>
@@ -485,7 +485,7 @@
                                 style="cursor: pointer;background-color: #25D366;">
                                 <a href="#" target="_blank" style="text-decoration:none;">
                                     <i class="fa-brands filter-social-Icon fa-whatsapp ps-2"></i>
-                                    <p class="mb-0 filter-count-Text">63,537</p>
+                                    <p class="mb-0 filter-count-Text">1.6k</p>
                                     <p class="mb-0 filter-count-Text2">Followers</p>
                                 </a>
                             </span>

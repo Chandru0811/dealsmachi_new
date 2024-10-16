@@ -19,7 +19,7 @@
                             <a href="https://www.linkedin.com/in/deals-machi-2b4944331"
                                 class="text-decoration-none me-2"><i class="fab fa-linkedin"
                                     style="font-size: 15px"></i></a>
-                            <a href="https://www.youtube.com/channel/UCIbNIWhaDnRs-gFuJ0sTNCQ/videos"
+                            <a href="https://www.youtube.com/@Dealsmachi"
                                 class="text-decoration-none me-2"><i class="fab fa-youtube"
                                     style="font-size: 15px"></i></a>
                             <a href="https://www.tiktok.com/@ecsaio" class="text-decoration-none me-2"><i

@@ -36,18 +36,18 @@
                         <div class="d-flex align-items-center justify-content-between">
                             <span class=" text-center w-100 my-2 py-3 ms-2"
                                 style="cursor: pointer; background-color: #627aad;">
-                                <a href ="https://www.facebook.com/profile.php?id=61567112492283" style="text-decoration:none;"><i
+                                <a href ="https://www.facebook.com/profile.php?id=61567112492283" target="_blank" style="text-decoration:none;"><i
                                         class="fa-brands social-Icon fa-facebook-f"></i>
-                                    <p class="mb-0 count-Text">145k</p>
+                                    <p class="mb-0 count-Text">1k</p>
                                     <p class="mb-0 count-Text2">Fans</p>
                                 </a>
                             </span>
 
                             <span class=" text-center w-100 my-2  py-3 ms-2"
                                 style="cursor: pointer;background-color: #FF0000;">
-                                <a href ="#" style="text-decoration:none;"><i
-                                        class="fa-brands social-Icon fa-youtube"></i>
-                                    <p class="mb-0 count-Text">13,786</p>
+                                <a href ="https://www.youtube.com/@Dealsmachi" target="_blank"   style="text-decoration:none;"><i
+                                  class="fa-brands social-Icon fa-youtube"></i>
+                                    <p class="mb-0 count-Text">1.2k</p>
                                     <p class="mb-0 count-Text2">Subscribes</p>
                                 </a>
                             </span>
@@ -63,7 +63,7 @@
                                                     );">
                                 <a href ="https://www.instagram.com/dealslah/" style="text-decoration:none;">
                                     <i class="fa-brands social-Icon fa-instagram"></i>
-                                    <p class="mb-0 count-Text">63,537</p>
+                                    <p class="mb-0 count-Text">1.4k</p>
                                     <p class="mb-0 count-Text2">Followers</p>
                                 </a>
                             </span>
