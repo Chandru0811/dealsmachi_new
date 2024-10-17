@@ -18,7 +18,7 @@
                         </a>
                     </span>
                     &nbsp;&nbsp;&nbsp;
-                    <button class="btn btn-button" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Bookmark"
+                    <button class="btn btn-button"
                         style="border: none; position: relative;">
                         <a href="{{ url('/bookmarks') }}" class="text-decoration-none d-xl-none"
                             style="text-decoration: none;">
@@ -62,7 +62,7 @@
                             </ul>
                         </form>
                     </div>
-                    <button class="btn btn-button" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Bookmark"
+                    <button class="btn btn-button"
                         style="border: none; position: relative;">
                         <a href="{{ url('/bookmarks') }}" class="text-decoration-none px-1 py-1 d-none d-xl-inline"
                             style="text-decoration: none; position: relative;">

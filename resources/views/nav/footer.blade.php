@@ -48,7 +48,7 @@
                                 <a href="#" class="text-light text-decoration-none">Contact Us</a>
                             </li>
                             <li>
-                                <a href="https://dealslah.com/dealslahVendor/" class="text-light text-decoration-none">Post your deal</a>
+                                <a href="http://localhost:3000/dealsmachiVendor/" class="text-light text-decoration-none">Post your deal</a>
                             </li>
                         </ul>
                     </div>

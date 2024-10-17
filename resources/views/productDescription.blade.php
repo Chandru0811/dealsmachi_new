@@ -207,13 +207,13 @@ $reviewData = [
                                 <div class="d-flex productViewIcons">
                                     @if ($bookmarkedProducts->contains($product->id))
                                     <button type="button" class="bookmark-button remove-bookmark" data-deal-id="{{ $product->id }}" style="border: none; background: none;">
-                                        <p style="height:fit-content;cursor:pointer" class="p-1 px-2" data-bs-toggle="tooltip" data-bs-placement="top" title="Bookmark">
+                                        <p style="height:fit-content;cursor:pointer" class="p-1 px-2">
                                             <i class="fa-solid fa-bookmark bookmark-icon" style="color: #ff0060;"></i>
                                         </p>
                                     </button>
                                     @else
                                     <button type="button" class="bookmark-button add-bookmark" data-deal-id="{{ $product->id }}" style="border: none; background: none;">
-                                        <p style="height:fit-content;cursor:pointer" class="p-1 px-2" data-bs-toggle="tooltip" data-bs-placement="top" title="Bookmark">
+                                        <p style="height:fit-content;cursor:pointer" class="p-1 px-2">
                                             <i class="fa-regular fa-bookmark bookmark-icon" style="color: #ff0060;"></i>
                                         </p>
                                     </button>

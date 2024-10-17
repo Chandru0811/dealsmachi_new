@@ -686,7 +686,7 @@ $(document).ready(function () {
                             .addClass("remove-bookmark");
                         button.html(`
                         <p style="height:fit-content;cursor:pointer" class="p-1 px-2">
-                            <i class="fa-solid fa-bookmark bookmark-icon" style="color: #ef4444;"></i>
+                            <i class="fa-solid fa-bookmark bookmark-icon" style="color: #ff0060;"></i>
                         </p>
                     `);
 
@@ -719,7 +719,7 @@ $(document).ready(function () {
                             .addClass("add-bookmark");
                         button.html(`
                         <p style="height:fit-content;cursor:pointer" class="p-1 px-2">
-                            <i class="fa-regular fa-bookmark bookmark-icon" style="color: #ef4444;"></i>
+                            <i class="fa-regular fa-bookmark bookmark-icon" style="color: #ff0060;"></i>
                         </p>
                     `);
 
@@ -789,7 +789,7 @@ function shareOnInstagram() {
     alert(
         "Instagram does not support direct message and link sharing. Copy the message below and share it manually:"
     );
-    navigator.clipboard.writeText(`https://ecsaio.com/`);
+    navigator.clipboard.writeText(`Check out this amazing deal : ${decodeURIComponent(currentUrl)}`);
     window.open("https://www.instagram.com", "_blank");
 }
 

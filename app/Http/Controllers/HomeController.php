@@ -161,12 +161,12 @@ class HomeController extends Controller
 
             if ($end > $maxPrice) {
                 $priceRanges[] = [
-                    'label' => '$' . number_format($start, 2) . ' - $' . number_format($end, 2)
+                    'label' => 'Rs' . number_format($start, 2) . ' - Rs' . number_format($end, 2)
                 ];
                 break;
             }
             $priceRanges[] = [
-                'label' => '$' . number_format($start, 2) . ' - $' . number_format($end, 2)
+                'label' => 'Rs' . number_format($start, 2) . ' - Rs' . number_format($end, 2)
             ];
         }
 
@@ -211,7 +211,7 @@ class HomeController extends Controller
             $query->where(function ($priceQuery) use ($priceRanges) {
                 foreach ($priceRanges as $range) {
                     // Clean and split the price range
-                    $cleanRange = str_replace(['$', ',', ' '], '', $range);
+                    $cleanRange = str_replace(['Rs', ',', ' '], '', $range);
                     $priceRange = explode('-', $cleanRange);
 
                     $minPrice = isset($priceRange[0]) ? (float)$priceRange[0] : null;
@@ -270,12 +270,12 @@ class HomeController extends Controller
 
             if ($end > $maxPrice) {
                 $priceRanges[] = [
-                    'label' => '$' . number_format($start, 2) . ' - $' . number_format($end, 2)
+                    'label' => 'Rs' . number_format($start, 2) . ' - Rs' . number_format($end, 2)
                 ];
                 break;
             }
             $priceRanges[] = [
-                'label' => '$' . number_format($start, 2) . ' - $' . number_format($end, 2)
+                'label' => 'Rs' . number_format($start, 2) . ' - Rs' . number_format($end, 2)
             ];
         }
 
@@ -347,7 +347,7 @@ class HomeController extends Controller
             $query->where(function ($priceQuery) use ($priceRanges) {
                 foreach ($priceRanges as $range) {
                     // Clean and split the price range
-                    $cleanRange = str_replace(['$', ',', ' '], '', $range);
+                    $cleanRange = str_replace(['Rs', ',', ' '], '', $range);
                     $priceRange = explode('-', $cleanRange);
 
                     $minPrice = isset($priceRange[0]) ? (float)$priceRange[0] : null;
@@ -414,12 +414,12 @@ class HomeController extends Controller
 
             if ($end > $maxPrice) {
                 $priceRanges[] = [
-                    'label' => '$' . number_format($start, 2) . ' - $' . number_format($end, 2)
+                    'label' => 'Rs' . number_format($start, 2) . ' - Rs' . number_format($end, 2)
                 ];
                 break;
             }
             $priceRanges[] = [
-                'label' => '$' . number_format($start, 2) . ' - $' . number_format($end, 2)
+                'label' => 'Rs' . number_format($start, 2) . ' - Rs' . number_format($end, 2)
             ];
         }
 
