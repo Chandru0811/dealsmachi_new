@@ -17,4 +17,10 @@ class Category extends Model
     {
         return $this->belongsTo(CategoryGroup::class);
     }
+
+    public function products()
+    {
+        return $this->hasMany(Product::class, 'category_id');
+    }
+
 }

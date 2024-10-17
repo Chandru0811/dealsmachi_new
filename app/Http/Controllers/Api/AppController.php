@@ -14,62 +14,72 @@ use App\Models\Product;
 use App\Models\Shop;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
-
+use Carbon\Carbon;
+use App\Models\DealClick;
 
 class AppController extends Controller
 {
     use ApiResponses;
 
-    public function homepage()
+    public function homepage(Request $request)
     {
         $today = now()->toDateString();
 
-        $categoryGroups = CategoryGroup::where('active',1)->get();
+        $categoryGroups = CategoryGroup::where('active', 1)->get();
         $sliders = Slider::get();
-        $cashBackDeals = DealCategory::where('active',1)->get();
-        $trendingDeals = Product::where('active', 1) 
-                                ->withCount(['views' => function ($query) use ($today) {
-                                    $query->whereDate('viewed_at', $today);
-                                }])
-                                ->orderBy('views_count', 'desc')
-                                ->take(10)
-                                ->get();
-        // Check if $treandingDeals is empty
-            if ($trendingDeals->isEmpty()) {
-                // If empty, get all active deals
-                $trendingDeals = Product::where('active', 1)->get();
-            }
-        $popularDeals = Product::where('active', 1)->withCount('views')->orderBy('views_count', 'desc')->take(10)->get();//mostly viewed
-        if ($popularDeals->isEmpty()) {
-            // If empty, get all active deals
-            $popularDeals = Product::where('active', 1)->get();
+        $cashBackDeals = DealCategory::where('active', 1)->get();
+
+        $products = Product::select(
+            'products.*',
+            'shops.city',
+            'shops.shop_ratings',
+            DB::raw('CASE
+                WHEN deal_views.viewed_at = CURDATE() THEN "TRENDING"
+                WHEN products.start_date = CURDATE() THEN "EARLY BIRD"
+                WHEN DATEDIFF(products.end_date, products.start_date) <= 2 THEN "LIMITED TIME"
+                WHEN products.end_date = CURDATE() THEN "LAST CHANCE"
+                ELSE ""
+            END AS label')
+        )
+            ->leftJoin('deal_views', 'deal_views.deal_id', '=', 'products.id')
+            ->leftJoin('shops', 'shops.id', '=', 'products.shop_id')
+            ->where('products.active', 1)
+            ->get();
+
+        $bookmarkedProducts = collect();
+
+        if (Auth::check()) {
+            $userId = Auth::id();
+            $bookmarkedProducts = Bookmark::where('user_id', $userId)->pluck('deal_id');
+        } else {
+            $ipAddress = $request->ip();
+            $bookmarkedProducts = Bookmark::where('ip_address', $ipAddress)->pluck('deal_id');
         }
-        $earlyBirdDeals = Product::where('active',1)->whereDate('start_date',now())->get();
-        $limitedDeals = Product::where('active',1)->whereRaw('DATEDIFF(end_date, start_date) <= ?', [2])->get();
-        $lastChangeDeals = Product::where('active',1)->whereDate('end_date',now())->get();
-        $HandPickedDeals = Product::where('active',1)->get();
+
         $homePageData = [
             'categoryGroups' => $categoryGroups,
             'sliders' => $sliders,
-            'cashBackDeals'=> $cashBackDeals,
-            'trendingDeals'=>$trendingDeals,
-            'popularDeals'=>$popularDeals,
-            'earlyBirdDeals'=>$earlyBirdDeals,
-            'limitedDeals'=>$limitedDeals,
-            'lastChangeDeals'=>$lastChangeDeals,
-            'HandPickedDeals'=>$HandPickedDeals
+            'cashBackDeals' => $cashBackDeals,
+            'products' => $products,
+            'bookmarkedProducts' => $bookmarkedProducts
         ];
-        return $this->success( 'HomePage Retrieved Successfully!',$homePageData);
 
+        return $this->success('HomePage Retrieved Successfully!', $homePageData);
     }
 
     public function categories($id)
     {
-        $categories = Category::where('active',1)->where('category_group_id',$id)->get();
-        return $this->success( 'Categories Retrieved Successfully!',$categories);
+        $categories = Category::where('active', 1)
+        ->where('category_group_id', $id)
+        ->withCount(['products' => function ($query) {
+            $query->where('active', 1);
+        }])
+            ->get();
+
+        return $this->success('Categories Retrieved Successfully!', $categories);
     }
 
-    public function getDeals($category_id)
+    public function getDeals($category_id, Request $request)
     {
         $deals = Product::with('shop')->where('category_id', $category_id)->where('active', 1)->get();
         $brands = Product::where('active', 1)->distinct()->pluck('brand');
@@ -95,7 +105,17 @@ class AppController extends Controller
         }
         $shortby = DealCategory::where('active', 1)->get();
         $totaldeals = $deals->count();
-        
+
+        $bookmarkedProducts = collect();
+
+        if (Auth::check()) {
+            $userId = Auth::id();
+            $bookmarkedProducts = Bookmark::where('user_id', $userId)->pluck('deal_id');
+        } else {
+            $ipAddress = $request->ip();
+            $bookmarkedProducts = Bookmark::where('ip_address', $ipAddress)->pluck('deal_id');
+        }
+
         $dealdata = [
             'deals' => $deals,
             'brands' => $brands,
@@ -104,18 +124,37 @@ class AppController extends Controller
             'priceRanges' => $priceRanges,
             'shortby' => $shortby,
             'totaldeals' => $totaldeals,
+            'bookmarkedProducts' => $bookmarkedProducts,
         ];
 
-        return $this->success( 'Deals Retrieved Successfully!',$dealdata);
+        return $this->success('Deals Retrieved Successfully!', $dealdata);
     }
 
-    public function dealDescription($id)
+    public function dealDescription($id, Request $request)
     {
-        $deal = Product::with(['shop', 'shop.hour','shop.policy'])->where('id', $id)
-        ->where('active', 1)
-        ->first();
+        $deal = Product::with(['shop', 'shop.hour', 'shop.policy'])
+            ->where('id', $id)
+            ->where('active', 1)
+            ->first();
 
-        return $this->success( 'Deals Retrieved Successfully!',$deal);
+        if (!$deal) {
+            return $this->error('Deal not found!', 404);
+        }
+
+        $isBookmarked = false;
+
+        if (Auth::check()) {
+            $userId = Auth::id();
+            $isBookmarked = Bookmark::where('user_id', $userId)->where('deal_id', $id)->exists();
+        } else {
+            $ipAddress = $request->ip();
+            $isBookmarked = Bookmark::where('ip_address', $ipAddress)->where('deal_id', $id)->exists();
+        }
+
+        $dealData = $deal->toArray();
+        $dealData['is_bookmarked'] = $isBookmarked;
+
+        return $this->success('Deal Retrieved Successfully!', $dealData);
     }
 
     public function search(Request $request)
@@ -142,9 +181,28 @@ class AppController extends Controller
         if ($request->has('brand')) {
             $brandTerms = $request->input('brand');
 
-            if (is_array($brandTerms) && count($brandTerms) > 0) {
+            if (!is_array($brandTerms)) {
+                $brandTerms = [$brandTerms];
+            }
+
+            if (count($brandTerms) > 0) {
                 $query->whereIn('brand', $brandTerms);
             }
+        }
+
+        if ($request->has('category')) {
+            $categoryId = $request->input('category');
+            $query->where('category_id', $categoryId);
+            
+            $brands = Product::where('active', 1)->where('category_id',$categoryId)->distinct()->pluck('brand');
+            $discounts = Product::where('active', 1)->where('category_id',$categoryId)->distinct()->pluck('discount_percentage');
+            $minPrice = Product::where('category_id',$categoryId)->min(DB::raw('LEAST(original_price, discounted_price)'));
+            $maxPrice = Product::where('category_id',$categoryId)->max(DB::raw('GREATEST(original_price, discounted_price)'));
+        }else{
+            $brands = Product::where('active', 1)->distinct()->pluck('brand');
+            $discounts = Product::where('active', 1)->distinct()->pluck('discount_percentage');
+            $minPrice = Product::min(DB::raw('LEAST(original_price, discounted_price)'));
+            $maxPrice = Product::max(DB::raw('GREATEST(original_price, discounted_price)'));
         }
 
         if ($request->has('discount')) {
@@ -165,55 +223,143 @@ class AppController extends Controller
         }
 
         if ($request->has('price_range')) {
-            
+
             $priceRange = $request->input('price_range');
-        
-            
+
             $priceRange = str_replace(['$', ',', ' '], '', $priceRange[0]);
             $priceRange = explode('-', $priceRange);
-        
-            
+
             $minPrice = isset($priceRange[0]) ? (float)$priceRange[0] : null;
             $maxPrice = isset($priceRange[1]) ? (float)$priceRange[1] : null;
-        
-            
+
             $query->where(function ($priceQuery) use ($minPrice, $maxPrice) {
                 if ($maxPrice !== null) {
-                    
+
                     $priceQuery->whereBetween('original_price', [$minPrice, $maxPrice])
-                               ->orWhereBetween('discounted_price', [$minPrice, $maxPrice]);
+                        ->orWhereBetween('discounted_price', [$minPrice, $maxPrice]);
                 } else {
-                    
+
                     $priceQuery->where('original_price', '>=', $minPrice)
-                               ->orWhere('discounted_price', '>=', $minPrice);
+                        ->orWhere('discounted_price', '>=', $minPrice);
                 }
             });
         }
-        
 
         if ($request->has('short_by')) {
             $shortby = $request->input('short_by');
+        
             if ($shortby == 'trending') {
                 $query->withCount(['views' => function ($viewQuery) {
-                    $viewQuery->whereDate('viewed_at', now()->toDateString());
-                }])->with(['shop:id,country,state,city,street,street2,zip_code,shop_ratings'])
-                    ->orderBy('views_count', 'desc');
+                        $viewQuery->whereDate('viewed_at', now()->toDateString());
+                    }])
+                    ->with(['shop:id,country,state,city,street,street2,zip_code,shop_ratings'])
+                    ->orderBy('views_count', 'desc')
+                    ->addSelect(DB::raw("'TRENDING' as label"));
             } elseif ($shortby == 'popular') {
-                $query->withCount('views')->with(['shop:id,country,state,city,street,street2,zip_code,shop_ratings'])
-                    ->orderBy('views_count', 'desc');
+                $query->withCount('views')
+                    ->with(['shop:id,country,state,city,street,street2,zip_code,shop_ratings'])
+                    ->orderBy('views_count', 'desc')
+                    ->addSelect(DB::raw("'POPULAR' as label"));
             } elseif ($shortby == 'early_bird') {
                 $query->with(['shop:id,country,state,city,street,street2,zip_code,shop_ratings'])
-                    ->whereDate('start_date', now());
+                    ->whereDate('start_date', now())
+                    ->addSelect(DB::raw("'EARLY BIRD' as label"));
             } elseif ($shortby == 'last_chance') {
                 $query->with(['shop:id,country,state,city,street,street2,zip_code,shop_ratings'])
-                    ->whereDate('end_date', now());
+                    ->whereDate('end_date', now())
+                    ->addSelect(DB::raw("'LAST CHANCE' as label"));
             } elseif ($shortby == 'limited_time') {
                 $query->with(['shop:id,country,state,city,street,street2,zip_code,shop_ratings'])
-                    ->whereRaw('DATEDIFF(end_date, start_date) <= ?', [2]);
+                    ->whereRaw('DATEDIFF(end_date, start_date) <= ?', [2])
+                    ->addSelect(DB::raw("'LIMITED TIME' as label"));
             }
         }
 
         $deals = $query->paginate($perPage);
+
+        $rating_items = Shop::where('active', 1)
+            ->select('shop_ratings', DB::raw('count(*) as rating_count'))
+            ->groupBy('shop_ratings')
+            ->get();
+
+        $priceRanges = [];
+        $priceStep = 2000;
+        
+        for ($start = $minPrice; $start <= $maxPrice; $start += $priceStep) {
+            $end = $start + $priceStep;
+
+            if ($end > $maxPrice) {
+                $priceRanges[] = [
+                    'label' => '$' . number_format($start, 2) . ' - $' . number_format($end, 2)
+                ];
+                break;
+            }
+            $priceRanges[] = [
+                'label' => '$' . number_format($start, 2) . ' - $' . number_format($end, 2)
+            ];
+        }
+
+        $shortby = DealCategory::where('active', 1)->get();
+        $totaldeals = $deals->total();
+
+        $bookmarkedProducts = collect();
+
+        if (Auth::check()) {
+            $userId = Auth::id();
+            $bookmarkedProducts = Bookmark::where('user_id', $userId)->pluck('deal_id');
+        } else {
+            $ipAddress = $request->ip();
+            $bookmarkedProducts = Bookmark::where('ip_address', $ipAddress)->pluck('deal_id');
+        }
+
+        $dealdata = [
+            'deals' => $deals,
+            'brands' => $brands,
+            'discounts' => $discounts,
+            'rating_items' => $rating_items,
+            'priceRanges' => $priceRanges,
+            'shortby' => $shortby,
+            'totaldeals' => $totaldeals,
+            'bookmarkedProducts' => $bookmarkedProducts
+        ];
+
+        return $this->success('Deals Retrieved Successfully!', $dealdata);
+    }
+
+    public function dealcategorybasedproductsformobile($slug, Request $request)
+    {
+        $perPage = 10;
+        $today = now()->toDateString();
+        $deals = collect();
+
+        if ($slug == 'trending') {
+            $deals = Product::where('active', 1)
+                ->withCount(['views' => function ($query) use ($today) {
+                    $query->whereDate('viewed_at', $today);
+                }])->with(['shop:id,country,state,city,street,street2,zip_code,shop_ratings'])
+                ->orderBy('views_count', 'desc')
+                ->paginate($perPage);
+        } elseif ($slug == 'popular') {
+            $deals = Product::where('active', 1)
+                ->withCount('views')->with(['shop:id,country,state,city,street,street2,zip_code,shop_ratings'])
+                ->orderBy('views_count', 'desc')
+                ->paginate($perPage);
+        } elseif ($slug == 'early_bird') {
+            $deals = Product::where('active', 1)
+                ->with(['shop:id,country,state,city,street,street2,zip_code,shop_ratings'])
+                ->whereDate('start_date', now())
+                ->paginate($perPage);
+        } elseif ($slug == 'last_chance') {
+            $deals = Product::where('active', 1)
+                ->with(['shop:id,country,state,city,street,street2,zip_code,shop_ratings'])
+                ->whereDate('end_date', now())
+                ->paginate($perPage);
+        } elseif ($slug == 'limited_time') {
+            $deals = Product::where('active', 1)
+                ->with(['shop:id,country,state,city,street,street2,zip_code,shop_ratings'])
+                ->whereRaw('DATEDIFF(end_date, start_date) <= ?', [2])
+                ->paginate($perPage);
+        }
 
         $brands = Product::where('active', 1)->distinct()->pluck('brand');
         $discounts = Product::where('active', 1)->distinct()->pluck('discount_percentage');
@@ -244,6 +390,16 @@ class AppController extends Controller
         $shortby = DealCategory::where('active', 1)->get();
         $totaldeals = $deals->total();
 
+        $bookmarkedProducts = collect();
+
+        if (Auth::check()) {
+            $userId = Auth::id();
+            $bookmarkedProducts = Bookmark::where('user_id', $userId)->pluck('deal_id');
+        } else {
+            $ipAddress = $request->ip();
+            $bookmarkedProducts = Bookmark::where('ip_address', $ipAddress)->pluck('deal_id');
+        }
+
         $dealdata = [
             'deals' => $deals,
             'brands' => $brands,
@@ -252,9 +408,10 @@ class AppController extends Controller
             'priceRanges' => $priceRanges,
             'shortby' => $shortby,
             'totaldeals' => $totaldeals,
+            'bookmarkedProducts' => $bookmarkedProducts
         ];
 
-        return $this->success( 'Deals Retrieved Successfully!',$dealdata);
+        return $this->success('Deals Retrieved Successfully!', $dealdata);
     }
 
     public function addBookmark(Request $request, $deal_id)
@@ -331,4 +488,20 @@ class AppController extends Controller
 
         return $this->success('Item Added SuccessFully!', $bookmarks);
     }
+
+    public function clickcounts(Request $request)
+    {
+        $dealId = $request->id;
+        $userId = Auth::check() ? Auth::id() : null;
+
+        DealClick::create([
+            'deal_id' => $dealId, 
+            'user_id' => $userId, 
+            'ip_address' => request()->ip(),
+            'clicked_at' => Carbon::now(), 
+        ]);
+
+        return $this->ok('DealClicks Added SuccessFully!');
+    }
+
 }
