@@ -261,6 +261,11 @@ class ShopController extends Controller
     public function status($id)
     {
         $shopStatus = Shop::select('active')->where('id', $id)->first();
+        if($shopStatus->active == 1)
+        {
+            $shopStatus = Shop::select('active','logo')->where('id', $id)->first();
+        }
         return $this->success('Shop Status Retrived Successfully!', $shopStatus);
     }
+
 }

@@ -64,6 +64,7 @@ Route::middleware('auth:api')->group(function () {
         Route::get('shop/{id}/payment', [AdminShopController::class, 'getshoppayment']);
         Route::get('shop/{id}/policy', [AdminShopController::class, 'getshoppolicy']);
         Route::get('shop/{id}/hours', [AdminShopController::class, 'getshophours']);
+        Route::get('shop/{id}/logindetails', [AdminShopController::class, 'getlogindetails']);
         Route::get('shop/{id}/products', [AdminShopController::class, 'getshopproducts']);
         Route::post('shop/{id}/activate', [AdminShopController::class, 'activateshop']);
         Route::post('shop/{id}/deactivate', [AdminShopController::class, 'deactivateshop']);

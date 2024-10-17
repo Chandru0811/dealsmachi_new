@@ -9,6 +9,7 @@ use App\Models\Shop;
 use App\Traits\ApiResponses;
 use App\Models\ShopPolicy;
 use App\Models\ShopHour;
+use App\Models\User;
 
 class ShopController extends Controller
 {
@@ -64,13 +65,13 @@ class ShopController extends Controller
 
     public function indexproduct()
     {
-        $products = Product::orderBy('id', 'desc')->get();
+        $products = Product::orderBy('id', 'desc')->with(['shop:id,legal_name'])->get();
         return $this->success('Products Retrieved Successfully!', $products);
     }
 
     public function showproduct(string $id)
     {
-        $product = Product::with(['category', 'category.categoryGroup'])->find($id);
+        $product = Product::with(['category', 'category.categoryGroup','shop'])->find($id);
 
         if (!$product) {
             return $this->error('Product Not Found.', ['error' => 'Product Not Found']);
@@ -84,4 +85,18 @@ class ShopController extends Controller
 
         return $this->success('Product Retrieved Successfully!', $product);
     }
+
+    public function getshopproducts($id)
+    {
+        $products = Product::with('shop')->where('shop_id',$id)->get();
+        return $this->success('Product Retrieved Successfully!', $products);
+    }
+
+    public function getlogindetails($id)
+    {
+        $shop = Shop::where('id',$id)->first();
+        $login_details = User::where('id',$shop->owner_id)->select('id','name','email')->first();
+        return $this->success('Shop retrieved successfully.', $login_details);
+    }
+
 }
