@@ -155,41 +155,41 @@
                             <div class="textline2"></div>
                         </div>
                         <div class="form-check pt-3">
-                            <input class="form-check-input" type="checkbox" name="price_range[]" value="Rs0-Rs1000" 
-                                   id="price_0_1000" 
-                                   {{ in_array('Rs0-Rs1000', request()->get('price_range', [])) ? 'checked' : '' }}>
+                            <input class="form-check-input" type="checkbox" name="price_range[]" value="Rs0-Rs1000"
+                                id="price_0_1000"
+                                {{ in_array('Rs0-Rs1000', request()->get('price_range', [])) ? 'checked' : '' }}>
                             <label class="form-check-label categoryLable" for="price_0_1000">
                                 Under Rs 1000
                             </label>
                         </div>
                         <div class="form-check pt-3">
-                            <input class="form-check-input" type="checkbox" name="price_range[]" value="Rs1000-Rs2000" 
-                                   id="price_1000_2000" 
-                                   {{ in_array('Rs1000-Rs2000', request()->get('price_range', [])) ? 'checked' : '' }}>
+                            <input class="form-check-input" type="checkbox" name="price_range[]" value="Rs1000-Rs2000"
+                                id="price_1000_2000"
+                                {{ in_array('Rs1000-Rs2000', request()->get('price_range', [])) ? 'checked' : '' }}>
                             <label class="form-check-label categoryLable" for="price_1000_2000">
                                 Rs 1000 - Rs 2000
                             </label>
                         </div>
                         <div class="form-check pt-3">
-                            <input class="form-check-input" type="checkbox" name="price_range[]" value="Rs2000-Rs5000" 
-                                   id="price_2000_5000" 
-                                   {{ in_array('Rs2000-Rs5000', request()->get('price_range', [])) ? 'checked' : '' }}>
+                            <input class="form-check-input" type="checkbox" name="price_range[]" value="Rs2000-Rs5000"
+                                id="price_2000_5000"
+                                {{ in_array('Rs2000-Rs5000', request()->get('price_range', [])) ? 'checked' : '' }}>
                             <label class="form-check-label categoryLable" for="price_2000_5000">
                                 Rs 2000 - Rs 5000
                             </label>
                         </div>
                         <div class="form-check pt-3">
-                            <input class="form-check-input" type="checkbox" name="price_range[]" value="Rs5000-Rs10000" 
-                                   id="price_5000_10000" 
-                                   {{ in_array('Rs5000-Rs10000', request()->get('price_range', [])) ? 'checked' : '' }}>
+                            <input class="form-check-input" type="checkbox" name="price_range[]" value="Rs5000-Rs10000"
+                                id="price_5000_10000"
+                                {{ in_array('Rs5000-Rs10000', request()->get('price_range', [])) ? 'checked' : '' }}>
                             <label class="form-check-label categoryLable" for="price_5000_10000">
                                 Rs 5000 - Rs 10000
                             </label>
                         </div>
                         <div class="form-check pt-3">
-                            <input class="form-check-input" type="checkbox" name="price_range[]" value="Rs10000-Rs100000" 
-                                   id="price_10000_100000" 
-                                   {{ in_array('Rs10000-Rs100000', request()->get('price_range', [])) ? 'checked' : '' }}>
+                            <input class="form-check-input" type="checkbox" name="price_range[]" value="Rs10000-Rs100000"
+                                id="price_10000_100000"
+                                {{ in_array('Rs10000-Rs100000', request()->get('price_range', [])) ? 'checked' : '' }}>
                             <label class="form-check-label categoryLable" for="price_10000_100000">
                                 Above Rs 10000
                             </label>
@@ -289,41 +289,41 @@
                             <div class="textline2"></div>
                         </div>
                         <div class="form-check pt-3">
-                            <input class="form-check-input" type="checkbox" name="price_range[]" value="Rs0-Rs1000" 
-                                   id="price_0_1000" 
-                                   {{ in_array('Rs0-Rs1000', request()->get('price_range', [])) ? 'checked' : '' }}>
+                            <input class="form-check-input" type="checkbox" name="price_range[]" value="Rs0-Rs1000"
+                                id="price_0_1000"
+                                {{ in_array('Rs0-Rs1000', request()->get('price_range', [])) ? 'checked' : '' }}>
                             <label class="form-check-label categoryLable" for="price_0_1000">
                                 Under Rs 1000
                             </label>
                         </div>
                         <div class="form-check pt-3">
-                            <input class="form-check-input" type="checkbox" name="price_range[]" value="Rs1000-Rs2000" 
-                                   id="price_1000_2000" 
-                                   {{ in_array('Rs1000-Rs2000', request()->get('price_range', [])) ? 'checked' : '' }}>
+                            <input class="form-check-input" type="checkbox" name="price_range[]" value="Rs1000-Rs2000"
+                                id="price_1000_2000"
+                                {{ in_array('Rs1000-Rs2000', request()->get('price_range', [])) ? 'checked' : '' }}>
                             <label class="form-check-label categoryLable" for="price_1000_2000">
                                 Rs 1000 - Rs 2000
                             </label>
                         </div>
                         <div class="form-check pt-3">
-                            <input class="form-check-input" type="checkbox" name="price_range[]" value="Rs2000-Rs5000" 
-                                   id="price_2000_5000" 
-                                   {{ in_array('Rs2000-Rs5000', request()->get('price_range', [])) ? 'checked' : '' }}>
+                            <input class="form-check-input" type="checkbox" name="price_range[]" value="Rs2000-Rs5000"
+                                id="price_2000_5000"
+                                {{ in_array('Rs2000-Rs5000', request()->get('price_range', [])) ? 'checked' : '' }}>
                             <label class="form-check-label categoryLable" for="price_2000_5000">
                                 Rs 2000 - Rs 5000
                             </label>
                         </div>
                         <div class="form-check pt-3">
-                            <input class="form-check-input" type="checkbox" name="price_range[]" value="Rs5000-Rs10000" 
-                                   id="price_5000_10000" 
-                                   {{ in_array('Rs5000-Rs10000', request()->get('price_range', [])) ? 'checked' : '' }}>
+                            <input class="form-check-input" type="checkbox" name="price_range[]" value="Rs5000-Rs10000"
+                                id="price_5000_10000"
+                                {{ in_array('Rs5000-Rs10000', request()->get('price_range', [])) ? 'checked' : '' }}>
                             <label class="form-check-label categoryLable" for="price_5000_10000">
                                 Rs 5000 - Rs 10000
                             </label>
                         </div>
                         <div class="form-check pt-3">
-                            <input class="form-check-input" type="checkbox" name="price_range[]" value="Rs10000-Rs100000" 
-                                   id="price_10000_100000" 
-                                   {{ in_array('Rs10000-Rs100000', request()->get('price_range', [])) ? 'checked' : '' }}>
+                            <input class="form-check-input" type="checkbox" name="price_range[]" value="Rs10000-Rs100000"
+                                id="price_10000_100000"
+                                {{ in_array('Rs10000-Rs100000', request()->get('price_range', [])) ? 'checked' : '' }}>
                             <label class="form-check-label categoryLable" for="price_10000_100000">
                                 Above Rs 10000
                             </label>
@@ -362,28 +362,16 @@
                                         <div class="mt-3 d-flex align-items-center justify-content-between">
                                             <h5 class="card-title ps-3">{{ $product->name }}</h5>
                                             <span class="badge mx-3 p-0 trending-bookmark-badge">
-                                                @if (count($product->bookmark) === 0)
-                                                <button type="button"
-                                                    class="bookmark-button add-bookmark"
-                                                    data-deal-id="{{ $product->id }}"
-                                                    style="border: none; background: none;">
-                                                    <p style="height:fit-content;cursor:pointer"
-                                                        class="p-1 px-2" data-bs-toggle="tooltip"
-                                                        data-bs-placement="top" title="Bookmark">
-                                                        <i class="fa-regular fa-bookmark bookmark-icon"
-                                                            style="color: #ff0060;"></i>
+                                                @if ($bookmarkedProducts->contains($product->id))
+                                                <button type="button" class="bookmark-button remove-bookmark" data-deal-id="{{ $product->id }}" style="border: none; background: none;">
+                                                    <p style="height:fit-content;cursor:pointer" class="p-1 px-2" data-bs-toggle="tooltip" data-bs-placement="top" title="Bookmark">
+                                                        <i class="fa-solid fa-bookmark bookmark-icon" style="color: #ff0060;"></i>
                                                     </p>
                                                 </button>
                                                 @else
-                                                <button type="button"
-                                                    class="bookmark-button remove-bookmark"
-                                                    data-deal-id="{{ $product->id }}"
-                                                    style="border: none; background: none;">
-                                                    <p style="height:fit-content;cursor:pointer"
-                                                        class="p-1 px-2" data-bs-toggle="tooltip"
-                                                        data-bs-placement="top" title="Bookmark">
-                                                        <i class="fa-solid fa-bookmark bookmark-icon"
-                                                            style="color: #ff0060;"></i>
+                                                <button type="button" class="bookmark-button add-bookmark" data-deal-id="{{ $product->id }}" style="border: none; background: none;">
+                                                    <p style="height:fit-content;cursor:pointer" class="p-1 px-2" data-bs-toggle="tooltip" data-bs-placement="top" title="Bookmark">
+                                                        <i class="fa-regular fa-bookmark bookmark-icon" style="color: #ff0060;"></i>
                                                     </p>
                                                 </button>
                                                 @endif
@@ -457,7 +445,7 @@
                         </div>
                         <div class="col-md-6 col-sm-6 col-12 p-2" style="cursor: pointer; background-color: #FF0000; border-top-right-radius: 5px;">
                             <span class="d-flex justify-content-center align-items-center">
-                                <a href ="https://www.youtube.com/@Dealsmachi" target="_blank" style="text-decoration:none;"><i
+                                <a href="https://www.youtube.com/@Dealsmachi" target="_blank" style="text-decoration:none;"><i
                                         class="fa-brands filter-social-Icon fa-youtube ps-2"></i>
                                     <p class="mb-0 filter-count-Text">1.2k</p>
                                     <p class="mb-0 filter-count-Text2">Subscribes</p>

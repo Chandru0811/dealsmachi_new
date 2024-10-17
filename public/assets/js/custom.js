@@ -1,5 +1,4 @@
-
-$(document).ready(function() {
+$(document).ready(function () {
     // Validation for Main Form
     $("#enquiryFormMain").validate({
         rules: {
@@ -24,17 +23,17 @@ $(document).ready(function() {
                 maxlength: "Phone number can't exceed 10 digits",
             },
         },
-        errorPlacement: function(error, element) {
+        errorPlacement: function (error, element) {
             error.addClass("text-danger mt-1");
             error.insertAfter(element);
         },
-        highlight: function(element) {
+        highlight: function (element) {
             $(element).addClass("is-invalid");
         },
-        unhighlight: function(element) {
+        unhighlight: function (element) {
             $(element).removeClass("is-invalid");
         },
-        submitHandler: function(form) {
+        submitHandler: function (form) {
             submitEnquiryForm(form);
         },
     });
@@ -63,17 +62,17 @@ $(document).ready(function() {
                 maxlength: "Phone number can't exceed 10 digits",
             },
         },
-        errorPlacement: function(error, element) {
+        errorPlacement: function (error, element) {
             error.addClass("text-danger mt-1");
             error.insertAfter(element);
         },
-        highlight: function(element) {
+        highlight: function (element) {
             $(element).addClass("is-invalid");
         },
-        unhighlight: function(element) {
+        unhighlight: function (element) {
             $(element).removeClass("is-invalid");
         },
-        submitHandler: function(form) {
+        submitHandler: function (form) {
             submitEnquiryForm(form);
         },
     });
@@ -85,7 +84,7 @@ $(document).ready(function() {
             email: $currentForm.find("[name='email']").val(),
             phone: $currentForm.find("[name='phone']").val(),
             company_id: 40,
-            company: "Dealsmachi",
+            company: "ECSCloudInfotech",
             lead_status: "PENDING",
             lead_source: "Product Page",
             country_code: "65",
@@ -96,23 +95,26 @@ $(document).ready(function() {
             type: "POST",
             contentType: "application/json",
             data: JSON.stringify(payload),
-            success: function(response, status, xhr) {
+            success: function (response, status, xhr) {
                 if (xhr.status === 201 && response) {
-                    $('#successModal').modal('show');
+                    $("#successModal").modal("show");
                     $currentForm[0].reset();
                     // Optionally, close the modal if it's the modal form
-                    if ($currentForm.attr('id') === 'enquiryFormModal') {
-                        $('#enquiryModal').modal('hide');
+                    if ($currentForm.attr("id") === "enquiryFormModal") {
+                        $("#enquiryModal").modal("hide");
                     }
                 } else {
-                    console.error("Unexpected response or missing leadId:", response);
-                    $('#errorModal').modal('show');
+                    console.error(
+                        "Unexpected response or missing leadId:",
+                        response
+                    );
+                    $("#errorModal").modal("show");
                     $currentForm[0].reset();
                 }
             },
-            error: function(xhr, status, error) {
+            error: function (xhr, status, error) {
                 console.error("API call failed:", error);
-                $('#errorModal').modal('show');
+                $("#errorModal").modal("show");
                 $currentForm[0].reset();
             },
         });
@@ -544,44 +546,29 @@ $(document).ready(function () {
 });
 
 //Offcanvas Closing Buttons
-document.addEventListener('DOMContentLoaded', function () {
-    document.getElementById("clearButton").addEventListener("click", function () {
-        var offcanvasElement = document.getElementById("filterOffcanvas");
-        var offcanvas = bootstrap.Offcanvas.getInstance(offcanvasElement); // Get the current instance
-        offcanvas.hide(); // Hide the offcanvas
-    });
+// document.addEventListener("DOMContentLoaded", function () {
+//     var clearButton = document.getElementById("clearButton");
+//     var applyButton = document.getElementById("applyButton");
+//     var offcanvasElement = document.getElementById("filterOffcanvas");
 
-    document.getElementById("applyButton").addEventListener("click", function () {
-        var offcanvasElement = document.getElementById("filterOffcanvas");
-        var offcanvas = bootstrap.Offcanvas.getInstance(offcanvasElement); // Get the current instance
-        offcanvas.hide(); // Hide the offcanvas
-    });
-});
+//     if (clearButton && offcanvasElement) {
+//         clearButton.addEventListener("click", function () {
+//             var offcanvas = bootstrap.Offcanvas.getInstance(offcanvasElement);
+//             if (offcanvas) {
+//                 offcanvas.hide();
+//             }
+//         });
+//     }
 
-
-// <!-- Book Mark Icon -->
-function toggleBookmark(element, event) {
-    // Prevent the click from propagating to the anchor tag
-    event.preventDefault();
-    event.stopPropagation();
-
-    // Toggle the bookmark icon class
-    if (element.classList.contains("fa-regular")) {
-        element.classList.remove("fa-regular");
-        element.classList.add("fa-solid");
-    } else {
-        element.classList.remove("fa-solid");
-        element.classList.add("fa-regular");
-    }
-}
-
-// Copy DealsMachi Text Function
-var tooltipTriggerList = [].slice.call(
-    document.querySelectorAll('[data-bs-toggle="tooltip"]')
-);
-var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
-    return new bootstrap.Tooltip(tooltipTriggerEl);
-});
+//     if (applyButton && offcanvasElement) {
+//         applyButton.addEventListener("click", function () {
+//             var offcanvas = bootstrap.Offcanvas.getInstance(offcanvasElement);
+//             if (offcanvas) {
+//                 offcanvas.hide();
+//             }
+//         });
+//     }
+// });
 
 function copySpanText(element, event) {
     event.preventDefault();
@@ -616,17 +603,17 @@ function copyLinkToClipboard() {
 
     document.body.removeChild(tempInput);
 
-    const tooltip = bootstrap.Tooltip.getInstance(document.getElementById('shareButton'));
-    tooltip.setContent({ '.tooltip-inner': 'Link Copied' });
+    const tooltip = bootstrap.Tooltip.getInstance(
+        document.getElementById("shareButton")
+    );
+    tooltip.setContent({ ".tooltip-inner": "Link Copied" });
 
     tooltip.show();
 
     setTimeout(() => {
-        tooltip.setContent({ '.tooltip-inner': 'Share' });
+        tooltip.setContent({ ".tooltip-inner": "Share" });
     }, 2000);
 }
-
-
 
 function showTooltip(element) {
     var tooltip = element.querySelector(".tooltip-text");
@@ -641,23 +628,6 @@ function hideTooltip(element) {
     var tooltip = element.querySelector(".tooltip-text");
     tooltip.style.visibility = "hidden";
 }
-
-document.addEventListener("DOMContentLoaded", function () {
-    fetch("/totalbookmark")
-        .then((response) => {
-            return response.json();
-        })
-        .then((data) => {
-            console.log("Data received from API:", data);
-            const totalItemsCounts = document.querySelectorAll(".totalItemsCount"); // Select all elements with the class
-            totalItemsCounts.forEach((totalItemsCount) => {
-                totalItemsCount.textContent = data.total_items > 0 ? data.total_items : ''; // Update text content
-            });
-        })
-        .catch((error) => {
-            console.error("Error fetching total items:", error);
-        });
-});
 
 function toggleNumber(event) {
     event.preventDefault();
@@ -675,82 +645,108 @@ function toggleNumber(event) {
     }
 }
 
-$(document).ready(function() {
+$(document).ready(function () {
     // Setup CSRF token for AJAX
     $.ajaxSetup({
         headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        }
+            "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+        },
     });
 
     // Function to update the bookmark count
     function updateBookmarkCount(count) {
-        $('.totalItemsCount').each(function() {
-            $(this).text(count);
+        $(".totalItemsCount").each(function () {
+            if (count > 0) {
+                $(this).text(count).css("visibility", "visible");
+            } else {
+                $(this).text("").css("visibility", "hidden");
+            }
         });
     }
 
     // Add Bookmark
-    $('.add-bookmark').on('click', function(e) {
-        e.preventDefault();
-        let dealId = $(this).data('deal-id');
+    function handleAddBookmark() {
+        $(".add-bookmark")
+            .off("click")
+            .on("click", function (e) {
+                e.preventDefault();
+                let dealId = $(this).data("deal-id");
 
-        $.ajax({
-            url: `/bookmark/${dealId}/add`,
-            method: 'POST',
-            success: function(response) {
-                updateBookmarkCount(response.total_items);
-                // Toggle the bookmark button to remove state
-                let button = $(`.add-bookmark[data-deal-id="${dealId}"]`);
-                button.removeClass('add-bookmark').addClass('remove-bookmark');
-                button.html(`
-                    <p style="height:fit-content;cursor:pointer" class="p-1 px-2">
-                        <i class="fa-solid fa-bookmark bookmark-icon" style="color: #ff0060;"></i>
-                    </p>
-                `);
-            },
-            error: function(xhr) {
-                // Handle error (optional)
-            }
-        });
-    });
+                $.ajax({
+                    url: `/bookmark/${dealId}/add`,
+                    method: "POST",
+                    success: function (response) {
+                        updateBookmarkCount(response.total_items);
+
+                        let button = $(
+                            `.add-bookmark[data-deal-id="${dealId}"]`
+                        );
+                        button
+                            .removeClass("add-bookmark")
+                            .addClass("remove-bookmark");
+                        button.html(`
+                        <p style="height:fit-content;cursor:pointer" class="p-1 px-2">
+                            <i class="fa-solid fa-bookmark bookmark-icon" style="color: #ef4444;"></i>
+                        </p>
+                    `);
+
+                        handleRemoveBookmark();
+                    },
+                    error: function (xhr) {},
+                });
+            });
+    }
 
     // Remove Bookmark
-    $(document).on('click', '.remove-bookmark', function(e) {
-        e.preventDefault();
-        let dealId = $(this).data('deal-id');
+    function handleRemoveBookmark() {
+        $(".remove-bookmark")
+            .off("click")
+            .on("click", function (e) {
+                e.preventDefault();
+                let dealId = $(this).data("deal-id");
 
-        $.ajax({
-            url: `/bookmark/${dealId}/remove`,
-            method: 'DELETE',
-            success: function(response) {
-                updateBookmarkCount(response.total_items);
-                // Toggle the bookmark button to add state
-                let button = $(`.remove-bookmark[data-deal-id="${dealId}"]`);
-                button.removeClass('remove-bookmark').addClass('add-bookmark');
-                button.html(`
-                    <p style="height:fit-content;cursor:pointer" class="p-1 px-2">
-                        <i class="fa-regular fa-bookmark bookmark-icon" style="color: #ff0060;"></i>
-                    </p>
-                `);
-            },
-            error: function(xhr) {
-                // Handle error (optional)
-            }
-        });
-    });
+                $.ajax({
+                    url: `/bookmark/${dealId}/remove`,
+                    method: "DELETE",
+                    success: function (response) {
+                        updateBookmarkCount(response.total_items);
+
+                        let button = $(
+                            `.remove-bookmark[data-deal-id="${dealId}"]`
+                        );
+                        button
+                            .removeClass("remove-bookmark")
+                            .addClass("add-bookmark");
+                        button.html(`
+                        <p style="height:fit-content;cursor:pointer" class="p-1 px-2">
+                            <i class="fa-regular fa-bookmark bookmark-icon" style="color: #ef4444;"></i>
+                        </p>
+                    `);
+
+                        handleAddBookmark(); // Re-bind the add bookmark handler
+                    },
+                    error: function (xhr) {
+                        // Handle error (optional)
+                    },
+                });
+            });
+    }
+
+    // Initialize the event handlers
+    handleAddBookmark();
+    handleRemoveBookmark();
 
     // Initial Load of Bookmark Count
     function loadBookmarkCount() {
         $.ajax({
-            url: '/totalbookmark',
-            method: 'GET',
-            success: function(response) {
+            url: "/totalbookmark",
+            method: "GET",
+            success: function (response) {
                 updateBookmarkCount(response.total_items);
             },
-            error: function(xhr) {
-                console.error('Failed to load bookmark count.');
-            }
+            error: function (xhr) {
+                console.error("Failed to load bookmark count.");
+            },
         });
     }
 
@@ -758,32 +754,12 @@ $(document).ready(function() {
 
     // Disable or remove tooltip from bookmark buttons
     // Option 1: Disable the tooltip functionality
-    $('.bookmark-button').tooltip('disable');
+    $(".bookmark-button").tooltip("disable");
 
     // Option 2: Remove the tooltip attribute entirely
-    $('.bookmark-button [data-bs-toggle="tooltip"]').removeAttr('data-bs-toggle');
-});
-
-
-$('input[name="price_range[]"]').on('change', function () {
-    let selectedRanges = $('input[name="price_range[]"]:checked').map(function () {
-        return this.value;
-    }).get();
-
-    // Send an AJAX request
-    $.ajax({
-        url: '/your-api-endpoint',  // Replace with your API endpoint
-        method: 'GET',  // Or 'POST', depending on your setup
-        data: {
-            price_range: selectedRanges,
-        },
-        success: function (response) {
-            // Handle successful response
-        },
-        error: function (error) {
-            // Handle errors
-        }
-    });
+    $('.bookmark-button [data-bs-toggle="tooltip"]').removeAttr(
+        "data-bs-toggle"
+    );
 });
 
 // Link Shared Capture the current page URL dynamically
@@ -791,26 +767,52 @@ const currentUrl = encodeURIComponent(window.location.href);
 
 function shareOnFacebook() {
     const facebookShareUrl = `https://www.facebook.com/sharer/sharer.php?u=${currentUrl}`;
-    window.open(facebookShareUrl, '_blank');
+    window.open(facebookShareUrl, "_blank");
 }
 
 function shareOnLinkedIn() {
     const linkedInShareUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${currentUrl}`;
-    window.open(linkedInShareUrl, '_blank');
+    window.open(linkedInShareUrl, "_blank");
 }
 
 function shareOnTwitter() {
     const twitterShareUrl = `https://twitter.com/intent/tweet?url=${currentUrl}&text=Check+out+this+amazing+page!`;
-    window.open(twitterShareUrl, '_blank');
+    window.open(twitterShareUrl, "_blank");
 }
 
 function shareOnWhatsApp() {
     const whatsappShareUrl = `https://api.whatsapp.com/send?text=Check+out+this+amazing+deal:+${currentUrl}`;
-    window.open(whatsappShareUrl, '_blank');
+    window.open(whatsappShareUrl, "_blank");
 }
 
 function shareOnInstagram() {
-alert("Instagram does not support direct message and link sharing. Copy the message below and share it manually:");
-navigator.clipboard.writeText(`https://ecsaio.com/`);
-window.open("https://www.instagram.com", "_blank");
+    alert(
+        "Instagram does not support direct message and link sharing. Copy the message below and share it manually:"
+    );
+    navigator.clipboard.writeText(`https://ecsaio.com/`);
+    window.open("https://www.instagram.com", "_blank");
 }
+
+$('input[type="checkbox"]').change(function () {
+    var selectedPriceRanges = [];
+
+    $('input[name="price_range[]"]:checked').each(function () {
+        selectedPriceRanges.push($(this).val());
+    });
+
+    $.ajax({
+        url: "/your-api-endpoint",
+        method: "GET", // or POST depending on your API
+        data: {
+            price_range: selectedPriceRanges,
+            // include other data if needed
+        },
+        success: function (response) {
+            // Update the page content dynamically
+            $("#your-products-list").html(response);
+        },
+        error: function (error) {
+            console.error(error);
+        },
+    });
+});
