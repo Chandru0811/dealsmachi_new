@@ -15,6 +15,7 @@ use App\Models\Shop;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use App\Models\DealViews;
 
 class HomeController extends Controller
 {
@@ -71,9 +72,27 @@ class HomeController extends Controller
         return $this->ok('DealClicks Added Successfully!');
     }
 
+    public function viewcounts(Request $request)
+    {
+        $dealId = $request->id;
+        $userId = Auth::check() ? Auth::id() : null;
+        $ipAddress = $request->ip();
+
+        DealViews::create([
+            'deal_id' => $dealId,
+            'user_id' => $userId,
+            'ip_address' => $ipAddress,
+            'viewed_at' => Carbon::now(),
+        ]);
+
+        return $this->ok('DealViews Added Successfully!');
+    }
+
     public function productdescription($id, Request $request)
     {
         $this->clickcounts($request);
+
+        $this->viewcounts($request);
 
         $product = Product::with(['shop', 'shop.hour', 'shop.policy'])->where('id', $id)
             ->where('active', 1)

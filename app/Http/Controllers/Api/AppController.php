@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 use App\Models\DealClick;
+use App\Models\DealViews;
 
 class AppController extends Controller
 {
@@ -502,6 +503,22 @@ class AppController extends Controller
         ]);
 
         return $this->ok('DealClicks Added SuccessFully!');
+    }
+
+    public function viewcounts(Request $request)
+    {
+        $dealId = $request->id;
+        $userId = Auth::check() ? Auth::id() : null;
+        $ipAddress = $request->ip();
+
+        DealViews::create([
+            'deal_id' => $dealId,
+            'user_id' => $userId,
+            'ip_address' => $ipAddress,
+            'viewed_at' => Carbon::now(),
+        ]);
+
+        return $this->ok('DealViews Added Successfully!');
     }
 
 }

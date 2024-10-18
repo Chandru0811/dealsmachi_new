@@ -19,24 +19,11 @@ class CategoryGroupsController extends Controller
         return $this->success('Category Groups Retrieved successfully.', $categoryGroup);
     }
 
-    public function restore($id)
-    {
-        $categoryGroup = CategoryGroup::onlyTrashed()->find($id);
-
-        if (!$categoryGroup) {
-            return $this->error('Category Group Not Found.', ['error' => 'categoryGroup Not Found']);
-        }
-        $categoryGroup->restore();
-
-        return $this->success('Category Group Restored Successfully!', $categoryGroup);
-    }
-
-
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'name'        => 'required|string|max:200|unique:category_groups,name',
-            'slug'        => 'required|string|max:200|unique:category_groups,slug',
+            'name'        => 'required|string|max:200|unique:category_groups,name,NULL,id,deleted_at,NULL',
+            'slug'        => 'required|string|max:200|unique:category_groups,slug,NULL,id,deleted_at,NULL',
             'description' => 'required|string',
             'icon'        => 'nullable|string',
             'image'       => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,webp|max:2048',
@@ -44,6 +31,7 @@ class CategoryGroupsController extends Controller
         ], [
             'name.unique' => 'The name field must be unique.',
             'name.required' => 'The name field is required.',
+            'slug.unique' => 'The slug field must be unique.',
             'slug.required' => 'The slug field is required.',
             'description.required' => 'The description field is required.',
             'image.image' => 'The image field must be an image.',
@@ -78,7 +66,6 @@ class CategoryGroupsController extends Controller
         return $this->success('Category Group Created Successfully!', $categoryGroup);
     }
 
-
     public function show($id)
     {
 
@@ -101,8 +88,8 @@ class CategoryGroupsController extends Controller
         }
 
         $validator = Validator::make($request->all(), [
-            'name'        => 'required|string|max:200|unique:category_groups,name,' . $id . ',id,deleted_at,NULL',
-            'slug'        => 'required|string|max:200|unique:category_groups,slug,' . $id . ',id,deleted_at,NULL',
+            'name'        => 'required|string|max:200|unique:category_groups,name,' . $id,
+            'slug'        => 'required|string|max:200|unique:category_groups,slug,' . $id,
             'description' => 'required|string',
             'icon'        => 'nullable|string',
             'image'       => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,webp|max:2048',
@@ -157,6 +144,8 @@ class CategoryGroupsController extends Controller
         }
 
         $categoryGroup->delete();
+
         return $this->ok('Category Group Deleted Successfully!');
     }
+
 }

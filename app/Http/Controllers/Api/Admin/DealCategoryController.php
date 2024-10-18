@@ -31,7 +31,6 @@ class DealCategoryController extends Controller
         return $this->success('Deal Category Restored Successfully!', $dealCategory);
     }
 
-
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -78,11 +77,11 @@ class DealCategoryController extends Controller
     public function update(Request $request, $id)
     {
         $dealCategory = DealCategory::find($id);
-
+    
         if (!$dealCategory) {
             return $this->error('Deal Category Not Found.', ['error' => 'Deal Category Not Found']);
         }
-
+    
         $validator = Validator::make($request->all(), [
             'name' => 'sometimes|required|string|unique:deal_categories,name,' . $id,
             'slug' => 'sometimes|required|string|unique:deal_categories,slug,' . $id,
@@ -97,37 +96,36 @@ class DealCategoryController extends Controller
             'image.mimes' => 'The image must be a jpeg, png, jpg, gif, svg or webp file.',
             'image.max' => 'The image must not be larger than 2MB.',
         ]);
-
+    
         if ($validator->fails()) {
             return response()->json(['errors' => $validator->errors()], 422);
         }
-
+    
         $validatedData = $validator->validated();
-
+    
         if ($request->hasFile('image')) {
             $image = $request->file('image');
             $imagePath = 'assets/images/deal_categories';
-
+    
             if (!file_exists($imagePath)) {
                 mkdir($imagePath, 0755, true);
             }
-
+    
             $imageName = time() . '_' . $image->getClientOriginalName();
             $image->move($imagePath, $imageName);
-
+    
             if ($dealCategory->image_path && file_exists(public_path($dealCategory->image_path))) {
                 unlink(public_path($dealCategory->image_path));
             }
-
+    
             $validatedData['image_path'] = $imagePath . '/' . $imageName;
         }
-
+    
         $dealCategory->update($validatedData);
-
+    
         return $this->success('Deal Category Updated Successfully!', $dealCategory);
     }
-
-
+    
     public function show($id)
     {
 

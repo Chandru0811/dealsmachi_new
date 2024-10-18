@@ -17,7 +17,7 @@ class ProductController extends Controller
 
     public function index($shop_id)
     {
-        $products = Product::where('shop_id', $shop_id)->get();
+        $products = Product::where('shop_id', $shop_id)->orderBy('id', 'desc')->get();
 
         return $this->success('Products retrieved successfully.', $products);
     }
@@ -48,7 +48,7 @@ class ProductController extends Controller
             'discounted_price' => 'required|numeric|min:0',
             'discount_percentage' => 'required|numeric|min:0|max:100',
             'stock' => 'nullable|integer|min:0',
-            'sku' => 'nullable|string|unique:products,sku|max:100',
+            'sku' => 'nullable|string|max:100',
             'image1' => 'required|image|mimes:jpeg,png,jpg,gif,svg,webp|max:2048',
             'image2' => 'required|image|mimes:jpeg,png,jpg,gif,svg,webp|max:2048',
             'image3' => 'required|image|mimes:jpeg,png,jpg,gif,svg,webp|max:2048',
@@ -198,7 +198,7 @@ class ProductController extends Controller
             'discounted_price' => 'required|numeric|min:0',
             'discount_percentage' => 'required|numeric|min:0|max:100',
             'stock' => 'nullable|integer|min:0',
-            'sku' => 'nullable|string|unique:products,sku,' . $id,
+            'sku' => 'nullable|string',
             'image1' => 'sometimes|image|mimes:jpeg,png,jpg,gif,svg,webp|max:2048',
             'image2' => 'sometimes|image|mimes:jpeg,png,jpg,gif,svg,webp|max:2048',
             'image3' => 'sometimes|image|mimes:jpeg,png,jpg,gif,svg,webp|max:2048',

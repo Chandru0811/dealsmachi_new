@@ -103,7 +103,7 @@ class ShopController extends Controller
             }
 
             $image = $request->file('logo');
-            $imagePath = 'assets/images/shops/' . $shop->id . '/logo';
+            $imagePath ='assets/images/shops/' . $shop->id . '/logo';
 
             if (!file_exists($imagePath)) {
                 mkdir($imagePath, 0755, true);
@@ -112,7 +112,7 @@ class ShopController extends Controller
             $imageName = time() . '_' . $image->getClientOriginalName();
             $image->move($imagePath, $imageName);
 
-            $updateData['logo'] = 'assets/images/shops/' . $shop->id . '/logo' . '/' . $imageName;
+            $updateData['logo'] = $imagePath . '/' . $imageName;
         }
 
         if ($request->hasFile('banner')) {
@@ -130,7 +130,7 @@ class ShopController extends Controller
             $imageName = time() . '_' . $image->getClientOriginalName();
             $image->move($imagePath, $imageName);
 
-            $updateData['banner'] = 'assets/images/shops/' . $shop->id . '/banner' . '/' . $imageName;
+            $updateData['banner'] = $imagePath . '/' . $imageName;
         }
 
         $shop->update($updateData);
@@ -267,5 +267,4 @@ class ShopController extends Controller
         }
         return $this->success('Shop Status Retrived Successfully!', $shopStatus);
     }
-
 }

@@ -5,6 +5,11 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 
+Route::fallback(function () {
+    return response()->view('errors.404', [], 404);
+});
+
+
 Route::get('/', [HomeController::class, 'index']);
 Route::get('hotpick/{slug}', [HomeController::class, 'dealcategorybasedproducts']);
 Route::get('categories/{slug}', [HomeController::class, 'subcategorybasedproducts'])->name('subcategorybasedproducts');
