@@ -487,8 +487,8 @@ footer hr {
 /* Header Start */
 
 .total-count {
-    font-size: 12px;
-    width: 40%;
+    font-size: 8px;
+    width: 25%;
     border-radius:50%;
     text-align:center;
     background-color: #ff0060;
@@ -498,8 +498,8 @@ footer hr {
 
 @media screen and (max-width: 1199px) and (min-width: 320px) {
     .total-count {
-        font-size: 10px;
-        width: 40%;
+        font-size: 8px;
+        width: 25%;
         border-radius:50%;
         text-align:center;
         background-color: #ff0060;
