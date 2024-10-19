@@ -1,6 +1,6 @@
 <div class="container">
     <h5 class="pt-0 pb-2">Hot Picks</h5>
-    <div class="row row-cols-1 row-cols-md-3 row-cols-lg-6 pb-2">
+    <div class="row row-cols-1 row-cols-md-3 row-cols-lg-5 pb-2">
         @foreach ($hotpicks as $hotpick)
         <div class="col mb-3">
             <a href="{{ url('hotpick/' . $hotpick->slug) }}" style="text-decoration: none;">
