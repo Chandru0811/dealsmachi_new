@@ -7,6 +7,7 @@ use App\Models\Bookmark;
 use Illuminate\Http\Request;
 use App\Models\CategoryGroup;
 use App\Models\Category;
+use App\Models\CouponCodeUsed;
 use App\Models\Slider;
 use App\Traits\ApiResponses;
 use App\Models\DealCategory;
@@ -16,6 +17,8 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 use App\Models\DealClick;
+use App\Models\Dealenquire;
+use App\Models\DealShare;
 use App\Models\DealViews;
 
 class AppController extends Controller
@@ -519,6 +522,55 @@ class AppController extends Controller
         ]);
 
         return $this->ok('DealViews Added Successfully!');
+    }
+
+    public function couponCopied(Request $request)
+    {
+        $dealId = $request->id;
+            $userId = Auth::check() ? Auth::id() : null;
+            $ipAddress = $request->ip();
+
+            CouponCodeUsed::create([
+                'deal_id' => $dealId,
+                'coupon_code' => $request->coupon_code,
+                'user_id' => $userId,
+                'ip_address' => $ipAddress,
+                'copied_at' => Carbon::now(),
+            ]);
+
+            return $this->ok('CouponCode Copied Successfully!');
+    }
+
+    public function dealshare(Request $request)
+    {
+        $dealId = $request->id;
+        $userId = Auth::check() ? Auth::id() : null;
+        $ipAddress = $request->ip();
+
+        DealShare::create([
+            'deal_id' => $dealId,
+            'user_id' => $userId,
+            'ip_address' => $ipAddress,
+            'share_at' => Carbon::now(),
+        ]);
+
+        return $this->ok('DealShare Added Successfully!');      
+    }
+
+    public function dealenquire(Request $request)
+    {
+        $dealId = $request->id;
+        $userId = Auth::check() ? Auth::id() : null;
+        $ipAddress = $request->ip();
+
+        Dealenquire::create([
+            'deal_id' => $dealId,
+            'user_id' => $userId,
+            'ip_address' => $ipAddress,
+            'enquire_at' => Carbon::now(),
+        ]);
+
+        return $this->ok('Dealenquire Added Successfully!');       
     }
 
 }

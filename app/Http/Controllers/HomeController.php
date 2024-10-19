@@ -10,7 +10,10 @@ use App\Models\Category;
 use App\Traits\ApiResponses;
 use App\Models\Product;
 use App\Models\Bookmark;
+use App\Models\CouponCodeUsed;
 use App\Models\DealClick;
+use App\Models\Dealenquire;
+use App\Models\DealShare;
 use App\Models\Shop;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
@@ -458,4 +461,53 @@ class HomeController extends Controller
         return view('productfilter', compact('deals', 'brands', 'discounts', 'rating_items', 'priceRanges', 'shortby', 'totaldeals', 'category', 'categorygroup', 'bookmarkedProducts'));
     }
     
+    public function couponCodeCopied(Request $request)
+    {
+        $dealId = $request->id;
+        $userId = Auth::check() ? Auth::id() : null;
+        $ipAddress = $request->ip();
+
+        CouponCodeUsed::create([
+            'deal_id' => $dealId,
+            'coupon_code' => $request->coupon_code,
+            'user_id' => $userId,
+            'ip_address' => $ipAddress,
+            'copied_at' => Carbon::now(),
+        ]);
+
+        return $this->ok('Coupon Code Copied Successfully!');        
+    }
+
+    public function dealshare(Request $request)
+    {
+        $dealId = $request->id;
+        $userId = Auth::check() ? Auth::id() : null;
+        $ipAddress = $request->ip();
+
+        DealShare::create([
+            'deal_id' => $dealId,
+            'user_id' => $userId,
+            'ip_address' => $ipAddress,
+            'share_at' => Carbon::now(),
+        ]);
+
+        return $this->ok('DealShare Added Successfully!');      
+    }
+
+    public function dealenquire(Request $request)
+    {
+        $dealId = $request->id;
+        $userId = Auth::check() ? Auth::id() : null;
+        $ipAddress = $request->ip();
+
+        Dealenquire::create([
+            'deal_id' => $dealId,
+            'user_id' => $userId,
+            'ip_address' => $ipAddress,
+            'enquire_at' => Carbon::now(),
+        ]);
+
+        return $this->ok('Dealenquire Added Successfully!');       
+    }
+
 }

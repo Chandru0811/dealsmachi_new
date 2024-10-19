@@ -56,16 +56,22 @@
                             <p class="ps-3 fw-medium d-flex align-items-center justify-content-between"
                                 style="color: #ff0060">
                                 <span>Rs {{ $product->discounted_price }}</span>
+                                @if (!empty($product->coupon_code))
                                 <span id="mySpan" class="mx-3 px-2 couponBadge"
                                     onclick="copySpanText(this, event)" data-bs-toggle="tooltip"
                                     data-bs-placement="bottom" title="Click to Copy" style="position:relative;">
-                                    DEALSLAH{{ round($product->discount_percentage) }}
+
+                                    {{ $product->coupon_code }}
+
                                     <!-- Tooltip container -->
                                     <span class="tooltip-text"
-                                        style="visibility: hidden; background-color: black; color: #fff; text-align: center; border-radius: 6px; padding: 5px; position: absolute; z-index: 1; bottom: 125%; left: 50%; margin-left: -60px;">
+                                        style="visibility: hidden; background-color: black; color: #fff; text-align: center; 
+                                                    border-radius: 6px; padding: 5px; position: absolute; z-index: 1; 
+                                                    bottom: 125%; left: 50%; margin-left: -60px;">
                                         Copied!
                                     </span>
                                 </span>
+                                @endif
                             </p>
                             <div class="card-divider"></div>
                             <div class="ps-3">

@@ -1,7 +1,6 @@
 <?php
 
 use App\Http\Controllers\BookmarkController;
-use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 
@@ -19,30 +18,17 @@ Route::post('bookmark/{deal_id}/add', [BookmarkController::class, 'add'])->name(
 Route::delete('bookmark/{deal_id}/remove', [BookmarkController::class, 'remove'])->name('bookmarks.remove');
 Route::get('totalbookmark', [BookmarkController::class, 'totalItems'])->name('bookmarks.totalItems');
 Route::get('search', [HomeController::class, 'search'])->name('search');
+Route::post('deals/count/click', [HomeController::class, 'clickcounts']);
+Route::post('deals/count/views', [HomeController::class, 'viewcounts']);
+Route::post('deals/coupon/copied', [HomeController::class, 'couponCodeCopied']);
+Route::post('deals/count/share', [HomeController::class, 'dealshare']);
+Route::post('deals/count/enquire', [HomeController::class, 'dealenquire']);
 Route::get('/privacyPolicy', function () {
     return view('privacyPolicy');
 });
 Route::get('/terms_conditions', function () {
     return view('termsandconditions');
 });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // Route::get('/dashboard', function () {
 //     return view('dashboard');

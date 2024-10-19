@@ -79,8 +79,10 @@ $(document).ready(function () {
 
     function submitEnquiryForm(form) {
         var $currentForm = $(form);
+        var dealId = $currentForm.data("deal-id");
+
         var payload = {
-            first_name: $currentForm.find("[name='name']").val(),
+            name: $currentForm.find("[name='name']").val(),
             email: $currentForm.find("[name='email']").val(),
             phone: $currentForm.find("[name='phone']").val(),
             company_id: 40,
@@ -90,34 +92,36 @@ $(document).ready(function () {
             country_code: "65",
         };
 
-        $.ajax({
+        var laravelRequest = $.ajax({
+            url: "/deals/count/enquire",
+            type: "POST",
+            headers: {
+                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+            },
+            contentType: "application/json",
+            data: JSON.stringify({ id: dealId }),
+        });
+
+        var crmlahRequest = $.ajax({
             url: "https://crmlah.com/ecscrm/api/newClient",
             type: "POST",
             contentType: "application/json",
             data: JSON.stringify(payload),
-            success: function (response, status, xhr) {
-                if (xhr.status === 201 && response) {
-                    $("#successModal").modal("show");
-                    $currentForm[0].reset();
-                    // Optionally, close the modal if it's the modal form
-                    if ($currentForm.attr("id") === "enquiryFormModal") {
-                        $("#enquiryModal").modal("hide");
-                    }
-                } else {
-                    console.error(
-                        "Unexpected response or missing leadId:",
-                        response
-                    );
-                    $("#errorModal").modal("show");
-                    $currentForm[0].reset();
-                }
-            },
-            error: function (xhr, status, error) {
-                console.error("API call failed:", error);
+        });
+
+        $.when(laravelRequest, crmlahRequest)
+            .done(function (laravelResponse, crmlahResponse) {
+                console.log("Both APIs succeeded:", laravelResponse, crmlahResponse);
+                $("#successModal").modal("show");
+                $currentForm[0].reset();
+                $("#enquiryModal").modal("hide");
+            })
+            .fail(function (jqXHR, textStatus, errorThrown) {
+                console.error("One or both API calls failed:", textStatus, errorThrown);
                 $("#errorModal").modal("show");
                 $currentForm[0].reset();
-            },
-        });
+                $("#enquiryModal").modal("hide");
+            });
     }
 });
 
@@ -149,25 +153,6 @@ $(document).ready(function () {
         navText: ["&#10094;", "&#10095;"],
     });
 });
-
-// Handle hover or click event
-// $(document).ready(function () {
-//     $('.custom-dropdown').hover(
-//         function () {
-//             $(this).siblings('.dropdown-menu').addClass('show');
-//             $(this).find('.arrow-icon').addClass('rotate');
-//         },
-//         function () {
-//             $(this).siblings('.dropdown-menu').removeClass('show');
-//             $(this).find('.arrow-icon').removeClass('rotate');
-//         }
-//     );
-
-//     $('.custom-dropdown').click(function () {
-//         $(this).siblings('.dropdown-menu').toggleClass('show');
-//         $(this).find('.arrow-icon').toggleClass('rotate');
-//     });
-// });
 
 // Validation for Login Page
 $(document).ready(function () {
@@ -375,7 +360,7 @@ $(document).ready(function () {
                 function () {
                     const type =
                         registerConfirmPassword.getAttribute("type") ===
-                        "password"
+                            "password"
                             ? "text"
                             : "password";
                     registerConfirmPassword.setAttribute("type", type);
@@ -545,83 +530,79 @@ $(document).ready(function () {
     });
 });
 
-//Offcanvas Closing Buttons
-// document.addEventListener("DOMContentLoaded", function () {
-//     var clearButton = document.getElementById("clearButton");
-//     var applyButton = document.getElementById("applyButton");
-//     var offcanvasElement = document.getElementById("filterOffcanvas");
-
-//     if (clearButton && offcanvasElement) {
-//         clearButton.addEventListener("click", function () {
-//             var offcanvas = bootstrap.Offcanvas.getInstance(offcanvasElement);
-//             if (offcanvas) {
-//                 offcanvas.hide();
-//             }
-//         });
-//     }
-
-//     if (applyButton && offcanvasElement) {
-//         applyButton.addEventListener("click", function () {
-//             var offcanvas = bootstrap.Offcanvas.getInstance(offcanvasElement);
-//             if (offcanvas) {
-//                 offcanvas.hide();
-//             }
-//         });
-//     }
-// });
-
 function copySpanText(element, event) {
     event.preventDefault();
     event.stopPropagation();
 
-    var copyText = element.innerText.trim();
+    var couponCode = element.innerText.trim();
 
     var tempInput = document.createElement("textarea");
-    tempInput.value = copyText;
+    tempInput.value = couponCode;
     document.body.appendChild(tempInput);
 
     tempInput.select();
-    tempInput.setSelectionRange(0, 99999);
-    navigator.clipboard.writeText(tempInput.value);
-
+    document.execCommand("copy");
     document.body.removeChild(tempInput);
+
+    var dealId = element.closest('a').getAttribute('href').split('/').pop();
+
+    $.ajax({
+        url: '/deals/coupon/copied',
+        type: 'POST',
+        data: {
+            _token: $('meta[name="csrf-token"]').attr('content'),
+            coupon_code: couponCode,
+            id: dealId
+        },
+        success: function(response) {
+            console.log(response.message);
+        },
+        error: function(xhr) {
+            console.log('Error occurred: ' + xhr.statusText);
+        }
+    });
 
     showTooltip(element);
 }
 
-function copyLinkToClipboard() {
+function copyLinkToClipboard(element, event, dealId) {
+    event.preventDefault();
+    event.stopPropagation(); 
     const currentUrl = window.location.href;
-    const tempInput = document.createElement("textarea");
-    tempInput.value = currentUrl;
 
+    var tempInput = document.createElement("textarea");
+    tempInput.value = currentUrl;
     document.body.appendChild(tempInput);
 
     tempInput.select();
-    tempInput.setSelectionRange(0, 99999);
-
     document.execCommand("copy");
-
     document.body.removeChild(tempInput);
 
-    const tooltip = bootstrap.Tooltip.getInstance(
-        document.getElementById("shareButton")
-    );
-    tooltip.setContent({ ".tooltip-inner": "Link Copied" });
+    $.ajax({
+        url: '/deals/count/share',
+        type: 'POST',
+        data: {
+            _token: $('meta[name="csrf-token"]').attr('content'),
+            id: dealId
+        },
+        success: function(response) {
+            console.log(response.message);
+        },
+        error: function(xhr) {
+            console.log('Error occurred: ' + xhr.statusText);
+        }
+    });
 
-    tooltip.show();
-
-    setTimeout(() => {
-        tooltip.setContent({ ".tooltip-inner": "Share" });
-    }, 2000);
+    showTooltip(element);
 }
 
 function showTooltip(element) {
-    var tooltip = element.querySelector(".tooltip-text");
-    tooltip.style.visibility = "visible";
+    const tooltipText = element.querySelector('.tooltip-text');
+    tooltipText.style.visibility = 'visible';
 
-    setTimeout(function () {
-        tooltip.style.visibility = "hidden";
-    }, 1500);
+    setTimeout(() => {
+        tooltipText.style.visibility = 'hidden';
+    }, 2000);
 }
 
 function hideTooltip(element) {
@@ -692,7 +673,7 @@ $(document).ready(function () {
 
                         handleRemoveBookmark();
                     },
-                    error: function (xhr) {},
+                    error: function (xhr) { },
                 });
             });
     }

@@ -224,11 +224,21 @@
                                             </button>
                                         @endif
                                         &nbsp;&nbsp;&nbsp;
-                                        <p id="shareButton" style="height: fit-content; cursor:pointer" class="p-1 px-2"
-                                            onclick="copyLinkToClipboard()" data-bs-toggle="tooltip"
-                                            data-bs-placement="bottom" title="Share">
-                                            <i class="fa-solid fa-share-nodes" style="color: #ff0060;"></i>
-                                        </p>
+                                        <p id="shareButton"
+                                        style="height: fit-content; cursor: pointer; position: relative;"
+                                        class="p-1 px-2" onclick="copyLinkToClipboard(this, event, '{{ $product->id }}')"
+                                        data-bs-toggle="tooltip" data-bs-placement="bottom" title="Share">
+                                        <i class="fa-solid fa-share-nodes" style="color: #ff0060;"></i>
+
+                                        <!-- Tooltip container to show below the share icon -->
+                                        <span class="tooltip-text"
+                                            style="visibility: hidden; background-color: black; color: #fff; 
+                                                   text-align: center; border-radius: 6px; padding: 5px; 
+                                                   position: absolute; z-index: 1; top: 125%; left: 50%; 
+                                                   transform: translateX(-50%); font-size: 12px; white-space: nowrap;">
+                                            Link Copied!
+                                        </span>
+                                    </p>
 
                                     </div>
                                 </div>
@@ -616,7 +626,8 @@
                                 <div class="card p-4" style="border-color:#ff0060;">
                                     <h6 class="fw-medium mb-3">Get the list of best <span
                                             style="color:#ff0060;">”{{ $product->name }}”</span></h6>
-                                    <form id="enquiryFormMain">
+                                    <form id="enquiryFormMain" data-deal-id="{{ $product->id }}"
+                                        onsubmit="event.preventDefault(); submitEnquiryForm(this);">
                                         <div>
                                             <label class="form-label">Name*</label>
                                             <input type="text" class="form-control" name="name" id="name" />
@@ -683,7 +694,8 @@
                                 aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
-                            <form id="enquiryFormModal">
+                            <form id="enquiryFormModal" data-deal-id="{{ $product->id }}"
+                                        onsubmit="event.preventDefault(); submitEnquiryForm(this);">
                                 <div>
                                     <label class="form-label">Name*</label>
                                     <input type="text" class="form-control" name="name" id="name" />

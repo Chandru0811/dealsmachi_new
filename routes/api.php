@@ -30,6 +30,10 @@ Route::post('dealbookmark/remove/{id}', [AppController::class, 'removeBookmark']
 Route::get('dealbookmarks', [AppController::class, 'getBookmarks']);
 Route::get('bookmark/totalitems', [AppController::class, 'totalItems']);
 Route::post('deal/clicked', [AppController::class, 'clickcounts']);
+Route::post('deal/viewed', [AppController::class, 'viewcounts']);
+Route::post('coupon/copied', [AppController::class, 'couponCopied']);
+Route::post('deal/shared', [AppController::class, 'dealshare']);
+Route::post('deal/enquired', [AppController::class, 'dealenquire']);
 
 Route::middleware('auth:api')->group(function () {
     Route::get('/user', function (Request $request) {
