@@ -586,7 +586,7 @@
 
                                         <span class=" text-center w-100 my-2  py-3 ms-2"
                                             style="cursor: pointer;background-color: #FF0000;">
-                                            <a href="https://www.youtube.com/@Dealsmachi" target="_blank"
+                                            <a href="https://www.youtube.com/channel/UCAyH2wQ2srJE8WqvII8JNrQ" target="_blank"
                                                 style="text-decoration:none;"><i
                                                     class="fa-brands social-Icon fa-youtube"></i>
                                                 <p class="mb-0 count-Text">1.2k</p>

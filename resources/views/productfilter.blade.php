@@ -445,7 +445,7 @@
                         </div>
                         <div class="col-md-6 col-sm-6 col-12 p-2" style="cursor: pointer; background-color: #FF0000; border-top-right-radius: 5px;">
                             <span class="d-flex justify-content-center align-items-center">
-                                <a href="https://www.youtube.com/@Dealsmachi" target="_blank" style="text-decoration:none;"><i
+                                <a href="https://www.youtube.com/channel/UCAyH2wQ2srJE8WqvII8JNrQ" target="_blank" style="text-decoration:none;"><i
                                         class="fa-brands filter-social-Icon fa-youtube ps-2"></i>
                                     <p class="mb-0 filter-count-Text">1.2k</p>
                                     <p class="mb-0 filter-count-Text2">Subscribes</p>
