@@ -334,7 +334,7 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.0);
+    background-color: rgba(0, 0, 0, 0);
     z-index: 1;
 }
 
@@ -489,8 +489,8 @@ footer hr {
 .total-count {
     font-size: 8px;
     width: 25%;
-    border-radius:50%;
-    text-align:center;
+    border-radius: 50%;
+    text-align: center;
     background-color: #ff0060;
     color: #fff;
     margin-left: 45%;
@@ -500,8 +500,8 @@ footer hr {
     .total-count {
         font-size: 8px;
         width: 25%;
-        border-radius:50%;
-        text-align:center;
+        border-radius: 50%;
+        text-align: center;
         background-color: #ff0060;
         color: #fff;
         margin-left: 8%;
@@ -615,7 +615,6 @@ footer hr {
         margin-right: 10px;
         width: 780px;
     }
-
 }
 
 @media (min-width: 320px) {
@@ -1461,8 +1460,8 @@ footer hr {
     font-weight: 500 !important;
 }
 
-@media screen and (max-width: 2600px ) and (min-width: 992px) {
-    .filteremptytext{
+@media screen and (max-width: 2600px) and (min-width: 992px) {
+    .filteremptytext {
         display: flex;
         justify-content: end !important;
         align-items: center !important;
@@ -1544,3 +1543,129 @@ footer hr {
     }
 }
 
+#social-links ul {
+    list-style: none;
+    padding: 0;
+    display: flex;
+}
+#social-links li {
+    margin-right: 10px;
+}
+#social-links a {
+    display: inline-block;
+    text-decoration: none;
+    color: white;
+    border-radius: 5px;
+}
+/* Specific social media colors */
+#social-links .fa-facebook-square {
+    padding: 10px;
+    background-color: #3b5998;
+    border-radius: 3px;
+    font-size: 16px;
+}
+#social-links .fa-twitter {
+    padding: 10px;
+    background-color: #000;
+    border-radius: 3px;
+    font-size: 16px;
+}
+#social-links .fa-linkedin {
+    padding: 10px;
+    background-color: #0077b5;
+    border-radius: 3px;
+    font-size: 16px;
+}
+#social-links .fa-whatsapp {
+    padding: 10px;
+    background-color: #25d366;
+    border-radius: 3px;
+    font-size: 16px;
+}
+
+.social-link-container {
+    display: flex;
+}
+
+.social-link-container a {
+    display: inline-block;
+    text-decoration: none;
+    color: white;
+    border-radius: 50%;
+    font-size: 16px;
+    position: relative;
+    text-align: center;
+}
+
+.social-link-container a p {
+    position: absolute;
+    bottom: 25px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 9px;
+    font-weight: 500;
+    color: white;
+    margin: 0;
+}
+
+.fa-thumbs-up {
+    background-color: #1877f2;
+    padding-top: 8px;
+    width: 50px;
+    height: 50px;
+    border-radius: 4px;
+}
+
+.fa-instagram {
+    background: linear-gradient(
+        45deg,
+        #f09433,
+        #e6683c,
+        #dc2743,
+        #cc2366,
+        #bc1888
+    );
+    padding-top: 8px;
+    width: 50px;
+    height: 50px;
+    border-radius: 4px;
+}
+
+#social-links .fa-facebook-square::after {
+    content: "Facebook";
+    display: block;
+    font-size: 9px;
+    margin-top: 5px;
+    font-family: kanit;
+    text-align: center;
+}
+
+#social-links .fa-twitter::after {
+    content: "Twitter";
+    display: block;
+    font-size: 9px;
+    margin-top: 5px;
+    font-family: kanit;
+
+    text-align: center;
+}
+
+#social-links .fa-linkedin::after {
+    content: "Linkedin";
+    display: block;
+    font-size: 9px;
+    margin-top: 5px;
+    font-family: kanit;
+
+    text-align: center;
+}
+
+#social-links .fa-whatsapp::after {
+    content: "Whatsapp";
+    display: block;
+    font-size: 9px;
+    margin-top: 5px;
+    font-family: kanit;
+
+    text-align: center;
+}

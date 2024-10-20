@@ -225,61 +225,63 @@
                                         @endif
                                         &nbsp;&nbsp;&nbsp;
                                         <p id="shareButton"
-                                        style="height: fit-content; cursor: pointer; position: relative;"
-                                        class="p-1 px-2" onclick="copyLinkToClipboard(this, event, '{{ $product->id }}')"
-                                        data-bs-toggle="tooltip" data-bs-placement="bottom" title="Share">
-                                        <i class="fa-solid fa-share-nodes" style="color: #ff0060;"></i>
+                                            style="height: fit-content; cursor: pointer; position: relative;"
+                                            class="p-1 px-2"
+                                            onclick="copyLinkToClipboard(this, event, '{{ $product->id }}')"
+                                            data-bs-toggle="tooltip" data-bs-placement="bottom" title="Share">
+                                            <i class="fa-solid fa-share-nodes" style="color: #ff0060;"></i>
 
-                                        <!-- Tooltip container to show below the share icon -->
-                                        <span class="tooltip-text"
-                                            style="visibility: hidden; background-color: black; color: #fff; 
-                                                   text-align: center; border-radius: 6px; padding: 5px; 
-                                                   position: absolute; z-index: 1; top: 125%; left: 50%; 
+                                            <!-- Tooltip container to show below the share icon -->
+                                            <span class="tooltip-text"
+                                                style="visibility: hidden; background-color: black; color: #fff;
+                                                   text-align: center; border-radius: 6px; padding: 5px;
+                                                   position: absolute; z-index: 1; top: 125%; left: 50%;
                                                    transform: translateX(-50%); font-size: 12px; white-space: nowrap;">
-                                            Link Copied!
-                                        </span>
-                                    </p>
+                                                Link Copied!
+                                            </span>
+                                        </p>
 
                                     </div>
                                 </div>
                                 <img src="{{ asset($product->image_url1) }}" alt="Adverstiment" class="img-fluid">
                             </div>
                         </div>
-                        <div class="d-flex flex-wrap">
-                            <div class="btn-group my-2 me-2" onclick="shareOnFacebook()">
-                                <button type="button" class="btn" style="background-color: #166bd9;color: #fff">
-                                    <i class="fa-brands fa-facebook"></i>
-                                </button>
-                                <button type="button" style="background-color: #1877f2;color: #fff"
-                                    class="btn">Facebook <span class="badge text-bg-light">4</span></button>
+                        <div class="d-flex flex-wrap social-link-container">
+                            <a href="#" id="" class="me-2" title="" rel="">
+                                <i class="fa-regular fa-thumbs-up"></i>
+                                <p>Like</p>
+                            </a>
+
+                            <div id="social-links">
+                                <ul>
+                                    <li>
+                                        <a href="https://www.facebook.com/sharer/sharer.php?u=https://sgitjobs.com/dealslah/deal/46"
+                                            class="social-button" id="" title="" rel=""><span
+                                                class="fab fa-facebook-square" aria-hidden="true"></span></a>
+                                    </li>
+                                    <li>
+                                        <a href="https://twitter.com/intent/tweet?text=House+Moving&amp;url=https://sgitjobs.com/dealslah/deal/46"
+                                            class="social-button" id="" title="" rel=""><span
+                                                class="fab fa-twitter" aria-hidden="true"></span></a>
+                                    </li>
+                                    <li>
+                                        <a href="https://www.linkedin.com/sharing/share-offsite?mini=true&amp;url=https://sgitjobs.com/dealslah/deal/46&amp;title=House+Moving&amp;summary="
+                                            class="social-button" id="" title="" rel=""><span
+                                                class="fab fa-linkedin" aria-hidden="true"></span></a>
+                                    </li>
+                                    <li>
+                                        <a target="_blank"
+                                            href="https://wa.me/?text=https://sgitjobs.com/dealslah/deal/46"
+                                            class="social-button" id="" title="" rel=""><span
+                                                class="fab fa-whatsapp" aria-hidden="true"></span></a>
+                                    </li>
+                                </ul>
                             </div>
-                            <div class="btn-group my-2 me-2" onclick="shareOnTwitter()">
-                                <button type="button" class="btn" style="background-color: #000;color: #fff">
-                                    <i class="fa-brands fa-x-twitter"></i>
-                                </button>
-                                <button type="button" style="background-color: #000;color: #fff" class="btn">Twitter
-                            </div>
-                            <div class="btn-group my-2 me-2" onclick="shareOnWhatsApp()">
-                                <button type="button" class="btn" style="background-color: #21bd5c;color: #fff">
-                                    <i class="fa-brands fa-whatsapp"></i>
-                                </button>
-                                <button type="button" style="background-color: #25d366;color: #fff"
-                                    class="btn">Whatsapp
-                            </div>
-                            <div class="btn-group my-2 me-2" onclick="shareOnLinkedIn()">
-                                <button type="button" class="btn" style="background-color: #148cc8;color: #fff">
-                                    <i class="fa-brands fa-linkedin"></i>
-                                </button>
-                                <button type="button" style="background-color: #169cdf;color: #fff"
-                                    class="btn">Linkedin</button>
-                            </div>
-                            <div class="btn-group my-2 me-2" onclick="shareOnInstagram()">
-                                <button type="button" class="btn" style="background-color: #C13584;color: #fff">
-                                    <i class="fa-brands fa-instagram"></i>
-                                </button>
-                                <button type="button" style="background-color: #E1306C;color: #fff"
-                                    class="btn">Instagram </button>
-                            </div>
+
+                            <a href="#" id="" title="" rel="">
+                                <i class="fa-brands fa-instagram"></i>
+                                <p>Instagram</p>
+                            </a>
                         </div>
 
                     </div>
@@ -586,8 +588,8 @@
 
                                         <span class=" text-center w-100 my-2  py-3 ms-2"
                                             style="cursor: pointer;background-color: #FF0000;">
-                                            <a href="https://www.youtube.com/channel/UCAyH2wQ2srJE8WqvII8JNrQ" target="_blank"
-                                                style="text-decoration:none;"><i
+                                            <a href="https://www.youtube.com/channel/UCAyH2wQ2srJE8WqvII8JNrQ"
+                                                target="_blank" style="text-decoration:none;"><i
                                                     class="fa-brands social-Icon fa-youtube"></i>
                                                 <p class="mb-0 count-Text">1.2k</p>
                                                 <p class="mb-0 count-Text2">Subscribes</p>
@@ -695,7 +697,7 @@
                         </div>
                         <div class="modal-body">
                             <form id="enquiryFormModal" data-deal-id="{{ $product->id }}"
-                                        onsubmit="event.preventDefault(); submitEnquiryForm(this);">
+                                onsubmit="event.preventDefault(); submitEnquiryForm(this);">
                                 <div>
                                     <label class="form-label">Name*</label>
                                     <input type="text" class="form-control" name="name" id="name" />
