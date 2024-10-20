@@ -12,6 +12,7 @@ use App\Http\Controllers\Api\Admin\SliderController;
 use App\Http\Controllers\Api\vendor\ProductController;
 use App\Http\Controllers\Api\Admin\ApprovalController;
 use App\Http\Controllers\Api\AppController;
+use App\Http\Controllers\Api\Vendor\DashboardController;
 
 Route::post('login', [AuthController::class, 'login']);
 Route::post('register', [AuthController::class, 'register']);
@@ -97,6 +98,9 @@ Route::middleware('auth:api')->group(function () {
 
     //Vendor
     Route::middleware('role:2')->prefix('vendor')->group(function () {
+        Route::get('dashboard', [DashboardController::class, 'index']);
+        Route::post('dashboard', [DashboardController::class, 'graphdata']);
+
         // Shops
         Route::post('shopregistration', [AuthController::class, 'shopregistration']);
         Route::get('shop/details/{id}', [ShopController::class, 'showshopdetails']);
