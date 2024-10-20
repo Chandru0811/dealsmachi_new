@@ -12,7 +12,7 @@ use App\Http\Controllers\Api\Admin\SliderController;
 use App\Http\Controllers\Api\vendor\ProductController;
 use App\Http\Controllers\Api\Admin\ApprovalController;
 use App\Http\Controllers\Api\AppController;
-use App\Http\Controllers\Api\Vendor\DashboardController;
+use App\Http\Controllers\Api\vendor\DashboardController;
 
 Route::post('login', [AuthController::class, 'login']);
 Route::post('register', [AuthController::class, 'register']);

@@ -8,12 +8,12 @@ use App\Models\Product;
 use App\Models\DealClick;
 use App\Models\DealViews;
 use App\Models\Shop;
-use Auth;
 use App\Models\Dealenquire;
 use App\Models\DealShare;
 use App\Models\CouponCodeUsed;
 use Carbon\Carbon;
 use App\Traits\ApiResponses;
+use Illuminate\Support\Facades\Auth;
 
 class DashboardController extends Controller
 {
@@ -132,7 +132,7 @@ class DashboardController extends Controller
         foreach (range(0, 6) as $day) {
             $currentDay = $startOfWeek->copy()->addDays($day);
 
-            
+
             $dealClicksData[] = DealClick::whereIn('deal_id', $productIds)
                 ->whereDate('clicked_at', $currentDay)
                 ->count();
@@ -179,5 +179,5 @@ class DashboardController extends Controller
             ]
         ]);
     }
-    
+
 }
