@@ -1564,7 +1564,7 @@ footer hr {
     border-radius: 3px;
     font-size: 16px;
 }
-#social-links .fa-twitter {
+#social-links .fa-x-twitter {
     padding: 10px;
     background-color: #000;
     border-radius: 3px;
@@ -1608,7 +1608,7 @@ footer hr {
     margin: 0;
 }
 
-.fa-thumbs-up {
+.social-link-container .fa-thumbs-up {
     background-color: #1877f2;
     padding-top: 8px;
     width: 50px;
@@ -1616,7 +1616,7 @@ footer hr {
     border-radius: 4px;
 }
 
-.fa-instagram {
+.social-link-container .fa-instagram {
     background: linear-gradient(
         45deg,
         #f09433,
@@ -1640,7 +1640,7 @@ footer hr {
     text-align: center;
 }
 
-#social-links .fa-twitter::after {
+#social-links .fa-x-twitter::after {
     content: "Twitter";
     display: block;
     font-size: 9px;

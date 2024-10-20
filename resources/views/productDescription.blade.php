@@ -782,3 +782,23 @@
             </div>
     </section>
 @endsection
+
+@push('script')
+    <script>
+        // Function to change the icon class
+        function changeTwitterIcon() {
+            // Select the anchor tag with the fa-twitter class
+            const twitterIcon = document.querySelector('.social-button .fab.fa-twitter');
+
+            // Check if the element exists
+            if (twitterIcon) {
+                // Replace the class fa-twitter with fa-x-twitter
+                twitterIcon.classList.remove('fa-twitter');
+                twitterIcon.classList.add('fa-x-twitter');
+            }
+        }
+
+        // Call the function to change the icon
+        changeTwitterIcon();
+    </script>
+@endpush
