@@ -3,16 +3,16 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthController;
-use App\Http\Controllers\Api\vendor\ShopController;
+use App\Http\Controllers\Api\Vendor\ShopController;
 use App\Http\Controllers\Api\Admin\CategoryGroupsController;
 use App\Http\Controllers\Api\Admin\DealCategoryController;
 use App\Http\Controllers\Api\Admin\CategoriesController;
 use App\Http\Controllers\Api\Admin\ShopController as AdminShopController;
 use App\Http\Controllers\Api\Admin\SliderController;
-use App\Http\Controllers\Api\vendor\ProductController;
+use App\Http\Controllers\Api\Vendor\ProductController;
 use App\Http\Controllers\Api\Admin\ApprovalController;
 use App\Http\Controllers\Api\AppController;
-use App\Http\Controllers\Api\vendor\DashboardController;
+use App\Http\Controllers\Api\Vendor\DashboardController;
 
 Route::post('login', [AuthController::class, 'login']);
 Route::post('register', [AuthController::class, 'register']);

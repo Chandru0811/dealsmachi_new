@@ -246,7 +246,7 @@
                             </div>
                         </div>
                         <div class="d-flex flex-wrap">
-                            <div class="btn-group my-2 me-2" onclick="shareOnFacebook()">
+                            <!-- <div class="btn-group my-2 me-2" onclick="shareOnFacebook()">
                                 <button type="button" class="btn" style="background-color: #166bd9;color: #fff">
                                     <i class="fa-brands fa-facebook"></i>
                                 </button>
@@ -279,7 +279,9 @@
                                 </button>
                                 <button type="button" style="background-color: #E1306C;color: #fff"
                                     class="btn">Instagram </button>
-                            </div>
+                            </div> -->
+
+                            {!! $shareButtons !!}
                         </div>
 
                     </div>

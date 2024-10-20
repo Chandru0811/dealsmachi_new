@@ -29,22 +29,25 @@ class HomeController extends Controller
         $categoryGroups = CategoryGroup::where('active', 1)->with('categories')->get();
         $hotpicks = DealCategory::where('active', 1)->get();
 
-        $products = Product::select(
-            'products.*',
-            'shops.city',
-            'shops.shop_ratings',
-            DB::raw('CASE
-                WHEN deal_views.viewed_at = CURDATE() THEN "TRENDING"
-                WHEN products.start_date = CURDATE() THEN "EARLY BIRD"
-                WHEN DATEDIFF(products.end_date, products.start_date) <= 2 THEN "LIMITED TIME"
-                WHEN products.end_date = CURDATE() THEN "LAST CHANCE"
-                ELSE ""
-            END AS label')
-        )
-            ->leftJoin('deal_views', 'deal_views.deal_id', '=', 'products.id')
-            ->leftJoin('shops', 'shops.id', '=', 'products.shop_id')
-            ->where('products.active', 1)
-            ->get();
+        // $products = Product::select(
+        //     'products.*',
+        //     'shops.city',
+        //     'shops.shop_ratings',
+        //     DB::raw('CASE
+        //         WHEN deal_views.viewed_at = CURDATE() THEN "TRENDING"
+        //         WHEN products.start_date = CURDATE() THEN "EARLY BIRD"
+        //         WHEN DATEDIFF(products.end_date, products.start_date) <= 2 THEN "LIMITED TIME"
+        //         WHEN products.end_date = CURDATE() THEN "LAST CHANCE"
+        //         ELSE ""
+        //     END AS label')
+        // )
+        //     ->leftJoin('deal_views', 'deal_views.deal_id', '=', 'products.id')
+        //     ->leftJoin('shops', 'shops.id', '=', 'products.shop_id')
+        //     ->where('products.active', 1)
+        //     ->get();
+
+
+        $products = Product::where('active',1)->get();
 
         $bookmarkedProducts = collect();
 
@@ -111,7 +114,18 @@ class HomeController extends Controller
             $bookmarkedProducts = Bookmark::where('ip_address', $ipAddress)->pluck('deal_id');
         }
 
-        return view('productDescription', compact('product', 'bookmarkedProducts'));
+
+        $pageurl = url()->current(); 
+        $pagetitle = $product->name; 
+        $pagedescription = $product->description; 
+        $pageimage = $product->image_url1;
+
+        $shareButtons = \Share::page(
+            $pageurl,
+            $pagetitle
+        )->facebook()->twitter()->linkedin()->whatsapp();
+
+        return view('productDescription', compact('product', 'bookmarkedProducts','shareButtons','pageurl','pagetitle','pagedescription','pageimage'));
     }
 
     public function dealcategorybasedproducts($slug, Request $request)
