@@ -1,6 +1,11 @@
+
 $(document).ready(function () {
-    // Validation for Main Form
-    $("#enquiryFormMain").validate({
+    $(".social-button .fab.fa-twitter")
+        .removeClass("fa-twitter")
+        .addClass("fa-x-twitter");
+
+
+        $("#enquiryFormMain").validate({
         rules: {
             name: {
                 required: true,
@@ -567,7 +572,7 @@ function copySpanText(element, event) {
 
 function copyLinkToClipboard(element, event, dealId) {
     event.preventDefault();
-    event.stopPropagation(); 
+    event.stopPropagation();
     const currentUrl = window.location.href;
 
     var tempInput = document.createElement("textarea");

@@ -225,20 +225,21 @@
                                         @endif
                                         &nbsp;&nbsp;&nbsp;
                                         <p id="shareButton"
-                                        style="height: fit-content; cursor: pointer; position: relative;"
-                                        class="p-1 px-2" onclick="copyLinkToClipboard(this, event, '{{ $product->id }}')"
-                                        data-bs-toggle="tooltip" data-bs-placement="bottom" title="Share">
-                                        <i class="fa-solid fa-share-nodes" style="color: #ff0060;"></i>
+                                            style="height: fit-content; cursor: pointer; position: relative;"
+                                            class="p-1 px-2"
+                                            onclick="copyLinkToClipboard(this, event, '{{ $product->id }}')"
+                                            data-bs-toggle="tooltip" data-bs-placement="bottom" title="Share">
+                                            <i class="fa-solid fa-share-nodes" style="color: #ff0060;"></i>
 
-                                        <!-- Tooltip container to show below the share icon -->
-                                        <span class="tooltip-text"
-                                            style="visibility: hidden; background-color: black; color: #fff; 
-                                                   text-align: center; border-radius: 6px; padding: 5px; 
-                                                   position: absolute; z-index: 1; top: 125%; left: 50%; 
+                                            <!-- Tooltip container to show below the share icon -->
+                                            <span class="tooltip-text"
+                                                style="visibility: hidden; background-color: black; color: #fff;
+                                                   text-align: center; border-radius: 6px; padding: 5px;
+                                                   position: absolute; z-index: 1; top: 125%; left: 50%;
                                                    transform: translateX(-50%); font-size: 12px; white-space: nowrap;">
-                                            Link Copied!
-                                        </span>
-                                    </p>
+                                                Link Copied!
+                                            </span>
+                                        </p>
 
                                     </div>
                                 </div>
@@ -282,6 +283,42 @@
                             </div> -->
 
                             {!! $shareButtons !!}
+                        <div class="d-flex flex-wrap social-link-container">
+                            <a href="#" id="" class="me-2" title="" rel="">
+                                <i class="fa-regular fa-thumbs-up"></i>
+                                <p>Like</p>
+                            </a>
+
+                            <!-- <div id="social-links">
+                                <ul>
+                                    <li>
+                                        <a href="https://www.facebook.com/sharer/sharer.php?u=https://sgitjobs.com/dealslah/deal/46"
+                                            class="social-button" id="" title="" rel=""><span
+                                                class="fab fa-facebook-square" aria-hidden="true"></span></a>
+                                    </li>
+                                    <li>
+                                        <a href="https://twitter.com/intent/tweet?text=House+Moving&amp;url=https://sgitjobs.com/dealslah/deal/46"
+                                            class="social-button" id="" title="" rel=""><span
+                                                class="fab fa-twitter" aria-hidden="true"></span></a>
+                                    </li>
+                                    <li>
+                                        <a href="https://www.linkedin.com/sharing/share-offsite?mini=true&amp;url=https://sgitjobs.com/dealslah/deal/46&amp;title=House+Moving&amp;summary="
+                                            class="social-button" id="" title="" rel=""><span
+                                                class="fab fa-linkedin" aria-hidden="true"></span></a>
+                                    </li>
+                                    <li>
+                                        <a target="_blank"
+                                            href="https://wa.me/?text=https://sgitjobs.com/dealslah/deal/46"
+                                            class="social-button" id="" title="" rel=""><span
+                                                class="fab fa-whatsapp" aria-hidden="true"></span></a>
+                                    </li>
+                                </ul>
+                            </div> -->
+
+                            <a href="#" id="" title="" rel="">
+                                <i class="fa-brands fa-instagram"></i>
+                                <p>Instagram</p>
+                            </a>
                         </div>
 
                     </div>
@@ -588,8 +625,8 @@
 
                                         <span class=" text-center w-100 my-2  py-3 ms-2"
                                             style="cursor: pointer;background-color: #FF0000;">
-                                            <a href="https://www.youtube.com/channel/UCAyH2wQ2srJE8WqvII8JNrQ" target="_blank"
-                                                style="text-decoration:none;"><i
+                                            <a href="https://www.youtube.com/channel/UCAyH2wQ2srJE8WqvII8JNrQ"
+                                                target="_blank" style="text-decoration:none;"><i
                                                     class="fa-brands social-Icon fa-youtube"></i>
                                                 <p class="mb-0 count-Text">1.2k</p>
                                                 <p class="mb-0 count-Text2">Subscribes</p>
@@ -697,7 +734,7 @@
                         </div>
                         <div class="modal-body">
                             <form id="enquiryFormModal" data-deal-id="{{ $product->id }}"
-                                        onsubmit="event.preventDefault(); submitEnquiryForm(this);">
+                                onsubmit="event.preventDefault(); submitEnquiryForm(this);">
                                 <div>
                                     <label class="form-label">Name*</label>
                                     <input type="text" class="form-control" name="name" id="name" />
@@ -782,3 +819,23 @@
             </div>
     </section>
 @endsection
+
+@push('script')
+    <script>
+        // Function to change the icon class
+        function changeTwitterIcon() {
+            // Select the anchor tag with the fa-twitter class
+            const twitterIcon = document.querySelector('.social-button .fab.fa-twitter');
+
+            // Check if the element exists
+            if (twitterIcon) {
+                // Replace the class fa-twitter with fa-x-twitter
+                twitterIcon.classList.remove('fa-twitter');
+                twitterIcon.classList.add('fa-x-twitter');
+            }
+        }
+
+        // Call the function to change the icon
+        changeTwitterIcon();
+    </script>
+@endpush
