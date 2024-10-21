@@ -47,14 +47,14 @@ class HomeController extends Controller
         //     ->get();
 
 
-        $products = Product::where('active',1)->with(['shop:id,city,shop_ratings'])->get();
+        $products = Product::where('active',1)->with(['shop:id,state,shop_ratings'])->get();
 
         $treandingdeals = DealViews::whereDate('viewed_at',Carbon::today())->get();
-        $populardeals = DealViews::select('deal_id', DB::raw('count(*) as total_views'))->groupBy('deal_id')->limit(5)->orderBy('total_views', 'desc')->having('total_views', '>', 10)->get(); 
+        $populardeals = DealViews::select('deal_id', DB::raw('count(*) as total_views'))->groupBy('deal_id')->limit(5)->orderBy('total_views', 'desc')->having('total_views', '>', 10)->get();
         $earlybirddeals = Product::where('active', 1)->whereDate('start_date', now())->get();
         $lastchancedeals = Product::where('active', 1)->whereDate('end_date', now())->get();
         $limitedtimedeals = Product::where('active', 1)->whereRaw('DATEDIFF(end_date, start_date) <= ?', [2])->get();
-        
+
 
         $bookmarkedProducts = collect();
 
@@ -122,9 +122,9 @@ class HomeController extends Controller
         }
 
 
-        $pageurl = url()->current(); 
-        $pagetitle = $product->name; 
-        $pagedescription = $product->description; 
+        $pageurl = url()->current();
+        $pagetitle = $product->name;
+        $pagedescription = $product->description;
         $pageimage = $product->image_url1;
 
         $shareButtons = \Share::page(
@@ -409,7 +409,7 @@ class HomeController extends Controller
 
         if ($request->has('short_by')) {
             $shortby = $request->input('short_by');
-        
+
             if ($shortby == 'trending') {
                 $query->withCount(['views' => function ($viewQuery) {
                         $viewQuery->whereDate('viewed_at', now()->toDateString());
@@ -436,10 +436,10 @@ class HomeController extends Controller
                     ->addSelect(DB::raw("'LIMITED TIME' as label"));
             }
         }
-        
+
 
         $deals = $query->paginate($perPage);
-        
+
         $brands = Product::where('active', 1)->whereNotNull('brand')->where('brand', '!=', '')->distinct()->pluck('brand');
         $discounts = Product::where('active', 1)->distinct()->pluck('discount_percentage');
         $rating_items = Shop::where('active', 1)
@@ -481,7 +481,7 @@ class HomeController extends Controller
 
         return view('productfilter', compact('deals', 'brands', 'discounts', 'rating_items', 'priceRanges', 'shortby', 'totaldeals', 'category', 'categorygroup', 'bookmarkedProducts'));
     }
-    
+
     public function couponCodeCopied(Request $request)
     {
         $dealId = $request->id;
@@ -496,7 +496,7 @@ class HomeController extends Controller
             'copied_at' => Carbon::now(),
         ]);
 
-        return $this->ok('Coupon Code Copied Successfully!');        
+        return $this->ok('Coupon Code Copied Successfully!');
     }
 
     public function dealshare(Request $request)
@@ -512,7 +512,7 @@ class HomeController extends Controller
             'share_at' => Carbon::now(),
         ]);
 
-        return $this->ok('DealShare Added Successfully!');      
+        return $this->ok('DealShare Added Successfully!');
     }
 
     public function dealenquire(Request $request)
@@ -528,7 +528,7 @@ class HomeController extends Controller
             'enquire_at' => Carbon::now(),
         ]);
 
-        return $this->ok('Dealenquire Added Successfully!');       
+        return $this->ok('Dealenquire Added Successfully!');
     }
 
 }

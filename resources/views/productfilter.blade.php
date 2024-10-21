@@ -428,7 +428,7 @@
                                                     <p class="ps-3 fw-medium"
                                                         style="color: #ff0060; font-weight: 400 !important;">
                                                         <i
-                                                            class="fa-solid fa-location-dot"></i>&nbsp;{{ $product->shop->city }}
+                                                            class="fa-solid fa-location-dot"></i>&nbsp;{{ $product->shop->state }}
                                                     </p>
                                                 </div>
                                             </div>
@@ -486,7 +486,7 @@
                                     <a href="https://www.youtube.com/channel/UCAyH2wQ2srJE8WqvII8JNrQ" target="_blank"
                                         style="text-decoration:none;">
                                         <div class="d-flex justify-content-center align-items-center  p-1">
-                                            <img src="{{ asset('assets/images/home/QR_Code.png') }}" alt="QR Code"
+                                            <img src="{{ asset('assets/images/home/youtube_qr_code.png') }}" alt="QR Code"
                                                 class="card-img-top img-fluid">
                                         </div>
                                         <div

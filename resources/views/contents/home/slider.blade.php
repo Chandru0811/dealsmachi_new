@@ -70,7 +70,7 @@
                             <a href="https://www.youtube.com/channel/UCAyH2wQ2srJE8WqvII8JNrQ" target="_blank"
                                 style="text-decoration:none;">
                                 <div class="d-flex justify-content-center align-items-center  p-1">
-                                    <img src="{{ asset('assets/images/home/QR_Code.png') }}" alt="QR Code"
+                                    <img src="{{ asset('assets/images/home/youtube_qr_code.png') }}" alt="QR Code"
                                         class="card-img-top" style="width: 100px; height: 100px;">
                                 </div>
                                 <div class="card-body youtube-body d-flex align-items-center  justify-content-center">

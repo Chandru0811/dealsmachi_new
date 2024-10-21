@@ -73,8 +73,8 @@
 
                                     <!-- Tooltip container -->
                                     <span class="tooltip-text"
-                                        style="visibility: hidden; background-color: black; color: #fff; text-align: center; 
-                                                    border-radius: 6px; padding: 5px; position: absolute; z-index: 1; 
+                                        style="visibility: hidden; background-color: black; color: #fff; text-align: center;
+                                                    border-radius: 6px; padding: 5px; position: absolute; z-index: 1;
                                                     bottom: 125%; left: 50%; margin-left: -60px;">
                                         Copied!
                                     </span>
@@ -88,7 +88,7 @@
                             </div>
                             <div class="card-divider"></div>
                             <p class="ps-3 fw-medium" style="color: #ff0060; font-weight: 400 !important;">
-                                <i class="fa-solid fa-location-dot"></i>&nbsp;{{ $product->city }}
+                                <i class="fa-solid fa-location-dot"></i>&nbsp;{{  $product->shop->state }}
                             </p>
                         </div>
                     </div>

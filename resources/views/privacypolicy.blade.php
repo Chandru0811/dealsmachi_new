@@ -30,17 +30,15 @@
         <div class="home-content container" style="margin-top: 100px">
             <div class="mt-5 mb-5">
                 <h1>DealsMachi Privacy Policy</h1>
-                <h3>Effective Date: 24/09/2024</h3>
+                <h3>Effective Date: October 21, 2024</h3>
             </div>
             <div>
                 <h2>1. Introduction</h2>
-                <p>DealsMachi is committed to protecting your privacy. This Privacy Policy outlines
-                    how we collect, use, disclose, and protect your personal information when you
-                    visit our website, dealsmachi.com.</p>
+                <p>This Privacy Policy describes how dealsmachi.com ("DealsMachi", "we", "us", or "our") collects, uses, and discloses your personal information when you use our website (dealsmachi.com).</p>
             </div>
             <div>
                 <h2>2. Information We Collect</h2>
-                <p>We may collect the following types of information: </p>
+                <p>We collect several types of information when you use the Website: </p>
                 <ul>
                     <li>
                         <span class="fw-normal">Personal Information: </span> Name, email address, phone number, and
