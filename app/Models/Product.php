@@ -34,7 +34,8 @@ class Product extends Model
         'image_url2',
         'image_url3',
         'image_url4',
-        'active'
+        'active',
+        'coupon_code'
     ];
 
     protected $dates = ['deleted_at', 'start_date', 'end_date'];
@@ -46,7 +47,7 @@ class Product extends Model
 
     public function shop()
     {
-        return $this->belongsTo(Shop::class, 'shop_id'); 
+        return $this->belongsTo(Shop::class, 'shop_id');
     }
 
     public function views()
