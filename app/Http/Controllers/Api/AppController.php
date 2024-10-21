@@ -33,22 +33,13 @@ class AppController extends Controller
         $sliders = Slider::get();
         $cashBackDeals = DealCategory::where('active', 1)->get();
 
-        $products = Product::select(
-            'products.*',
-            'shops.city',
-            'shops.shop_ratings',
-            DB::raw('CASE
-                WHEN deal_views.viewed_at = CURDATE() THEN "TRENDING"
-                WHEN products.start_date = CURDATE() THEN "EARLY BIRD"
-                WHEN DATEDIFF(products.end_date, products.start_date) <= 2 THEN "LIMITED TIME"
-                WHEN products.end_date = CURDATE() THEN "LAST CHANCE"
-                ELSE ""
-            END AS label')
-        )
-            ->leftJoin('deal_views', 'deal_views.deal_id', '=', 'products.id')
-            ->leftJoin('shops', 'shops.id', '=', 'products.shop_id')
-            ->where('products.active', 1)
-            ->get();
+        $products = Product::where('active',1)->with(['shop:id,city,shop_ratings'])->get();
+
+        $treandingdeals = DealViews::whereDate('viewed_at',Carbon::today())->get();
+        $populardeals = DealViews::select('deal_id', DB::raw('count(*) as total_views'))->groupBy('deal_id')->limit(5)->orderBy('total_views', 'desc')->having('total_views', '>', 10)->get(); 
+        $earlybirddeals = Product::where('active', 1)->whereDate('start_date', now())->get();
+        $lastchancedeals = Product::where('active', 1)->whereDate('end_date', now())->get();
+        $limitedtimedeals = Product::where('active', 1)->whereRaw('DATEDIFF(end_date, start_date) <= ?', [2])->get();
 
         $bookmarkedProducts = collect();
 
@@ -65,7 +56,12 @@ class AppController extends Controller
             'sliders' => $sliders,
             'cashBackDeals' => $cashBackDeals,
             'products' => $products,
-            'bookmarkedProducts' => $bookmarkedProducts
+            'bookmarkedProducts' => $bookmarkedProducts,
+            'treandingdeals' => $treandingdeals,
+            'populardeals' => $populardeals,
+            'earlybirddeals' => $earlybirddeals,
+            'lastchancedeals' => $lastchancedeals,
+            'limitedtimedeals' => $limitedtimedeals
         ];
 
         return $this->success('HomePage Retrieved Successfully!', $homePageData);
