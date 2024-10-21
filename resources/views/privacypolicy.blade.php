@@ -10,10 +10,10 @@
         <link rel="canonical" href="https://dealsmachi.com/privacyPolicy" />
         <link rel="icon" href="{{ asset('assets/images/home/favicon.ico') }}" />
 
-           <!-- Google Fonts -->
-           <link rel="preconnect" href="https://fonts.googleapis.com">
-           <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-           <link href="https://fonts.googleapis.com/css2?family=Kanit&display=swap" rel="stylesheet">
+        <!-- Google Fonts -->
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Kanit&display=swap" rel="stylesheet">
 
         <!-- Vendor CSS Files -->
         {{-- Boostrap css  --}}
@@ -34,117 +34,122 @@
             </div>
             <div>
                 <h2>1. Introduction</h2>
-                <p>This Privacy Policy describes how dealsmachi.com ("DealsMachi", "we", "us", or "our") collects, uses, and discloses your personal information when you use our website (dealsmachi.com).</p>
+                <p>This Privacy Policy describes how dealsmachi.com ("DealsMachi", "we", "us", or "our") collects, uses,
+                    and discloses your personal information when you use our website (dealsmachi.com).</p>
             </div>
             <div>
                 <h2>2. Information We Collect</h2>
                 <p>We collect several types of information when you use the Website: </p>
                 <ul>
                     <li>
-                        <span class="fw-normal">Personal Information: </span> Name, email address, phone number, and
-                        other
-                        information you voluntarily provide.
+                        <span class="fw-normal">Personal Information: </span>This includes information that can be used
+                        to identify you directly, such as your name, email address, phone number (optional), and any
+                        other information you voluntarily provide to us when you create an account or contact us.
                     </li>
                     <li>
-                        <span class="fw-normal">Usage Data: </span> Information about how you interact with our
-                        website,
-                        including your IP address, browser type, and pages visited.
-                    </li>
-                    <li>
-                        <span class="fw-normal">Cookies and Similar Technologies: </span> We may use cookies and
-                        similar
-                        technologies to collect information about your browsing activities.
+                        <span class="fw-normal">Non-Personal Information: </span>This includes information that cannot
+                        be used to identify you directly, such as your browsing history on the Website, IP address,
+                        device type, operating system, and geographic location. We may also collect information about
+                        your interactions with the Website, such as the pages you visit and the links you click.
                     </li>
                 </ul>
             </div>
             <div>
-                <h2>3. How We Use Your Information</h2>
-                <p>We may use your information for the following purposes: </p>
+                <h2>3. How We Collect Information</h2>
+                <p>We collect information in the following ways: </p>
                 <ul>
                     <li>
-                        To provide and improve our services.
+                        <span class="fw-normal">When you create an account: </span>We collect your name and email
+                        address when you create an account on the Website.
                     </li>
                     <li>
-                        To communicate with you about our services and offers.
+                        <span class="fw-normal">When you contact us: </span>We collect your name, email address, and any
+                        other information you provide when you contact us through a form or email.
                     </li>
                     <li>
-                        To analyze website usage and trends.
+                        <span class="fw-normal">When you use the Website: </span>We collect non-personal information
+                        through cookies and other tracking technologies.
                     </li>
-                    <li>
-                        To comply with legal requirements.
-                    </li>
+
                 </ul>
             </div>
             <div>
-                <h2>4. Disclosure of Your Information</h2>
-                <p>We may disclose your information to: </p>
+                <h2>4. Cookies and Other Tracking Technologies</h2>
+                <p>We use cookies and other tracking technologies to collect non-personal information about your use of
+                    the Website. These technologies help us remember your preferences, understand how you use the
+                    Website, and improve your overall experience.</p>
+                <p>You can control the use of cookies by adjusting the settings on your web browser. However, if you
+                    disable cookies, you may not be able to use all of the features of the Website.</p>
+            </div>
+            <div>
+                <h2>5. How We Use Your Information</h2>
+                <p>We use your information for the following purposes:</p>
                 <ul>
                     <li>
-                        Service providers who assist us in operating our website and services.
+                        To provide and operate the Website.
                     </li>
                     <li>
-                        Law enforcement authorities or other government agencies as required
-                        by law.
+                        To create and manage your account.
                     </li>
                     <li>
-                        Third parties with your consent.
+                        To personalize your experience on the Website.
+                    </li>
+                    <li>
+                        To communicate with you about deals, promotions, and other news. </li>
+                    <li>
+                        To improve the Website. </li>
+                    <li>
+                        To comply with the law.
                     </li>
                 </ul>
             </div>
             <div>
-                <h2>5. Your Rights</h2>
-                <p>You may have the right to:</p>
+                <h2>6. Sharing Your Information</h2>
+                <p>We may share your information with third-party service providers who help us operate the Website.
+                    These service providers are contractually obligated to keep your information confidential and to use
+                    it only for the purposes we have specified.</p>
+                <P>We will not share your personal information with any third party for marketing purposes without your
+                    consent.</P>
+            </div>
+            <div>
+                <h2>7. Data Security</h2>
+                <p>We take reasonable steps to protect your information from unauthorized access, disclosure,
+                    alteration, or destruction. However, no website or internet transmission is completely secure. We
+                    cannot guarantee the security of your information.</p>
+            </div>
+            <div>
+                <h2>8. Your Rights</h2>
+                <p>You have the following rights regarding your information:</p>
                 <ul>
                     <li>
-                        Access your personal information.
-                    </li>
+                        The right to access and update your personal information.</li>
                     <li>
-                        Rectify inaccurate information.
-                    </li>
+                        The right to request that we delete your personal information.</li>
                     <li>
-                        Request the deletion of your personal information.
-                    </li>
-                    <li>
-                        Object to the processing of your personal information.
-                    </li>
-                    <li>
-                        Restrict the processing of your personal information.
-                    </li>
-                    <li>
-                        Data portability.
-                    </li>
+                        The right to object to the processing of your personal information.</li>
+
+
                 </ul>
             </div>
             <div>
-                <h2>6. Security</h2>
-                <p>We implement reasonable security measures to protect your personal
-                    information from unauthorized access, disclosure, alteration, or destruction.</p>
+                <h2>9. Children's Privacy</h2>
+                <p>Our Website is not intended for children under the age of 18. We do not knowingly collect personal
+                    information from children under 18. If you are a parent or guardian and you believe that your child
+                    has provided us with personal information, please contact us. We will delete such information from
+                    our records.</p>
             </div>
             <div>
-                <h2>7. Children's Privacy</h2>
-                <p>Our website is not intended for children under the age of 18. We do not
-                    knowingly collect personal information from children.</p>
+                <h2>10. Changes to this Privacy Policy</h2>
+                <p>We may update this Privacy Policy from time to time. We will notify you of any changes by posting the
+                    new Privacy Policy on the Website. You are advised to review this Privacy Policy periodically for
+                    any changes.</p>
             </div>
             <div>
-                <h2>8. Changes to This Privacy Policy</h2>
-                <p>We may update this Privacy Policy from time to time. We will notify you of any
-                    significant changes by posting the revised policy on our website.</p>
+                <h2>11. Contact Us</h2>
+                <p>If you have any questions about this Privacy Policy, please contact us by email at
+                    <a href="mailto:info.dealsmachi@gmail.com">info.dealsmachi@gmail.com</a>
+                 </p>
             </div>
-            <div>
-                <h2>9. Contact Us</h2>
-                <p>If you have any questions about this Privacy Policy or our practices, please
-                    contact us at:</p>
-                <br /><div>
-                <p class="fw-medium">Cloud ECS Infotech Pvt Ltd</p>
-                <p class="fw-medium">766, Sakthi Tower Ln,</p>
-                <p class="fw-medium">Anna Salai,</p>
-                <p class="fw-medium">Thousand Lights,</p>
-                <p class="fw-medium">Chennai,</p>
-                <p class="fw-medium">Tamil Nadu - 600002.</p>
-                <p class="fw-medium">info@dealsmachi.com</p>
-                <p class="fw-medium">+65 8894 1306</p>
-            </div>
-        </div>
         </div>
         @include('nav.footer')
     </section>

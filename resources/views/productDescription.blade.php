@@ -564,7 +564,7 @@
                                         <a href="https://www.facebook.com/profile.php?id=61566743978973" target="_blank"
                                             style="text-decoration:none;">
                                             <div class="d-flex justify-content-center align-items-center  p-1">
-                                                <img src="{{ asset('assets/images/home/facebook_qr_code.png') }}"
+                                                <img src="{{ asset('assets/images/home/facebook_qr_code.webp') }}"
                                                     alt="QR Code" class="card-img-top"
                                                     style="width: 100px; height: 100px;">
                                             </div>
@@ -584,7 +584,7 @@
                                         <a href="https://www.instagram.com/dealsmachi/" target="_blank"
                                             style="text-decoration:none;">
                                             <div class="d-flex justify-content-center align-items-center  p-1">
-                                                <img src="{{ asset('assets/images/home/instagram_qr_code.png') }}"
+                                                <img src="{{ asset('assets/images/home/instagram_qr_code.webp') }}"
                                                     alt="QR Code" class="card-img-top"
                                                     style="width: 100px; height: 100px;">
                                             </div>
@@ -606,7 +606,7 @@
                                         <a href="https://www.youtube.com/channel/UCAyH2wQ2srJE8WqvII8JNrQ" target="_blank"
                                             style="text-decoration:none;">
                                             <div class="d-flex justify-content-center align-items-center  p-1">
-                                                <img src="{{ asset('assets/images/home/youtube_qr_code.png') }}" alt="QR Code"
+                                                <img src="{{ asset('assets/images/home/youtube_qr_code.webp') }}" alt="QR Code"
                                                     class="card-img-top" style="width: 100px; height: 100px;">
                                             </div>
                                             <div
@@ -625,7 +625,7 @@
                                         style="width: 49%; border-color: #25d366; overflow: hidden;">
                                         <a href="#" target="_blank" style="text-decoration:none;">
                                             <div class="d-flex justify-content-center align-items-center  p-1">
-                                                <img src="{{ asset('assets/images/home/QR_Code.png') }}" alt="QR Code"
+                                                <img src="{{ asset('assets/images/home/facebook_qr_code.webp') }}" alt="QR Code"
                                                     class="card-img-top" style="width: 100px; height: 100px;">
                                             </div>
                                             <div
