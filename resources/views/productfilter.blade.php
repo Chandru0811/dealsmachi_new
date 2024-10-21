@@ -428,7 +428,7 @@
                                                     <p class="ps-3 fw-medium"
                                                         style="color: #ff0060; font-weight: 400 !important;">
                                                         <i
-                                                            class="fa-solid fa-location-dot"></i>&nbsp;{{ $product->shop->state }}
+                                                            class="fa-solid fa-location-dot"></i>&nbsp;{{ $product->shop->city }}
                                                     </p>
                                                 </div>
                                             </div>
