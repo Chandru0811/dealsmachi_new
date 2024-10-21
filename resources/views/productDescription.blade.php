@@ -289,7 +289,7 @@
                                 <p>Like</p>
                             </a>
 
-                            <!-- <div id="social-links">
+                            <div id="social-links">
                                 <ul>
                                     <li>
                                         <a href="https://www.facebook.com/sharer/sharer.php?u=https://sgitjobs.com/dealslah/deal/46"
@@ -313,7 +313,7 @@
                                                 class="fab fa-whatsapp" aria-hidden="true"></span></a>
                                     </li>
                                 </ul>
-                            </div> -->
+                            </div>
 
                             <a href="#" id="" title="" rel="">
                                 <i class="fa-brands fa-instagram"></i>

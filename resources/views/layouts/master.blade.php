@@ -11,8 +11,8 @@
         <link rel="canonical" href="https://dealsmachi.com/" />
         <link rel="icon" href="{{ asset('assets/images/home/favicon.ico') }}" />
 
-        <meta property="og:title" content="{{ $pagetitle ?? 'Dealsmachi – Deals that matter in Singapore'}}" />
-        <meta property="og:description" content="{{ $pagedescription ?? 'Shop Big, Earn Big Save Big, Dealsmachi – Deals that matters in Singapore' }}" />
+        <meta property="og:title" content="{{ $pagetitle ?? 'Dealsmachi – Deals that matter in India'}}" />
+        <meta property="og:description" content="{{ $pagedescription ?? 'Shop Big, Earn Big Save Big, Dealsmachi – Deals that matters in India' }}" />
         <meta property="og:url" content="{{$pageurl ?? 'https://dealsmachi.com'}}" />
         <meta property="og:site_name" content="Dealsmachi" />
         <meta property="og:image" content="{{ asset($pageimage ?? 'assets/images/social/Dealslah_og.png') }}" />

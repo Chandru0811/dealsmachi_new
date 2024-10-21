@@ -47,7 +47,14 @@ class HomeController extends Controller
         //     ->get();
 
 
-        $products = Product::where('active',1)->get();
+        $products = Product::where('active',1)->with(['shop:id,city,shop_ratings'])->get();
+
+        $treandingdeals = DealViews::whereDate('viewed_at',Carbon::today())->get();
+        $populardeals = DealViews::select('deal_id', DB::raw('count(*) as total_views'))->groupBy('deal_id')->limit(5)->orderBy('total_views', 'desc')->having('total_views', '>', 10)->get(); 
+        $earlybirddeals = Product::where('active', 1)->whereDate('start_date', now())->get();
+        $lastchancedeals = Product::where('active', 1)->whereDate('end_date', now())->get();
+        $limitedtimedeals = Product::where('active', 1)->whereRaw('DATEDIFF(end_date, start_date) <= ?', [2])->get();
+        
 
         $bookmarkedProducts = collect();
 
@@ -59,7 +66,7 @@ class HomeController extends Controller
             $bookmarkedProducts = Bookmark::where('ip_address', $ipAddress)->pluck('deal_id');
         }
 
-        return view('home', compact('categoryGroups', 'hotpicks', 'products', 'bookmarkedProducts'));
+        return view('home', compact('categoryGroups', 'hotpicks', 'products', 'bookmarkedProducts','treandingdeals','populardeals','earlybirddeals','lastchancedeals','limitedtimedeals'));
     }
 
     public function clickcounts(Request $request)

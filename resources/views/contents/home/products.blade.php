@@ -5,9 +5,17 @@
         <div class="col-md-4 col-lg-3 col-12 mb-3 d-flex align-items-stretch justify-content-center">
             <a href="{{ url('/deal/' . $product->id) }}" style="text-decoration: none;">
                 <div class="card sub_topCard h-100 d-flex flex-column">
-                    <div style="min-height: 50px">
-                        @if ($product->label !== '')
-                        <span class="badge trending-badge">{{ $product->label }}</span>
+                <div style="min-height: 50px">
+                        @if ($treandingdeals->contains('deal_id', $product->id))
+                            <span class="badge trending-badge">TRENDING</span>
+                        @elseif($populardeals->contains('deal_id', $product->id))
+                            <span class="badge trending-badge">POPULAR</span>
+                        @elseif($earlybirddeals->contains('id', $product->id))
+                            <span class="badge trending-badge">EARLY BIRD</span>
+                        @elseif($lastchancedeals->contains('id', $product->id))
+                            <span class="badge trending-badge">LAST CHANCE</span>
+                        @elseif($limitedtimedeals->contains('id', $product->id))
+                            <span class="badge trending-badge">LIMITED TIME</span>
                         @endif
                         <img src="{{ asset($product->image_url1) }}" class="img-fluid card-img-top1"
                             alt="{{ $product->name }}" />
