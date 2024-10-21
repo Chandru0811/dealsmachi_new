@@ -42,8 +42,8 @@
                             </div>
                             <span class="px-3">
                                 @php
-                                $fullStars = floor($product->shop_ratings);
-                                $hasHalfStar = ($product->shop_ratings - $fullStars) >= 0.5;
+                                $fullStars = floor($product->shop->shop_ratings);
+                                $hasHalfStar = ($product->shop->shop_ratings - $fullStars) >= 0.5;
                                 $remaining = 5 - ($hasHalfStar ? $fullStars + 1 : $fullStars);
                                 @endphp
                                 @for ($i = 0; $i < $fullStars; $i++)
