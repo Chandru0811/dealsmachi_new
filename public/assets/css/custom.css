@@ -1669,3 +1669,73 @@ footer hr {
 
     text-align: center;
 }
+
+
+.icon-circle {
+    width: 30px !important;
+    height: 30px !important;
+    border-radius: 50%;
+    background-color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.icon-circle-youtube {
+    width: 30px !important;
+    height: 30px !important;
+    border-radius: 50%;
+    background-color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.icon-circle i {
+    font-size: 16px;
+}
+
+/* .followers-count {
+    font-size: 16px;
+    font-weight: bold;
+    color: #fff;
+} */
+
+.followers-type {
+    font-size: 10px;
+    color: #fff;
+}
+
+/* / Card background / */
+.facebook-body {
+    background-color: #1878f3;
+    border-radius: 0 0 5px 5px;
+    padding: 5px 0px !important;
+
+}
+
+.instagram-body {
+    background: linear-gradient(
+        45deg,
+        #f09433,
+        #e6683c,
+        #dc2743,
+        #cc2366,
+        #bc1888
+    );
+    padding: 5px 0px;
+}
+
+.youtube-body {
+    background-color: #ff0000;
+    border-radius: 0 0 5px 5px;
+    padding: 5px 0px;
+
+}
+
+.whatsapp-body {
+    background-color: #25d366;
+    border-radius: 0 0 5px 5px;
+    padding: 5px 0px;
+
+}

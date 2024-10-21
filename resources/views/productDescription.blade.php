@@ -7,7 +7,7 @@
                 'productId' => '1',
                 'reviews' => [
                     [
-                        'reviewerName' => 'Tan Wei Ming',
+                        'reviewerName' => 'Sangeetha',
                         'review' =>
                             'Thank you Trucklah for the wonderful job. I am very much happy with your service. I got track updates regularly and everything went well!',
                         'rating' => 4.3,
@@ -15,7 +15,7 @@
                         'advertisement' => 'assets/images/product_view/trucklah_add.png',
                     ],
                     [
-                        'reviewerName' => 'Lim Xin Wei',
+                        'reviewerName' => 'Mari Muthu',
                         'review' =>
                             'Thank you Trucklah for your prompt service. We were in difficulty with lack of space in our apartment. Thankfully, Trucklah managed it well and were on time and budget friendly.',
                         'rating' => 5,
@@ -28,7 +28,7 @@
                 'productId' => '3',
                 'reviews' => [
                     [
-                        'reviewerName' => 'Goh Meih Lin',
+                        'reviewerName' => 'Chandru',
                         'review' =>
                             'I did an item move last week with Trucklah. The service was excellent. I recommend their service, they are professional in approach.',
                         'rating' => 4,
@@ -36,7 +36,7 @@
                         'advertisement' => 'assets/images/product_view/trucklah_add.png',
                     ],
                     [
-                        'reviewerName' => 'Wong Kok Seng',
+                        'reviewerName' => 'Leela',
                         'review' =>
                             'Trucklah helped us to move our office last week. Their service was really appreciable. The best thing I noted is that they were professional in approach and they did really well to relocate our office. I am really thankful for their effort!',
                         'rating' => 5,
@@ -49,7 +49,7 @@
                 'productId' => '4',
                 'reviews' => [
                     [
-                        'reviewerName' => 'Liu Zhang',
+                        'reviewerName' => 'Suriya',
                         'review' =>
                             'We were in a hurry and there was no one we trust. Thanks to Trucklah, for helping us on time like a friend. Their delivery experts handled everything without errors.',
                         'rating' => 5,
@@ -57,7 +57,7 @@
                         'advertisement' => 'assets/images/product_view/trucklah_add.png',
                     ],
                     [
-                        'reviewerName' => 'Zhang Wei',
+                        'reviewerName' => 'Kishore',
                         'review' =>
                             'As a business, we never rely much on third party services. But Trucklah changed us. We are full partnership with Trucklah now. Complete peace of mind.',
                         'rating' => 5,
@@ -70,7 +70,7 @@
                 'productId' => '6',
                 'reviews' => [
                     [
-                        'reviewerName' => 'Wang Fang',
+                        'reviewerName' => 'Manikandan',
                         'review' =>
                             'E-commerce is tricky. But if you have a logistics partner like Trucklah, life is more easy than we expect. Timely delivery, on schedule, all the time.',
                         'rating' => 4,
@@ -78,7 +78,7 @@
                         'advertisement' => 'assets/images/product_view/trucklah_add.png',
                     ],
                     [
-                        'reviewerName' => 'Li Na',
+                        'reviewerName' => 'Saravanan',
                         'review' =>
                             'We never thought moving would be this easy. Not until we had our move scheduled with Trucklah. App booking, online payment, everything went well.',
                         'rating' => 5,
@@ -91,7 +91,7 @@
                 'productId' => '11',
                 'reviews' => [
                     [
-                        'reviewerName' => 'Chen Ming',
+                        'reviewerName' => 'Manoj',
                         'review' =>
                             'Space issues were too much for us. Until Trucklah cleared it for us without any headaches. For any moving work, I recommend Trucklah.',
                         'rating' => 4,
@@ -99,7 +99,7 @@
                         'advertisement' => 'assets/images/product_view/trucklah_add.png',
                     ],
                     [
-                        'reviewerName' => 'Xiao Mei',
+                        'reviewerName' => 'Siva',
                         'review' =>
                             'Moving is not easy in Singapore. But with Trucklah by your side, nothing is impossible. Faster, reliable and safe delivery from Trucklah has changed the scene.',
                         'rating' => 5,
@@ -111,6 +111,7 @@
         ];
     @endphp
 
+
     <section class="categoryIcons">
         <div class="container my-5">
             <div class="row">
@@ -121,7 +122,7 @@
                             <div class="col-lg-7 col-12 mb-3 d-flex flex-column justify-content-center">
                                 <h4>{{ $product->name }}</h4>
                                 <div>
-                                    <div class="d-flex">
+                                    <div class="d-flex  align-items-center">
                                         @php
                                             $currentDay = strtolower(\Carbon\Carbon::now()->format('l'));
                                         @endphp
@@ -134,6 +135,12 @@
                                             @else
                                                 Closed Today
                                             @endif
+                                        </p>
+
+                                        <p class="info pe-3 d-flex align-items-center">
+                                            <s>${{ $product->original_price }}</s>&nbsp;&nbsp; <span
+                                                style="font-size:24px;"><span
+                                                    style="color: #ff0060">$</span>{{ $product->discounted_price }}</span>
                                         </p>
 
                                     </div>
@@ -246,74 +253,14 @@
                                 <img src="{{ asset($product->image_url1) }}" alt="Adverstiment" class="img-fluid">
                             </div>
                         </div>
-                        <div class="d-flex flex-wrap">
-                            <!-- <div class="btn-group my-2 me-2" onclick="shareOnFacebook()">
-                                <button type="button" class="btn" style="background-color: #166bd9;color: #fff">
-                                    <i class="fa-brands fa-facebook"></i>
-                                </button>
-                                <button type="button" style="background-color: #1877f2;color: #fff"
-                                    class="btn">Facebook <span class="badge text-bg-light">4</span></button>
-                            </div>
-                            <div class="btn-group my-2 me-2" onclick="shareOnTwitter()">
-                                <button type="button" class="btn" style="background-color: #000;color: #fff">
-                                    <i class="fa-brands fa-x-twitter"></i>
-                                </button>
-                                <button type="button" style="background-color: #000;color: #fff" class="btn">Twitter
-                            </div>
-                            <div class="btn-group my-2 me-2" onclick="shareOnWhatsApp()">
-                                <button type="button" class="btn" style="background-color: #21bd5c;color: #fff">
-                                    <i class="fa-brands fa-whatsapp"></i>
-                                </button>
-                                <button type="button" style="background-color: #25d366;color: #fff"
-                                    class="btn">Whatsapp
-                            </div>
-                            <div class="btn-group my-2 me-2" onclick="shareOnLinkedIn()">
-                                <button type="button" class="btn" style="background-color: #148cc8;color: #fff">
-                                    <i class="fa-brands fa-linkedin"></i>
-                                </button>
-                                <button type="button" style="background-color: #169cdf;color: #fff"
-                                    class="btn">Linkedin</button>
-                            </div>
-                            <div class="btn-group my-2 me-2" onclick="shareOnInstagram()">
-                                <button type="button" class="btn" style="background-color: #C13584;color: #fff">
-                                    <i class="fa-brands fa-instagram"></i>
-                                </button>
-                                <button type="button" style="background-color: #E1306C;color: #fff"
-                                    class="btn">Instagram </button>
-                            </div> -->
 
-                            {!! $shareButtons !!}
                         <div class="d-flex flex-wrap social-link-container">
                             <a href="#" id="" class="me-2" title="" rel="">
                                 <i class="fa-regular fa-thumbs-up"></i>
                                 <p>Like</p>
                             </a>
 
-                            <div id="social-links">
-                                <ul>
-                                    <li>
-                                        <a href="https://www.facebook.com/sharer/sharer.php?u=https://sgitjobs.com/dealslah/deal/46"
-                                            class="social-button" id="" title="" rel=""><span
-                                                class="fab fa-facebook-square" aria-hidden="true"></span></a>
-                                    </li>
-                                    <li>
-                                        <a href="https://twitter.com/intent/tweet?text=House+Moving&amp;url=https://sgitjobs.com/dealslah/deal/46"
-                                            class="social-button" id="" title="" rel=""><span
-                                                class="fab fa-twitter" aria-hidden="true"></span></a>
-                                    </li>
-                                    <li>
-                                        <a href="https://www.linkedin.com/sharing/share-offsite?mini=true&amp;url=https://sgitjobs.com/dealslah/deal/46&amp;title=House+Moving&amp;summary="
-                                            class="social-button" id="" title="" rel=""><span
-                                                class="fab fa-linkedin" aria-hidden="true"></span></a>
-                                    </li>
-                                    <li>
-                                        <a target="_blank"
-                                            href="https://wa.me/?text=https://sgitjobs.com/dealslah/deal/46"
-                                            class="social-button" id="" title="" rel=""><span
-                                                class="fab fa-whatsapp" aria-hidden="true"></span></a>
-                                    </li>
-                                </ul>
-                            </div>
+                            {!! $shareButtons !!}
 
                             <a href="#" id="" title="" rel="">
                                 <i class="fa-brands fa-instagram"></i>
@@ -610,56 +557,93 @@
                 <div class="col-md-4 col-12 mb-3">
                     <div class="mx-2">
                         <div class="row productViewCard mb-3">
-                            <div class="card w-100 social-media-card p-0">
-                                <div class="card-body p-0">
-                                    <div class="d-flex align-items-center justify-content-between">
-                                        <span class=" text-center w-100 my-2 py-3 ms-2"
-                                            style="cursor: pointer; background-color: #627aad;">
-                                            <a href="https://www.facebook.com/profile.php?id=61567112492283"
-                                                target="_blank" style="text-decoration:none;"><i
-                                                    class="fa-brands social-Icon fa-facebook-f"></i>
-                                                <p class="mb-0 count-Text">1k</p>
-                                                <p class="mb-0 count-Text2">Fans</p>
-                                            </a>
-                                        </span>
-
-                                        <span class=" text-center w-100 my-2  py-3 ms-2"
-                                            style="cursor: pointer;background-color: #FF0000;">
-                                            <a href="https://www.youtube.com/channel/UCAyH2wQ2srJE8WqvII8JNrQ"
-                                                target="_blank" style="text-decoration:none;"><i
-                                                    class="fa-brands social-Icon fa-youtube"></i>
-                                                <p class="mb-0 count-Text">1.2k</p>
-                                                <p class="mb-0 count-Text2">Subscribes</p>
-                                            </a>
-                                        </span>
-
-                                        <span class=" text-center w-100 my-2 py-3 mx-2"
-                                            style="cursor: pointer;background: linear-gradient(
-                                                                    45deg,
-                                                                    #f09433,
-                                                                    #e6683c,
-                                                                    #dc2743,
-                                                                    #cc2366,
-                                                                    #bc1888
-                                                                );">
-                                            <a href="https://www.instagram.com/dealslah/" style="text-decoration:none;">
-                                                <i class="fa-brands social-Icon fa-instagram"></i>
-                                                <p class="mb-0 count-Text">1.4k</p>
-                                                <p class="mb-0 count-Text2">Followers</p>
-                                            </a>
-                                        </span>
-
+                            <div class="card py-1 px-1" style="border-radius: 10px;width: 100%;">
+                                <div class="d-flex">
+                                    <div class="card me-1"
+                                        style="width: 49%; border-color: #1878f3; overflow: hidden;">
+                                        <a href="https://www.facebook.com/profile.php?id=61566743978973" target="_blank"
+                                            style="text-decoration:none;">
+                                            <div class="d-flex justify-content-center align-items-center  p-1">
+                                                <img src="{{ asset('assets/images/home/facebook_qr_code.png') }}"
+                                                    alt="QR Code" class="card-img-top"
+                                                    style="width: 100px; height: 100px;">
+                                            </div>
+                                            <div
+                                                class="card-body facebook-body d-flex align-items-center justify-content-center">
+                                                <div class="icon-circle d-flex justify-content-center align-items-center">
+                                                    <i class="fa-brands fa-facebook-f" style="color: #1878f3;"></i>
+                                                </div>
+                                                <div class="d-flex flex-column ms-2">
+                                                    <div class="followers-type">Follow us</div>
+                                                </div>
+                                            </div>
+                                        </a>
                                     </div>
-                                    <a href="#" style="text-decoration:none;">
-                                        <div class="d-flex align-items-center justify-content-center">
-                                            <img src="{{ asset('assets/images/home/Whatsapp-Banner.webp') }}"
-                                                alt="Whatsapp Banner" class="img-fluid px-2 pb-2">
-                                        </div>
-                                    </a>
+                                    <div class="card"
+                                        style="width: 49%; border-color: #cc236; overflow: hidden;">
+                                        <a href="https://www.instagram.com/dealsmachi/" target="_blank"
+                                            style="text-decoration:none;">
+                                            <div class="d-flex justify-content-center align-items-center  p-1">
+                                                <img src="{{ asset('assets/images/home/instagram_qr_code.png') }}"
+                                                    alt="QR Code" class="card-img-top"
+                                                    style="width: 100px; height: 100px;">
+                                            </div>
+                                            <div
+                                                class="card-body instagram-body d-flex align-items-center  justify-content-center">
+                                                <div class="icon-circle d-flex justify-content-center align-items-center">
+                                                    <i class="fa-brands fa-instagram " style="color: #cc2366;"></i>
+                                                </div>
+                                                <div class="d-flex flex-column ms-2">
+                                                    <div class="followers-type">Follow us</div>
+                                                </div>
+                                            </div>
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="d-flex mt-1">
+                                    <div class="card me-1"
+                                        style="width: 49%; border-color: #FF0000; overflow: hidden;">
+                                        <a href="https://www.youtube.com/channel/UCAyH2wQ2srJE8WqvII8JNrQ" target="_blank"
+                                            style="text-decoration:none;">
+                                            <div class="d-flex justify-content-center align-items-center  p-1">
+                                                <img src="{{ asset('assets/images/home/QR_Code.png') }}" alt="QR Code"
+                                                    class="card-img-top" style="width: 100px; height: 100px;">
+                                            </div>
+                                            <div
+                                                class="card-body youtube-body d-flex align-items-center  justify-content-center">
+                                                <div
+                                                    class="icon-circle-youtube d-flex justify-content-center align-items-center">
+                                                    <i class="fa-brands fa-youtube" style="color: #FF0000;"></i>
+                                                </div>
+                                                <div class="d-flex flex-column ms-2">
+                                                    <div class="followers-type">Subscribe </div>
+                                                </div>
+                                            </div>
+                                        </a>
+                                    </div>
+                                    <div class="card"
+                                        style="width: 49%; border-color: #25d366; overflow: hidden;">
+                                        <a href="#" target="_blank" style="text-decoration:none;">
+                                            <div class="d-flex justify-content-center align-items-center  p-1">
+                                                <img src="{{ asset('assets/images/home/QR_Code.png') }}" alt="QR Code"
+                                                    class="card-img-top" style="width: 100px; height: 100px;">
+                                            </div>
+                                            <div
+                                                class="card-body whatsapp-body d-flex align-items-center  justify-content-center">
+                                                <div
+                                                    class="icon-circle-youtube d-flex justify-content-center align-items-center">
+                                                    <i class="fa-brands fa-whatsapp" style="color: #25D366;"></i>
+                                                </div>
+                                                <div class="d-flex flex-column ms-2">
+                                                    <div class="followers-type">Join Us</div>
+                                                </div>
+                                            </div>
+                                        </a>
+                                    </div>
                                 </div>
                             </div>
-
                         </div>
+
                         <div style="position: sticky; top: 110px;">
                             <div class="row mb-4">
                                 <div class="card p-4" style="border-color:#ff0060;">
@@ -819,23 +803,3 @@
             </div>
     </section>
 @endsection
-
-@push('script')
-    <script>
-        // Function to change the icon class
-        function changeTwitterIcon() {
-            // Select the anchor tag with the fa-twitter class
-            const twitterIcon = document.querySelector('.social-button .fab.fa-twitter');
-
-            // Check if the element exists
-            if (twitterIcon) {
-                // Replace the class fa-twitter with fa-x-twitter
-                twitterIcon.classList.remove('fa-twitter');
-                twitterIcon.classList.add('fa-x-twitter');
-            }
-        }
-
-        // Call the function to change the icon
-        changeTwitterIcon();
-    </script>
-@endpush

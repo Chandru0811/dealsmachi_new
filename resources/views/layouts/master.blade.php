@@ -5,35 +5,35 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     @section('head_links')
-        <title>Dealsmachi – Deals that matter in India</title>
+        <title>DealsMachi - Discount Coupons & Money Saver Deals</title>
         <meta name="description"
-            content="Get the best deals in India. Electronics, Beauty, Travel and every category you can imagine! Get our apps and stay ahead of every else in deals." />
+            content="Save money with discount coupons and exclusive deals. Deals that you cannot find elsewhere. Special deals, festive deals, discount offers and more." />
         <link rel="canonical" href="https://dealsmachi.com/" />
         <link rel="icon" href="{{ asset('assets/images/home/favicon.ico') }}" />
 
-        <meta property="og:title" content="{{ $pagetitle ?? 'Dealsmachi – Deals that matter in India'}}" />
-        <meta property="og:description" content="{{ $pagedescription ?? 'Shop Big, Earn Big Save Big, Dealsmachi – Deals that matters in India' }}" />
-        <meta property="og:url" content="{{$pageurl ?? 'https://dealsmachi.com'}}" />
+        <meta property="og:title" content="{{ $pagetitle ?? 'Dealsmachi – Deals that matter in India' }}" />
+        <meta property="og:description"
+            content="{{ $pagedescription ?? 'Shop Big, Earn Big Save Big, Dealsmachi – Deals that matters in India' }}" />
+        <meta property="og:url" content="{{ $pageurl ?? 'https://dealsmachi.com' }}" />
         <meta property="og:site_name" content="Dealsmachi" />
         <meta property="og:image" content="{{ asset($pageimage ?? 'assets/images/social/Dealslah_og.png') }}" />
         @php
-    // Provide a fallback for $pageimage in case it's not set
-    $imageType = isset($pageimage) ? pathinfo($pageimage, PATHINFO_EXTENSION) : 'png'; // Default to 'png' if $pageimage is not set
-@endphp
+            // Provide a fallback for $pageimage in case it's not set
+$imageType = isset($pageimage) ? pathinfo($pageimage, PATHINFO_EXTENSION) : 'png'; // Default to 'png' if $pageimage is not set
+        @endphp
 
-@if(in_array($imageType, ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'webp']))
-    <meta property="og:image:type" content="image/{{ $imageType }}">
-@endif
-        
+        @if (in_array($imageType, ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'webp']))
+            <meta property="og:image:type" content="image/{{ $imageType }}">
+        @endif
+
         <meta property="og:image:alt" content="Get the best deals and discounts in India" />
         <meta property="og:image:width" content="256">
-        <meta property="og:image:height" content="256"> 
+        <meta property="og:image:height" content="256">
 
 
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content="Dealsmachi - Deals that Matter in India !" />
-        <meta name="twitter:description"
-            content="Shop Big, Earn Big Save Big, Dealsmachi – Deals that matters in India" />
+        <meta name="twitter:description" content="Shop Big, Earn Big Save Big, Dealsmachi – Deals that matters in India" />
         <meta name="twitter:site" content="@dealsmachi" />
 
         <meta name="twitter:image" content="{{ asset('assets/images/social/Dealslah_twitter.png') }}" />
