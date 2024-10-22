@@ -504,7 +504,7 @@
                                 <div class="card" style="width: 49%; border-color: #25d366; overflow: hidden;">
                                     <a href="#" target="_blank" style="text-decoration:none;">
                                         <div class="d-flex justify-content-center align-items-center  p-1">
-                                            <img src="{{ asset('assets/images/home/facebook_qr_code.webp') }}" alt="QR Code"
+                                            <img src="{{ asset('assets/images/home/youtube_qr_code.webp') }}" alt="QR Code"
                                                 class="card-img-top img-fluid">
                                         </div>
                                         <div

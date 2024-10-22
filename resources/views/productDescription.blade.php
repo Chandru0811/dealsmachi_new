@@ -140,7 +140,7 @@
                                         <p class="info pe-3 d-flex align-items-center">
                                             <s>${{ $product->original_price }}</s>&nbsp;&nbsp; <span
                                                 style="font-size:24px;"><span
-                                                    style="color: #ff0060">$</span>{{ $product->discounted_price }}</span>
+                                                    style="color: #ff0060">Rs</span>{{ $product->discounted_price }}</span>
                                         </p>
 
                                     </div>
