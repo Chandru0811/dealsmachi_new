@@ -1614,10 +1614,10 @@ footer hr {
 
 .social-link-container .fa-thumbs-up {
     background-color: #1877f2;
-    padding: 8px 5px;
+    padding: 10px 8px;
     width: 60px;
     height: 50px;
-    border-radius: 4px;
+    border-radius: 3px;
 }
 
 .social-link-container .fa-instagram {
@@ -1632,7 +1632,7 @@ footer hr {
     padding: 8px 5px;
     width: 60px;
     height: 50px;
-    border-radius: 4px;
+    border-radius: 3px;
 }
 
 #social-links .fa-facebook-square::after {
