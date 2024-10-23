@@ -751,7 +751,7 @@ $(document).ready(function () {
 const currentUrl = encodeURIComponent(window.location.href);
 
 function shareOnInstagram(dealId) {
-    console.log('Deal ID:', dealId); // Check if dealId is being passed correctly
+    console.log('Deal ID:', dealId);
 
     alert(
         "Instagram does not support direct message and link sharing. Copy the message below and share it manually:"
@@ -759,7 +759,6 @@ function shareOnInstagram(dealId) {
 
     navigator.clipboard.writeText(`Check out this amazing deal: ${decodeURIComponent(currentUrl)}`);
 
-    // Send the deal ID to your Laravel backend to record the share
     fetch('/deals/count/share', {
         method: 'POST',
         headers: {
@@ -771,7 +770,6 @@ function shareOnInstagram(dealId) {
     .then(response => {
         if (response.ok) {
             console.log('Share recorded successfully!');
-            // Open Instagram after recording the share
             window.open("https://www.instagram.com", "_blank");
         } else {
             console.error('Failed to record share action:', response.statusText);
@@ -797,12 +795,10 @@ document.querySelectorAll('.social-link-container a').forEach(function(button) {
             },
             error: function(xhr) {
                 console.log('Error occurred: ' + xhr.statusText);
-                // Open the share link even if the API call fails
                 window.open(shareUrl, '_blank');
             }
         });
 
-        // Prevent default action to avoid double opening
         event.preventDefault();
     });
 });
