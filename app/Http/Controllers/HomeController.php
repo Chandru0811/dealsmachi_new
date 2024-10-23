@@ -28,25 +28,6 @@ class HomeController extends Controller
     {
         $categoryGroups = CategoryGroup::where('active', 1)->with('categories')->get();
         $hotpicks = DealCategory::where('active', 1)->get();
-
-        // $products = Product::select(
-        //     'products.*',
-        //     'shops.city',
-        //     'shops.shop_ratings',
-        //     DB::raw('CASE
-        //         WHEN deal_views.viewed_at = CURDATE() THEN "TRENDING"
-        //         WHEN products.start_date = CURDATE() THEN "EARLY BIRD"
-        //         WHEN DATEDIFF(products.end_date, products.start_date) <= 2 THEN "LIMITED TIME"
-        //         WHEN products.end_date = CURDATE() THEN "LAST CHANCE"
-        //         ELSE ""
-        //     END AS label')
-        // )
-        //     ->leftJoin('deal_views', 'deal_views.deal_id', '=', 'products.id')
-        //     ->leftJoin('shops', 'shops.id', '=', 'products.shop_id')
-        //     ->where('products.active', 1)
-        //     ->get();
-
-
         $products = Product::where('active',1)->with(['shop:id,city,shop_ratings'])->get();
 
         $treandingdeals = DealViews::whereDate('viewed_at',Carbon::today())->get();
@@ -103,8 +84,6 @@ class HomeController extends Controller
 
     public function productdescription($id, Request $request)
     {
-        $this->clickcounts($request);
-
         $this->viewcounts($request);
 
         $product = Product::with(['shop', 'shop.hour', 'shop.policy'])->where('id', $id)

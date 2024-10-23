@@ -1,4 +1,3 @@
-
 $(document).ready(function () {
     $(".social-button .fab.fa-twitter")
         .removeClass("fa-twitter")
@@ -751,33 +750,62 @@ $(document).ready(function () {
 // Link Shared Capture the current page URL dynamically
 const currentUrl = encodeURIComponent(window.location.href);
 
-function shareOnFacebook() {
-    const facebookShareUrl = `https://www.facebook.com/sharer/sharer.php?u=${currentUrl}`;
-    window.open(facebookShareUrl, "_blank");
-}
+function shareOnInstagram(dealId) {
+    console.log('Deal ID:', dealId); // Check if dealId is being passed correctly
 
-function shareOnLinkedIn() {
-    const linkedInShareUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${currentUrl}`;
-    window.open(linkedInShareUrl, "_blank");
-}
-
-function shareOnTwitter() {
-    const twitterShareUrl = `https://twitter.com/intent/tweet?url=${currentUrl}&text=Check+out+this+amazing+page!`;
-    window.open(twitterShareUrl, "_blank");
-}
-
-function shareOnWhatsApp() {
-    const whatsappShareUrl = `https://api.whatsapp.com/send?text=Check+out+this+amazing+deal:+${currentUrl}`;
-    window.open(whatsappShareUrl, "_blank");
-}
-
-function shareOnInstagram() {
     alert(
         "Instagram does not support direct message and link sharing. Copy the message below and share it manually:"
     );
-    navigator.clipboard.writeText(`Check out this amazing deal : ${decodeURIComponent(currentUrl)}`);
-    window.open("https://www.instagram.com", "_blank");
+
+    navigator.clipboard.writeText(`Check out this amazing deal: ${decodeURIComponent(currentUrl)}`);
+
+    // Send the deal ID to your Laravel backend to record the share
+    fetch('/deals/count/share', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+        },
+        body: JSON.stringify({ id: dealId })
+    })
+    .then(response => {
+        if (response.ok) {
+            console.log('Share recorded successfully!');
+            // Open Instagram after recording the share
+            window.open("https://www.instagram.com", "_blank");
+        } else {
+            console.error('Failed to record share action:', response.statusText);
+        }
+    })
+    .catch(error => console.error('Error:', error));
 }
+
+document.querySelectorAll('.social-link-container a').forEach(function(button) {
+    button.addEventListener('click', function(event) {
+        var dealId = '{{ $product->id }}';
+        var shareUrl = event.target.closest('a').href;
+
+        $.ajax({
+            url: '/deals/count/share',
+            type: 'POST',
+            data: {
+                _token: $('meta[name="csrf-token"]').attr('content'),
+                id: dealId
+            },
+            success: function(response) {
+                console.log(response.message);
+            },
+            error: function(xhr) {
+                console.log('Error occurred: ' + xhr.statusText);
+                // Open the share link even if the API call fails
+                window.open(shareUrl, '_blank');
+            }
+        });
+
+        // Prevent default action to avoid double opening
+        event.preventDefault();
+    });
+});
 
 $('input[type="checkbox"]').change(function () {
     var selectedPriceRanges = [];
@@ -802,3 +830,20 @@ $('input[type="checkbox"]').change(function () {
         },
     });
 });
+
+function clickCount(dealId) {
+    $.ajax({
+        url: 'deals/count/click',
+        type: 'POST',
+        data: {
+            _token: $('meta[name="csrf-token"]').attr('content'),
+            id: dealId
+        },
+        success: function(response) {
+            console.log(response.message);
+        },
+        error: function(xhr) {
+            console.log('Error occurred: ' + xhr.statusText);
+        }
+    });
+}

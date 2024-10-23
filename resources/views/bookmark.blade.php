@@ -6,7 +6,7 @@
         @if ($bookmarks->isNotEmpty())
             <span class="d-flex">
                 <h5 class="pt-0 pb-2">Your Bookmark</h5> &nbsp;&nbsp;
-                <p style="color: #ff0060" class="totalItemsCount">({{ $bookmarks->total() }})</p>
+                <p style="color: #ff0060">(<span class="totalItemsCount">{{ $bookmarks->total() }}</span>)</p>
             </span>
             <div class="row pb-4">
                 @foreach ($bookmarks as $bookmark)
@@ -14,7 +14,7 @@
                     $deal = $bookmark->deal;
                     @endphp
                     <div class="col-md-4 col-lg-3 col-12 mb-3 d-flex align-items-stretch justify-content-center">
-                        <a href="{{ url('/deal/' . $deal->id) }}" style="text-decoration: none; width: 100%;">
+                        <a href="{{ url('/deal/' . $deal->id) }}" style="text-decoration: none; width: 100%;" onclick="clickCount('{{ $deal->id }}')">
                             <div class="card sub_topCard h-100 d-flex flex-column">
                                 <div style="min-height: 50px">
                                     <span class="badge trending-badge">TRENDING</span>
