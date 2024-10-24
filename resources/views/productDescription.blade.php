@@ -264,7 +264,6 @@ $reviewData = [
 
                         <a href="#" onclick="shareOnInstagram()" id="" title="" rel="">
                             <i class="fa-brands fa-instagram"></i>
-                            <p>Instagram</p>
                         </a>
                     </div>
 
