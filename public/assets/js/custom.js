@@ -90,10 +90,10 @@ $(document).ready(function () {
             email: $currentForm.find("[name='email']").val(),
             phone: $currentForm.find("[name='phone']").val(),
             company_id: 42,
-            company: "ECSCloudInfotech",
+            company: "Dealsmachi",
             lead_status: "PENDING",
             lead_source: "Product Page",
-            country_code: "65",
+            country_code: "91",
         };
 
         var laravelRequest = $.ajax({
