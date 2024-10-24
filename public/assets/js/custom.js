@@ -89,7 +89,7 @@ $(document).ready(function () {
             name: $currentForm.find("[name='name']").val(),
             email: $currentForm.find("[name='email']").val(),
             phone: $currentForm.find("[name='phone']").val(),
-            company_id: 40,
+            company_id: 42,
             company: "ECSCloudInfotech",
             lead_status: "PENDING",
             lead_source: "Product Page",
