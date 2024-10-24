@@ -254,7 +254,7 @@ $reviewData = [
                         </div>
                     </div>
 
-                    <div class="d-flex mt-2 flex-wrap social-link-container">
+                    <div class="d-flex mt-2 flex-wrap social-link-container" data-product-id="{{ $product->id }}">
                         <a href="#" id="" class="me-2" title="" rel="">
                             <i class="fa-regular fa-thumbs-up"></i>
                             <p>Like</p>
@@ -262,7 +262,7 @@ $reviewData = [
 
                             {!! $shareButtons !!}
 
-                        <a href="#" onclick="shareOnInstagram('{{ $product->id }}')" id="" title="" rel="">
+                        <a href="#" onclick="shareOnInstagram()" id="" title="" rel="">
                             <i class="fa-brands fa-instagram"></i>
                             <p>Instagram</p>
                         </a>

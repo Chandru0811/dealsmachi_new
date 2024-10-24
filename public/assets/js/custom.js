@@ -750,37 +750,19 @@ $(document).ready(function () {
 // Link Shared Capture the current page URL dynamically
 const currentUrl = encodeURIComponent(window.location.href);
 
-function shareOnInstagram(dealId) {
-    console.log('Deal ID:', dealId);
-
+function shareOnInstagram() {
     alert(
         "Instagram does not support direct message and link sharing. Copy the message below and share it manually:"
     );
-
-    navigator.clipboard.writeText(`Check out this amazing deal: ${decodeURIComponent(currentUrl)}`);
-
-    fetch('/deals/count/share', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
-        },
-        body: JSON.stringify({ id: dealId })
-    })
-    .then(response => {
-        if (response.ok) {
-            console.log('Share recorded successfully!');
-            window.open("https://www.instagram.com", "_blank");
-        } else {
-            console.error('Failed to record share action:', response.statusText);
-        }
-    })
-    .catch(error => console.error('Error:', error));
+    navigator.clipboard.writeText(
+        `Check out this amazing deal : ${decodeURIComponent(currentUrl)}`
+    );
+    window.open("https://www.instagram.com", "_blank");
 }
 
 document.querySelectorAll('.social-link-container a').forEach(function(button) {
     button.addEventListener('click', function(event) {
-        var dealId = '{{ $product->id }}';
+        var productId = event.target.closest('.social-link-container').getAttribute('data-product-id');
         var shareUrl = event.target.closest('a').href;
 
         $.ajax({
@@ -788,10 +770,11 @@ document.querySelectorAll('.social-link-container a').forEach(function(button) {
             type: 'POST',
             data: {
                 _token: $('meta[name="csrf-token"]').attr('content'),
-                id: dealId
+                id: productId
             },
             success: function(response) {
                 console.log(response.message);
+                window.open(shareUrl, '_blank');
             },
             error: function(xhr) {
                 console.log('Error occurred: ' + xhr.statusText);
