@@ -132,13 +132,12 @@ $reviewData = [
                                             <span style="color: #000"> Offer Price</span> &nbsp;&nbsp;
                                             <span style=" color: #ff0060;"> Rs {{ $product->discounted_price }}</span>
                                         </span>&nbsp;&nbsp; &nbsp;&nbsp;
-                                        <span style="font-size: 24px; font-weight: Semibold; color: lightgrey;">
+                                        <span style="font-size: 24px; font-weight: Semibold; color: rgb(158, 158, 158);">
                                             <span style="text-decoration: line-through; text-decoration-color: gray;  text-decoration-thickness: 1px">
                                                 Rs{{ $product->original_price }}
                                             </span>
                                         </span>
                                     </p>
-
                                     <p class="info pe-3">
                                         <i class="fa-solid fa-circle" style="color: #fdbf46; font-size: 8px;"></i>
                                         @if (!empty($product->shop->hour['daily_timing'][$currentDay]['closing']))
