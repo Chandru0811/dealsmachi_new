@@ -1741,3 +1741,150 @@ footer hr {
     padding: 5px 0px;
 
 }
+
+/* Contact Us Start */
+
+.nav-tabs .nav-link.active {
+    background-color: white !important;
+  }
+  .nav-tabs .nav-link:hover {
+    background-color: white !important;
+  }
+
+  .nav-tabs.nav-link {
+    color: #000;
+    background-color: transparent;
+    transition: background-color 0.3s ease;
+    padding: 5px;
+  }
+
+  .contact-nav:hover {
+    background-color: #fff;
+  }
+
+  .address-content {
+    display: none;
+    padding-top: 16px;
+  }
+  .active-address {
+    display: block;
+    padding-top: 16px;
+  }
+
+  .nav-tabs .contact-nav.active {
+    background-color: #fff !important;
+  }
+
+  .nav-tabs .contact-nav {
+    margin-bottom: 0px;
+  }
+
+  .mediaIconBgIcon {
+    font-size: 22px;
+    border-radius: 5px;
+    padding: 14px;
+    /* width: 40px;
+    height: 40px; */
+    background: #ff0060;
+  }
+
+  .mediaIconBgIcon:hover {
+    background: #ff0060;
+  }
+
+  .socialicons a {
+    padding: 0;
+  }
+
+  .mediaIconBgIcon {
+    width: 50px;
+    height: 50px;
+    background-color: #ff0060;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 5%;
+    margin: 5px;
+  }
+
+  .soc_icons {
+    font-size: 24px;
+    color: white;
+  }
+
+  @media (max-width: 320px) {
+    .socialicons {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+    }
+
+    .socialicons a:nth-child(1),
+    .socialicons a:nth-child(4) {
+      grid-column: 1;
+    }
+
+    .socialicons a:nth-child(2),
+    .socialicons a:nth-child(5) {
+      grid-column: 2;
+    }
+
+    .socialicons a:nth-child(3) {
+      grid-column: 3;
+    }
+  }
+
+  .borderline {
+    border-left: 1px solid #4f4f4f;
+  }
+
+  @media (max-width: 767px) {
+    .borderline {
+      border-left: none !important;
+    }
+  }
+
+  .contact-heading {
+    font-size: 2em;
+  }
+
+  .contact-icon-group {
+    background-color: #fff;
+    border: none;
+    border-radius: 0px;
+    border-bottom: 1px solid #a7a7a7;
+  }
+
+  .icon-color {
+    color: gray !important;
+  }
+
+  .contact-button {
+    background-color: #ff0060;
+    color: #fff;
+  }
+
+  .contact-button:hover{
+    background-color: #ff0060 !important;
+    color: #fff !important;
+  }
+
+  .contact-subheading2 {
+    color: #00d570;
+  }
+
+  .input-text-color {
+    color: #000 !important;
+  }
+
+  .input-text-color:focus {
+    box-shadow: none;
+  }
+
+  .contact-icon-group {
+    background-color: #fff;
+    border: none;
+    border-radius: 0px;
+    border-bottom: 1px solid #a7a7a7;
+  }
+  /* Contact Us End */

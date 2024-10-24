@@ -122,10 +122,22 @@ $reviewData = [
                         <div class="col-lg-7 col-12 mb-3 d-flex flex-column justify-content-center">
                             <h4>{{ $product->name }}</h4>
                             <div>
-                                <div class="d-flex  align-items-center">
+                                <div class="">
                                     @php
                                     $currentDay = strtolower(\Carbon\Carbon::now()->format('l'));
                                     @endphp
+
+                                    <p class="info d-flex align-items-center">
+                                        <span class="d-flex" style="font-size: 24px !important;font-weight: Semibold;">
+                                            <span style="color: #000"> Offer Price</span> &nbsp;&nbsp;
+                                            <span style=" color: #ff0060;"> Rs {{ $product->discounted_price }}</span>
+                                        </span>&nbsp;&nbsp; &nbsp;&nbsp;
+                                        <span style="font-size: 24px; font-weight: Semibold; color: lightgrey;">
+                                            <span style="text-decoration: line-through; text-decoration-color: gray;  text-decoration-thickness: 1px">
+                                                Rs{{ $product->original_price }}
+                                            </span>
+                                        </span>
+                                    </p>
 
                                     <p class="info pe-3">
                                         <i class="fa-solid fa-circle" style="color: #fdbf46; font-size: 8px;"></i>
@@ -136,15 +148,8 @@ $reviewData = [
                                         Closed Today
                                         @endif
                                     </p>
-
-                                    <p class="info pe-3 d-flex align-items-center">
-                                        <s>${{ $product->original_price }}</s>&nbsp;&nbsp; <span
-                                            style="font-size:24px;"><span
-                                                style="color: #ff0060">Rs</span>{{ $product->discounted_price }}</span>
-                                    </p>
-
                                 </div>
-                                <div class="d-flex">
+                                <div class="d-flex align-items-center">
                                     <p>602 <span style="font-size: 11px; color: #5C5C5C;">people</span></p>
                                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                     <p>{{ $product->shop->shop_ratings }} <span>&nbsp;<i class="fa-solid fa-star fa-xs"
@@ -168,6 +173,7 @@ $reviewData = [
                                         </div>
                                     </div>
                                     <div class="col-6">
+                                        @if ($product->shop->mobile)
                                         <div class="row">
                                             <div class="col-2 pe-0">
                                                 <i class="fa-solid fa-phone fa-lg" style="color: #ff0060;"></i>
@@ -182,6 +188,9 @@ $reviewData = [
                                                 </a>
                                             </div>
                                         </div>
+                                        @else
+
+                                        @endif
                                     </div>
                                 </div>
                             </div>
@@ -194,13 +203,20 @@ $reviewData = [
                                     data-bs-target="#enquiryModal">
                                     Send Enquiry
                                 </button>
+                                @if ($product->shop->mobile)
+                                <button class="btn mb-2 sendEnqBtn"
+                                    onclick="window.open('https://wa.me/{{ $product->shop->mobile }}?text=Hello! I visited your website.', '_blank')">
+                                    <i class="fa-brands fa-whatsapp"></i>&nbsp;&nbsp;Chat
+                                </button>
+                                @else
                                 <button class="btn mb-2 sendEnqBtn" disabled
                                     onclick="window.open('https://wa.me/{{ $product->shop->mobile }}?text=Hello! I visited your website.', '_blank')">
                                     <i class="fa-brands fa-whatsapp"></i>&nbsp;&nbsp;Chat
                                 </button>
+                                @endif
                             </div>
                         </div>
-                        <div class="col-lg-5 col-12 d-flex flex-column justify-content-center">
+                        <div class="col-lg-5 col-12">
                             <div class="d-flex justify-content-between">
                                 <p class="productViewStar" style="cursor: pointer">
                                     Rate Now
@@ -216,21 +232,23 @@ $reviewData = [
                                     @if ($bookmarkedProducts->contains($product->id))
                                     <button type="button" class="bookmark-button remove-bookmark"
                                         data-deal-id="{{ $product->id }}" style="border: none; background: none;">
-                                        <p style="height:fit-content;cursor:pointer" class="p-1 px-2">
-                                            <i class="fa-solid fa-bookmark bookmark-icon"
-                                                style="color: #ff0060;"></i>
+                                        <p style="height: fit-content; cursor: pointer;" class="p-1 px-2"
+                                            data-bs-toggle="tooltip" data-bs-placement="top" title="Bookmark">
+                                            <i class="fa-solid fa-bookmark bookmark-icon" style="color: #ff0060;"></i>
                                         </p>
                                     </button>
                                     @else
                                     <button type="button" class="bookmark-button add-bookmark"
                                         data-deal-id="{{ $product->id }}" style="border: none; background: none;">
-                                        <p style="height:fit-content;cursor:pointer" class="p-1 px-2">
-                                            <i class="fa-regular fa-bookmark bookmark-icon"
-                                                style="color: #ff0060;"></i>
+                                        <p style="height: fit-content; cursor: pointer;" class="p-1 px-2"
+                                            data-bs-toggle="tooltip" data-bs-placement="top" title="Bookmark">
+                                            <i class="fa-regular fa-bookmark bookmark-icon" style="color: #ff0060;"></i>
                                         </p>
                                     </button>
                                     @endif
+
                                     &nbsp;&nbsp;&nbsp;
+
                                     <p id="shareButton"
                                         style="height: fit-content; cursor: pointer; position: relative;"
                                         class="p-1 px-2"
@@ -239,34 +257,29 @@ $reviewData = [
                                         <i class="fa-solid fa-share-nodes" style="color: #ff0060;"></i>
 
                                         <!-- Tooltip container to show below the share icon -->
-                                        <span class="tooltip-text"
-                                            style="visibility: hidden; background-color: black; color: #fff;
+                                        <span class="tooltip-text" style="visibility: hidden; background-color: black; color: #fff;
                                                    text-align: center; border-radius: 6px; padding: 5px;
                                                    position: absolute; z-index: 1; top: 125%; left: 50%;
                                                    transform: translateX(-50%); font-size: 12px; white-space: nowrap;">
                                             Link Copied!
                                         </span>
                                     </p>
-
                                 </div>
                             </div>
                             <img src="{{ asset($product->image_url1) }}" alt="Adverstiment" class="img-fluid">
                         </div>
-                    </div>
-
-                    <div class="d-flex mt-2 flex-wrap social-link-container" data-product-id="{{ $product->id }}">
-                        <a href="#" id="" class="me-2" title="" rel="">
-                            <i class="fa-regular fa-thumbs-up"></i>
-                            <p>Like</p>
-                        </a>
+                        <div class="d-flex flex-wrap mt-2 social-link-container" data-product-id="{{ $product->id }}">
+                            <a href="#" id="" class="me-2" title="" rel="">
+                                <i class="fa-regular fa-thumbs-up"></i>
+                            </a>
 
                             {!! $shareButtons !!}
 
-                        <a href="#" onclick="shareOnInstagram()" id="" title="" rel="">
-                            <i class="fa-brands fa-instagram"></i>
-                        </a>
+                            <a href="#" onclick="shareOnInstagram()" id="" title="" rel="">
+                                <i class="fa-brands fa-instagram"></i>
+                            </a>
+                        </div>
                     </div>
-
                 </div>
                 <div class="productViewTabs">
                     <!-- Tabs navigation -->

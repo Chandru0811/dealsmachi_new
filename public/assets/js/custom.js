@@ -826,3 +826,33 @@ function clickCount(dealId) {
         }
     });
 }
+
+function showAddress(country) {
+    // Hide all addresses
+    var contents = document.getElementsByClassName("address-content");
+    for (var i = 0; i < contents.length; i++) {
+        contents[i].classList.remove("active-address");
+    }
+
+    // Show the selected address
+    document.getElementById(country).classList.add("active-address");
+
+    // Update active tab styling
+    var tabs = document.getElementsByClassName("nav-link");
+    for (var j = 0; j < tabs.length; j++) {
+        tabs[j].classList.remove("active");
+    }
+    document.getElementById(country + "-tab").classList.add("active");
+
+    // Change phone number and href based on the selected country
+    var phoneLink = document.getElementById("phone-link");
+    var phoneNumber = document.getElementById("phone-number");
+
+    if (country === "singapore") {
+        phoneLink.href = "tel:+6588941306";
+        phoneNumber.innerHTML = "+65 8894 1306";
+    } else if (country === "india") {
+        phoneLink.href = "tel:+919361365818";
+        phoneNumber.innerHTML = "+91 93613 65818";
+    }
+}
