@@ -556,16 +556,15 @@ $reviewData = [
             <div class="col-md-4 col-12 mb-3">
                 <div class="mx-2">
                     <div class="row productViewCard mb-3">
-                        <div class="card py-1 px-1" style="border-radius: 10px;width: 100%;">
-                            <div class="d-flex">
-                                <div class="card me-1"
-                                    style="width: 49%; border-color: #1878f3; overflow: hidden;">
-                                    <a href="https://www.facebook.com/profile.php?id=61566743978973" target="_blank"
+                        <div class="py-1" style="border-radius: 10px">
+                            <div class="d-flex justify-content-center align-items-center flex-wrap">
+                                <div class="card"
+                                    style="border-radius: 10px;max-width: 30%; border-color: #1878f3; overflow: hidden;">
+                                    <a href="https://www.facebook.com/profile.php?id=61567112492283" target="_blank"
                                         style="text-decoration:none;">
                                         <div class="d-flex justify-content-center align-items-center  p-1">
                                             <img src="{{ asset('assets/images/home/facebook_qr_code.webp') }}"
-                                                alt="QR Code" class="card-img-top"
-                                                style="width: 100px; height: 100px;">
+                                                alt="QR Code" class="card-img-top img-fluid">
                                         </div>
                                         <div
                                             class="card-body facebook-body d-flex align-items-center justify-content-center">
@@ -578,14 +577,13 @@ $reviewData = [
                                         </div>
                                     </a>
                                 </div>
-                                <div class="card"
-                                    style="width: 49%; border-color: #cc2366; overflow: hidden;">
-                                    <a href="https://www.instagram.com/dealsmachi/" target="_blank"
+                                <div class="card mx-3"
+                                    style="border-radius: 10px;max-width: 30%; border-color: #cc2366; overflow: hidden;">
+                                    <a href="https://www.instagram.com/dealslah/" target="_blank"
                                         style="text-decoration:none;">
                                         <div class="d-flex justify-content-center align-items-center  p-1">
                                             <img src="{{ asset('assets/images/home/instagram_qr_code.webp') }}"
-                                                alt="QR Code" class="card-img-top"
-                                                style="width: 100px; height: 100px;">
+                                                alt="QR Code" class="card-img-top img-fluid">
                                         </div>
                                         <div
                                             class="card-body instagram-body d-flex align-items-center  justify-content-center">
@@ -599,14 +597,14 @@ $reviewData = [
                                     </a>
                                 </div>
                             </div>
-                            <div class="d-flex mt-1">
-                                <div class="card me-1"
-                                    style="width: 49%; border-color: #FF0000; overflow: hidden;">
-                                    <a href="https://www.youtube.com/channel/UCAyH2wQ2srJE8WqvII8JNrQ" target="_blank"
-                                        style="text-decoration:none;">
+                            <div class="d-flex justify-content-center align-items-center flex-wrap mt-1">
+                                <div class="card"
+                                    style="border-radius: 10px;max-width: 30%; border-color: #FF0000; overflow: hidden;">
+                                    <a href="https://www.youtube.com/channel/UCIbNIWhaDnRs-gFuJ0sTNCQ/videos"
+                                        target="_blank" style="text-decoration:none;">
                                         <div class="d-flex justify-content-center align-items-center  p-1">
-                                            <img src="{{ asset('assets/images/home/youtube_qr_code.webp') }}" alt="QR Code"
-                                                class="card-img-top" style="width: 100px; height: 100px;">
+                                            <img src="{{ asset('assets/images/home/youtube_qr_code.webp') }}"
+                                                alt="QR Code" class="card-img-top img-fluid">
                                         </div>
                                         <div
                                             class="card-body youtube-body d-flex align-items-center  justify-content-center">
@@ -620,12 +618,12 @@ $reviewData = [
                                         </div>
                                     </a>
                                 </div>
-                                <div class="card"
-                                    style="width: 49%; border-color: #25d366; overflow: hidden;">
+                                <div class="card mx-3"
+                                    style="border-radius: 10px;max-width: 30%; border-color: #25d366; overflow: hidden;">
                                     <a href="#" target="_blank" style="text-decoration:none;">
                                         <div class="d-flex justify-content-center align-items-center  p-1">
-                                            <img src="{{ asset('assets/images/home/facebook_qr_code.webp') }}" alt="QR Code"
-                                                class="card-img-top" style="width: 100px; height: 100px;">
+                                            <img src="{{ asset('assets/images/home/QR_Code.webp') }}" alt="QR Code"
+                                                class="card-img-top img-fluid">
                                         </div>
                                         <div
                                             class="card-body whatsapp-body d-flex align-items-center  justify-content-center">
@@ -641,6 +639,7 @@ $reviewData = [
                                 </div>
                             </div>
                         </div>
+
                     </div>
 
                     <div style="position: sticky; top: 110px;">
