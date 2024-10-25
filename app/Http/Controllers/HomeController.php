@@ -170,8 +170,8 @@ class HomeController extends Controller
             });
         }
 
-        $brands = Product::where('active', 1)->whereNotNull('brand')->where('brand', '!=', '')->distinct()->pluck('brand');
-        $discounts = Product::where('active', 1)->distinct()->pluck('discount_percentage');
+        $brands = Product::where('active', 1)->whereNotNull('brand')->where('brand', '!=', '')->distinct()->orderBy('brand', 'asc')->pluck('brand');
+        $discounts = Product::where('active', 1)->distinct()->orderBy('discount_percentage', 'asc')->pluck('discount_percentage');
         $rating_items = Shop::where('active', 1)->select('shop_ratings', DB::raw('count(*) as rating_count'))->groupBy('shop_ratings')->get();
         $priceRanges = [];
         $priceStep = 2000;
@@ -278,8 +278,8 @@ class HomeController extends Controller
 
         $deals = $query->paginate($perPage);
 
-        $brands = Product::where('active', 1)->where('category_id', $category->id)->whereNotNull('brand')->where('brand', '!=', '')->distinct()->pluck('brand');
-        $discounts = Product::where('active', 1)->where('category_id', $category->id)->distinct()->pluck('discount_percentage');
+        $brands = Product::where('active', 1)->where('category_id', $category->id)->whereNotNull('brand')->where('brand', '!=', '')->distinct()->orderBy('brand', 'asc')->pluck('brand');
+        $discounts = Product::where('active', 1)->where('category_id', $category->id)->distinct()->orderBy('discount_percentage', 'asc')->pluck('discount_percentage');
         $rating_items = Shop::where('active', 1)->select('shop_ratings', DB::raw('count(*) as rating_count'))->groupBy('shop_ratings')->get();
 
         $priceRanges = [];
@@ -302,7 +302,7 @@ class HomeController extends Controller
         }
 
         $shortby = DealCategory::where('active', 1)->get();
-        $totaldeals = $deals->total();
+        $totaldeals = $deals->count();
         $categorygroup = CategoryGroup::where('id', $category->category_group_id)->first();
         $bookmarkedProducts = collect();
         if (Auth::check()) {
@@ -419,8 +419,8 @@ class HomeController extends Controller
 
         $deals = $query->paginate($perPage);
 
-        $brands = Product::where('active', 1)->whereNotNull('brand')->where('brand', '!=', '')->distinct()->pluck('brand');
-        $discounts = Product::where('active', 1)->distinct()->pluck('discount_percentage');
+        $brands = Product::where('active', 1)->whereNotNull('brand')->where('brand', '!=', '')->distinct()->orderBy('brand', 'asc')->pluck('brand');
+        $discounts = Product::where('active', 1)->distinct()->orderBy('discount_percentage', 'asc')->pluck('discount_percentage');
         $rating_items = Shop::where('active', 1)
             ->select('shop_ratings', DB::raw('count(*) as rating_count'))
             ->groupBy('shop_ratings')
@@ -446,7 +446,7 @@ class HomeController extends Controller
         }
 
         $shortby = DealCategory::where('active', 1)->get();
-        $totaldeals = $deals->total();
+        $totaldeals = $deals->count();
         $category = '';
         $categorygroup = '';
         $bookmarkedProducts = collect();
