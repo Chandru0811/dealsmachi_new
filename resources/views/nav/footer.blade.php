@@ -45,7 +45,7 @@
                                 <a href="#" class="text-light text-decoration-none">FAQ</a>
                             </li>
                             <li>
-                                <a href="#" class="text-light text-decoration-none">Contact Us</a>
+                                <a href="{{ url('/contactus') }}" class="text-light text-decoration-none">Contact Us</a>
                             </li>
                             <li>
                                 <a href="http://localhost:3000/dealsmachiVendor/" class="text-light text-decoration-none">Post your deal</a>

@@ -29,6 +29,9 @@ Route::get('/privacyPolicy', function () {
 Route::get('/terms_conditions', function () {
     return view('termsandconditions');
 });
+Route::get('/contactus', function () {
+    return view('contactus');
+});
 
 // Route::get('/dashboard', function () {
 //     return view('dashboard');

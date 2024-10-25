@@ -44,7 +44,7 @@ class ProductController extends Controller
             'brand' => 'nullable|string',
             'description' => 'nullable|string',
             'slug' => 'required|string|unique:products,slug',
-            'coupon_code' => 'required|string|unique:products,coupon_code',
+            'coupon_code' => 'required|string',
             'original_price' => 'required|numeric|min:0',
             'discounted_price' => 'required|numeric|min:0',
             'discount_percentage' => 'required|numeric|min:0|max:100',
@@ -78,7 +78,6 @@ class ProductController extends Controller
 
             'coupon_code.required' => 'The product coupon code is required.',
             'coupon_code.string' => 'The coupon code must be a valid string.',
-            'coupon_code.unique' => 'The product coupon code has already been taken.',
 
             'original_price.required' => 'Please provide the original price of the product.',
             'original_price.numeric' => 'The original price must be a valid number.',
@@ -199,7 +198,7 @@ class ProductController extends Controller
             'brand' => 'nullable|string',
             'description' => 'nullable|string',
             'slug' => 'required|string|unique:products,slug,' . $id,
-            'coupon_code' => 'required|string|unique:products,coupon_code,' . $id,
+            'coupon_code' => 'required|string',
             'original_price' => 'required|numeric|min:0',
             'discounted_price' => 'required|numeric|min:0',
             'discount_percentage' => 'required|numeric|min:0|max:100',
@@ -234,7 +233,6 @@ class ProductController extends Controller
 
             'coupon_code.required' => 'The product coupon code is required.',
             'coupon_code.string' => 'The coupon code must be a valid string.',
-            'coupon_code.unique' => 'The product coupon code has already been taken.',
 
             'original_price.required' => 'Please provide the original price of the product.',
             'original_price.numeric' => 'The original price must be a valid number.',
