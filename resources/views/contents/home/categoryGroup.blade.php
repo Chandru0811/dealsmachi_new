@@ -4,11 +4,11 @@
         ['class' => 'fa-utensils', 'primary_color' => '#ff5600', 'secondary_color' => '#ff5600'],
         ['class' => 'fa-lips', 'primary_color' => '#ff54c7', 'secondary_color' => '#ff54c7'],
         ['class' => 'fa-graduation-cap', 'primary_color' => '#2a85ff', 'secondary_color' => '#2a85ff'],
-        ['class' => 'fa-cart-shopping', 'primary_color' => '#ff6400', 'secondary_color' => '#ff6400'],
-        ['class' => 'fa-dumbbell', 'primary_color' => '#ff2e78', 'secondary_color' => '#ff2e78'],
-        ['class' => 'fa-user-doctor', 'primary_color' => '#4ba4ff', 'secondary_color' => '#4ba4ff'],
+        ['class' => 'fa-shirt', 'primary_color' => '#ff6400', 'secondary_color' => '#ff6400'],
+        ['class' => 'fa-user-doctor', 'primary_color' => '#ff2e78', 'secondary_color' => '#ff2e78'],
+        ['class' => 'fa-ring', 'primary_color' => '#ffca4b', 'secondary_color' => '#ffe34b'],
         ['class' => 'fa-plane', 'primary_color' => '#00e888', 'secondary_color' => '#00e888'],
-        ['class' => 'fa-truck', 'primary_color' => '#ffc319', 'secondary_color' => '#ffc319'],
+        ['class' => 'fa-truck', 'primary_color' => '#4ba4ff', 'secondary_color' => '#4ba4ff'],
         ['class' => 'fa-wrench', 'primary_color' => '#ff1300', 'secondary_color' => '#ff1300'],
     ];
 @endphp

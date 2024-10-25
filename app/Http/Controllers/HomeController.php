@@ -26,7 +26,7 @@ class HomeController extends Controller
 
     public function index(Request $request)
     {
-        $categoryGroups = CategoryGroup::where('active', 1)->with('categories')->get();
+        $categoryGroups = CategoryGroup::where('active', 1)->with('categories')->take(10)->get();
         $hotpicks = DealCategory::where('active', 1)->get();
         $products = Product::where('active',1)->with(['shop:id,city,shop_ratings'])->get();
 

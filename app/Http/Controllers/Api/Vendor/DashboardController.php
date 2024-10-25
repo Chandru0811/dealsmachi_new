@@ -24,8 +24,9 @@ class DashboardController extends Controller
         $userId = Auth::id();
         $shop = Shop::where('owner_id',$userId)->first();
         $shopId = $shop->id;
-        $products = Product::where('shop_id',$shopId)->get();
-        $productIds = Product::where('shop_id',$shopId)->pluck('id');
+        $products = Product::where('shop_id',$shopId)->where('active', 1)->get();
+        $productscount = Product::where('shop_id', $shopId)->where('active', 1)->count();
+        $productIds = Product::where('shop_id',$shopId)->where('active', 1)->pluck('id');
         $dealclicks = DealClick::whereIn('deal_id',$productIds)->Count();
         $dealviews = DealViews::whereIn('deal_id',$productIds)->Count();
         $discountcopied = CouponCodeUsed::whereIn('deal_id',$productIds)->Count();
@@ -100,6 +101,7 @@ class DashboardController extends Controller
             'totaldiscountcopied' => $discountcopied,
             'totaldealshared' => $dealshares,
             'totaldealenquired' => $dealenquires,
+            'totalproductscount' => $productscount,
             'products'=>$products,
             'chatdata' => $chartdata
         ];

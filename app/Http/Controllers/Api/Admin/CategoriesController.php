@@ -35,8 +35,8 @@ class CategoriesController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'category_group_id' => 'required|exists:category_groups,id',
-            'name'              => 'required|string|max:200|unique:categories,name',
-            'slug'              => 'required|string|max:200|unique:categories,slug',
+            'name'              => 'required|string|max:200|unique:categories,name,NULL,id,deleted_at,NULL',
+            'slug'              => 'required|string|max:200|unique:categories,slug,NULL,id,deleted_at,NULL',
             'description'       => 'nullable|string',
             'icon'              => 'required|image|mimes:jpeg,png,jpg,gif,svg,webp|max:2048',
         ], [
@@ -58,7 +58,23 @@ class CategoriesController extends Controller
         if ($validator->fails()) {
             return response()->json(['errors' => $validator->errors()], 422);
         }
-
+    
+        // Check if a soft-deleted category with the same name or slug exists
+        $existingCategory = Category::withTrashed()
+            ->where(function($query) use ($request) {
+                $query->where('name', $request->name)
+                      ->orWhere('slug', $request->slug);
+            })
+            ->first();
+    
+        if ($existingCategory && $existingCategory->trashed()) {
+            // Restore the soft-deleted record
+            $existingCategory->restore();
+    
+            // Return a response indicating the category was restored
+            return response()->json(['message' => 'Category Restored Successfully!', 'data' => $existingCategory], 200);
+        }
+    
         $validatedData = $validator->validated();
 
         if ($request->hasFile('icon')) {
@@ -79,8 +95,9 @@ class CategoriesController extends Controller
 
         $category = Category::create($validatedData);
 
-        return $this->success('Category Created Successfully!', $category);
+        return response()->json(['message' => 'Category Created Successfully!', 'data' => $category], 201);
     }
+
     public function show($id)
     {
         $category = Category::with(['categoryGroup'])->find($id);

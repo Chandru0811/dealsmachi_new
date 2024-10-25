@@ -42,23 +42,23 @@ class CategoryGroupSeeder extends Seeder
                 'order' => 4,
             ],
             [
-                'name' => 'Groceries',
-                'slug' => 'groceries',
-                'description' => 'Group of grocery-related categories, including food markets and online grocery stores',
+                'name' => 'Fashion',
+                'slug' => 'fashion',
+                'description' => 'Collection of clothing, accessories, and trends that express personal style and cultural influences.',
                 'active' => 1,
                 'order' => 5,
-            ],
-            [
-                'name' => 'Wellness',
-                'slug' => 'wellness',
-                'description' => 'Group of wellness-related categories, including fitness, yoga, and holistic therapies',
-                'active' => 1,
-                'order' => 6,
-            ],
+            ],          
             [
                 'name' => 'Health Care',
                 'slug' => 'health_care',
                 'description' => 'Group of health care-related categories, including hospitals, clinics, and medical services',
+                'active' => 1,
+                'order' => 6,
+            ],
+            [
+                'name' => 'Jewellery',
+                'slug' => 'jewellery',
+                'description' => 'Collection of adornments and decorative items, including rings, necklaces, bracelets, and earrings.',
                 'active' => 1,
                 'order' => 7,
             ],
@@ -82,6 +82,13 @@ class CategoryGroupSeeder extends Seeder
                 'description' => 'Group of service-related categories, including professional services, maintenance, and repair',
                 'active' => 1,
                 'order' => 10,
+            ],
+            [
+                'name' => 'Others',
+                'slug' => 'others',
+                'description' => 'Miscellaneous categories that do not fit into other defined groups, covering a variety of topics and services.',
+                'active' => 1,
+                'order' => 11,
             ]
         ]);
     }

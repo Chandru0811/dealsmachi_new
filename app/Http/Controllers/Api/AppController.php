@@ -29,7 +29,7 @@ class AppController extends Controller
     {
         $today = now()->toDateString();
 
-        $categoryGroups = CategoryGroup::where('active', 1)->get();
+        $categoryGroups = CategoryGroup::where('active', 1)->take(10)->get();
         $sliders = Slider::get();
         $cashBackDeals = DealCategory::where('active', 1)->get();
 
