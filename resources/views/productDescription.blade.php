@@ -204,8 +204,10 @@ $reviewData = [
                                 </button>
                                 @if ($product->shop->mobile)
                                 <button class="btn mb-2 sendEnqBtn"
-                                    onclick="window.open('https://wa.me/{{ $product->shop->mobile }}?text=Hello! I visited your website.', '_blank')">
-                                    <i class="fa-brands fa-whatsapp"></i>&nbsp;&nbsp;Chat
+                                    onclick="window.open(
+                                        `https://wa.me/91{{ $product->shop->mobile }}?text=` +
+                                        encodeURIComponent(`*Hello! I visited your website and found an amazing product:*\n\n{{ $product->name }}\n{{ $product->description }}\n\nHere is the product page: ${window.location.href}`),'_blank')">
+                                    <i class="fa-brands fa-whatsapp"></i>&nbsp;&nbsp;Enquiry
                                 </button>
                                 @else
                                 <button class="btn mb-2 sendEnqBtn" disabled
