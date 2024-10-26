@@ -3,8 +3,7 @@ $(document).ready(function () {
         .removeClass("fa-twitter")
         .addClass("fa-x-twitter");
 
-
-        $("#enquiryFormMain").validate({
+    $("#enquiryFormMain").validate({
         rules: {
             name: {
                 required: true,
@@ -115,13 +114,21 @@ $(document).ready(function () {
 
         $.when(laravelRequest, crmlahRequest)
             .done(function (laravelResponse, crmlahResponse) {
-                console.log("Both APIs succeeded:", laravelResponse, crmlahResponse);
+                console.log(
+                    "Both APIs succeeded:",
+                    laravelResponse,
+                    crmlahResponse
+                );
                 $("#successModal").modal("show");
                 $currentForm[0].reset();
                 $("#enquiryModal").modal("hide");
             })
             .fail(function (jqXHR, textStatus, errorThrown) {
-                console.error("One or both API calls failed:", textStatus, errorThrown);
+                console.error(
+                    "One or both API calls failed:",
+                    textStatus,
+                    errorThrown
+                );
                 $("#errorModal").modal("show");
                 $currentForm[0].reset();
                 $("#enquiryModal").modal("hide");
@@ -156,6 +163,84 @@ $(document).ready(function () {
         },
         navText: ["&#10094;", "&#10095;"],
     });
+});
+
+$("#contactForm").validate({
+    rules: {
+        first_name: {
+            required: true,
+            minlength: 2,
+        },
+        email: {
+            required: true,
+            email: true,
+        },
+        mobile: {
+            required: true,
+            number: true,
+            minlength: 8,
+            maxlength: 10,
+        },
+        description_info: {
+            required: true,
+        },
+    },
+    messages: {
+        first_name: {
+            required: "Please enter your first name*",
+            minlength: "Your name must be at least 2 characters long",
+        },
+        email: {
+            required: "Please enter your email*",
+            email: "Please enter a valid email address",
+        },
+        mobile: {
+            required: "Please enter your phone number*",
+            number: "Please enter a valid phone number",
+            minlength: "Your phone number must be at least 8 digits long",
+            maxlength: "Your phone number must be at most 10 digits long",
+        },
+        description_info: {
+            required: "Please enter your message*",
+        },
+    },
+    errorPlacement: function (error, element) {
+        error.appendTo(element.next(".error"));
+    },
+    submitHandler: function (form) {
+        var payload = {
+            first_name: $("#first_name").val(),
+            last_name: $("#last_name").val(),
+            email: $("#email").val(),
+            phone: $("#mobile").val(),
+            company_id: 42,
+            company: "Dealslah",
+            lead_status: "PENDING",
+            description_info: $("#description_info").val(),
+            lead_source: "Contact Us",
+            country_code: "65",
+            createdBy: $("#first_name").val(),
+        };
+
+        // console.log("Form data:", $("#description_info").val());
+
+        // AJAX call to the newClient API
+        $.ajax({
+            url: "https://crmlah.com/ecscrm/api/newClient",
+            type: "POST",
+            contentType: "application/json",
+            data: JSON.stringify(payload),
+            success: function (response) {
+                console.log("API response:", response);
+                $("#successModal").modal("show");
+                $(form).trigger("reset"); // Reset form after successful submission
+            },
+            error: function (xhr, status, error) {
+                console.error("API call failed:", error);
+                $("#errorModal").modal("show");
+            },
+        });
+    },
 });
 
 // Validation for Login Page
@@ -364,7 +449,7 @@ $(document).ready(function () {
                 function () {
                     const type =
                         registerConfirmPassword.getAttribute("type") ===
-                            "password"
+                        "password"
                             ? "text"
                             : "password";
                     registerConfirmPassword.setAttribute("type", type);
@@ -548,22 +633,22 @@ function copySpanText(element, event) {
     document.execCommand("copy");
     document.body.removeChild(tempInput);
 
-    var dealId = element.closest('a').getAttribute('href').split('/').pop();
+    var dealId = element.closest("a").getAttribute("href").split("/").pop();
 
     $.ajax({
-        url: '/deals/coupon/copied',
-        type: 'POST',
+        url: "/deals/coupon/copied",
+        type: "POST",
         data: {
-            _token: $('meta[name="csrf-token"]').attr('content'),
+            _token: $('meta[name="csrf-token"]').attr("content"),
             coupon_code: couponCode,
-            id: dealId
+            id: dealId,
         },
-        success: function(response) {
+        success: function (response) {
             console.log(response.message);
         },
-        error: function(xhr) {
-            console.log('Error occurred: ' + xhr.statusText);
-        }
+        error: function (xhr) {
+            console.log("Error occurred: " + xhr.statusText);
+        },
     });
 
     showTooltip(element);
@@ -583,29 +668,29 @@ function copyLinkToClipboard(element, event, dealId) {
     document.body.removeChild(tempInput);
 
     $.ajax({
-        url: '/deals/count/share',
-        type: 'POST',
+        url: "/deals/count/share",
+        type: "POST",
         data: {
-            _token: $('meta[name="csrf-token"]').attr('content'),
-            id: dealId
+            _token: $('meta[name="csrf-token"]').attr("content"),
+            id: dealId,
         },
-        success: function(response) {
+        success: function (response) {
             console.log(response.message);
         },
-        error: function(xhr) {
-            console.log('Error occurred: ' + xhr.statusText);
-        }
+        error: function (xhr) {
+            console.log("Error occurred: " + xhr.statusText);
+        },
     });
 
     showTooltip(element);
 }
 
 function showTooltip(element) {
-    const tooltipText = element.querySelector('.tooltip-text');
-    tooltipText.style.visibility = 'visible';
+    const tooltipText = element.querySelector(".tooltip-text");
+    tooltipText.style.visibility = "visible";
 
     setTimeout(() => {
-        tooltipText.style.visibility = 'hidden';
+        tooltipText.style.visibility = "hidden";
     }, 2000);
 }
 
@@ -677,7 +762,7 @@ $(document).ready(function () {
 
                         handleRemoveBookmark();
                     },
-                    error: function (xhr) { },
+                    error: function (xhr) {},
                 });
             });
     }
@@ -760,31 +845,35 @@ function shareOnInstagram() {
     window.open("https://www.instagram.com", "_blank");
 }
 
-document.querySelectorAll('.social-link-container a').forEach(function(button) {
-    button.addEventListener('click', function(event) {
-        var productId = event.target.closest('.social-link-container').getAttribute('data-product-id');
-        var shareUrl = event.target.closest('a').href;
+document
+    .querySelectorAll(".social-link-container a")
+    .forEach(function (button) {
+        button.addEventListener("click", function (event) {
+            var productId = event.target
+                .closest(".social-link-container")
+                .getAttribute("data-product-id");
+            var shareUrl = event.target.closest("a").href;
 
-        $.ajax({
-            url: '/deals/count/share',
-            type: 'POST',
-            data: {
-                _token: $('meta[name="csrf-token"]').attr('content'),
-                id: productId
-            },
-            success: function(response) {
-                console.log(response.message);
-                window.open(shareUrl, '_blank');
-            },
-            error: function(xhr) {
-                console.log('Error occurred: ' + xhr.statusText);
-                window.open(shareUrl, '_blank');
-            }
+            $.ajax({
+                url: "/deals/count/share",
+                type: "POST",
+                data: {
+                    _token: $('meta[name="csrf-token"]').attr("content"),
+                    id: productId,
+                },
+                success: function (response) {
+                    console.log(response.message);
+                    window.open(shareUrl, "_blank");
+                },
+                error: function (xhr) {
+                    console.log("Error occurred: " + xhr.statusText);
+                    window.open(shareUrl, "_blank");
+                },
+            });
+
+            event.preventDefault();
         });
-
-        event.preventDefault();
     });
-});
 
 $('input[type="checkbox"]').change(function () {
     var selectedPriceRanges = [];
@@ -812,18 +901,18 @@ $('input[type="checkbox"]').change(function () {
 
 function clickCount(dealId) {
     $.ajax({
-        url: 'deals/count/click',
-        type: 'POST',
+        url: "deals/count/click",
+        type: "POST",
         data: {
-            _token: $('meta[name="csrf-token"]').attr('content'),
-            id: dealId
+            _token: $('meta[name="csrf-token"]').attr("content"),
+            id: dealId,
         },
-        success: function(response) {
+        success: function (response) {
             console.log(response.message);
         },
-        error: function(xhr) {
-            console.log('Error occurred: ' + xhr.statusText);
-        }
+        error: function (xhr) {
+            console.log("Error occurred: " + xhr.statusText);
+        },
     });
 }
 

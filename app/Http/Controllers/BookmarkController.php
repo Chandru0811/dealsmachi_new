@@ -83,10 +83,10 @@ class BookmarkController extends Controller
                 $query->whereNull('user_id')->where('ip_address', $request->ip());
             }
         })
-        ->whereHas('deal', function ($query) {
-            $query->where('active', 1)
-                  ->whereNull('deleted_at');
-        })->count();
+            ->whereHas('deal', function ($query) {
+                $query->where('active', 1)
+                    ->whereNull('deleted_at');
+            })->count();
 
         return $bookmarkCount;
     }
@@ -94,19 +94,19 @@ class BookmarkController extends Controller
     public function totalItems(Request $request)
     {
         $user_id = Auth::check() ? Auth::id() : null;
-    
+
         $bookmarkCount = Bookmark::where(function ($query) use ($user_id, $request) {
-                if ($user_id) {
-                    $query->where('user_id', $user_id);
-                } else {
-                    $query->whereNull('user_id')->where('ip_address', $request->ip());
-                }
+            if ($user_id) {
+                $query->where('user_id', $user_id);
+            } else {
+                $query->whereNull('user_id')->where('ip_address', $request->ip());
+            }
         })
-        ->whereHas('deal', function ($query) {
-            $query->where('active', 1)
-                  ->whereNull('deleted_at');
-        })->count();
-    
+            ->whereHas('deal', function ($query) {
+                $query->where('active', 1)
+                    ->whereNull('deleted_at');
+            })->count();
+
         return response()->json(['total_items' => $bookmarkCount]);
     }
 
@@ -121,16 +121,15 @@ class BookmarkController extends Controller
                 $query->whereNull('user_id')->where('ip_address', $request->ip());
             }
         })
-        ->whereHas('deal', function ($query) {
-            $query->where('active', 1)
-                  ->whereNull('deleted_at');
-        })
-        ->with(['deal' => function($query) {
-            $query->where('active', 1)->whereNull('deleted_at');
-        }, 'deal.shop'])
-        ->paginate(10);
+            ->whereHas('deal', function ($query) {
+                $query->where('active', 1)
+                    ->whereNull('deleted_at');
+            })
+            ->with(['deal' => function ($query) {
+                $query->where('active', 1)->whereNull('deleted_at');
+            }, 'deal.shop'])
+            ->paginate(10);
 
         return view('bookmark', compact('bookmarks'));
     }
-    
 }

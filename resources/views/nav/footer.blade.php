@@ -12,19 +12,20 @@
                         </div>
                         <div class="social-icons">
                             <a href="https://www.facebook.com/profile.php?id=61566743978973"
-                                class="text-decoration-none me-2"><i class="fab fa-facebook"
+                                class="text-decoration-none me-2" target='_blank'><i class="fab fa-facebook"
                                     style="font-size: 15px"></i></a>
-                            <a href="https://www.instagram.com/dealsmachi/" class="text-decoration-none me-2"><i
-                                    class="fab fa-instagram" style="font-size: 15px"></i></a>
-                            <a href="https://www.linkedin.com/in/deals-machi-2b4944331"
+                            <a href="https://www.instagram.com/dealsmachi/" target='_blank'
+                                class="text-decoration-none me-2"><i class="fab fa-instagram"
+                                    style="font-size: 15px"></i></a>
+                            <a href="https://www.linkedin.com/in/deals-machi-2b4944331" target='_blank'
                                 class="text-decoration-none me-2"><i class="fab fa-linkedin"
                                     style="font-size: 15px"></i></a>
-                            <a href="https://www.youtube.com/channel/UCAyH2wQ2srJE8WqvII8JNrQ"
+                            <a href="https://www.youtube.com/channel/UCAyH2wQ2srJE8WqvII8JNrQ" target='_blank'
                                 class="text-decoration-none me-2"><i class="fab fa-youtube"
                                     style="font-size: 15px"></i></a>
-                            <a href="#" class="text-decoration-none me-2"><i class="fab fa-whatsapp"
-                                    style="font-size: 15px"></i></a>
-                            <a href="https://x.com/dealsmachi_in" class="text-decoration-none"><i
+                            <a href="#" class="text-decoration-none me-2" target='_blank'><i
+                                    class="fab fa-whatsapp" style="font-size: 15px"></i></a>
+                            <a href="https://x.com/dealsmachi_in" target='_blank' class="text-decoration-none"><i
                                     class="fab fa-x-twitter" style="font-size: 15px"></i></a>
                         </div>
                     </div>
@@ -48,7 +49,8 @@
                                 <a href="{{ url('/contactus') }}" class="text-light text-decoration-none">Contact Us</a>
                             </li>
                             <li>
-                                <a href="http://localhost:3000/dealsmachiVendor/" class="text-light text-decoration-none">Post your deal</a>
+                                <a href="http://localhost:3000/dealsmachiVendor/"
+                                    class="text-light text-decoration-none">Post your deal</a>
                             </li>
                         </ul>
                     </div>

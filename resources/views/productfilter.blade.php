@@ -349,7 +349,8 @@
                             @foreach ($deals as $product)
                                 <div
                                     class="col-md-4 col-lg-6 col-xl-4 col-12 mb-3 d-flex justify-content-center align-items-stretch">
-                                    <a href="{{ url('/deal/' . $product->id) }}" style="text-decoration: none;" onclick="clickCount('{{ $product->id }}')">
+                                    <a href="{{ url('/deal/' . $product->id) }}" style="text-decoration: none;"
+                                        onclick="clickCount('{{ $product->id }}')">
                                         <div class="card sub_topCard h-100 d-flex flex-column">
                                             <div style="min-height: 50px">
                                                 <span class="badge trending-badge">{{ $product->label }}</span>
@@ -416,8 +417,23 @@
                                                     <p class="ps-3 fw-medium d-flex align-items-center justify-content-between"
                                                         style="color: #ff0060">
                                                         <span>Rs {{ $product->discounted_price }}</span>
-                                                        <span
-                                                            class="mx-3 px-2 couponBadge">DEALSLAH{{ round($product->discount_percentage) }}</span>
+                                                        @if (!empty($product->coupon_code))
+                                                            <span id="mySpan" class="mx-3 px-2 couponBadge"
+                                                                onclick="copySpanText(this, event)"
+                                                                data-bs-toggle="tooltip" data-bs-placement="bottom"
+                                                                title="Click to Copy" style="position:relative;">
+
+                                                                {{ $product->coupon_code }}
+
+                                                                <!-- Tooltip container -->
+                                                                <span class="tooltip-text"
+                                                                    style="visibility: hidden; background-color: black; color: #fff; text-align: center;
+                                                    border-radius: 6px; padding: 5px; position: absolute; z-index: 1;
+                                                    bottom: 125%; left: 50%; margin-left: -60px;">
+                                                                    Copied!
+                                                                </span>
+                                                            </span>
+                                                        @endif
                                                     </p>
                                                     <div class="card-divider"></div>
                                                     <div class="ps-3">
@@ -489,8 +505,8 @@
                                     <a href="https://www.youtube.com/channel/UCIbNIWhaDnRs-gFuJ0sTNCQ/videos"
                                         target="_blank" style="text-decoration:none;">
                                         <div class="d-flex justify-content-center align-items-center  p-1">
-                                            <img src="{{ asset('assets/images/home/youtube_qr_code.webp') }}" alt="QR Code"
-                                                class="card-img-top img-fluid">
+                                            <img src="{{ asset('assets/images/home/youtube_qr_code.webp') }}"
+                                                alt="QR Code" class="card-img-top img-fluid">
                                         </div>
                                         <div
                                             class="card-body youtube-body d-flex align-items-center  justify-content-center">

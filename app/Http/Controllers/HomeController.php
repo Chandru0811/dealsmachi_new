@@ -28,9 +28,9 @@ class HomeController extends Controller
     {
         $categoryGroups = CategoryGroup::where('active', 1)->with('categories')->take(10)->get();
         $hotpicks = DealCategory::where('active', 1)->get();
-        $products = Product::where('active',1)->with(['shop:id,city,shop_ratings'])->get();
+        $products = Product::where('active', 1)->with(['shop:id,city,shop_ratings'])->get();
 
-        $treandingdeals = DealViews::whereDate('viewed_at',Carbon::today())->get();
+        $treandingdeals = DealViews::whereDate('viewed_at', Carbon::today())->get();
         $populardeals = DealViews::select('deal_id', DB::raw('count(*) as total_views'))->groupBy('deal_id')->limit(5)->orderBy('total_views', 'desc')->having('total_views', '>', 10)->get();
         $earlybirddeals = Product::where('active', 1)->whereDate('start_date', now())->get();
         $lastchancedeals = Product::where('active', 1)->whereDate('end_date', now())->get();
@@ -47,7 +47,7 @@ class HomeController extends Controller
             $bookmarkedProducts = Bookmark::where('ip_address', $ipAddress)->pluck('deal_id');
         }
 
-        return view('home', compact('categoryGroups', 'hotpicks', 'products', 'bookmarkedProducts','treandingdeals','populardeals','earlybirddeals','lastchancedeals','limitedtimedeals'));
+        return view('home', compact('categoryGroups', 'hotpicks', 'products', 'bookmarkedProducts', 'treandingdeals', 'populardeals', 'earlybirddeals', 'lastchancedeals', 'limitedtimedeals'));
     }
 
     public function clickcounts(Request $request)
@@ -111,7 +111,7 @@ class HomeController extends Controller
             $pagetitle
         )->facebook()->twitter()->linkedin()->whatsapp();
 
-        return view('productDescription', compact('product', 'bookmarkedProducts','shareButtons','pageurl','pagetitle','pagedescription','pageimage'));
+        return view('productDescription', compact('product', 'bookmarkedProducts', 'shareButtons', 'pageurl', 'pagetitle', 'pagedescription', 'pageimage'));
     }
 
     public function dealcategorybasedproducts($slug, Request $request)
@@ -171,7 +171,9 @@ class HomeController extends Controller
         }
 
         $brands = Product::where('active', 1)->whereNotNull('brand')->where('brand', '!=', '')->distinct()->orderBy('brand', 'asc')->pluck('brand');
-        $discounts = Product::where('active', 1)->pluck('discount_percentage')->map(function ($discount) {return round($discount);})->unique()->sort()->values();
+        $discounts = Product::where('active', 1)->pluck('discount_percentage')->map(function ($discount) {
+            return round($discount);
+        })->unique()->sort()->values();
         $rating_items = Shop::where('active', 1)->select('shop_ratings', DB::raw('count(*) as rating_count'))->groupBy('shop_ratings')->get();
         $priceRanges = [];
         $priceStep = 2000;
@@ -279,7 +281,9 @@ class HomeController extends Controller
         $deals = $query->paginate($perPage);
 
         $brands = Product::where('active', 1)->where('category_id', $category->id)->whereNotNull('brand')->where('brand', '!=', '')->distinct()->orderBy('brand', 'asc')->pluck('brand');
-        $discounts = Product::where('active', 1)->pluck('discount_percentage')->map(function ($discount) {return round($discount);})->unique()->sort()->values();
+        $discounts = Product::where('active', 1)->pluck('discount_percentage')->map(function ($discount) {
+            return round($discount);
+        })->unique()->sort()->values();
         $rating_items = Shop::where('active', 1)->select('shop_ratings', DB::raw('count(*) as rating_count'))->groupBy('shop_ratings')->get();
 
         $priceRanges = [];
@@ -369,7 +373,7 @@ class HomeController extends Controller
             $query->where(function ($priceQuery) use ($priceRanges) {
                 foreach ($priceRanges as $range) {
                     // Clean and split the price range
-                    $cleanRange = str_replace(['Rs', ',', ' '], '', $range);
+                    $cleanRange = str_replace(['$', ',', ' '], '', $range);
                     $priceRange = explode('-', $cleanRange);
 
                     $minPrice = isset($priceRange[0]) ? (float)$priceRange[0] : null;
@@ -391,8 +395,8 @@ class HomeController extends Controller
 
             if ($shortby == 'trending') {
                 $query->withCount(['views' => function ($viewQuery) {
-                        $viewQuery->whereDate('viewed_at', now()->toDateString());
-                    }])
+                    $viewQuery->whereDate('viewed_at', now()->toDateString());
+                }])
                     ->with(['shop:id,country,state,city,street,street2,zip_code,shop_ratings'])
                     ->orderBy('views_count', 'desc')
                     ->addSelect(DB::raw("'TRENDING' as label"));
@@ -404,7 +408,8 @@ class HomeController extends Controller
             } elseif ($shortby == 'early_bird') {
                 $query->with(['shop:id,country,state,city,street,street2,zip_code,shop_ratings'])
                     ->whereDate('start_date', now())
-                    ->addSelect(DB::raw("'EARLY BIRD' as label"));
+                    ->whereHas('shop')
+                    ->select('*', DB::raw("'EARLY BIRD' as label"));
             } elseif ($shortby == 'last_chance') {
                 $query->with(['shop:id,country,state,city,street,street2,zip_code,shop_ratings'])
                     ->whereDate('end_date', now())
@@ -412,15 +417,16 @@ class HomeController extends Controller
             } elseif ($shortby == 'limited_time') {
                 $query->with(['shop:id,country,state,city,street,street2,zip_code,shop_ratings'])
                     ->whereRaw('DATEDIFF(end_date, start_date) <= ?', [2])
-                    ->addSelect(DB::raw("'LIMITED TIME' as label"));
+                    ->select('*', DB::raw("'LIMITED TIME' as label"));
             }
         }
-
 
         $deals = $query->paginate($perPage);
 
         $brands = Product::where('active', 1)->whereNotNull('brand')->where('brand', '!=', '')->distinct()->orderBy('brand', 'asc')->pluck('brand');
-        $discounts = Product::where('active', 1)->pluck('discount_percentage')->map(function ($discount) {return round($discount);})->unique()->sort()->values();
+        $discounts = Product::where('active', 1)->pluck('discount_percentage')->map(function ($discount) {
+            return round($discount);
+        })->unique()->sort()->values();
         $rating_items = Shop::where('active', 1)->select('shop_ratings', DB::raw('count(*) as rating_count'))->groupBy('shop_ratings')->get();
 
         $priceRanges = [];
@@ -433,12 +439,12 @@ class HomeController extends Controller
 
             if ($end > $maxPrice) {
                 $priceRanges[] = [
-                    'label' => 'Rs' . number_format($start, 2) . ' - Rs' . number_format($end, 2)
+                    'label' => '$' . number_format($start, 2) . ' - $' . number_format($end, 2)
                 ];
                 break;
             }
             $priceRanges[] = [
-                'label' => 'Rs' . number_format($start, 2) . ' - Rs' . number_format($end, 2)
+                'label' => '$' . number_format($start, 2) . ' - $' . number_format($end, 2)
             ];
         }
 
@@ -506,5 +512,4 @@ class HomeController extends Controller
 
         return $this->ok('Dealenquire Added Successfully!');
     }
-
 }

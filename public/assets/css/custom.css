@@ -1557,34 +1557,128 @@ footer hr {
     color: white;
     border-radius: 5px;
 }
+@media screen and (min-width: 992px) and (max-width: 1199px) {
+    #social-links .fa-facebook-square {
+        padding: 10px 8px;
+        width: 30px;
+        height: 28px;
+        background-color: #3b5998;
+        border-radius: 3px;
+        font-size: 10px;
+    }
+    #social-links .fa-twitter {
+        padding: 10px 8px;
+        width: 30px;
+        height: 28px;
+        background-color: #1da1f2;
+        border-radius: 3px;
+        font-size: 10px;
+    }
+    #social-links .fa-linkedin {
+        padding: 10px 8px;
+        width: 30px;
+        height: 28px;
+        background-color: #0077b5;
+        border-radius: 3px;
+        font-size: 10px;
+    }
+    #social-links .fa-whatsapp {
+        padding: 10px 8px;
+        width: 30px;
+        height: 28px;
+        background-color: #25d366;
+        border-radius: 3px;
+        font-size: 10px;
+    }
+
+    .social-link-container {
+        display: flex;
+        gap: 4;
+    }
+
+    .social-link-container a {
+        display: inline-block;
+        text-decoration: none;
+        color: white;
+        border-radius: 50%;
+        font-size: 10px;
+        position: relative;
+        text-align: center;
+        width: 20px;
+        height: 20px;
+        margin-left: 2px;
+    }
+
+    .social-link-container a p {
+        position: absolute;
+        bottom: 25px;
+        left: 50%;
+        transform: translateX(-50%);
+        font-size: 9px;
+        font-weight: 500;
+        color: white;
+        margin: 0;
+    }
+
+    .social-link-container .fa-thumbs-up {
+        background-color: #1877f2;
+        padding: 8px;
+        width: 30px;
+        height: 28px;
+        border-radius: 3px;
+        font-size: 14px !important;
+        margin: 0px -2px;
+    }
+
+    .social-link-container .fa-instagram {
+        background: linear-gradient(
+            45deg,
+            #f09433,
+            #e6683c,
+            #dc2743,
+            #cc2366,
+            #bc1888
+        );
+        padding: 8px 5px;
+        width: 30px;
+        height: 28px;
+        border-radius: 3px;
+        font-size: 14px !important;
+    }
+}
+
 /* Specific social media colors */
 #social-links .fa-facebook-square {
-    padding: 10px 8px;
-    width: 40px;
+    padding: 6px 8px;
+    width: 30px;
+    height: 28px;
     background-color: #3b5998;
     border-radius: 3px;
-    font-size: 18px;
+    font-size: 16px;
 }
 #social-links .fa-x-twitter {
-    padding: 10px 8px;
-    width: 40px;
+    padding: 6px 7px;
+    width: 30px;
+    height: 28px;
     background-color: #000;
     border-radius: 3px;
-    font-size: 18px;
+    font-size: 16px;
 }
 #social-links .fa-linkedin {
-    padding: 10px 8px;
-    width: 40px;
+    padding: 6px 8px;
+    width: 30px;
+    height: 28px;
     background-color: #0077b5;
     border-radius: 3px;
-    font-size: 18px;
+    font-size: 16px;
 }
 #social-links .fa-whatsapp {
-    padding: 10px 8px;
-    width: 40px;
+    padding: 6px 8px;
+    width: 30px;
+    height: 28px;
     background-color: #25d366;
     border-radius: 3px;
-    font-size: 18px;
+    font-size: 16px;
 }
 
 .social-link-container {
@@ -1614,11 +1708,11 @@ footer hr {
 
 .social-link-container .fa-thumbs-up {
     background-color: #1877f2;
-    padding: 10px 8px;
-    width: 40px;
-    height: 38px;
+    padding: 6px 8px;
+    width: 30px;
+    height: 28px;
     border-radius: 3px;
-    font-size: 18px !important;
+    font-size: 16px !important;
 }
 
 .social-link-container .fa-instagram {
@@ -1630,48 +1724,12 @@ footer hr {
         #cc2366,
         #bc1888
     );
-    padding: 8px 5px;
-    width: 40px;
-    height: 38px;
+    padding: 7px 5px;
+    width: 30px;
+    height: 28px;
     border-radius: 3px;
-    font-size: 22px !important;
+    font-size: 16px !important;
 }
-
-#social-links .fa-facebook-square::after {
-    display: block;
-    font-size: 9px;
-    margin-top: 5px;
-    font-family: kanit;
-    text-align: center;
-}
-
-#social-links .fa-x-twitter::after {
-    display: block;
-    font-size: 9px;
-    margin-top: 5px;
-    font-family: "kanit";
-
-    text-align: center;
-}
-
-#social-links .fa-linkedin::after {
-    display: block;
-    font-size: 9px;
-    margin-top: 5px;
-    font-family: "kanit";
-
-    text-align: center;
-}
-
-#social-links .fa-whatsapp::after {
-    display: block;
-    font-size: 9px;
-    margin-top: 5px;
-    font-family: "kanit";
-
-    text-align: center;
-}
-
 
 .icon-circle {
     width: 30px !important;
@@ -1713,7 +1771,6 @@ footer hr {
     background-color: #1878f3;
     border-radius: 0 0 10px 10px;
     padding: 5px 0px !important;
-
 }
 
 .instagram-body {
@@ -1732,71 +1789,69 @@ footer hr {
     background-color: #ff0000;
     border-radius: 0 0 10px 10px;
     padding: 5px 0px;
-
 }
 
 .whatsapp-body {
     background-color: #25d366;
     border-radius: 0 0 10px 10px;
     padding: 5px 0px;
-
 }
 
 /* Contact Us Start */
 
 .nav-tabs .nav-link.active {
     background-color: white !important;
-  }
-  .nav-tabs .nav-link:hover {
+}
+.nav-tabs .nav-link:hover {
     background-color: white !important;
-  }
+}
 
-  .nav-tabs.nav-link {
+.nav-tabs.nav-link {
     color: #000;
     background-color: transparent;
     transition: background-color 0.3s ease;
     padding: 5px;
-  }
+}
 
-  .contact-nav:hover {
+.contact-nav:hover {
     background-color: #fff;
-  }
+}
 
-  .address-content {
+.address-content {
     display: none;
     padding-top: 16px;
-  }
-  .active-address {
+}
+.active-address {
     display: block;
     padding-top: 16px;
-  }
+}
 
-  .nav-tabs .contact-nav.active {
+.nav-tabs .contact-nav.active {
     background-color: #fff !important;
-  }
+}
 
-  .nav-tabs .contact-nav {
+.nav-tabs .contact-nav {
     margin-bottom: 0px;
-  }
+}
 
-  .mediaIconBgIcon {
+.mediaIconBgIcon {
     font-size: 22px;
     border-radius: 5px;
     padding: 14px;
     /* width: 40px;
     height: 40px; */
     background: #ff0060;
-  }
+}
 
-  .mediaIconBgIcon:hover {
+.mediaIconBgIcon:hover {
     background: #ff0060;
-  }
+}
 
-  .socialicons a {
+.socialicons a {
     padding: 0;
-  }
+}
 
-  .mediaIconBgIcon {
+.mediaIconBgIcon {
     width: 50px;
     height: 50px;
     background-color: #ff0060;
@@ -1805,86 +1860,86 @@ footer hr {
     align-items: center;
     border-radius: 5%;
     margin: 5px;
-  }
+}
 
-  .soc_icons {
+.soc_icons {
     font-size: 24px;
     color: white;
-  }
+}
 
-  @media (max-width: 320px) {
+@media (max-width: 320px) {
     .socialicons {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 10px;
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 10px;
     }
 
     .socialicons a:nth-child(1),
     .socialicons a:nth-child(4) {
-      grid-column: 1;
+        grid-column: 1;
     }
 
     .socialicons a:nth-child(2),
     .socialicons a:nth-child(5) {
-      grid-column: 2;
+        grid-column: 2;
     }
 
     .socialicons a:nth-child(3) {
-      grid-column: 3;
+        grid-column: 3;
     }
-  }
+}
 
-  .borderline {
+.borderline {
     border-left: 1px solid #4f4f4f;
-  }
+}
 
-  @media (max-width: 767px) {
+@media (max-width: 767px) {
     .borderline {
-      border-left: none !important;
+        border-left: none !important;
     }
-  }
+}
 
-  .contact-heading {
+.contact-heading {
     font-size: 2em;
-  }
+}
 
-  .contact-icon-group {
+.contact-icon-group {
     background-color: #fff;
     border: none;
     border-radius: 0px;
     border-bottom: 1px solid #a7a7a7;
-  }
+}
 
-  .icon-color {
+.icon-color {
     color: gray !important;
-  }
+}
 
-  .contact-button {
+.contact-button {
     background-color: #ff0060;
     color: #fff;
-  }
+}
 
-  .contact-button:hover{
+.contact-button:hover {
     background-color: #ff0060 !important;
     color: #fff !important;
-  }
+}
 
-  .contact-subheading2 {
+.contact-subheading2 {
     color: #00d570;
-  }
+}
 
-  .input-text-color {
+.input-text-color {
     color: #000 !important;
-  }
+}
 
-  .input-text-color:focus {
+.input-text-color:focus {
     box-shadow: none;
-  }
+}
 
-  .contact-icon-group {
+.contact-icon-group {
     background-color: #fff;
     border: none;
     border-radius: 0px;
     border-bottom: 1px solid #a7a7a7;
-  }
-  /* Contact Us End */
+}
+/* Contact Us End */
