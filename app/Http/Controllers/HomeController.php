@@ -171,7 +171,7 @@ class HomeController extends Controller
         }
 
         $brands = Product::where('active', 1)->whereNotNull('brand')->where('brand', '!=', '')->distinct()->orderBy('brand', 'asc')->pluck('brand');
-        $discounts = Product::where('active', 1)->distinct()->orderBy('discount_percentage', 'asc')->pluck('discount_percentage');
+        $discounts = Product::where('active', 1)->pluck('discount_percentage')->map(function ($discount) {return round($discount);})->unique()->sort()->values();
         $rating_items = Shop::where('active', 1)->select('shop_ratings', DB::raw('count(*) as rating_count'))->groupBy('shop_ratings')->get();
         $priceRanges = [];
         $priceStep = 2000;
@@ -279,7 +279,7 @@ class HomeController extends Controller
         $deals = $query->paginate($perPage);
 
         $brands = Product::where('active', 1)->where('category_id', $category->id)->whereNotNull('brand')->where('brand', '!=', '')->distinct()->orderBy('brand', 'asc')->pluck('brand');
-        $discounts = Product::where('active', 1)->where('category_id', $category->id)->distinct()->orderBy('discount_percentage', 'asc')->pluck('discount_percentage');
+        $discounts = Product::where('active', 1)->pluck('discount_percentage')->map(function ($discount) {return round($discount);})->unique()->sort()->values();
         $rating_items = Shop::where('active', 1)->select('shop_ratings', DB::raw('count(*) as rating_count'))->groupBy('shop_ratings')->get();
 
         $priceRanges = [];
@@ -420,11 +420,8 @@ class HomeController extends Controller
         $deals = $query->paginate($perPage);
 
         $brands = Product::where('active', 1)->whereNotNull('brand')->where('brand', '!=', '')->distinct()->orderBy('brand', 'asc')->pluck('brand');
-        $discounts = Product::where('active', 1)->distinct()->orderBy('discount_percentage', 'asc')->pluck('discount_percentage');
-        $rating_items = Shop::where('active', 1)
-            ->select('shop_ratings', DB::raw('count(*) as rating_count'))
-            ->groupBy('shop_ratings')
-            ->get();
+        $discounts = Product::where('active', 1)->pluck('discount_percentage')->map(function ($discount) {return round($discount);})->unique()->sort()->values();
+        $rating_items = Shop::where('active', 1)->select('shop_ratings', DB::raw('count(*) as rating_count'))->groupBy('shop_ratings')->get();
 
         $priceRanges = [];
         $priceStep = 2000;
