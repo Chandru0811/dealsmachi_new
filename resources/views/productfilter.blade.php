@@ -276,7 +276,7 @@
                                                         <i class="fa-solid fa-star" style="color: #B2B2B2"></i>
                                                     @endif
                                                 @endfor
-                                                <span class="topText4">({{ $item->rating_count }})</span>
+                                                <!-- <span class="topText4">({{ $item->rating_count }})</span> -->
                                             </label>
                                         </div>
                                     @endforeach
