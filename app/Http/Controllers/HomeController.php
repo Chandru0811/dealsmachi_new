@@ -193,7 +193,7 @@ class HomeController extends Controller
         }
 
         $shortby = DealCategory::where('active', 1)->get();
-        $totaldeals = $deals->count();
+        $totaldeals = $deals->total();
         $category = "";
         $categorygroup = "";
         $bookmarkedProducts = collect();
@@ -302,7 +302,7 @@ class HomeController extends Controller
         }
 
         $shortby = DealCategory::where('active', 1)->get();
-        $totaldeals = $deals->count();
+        $totaldeals = $deals->total();
         $categorygroup = CategoryGroup::where('id', $category->category_group_id)->first();
         $bookmarkedProducts = collect();
         if (Auth::check()) {
@@ -443,7 +443,7 @@ class HomeController extends Controller
         }
 
         $shortby = DealCategory::where('active', 1)->get();
-        $totaldeals = $deals->count();
+        $totaldeals = $deals->total();
         $category = '';
         $categorygroup = '';
         $bookmarkedProducts = collect();
