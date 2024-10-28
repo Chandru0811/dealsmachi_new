@@ -62,7 +62,13 @@ class AuthController extends Controller
             'role' => 2
         ]);
 
-        return $this->success('Vendor Registered Successfully!', $user);
+        Auth::login($user);
+
+        $token = $user->createToken('Personal Access Token')->accessToken;
+        $success['token'] = $token;
+        $success['userDetails'] =  $user;
+
+        return $this->success('Vendor Registered Successfully!', $success);
     }
 
     public function shopregistration(Request $request)

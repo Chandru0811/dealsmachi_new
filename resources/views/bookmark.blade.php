@@ -3,19 +3,25 @@
 @section('content')
     <section>
         <div class="container" style="margin-top: 100px">
-            @if ($bookmarks->isNotEmpty())
-                <span class="d-flex">
-                    <h5 class="pt-0 pb-2">Your Bookmark</h5> &nbsp;&nbsp;
-                    <p style="color: #ff0060">(<span class="totalItemsCount">{{ $bookmarks->total() }}</span>)</p>
-                </span>
+            @if (isset($bookmarks) && $bookmarks->isNotEmpty())
+                <!-- Display "Your Bookmark" heading only if there are bookmarks -->
+                @if ($bookmarks->total() > 0)
+                    <span class="d-flex">
+                        <h5 class="pt-0 pb-2">Your Bookmark</h5>
+                        &nbsp;&nbsp;
+                        <p style="color: #ff0060" id="bookmarkCountDisplay">
+                            (<span class="totalItemsCount">{{ $bookmarks->total() }}</span>)
+                        </p>
+                    </span>
+                @endif
+
                 <div class="row pb-4">
                     @foreach ($bookmarks as $bookmark)
                         @php
                             $deal = $bookmark->deal;
                         @endphp
-                        <div class="col-md-4 col-lg-3 col-12 mb-3 d-flex align-items-stretch justify-content-center">
-                            <a href="{{ url('/deal/' . $deal->id) }}" style="text-decoration: none; "
-                                onclick="clickCount('{{ $deal->id }}')">
+                        <div class="col-md-4 col-lg-4 col-xl-3 col-12 mb-3 d-flex align-items-stretch justify-content-center">
+                            <a href="{{ url('/deal/' . $deal->id) }}" style="text-decoration: none;" onclick="clickCount('{{ $deal->id }}')">
                                 <div class="card sub_topCard h-100 d-flex flex-column">
                                     <div style="min-height: 50px">
                                         <span class="badge trending-badge">TRENDING</span>
@@ -61,7 +67,7 @@
                                             <div class="card-divider"></div>
                                             <p class="ps-3 fw-medium d-flex align-items-center justify-content-between"
                                                 style="color: #ff0060">
-                                                <span>${{ $deal->discounted_price }}</span>
+                                                <span>₹ {{ number_format($deal->discounted_price, 0) }}</span>
                                                 @if (!empty($deal->coupon_code))
                                                     <span id="mySpan" class="mx-3 px-2 couponBadge"
                                                         onclick="copySpanText(this, event)" data-bs-toggle="tooltip"
@@ -83,7 +89,7 @@
                                             <div class="card-divider"></div>
                                             <div class="ps-3">
                                                 <p>Regular Price</p>
-                                                <p><s>${{ $deal->original_price }}</s></p>
+                                                <p><s>₹ {{ number_format($deal->original_price, 0) }}</s></p>
                                             </div>
                                             <div class="card-divider"></div>
                                             <p class="ps-3 fw-medium" style="color: #ff0060; font-weight: 400 !important;">
@@ -97,6 +103,7 @@
                     @endforeach
                 </div>
             @else
+                <!-- Empty bookmark section -->
                 <div class="col-12 text-center d-flex flex-column align-items-center justify-content-center"
                     style="min-height: 60vh">
                     <img src="{{ asset('assets/images/home/empty_bookmark.webp') }}" alt="Empty Bookmark"
@@ -121,13 +128,14 @@
             });
 
             function updateBookmarkCount(count) {
-                $(".totalItemsCount").each(function() {
-                    if (count > 0) {
-                        $(this).text(count).css("visibility", "visible");
-                    } else {
-                        $(this).text("").css("visibility", "hidden");
-                    }
-                });
+                const countDisplay = $(".totalItemsCount");
+                if (count > 0) {
+                    countDisplay.text(count);
+                    $("#bookmarkCountDisplay").css("display", "inline");
+                } else {
+                    countDisplay.text("");
+                    $("#bookmarkCountDisplay").css("display", "none");
+                }
             }
 
             $(document).on('click', '.bookmark-button', function(e) {
@@ -145,7 +153,6 @@
 
                             button.closest('.col-md-4').remove();
 
-                            // Check if there are no bookmarks left
                             if (response.total_items == 0) {
                                 let emptyBookmarkHtml = `
                                 <div class="col-12 text-center d-flex flex-column align-items-center justify-content-center" style="min-height: 60vh">
@@ -154,9 +161,8 @@
                                 </div>
                             `;
                                 $('.row.pb-4').html(emptyBookmarkHtml);
-                                // Hide the heading and item count as well
-                                $(".d-flex h5").remove(); // Remove the heading
-                                $(".totalItemsCount").remove(); // Remove the count
+                                $("#bookmarkCountDisplay").remove();
+                                $("h5:contains('Your Bookmark')").parent().remove(); // Remove heading if no bookmarks
                             }
                         },
                         error: function(xhr) {
@@ -180,8 +186,6 @@
             }
 
             loadBookmarkCount();
-
-            // Disable or remove tooltip from bookmark buttons
             $('.bookmark-button [data-bs-toggle="tooltip"]').removeAttr("data-bs-toggle");
         });
     </script>

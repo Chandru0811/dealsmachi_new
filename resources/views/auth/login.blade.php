@@ -55,7 +55,7 @@
                     </div>
                     <div class="mb-3 text-center fw-light">
                         <p>Don't have an account? <a href="{{ url('register') }}" class="text-decoration-none"
-                                style="color:  #ef4444;">Register</a></p>
+                                style="color:  #ff0060;">Register</a></p>
                     </div>
                 </form>
             </div>

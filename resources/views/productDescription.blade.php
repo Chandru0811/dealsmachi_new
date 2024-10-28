@@ -130,14 +130,14 @@
                                         <p class="info d-flex align-items-center">
                                             <span class="d-flex" style="font-size: 24px !important;font-weight: Semibold;">
                                                 <span style="color: #000"> Offer Price</span> &nbsp;&nbsp;
-                                                <span style=" color: #ff0060;"> Rs
+                                                <span style=" color: #ff0060;"> ₹
                                                     {{ number_format($product->discounted_price, 0) }}</span>
                                             </span>&nbsp;&nbsp; &nbsp;&nbsp;
                                             <span
                                                 style="font-size: 24px; font-weight: Semibold; color: rgb(158, 158, 158);">
                                                 <span
                                                     style="text-decoration: line-through; text-decoration-color: gray;  text-decoration-thickness: 1px">
-                                                    Rs {{ number_format($product->original_price, 0) }}
+                                                    ₹ {{ number_format($product->original_price, 0) }}
                                                 </span>
                                             </span>
                                         </p>
@@ -208,7 +208,7 @@
                                         <button class="btn mb-2 sendEnqBtn"
                                             onclick="window.open(
                                         `https://wa.me/91{{ $product->shop->mobile }}?text=` +
-                                        encodeURIComponent(`*Hello! I visited your website and found an amazing product:*\n\n{{ $product->name }}\n{{ $product->description }}\n\nHere is the product page: ${window.location.href}`),'_blank')">
+                                        encodeURIComponent(`*Hello! I visited dealsmachi website and found an amazing product:*\n\n{{ $product->name }}\n{{ $product->description }}\n\nHere is the product page: ${window.location.href}`),'_blank')">
                                             <i class="fa-brands fa-whatsapp"></i>&nbsp;&nbsp;Enquiry
                                         </button>
                                     @else

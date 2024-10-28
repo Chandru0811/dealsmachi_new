@@ -2,7 +2,7 @@
     <h5 class="pt-0 pb-2">Products</h5>
     <div class="row pb-4">
         @foreach ($products as $product)
-        <div class="col-md-4 col-lg-3 col-12 mb-3 d-flex align-items-stretch justify-content-center">
+        <div class="col-md-4 col-lg-4 col-xl-3 col-12 mb-3 d-flex align-items-stretch justify-content-center">
             <a href="{{ url('/deal/' . $product->id) }}" style="text-decoration: none;" onclick="clickCount('{{ $product->id }}')">
                 <div class="card sub_topCard h-100 d-flex flex-column">
                 <div style="min-height: 50px">
@@ -63,7 +63,8 @@
                             <div class="card-divider"></div>
                             <p class="ps-3 fw-medium d-flex align-items-center justify-content-between"
                                 style="color: #ff0060">
-                                <span>Rs {{ $product->discounted_price }}</span>
+                                <!-- <span>Rs {{ $product->discounted_price }}</span> -->
+                                <span>₹ {{ number_format($product->discounted_price, 0) }}</span>
                                 @if (!empty($product->coupon_code))
                                 <span id="mySpan" class="mx-3 px-2 couponBadge"
                                     onclick="copySpanText(this, event)" data-bs-toggle="tooltip"
@@ -84,7 +85,7 @@
                             <div class="card-divider"></div>
                             <div class="ps-3">
                                 <p>Regular Price</p>
-                                <p><s>Rs {{ $product->original_price }}</s></p>
+                                <p><s>₹ {{ number_format($product->original_price, 0) }}</s></p>
                             </div>
                             <div class="card-divider"></div>
                             <p class="ps-3 fw-medium" style="color: #ff0060; font-weight: 400 !important;">
