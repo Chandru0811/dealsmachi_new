@@ -30,8 +30,8 @@
             </div>
         </div>
 
-        <div class="col-lg-3 col-md-12 col-12 p-0 my-3">
-            <div class="card p-2 d-flex justify-content-center align-items-center" style="border-radius: 10px;">
+        <div class="col-lg-3 col-md-12 col-12 p-0 d-flex justify-content-center align-items-center">
+            <div class="card p-2 d-flex justify-content-center align-items-center" style="border-radius: 10px;border: none;">
                 <div class="row justify-content-center">
                     <div class="col-4 p-1">
                         <div class="card h-100 silderCard" style="border-color: #1878f3; border-radius: 10px;">

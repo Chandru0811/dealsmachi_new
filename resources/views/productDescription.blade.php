@@ -583,9 +583,9 @@ $reviewData = [
                 </div>
             </div>
             <!-- Right Column -->
-            <div class="col-md-4 col-12 mb-3">
+            <div class="col-md-4 col-12 mb-3 ">
                 <div class="mx-2">
-                    <div class="card p-2 d-flex justify-content-center align-items-center mb-4" style="border-radius: 10px;">
+                    <div class="card p-2 d-flex justify-content-center align-items-center mb-4" style="border-radius: 10px;border: none">
                         <div class="row justify-content-center">
                             <div class="col-4 p-1">
                                 <div class="card h-100 prodDescCard" style="border-color: #1878f3; border-radius: 10px;">

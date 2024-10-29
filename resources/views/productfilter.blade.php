@@ -458,7 +458,7 @@
             </div>
 
             <div class="col-md-12 col-lg-2 col-12 mb-3">
-                <div class="card p-2 d-flex justify-content-center align-items-center" style="border-radius: 10px;">
+                <div class="card p-2 d-flex justify-content-center align-items-center" style="border-radius: 10px;border: none">
                     <div class="row justify-content-center">
                         <div class="col-6 p-1">
                             <div class="card h-100 prodFilterCard" style="border-color: #1878f3; border-radius: 10px;">
