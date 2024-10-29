@@ -1,6 +1,6 @@
 <div class="container slider-content">
     <div class="row">
-        <div class="col-md-12 col-lg-9 col-12 mb-3">
+        <div class="col-lg-9 col-md-12 col-12">
             <div class="owl-carousel carousel_slider owl-theme">
                 <div class="item">
                     <img src="{{ asset('assets/images/home/banner1.webp') }}" alt="slider_image1"
@@ -30,79 +30,75 @@
             </div>
         </div>
 
-        <div class="col-md-12 col-lg-3 col-12 px-0 pt-2 mb-3">
-            <div class="card py-1 px-1" style="border-radius: 10px;width: 100%;">
-                <div class="d-flex">
-                    <div class="card me-1"
-                        style="border-radius: 10px;width: 49%; border-color: #1878f3; overflow: hidden;">
-                        <a href="https://www.facebook.com/people/Dealsmachi/61566743978973/" target="_blank"
-                            style="text-decoration:none;">
-                            <div class="d-flex justify-content-center align-items-center  p-1">
-                                <img src="{{ asset('assets/images/home/facebook_qr_code.webp') }}" alt="QR Code"
-                                    class="card-img-top img-fluid" style="max-width: 100px">
-                            </div>
-                            <div class="card-body facebook-body d-flex align-items-center justify-content-center">
-                                <div class="icon-circle d-flex justify-content-center align-items-center">
-                                    <i class="fa-brands fa-facebook-f" style="color: #1878f3;"></i>
+        <div class="col-lg-3 col-md-12 col-12 p-0 my-3">
+            <div class="card p-2 d-flex justify-content-center align-items-center" style="border-radius: 10px;">
+                <div class="row justify-content-center">
+                    <div class="col-4 p-1">
+                        <div class="card h-100 silderCard" style="border-color: #1878f3; border-radius: 10px;">
+                            <a href="https://www.facebook.com/profile.php?id=61566743978973" target="_blank" style="text-decoration: none;">
+                                <div class="p-2 qr-code">
+                                    <img src="{{ asset('assets/images/home/facebook_qr_code.webp') }}" alt="Facebook QR" class="img-fluid">
                                 </div>
-                                <div class="d-flex flex-column ms-2">
-                                    <div class="followers-type">Follow us</div>
+                                <div class="icon-facebook icon-text">
+                                    <i class="fa-brands fa-facebook-f" style="color: #1878f3; padding: 3px 5px;"></i>
+                                    <span>Follow Us</span>
                                 </div>
-                            </div>
-                        </a>
+                            </a>
+                        </div>
                     </div>
-                    <div class="card" style="border-radius: 10px;width: 49%; border-color: #cc236; overflow: hidden;">
-                        <a href="https://www.instagram.com/dealsmachi/" target="_blank" style="text-decoration:none;">
-                            <div class="d-flex justify-content-center align-items-center  p-1">
-                                <img src="{{ asset('assets/images/home/instagram_qr_code.webp') }}" alt="QR Code"
-                                    class="card-img-top img-fluid" style="max-width: 100px">
-                            </div>
-                            <div class="card-body instagram-body d-flex align-items-center  justify-content-center">
-                                <div class="icon-circle d-flex justify-content-center align-items-center">
-                                    <i class="fa-brands fa-instagram " style="color: #cc2366;"></i>
+                    <div class="col-4 p-1">
+                        <div class="card h-100 silderCard" style="border-color: #cc2366; border-radius: 10px;">
+                            <a href="https://www.instagram.com/dealsmachi/" target="_blank" style="text-decoration: none;">
+                                <div class="p-2 qr-code">
+                                    <img src="{{ asset('assets/images/home/instagram_qr_code.webp') }}" alt="Instagram QR" class="img-fluid">
                                 </div>
-                                <div class="d-flex flex-column ms-2">
-                                    <div class="followers-type">Follow us</div>
+                                <div class="icon-instagram icon-text">
+                                    <i class="fa-brands fa-instagram " style="color: #cc2366; padding: 3px 4px;"></i>
+                                    <span>Follow Us</span>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="col-4 p-1">
+                        <a href="https://www.youtube.com/channel/UCAyH2wQ2srJE8WqvII8JNrQ" target="_blank" style="text-decoration: none;">
+                            <div class="card h-100 silderCard" style="border-color: #FF0000; border-radius: 10px;">
+                                <div class="p-2 qr-code">
+                                    <img src="{{ asset('assets/images/home/youtube_qr_code.webp') }}" alt="YouTube QR" class="img-fluid">
+                                </div>
+                                <div class="icon-youtube icon-text">
+                                    <i class="fa-brands fa-youtube" style="color: #FF0000;"></i>
+                                    <span>Subscribe</span>
                                 </div>
                             </div>
                         </a>
                     </div>
                 </div>
-                <div class="d-flex mt-1">
-                    <div class="card me-1"
-                        style="border-radius: 10px;width: 49%; border-color: #FF0000; overflow: hidden;">
-                        <a href="https://www.youtube.com/channel/UCAyH2wQ2srJE8WqvII8JNrQ" target="_blank"
-                            style="text-decoration:none;">
-                            <div class="d-flex justify-content-center align-items-center  p-1">
-                                <img src="{{ asset('assets/images/home/youtube_qr_code.webp') }}" alt="QR Code"
-                                    class="card-img-top img-fluid" style="max-width: 100px">
-                            </div>
-                            <div class="card-body youtube-body d-flex align-items-center  justify-content-center">
-                                <div class="icon-circle-youtube d-flex justify-content-center align-items-center">
-                                    <i class="fa-brands fa-youtube" style="color: #FF0000;"></i>
+                <div class="row justify-content-center mt-2">
+                    <div class="col-6">
+                        <div class="card h-100 silderCard1" style="border-color: #25D366; border-radius: 10px;">
+                            <a href="https://chat.whatsapp.com/Ef23qGMU1d6EXYpRvomaLx" target="_blank" style="text-decoration: none;">
+                                <div class="p-2 qr-code1">
+                                    <img src="{{ asset('assets/images/home/whatsapp_qr_code.webp') }}" alt="WhatsApp QR" class="img-fluid">
                                 </div>
-                                <div class="d-flex flex-column ms-2">
-                                    <div class="followers-type">Subscribe </div>
+                                <div class="icon-whatsapp icon-text">
+                                    <i class="fa-brands fa-whatsapp" style="color: #25D366; padding: 3px 4px;"></i>
+                                    <span>Join Us</span>
                                 </div>
-                            </div>
-                        </a>
+                            </a>
+                        </div>
                     </div>
-                    <div class="card"
-                        style="border-radius: 10px;width: 49%; border-color: #25d366; overflow: hidden;">
-                        <a href="#" target="_blank" style="text-decoration:none;">
-                            <div class="d-flex justify-content-center align-items-center  p-1">
-                                <img src="{{ asset('assets/images/home/QR_Code.webp') }}" alt="QR Code"
-                                    class="card-img-top img-fluid" style="max-width: 100px">
-                            </div>
-                            <div class="card-body whatsapp-body d-flex align-items-center  justify-content-center">
-                                <div class="icon-circle-youtube d-flex justify-content-center align-items-center">
-                                    <i class="fa-brands fa-whatsapp" style="color: #25D366;"></i>
+                    <div class="col-6">
+                        <div class="card h-100 silderCard1" style="border-color: #28a8e9; border-radius: 10px;">
+                            <a href="https://t.me/+UTD7rFen3K4zNDFl" target="_blank" style="text-decoration: none;">
+                                <div class="p-2 qr-code1">
+                                    <img src="{{ asset('assets/images/home/telegram_qr_code.webp') }}" alt="Telegram QR" class="img-fluid">
                                 </div>
-                                <div class="d-flex flex-column ms-2">
-                                    <div class="followers-type">Join Us</div>
+                                <div class="icon-telegram icon-text">
+                                    <i class="fa-brands fa-telegram" style="color: #28a8e9;"></i>
+                                    <span>Follow Us</span>
                                 </div>
-                            </div>
-                        </a>
+                            </a>
+                        </div>
                     </div>
                 </div>
             </div>
