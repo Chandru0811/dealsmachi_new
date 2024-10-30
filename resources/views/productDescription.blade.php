@@ -281,10 +281,10 @@ $reviewData = [
 
                                     <div class="d-flex  justify-content-center mt-2 social-link-container"
                                         data-product-id="{{ $product->id }}">
-                                        <a href="#" id="" class="me-2" title=""
+                                        {{-- <a href="#" id="" class="me-2" title=""
                                             rel="">
                                             <i class="fa-regular fa-thumbs-up"></i>
-                                        </a>
+                                        </a> --}}
 
                                         {!! $shareButtons !!}
 

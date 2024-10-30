@@ -515,8 +515,8 @@
                             </div>
                         </div>
                     </div>
-                    <div class="row justify-content-center">
-                        <div class="col-12 p-1">
+                    <div class="row justify-content-end">
+                        <div class="col-6 p-1">
                             <div class="card h-100 prodFilterCard" style="border-color: #28a8e9; border-radius: 10px;">
                                 <a href="https://t.me/+UTD7rFen3K4zNDFl" target="_blank" style="text-decoration: none;">
                                     <div class="p-2 qr-code">
