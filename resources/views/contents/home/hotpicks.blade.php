@@ -6,7 +6,6 @@
             <a href="{{ url('hotpick/' . $hotpick->slug) }}" style="text-decoration: none;">
                 <div class="card topCard card-img-top1 h-100">
                     <div class="card-body p-0" style="min-height: 50px; position: relative;">
-                        <span class="badge trending-badge" style="border: 1px solid #fff">{{ $hotpick->name }}</span>
                         <img src="{{ asset($hotpick->image_path) }}" class="img-fluid card-img-top"
                             alt="{{ $hotpick->name }}" />
                     </div>
