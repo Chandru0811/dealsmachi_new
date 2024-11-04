@@ -19,7 +19,7 @@
             background-color: #ffffff;
             margin: 40px auto;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-            border-top: 5px solid #ef4444;
+            border-top: 5px solid #ff0060;
             border-bottom: 3px solid #888888;
         }
 
@@ -47,7 +47,7 @@
         }
 
         .message a {
-            color: #ef4444;
+            color: #ff0060;
         }
 
         .content {
@@ -56,7 +56,7 @@
         }
 
         .content h4 {
-            color: #ef4444;
+            color: #ff0060;
             font-size: 28px;
             margin-top: 15px;
             margin-bottom: 15px;
@@ -103,7 +103,7 @@
         }
 
         .cta-button a {
-            background-color: #ef4444;
+            background-color: #ff0060;
             color: #fff;
             padding: 14px 28px;
             font-size: 16px;
@@ -130,18 +130,18 @@
             <table width="100%" cellspacing="0" cellpadding="0" style="border-collapse: collapse;">
                 <tr>
                     <td align="left" style="vertical-align: middle;">
-                        <img src="https://dealslah.com/dealslahVendor/static/media/logo_dealslah.e4f20b4a44af9aca0842.png" alt="Dealslah" style="max-width: 150px; height: auto;">
+                        <img src="https://dealsmachi.com/dealsmachiVendor/static/media/header-logo.a9aa2b8a0fe2d8e0419d.webp" alt="dealsmachi" style="max-width: 150px; height: auto;">
                     </td>
                     <td align="right" style="vertical-align: middle;">
                         <div class="headerText" style="font-size: 14px; color: #333;">
-                            <a href="https://dealslah.com/" target="_blank" style="text-decoration: none; color: #333;">
-                                Your <span style="color: #ef4444;">deaslah.com</span>
+                            <a href="https://dealsmachi.com/" target="_blank" style="text-decoration: none; color: #333;">
+                                Your <span style="color: #ff0060;">dealsmachi.com</span>
                             </a> |
-                            <a href="tel:6588941306" target="_blank" style="text-decoration: none; color: #333;">
-                                +65 8894 1306
+                            <a href="tel:919150150687" target="_blank" style="text-decoration: none; color: #333;">
+                                + 91 9150150687
                             </a> |
-                            <a href="https://play.google.com/store/apps/details?id=com.dealslah.dealslah" target="_blank" style="text-decoration: none; color: #333;">
-                                Get <span style="color: #ef4444;">Dealslah</span> App
+                            <a href="https://play.google.com/store/apps/details?id=com.dealsmachi.dealsmachi" target="_blank" style="text-decoration: none; color: #333;">
+                                Get <span style="color: #ff0060;">dealsmachi</span> App
                             </a>
                         </div>
                     </td>
@@ -152,8 +152,8 @@
         <!-- Warming Message -->
         <div class="message">
             <p>Hello {{ $user->name }}</p>
-            <p class="bottomLine">We are delighted to announce that your Deal <a href=""
-                    target="_blank">{{ $product->name }}</a> is addedd Successfully in Dealslah.</p>
+            <p class="bottomLine">We are delighted to announce that your Deal <a href="#"
+                    target="_blank">{{ $product->name }}</a> is addedd Successfully in dealsmachi.</p>
         </div>
 
         <!-- Content -->
@@ -168,12 +168,12 @@
                 <p class="sub-heading">Discount Percentage : <span>{{ $product->discount_percentage }}%</span></p>
                 <p class="sub-heading">Coupon Code : <span>{{ $product->coupon_code }}</span></p>
                 <p class="sold-details">Sold by <span style="color: #1a0dab;">{{ $user->legal_name }}</span> and
-                    Fulfilled by <a href="https://dealslah.com/" target="_blank"
-                        style="color: #ef4444; text-decoration: none;">Dealslah</a></p>
+                    Fulfilled by <a href="https://dealsmachi.com/" target="_blank"
+                        style="color: #ff0060; text-decoration: none;">dealsmachi</a></p>
             </div>
 
             <div class="cta-button">
-                <a href="https://dealslah.com/dealslahVendor/product/view/{{ $product->id }}" target="_blank">Learn
+                <a href="https://dealsmachi.com/dealsmachiVendor/product/view/{{ $product->id }}" target="_blank">Learn
                     More</a>
 
             </div>
@@ -185,11 +185,11 @@
             <table width="100%" cellspacing="0" cellpadding="0" style="border-collapse: collapse;">
                 <tr>
                     <td align="left" style="vertical-align: middle;">
-                        <img src="https://dealslah.com/dealslahVendor/static/media/logo_dealslah.e4f20b4a44af9aca0842.png" alt="Dealslah" style="max-width: 150px; height: auto; margin-bottom: 10px;">
+                        <img src="https://dealsmachi.com/dealsmachiVendor/static/media/header-logo.a9aa2b8a0fe2d8e0419d.webp" alt="dealsmachi" style="max-width: 150px; height: auto; margin-bottom: 10px;">
                     </td>
                     <td align="right" style="vertical-align: middle;">
                         <p style="font-size: 12px; color: #333; margin: 0;">
-                            Connect with <a href="https://dealslah.com/" target="_blank" style="color: #ef4444; text-decoration: none;">Dealslah</a> Singapore
+                            Connect with <a href="https://dealsmachi.com/" target="_blank" style="color: #ff0060; text-decoration: none;">dealsmachi</a> India
                         </p>
                     </td>
                 </tr>

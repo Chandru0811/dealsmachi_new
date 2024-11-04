@@ -101,12 +101,12 @@
     <div class="email-container">
         <!-- Header -->
         <div class="header">
-            <img src="https://dealslah.com/dealslahVendor/static/media/logo_dealslah.e4f20b4a44af9aca0842.png" alt="Dealslah Pte Ltd" />
+            <img src="https://dealsmachi.com/dealsmachiVendor/static/media/header-logo.a9aa2b8a0fe2d8e0419d.webp" alt="dealsmachi Pte Ltd" />
         </div>
 
         <!-- Content -->
         <div class="content">
-            <h1>Welcome to Dealslah!</h1>
+            <h1>Welcome to dealsmachi!</h1>
             <p>Thank you for registering with us. To complete your registration, please verify your email address by clicking the button below.</p>
 
             <div class="cta-button">
@@ -119,11 +119,11 @@
         <!-- Footer -->
         <div class="footer">
             <p class="signature">Warm Regards,</p>
-            <p>Team Dealslah Pte Ltd</p>
-            <p>Email: <a href="mailto:info@dealslah.com" mailto:target="_blank">info@dealslah.com</a></p>
-            <p>Phone: +65 8894 1306</p>
-            <p><a href="https://dealslah.com/" target="_blank">https://dealslah.com/</a></p>
-            <p>Powered by Dealslah</p>
+            <p>Team dealsmachi Pte Ltd</p>
+            <p>Email: <a href="mailto:info@dealsmachi.com" mailto:target="_blank">info@dealsmachi.com</a></p>
+            <p>Phone: + 91 9150150687</p>
+            <p><a href="https://dealsmachi.com/" target="_blank">https://dealsmachi.com/</a></p>
+            <p>Powered by dealsmachi</p>
         </div>
     </div>
 </body>

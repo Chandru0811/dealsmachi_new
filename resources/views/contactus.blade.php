@@ -157,16 +157,16 @@
                                     <h6 class="text-muted mt-4">
                                         <i class="fa-solid fa-mobile icon-color"></i>&nbsp; Phone
                                         <span>
-                                            <h3 class="text-dark"><b id="phone-number">+65 8894 1306</b></h3>
+                                            <h3 class="text-dark"><b id="phone-number">+91 91501 50687</b></h3>
                                         </span>
                                     </h6>
                                 </a>
-                                <a href="mailto:info@ecsaio.com" class="text-decoration-none text-dark"
+                                <a href="mailto:info@dealsmachi.com" class="text-decoration-none text-dark"
                                     target="_blank" rel="noopener noreferrer">
                                     <h6 class="text-muted mt-4 contact-subheading">
                                         <i class="fa-solid fa-envelope icon-color"></i>&nbsp; Email
                                     </h6>
-                                    <p>info@ecsaio.com</p>
+                                    <p>info@dealsmachi.com</p>
                                 </a>
                                 <br /><br />
                                 <div class="d-flex flex-wrap my-2 socialicons">
