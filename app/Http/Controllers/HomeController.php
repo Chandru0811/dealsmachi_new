@@ -109,7 +109,7 @@ class HomeController extends Controller
         $shareButtons = \Share::page(
             $pageurl,
             $pagetitle
-        )->facebook()->twitter()->linkedin()->whatsapp();
+        )->facebook()->twitter()->linkedin()->whatsapp()->telegram();
 
         return view('productDescription', compact('product', 'bookmarkedProducts', 'shareButtons', 'pageurl', 'pagetitle', 'pagedescription', 'pageimage'));
     }

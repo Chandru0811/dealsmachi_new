@@ -1591,6 +1591,15 @@ footer hr {
         font-size: 10px;
     }
 
+    #social-links .fa-telegram {
+        padding: 10px 8px;
+        width: 30px;
+        height: 28px;
+        background-color: #25d366;
+        border-radius: 3px;
+        font-size: 10px;
+    }
+
     .social-link-container {
         display: flex;
         gap: 4;
@@ -1677,6 +1686,15 @@ footer hr {
     width: 30px;
     height: 28px;
     background-color: #25d366;
+    border-radius: 3px;
+    font-size: 16px;
+}
+
+#social-links .fa-telegram {
+    padding: 6px 8px;
+    width: 30px;
+    height: 28px;
+    background-color: #28a8e9;
     border-radius: 3px;
     font-size: 16px;
 }

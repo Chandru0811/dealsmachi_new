@@ -31,12 +31,13 @@ $imageType = isset($pageimage) ? pathinfo($pageimage, PATHINFO_EXTENSION) : 'png
         <meta property="og:image:height" content="256">
 
 
-        <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content="Dealsmachi - Deals that Matter in India !" />
-        <meta name="twitter:description" content="Shop Big, Earn Big Save Big, Dealsmachi – Deals that matters in India" />
+         <!-- Twitter Meta Tags -->
+         <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="{{ $pagetitle ?? 'Dealsmachi - Deals that Matter in India !' }}" />
+        <meta name="twitter:description" content="{{ $pagedescription ?? 'Shop Big, Earn Big Save Big, Dealsmachi – Deals that matters in India' }}" />
         <meta name="twitter:site" content="@dealsmachi" />
-
-        <meta name="twitter:image" content="{{ asset('assets/images/social/Dealslah_twitter.png') }}" />
+        <meta name="twitter:image" content="{{ asset($pageimage ?? 'assets/images/social/Dealslah_twitter.png') }}" />
+        <meta name="twitter:image:alt" content="Get the best deals and discounts in India" />
 
 
         <!-- Vendor CSS Files -->
