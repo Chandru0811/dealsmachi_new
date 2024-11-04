@@ -71,7 +71,7 @@ class ShopController extends Controller
 
     public function showproduct(string $id)
     {
-        $product = Product::with(['category', 'category.categoryGroup','shop'])->find($id);
+        $product = Product::with(['category', 'category.categoryGroup', 'shop'])->find($id);
 
         if (!$product) {
             return $this->error('Product Not Found.', ['error' => 'Product Not Found']);
@@ -81,10 +81,18 @@ class ShopController extends Controller
         $product->categoryGroupName = $product->category && $product->category->categoryGroup ? $product->category->categoryGroup->name : null;
         $product->categoryGroupId = $product->category && $product->category->categoryGroup ? $product->category->categoryGroup->id : null;
 
+        if ($product->shop && $product->shop->owner_id) {
+            $shopOwner = User::find($product->shop->owner_id);
+            $product->ownerEmailVerifiedAt = $shopOwner ? $shopOwner->email_verified_at : null;
+        } else {
+            $product->ownerEmailVerifiedAt = null;
+        }
+
         unset($product->category);
 
         return $this->success('Product Retrieved Successfully!', $product);
     }
+
 
     public function getshopproducts($id)
     {
@@ -98,5 +106,4 @@ class ShopController extends Controller
         $login_details = User::where('id',$shop->owner_id)->select('id','name','email')->first();
         return $this->success('Shop retrieved successfully.', $login_details);
     }
-
 }

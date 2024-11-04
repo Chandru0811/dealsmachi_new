@@ -5,16 +5,18 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Traits\ApiResponses;
-use Laravel\Passport\Passport;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use Carbon\Carbon;
-use DB;
+use Illuminate\Support\Facades\DB;
 use App\Models\Shop;
+use App\Models\Product;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Hash;
+use App\Mail\AdminProductAddedNotification;
+use App\Mail\ProductAddedSuccessfully;
 
 class AuthController extends Controller
 {
@@ -85,7 +87,7 @@ class AuthController extends Controller
             'external_url' => 'nullable|url',
             'mobile' => 'required|string|unique:shops,mobile',
             'street' => 'required|string',
-            'zip_code' => 'required|string',
+            'zip_code' => 'nullable|string',
             'country' => 'required|string'
         ], [
             'name.required' => 'The name field is required.',
@@ -145,19 +147,20 @@ class AuthController extends Controller
 
         $token = Str::random(64);
 
-        DB::table('password_reset_tokens')->insert([
-            'email' => $request->email,
-            'token' => $token,
-            'created_at' => Carbon::now()
-        ]);
+        DB::table('password_reset_tokens')->updateOrInsert(
+            ['email' => $request->email],
+            [
+                'token' => $token,
+                'created_at' => Carbon::now(),
+            ]
+        );
 
-
-        $resetLink = "http://127.0.0.1:8000/resetpassword?token=" . $token . "&email=" . urlencode($request->email);
+        $resetLink = "https://dealslah.com/dealslahVendor/resetpassword?token=" . $token . "&email=" . urlencode($request->email);
 
         Mail::send('email.forgotPassword', ['resetLink' => $resetLink, 'name' => $username, 'token' => $token], function($message) use($request){
             $message->to($request->email);
             $message->subject('Reset Password');
-        });        
+        });
 
         return response()->json(['message' => 'We have e-mailed your password reset link!']);
     }
@@ -187,5 +190,27 @@ class AuthController extends Controller
         DB::table('password_reset_tokens')->where(['email' => $request->email])->delete();
 
         return response()->json(['message' => 'Your password has been changed!']);
+    }
+
+    public function verifyAccount($id)
+    {
+        $user = User::find($id);
+        $shop = Shop::where('owner_id',$user->id)->first();
+        $product = Product::where('shop_id',$shop->id)->latest()->first();
+
+        if ($user && !$user->email_verified_at) {
+            $user->email_verified_at = Carbon::now();
+            $user->save();
+
+            Mail::to($shop->email)->send(new ProductAddedSuccessfully($shop,$product));
+
+            $adminEmail = 'info@dealslah.com';
+
+            Mail::to($adminEmail)->send(new AdminProductAddedNotification($user, $product));
+
+            return response()->json(['message' => 'Email verified successfully.']);
+        }
+
+        return response()->json(['message' => 'User not found or already verified.'], 404);
     }
 }

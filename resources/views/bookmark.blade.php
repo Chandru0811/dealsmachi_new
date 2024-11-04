@@ -16,11 +16,11 @@
                 @endif
 
                 <div class="row pb-4">
-                    @foreach ($bookmarks as $bookmark)
+                    @foreach ($bookmarks as $bookmark)  
                         @php
                             $deal = $bookmark->deal;
                         @endphp
-                        <div class="col-md-4 col-lg-4 col-xl-3 col-12 mb-3 d-flex align-items-stretch justify-content-center">
+                        <div class="col-md-4 col-lg-4 col-12 mb-3 d-flex align-items-stretch justify-content-center">
                             <a href="{{ url('/deal/' . $deal->id) }}" style="text-decoration: none;" onclick="clickCount('{{ $deal->id }}')">
                                 <div class="card sub_topCard h-100 d-flex flex-column">
                                     <div style="min-height: 50px">

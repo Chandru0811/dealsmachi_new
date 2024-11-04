@@ -246,10 +246,7 @@
                                 <img src="{{ asset($product->image_url1) }}" alt="Adverstiment" class="img-fluid">
                             </div>
                             <div class="d-flex flex-wrap social-link-container">
-                            <a href="#" id="" class="me-2" title="" rel="">
-                                <i class="fa-regular fa-thumbs-up"></i>
-                                <p>Like</p>
-                            </a>
+                           
                             {!! $shareButtons !!}
                             <!-- <div id="social-links">
                                 <ul>

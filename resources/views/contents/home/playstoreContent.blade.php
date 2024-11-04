@@ -16,10 +16,12 @@
                      <button class="app-store-btn text-center mb-2">
                          <i class="fa-brands fa-apple text-light" style="font-size: 18px"></i>&nbsp;&nbsp;App
                          Store</button>&nbsp;&nbsp;&nbsp;&nbsp;
+                    <a href="https://play.google.com/store/apps/details?id=com.dealsmachi.dealsmachi&hl=en_IN">
                      <button class="app-store-btn text-center mb-2">
                          <i class="fa-brands fa-google-play" style="font-size: 18px"></i>
                          &nbsp;&nbsp;Google Play
                      </button>
+                    </a>
                  </div>
              </div>
              <div class="col-md-3 col-12"></div>

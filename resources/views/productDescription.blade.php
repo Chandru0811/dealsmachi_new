@@ -274,18 +274,13 @@ $reviewData = [
                             </div>
                             <img src="{{ asset($product->image_url1) }}" alt="Adverstiment" class="img-fluid">
                             <div class="mt-2" style="border: 1px solid #c1bcbc40;border-radius:5px;">
-                                <div class-"row">
+                                <div class="row m-0">
                                     <p class="text-center p-1"
                                         style="border-bottom: 1px solid #76737340; font-size:12px;">
                                         Share on Social Media</p>
 
                                     <div class="d-flex  justify-content-center mt-2 social-link-container"
                                         data-product-id="{{ $product->id }}">
-                                        {{-- <a href="#" id="" class="me-2" title=""
-                                            rel="">
-                                            <i class="fa-regular fa-thumbs-up"></i>
-                                        </a> --}}
-
                                         {!! $shareButtons !!}
 
                                         <a href="#" onclick="shareOnInstagram()" id="" title=""

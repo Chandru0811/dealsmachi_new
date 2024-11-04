@@ -16,13 +16,13 @@ class ShopController extends Controller
 
     public function showshopdetails($id)
     {
-        $shop = Shop::select('name', 'legal_name','company_registeration_no', 'slug', 'email', 'mobile', 'external_url', 'shop_type', 'logo', 'banner', 'map_url', 'shop_ratings', 'description')->where('id', $id)->first();
+        $shop = Shop::select('name', 'legal_name','company_registeration_no', 'slug', 'email', 'mobile', 'external_url', 'shop_type', 'logo', 'banner', 'shop_ratings', 'description')->where('id', $id)->first();
         return $this->success('Shop Details Retrieved Successfully!', $shop);
     }
 
     public function showshoplocation($id)
     {
-        $shop = Shop::select('street', 'street2', 'city', 'zip_code', 'state', 'country')->where('id', $id)->first();
+        $shop = Shop::select('street', 'street2', 'city', 'zip_code', 'state','country', 'address', 'map_url', 'shop_lattitude', 'shop_longtitude')->where('id', $id)->first();
         return $this->success('Shop Location Retrieved Successfully!', $shop);
     }
 
@@ -49,8 +49,8 @@ class ShopController extends Controller
             'description' => 'sometimes|required|string',
             'external_url' => 'nullable|url',
             'logo' => (!$shop->logo ? 'required|' : 'sometimes|') . 'image|mimes:jpeg,png,jpg,gif,svg,webp|max:2048',
-            'banner' => (!$shop->banner ? 'required|' : 'sometimes|') . 'image|mimes:jpeg,png,jpg,gif,svg,webp|max:2048',
-            'map_url' => (!$shop->map_url ? 'required|' : 'sometimes|') . 'url'
+            // 'banner' => (!$shop->banner ? 'required|' : 'sometimes|') . 'image|mimes:jpeg,png,jpg,gif,svg,webp|max:2048',
+            // 'map_url' => (!$shop->map_url ? 'required|' : 'sometimes|') . 'url'
         ], [
             'name.required' => 'The name field is required.',
             'name.unique' => 'The name field must be unique.',
@@ -69,12 +69,12 @@ class ShopController extends Controller
             'logo.image' => 'The logo must be an image.',
             'logo.mimes' => 'The logo must be a file of type: jpeg, png, jpg, gif, svg, or webp file.',
             'logo.max' => 'The logo may not be greater than 2048 kilobytes.',
-            'banner.required' => 'The banner field is required.',
-            'banner.image' => 'The banner must be an image.',
-            'banner.mimes' => 'The banner must be a file of type: jpeg, png, jpg, gif, svg, or webp file.',
-            'banner.max' => 'The banner may not be greater than 2048 kilobytes.',
-            'map_url.required' => 'Map URL is required.',
-            'map_url.url' => 'The map URL must be a valid URL.',
+            // 'banner.required' => 'The banner field is required.',
+            // 'banner.image' => 'The banner must be an image.',
+            // 'banner.mimes' => 'The banner must be a file of type: jpeg, png, jpg, gif, svg, or webp file.',
+            // 'banner.max' => 'The banner may not be greater than 2048 kilobytes.',
+            // 'map_url.required' => 'Map URL is required.',
+            // 'map_url.url' => 'The map URL must be a valid URL.',
         ]);
 
         if ($validator->fails()) {
@@ -92,7 +92,6 @@ class ShopController extends Controller
             'shop_type',
             'logo',
             'banner',
-            'map_url',
             'shop_ratings',
             'description',
         ]), fn($value) => !is_null($value));
@@ -159,7 +158,7 @@ class ShopController extends Controller
             return response()->json(['error' => $validator->errors()], 422);
         }
 
-        $updateData = array_filter($request->only(['street', 'street2', 'city', 'zip_code', 'state', 'country']), fn($value) => !is_null($value));
+        $updateData = array_filter($request->only(['street', 'street2', 'city', 'zip_code', 'state', 'country', 'address', 'map_url', 'shop_lattitude', 'shop_longtitude']), fn($value) => !is_null($value));
 
         $shop->update($updateData);
 
