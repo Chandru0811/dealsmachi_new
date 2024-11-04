@@ -7,7 +7,6 @@ use App\Http\Controllers\Controller;
 use App\Traits\ApiResponses;
 use App\Models\Product;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Facades\File;
 use App\Models\Category;
 use App\Models\CategoryGroup;
 use App\Models\User;

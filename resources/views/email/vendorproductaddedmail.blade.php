@@ -19,7 +19,7 @@
             background-color: #ffffff;
             margin: 40px auto;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-            border-top: 5px solid #ff0060;
+            border-top: 5px solid #ef4444;
             border-bottom: 3px solid #888888;
         }
 
@@ -47,7 +47,7 @@
         }
 
         .message a {
-            color: #ff0060;
+            color: #ef4444;
         }
 
         .content {
@@ -56,7 +56,7 @@
         }
 
         .content h4 {
-            color: #ff0060;
+            color: #ef4444;
             font-size: 28px;
             margin-top: 15px;
             margin-bottom: 15px;
@@ -72,33 +72,13 @@
             padding: 15px;
             border: 1px solid #ddd;
             background-color: #f9f9f9;
-            display: flex;
-            justify-content: start;
-            align-items: center;
-        }
-
-        .col-4 {
-            flex: 0 0 33.33%;
-            max-width: 33.33%;
-            display: flex;
-            justify-content: center;
-        }
-
-        .col-4 img {
-            width: 100%;
-            max-width: 175px;
-        }
-
-        .col-8 {
-            flex: 0 0 66.67%;
-            max-width: 66.67%;
-            padding-left: 15px;
         }
 
         .product-details h2 {
             color: #333;
             font-size: 20px;
             margin-bottom: 10px;
+            margin-top: 0px;
         }
 
         .product-details p {
@@ -109,7 +89,7 @@
             color: #d32323;
         }
 
-        .product-details .sub-heading span .price {
+        .product-details .sub-heading .price {
             text-decoration: line-through;
         }
 
@@ -123,7 +103,7 @@
         }
 
         .cta-button a {
-            background-color: #ff0060;
+            background-color: #ef4444;
             color: #fff;
             padding: 14px 28px;
             font-size: 16px;
@@ -137,13 +117,6 @@
             background-color: #cc3b3b;
         }
 
-        .footer {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 25px;
-        }
-
         .footer img {
             width: 120px;
         }
@@ -153,16 +126,27 @@
 <body>
     <div class="container">
         <!-- Header -->
-        <div class="header">
-            <img src="https://dealslah.com/dealslahVendor/static/media/logo_dealslah.e4f20b4a44af9aca0842.png"
-                alt="Dealslah" />
-            <div class="headerText">
-                <a href="https://dealslah.com/" target="_blank">Your <span style="color: #ff0060;">deaslah</span>.com</a>
-                |
-                <a href="tel:6588941306" target="_blank">+65 8894 1306</a> |
-                <a href="https://play.google.com/store/apps/details?id=com.dealslah.dealslah" target="_blank">Get <span
-                        style="color: #ff0060;">Dealslah</span> App</a>
-            </div>
+        <div class="header" style="padding: 25px; border-bottom: 1px solid #ddd; text-align: center;">
+            <table width="100%" cellspacing="0" cellpadding="0" style="border-collapse: collapse;">
+                <tr>
+                    <td align="left" style="vertical-align: middle;">
+                        <img src="https://dealslah.com/dealslahVendor/static/media/logo_dealslah.e4f20b4a44af9aca0842.png" alt="Dealslah" style="max-width: 150px; height: auto;">
+                    </td>
+                    <td align="right" style="vertical-align: middle;">
+                        <div class="headerText" style="font-size: 14px; color: #333;">
+                            <a href="https://dealslah.com/" target="_blank" style="text-decoration: none; color: #333;">
+                                Your <span style="color: #ef4444;">deaslah.com</span>
+                            </a> |
+                            <a href="tel:6588941306" target="_blank" style="text-decoration: none; color: #333;">
+                                +65 8894 1306
+                            </a> |
+                            <a href="https://play.google.com/store/apps/details?id=com.dealslah.dealslah" target="_blank" style="text-decoration: none; color: #333;">
+                                Get <span style="color: #ef4444;">Dealslah</span> App
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+            </table>
         </div>
 
         <!-- Warming Message -->
@@ -174,24 +158,18 @@
 
         <!-- Content -->
         <div class="content">
-            <!--<h4>Mobile Phones</h4>-->
+            <!-- <h4>Mobile Phones</h4> -->
 
             <div class="product-details">
-                <div class="col-4">
-                    <img src="https://dealslah.com/{{ $product->image_url1 }}" alt="iPhone 15 Price Drop!"
-                        class="img-fluid" />
-                </div>
-                <div class="col-8">
-                    <h2>{{ $product->name }}</h2>
-                    <p class="sub-heading">Regular Price : <span class="price">${{ $product->original_price }}</span>
-                    </p>
-                    <p class="sub-heading">Offer Price: <span>${{ $product->discounted_price }}</span></p>
-                    <p class="sub-heading">Discount Percentage : <span>{{ $product->discount_percentage }}%</span></p>
-                    <p class="sub-heading">Coupon Code : <span>{{ $product->coupon_code }}</span></p>
-                    <p class="sold-details">Sold by <span style="color: #1a0dab;">{{ $user->legal_name }}</span> and
-                        Fulfilled by <a href="https://dealslah.com/" target="_blank"
-                            style="color: #ff0060; text-decoration: none;">Dealslah</a></p>
-                </div>
+                <h2>{{ $product->name }}</h2>
+                <p class="sub-heading">Regular Price : <span class="price">${{ $product->original_price }}</span>
+                </p>
+                <p class="sub-heading">Offer Price: <span>${{ $product->discounted_price }}</span></p>
+                <p class="sub-heading">Discount Percentage : <span>{{ $product->discount_percentage }}%</span></p>
+                <p class="sub-heading">Coupon Code : <span>{{ $product->coupon_code }}</span></p>
+                <p class="sold-details">Sold by <span style="color: #1a0dab;">{{ $user->legal_name }}</span> and
+                    Fulfilled by <a href="https://dealslah.com/" target="_blank"
+                        style="color: #ef4444; text-decoration: none;">Dealslah</a></p>
             </div>
 
             <div class="cta-button">
@@ -203,13 +181,19 @@
         </div>
 
         <!-- Footer -->
-        <div class="footer">
-            <img src="https://dealslah.com/dealslahVendor/static/media/logo_dealslah.e4f20b4a44af9aca0842.png"
-                alt="Dealslah" />
-            <div>
-                <p style="font-size: 12px;">Connect with <a href="https://dealslah.com/" target="_blank"
-                        style="color: #ff0060; text-decoration: none;">Dealslah</a> Singapore</p>
-            </div>
+        <div class="footer" style="padding: 15px 25px; text-align: center;">
+            <table width="100%" cellspacing="0" cellpadding="0" style="border-collapse: collapse;">
+                <tr>
+                    <td align="left" style="vertical-align: middle;">
+                        <img src="https://dealslah.com/dealslahVendor/static/media/logo_dealslah.e4f20b4a44af9aca0842.png" alt="Dealslah" style="max-width: 150px; height: auto; margin-bottom: 10px;">
+                    </td>
+                    <td align="right" style="vertical-align: middle;">
+                        <p style="font-size: 12px; color: #333; margin: 0;">
+                            Connect with <a href="https://dealslah.com/" target="_blank" style="color: #ef4444; text-decoration: none;">Dealslah</a> Singapore
+                        </p>
+                    </td>
+                </tr>
+            </table>
         </div>
     </div>
 </body>
