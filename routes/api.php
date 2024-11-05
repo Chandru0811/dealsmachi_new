@@ -18,6 +18,7 @@ Route::post('login', [AuthController::class, 'login']);
 Route::post('register', [AuthController::class, 'register']);
 Route::post('forgot-password', [AuthController::class, 'forgetpassword']);
 Route::post('reset-password', [AuthController::class, 'resetpassword']);
+Route::get('account/verify/{id}', [AuthController::class, 'verifyAccount'])->name('vendor.verify'); 
 
 //user
 Route::get('appHome', [AppController::class, 'homepage']);

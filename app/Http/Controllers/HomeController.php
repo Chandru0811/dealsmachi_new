@@ -281,7 +281,7 @@ class HomeController extends Controller
         $deals = $query->paginate($perPage);
 
         $brands = Product::where('active', 1)->where('category_id', $category->id)->whereNotNull('brand')->where('brand', '!=', '')->distinct()->orderBy('brand', 'asc')->pluck('brand');
-        $discounts = Product::where('active', 1)->pluck('discount_percentage')->map(function ($discount) {
+        $discounts = Product::where('active', 1)->where('category_id', $category->id)->pluck('discount_percentage')->map(function ($discount) {
             return round($discount);
         })->unique()->sort()->values();
         $rating_items = Shop::where('active', 1)->select('shop_ratings', DB::raw('count(*) as rating_count'))->groupBy('shop_ratings')->get();

@@ -165,7 +165,7 @@ class ProductController extends Controller
                 $message->subject('Verify Email');
             });
 
-            return $this->success('Product created successfully..,Verify Your mail for admin approvel', $product);
+            return $this->success('Product created successfully. Please verify your email for admin approval.', $product);
         }else{
             $shop = Shop::where('owner_id',$user->id)->first();
             $product = Product::where('shop_id',$shop->id)->latest()->first();
