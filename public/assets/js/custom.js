@@ -945,3 +945,33 @@ function showAddress(country) {
         phoneNumber.innerHTML = "+91 93613 65818";
     }
 }
+
+document.addEventListener("DOMContentLoaded", function() {
+    function formatIndianNumber(number) {
+        let [integerPart, decimalPart] = number.toString().split(".");
+        
+        let lastThree = integerPart.slice(-3);
+        let rest = integerPart.slice(0, -3);
+        
+        if (rest.length > 0) {
+            rest = rest.replace(/\B(?=(\d{2})+(?!\d))/g, ",") + ",";
+        }
+        
+        let formattedNumber = "₹" + rest + lastThree;
+        
+        if (decimalPart !== undefined) {
+            formattedNumber += "." + decimalPart;
+        }
+        return formattedNumber;
+    }
+
+    document.querySelectorAll('.discounted-price').forEach(element => {
+        let price = parseFloat(element.innerText);
+        element.innerText = formatIndianNumber(price);
+    });
+
+    document.querySelectorAll('.original-price').forEach(element => {
+        let price = parseFloat(element.innerText);
+        element.innerText = formatIndianNumber(price);
+    });
+});

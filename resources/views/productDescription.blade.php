@@ -130,14 +130,15 @@ $reviewData = [
                                     <p class="info d-flex align-items-center">
                                         <span class="d-flex" style="font-size: 24px !important;font-weight: Semibold;">
                                             <span style="color: #000"> Offer Price</span> &nbsp;&nbsp;
-                                            <span style=" color: #ff0060;"> ₹
-                                                {{ number_format($product->discounted_price, 0) }}</span>
+                                            <span style="color: #ff0060;" class="discounted-price">
+                                                {{ $product->discounted_price }}
+                                            </span>
                                         </span>&nbsp;&nbsp; &nbsp;&nbsp;
                                         <span
                                             style="font-size: 24px; font-weight: Semibold; color: rgb(158, 158, 158);">
-                                            <span
+                                            <span class="original-price"
                                                 style="text-decoration: line-through; text-decoration-color: gray;  text-decoration-thickness: 1px">
-                                                ₹ {{ number_format($product->original_price, 0) }}
+                                                {{ $product->original_price }}
                                             </span>
                                         </span>
                                     </p>
