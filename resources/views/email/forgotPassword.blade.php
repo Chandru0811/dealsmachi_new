@@ -102,20 +102,20 @@
 <body>
     <div class="invoice-box">
         <div class="invoice">
-            <h1 style="color: black;margin: 0px;">Hello Chandru,</h1>
+            <h1 style="color: black;margin: 0px;">Hello {{ $name }},</h1>
             <div id="email-content" class="preserve-whitespace" style="margin: 0.5rem 0 0; font-size: 0.9rem;">
                 We received a request to reset your password. Click the button below to reset your password:
             </div>
             <div style="text-align: center; margin: 0rem 0;">
-                <a href="${resetLink}" class="reset-button">Reset Password</a>
+                <a href="{{$resetLink}}" class="reset-button">Reset Password</a>
             </div>
             <div id="email-content" class="preserve-whitespace" style="margin: 0.5rem 0 0; font-size: 0.9rem;">
                 If you did not request a password reset, please ignore this email. Your password will not be changed.
             </div>
             <hr />
             <p style="margin: 2rem 0 0;">Best regards,</p>
-            <h4 style="margin: 0;">Dealslah</h4>
-            <p style="margin: 0;">info@dealslah.com</p>
+            <h4 style="margin: 0;">Dealsmachi</h4>
+            <p style="margin: 0;">info@ecsaio.com</p>
             <p style="margin: 0;">+65 8894 1306</p>
             <p style="margin: 0 0 2rem 0;"><a href="https://dealslahmachi.com/">https://dealslahmachi.com</a></p>
             <hr />
