@@ -67,7 +67,7 @@
                                             <div class="card-divider"></div>
                                             <p class="ps-3 fw-medium d-flex align-items-center justify-content-between"
                                                 style="color: #ff0060">
-                                                <span>₹ {{ number_format($deal->discounted_price, 0) }}</span>
+                                                <span>₹{{ number_format($deal->discounted_price, 0) }}</span>
                                                 @if (!empty($deal->coupon_code))
                                                     <span id="mySpan" class="mx-3 px-2 couponBadge"
                                                         onclick="copySpanText(this, event)" data-bs-toggle="tooltip"
@@ -89,7 +89,7 @@
                                             <div class="card-divider"></div>
                                             <div class="ps-3">
                                                 <p>Regular Price</p>
-                                                <p><s>₹ {{ number_format($deal->original_price, 0) }}</s></p>
+                                                <p><s>₹{{ number_format($deal->original_price, 0) }}</s></p>
                                             </div>
                                             <div class="card-divider"></div>
                                             <p class="ps-3 fw-medium" style="color: #ff0060; font-weight: 400 !important;">
