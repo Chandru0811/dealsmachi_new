@@ -119,11 +119,11 @@
         <!-- Footer -->
         <div class="footer">
             <p class="signature">Warm Regards,</p>
-            <p>Team dealsmachi Pte Ltd</p>
+            <p>Team DealsMachi Pte Ltd</p>
             <p>Email: <a href="mailto:info@dealsmachi.com" mailto:target="_blank">info@dealsmachi.com</a></p>
             <p>Phone: + 91 9150150687</p>
             <p><a href="https://dealsmachi.com/" target="_blank">https://dealsmachi.com/</a></p>
-            <p>Powered by dealsmachi</p>
+            <p>Powered by DealsMachi</p>
         </div>
     </div>
 </body>

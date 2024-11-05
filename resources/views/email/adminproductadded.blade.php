@@ -138,7 +138,7 @@
                                 +91 9150150687
                             </a> |
                             <a href="https://play.google.com/store/apps/details?id=com.dealsmachi.dealsmachi" target="_blank" style="text-decoration: none; color: #333;">
-                                Get <span style="color: #ff0060;">dealsmachi</span> App
+                                Get <span style="color: #ff0060;">DealsMachi</span> App
                             </a>
                         </div>
                     </td>

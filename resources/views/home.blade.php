@@ -21,23 +21,21 @@
     @include('contents.home.playstoreContent')
     <!-- App & PlayStore End  -->
     <!-- Permission Denied Modal -->
-<div class="modal fade" id="permissionDeniedModal" tabindex="-1" aria-labelledby="permissionDeniedModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="permissionDeniedModalLabel"></h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+    <div class="modal fade" id="permissionDeniedModal" tabindex="-1" aria-labelledby="permissionDeniedModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="permissionDeniedModalLabel">Enable Location Services for Nearby Deals</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                   <p style="color: #ff0060">Don't miss out on amazing deals near you! <br>
+                    Please enable location services to uncover them.</p>
+                </div>
+            </div>
         </div>
-        <div class="modal-body">
-            You missed the amazing nearby deals! Please turn on location services to discover them.
-        </div>
-        <div class="modal-footer">
-            <button type="button" class="btn btn-button" data-bs-dismiss="modal" style="background-color: #ef4444;color: #fff">Allow Location</button>
-          <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
-        </div>
-      </div>
     </div>
-  </div>
 @endsection
 
 @section('scripts')
@@ -126,9 +124,10 @@
             function showError(error) {
                 switch (error.code) {
                     case error.PERMISSION_DENIED:
-            var permissionDeniedModal = new bootstrap.Modal(document.getElementById('permissionDeniedModal'));
-            permissionDeniedModal.show();
-            break;
+                        var permissionDeniedModal = new bootstrap.Modal(document.getElementById(
+                            'permissionDeniedModal'));
+                        permissionDeniedModal.show();
+                        break;
                     case error.POSITION_UNAVAILABLE:
                         alert("Location information is unavailable.");
                         break;
