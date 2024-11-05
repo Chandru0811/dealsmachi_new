@@ -127,7 +127,7 @@
             <table width="100%" cellspacing="0" cellpadding="0" style="border-collapse: collapse;">
                 <tr>
                     <td align="left" style="vertical-align: middle;">
-                        <img src="https://dealsmachi.com/dealsmachiVendor/static/media/header-logo.a9aa2b8a0fe2d8e0419d.webp" alt="Deals Machi" style="max-width: 150px; height: auto;">
+                        <img src="https://dealsmachi.com/assets/images/home/email_logo.png" alt="Deals Machi" style="max-width: 150px; height: auto;">
                     </td>
                     <td align="right" style="vertical-align: middle;">
                         <div class="headerText" style="font-size: 14px; color: #333;">
@@ -178,7 +178,7 @@
             <table width="100%" cellspacing="0" cellpadding="0" style="border-collapse: collapse;">
                 <tr>
                     <td align="left" style="vertical-align: middle;">
-                        <img src="https://dealsmachi.com/dealsmachiVendor/static/media/header-logo.a9aa2b8a0fe2d8e0419d.webp" alt="dealsmachi" style="max-width: 150px; height: auto; margin-bottom: 10px;">
+                        <img src="https://dealsmachi.com/assets/images/home/email_logo.png" alt="dealsmachi" style="max-width: 150px; height: auto; margin-bottom: 10px;">
                     </td>
                     <td align="right" style="vertical-align: middle;">
                         <p style="font-size: 12px; color: #333; margin: 0;">
