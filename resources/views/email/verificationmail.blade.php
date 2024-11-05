@@ -101,7 +101,7 @@
     <div class="email-container">
         <!-- Header -->
         <div class="header">
-            <img src="https://dealsmachi.com/dealsmachiVendor/static/media/header-logo.a9aa2b8a0fe2d8e0419d.webp" alt="dealsmachi Pte Ltd" />
+            <img src="https://dealsmachi.com/assets/images/home/email_logo.png" alt="dealsmachi Pte Ltd" />
         </div>
 
         <!-- Content -->
@@ -119,11 +119,11 @@
         <!-- Footer -->
         <div class="footer">
             <p class="signature">Warm Regards,</p>
-            <p>Team dealsmachi Pte Ltd</p>
+            <p>Team DealsMachi Pte Ltd</p>
             <p>Email: <a href="mailto:info@dealsmachi.com" mailto:target="_blank">info@dealsmachi.com</a></p>
             <p>Phone: + 91 9150150687</p>
             <p><a href="https://dealsmachi.com/" target="_blank">https://dealsmachi.com/</a></p>
-            <p>Powered by dealsmachi</p>
+            <p>Powered by DealsMachi</p>
         </div>
     </div>
 </body>

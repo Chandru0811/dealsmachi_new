@@ -86,9 +86,9 @@ class AuthController extends Controller
             'description' => 'required|string',
             'external_url' => 'nullable|url',
             'mobile' => 'required|string|unique:shops,mobile',
-            'street' => 'required|string',
+            'street' => 'nullable|string',
             'zip_code' => 'nullable|string',
-            'country' => 'required|string'
+            'country' => 'nullable|string'
         ], [
             'name.required' => 'The name field is required.',
             'company_registeration_no.required' => 'The company registeration number field is required.',
@@ -103,9 +103,6 @@ class AuthController extends Controller
             'external_url.url' => 'The website URL must be a valid URL.',
             'mobile.required' => 'The mobile number  is required.',
             'mobile.unique' => 'Mobile number already exists.',
-            'street.required' => 'Street is required',
-            'zip_code.required' => 'Zip Code is required',
-            'country.required' => 'Country is required'
         ]);
 
         if ($validator->fails()) {
