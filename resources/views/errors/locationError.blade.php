@@ -1,9 +1,8 @@
 @extends('layouts.master')
 
 @section('content')
-<div class="categoryIcons container d-flex align-items-center justify-content-center text-center"
-style="min-height: 70vh; color: rgb(128, 128, 128)">
-<div>
+<div class="categoryIcons container d-flex flex-column align-items-start justify-content-center text-start"
+    style="min-height: 70vh; color: rgb(128, 128, 128); max-width: 600px;">
     <h2 style="font-weight: bold; color: #444">
         Discover Amazing Deals Nearby!
     </h2>
@@ -11,31 +10,13 @@ style="min-height: 70vh; color: rgb(128, 128, 128)">
         Let us help you find the best deals around your location. <br />
         Enable location access to unlock exclusive offers near you!
     </p>
-    <ul>
-        <li>Open your browser and go to <strong>Settings</strong>.</li>
-        <li>
-            Navigate to Location Settings:
-            <ul>
-                <li>
-                    <strong>Chrome:</strong> Privacy and Security > Site Settings >
-                    Location
-                </li>
-                <li>
-                    <strong>Firefox:</strong> Settings > Privacy & Security >
-                    Permissions > Location
-                </li>
-                <li>
-                    <strong>Safari:</strong> Preferences > Websites > Location
-                </li>
-            </ul>
-        </li>
-        <li>
-            In the location settings, find the site you’re using and select
-            <strong>Allow</strong> for location access.
-        </li>
+    <ul style="line-height: 2rem">
+        Open your browser and go to Settings.Navigate to Location Settings:
+        <li>Chrome: Privacy and Security > Site Settings > Location</li>
+        <li>Firefox: Settings > Privacy & Security > Permissions > Location</li>
+        <li>Safari: Preferences > Websites > Location</li>
+        <li>In the location settings, find the site you’re using and select Allow for location access.</li>
     </ul>
-
-</div>
 </div>
 @endsection
     @section('scripts')

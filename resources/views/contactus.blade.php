@@ -170,7 +170,7 @@
                                 </a>
                                 <br /><br />
                                 <div class="d-flex flex-wrap my-2 socialicons">
-                                    <a href="https://sg.linkedin.com/company/ecs-cloud-infotech"
+                                    <a href="https://www.linkedin.com/in/deals-machi-2b4944331"
                                         class="p-1 text-decoration-none text-white" target="_blank"
                                         rel="noopener noreferrer">
                                         <span
@@ -178,21 +178,21 @@
                                             <i class="fa-brands soc_icons text-center fa-linkedin-in"></i>
                                         </span>
                                     </a>
-                                    <a href="https://www.facebook.com/ecscloud/"
+                                    <a href="https://www.facebook.com/profile.php?id=61566743978973"
                                         class="p-1 text-decoration-none text-white" target="_blank"
                                         rel="noopener noreferrer">
                                         <span class="mediaIconBgIcon d-flex justify-content-center align-items-center">
                                             <i class="fa-brands soc_icons text-center fa-facebook-f"></i>
                                         </span>
                                     </a>
-                                    <a href="https://www.instagram.com/ecscloudinfotech/"
+                                    <a href="https://www.instagram.com/dealsmachi/"
                                         class="p-1 text-decoration-none text-white" target="_blank"
                                         rel="noopener noreferrer">
                                         <span class="mediaIconBgIcon d-flex justify-content-center align-items-center">
                                             <i class="fa-brands soc_icons text-center fa-instagram"></i>
                                         </span>
                                     </a>
-                                    <a href="https://www.youtube.com/channel/UCIbNIWhaDnRs-gFuJ0sTNCQ/videos"
+                                    <a href="https://www.youtube.com/channel/UCAyH2wQ2srJE8WqvII8JNrQ"
                                         class="p-1 text-decoration-none text-white" target="_blank"
                                         rel="noopener noreferrer">
                                         <span class="mediaIconBgIcon d-flex justify-content-center align-items-center">
@@ -206,7 +206,7 @@
                                             <i class="fab soc_icons text-center fa-tiktok"></i>
                                         </span>
                                     </a> --}}
-                                    <a href="https://x.com/ecscloudinfote2"
+                                    <a href="https://x.com/dealsmachi_in"
                                         class="p-1 text-decoration-none text-white" target="_blank"
                                         rel="noopener noreferrer">
                                         <span class="mediaIconBgIcon d-flex justify-content-center align-items-center">
