@@ -1,22 +1,38 @@
 @extends('layouts.master')
 
 @section('content')
-<div class="categoryIcons container d-flex flex-column align-items-start justify-content-center text-start"
-    style="min-height: 70vh; color: rgb(128, 128, 128); max-width: 600px;">
-    <h2 style="font-weight: bold; color: #444">
-        Discover Amazing Deals Nearby!
-    </h2>
-    <p style="font-size: 1.2em; margin-top: 10px">
-        Let us help you find the best deals around your location. <br />
-        Enable location access to unlock exclusive offers near you!
-    </p>
-    <ul style="line-height: 2rem">
-        Open your browser and go to Settings.Navigate to Location Settings:
-        <li>Chrome: Privacy and Security > Site Settings > Location</li>
-        <li>Firefox: Settings > Privacy & Security > Permissions > Location</li>
-        <li>Safari: Preferences > Websites > Location</li>
-        <li>In the location settings, find the site you’re using and select Allow for location access.</li>
-    </ul>
+<div class="d-flex align-items-center justify-content-center" style="min-height: 70vh;">
+    <div class="categoryIcons container d-flex flex-column align-items-start text-start"
+         style="color: rgb(128, 128, 128); max-width: 600px;">
+
+        <h4 style=" color: #4e4e4e;">
+            Please allow location access to show nearby deals
+        </h4>
+
+        <p style="font-size: 1.2em; margin-top: 10px;">
+            This is how you can enable it
+        </p>
+
+        <div>
+            <p>In your browser, do the following:</p>
+            <div class="d-flex align-items-center mb-2">
+                <img src="{{ asset('assets/images/home/Chrome.webp') }}" alt="Chrome_img"
+                     class="img-fluid me-2" style="width: 24px; height: 24px;" />
+                <span>Privacy and Security > Site Settings > Location</span>
+            </div>
+            <div class="d-flex align-items-center mb-2">
+                <img src="{{ asset('assets/images/home/Firefox.webp') }}" alt="Firefox_img"
+                     class="img-fluid me-2" style="width: 24px; height: 24px;" />
+                <span>Settings > Privacy & Security > Permissions > Location</span>
+            </div>
+            <div class="d-flex align-items-center mb-2">
+                <img src="{{ asset('assets/images/home/Safari.webp') }}" alt="Safari_img"
+                     class="img-fluid me-2" style="width: 24px; height: 24px;" />
+                <span>Preferences > Websites > Location</span>
+            </div>
+            <p>In the location settings, find the site you’re using and select Allow for location access.</p>
+        </div>
+    </div>
 </div>
 @endsection
     @section('scripts')
