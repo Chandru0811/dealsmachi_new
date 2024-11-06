@@ -167,9 +167,7 @@ $reviewData = [
                                             <div class="col-10 ps-2" style="font-size: 12px; color: #5C5C5C;">
                                                 <a href="{{ $product->shop->map_url }}" class="text-muted"
                                                     target="_blank" style="text-decoration: none;">
-                                                    {{ $product->shop->street }}, {{ $product->shop->street2 }},
-                                                    {{ $product->shop->city }}-{{ $product->shop->zip_code }},
-                                                    {{ $product->shop->country }}.
+                                                    {{ $product->shop->address }}
                                                 </a>
                                             </div>
 

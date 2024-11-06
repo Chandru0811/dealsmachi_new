@@ -83,7 +83,7 @@
             display: inline-block;
             padding: 8px 16px;
             font-size: 0.9rem;
-            color: #ffffff;
+            color: #ffffff !important;
             background-color: #007bff;
             text-decoration: none;
             border-radius: 25px;
@@ -107,7 +107,7 @@
                 We received a request to reset your password. Click the button below to reset your password:
             </div>
             <div style="text-align: center; margin: 0rem 0;">
-                <a href="{{$resetLink}}" class="reset-button">Reset Password</a>
+                <a href="{{$resetLink}}" class="reset-button"  style="color: #fff">Reset Password</a>
             </div>
             <div id="email-content" class="preserve-whitespace" style="margin: 0.5rem 0 0; font-size: 0.9rem;">
                 If you did not request a password reset, please ignore this email. Your password will not be changed.

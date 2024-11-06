@@ -901,7 +901,7 @@ $('input[type="checkbox"]').change(function () {
 
 function clickCount(dealId) {
     $.ajax({
-        url: "deals/count/click",
+        url: `${window.location.origin}/deals/count/click`,
         type: "POST",
         data: {
             _token: $('meta[name="csrf-token"]').attr("content"),
