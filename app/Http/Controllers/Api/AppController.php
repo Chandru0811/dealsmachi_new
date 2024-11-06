@@ -359,6 +359,30 @@ class AppController extends Controller
                 ->with(['shop:id,country,state,city,street,street2,zip_code,shop_ratings'])
                 ->whereRaw('DATEDIFF(end_date, start_date) <= ?', [2])
                 ->paginate($perPage);
+        }elseif($slug == 'nearby')
+        {
+            $user_latitude = $request->input('latitude');
+            $user_longitude = $request->input('longitude');
+
+            if (!isset($user_latitude) || !isset($user_longitude)) {
+                return response()->json(['error' => "user's location is empty"]);
+            }
+
+            $shops = Shop::select("shops.id", "shops.name",
+                        DB::raw("6371 * acos(cos(radians(" . $user_latitude . "))
+                        * cos(radians(shops.shop_lattitude))
+                        * cos(radians(shops.shop_longtitude) - radians(" . $user_longitude . "))
+                        + sin(radians(" . $user_latitude . "))
+                        * sin(radians(shops.shop_lattitude))) AS distance"))
+                        ->having('distance', '<', 10)
+                        ->orderBy('distance', 'asc')
+                        ->get();
+
+            $shopIds = $shops->pluck('id');
+
+            $deals = Product::whereIn('shop_id', $shopIds)->where('active',1)
+                    ->with(['shop:id,country,state,city,street,street2,zip_code,shop_ratings'])
+                    ->paginate($perPage);
         }
 
         $brands = Product::where('active', 1)->distinct()->pluck('brand');
