@@ -253,7 +253,11 @@ class HomeController extends Controller
         }
 
         if ($request->has('discount') && is_array($request->discount)) {
-            $query->whereIn('discount_percentage', $request->discount);
+            $discountTerms = $request->discount;
+            if (count($discountTerms) > 0) {
+                $roundedDiscounts = array_map('round', $discountTerms);
+                $query->whereIn(DB::raw('ROUND(discount_percentage)'), $roundedDiscounts);
+            }
         }
 
         if ($request->has('price_range')) {
@@ -379,9 +383,11 @@ class HomeController extends Controller
 
         if ($request->has('discount')) {
             $discountTerm = $request->input('discount');
-
+        
             if (is_array($discountTerm) && count($discountTerm) > 0) {
-                $query->whereIn('discount_percentage', $discountTerm);
+                // Round each discount term before filtering
+                $roundedDiscounts = array_map('round', $discountTerm);
+                $query->whereIn(DB::raw('ROUND(discount_percentage)'), $roundedDiscounts);
             }
         }
 

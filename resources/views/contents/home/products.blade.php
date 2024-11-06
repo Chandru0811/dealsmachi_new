@@ -3,7 +3,7 @@
     <div class="row pb-4">
         @foreach ($products as $product)
             <div class="col-md-4 col-lg-3 col-12 mb-3 d-flex align-items-stretch justify-content-center">
-                <a href="{{ url('/deal/' . $product->id) }}" style="text-decoration: none;" onclick="clickCount('{{ $product->id }}')">
+                <a href="{{ url('/deal/' . $product->id) }}" class="product-link" style="text-decoration: none;" onclick="clickCount('{{ $product->id }}')">
                     <div class="card sub_topCard h-100 d-flex flex-column">
 
                         <div style="min-height: 50px">
