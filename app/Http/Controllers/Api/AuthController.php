@@ -33,7 +33,11 @@ class AuthController extends Controller
             return response()->json(['error' => $validator->errors()], 422);
         }
 
-        if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
+        $user = User::where('email', $request->email)
+        ->whereNull('deleted_at') 
+        ->first();
+
+        if ($user && Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
             $user = Auth::user();
             $token = $user->createToken('Personal Access Token')->accessToken;
             $success['token'] = $token;
