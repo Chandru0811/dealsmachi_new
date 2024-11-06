@@ -101,7 +101,7 @@
     <div class="email-container">
         <!-- Header -->
         <div class="header">
-            <img src="https://dealsmachi.com/dealsmachiVendor/static/media/header-logo.a9aa2b8a0fe2d8e0419d.webp" alt="dealsmachi Pte Ltd" />
+            <img src="https://dealsmachi.com/assets/images/home/email_logo.png" alt="dealsmachi Pte Ltd" />
         </div>
 
         <!-- Content -->
