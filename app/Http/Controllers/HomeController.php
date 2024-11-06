@@ -168,6 +168,34 @@ class HomeController extends Controller
                 $product->label = 'LIMITED TIME';
                 return $product;
             });
+        }elseif ($slug == 'nearby') {
+            $user_latitude = $request->input('latitude');
+            $user_longitude = $request->input('longitude');
+
+            if (!isset($user_latitude) || !isset($user_longitude)) {
+                return view('errors.locationError');
+            }
+
+            $shops = Shop::select("shops.id", "shops.name",
+                        DB::raw("6371 * acos(cos(radians(" . $user_latitude . "))
+                        * cos(radians(shops.shop_lattitude))
+                        * cos(radians(shops.shop_longtitude) - radians(" . $user_longitude . "))
+                        + sin(radians(" . $user_latitude . "))
+                        * sin(radians(shops.shop_lattitude))) AS distance"))
+                        ->having('distance', '<', 10)
+                        ->orderBy('distance', 'asc')
+                        ->get();
+
+            $shopIds = $shops->pluck('id');
+
+            $deals = Product::whereIn('shop_id', $shopIds)->where('active',1)
+                    ->with(['shop:id,country,state,city,street,street2,zip_code,shop_ratings'])
+                    ->paginate($perPage);
+
+            $deals->getCollection()->transform(function ($product) {
+                $product->label = 'NEAREST DEALS';
+                return $product;
+            });
         }
 
         $brands = Product::where('active', 1)->whereNotNull('brand')->where('brand', '!=', '')->distinct()->orderBy('brand', 'asc')->pluck('brand');
