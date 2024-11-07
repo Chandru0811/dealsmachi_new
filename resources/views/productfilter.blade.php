@@ -349,7 +349,7 @@
                             @foreach ($deals as $product)
                                 <div
                                     class="col-md-4 col-lg-6 col-xl-4 col-12 mb-3 d-flex justify-content-center align-items-stretch">
-                                    <a href="{{ url('/deal/' . $product->id) }}" class="product-link" style="text-decoration: none;"
+                                    <a href="{{ url('/deal/' . $product->id) }}" style="text-decoration: none;"
                                         onclick="clickCount('{{ $product->id }}')">
                                         <div class="card sub_topCard h-100 d-flex flex-column">
                                             <div style="min-height: 50px">
@@ -362,7 +362,7 @@
                                                 <div>
                                                     <div class="mt-3 d-flex align-items-center justify-content-between">
                                                         <h5 class="card-title ps-3">{{ $product->name }}</h5>
-                                                        <span class="badge mx-3 p-0 trending-bookmark-badge">
+                                                        <span class="badge mx-3 p-0 trending-bookmark-badge" onclick="event.stopPropagation();">
                                                             @if ($bookmarkedProducts->contains($product->id))
                                                                 <button type="button"
                                                                     class="bookmark-button remove-bookmark"

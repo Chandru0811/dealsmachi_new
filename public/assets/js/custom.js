@@ -740,8 +740,6 @@ $(document).ready(function () {
             .off("click")
             .on("click", function (e) {
                 e.preventDefault();
-                e.stopPropagation(); // Prevents click event from bubbling up
-
                 let dealId = $(this).data("deal-id");
 
                 $.ajax({
@@ -775,8 +773,6 @@ $(document).ready(function () {
             .off("click")
             .on("click", function (e) {
                 e.preventDefault();
-                e.stopPropagation(); // Prevents click event from bubbling up
-
                 let dealId = $(this).data("deal-id");
 
                 $.ajax({
@@ -826,14 +822,14 @@ $(document).ready(function () {
 
     loadBookmarkCount();
 
-    // Click event for products excluding bookmark button
-    $(".product-link").on("click", function (e) {
-        // Check if the click target is not the bookmark icon or its descendants
-        if (!$(e.target).closest(".bookmark-button").length) {
-            let dealId = $(this).find("[data-deal-id]").data("deal-id");
-            clickCount(dealId);
-        }
-    });
+    // Disable or remove tooltip from bookmark buttons
+    // Option 1: Disable the tooltip functionality
+    $(".bookmark-button").tooltip("disable");
+
+    // Option 2: Remove the tooltip attribute entirely
+    $('.bookmark-button [data-bs-toggle="tooltip"]').removeAttr(
+        "data-bs-toggle"
+    );
 });
 
 // Link Shared Capture the current page URL dynamically
