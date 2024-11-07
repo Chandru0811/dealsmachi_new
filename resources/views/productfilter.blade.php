@@ -454,7 +454,29 @@
                                     </a>
                                 </div>
                             @endforeach
+                            <div class="d-flex justify-content-center align-items-center">
+                                <style>
+                                    .pagination .page-link {
+                                        background-color: white;
+                                        color: lightcoral;
+                                        border: 1px solid #ff0060;
+                                    }
 
+                                    .pagination .page-link:hover {
+                                        background-color: rgba(228, 72, 72, 0.318);
+                                        color: white;
+                                    }
+
+                                    .pagination .active .page-link {
+                                        background-color: #ff0060;
+                                        color: white;
+                                        border-color: #ff0060;
+                                    }
+                                </style>
+
+                                {{ $deals->appends(request()->except('page'))->links() }}
+
+                            </div>
 
                         </div>
                     </div>

@@ -375,7 +375,6 @@ class HomeController extends Controller
 
         if ($request->has('brand')) {
             $brandTerms = $request->input('brand');
-
             if (is_array($brandTerms) && count($brandTerms) > 0) {
                 $query->whereIn('brand', $brandTerms);
             }
@@ -383,9 +382,7 @@ class HomeController extends Controller
 
         if ($request->has('discount')) {
             $discountTerm = $request->input('discount');
-        
             if (is_array($discountTerm) && count($discountTerm) > 0) {
-                // Round each discount term before filtering
                 $roundedDiscounts = array_map('round', $discountTerm);
                 $query->whereIn(DB::raw('ROUND(discount_percentage)'), $roundedDiscounts);
             }
@@ -402,18 +399,14 @@ class HomeController extends Controller
 
         if ($request->has('price_range')) {
             $priceRanges = $request->input('price_range');
-
-            // Apply price range filters for each selected range
             $query->where(function ($priceQuery) use ($priceRanges) {
                 foreach ($priceRanges as $range) {
-                    // Clean and split the price range
                     $cleanRange = str_replace(['$', ',', ' '], '', $range);
                     $priceRange = explode('-', $cleanRange);
 
                     $minPrice = isset($priceRange[0]) ? (float)$priceRange[0] : null;
                     $maxPrice = isset($priceRange[1]) ? (float)$priceRange[1] : null;
 
-                    // Apply the range filter
                     if ($maxPrice !== null) {
                         $priceQuery->orWhereBetween('discounted_price', [$minPrice, $maxPrice]);
                     } else {
@@ -423,10 +416,8 @@ class HomeController extends Controller
             });
         }
 
-
         if ($request->has('short_by')) {
             $shortby = $request->input('short_by');
-
             if ($shortby == 'trending') {
                 $query->withCount(['views' => function ($viewQuery) {
                     $viewQuery->whereDate('viewed_at', now()->toDateString());
@@ -470,16 +461,11 @@ class HomeController extends Controller
 
         for ($start = $minPrice; $start <= $maxPrice; $start += $priceStep) {
             $end = $start + $priceStep;
-
             if ($end > $maxPrice) {
-                $priceRanges[] = [
-                    'label' => '$' . number_format($start, 2) . ' - $' . number_format($end, 2)
-                ];
+                $priceRanges[] = ['label' => '$' . number_format($start, 2) . ' - $' . number_format($end, 2)];
                 break;
             }
-            $priceRanges[] = [
-                'label' => '$' . number_format($start, 2) . ' - $' . number_format($end, 2)
-            ];
+            $priceRanges[] = ['label' => '$' . number_format($start, 2) . ' - $' . number_format($end, 2)];
         }
 
         $shortby = DealCategory::where('active', 1)->get();
