@@ -2147,4 +2147,16 @@ footer hr {
 .card.payment-option.selected {
     border-color: #ff0060;
 }
+
+.applyBtn{
+    background-color: #ff0060;
+    border: 1px solid #ff0060;
+    color: #fff;
+}
+
+.applyBtn:hover{
+    background-color: #fff;
+    border: 1px solid #ff0060;
+    color: #ff0060;
+}
 /* / Checkout / */

@@ -217,6 +217,11 @@ $reviewData = [
                                 </button>
                                 @endif
                             </div>
+                            <div class="mt-2">
+                                <a href="{{ url('/checkout') }}" class="btn showNumBtn" style="text-decoration: none;">
+                                    <i class="fa-solid fa-cart-shopping"></i>&nbsp;&nbsp;Buy Now
+                                </a>
+                            </div>
                         </div>
                         <div class="col-lg-5 col-12">
                             <div class="d-flex justify-content-between">
