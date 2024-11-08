@@ -30,34 +30,65 @@
 </head>
 
 <body>
-    <section class="login-container">
-        <div class="container-fluid d-flex justify-content-center align-items-center vh-100"
-            style="background-color: #f2f2f2;">
-            <div class="card shadow-lg p-3 mb-5 rounded" style="width: 100%; max-width: 400px;">
-                <div class="d-flex justify-content-around mb-2">
-                    <h3 class="login-title py-2">Login</h3>
+    <section class="container-fluid">
+        <div class="row m-0">
+            <div class="col-md-6 col-12 pt-5 login-text-container">
+                <div class="px-5">
+                    <h5 class="py-4">Hello,</h5>
+                    <h6 class="login-text">You are just a step away from an awesome purchase</h6>
+                    <h6 class="login-text">Register or Login to complete the process</h6>
                 </div>
-                <form id="loginForm">
-                    <div class="mb-3">
-                        <label class="form-label">Email Address</label>
-                        <input type="email" class="form-control" id="email" name="email" />
-                    </div>
-                    <div class="mb-4 password-container">
-                        <div class="d-flex justify-content-between">
-                            <label class="form-label">Password</label>
-                            <a href="{{ url('forgot-password') }}" class="forgot-password">Forgot Password?</a>
+                <div class="d-flex justify-content-center align-items-center py-5">
+                    <img src="{{ asset('assets/images/home/email_logo.png') }}" alt="header_logo" class="img-fluid" />
+                </div>
+            </div>
+            <div class="col-md-6 col-12 d-flex justify-content-center align-items-center login-container">
+                <div class="d-flex flex-column justify-content-center align-items-center w-100">
+                    <h3 class="login-title text-center mb-4">Login</h3>
+                    <form id="loginForm" class="w-75">
+                        <div class="mb-3 email-container">
+                            <label class="form-label">Email</label>
+                            <input type="email" class="form-control" id="email" name="email" />
                         </div>
-                        <input type="password" class="form-control" id="password" name="password" />
-                        <i class="fa-solid fa-eye fa-sm" id="toggleLoginPassword"></i>
-                    </div>
-                    <div class="mb-3">
-                        <button type="submit" class="btn login-btn">Login</button>
-                    </div>
-                    <div class="mb-3 text-center fw-light">
-                        <p>Don't have an account? <a href="{{ url('register') }}" class="text-decoration-none"
-                                style="color:  #ff0060;">Register</a></p>
-                    </div>
-                </form>
+                        <div class="mb-4 password-container">
+                            <div class="d-flex justify-content-between">
+                                <label class="form-label">Password</label>
+                            </div>
+                            <input type="password" class="form-control" id="password" name="password" />
+                            <i class="fa-solid fa-eye fa-sm" id="toggleLoginPassword"></i>
+                        </div>
+                           <div class="text-end">
+                            <p class="mb-2" style="color: #fff;"><a
+                                    href="{{ url('forgot-password') }}" class="text-decoration-none" style="color: #fff;">Forgot Password ?</a></p>
+                        </div>
+                        <div class="mb-3 text-center">
+                            <button type="submit" class="btn login-btn w-100">Submit</button>
+                        </div>
+                        <div class="d-flex justify-content-center align-items-center mb-3 line-divider-container">
+                            <hr class="line-divider" />
+                            <span class="mx-2 line-divider-text">or</span>
+                            <hr class="line-divider" />
+                        </div>
+                        <div class="d-flex justify-content-between mb-3">
+                            <div
+                                class="btn btn-light social-btn d-flex align-items-center justify-content-center w-100 me-2">
+                                <img src="{{ asset('assets/images/home/google.png') }}" class="me-2" alt="google_logo"
+                                    width="20">
+                                <span>Login with Google</span>
+                            </div>
+                            <div
+                                class="btn btn-light social-btn d-flex align-items-center justify-content-center w-100 ms-2">
+                                <img src="{{ asset('assets/images/home/facebook.png') }}" class="me-2"
+                                    alt="facebook_logo" width="20">
+                                <span>Login with Facebook</span>
+                            </div>
+                        </div>
+                        <div class="text-center">
+                            <p class="mb-0" style="color: #fff;">Don't have an account? <a
+                                    href="{{ url('register') }}" style="color: #fff;">Register</a></p>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
     </section>

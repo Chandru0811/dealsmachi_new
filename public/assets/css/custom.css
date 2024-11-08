@@ -1289,31 +1289,101 @@ footer hr {
 
 /* Login */
 .login-container .login-title {
-    color: #ff0060;
-    border-bottom: 2px solid #ff0060;
-    width: 100%;
+    color: #fff;
     text-align: center;
     font-weight: 400;
     cursor: pointer;
 }
 
+.login-text{
+    line-height: 30px;
+}
+
 .login-container .forgot-password {
-    color: #ff0060;
+    color: #fff;
     text-decoration: none;
     font-size: 0.9em;
 }
 
-.login-container .login-btn {
-    color: #fff;
+.login-container{
     background-color: #ff0060;
+}
+
+.login-container .login-btn {
+    color: #ff0060;
     width: 100%;
+    background-color: #fff;
+}
+
+@media (min-width: 992px) {
+    .login-container {
+        min-height: 100vh;
+    }
+}
+
+@media (min-width: 992px) {
+    .login-text-container {
+        min-height: 100vh;
+    }
 }
 
 .login-container .login-btn:hover,
 .login-container .login-btn.active {
+    color: #ff0060;
+    border-color: #fff;
+    background-color: #fff;
+}
+
+.password-container .form-label{
+    color: #fff !important
+}
+
+.email-container .form-label{
+    color: #fff !important
+}
+
+/* Style for the hr line and the text */
+.line-divider-container {
+    display: flex;
+    align-items: center;
     color: #fff;
-    background-color: #ff0060;
     width: 100%;
+}
+
+.line-divider {
+    flex-grow: 2;
+    height: 1px;
+    background-color: #fff;
+    border: none;
+    margin: 0 10px;
+}
+
+.line-divider-text {
+    padding: 0 10px;
+    font-size: 1rem;
+    color: #fff;
+}
+
+/* Social button styling */
+.social-btn {
+    background-color: #ffffff;
+    color: #000;
+    font-weight: bold;
+    padding: 0.5rem;
+    border-radius: 5px;
+}
+
+.social-btn img {
+    height: 20px;
+}
+
+.social-btn span {
+    font-size: 0.600rem;
+}
+
+.forgot-password {
+    color: #ffffff;
+    text-decoration: underline;
 }
 
 .login-container .password-container {
@@ -1865,7 +1935,7 @@ footer hr {
     }
 }
 
-.icon-facebook {   
+.icon-facebook {
     background-color: #1878f3;
 }
 
@@ -2062,3 +2132,19 @@ footer hr {
     border-bottom: 1px solid #a7a7a7;
 }
 /* Contact Us End */
+
+/* / Checkout / */
+.card.payment-option {
+    cursor: pointer;
+    border: 1px solid #ddd;
+    transition: border-color 0.2s;
+}
+
+.card.payment-option:hover {
+    border-color: #ff0060;
+}
+
+.card.payment-option.selected {
+    border-color: #ff0060;
+}
+/* / Checkout / */

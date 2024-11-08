@@ -4,9 +4,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DealsMachi | Register</title>
-    <link rel="canonical" href="https://dealsmachi.com/register" />
-    <meta name="description" content="DealsMachi Shop Smart, Save Big!" />
+    <title>Dealslah | Login </title>
+    <link rel="canonical" href="https://dealslah.com/login" />
+    <meta name="description" content="Dealslah Shop Smart, Save Big!" />
     <link rel="icon" href="{{ asset('assets/images/home/favicon.ico') }}" />
 
     <!-- Vendor CSS Files -->
@@ -30,43 +30,72 @@
 </head>
 
 <body>
-    <section class="register-container">
-        <div class="container-fluid d-flex justify-content-center align-items-center"
-            style="background-color: #f2f2f2;">
-            <div class="card shadow-lg p-3 rounded my-5" style="width: 100%; max-width: 400px;">
-                <div class="d-flex justify-content-around mb-2">
-                    <h3 class="register-title py-2">Register</h3>
+    <section class="container-fluid">
+        <div class="row m-0">
+            <div class="col-md-6 col-12 pt-5 login-text-container">
+                <div class="px-5">
+                    <h5 class="py-4">Hello,</h5>
+                    <h6 class="login-text">You are just a step away from an awesome purchase</h6>
+                    <h6 class="login-text">Register or Login to complete the process</h6>
                 </div>
-                <form id="registerForm">
-                    <div class="mb-3">
-                        <label class="form-label">Name</label>
-                        <input type="text" class="form-control" id="name" name="name" />
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Email Address</label>
-                        <input type="email" class="form-control" id="email" name="email" />
-                    </div>
-                    <div class="mb-3 password-container">
-                        <label class="form-label">Password</label>
-                        <input type="password" class="form-control" id="password" name="password" />
-                        <i class="fa-solid fa-eye fa-sm" id="toggleRegisterPassword"></i>
-                    </div>
-                    <div class="mb-4 password-container">
-                        <label class="form-label">Confirm Password</label>
-                        <input type="password" class="form-control" id="confirm_password" name="confirm_password" />
-                        <i class="fa-solid fa-eye fa-sm" id="toggleRegisterConfirmPassword"></i>
-                    </div>
-                    <div class="mb-3">
-                        <button type="submit" class="btn register-btn">Register</button>
-                    </div>
-                    <div class="mb-3 text-center fw-light">
-                        <a href="#" class="text-decoration-none" style="color:  #ff0060;">Become a Vendor</a>
-                    </div>
-                    <div class="mb-3 text-center fw-light">
-                        <p>Already have an account? <a href="{{ url('login') }}" class="text-decoration-none"
-                                style="color:  #ff0060;">Login</a></p>
-                    </div>
-                </form>
+                <div class="d-flex justify-content-center align-items-center py-5">
+                    <img src="{{ asset('assets/images/home/email_logo.png') }}" alt="header_logo" class="img-fluid" />
+                </div>
+            </div>
+            <div class="col-md-6 col-12 d-flex justify-content-center align-items-center login-container">
+                <div class="d-flex flex-column justify-content-center align-items-center w-100">
+                    <h3 class="login-title text-center mb-4">Register</h3>
+                    <form id="loginForm" class="w-75">
+                        <div class="mb-3 email-container">
+                            <label class="form-label">Name</label>
+                            <input type="text" class="form-control" id="name" name="name" />
+                        </div>
+                        <div class="mb-3 email-container">
+                            <label class="form-label">Email Address</label>
+                            <input type="email" class="form-control" id="email" name="email" />
+                        </div>
+                        <div class="mb-3 password-container">
+                            <div class="d-flex justify-content-between">
+                                <label class="form-label">Password</label>
+                            </div>
+                            <input type="password" class="form-control" id="password" name="password" />
+                            <i class="fa-solid fa-eye fa-sm" id="toggleLoginPassword"></i>
+                        </div>
+                        <div class="mb-4 password-container">
+                            <div class="d-flex justify-content-between">
+                                <label class="form-label">Confirm Password</label>
+                            </div>
+                            <input type="password" class="form-control" id="confirm password" name="confirm password" />
+                            <i class="fa-solid fa-eye fa-sm" id="toggleLoginPassword"></i>
+                        </div>
+                        <div class="mb-3 text-center">
+                            <button type="submit" class="btn login-btn w-100">Register</button>
+                        </div>
+                        <div class="d-flex justify-content-center align-items-center mb-3 line-divider-container">
+                            <hr class="line-divider" />
+                            <span class="mx-2 line-divider-text">or</span>
+                            <hr class="line-divider" />
+                        </div>
+                        <div class="d-flex justify-content-between mb-3">
+                            <div
+                                class="btn btn-light social-btn d-flex align-items-center justify-content-center w-100 me-2">
+                                <img src="{{ asset('assets/images/home/google.png') }}" class="me-2" alt="google_logo"
+                                    width="20">
+                                <span>Login with Google</span>
+                            </div>
+                            <div
+                                class="btn btn-light social-btn d-flex align-items-center justify-content-center w-100 ms-2">
+                                <img src="{{ asset('assets/images/home/facebook.png') }}" class="me-2"
+                                    alt="facebook_logo" width="20">
+                                <span>Login with Facebook</span>
+                            </div>
+                        </div>
+                        {{-- <div class="text-center">
+                            <p class="mb-0" style="color: #fff;">Don't have an account? <a
+                                    href="{{ url('register') }}" style="color: #fff;">Register</a></p>
+                        </div> --}}
+                    </form>
+                </div>
             </div>
         </div>
     </section>

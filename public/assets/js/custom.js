@@ -27,7 +27,7 @@ $(document).ready(function () {
             },
         },
         errorPlacement: function (error, element) {
-            error.addClass("text-danger mt-1");
+            error.addClass("text-light mt-1");
             error.insertAfter(element);
         },
         highlight: function (element) {
@@ -66,7 +66,7 @@ $(document).ready(function () {
             },
         },
         errorPlacement: function (error, element) {
-            error.addClass("text-danger mt-1");
+            error.addClass("text-light mt-1");
             error.insertAfter(element);
         },
         highlight: function (element) {
@@ -267,7 +267,7 @@ $(document).ready(function () {
             },
         },
         errorPlacement: function (error, element) {
-            error.addClass("text-danger mt-1");
+            error.addClass("text-light mt-1");
             error.insertAfter(element);
 
             if (element.attr("name") === "password") {
@@ -296,7 +296,7 @@ $(document).ready(function () {
 
     function adjustIconPosition(passwordField) {
         const icon = $("#toggleLoginPassword");
-        const errorElement = passwordField.next(".text-danger");
+        const errorElement = passwordField.next(".text-light");
 
         if (errorElement.length) {
             icon.css("right", `${passwordField.outerHeight() - 5}px`);
@@ -365,7 +365,7 @@ $(document).ready(function () {
             },
         },
         errorPlacement: function (error, element) {
-            error.addClass("text-danger mt-1");
+            error.addClass("text-light mt-1");
             error.insertAfter(element);
 
             if (
@@ -404,7 +404,7 @@ $(document).ready(function () {
             passwordField.attr("name") === "password"
                 ? $("#toggleRegisterPassword")
                 : $("#toggleRegisterConfirmPassword");
-        const errorElement = passwordField.next(".text-danger");
+        const errorElement = passwordField.next(".text-light");
 
         if (errorElement.length) {
             icon.css("right", `${passwordField.outerHeight() - 5}px`);
@@ -477,7 +477,7 @@ $(document).ready(function () {
             },
         },
         errorPlacement: function (error, element) {
-            error.addClass("text-danger mt-1");
+            error.addClass("text-light mt-1");
             error.insertAfter(element);
         },
         highlight: function (element) {
@@ -525,7 +525,7 @@ $(document).ready(function () {
             },
         },
         errorPlacement: function (error, element) {
-            error.addClass("text-danger mt-1");
+            error.addClass("text-light mt-1");
             error.insertAfter(element);
 
             if (
@@ -564,7 +564,7 @@ $(document).ready(function () {
             passwordField.attr("name") === "new_password"
                 ? $("#toggleResetPassword")
                 : $("#toggleResetConfirmPassword");
-        const errorElement = passwordField.next(".text-danger");
+        const errorElement = passwordField.next(".text-light");
 
         if (errorElement.length) {
             icon.css("right", `${passwordField.outerHeight() - 5}px`);
@@ -949,16 +949,16 @@ function showAddress(country) {
 document.addEventListener("DOMContentLoaded", function() {
     function formatIndianNumber(number) {
         let [integerPart, decimalPart] = number.toString().split(".");
-        
+
         let lastThree = integerPart.slice(-3);
         let rest = integerPart.slice(0, -3);
-        
+
         if (rest.length > 0) {
             rest = rest.replace(/\B(?=(\d{2})+(?!\d))/g, ",") + ",";
         }
-        
+
         let formattedNumber = "₹" + rest + lastThree;
-        
+
         if (decimalPart !== undefined) {
             formattedNumber += "." + decimalPart;
         }
@@ -975,3 +975,14 @@ document.addEventListener("DOMContentLoaded", function() {
         element.innerText = formatIndianNumber(price);
     });
 });
+
+function selectPaymentOption(optionId) {
+    document.querySelectorAll('.card.payment-option').forEach(card => {
+        card.classList.remove('selected');
+    });
+
+    const selectedCard = document.getElementById(optionId).closest('.card');
+    selectedCard.classList.add('selected');
+
+    document.getElementById(optionId).checked = true;
+}
