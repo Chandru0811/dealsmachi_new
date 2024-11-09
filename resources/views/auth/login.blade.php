@@ -74,13 +74,13 @@
                                 class="btn btn-light social-btn d-flex align-items-center justify-content-center w-100 me-2">
                                 <img src="{{ asset('assets/images/home/google.png') }}" class="me-2" alt="google_logo"
                                     width="20">
-                                <span style="color: #333;">Login with Google</span>
+                                <span style="color: #333;">Sign in with Google</span>
                             </div>
                             <div
                                 class="btn btn-light social-btn d-flex align-items-center justify-content-center w-100 ms-2">
                                 <img src="{{ asset('assets/images/home/facebook.png') }}" class="me-2"
                                     alt="facebook_logo" width="20">
-                                <span style="color: #333;">Login with Facebook</span>
+                                <span style="color: #333;">Continue with Facebook</span>
                             </div>
                         </div>
                         <div class="text-center">
