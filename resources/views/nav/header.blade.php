@@ -19,7 +19,7 @@
                     </span>
                     &nbsp;&nbsp;&nbsp;
                     <a href="{{ url('/login') }}" class="d-xl-none">
-                        <span><i class="fa-duotone fa-solid fa-user" style="--fa-primary-color: #ff0060; --fa-secondary-color: #ff0060;"></i></span>
+                        <span><i class="fa-duotone fa-solid fa-circle-user" style="--fa-primary-color: #ff0060; --fa-secondary-color: #ff0060;font-size: 20px"></i></span>
                     </a>
                     &nbsp;&nbsp;&nbsp;
                     <button class="btn btn-button"
@@ -77,7 +77,7 @@
                         </span>
                     </button>
                     <a href="{{ url('/login') }}">
-                    <span><i class="fa-duotone fa-solid fa-user" style="--fa-primary-color: #ff0060; --fa-secondary-color: #ff0060;"></i></span>
+                        <span><i class="fa-duotone fa-solid fa-circle-user" style="--fa-primary-color: #ff0060; --fa-secondary-color: #ff0060;font-size: 20px" ></i></span>
                 </a>
                     <span class="navbar-text d-none d-xl-inline align-items-center justify-content-end"
                         style="margin-left: 10px">
