@@ -756,7 +756,7 @@ $(document).ready(function () {
                             .addClass("remove-bookmark");
                         button.html(`
                         <p style="height:fit-content;cursor:pointer" class="p-1 px-2">
-                            <i class="fa-solid fa-bookmark bookmark-icon" style="color: #ef4444;"></i>
+                            <i class="fa-solid fa-bookmark bookmark-icon" style="color: #ff0060;"></i>
                         </p>
                     `);
 
@@ -789,7 +789,7 @@ $(document).ready(function () {
                             .addClass("add-bookmark");
                         button.html(`
                         <p style="height:fit-content;cursor:pointer" class="p-1 px-2">
-                            <i class="fa-regular fa-bookmark bookmark-icon" style="color: #ef4444;"></i>
+                            <i class="fa-regular fa-bookmark bookmark-icon" style="color: #ff0060;"></i>
                         </p>
                     `);
 

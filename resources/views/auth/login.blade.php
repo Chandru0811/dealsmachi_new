@@ -34,7 +34,7 @@
         <div class="row m-0">
             <div class="col-md-6 col-12 pt-5 login-text-container">
                 <div class="px-5">
-                    <h5 class="py-4">Hello,</h5>
+                    <h3 class="py-4">Hello,</h3>
                     <h6 class="login-text">You are just a step away from an awesome purchase</h6>
                     <h6 class="login-text">Register or Login to complete the process</h6>
                 </div>
@@ -50,7 +50,7 @@
                             <label class="form-label">Email</label>
                             <input type="email" class="form-control" id="email" name="email" />
                         </div>
-                        <div class="mb-4 password-container">
+                        <div class="mb-5 password-container">
                             <div class="d-flex justify-content-between">
                                 <label class="form-label">Password</label>
                             </div>
@@ -58,8 +58,8 @@
                             <i class="fa-solid fa-eye fa-sm" id="toggleLoginPassword"></i>
                         </div>
                            <div class="text-end">
-                            <p class="mb-2" style="color: #fff;"><a
-                                    href="{{ url('forgot-password') }}" class="text-decoration-none" style="color: #fff;">Forgot Password ?</a></p>
+                            <p class="" style="color: #fff;"><a
+                                    href="{{ url('forgot-password') }}"  style="color: #fff;">Forgot Password ?</a></p>
                         </div>
                         <div class="mb-3 text-center">
                             <button type="submit" class="btn login-btn w-100">Submit</button>
@@ -74,13 +74,13 @@
                                 class="btn btn-light social-btn d-flex align-items-center justify-content-center w-100 me-2">
                                 <img src="{{ asset('assets/images/home/google.png') }}" class="me-2" alt="google_logo"
                                     width="20">
-                                <span>Login with Google</span>
+                                <span style="color: #333;">Login with Google</span>
                             </div>
                             <div
                                 class="btn btn-light social-btn d-flex align-items-center justify-content-center w-100 ms-2">
                                 <img src="{{ asset('assets/images/home/facebook.png') }}" class="me-2"
                                     alt="facebook_logo" width="20">
-                                <span>Login with Facebook</span>
+                                <span style="color: #333;">Login with Facebook</span>
                             </div>
                         </div>
                         <div class="text-center">
