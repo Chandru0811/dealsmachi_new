@@ -937,9 +937,9 @@ function showAddress(country) {
     var phoneLink = document.getElementById("phone-link");
     var phoneNumber = document.getElementById("phone-number");
 
-    if (country === "singapore") {
-        phoneLink.href = "tel:+6588941306";
-        phoneNumber.innerHTML = "+65 8894 1306";
+    if (country === "india") {
+        phoneLink.href = "tel:+919361365818";
+        phoneNumber.innerHTML = "+91 93613 65818";
     } else if (country === "india") {
         phoneLink.href = "tel:+919361365818";
         phoneNumber.innerHTML = "+91 93613 65818";

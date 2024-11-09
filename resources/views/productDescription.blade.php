@@ -101,7 +101,7 @@ $reviewData = [
 [
 'reviewerName' => 'Siva',
 'review' =>
-'Moving is not easy in Singapore. But with Trucklah by your side, nothing is impossible. Faster, reliable and safe delivery from Trucklah has changed the scene.',
+'Moving is not easy in India. But with Trucklah by your side, nothing is impossible. Faster, reliable and safe delivery from Trucklah has changed the scene.',
 'rating' => 5,
 'reviewDate' => '2024-10-02',
 'advertisement' => 'assets/images/product_view/trucklah_add.png',
@@ -164,12 +164,16 @@ $reviewData = [
                                             <div class="col-2 pe-0">
                                                 <i class="fa-solid fa-location-dot fa-lg" style="color: #ff0060;"></i>
                                             </div>
+                                            @if($product->shop->address)
                                             <div class="col-10 ps-2" style="font-size: 12px; color: #5C5C5C;">
                                                 <a href="{{ $product->shop->map_url }}" class="text-muted"
                                                     target="_blank" style="text-decoration: none;">
                                                     {{ $product->shop->address }}
                                                 </a>
                                             </div>
+                                            @else
+                                            No Address Found
+                                            @endif
 
                                         </div>
                                     </div>
