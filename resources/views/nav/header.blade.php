@@ -18,9 +18,19 @@
                         </a>
                     </span>
                     &nbsp;&nbsp;&nbsp;
-                    <a href="{{ url('/login') }}" class="d-xl-none">
-                        <span><i class="fa-duotone fa-solid fa-circle-user" style="--fa-primary-color: #ff0060; --fa-secondary-color: #ff0060;font-size: 20px"></i></span>
-                    </a>
+                    <div class="dropdown d-xl-none">
+                        <a href="{{ url('login') }}" class="dropdown-toggle text-decoration-none" role="button" data-bs-toggle="dropdown" aria-expanded="false" >
+                            <span>
+                                <i class="fa-solid fa-circle-user"
+                                   style="--fa-primary-color: #ff0060; --fa-secondary-color: #ff0060; font-size: 20px;"></i>
+                            </span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a class="dropdown-item" href="{{ url('logout') }}">Logout</a>
+                            </li>
+                        </ul>
+                    </div>
                     &nbsp;&nbsp;&nbsp;
                     <button class="btn btn-button"
                         style="border: none; position: relative;">
@@ -76,9 +86,19 @@
                             class="totalItemsCount total-count translate-middle d-none d-xl-block"  style="position: absolute;top: 16px;right:5px">
                         </span>
                     </button>
-                    <a href="{{ url('/login') }}">
-                        <span><i class="fa-duotone fa-solid fa-circle-user" style="--fa-primary-color: #ff0060; --fa-secondary-color: #ff0060;font-size: 20px" ></i></span>
-                </a>
+                    <div class="dropdown">
+                        <a href="{{ url('login') }}" class="dropdown-toggle text-decoration-none" role="button" data-bs-toggle="dropdown" aria-expanded="false" >
+                            <span>
+                                <i class="fa-solid fa-circle-user"
+                                   style="--fa-primary-color: #ff0060; --fa-secondary-color: #ff0060; font-size: 20px;"></i>
+                            </span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a class="dropdown-item" href="{{ url('logout') }}">Logout</a>
+                            </li>
+                        </ul>
+                    </div>
                     <span class="navbar-text d-none d-xl-inline align-items-center justify-content-end"
                         style="margin-left: 10px">
                         <a href="https://dealsmachi.com/dealsmachiVendor/" style="text-decoration: none">

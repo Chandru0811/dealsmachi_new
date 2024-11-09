@@ -485,6 +485,14 @@ footer hr {
 /* Footer End  */
 
 /* Header Start */
+.dropdown:hover .dropdown-menu {
+    display: block;
+}
+
+.fa-circle-user:before, .fa-user-circle:before {
+    content: "";
+    color: #ff0060;
+}
 
 .total-count {
     font-size: 8px;
@@ -1368,7 +1376,6 @@ footer hr {
 .social-btn {
     background-color: #ffffff;
     color: #000;
-    font-weight: bold;
     padding: 0.5rem;
     border-radius: 5px;
 }
@@ -1378,7 +1385,7 @@ footer hr {
 }
 
 .social-btn span {
-    font-size: 0.600rem;
+    font-size: 0.400rem;
 }
 
 .forgot-password {
