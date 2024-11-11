@@ -101,15 +101,19 @@
 
 @media screen and (max-width: 767px) and (min-width: 380px) {
     .header-logo {
-        max-width: 150px;
+        max-width: 60px;
         padding-left: 0 !important;
+        padding-right: 0 !important ;
     }
     .navbar-toggler .button {
-        max-width: 150px;
+        max-width: 50px;
     }
 
     .button {
-        max-width: 200px;
+        max-width: 100px;
+    }
+    .header .userlogin-button {
+        font-size: 8px;
     }
 }
 
@@ -485,6 +489,14 @@ footer hr {
 /* Footer End  */
 
 /* Header Start */
+.dropdown:hover .dropdown-menu {
+    display: block;
+}
+
+.fa-circle-user:before, .fa-user-circle:before {
+    content: "";
+    color: #ff0060;
+}
 
 .total-count {
     font-size: 8px;
@@ -511,7 +523,7 @@ footer hr {
 .header .userlogin-button {
     background-color: #ff0060;
     color: #fff;
-    font-size: 24px;
+    font-size: 20px;
     font-family: "Kanit", system-ui;
 }
 
@@ -545,14 +557,14 @@ footer hr {
     }
     .navbar-toggler .button {
         padding-left: 0px;
-        max-width: 90px;
+        max-width: 50px;
     }
 
     .button {
-        max-width: 150px;
+        max-width: 100px;
     }
     .header .userlogin-button {
-        font-size: 10px;
+        font-size: 8px;
     }
 
     .header .userlogin-button:hover {
@@ -632,11 +644,11 @@ footer hr {
 
 @media (min-width: 320px) and (max-width: 768px) {
     .header .userlogin-button {
-        font-size: 12px;
+        font-size: 10px;
     }
 
     .header .userlogin-button:hover {
-        font-size: 12px;
+        font-size: 10x;
         border: 2px solid #ff0060;
         background-color: #fff;
         color: #ff0060;
@@ -1368,17 +1380,12 @@ footer hr {
 .social-btn {
     background-color: #ffffff;
     color: #000;
-    font-weight: bold;
     padding: 0.5rem;
     border-radius: 5px;
 }
 
 .social-btn img {
     height: 20px;
-}
-
-.social-btn span {
-    font-size: 0.600rem;
 }
 
 .forgot-password {

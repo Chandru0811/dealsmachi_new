@@ -540,7 +540,7 @@ $(document).ready(function () {
                             .addClass("remove-bookmark");
                         button.html(`
                         <p style="height:fit-content;cursor:pointer" class="p-1 px-2">
-                            <i class="fa-solid fa-bookmark bookmark-icon" style="color: #ef4444;"></i>
+                            <i class="fa-solid fa-bookmark bookmark-icon" style="color: #ff0060;"></i>
                         </p>
                     `);
 
@@ -573,7 +573,7 @@ $(document).ready(function () {
                             .addClass("add-bookmark");
                         button.html(`
                         <p style="height:fit-content;cursor:pointer" class="p-1 px-2">
-                            <i class="fa-regular fa-bookmark bookmark-icon" style="color: #ef4444;"></i>
+                            <i class="fa-regular fa-bookmark bookmark-icon" style="color: #ff0060;"></i>
                         </p>
                     `);
 
@@ -721,9 +721,9 @@ function showAddress(country) {
     var phoneLink = document.getElementById("phone-link");
     var phoneNumber = document.getElementById("phone-number");
 
-    if (country === "singapore") {
-        phoneLink.href = "tel:+6588941306";
-        phoneNumber.innerHTML = "+65 8894 1306";
+    if (country === "india") {
+        phoneLink.href = "tel:+919361365818";
+        phoneNumber.innerHTML = "+91 93613 65818";
     } else if (country === "india") {
         phoneLink.href = "tel:+919361365818";
         phoneNumber.innerHTML = "+91 93613 65818";
@@ -770,3 +770,103 @@ function selectPaymentOption(optionId) {
 
     document.getElementById(optionId).checked = true;
 }
+
+$(document).ready(function () {
+    $("#checkoutForm").validate({
+        rules: {
+            firstName: {
+                required: true,
+            },
+            lastName: {
+                required: true,
+            },
+            email: {
+                required: true,
+                email: true,
+            },
+            mobileNumber: {
+                required: true,
+                digits: true,
+                minlength: 10,
+                maxlength: 10,
+            },
+            address: {
+                required: true,
+            },
+            city: {
+                required: true,
+            },
+            state: {
+                required: true,
+            },
+            country: {
+                required: true,
+            },
+            zipCode: {
+                required: true,
+                digits: true,
+            },
+            payment_method: {
+                required: true,
+            },
+        },
+        messages: {
+            firstName: "First name is required",
+            lastName: "Last name is required",
+            email: {
+                required: "Email is required",
+                email: "Please enter a valid email address",
+            },
+            mobileNumber: {
+                required: "Mobile number is required",
+                digits: "Please enter a valid mobile number",
+                minlength: "Mobile number must be 10 digits",
+                maxlength: "Mobile number must be 10 digits",
+            },
+            address: "Address is required",
+            city: "City is required",
+            state: "State is required",
+            country: "Country is required",
+            zipCode: {
+                required: "Zip Code is required",
+                digits: "Zip Code should contain only numbers",
+            },
+            payment_method: "Please select a payment method",
+        },
+        errorPlacement: function (error, element) {
+            error.addClass("text-danger mt-1");
+            if (element.attr("name") === "payment_method") {
+                error.insertAfter(".payment-option:first");
+            } else {
+                error.insertAfter(element);
+            }
+        },
+        highlight: function (element) {
+            $(element).addClass("is-invalid");
+        },
+        unhighlight: function (element) {
+            $(element).removeClass("is-invalid");
+        },
+        submitHandler: function (form) {
+            alert("Form is valid! Submitting...");
+            
+            // Log form data to the console
+            const formData = {
+                firstName: $("#firstName").val(),
+                lastName: $("#lastName").val(),
+                email: $("#email").val(),
+                mobileNumber: $("#mobileNumber").val(),
+                address: $("#address").val(),
+                city: $("#city").val(),
+                state: $("#state").val(),
+                country: $("#country").val(),
+                zipCode: $("#zipCode").val(),
+                payment_method: $("input[name='payment_method']:checked").val(),
+            };
+            console.log(formData);
+
+            // Reset the form after submission
+            form.reset();
+        },
+    });
+});
