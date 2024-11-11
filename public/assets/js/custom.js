@@ -245,55 +245,6 @@ $("#contactForm").validate({
 
 // Validation for Login Page
 $(document).ready(function () {
-    $("#loginForm").validate({
-        rules: {
-            email: {
-                required: true,
-                email: true,
-            },
-            password: {
-                required: true,
-                minlength: 8,
-            },
-        },
-        messages: {
-            email: {
-                required: "Email is required",
-                email: "Invalid email address",
-            },
-            password: {
-                required: "Password is required",
-                minlength: "Password must be at least 8 characters long",
-            },
-        },
-        errorPlacement: function (error, element) {
-            error.addClass("text-light mt-1");
-            error.insertAfter(element);
-
-            if (element.attr("name") === "password") {
-                adjustIconPosition(element);
-            }
-        },
-        highlight: function (element) {
-            $(element).addClass("is-invalid");
-            if ($(element).attr("name") === "password") {
-                $("#toggleLoginPassword").addClass("is-invalid");
-                adjustIconPosition($(element));
-            }
-        },
-        unhighlight: function (element) {
-            $(element).removeClass("is-invalid");
-            if ($(element).attr("name") === "password") {
-                $("#toggleLoginPassword").removeClass("is-invalid");
-                adjustIconPosition($(element));
-            }
-        },
-        submitHandler: function (form) {
-            alert("Form is valid! Submitting...");
-            form.submit();
-        },
-    });
-
     function adjustIconPosition(passwordField) {
         const icon = $("#toggleLoginPassword");
         const errorElement = passwordField.next(".text-light");
@@ -306,7 +257,6 @@ $(document).ready(function () {
             icon.css("top", "71%");
         }
     }
-
     // Password visibility toggle
     $(document).ready(function () {
         const toggleLoginPassword = document.querySelector(
@@ -329,76 +279,6 @@ $(document).ready(function () {
 
 // Validation for Register Page
 $(document).ready(function () {
-    $("#registerForm").validate({
-        rules: {
-            name: {
-                required: true,
-            },
-            email: {
-                required: true,
-                email: true,
-            },
-            password: {
-                required: true,
-                minlength: 8,
-            },
-            confirm_password: {
-                required: true,
-                equalTo: "#password",
-            },
-        },
-        messages: {
-            name: {
-                required: "Name is required",
-            },
-            email: {
-                required: "Email is required",
-                email: "Invalid email address",
-            },
-            password: {
-                required: "Password is required",
-                minlength: "Password must be at least 8 characters long",
-            },
-            confirm_password: {
-                required: "Confirm Password is required",
-                equalTo: "Passwords do not match",
-            },
-        },
-        errorPlacement: function (error, element) {
-            error.addClass("text-light mt-1");
-            error.insertAfter(element);
-
-            if (
-                element.attr("name") === "password" ||
-                element.attr("name") === "confirm_password"
-            ) {
-                adjustRegisterIconPosition(element);
-            }
-        },
-        highlight: function (element) {
-            $(element).addClass("is-invalid");
-            if (
-                $(element).attr("name") === "password" ||
-                $(element).attr("name") === "confirm_password"
-            ) {
-                adjustRegisterIconPosition($(element));
-            }
-        },
-        unhighlight: function (element) {
-            $(element).removeClass("is-invalid");
-            if (
-                $(element).attr("name") === "password" ||
-                $(element).attr("name") === "confirm_password"
-            ) {
-                adjustRegisterIconPosition($(element));
-            }
-        },
-        submitHandler: function (form) {
-            alert("Registration form is valid! Submitting...");
-            form.submit();
-        },
-    });
-
     function adjustRegisterIconPosition(passwordField) {
         const icon =
             passwordField.attr("name") === "password"
@@ -461,104 +341,8 @@ $(document).ready(function () {
     });
 });
 
-// Validation for Forgot Password Page
-$(document).ready(function () {
-    $("#forgotForm").validate({
-        rules: {
-            email: {
-                required: true,
-                email: true,
-            },
-        },
-        messages: {
-            email: {
-                required: "Email is required",
-                email: "Invalid email address",
-            },
-        },
-        errorPlacement: function (error, element) {
-            error.addClass("text-light mt-1");
-            error.insertAfter(element);
-        },
-        highlight: function (element) {
-            $(element).addClass("is-invalid");
-        },
-        unhighlight: function (element) {
-            $(element).removeClass("is-invalid");
-        },
-        submitHandler: function (form) {
-            alert("Reset Password request is valid! Submitting...");
-            form.submit();
-        },
-    });
-});
-
 // Validation for Reset Password Page
 $(document).ready(function () {
-    $("#resetForm").validate({
-        rules: {
-            email: {
-                required: true,
-                email: true,
-            },
-            new_password: {
-                required: true,
-                minlength: 8,
-            },
-            confirm_new_password: {
-                required: true,
-                equalTo: "#new_password",
-            },
-        },
-        messages: {
-            email: {
-                required: "Email is required",
-                email: "Invalid email address",
-            },
-            new_password: {
-                required: "Password is required",
-                minlength: "Password must be at least 8 characters long",
-            },
-            confirm_new_password: {
-                required: "Confirm Password is required",
-                equalTo: "Passwords do not match",
-            },
-        },
-        errorPlacement: function (error, element) {
-            error.addClass("text-light mt-1");
-            error.insertAfter(element);
-
-            if (
-                element.attr("name") === "new_password" ||
-                element.attr("name") === "confirm_new_password"
-            ) {
-                adjustResetIconPosition(element);
-            }
-        },
-        highlight: function (element) {
-            $(element).addClass("is-invalid");
-            if (
-                $(element).attr("name") === "new_password" ||
-                $(element).attr("name") === "confirm_new_password"
-            ) {
-                adjustResetIconPosition($(element));
-            }
-        },
-        unhighlight: function (element) {
-            $(element).removeClass("is-invalid");
-            if (
-                $(element).attr("name") === "new_password" ||
-                $(element).attr("name") === "confirm_new_password"
-            ) {
-                adjustResetIconPosition($(element));
-            }
-        },
-        submitHandler: function (form) {
-            alert("Reset Password form is valid! Submitting...");
-            form.submit();
-        },
-    });
-
     function adjustResetIconPosition(passwordField) {
         const icon =
             passwordField.attr("name") === "new_password"
@@ -946,7 +730,7 @@ function showAddress(country) {
     }
 }
 
-document.addEventListener("DOMContentLoaded", function() {
+document.addEventListener("DOMContentLoaded", function () {
     function formatIndianNumber(number) {
         let [integerPart, decimalPart] = number.toString().split(".");
 
@@ -965,24 +749,24 @@ document.addEventListener("DOMContentLoaded", function() {
         return formattedNumber;
     }
 
-    document.querySelectorAll('.discounted-price').forEach(element => {
+    document.querySelectorAll(".discounted-price").forEach((element) => {
         let price = parseFloat(element.innerText);
         element.innerText = formatIndianNumber(price);
     });
 
-    document.querySelectorAll('.original-price').forEach(element => {
+    document.querySelectorAll(".original-price").forEach((element) => {
         let price = parseFloat(element.innerText);
         element.innerText = formatIndianNumber(price);
     });
 });
 
 function selectPaymentOption(optionId) {
-    document.querySelectorAll('.card.payment-option').forEach(card => {
-        card.classList.remove('selected');
+    document.querySelectorAll(".card.payment-option").forEach((card) => {
+        card.classList.remove("selected");
     });
 
-    const selectedCard = document.getElementById(optionId).closest('.card');
-    selectedCard.classList.add('selected');
+    const selectedCard = document.getElementById(optionId).closest(".card");
+    selectedCard.classList.add("selected");
 
     document.getElementById(optionId).checked = true;
 }
