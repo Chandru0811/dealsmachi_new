@@ -23,7 +23,7 @@
                             <a href="https://www.youtube.com/channel/UCAyH2wQ2srJE8WqvII8JNrQ" target='_blank'
                                 class="text-decoration-none me-2"><i class="fab fa-youtube"
                                     style="font-size: 15px"></i></a>
-                            <a href="#" class="text-decoration-none me-2" target='_blank'><i
+                            <a href="https://chat.whatsapp.com/Ef23qGMU1d6EXYpRvomaLx" class="text-decoration-none me-2" target='_blank'><i
                                     class="fab fa-whatsapp" style="font-size: 15px"></i></a>
                             <a href="https://x.com/dealsmachi_in" target='_blank' class="text-decoration-none"><i
                                     class="fab fa-x-twitter" style="font-size: 15px"></i></a>
@@ -49,7 +49,7 @@
                                 <a href="{{ url('/contactus') }}" class="text-light text-decoration-none">Contact Us</a>
                             </li>
                             <li>
-                                <a href="http://localhost:3000/dealsmachiVendor/"
+                                <a href="https://dealsmachi.com/dealsmachiVendor/"
                                     class="text-light text-decoration-none">Post your deal</a>
                             </li>
                         </ul>
@@ -102,13 +102,13 @@
                         </h6>
                         <ul class="list-unstyled">
                             <li>
-                                <a href="#" class="text-light text-decoration-none">Advertising</a>
+                                <a href="{{ url('/contactus') }}" class="text-light text-decoration-none">Advertising</a>
                             </li>
                             <li>
-                                <a href="#" class="text-light text-decoration-none">Premium Vendor</a>
+                                <a href="{{ url('/contactus') }}" class="text-light text-decoration-none">Premium Vendor</a>
                             </li>
                             <li>
-                                <a href="#" class="text-light text-decoration-none">Promoted Deals</a>
+                                <a href="{{ url('/contactus') }}" class="text-light text-decoration-none">Promoted Deals</a>
                             </li>
                         </ul>
                     </div>
