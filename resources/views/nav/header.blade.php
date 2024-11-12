@@ -86,6 +86,7 @@
                             class="totalItemsCount total-count translate-middle d-none d-xl-block"  style="position: absolute;top: 16px;right:5px">
                         </span>
                     </button>
+                    @auth
                     <div class="dropdown">
                         <a href="{{ url('login') }}" class="dropdown-toggle text-decoration-none d-none d-xl-inline" role="button" data-bs-toggle="dropdown" aria-expanded="false" >
                             <span class="d-none d-xl-block">
@@ -99,6 +100,14 @@
                             </li>
                         </ul>
                     </div>
+                    @else
+                    <a href="{{ url('login') }}" class="dropdown-toggle text-decoration-none d-none d-xl-inline" role="button" data-bs-toggle="dropdown" aria-expanded="false" >
+                            <span class="d-none d-xl-block">
+                                <i class="fa-solid fa-circle-user"
+                                   style="--fa-primary-color: #ff0060; --fa-secondary-color: #ff0060; font-size: 20px;"></i>
+                            </span>
+                        </a>
+                    @endauth
                     <span class="navbar-text d-none d-xl-inline align-items-center justify-content-end"
                         style="margin-left: 10px">
                         <a href="https://dealsmachi.com/dealsmachiVendor/" style="text-decoration: none">

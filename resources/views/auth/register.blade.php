@@ -4,9 +4,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DealsMachi | Login </title>
+    <title>Dealslah | Login </title>
     <link rel="canonical" href="https://dealslah.com/login" />
-    <meta name="description" content="DealsMachi Shop Smart, Save Big!" />
+    <meta name="description" content="Dealslah Shop Smart, Save Big!" />
     <link rel="icon" href="{{ asset('assets/images/home/favicon.ico') }}" />
 
     <!-- Vendor CSS Files -->
@@ -34,7 +34,7 @@
         <div class="row m-0">
             <div class="col-md-6 col-12 pt-5 login-text-container">
                 <div class="px-5">
-                    <h3 class="py-4">Hello,</h3>
+                    <h5 class="py-4">Hello,</h5>
                     <h6 class="login-text">You are just a step away from an awesome purchase</h6>
                     <h6 class="login-text">Register or Login to complete the process</h6>
                 </div>
@@ -45,14 +45,21 @@
             <div class="col-md-6 col-12 d-flex justify-content-center align-items-center login-container">
                 <div class="d-flex flex-column justify-content-center align-items-center w-100">
                     <h3 class="login-title text-center mb-4">Register</h3>
-                    <form id="loginForm" class="w-75">
+                    <form id="loginForm" class="w-75" method="POST" action="{{ route('register') }}">
+                        @csrf
                         <div class="mb-3 email-container">
                             <label class="form-label">Name</label>
-                            <input type="text" class="form-control" id="name" name="name" />
+                            <input type="text" class="form-control" id="name" name="name" value="{{ old('name') }}"/>
+                            @error('name')
+                            <span class="error">{{ $message }}</span>
+                            @enderror
                         </div>
                         <div class="mb-3 email-container">
                             <label class="form-label">Email Address</label>
-                            <input type="email" class="form-control" id="email" name="email" />
+                            <input type="email" class="form-control" id="email" name="email" value="{{ old('email') }}"/>
+                            @error('email')
+                            <span class="error">{{ $message }}</span>
+                            @enderror
                         </div>
                         <div class="mb-3 password-container">
                             <div class="d-flex justify-content-between">
@@ -60,12 +67,15 @@
                             </div>
                             <input type="password" class="form-control" id="password" name="password" />
                             <i class="fa-solid fa-eye fa-sm" id="toggleLoginPassword"></i>
+                            @error('password')
+                            <span class="error">{{ $message }}</span>
+                            @enderror
                         </div>
-                        <div class="mb-5 password-container">
+                        <div class="mb-4 password-container">
                             <div class="d-flex justify-content-between">
                                 <label class="form-label">Confirm Password</label>
                             </div>
-                            <input type="password" class="form-control" id="confirm password" name="confirm password" />
+                            <input type="password" class="form-control" id="confirm password" name="password_confirmation" />
                             <i class="fa-solid fa-eye fa-sm" id="toggleLoginPassword"></i>
                         </div>
                         <div class="mb-3 text-center">
@@ -81,19 +91,16 @@
                                 class="btn btn-light social-btn d-flex align-items-center justify-content-center w-100 me-2">
                                 <img src="{{ asset('assets/images/home/google.png') }}" class="me-2" alt="google_logo"
                                     width="20">
-                                <span style="color: #333;">Sign in with Google</span>
+                                <span>Login with Google</span>
                             </div>
                             <div
                                 class="btn btn-light social-btn d-flex align-items-center justify-content-center w-100 ms-2">
                                 <img src="{{ asset('assets/images/home/facebook.png') }}" class="me-2"
                                     alt="facebook_logo" width="20">
-                                <span style="color: #333;">Continue with Facebook</span>
+                                <span>Login with Facebook</span>
                             </div>
                         </div>
-                        <div class="text-center">
-                            <p class="mb-0" style="color: #fff;">Already have an account? <a
-                                    href="{{ url('login') }}" style="color: #fff;">Login</a></p>
-                        </div>
+                        
                     </form>
                 </div>
             </div>

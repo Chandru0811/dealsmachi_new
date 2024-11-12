@@ -23,6 +23,13 @@ Route::post('deals/count/views', [HomeController::class, 'viewcounts']);
 Route::post('deals/coupon/copied', [HomeController::class, 'couponCodeCopied']);
 Route::post('deals/count/share', [HomeController::class, 'dealshare']);
 Route::post('deals/count/enquire', [HomeController::class, 'dealenquire']);
+
+//Auth
+Route::get('/sociallogin/{provider}/{role}', [AuthController::class, 'socialredirect']);
+Route::get('/social/{provider}/callback', [AuthController::class, 'handlesociallogin']);
+require __DIR__ . '/auth.php';
+
+
 Route::get('/checkout', function () {
     return view('checkout');
 });
@@ -31,15 +38,6 @@ Route::get('/privacyPolicy', function () {
 });
 Route::get('/terms_conditions', function () {
     return view('termsandconditions');
-});
-Route::get('/login', function () {
-    return view('auth/login');
-});
-Route::get('/register', function () {
-    return view('auth/register');
-});
-Route::get('/forgot-password', function () {
-    return view('auth/forgot-password');
 });
 Route::get('/contactus', function () {
     return view('contactus');
@@ -55,4 +53,3 @@ Route::get('/contactus', function () {
 //     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 // });
 
-// require __DIR__ . '/auth.php';

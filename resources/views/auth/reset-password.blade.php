@@ -36,19 +36,28 @@
                 <div class="d-flex justify-content-around mb-2">
                     <h3 class="reset-title py-2">Reset Password</h3>
                 </div>
-                <form id="resetForm">
+                <form method="POST" action="{{ route('password.store') }}">
+                    @csrf
+                    <input type="hidden" name="token" value="{{ $request->route('token') }}">
+                    
                     <div class="mb-3">
                         <label class="form-label">Email Address</label>
-                        <input type="email" class="form-control" id="email" name="email" />
+                        <input type="email" class="form-control" id="email" name="email" value="{{ old('email') }}"/>
+                        @error('email')
+                            <span class="error">{{ $message }}</span>
+                        @enderror
                     </div>
                     <div class="mb-3 password-container">
                         <label class="form-label">Password</label>
-                        <input type="password" class="form-control" id="new_password" name="new_password" />
+                        <input type="password" class="form-control" id="new_password" name="password" />
                         <i class="fa-solid fa-eye fa-sm" id="toggleResetPassword"></i>
+                        @error('password')
+                            <span class="error">{{ $message }}</span>
+                        @enderror
                     </div>
                     <div class="mb-4 password-container">
                         <label class="form-label">Confirm Password</label>
-                        <input type="password" class="form-control" id="confirm_new_password" name="confirm_new_password" />
+                        <input type="password" class="form-control" id="confirm_new_password" name="password_confirmation" />
                         <i class="fa-solid fa-eye fa-sm" id="toggleResetConfirmPassword"></i>
                     </div>
                     <div class="mb-3">
