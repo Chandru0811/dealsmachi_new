@@ -10,40 +10,47 @@
                 <div class="d-flex align-items-center mb-1">
                     <span class="navbar-text d-xl-none align-items-center justify-content-end">
                         <a href="https://dealsmachi.com/dealsmachiVendor/" style="text-decoration: none">
-                        <button
-                            class="btn btn-button userlogin-button py-1 px-2 d-flex justify-content-center align-items-center"
-                            type="submit">
-                            Post your Deal
-                        </button>
+                            <button
+                                class="btn btn-button userlogin-button py-1 px-2 d-flex justify-content-center align-items-center"
+                                type="submit">
+                                Post your Deal
+                            </button>
                         </a>
                     </span>
                     &nbsp;&nbsp;&nbsp;
-                    <button class="btn btn-button"
-                        style="border: none; position: relative;">
+                    <button class="btn btn-button" style="border: none; position: relative;">
                         <a href="{{ url('/bookmarks') }}" class="text-decoration-none d-xl-none"
                             style="text-decoration: none;">
                             <i class="fa-regular fa-bookmark fa-xl" style="color: #ff0060;"></i>
                         </a>
-                        <span
-                            class="totalItemsCount total-count translate-middle d-xl-none"  style="position: absolute;top: 16px;right:5px">
-                            <!-- Count will be displayed here -->
+                        <span class="totalItemsCount total-count translate-middle d-xl-none"
+                            style="position: absolute;top: 16px;right:5px">
                         </span>
                     </button>
-
-                    <div class="dropdown">
-                        <a href="{{ url('login') }}" class="dropdown-toggle text-decoration-none d-xl-none" role="button" data-bs-toggle="dropdown" aria-expanded="false" >
+                    @auth
+                        <div class="dropdown">
+                            <a href="#" class="dropdown-toggle text-decoration-none d-xl-none" role="button"
+                                data-bs-toggle="dropdown" aria-expanded="false">
+                                <span class="d-xl-none">
+                                    <i class="fa-solid fa-circle-user"
+                                        style="--fa-primary-color: #ff0060; --fa-secondary-color: #ff0060; font-size: 20px;"></i>
+                                </span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <a class="dropdown-item" href="{{ url('logout') }}">Logout</a>
+                                </li>
+                            </ul>
+                        </div>
+                    @else
+                        <a href="{{ url('login') }}" class="dropdown-toggle text-decoration-none d-xl-none" role="button"
+                            data-bs-toggle="dropdown" aria-expanded="false">
                             <span class="d-xl-none">
                                 <i class="fa-solid fa-circle-user"
-                                   style="--fa-primary-color: #ff0060; --fa-secondary-color: #ff0060; font-size: 20px;"></i>
+                                    style="--fa-primary-color: #ff0060; --fa-secondary-color: #ff0060; font-size: 20px;"></i>
                             </span>
                         </a>
-                        <ul class="dropdown-menu">
-                            <li>
-                                <a class="dropdown-item" href="{{ url('logout') }}">Logout</a>
-                            </li>
-                        </ul>
-                    </div>
-
+                    @endauth
                     &nbsp;&nbsp;&nbsp;
                     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText"
                         aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
@@ -56,7 +63,8 @@
                         <ul class="navbar-nav pt-2" id="default-search">
                             <li class="nav-item mb-2">
                                 <div class="input-wrapper w-100">
-                                    <input type="text" name="q" placeholder="Search..." class="form-control mx-1 search-input" />
+                                    <input type="text" name="q" placeholder="Search..."
+                                        class="form-control mx-1 search-input" />
                                     <i class="fa-solid fa-magnifying-glass icon-input" style="font-size: 20px"></i>
                                 </div>
                             </li>
@@ -65,58 +73,61 @@
 
                     <!-- Expanded View (Large Screens) -->
                     <div class="d-flex justify-content-between align-items-center">
-                        <form action="{{ url('/search') }}" method="GET" class="d-none d-xl-flex justify-content-center align-items-center pt-2">
+                        <form action="{{ url('/search') }}" method="GET"
+                            class="d-none d-xl-flex justify-content-center align-items-center pt-2">
                             <ul class="navbar-nav" id="default-search">
                                 <li class="nav-item mb-2">
                                     <div class="input-wrapper">
-                                        <input type="text" name="q" placeholder="Search..." class="form-control me-2 search-input-large" />
+                                        <input type="text" name="q" placeholder="Search..."
+                                            class="form-control me-2 search-input-large" />
                                         <i class="fa-solid fa-magnifying-glass icon-input" style="font-size: 20px"></i>
                                     </div>
                                 </li>
                             </ul>
                         </form>
                     </div>
-                    <button class="btn btn-button"
-                        style="border: none; position: relative;">
+                    <button class="btn btn-button" style="border: none; position: relative;">
                         <a href="{{ url('/bookmarks') }}" class="text-decoration-none px-1 py-1 d-none d-xl-inline"
                             style="text-decoration: none; position: relative;">
                             <i class="fa-regular fa-bookmark fa-xl" style="color: #ff0060;"></i>
                         </a>
-                        <span
-                            class="totalItemsCount total-count translate-middle d-none d-xl-block"  style="position: absolute;top: 16px;right:5px">
+                        <span class="totalItemsCount total-count translate-middle d-none d-xl-block"
+                            style="position: absolute;top: 16px;right:5px">
                         </span>
                     </button>
                     @auth
-                    <div class="dropdown">
-                        <a href="{{ url('login') }}" class="dropdown-toggle text-decoration-none d-none d-xl-inline" role="button" data-bs-toggle="dropdown" aria-expanded="false" >
-                            <span class="d-none d-xl-block">
-                                <i class="fa-solid fa-circle-user"
-                                   style="--fa-primary-color: #ff0060; --fa-secondary-color: #ff0060; font-size: 20px;"></i>
-                            </span>
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li>
-                                <a class="dropdown-item" href="{{ url('logout') }}">Logout</a>
-                            </li>
-                        </ul>
-                    </div>
+                        <div class="dropdown">
+                            <a href="{{ url('login') }}" class="dropdown-toggle text-decoration-none d-none d-xl-inline"
+                                role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <span class="d-none d-xl-block">
+                                    <i class="fa-solid fa-circle-user"
+                                        style="--fa-primary-color: #ff0060; --fa-secondary-color: #ff0060; font-size: 20px;"></i>
+                                </span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <a class="dropdown-item" href="{{ url('logout') }}">Logout</a>
+                                </li>
+                            </ul>
+                        </div>
                     @else
-                    <a href="{{ url('login') }}" class="dropdown-toggle text-decoration-none d-none d-xl-inline" role="button" data-bs-toggle="dropdown" aria-expanded="false" >
+                        <a href="{{ url('login') }}" class="dropdown-toggle text-decoration-none d-none d-xl-inline"
+                            role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             <span class="d-none d-xl-block">
                                 <i class="fa-solid fa-circle-user"
-                                   style="--fa-primary-color: #ff0060; --fa-secondary-color: #ff0060; font-size: 20px;"></i>
+                                    style="--fa-primary-color: #ff0060; --fa-secondary-color: #ff0060; font-size: 20px;"></i>
                             </span>
                         </a>
                     @endauth
                     <span class="navbar-text d-none d-xl-inline align-items-center justify-content-end"
                         style="margin-left: 10px">
                         <a href="https://dealsmachi.com/dealsmachiVendor/" style="text-decoration: none">
-                        <button
-                            class="btn btn-button login-button userlogin-button-large py-2 px-4 d-flex justify-content-center align-items-center"
-                            type="submit">
-                            Post your Deal
-                        </button>
-                    </a>
+                            <button
+                                class="btn btn-button login-button userlogin-button-large py-2 px-4 d-flex justify-content-center align-items-center"
+                                type="submit">
+                                Post your Deal
+                            </button>
+                        </a>
                     </span>
                     &nbsp;&nbsp;
                 </div>

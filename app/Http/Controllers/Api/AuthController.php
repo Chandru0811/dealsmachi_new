@@ -34,7 +34,7 @@ class AuthController extends Controller
         }
 
         $user = User::where('email', $request->email)
-        ->whereNull('deleted_at') 
+        ->whereNull('deleted_at')
         ->first();
 
         if ($user && Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
@@ -164,7 +164,7 @@ class AuthController extends Controller
             ]
         );
 
-        $resetLink = "https://dealslah.com/dealslahVendor/resetpassword?token=" . $token . "&email=" . urlencode($request->email);
+        $resetLink = "https://dealsmachi.com/dealsmachiVendor/resetpassword?token=" . $token . "&email=" . urlencode($request->email);
 
         Mail::send('email.forgotPassword', ['resetLink' => $resetLink, 'name' => $username, 'token' => $token], function($message) use($request){
             $message->to($request->email);
@@ -213,7 +213,7 @@ class AuthController extends Controller
 
             Mail::to($shop->email)->send(new ProductAddedSuccessfully($shop,$product));
 
-            $adminEmail = 'info@dealslah.com';
+            $adminEmail = 'info@ecsaio.com';
 
             Mail::to($adminEmail)->send(new AdminProductAddedNotification($user, $product));
 

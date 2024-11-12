@@ -3,6 +3,32 @@ $(document).ready(function () {
         .removeClass("fa-twitter")
         .addClass("fa-x-twitter");
 
+    $("#togglePassword").on("click", function () {
+        const passwordField = $("#password");
+        const eyeIcon = $("#eyeIconPassword");
+
+        if (passwordField.attr("type") === "password") {
+            passwordField.attr("type", "text");
+            eyeIcon.removeClass("fa-eye").addClass("fa-eye-slash");
+        } else {
+            passwordField.attr("type", "password");
+            eyeIcon.removeClass("fa-eye-slash").addClass("fa-eye");
+        }
+    });
+
+    $("#toggleConfirmPassword").on("click", function () {
+        const confirmPasswordField = $("#password_confirmation");
+        const eyeIconConfirm = $("#eyeIconConfirm");
+
+        if (confirmPasswordField.attr("type") === "password") {
+            confirmPasswordField.attr("type", "text");
+            eyeIconConfirm.removeClass("fa-eye").addClass("fa-eye-slash");
+        } else {
+            confirmPasswordField.attr("type", "password");
+            eyeIconConfirm.removeClass("fa-eye-slash").addClass("fa-eye");
+        }
+    });
+
     $("#enquiryFormMain").validate({
         rules: {
             name: {
@@ -214,7 +240,7 @@ $("#contactForm").validate({
             email: $("#email").val(),
             phone: $("#mobile").val(),
             company_id: 42,
-            company: "Dealslah",
+            company: "DealsMachi",
             lead_status: "PENDING",
             description_info: $("#description_info").val(),
             lead_source: "Contact Us",
@@ -241,166 +267,6 @@ $("#contactForm").validate({
             },
         });
     },
-});
-
-// Validation for Login Page
-$(document).ready(function () {
-    function adjustIconPosition(passwordField) {
-        const icon = $("#toggleLoginPassword");
-        const errorElement = passwordField.next(".text-light");
-
-        if (errorElement.length) {
-            icon.css("right", `${passwordField.outerHeight() - 5}px`);
-            icon.css("top", `${passwordField.outerHeight() + 13}px`);
-        } else {
-            icon.css("right", "10px");
-            icon.css("top", "71%");
-        }
-    }
-    // Password visibility toggle
-    $(document).ready(function () {
-        const toggleLoginPassword = document.querySelector(
-            "#toggleLoginPassword"
-        );
-        const loginPassword = document.querySelector("#password");
-
-        if (toggleLoginPassword && loginPassword) {
-            toggleLoginPassword.addEventListener("click", function () {
-                const type =
-                    loginPassword.getAttribute("type") === "password"
-                        ? "text"
-                        : "password";
-                loginPassword.setAttribute("type", type);
-                $(this).toggleClass("fa-eye-slash fa-eye");
-            });
-        }
-    });
-});
-
-// Validation for Register Page
-$(document).ready(function () {
-    function adjustRegisterIconPosition(passwordField) {
-        const icon =
-            passwordField.attr("name") === "password"
-                ? $("#toggleRegisterPassword")
-                : $("#toggleRegisterConfirmPassword");
-        const errorElement = passwordField.next(".text-light");
-
-        if (errorElement.length) {
-            icon.css("right", `${passwordField.outerHeight() - 5}px`);
-            icon.css("top", `${passwordField.outerHeight() + 13}px`);
-        } else {
-            icon.css("right", "10px");
-            icon.css("top", "71%");
-        }
-    }
-
-    // Password visibility toggle for register form
-    $(document).ready(function () {
-        const toggleRegisterPassword = document.querySelector(
-            "#toggleRegisterPassword"
-        );
-        const registerPassword = document.querySelector("#password");
-
-        if (toggleRegisterPassword && registerPassword) {
-            toggleRegisterPassword.addEventListener("click", function () {
-                const type =
-                    registerPassword.getAttribute("type") === "password"
-                        ? "text"
-                        : "password";
-                registerPassword.setAttribute("type", type);
-                this.classList.toggle("fa-eye-slash");
-                this.classList.toggle("fa-eye");
-            });
-        }
-    });
-
-    $(document).ready(function () {
-        const toggleRegisterConfirmPassword = document.querySelector(
-            "#toggleRegisterConfirmPassword"
-        );
-        const registerConfirmPassword =
-            document.querySelector("#confirm_password");
-
-        // Check if both elements exist
-        if (toggleRegisterConfirmPassword && registerConfirmPassword) {
-            toggleRegisterConfirmPassword.addEventListener(
-                "click",
-                function () {
-                    const type =
-                        registerConfirmPassword.getAttribute("type") ===
-                        "password"
-                            ? "text"
-                            : "password";
-                    registerConfirmPassword.setAttribute("type", type);
-                    this.classList.toggle("fa-eye-slash");
-                    this.classList.toggle("fa-eye");
-                }
-            );
-        }
-    });
-});
-
-// Validation for Reset Password Page
-$(document).ready(function () {
-    function adjustResetIconPosition(passwordField) {
-        const icon =
-            passwordField.attr("name") === "new_password"
-                ? $("#toggleResetPassword")
-                : $("#toggleResetConfirmPassword");
-        const errorElement = passwordField.next(".text-light");
-
-        if (errorElement.length) {
-            icon.css("right", `${passwordField.outerHeight() - 5}px`);
-            icon.css("top", `${passwordField.outerHeight() + 13}px`);
-        } else {
-            icon.css("right", "10px");
-            icon.css("top", "71%");
-        }
-    }
-
-    // Password visibility toggle for reset password form
-    $(document).ready(function () {
-        const toggleResetPassword = document.querySelector(
-            "#toggleResetPassword"
-        );
-        const resetPassword = document.querySelector("#new_password");
-
-        // Check if both elements exist
-        if (toggleResetPassword && resetPassword) {
-            toggleResetPassword.addEventListener("click", function () {
-                const type =
-                    resetPassword.getAttribute("type") === "password"
-                        ? "text"
-                        : "password";
-                resetPassword.setAttribute("type", type);
-                this.classList.toggle("fa-eye-slash");
-                this.classList.toggle("fa-eye");
-            });
-        }
-    });
-
-    $(document).ready(function () {
-        const toggleResetConfirmPassword = document.querySelector(
-            "#toggleResetConfirmPassword"
-        );
-        const resetConfirmPassword = document.querySelector(
-            "#confirm_new_password"
-        );
-
-        // Check if both elements exist
-        if (toggleResetConfirmPassword && resetConfirmPassword) {
-            toggleResetConfirmPassword.addEventListener("click", function () {
-                const type =
-                    resetConfirmPassword.getAttribute("type") === "password"
-                        ? "text"
-                        : "password";
-                resetConfirmPassword.setAttribute("type", type);
-                this.classList.toggle("fa-eye-slash");
-                this.classList.toggle("fa-eye");
-            });
-        }
-    });
 });
 
 function copySpanText(element, event) {
@@ -500,7 +366,6 @@ function toggleNumber(event) {
 }
 
 $(document).ready(function () {
-    // Setup CSRF token for AJAX
     $.ajaxSetup({
         headers: {
             "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
@@ -616,7 +481,6 @@ $(document).ready(function () {
     );
 });
 
-// Link Shared Capture the current page URL dynamically
 const currentUrl = encodeURIComponent(window.location.href);
 
 function shareOnInstagram() {
@@ -701,7 +565,6 @@ function clickCount(dealId) {
 }
 
 function showAddress(country) {
-    // Hide all addresses
     var contents = document.getElementsByClassName("address-content");
     for (var i = 0; i < contents.length; i++) {
         contents[i].classList.remove("active-address");
@@ -849,7 +712,7 @@ $(document).ready(function () {
         },
         submitHandler: function (form) {
             alert("Form is valid! Submitting...");
-            
+
             // Log form data to the console
             const formData = {
                 firstName: $("#firstName").val(),

@@ -1384,9 +1384,6 @@ footer hr {
     border-radius: 5px;
 }
 
-.social-btn img {
-    height: 20px;
-}
 
 .forgot-password {
     color: #ffffff;
@@ -1397,16 +1394,7 @@ footer hr {
     position: relative;
 }
 
-.login-container .password-container input {
-    padding-right: 40px;
-}
 
-.login-container .password-container i {
-    position: absolute;
-    top: 71%;
-    right: 10px;
-    cursor: pointer;
-}
 /* Login */
 
 /* Register */
@@ -2167,3 +2155,8 @@ footer hr {
     color: #ff0060;
 }
 /* / Checkout / */
+
+.error{
+    color: #e4e4e4;
+    font-size: small;
+}

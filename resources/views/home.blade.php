@@ -1,6 +1,24 @@
 @extends('layouts.master')
 
 @section('content')
+    @if (session('status'))
+        <div class="alert alert-success alert-dismissible fade show" role="alert"
+            style="position: absolute; top: 15px; right: 40px;">
+            {{ session('status') }}
+            <button type="button" class="btn-close btn-sm" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    @endif
+    @if ($errors->any())
+        <div class="alert alert-danger alert-dismissible fade show" role="alert"
+            style="position: absolute; top: 15px; right: 40px;">
+            <ul class="mb-0">
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+            <button type="button" class="btn-close btn-sm" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    @endif
     <!-- Category & Banner Start  -->
     <!-- hero section -->
     <section class="categoryIcons">
@@ -30,8 +48,8 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                   <p style="color: #ff0060">Don't miss out on amazing deals near you! <br>
-                    Please enable location services to uncover them.</p>
+                    <p style="color: #ff0060">Don't miss out on amazing deals near you! <br>
+                        Please enable location services to uncover them.</p>
                 </div>
             </div>
         </div>
