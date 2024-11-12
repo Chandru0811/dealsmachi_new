@@ -47,6 +47,13 @@ class DealCategorySeeder extends Seeder
                 'description' => 'Time-sensitive offers that won’t last long. Act fast and make the most of these limited-time savings!',
                 'image_path' => 'assets\images\deal_categories\Limited_Time.svg',
                 'active' => 1,
+            ],
+            [
+                'name' => 'NEARBY',
+                'slug' => 'nearby',
+                'description' => 'Find great deals close to your location. Save on local offers that bring you the best value in your area.',
+                'image_path' => 'assets\images\deal_categories\Nearby.svg',
+                'active' => 1,
             ]
         ]);
     }
