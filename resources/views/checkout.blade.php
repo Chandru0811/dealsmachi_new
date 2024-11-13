@@ -55,13 +55,11 @@
                                 @if ($product->deal_type == 1)
                                     <div class="col-md-6 col-12 mb-3">
                                         <label class="form-label">Quantity</label>
-                                        <div class="input-group">
-                                            <button type="button" class="btn btn-outline-secondary"
-                                                id="decreaseQuantity">-</button>
+                                        <div class="input-group" style="width: 150px">
+                                            <button type="button" class="btn btn-light" id="decreaseQuantity">-</button>
                                             <input type="number" class="form-control text-center" name="quantity"
                                                 id="quantity" value="1" required />
-                                            <button type="button" class="btn btn-outline-secondary"
-                                                id="increaseQuantity">+</button>
+                                            <button type="button" class="btn btn-light" id="increaseQuantity">+</button>
                                         </div>
                                     </div>
                                 @elseif($product->deal_type == 2)
@@ -211,9 +209,13 @@
                                 <hr class="mt-1" />
                                 <div class="d-flex justify-content-between">
                                     <p class="mb-0">Total</p>
-                                    <p class="mb-0" id="total" style="color: #ff0060; font-size: 24px;">
-                                        ₹{{ $product->discounted_price }}</p>
+                                    <p class="mb-0" id="displayedTotal" style="color: #ff0060; font-size: 24px;">
+                                        ₹{{ $product->discounted_price }}
+                                    </p>
                                 </div>
+                                <!-- Hidden Total Input Field -->
+                                <input type="hidden" name="total" id="hiddenTotal"
+                                    value="{{ $product->discounted_price }}">
                                 <p style="color: #b12704">Your Savings : <span
                                         id="savings">₹{{ number_format($product->original_price - $product->discounted_price, 2) }}</span>
                                     ({{ number_format($product->discount_percentage, 0) }}%)</p>
@@ -230,66 +232,42 @@
             </form>
         </div>
     </section>
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
     <script>
-        document.getElementById('sameAsShipping').addEventListener('change', function() {
-            if (this.checked) {
-                document.getElementById('shippingAddress').style.display = 'none';
+        const originalPrice = {{ $product->original_price }};
+        const discountedPrice = {{ $product->discounted_price }};
 
-            } else {
-                document.getElementById('shippingAddress').style.display = 'block';
-            }
-        });
-        document.getElementById('sameAsShipping').dispatchEvent(new Event('change'));
+        function updateTotals() {
+            let quantity = parseInt($('#quantity').val()) || 1;
 
-        const productOriginalPrice = @json($product->original_price);
-        const productDiscountedPrice = @json($product->discounted_price);
+            const newSubtotal = originalPrice * quantity;
+            const newTotal = discountedPrice * quantity;
+            const discount = newSubtotal - newTotal;
 
-        const quantityInput = document.getElementById('quantity');
-        const decreaseButton = document.getElementById('decreaseQuantity');
-        const increaseButton = document.getElementById('increaseQuantity');
+            $('#subtotal').text(`₹${newSubtotal.toFixed(2)}`);
+            $('#discount').text(`₹${discount.toFixed(2)}`);
+            $('#displayedTotal').text(`₹${newTotal.toFixed(2)}`);
 
-        const subtotalElement = document.querySelector('#subtotal');
-        const discountElement = document.querySelector('#discount');
-        const totalElement = document.querySelector('#total');
-        const savingsElement = document.querySelector('#savings');
+            $('#hiddenTotal').val(newTotal.toFixed(2));
 
-        function updateValues() {
-            const quantity = parseInt(quantityInput.value);
-
-            const subtotal = quantity * productOriginalPrice;
-            const discount = quantity * productOriginalPrice - quantity * productDiscountedPrice;
-            const total = subtotal - discount;
-            const savings = discount;
-
-            subtotalElement.textContent = `₹${subtotal.toFixed(2)}`;
-            discountElement.textContent = `₹${discount.toFixed(2)}`;
-            totalElement.textContent = `₹${total.toFixed(2)}`;
-            savingsElement.textContent = `₹${savings.toFixed(2)}`;
+            $('#savings').text(`₹${discount.toFixed(2)}`);
         }
 
-        updateValues();
-
-        decreaseButton.addEventListener('click', () => {
-            let currentQuantity = parseInt(quantityInput.value);
-            if (currentQuantity > 1) {
-                quantityInput.value = currentQuantity - 1;
-                updateValues();
-            }
+        $('#increaseQuantity').click(function() {
+            let quantity = parseInt($('#quantity').val()) || 1;
+            $('#quantity').val(quantity + 1);
+            updateTotals();
         });
 
-        increaseButton.addEventListener('click', () => {
-            let currentQuantity = parseInt(quantityInput.value);
-            quantityInput.value = currentQuantity + 1;
-            updateValues();
+        $('#decreaseQuantity').click(function() {
+            let quantity = parseInt($('#quantity').val()) || 1;
+            if (quantity > 1) $('#quantity').val(quantity - 1);
+            updateTotals();
         });
 
-        quantityInput.addEventListener('change', () => {
-            let currentQuantity = parseInt(quantityInput.value);
-            if (currentQuantity < 1) {
-                currentQuantity = 1;
-                quantityInput.value = currentQuantity;
-            }
-            updateValues();
+       
+        $(document).ready(function() {
+            updateTotals();
         });
     </script>
 @endsection
