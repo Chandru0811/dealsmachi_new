@@ -46,7 +46,7 @@
                                     class="text-decoration-none pinkColor"><b>+91 91501 50687</b></a></p>
                         </div>
                         <div>
-                            <p class="mt-3 mb-0"><strong>Email:</strong></p>
+                            <p class="mt-3 mb-0">Email:</p>
                             <p class="h5"><a href="mailto:info@dealsmachi.com"
                                     class="text-decoration-none pinkColor">info@dealsmachi.com</a></p>
                         </div>
