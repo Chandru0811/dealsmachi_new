@@ -30,6 +30,7 @@
                 <input type="hidden" name="order_type" id="order_type"
                     value="{{ $product->deal_type == 1 ? 'Product' : ($product->deal_type == 2 ? 'Service' : '') }}">
                 <input type="hidden" name="total" id="total" value="{{ $product->discounted_price }}">
+                <input type="hidden" name="coupon_applied" value="1" id="coupon_applied">
                 <div class="row my-5">
                     <div class="col-md-7 col-12">
                         <div class="card p-3">
