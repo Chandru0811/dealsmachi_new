@@ -18,7 +18,7 @@ Route::post('login', [AuthController::class, 'login']);
 Route::post('register', [AuthController::class, 'register']);
 Route::post('forgot-password', [AuthController::class, 'forgetpassword']);
 Route::post('reset-password', [AuthController::class, 'resetpassword']);
-Route::get('account/verify/{id}', [AuthController::class, 'verifyAccount'])->name('vendor.verify'); 
+Route::get('account/verify/{id}', [AuthController::class, 'verifyAccount'])->name('vendor.verify');
 
 //user
 Route::get('appHome', [AppController::class, 'homepage']);
@@ -95,6 +95,10 @@ Route::middleware('auth:api')->group(function () {
         Route::get('product/{id}', [AdminShopController::class, 'showproduct']);
         Route::post('deal/{id}/approve', [ApprovalController::class, 'approveProduct']);
         Route::post('deal/{id}/disapprove', [ApprovalController::class, 'disapproveProduct']);
+
+        // user
+        Route::get('users', [ApprovalController::class, 'getAllUser']);
+        Route::get('users/{id}', [ApprovalController::class, 'userShow']);
     });
 
     //Vendor
@@ -128,7 +132,6 @@ Route::middleware('auth:api')->group(function () {
         Route::get('categorygroups', [ProductController::class, 'getAllCategoryGroups']);
         Route::get('categories/categorygroups/{id}', [ProductController::class, 'getAllCategoriesByCategoryGroupId']);
         Route::post('categories/create', [ProductController::class, 'categoriesCreate']);
-
     });
 });
 

@@ -172,7 +172,7 @@ class ProductController extends Controller
 
             Mail::to($shop->email)->send(new ProductAddedSuccessfully($shop,$product));
 
-            $adminEmail = 'info@dealslah.com';
+            $adminEmail = 'info@ecsaio.com';
 
             Mail::to($adminEmail)->send(new AdminProductAddedNotification($user, $product));
             return $this->success('Product created successfully.', $product);

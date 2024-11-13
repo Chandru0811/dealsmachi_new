@@ -7,7 +7,7 @@
     @section('head_links')
         <title>DealsMachi | Contact Us</title>
         <meta name="description" content="Privacy Policy for DealsMachi." />
-        <link rel="canonical" href="https://dealslah.com/privacyPolicy" />
+        <link rel="canonical" href="https://dealsmachi/contactus" />
         <link rel="icon" href="{{ asset('assets/images/home/favicon.ico') }}" />
 
         <!-- Google Fonts -->
