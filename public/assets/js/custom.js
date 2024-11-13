@@ -637,43 +637,18 @@ function selectPaymentOption(optionId) {
 $(document).ready(function () {
     const dealType = parseInt($('#checkoutForm').data('deal-type'), 10);
 
-    $("#checkoutForm").validate({
+    const validator = $("#checkoutForm").validate({
         rules: {
-            first_name: {
-                required: true,
-            },
-            last_name: {
-                required: true,
-            },
-            email: {
-                required: true,
-                email: true,
-            },
-            mobile: {
-                required: true,
-                digits: true,
-                minlength: 10,
-                maxlength: 10,
-            },
-            billing_street: {
-                required: true,
-            },
-            billing_city: {
-                required: true,
-            },
-            billing_state: {
-                required: true,
-            },
-            billing_country: {
-                required: true,
-            },
-            billing_zipCode: {
-                required: true,
-                digits: true,
-            },
-            payment_type: {
-                required: true,
-            },
+            first_name: { required: true },
+            last_name: { required: true },
+            email: { required: true, email: true },
+            mobile: { required: true, digits: true, minlength: 10, maxlength: 10 },
+            billing_street: { required: true },
+            billing_city: { required: true },
+            billing_state: { required: true },
+            billing_country: { required: true },
+            billing_zipCode: { required: true, digits: true },
+            payment_type: { required: true },
             shipping_street: {
                 required: function () {
                     return !$('#sameAsShipping').is(':checked');
@@ -699,9 +674,6 @@ $(document).ready(function () {
                     return !$('#sameAsShipping').is(':checked');
                 },
                 digits: true,
-            },
-            notes: {
-                required: true,
             },
             service_date: {
                 required: function () {
@@ -754,9 +726,6 @@ $(document).ready(function () {
                 required: "Service time is required",
                 time: "Please enter a valid time",
             },
-            notes: {
-                required: "Note is required",
-            },
         },
         errorPlacement: function (error, element) {
             error.addClass("text-danger mt-1");
@@ -777,10 +746,12 @@ $(document).ready(function () {
     $('#sameAsShipping').change(function () {
         if ($(this).is(':checked')) {
             $('#shippingAddress').hide();
-            $('#checkoutForm').valid();
+            $('#shipping_street, #shipping_city, #shipping_state, #shipping_country, #shipping_zipCode').removeClass("is-invalid");
+            $('.text-danger').filter(function () {
+                return $(this).prev().is('#shipping_street, #shipping_city, #shipping_state, #shipping_country, #shipping_zipCode');
+            }).remove();
         } else {
             $('#shippingAddress').show();
-            $('#checkoutForm').valid();
         }
     });
 
