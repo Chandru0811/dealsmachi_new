@@ -39,6 +39,9 @@ Route::middleware('auth')->group(function () {
 Route::get('/checkout', function () {
     return view('checkout');
 });
+Route::get('/support', function () {
+    return view('support');
+});
 Route::get('/privacyPolicy', function () {
     return view('privacyPolicy');
 });
