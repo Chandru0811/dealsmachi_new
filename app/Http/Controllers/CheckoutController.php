@@ -135,13 +135,15 @@ class CheckoutController extends Controller
             'total' => $validatedData['total']
         ]);
 
-        OrderItems::create([
-            'order_id' => $order->id,
-            'product_id' => $product->id,
-            'item_description' => $product->description ?? null,
-            'quantity' => $validatedData['quantity'],
-            'unit_price' => $product['discounted_price'],
-        ]);
+        if ($order) {
+            OrderItems::create([
+                'order_id' => $order->id,
+                'product_id' => $product->id,
+                'item_description' => $product->description ?? null,
+                'quantity' => $validatedData['quantity'],
+                'unit_price' => $product['discounted_price'],
+            ]);
+        }
 
         return redirect()->route('home')->with('status', 'Order Created Successfully!');
     }
