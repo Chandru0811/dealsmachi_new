@@ -882,10 +882,11 @@ footer hr {
     }
 }
 
-.showNumBtn:hover {
-    color: #ff0060;
-    background-color: #fff;
-    border: 1px solid #ff0060;
+.showNumBtn:hover,
+.showNumBtn.active {
+    color: #ff0060 !important;
+    background-color: #fff !important;
+    border: 1px solid #ff0060 !important;
 }
 
 .sendEnqBtn {
@@ -2149,10 +2150,11 @@ footer hr {
     color: #fff;
 }
 
-.applyBtn:hover{
-    background-color: #fff;
-    border: 1px solid #ff0060;
-    color: #ff0060;
+.applyBtn:hover,
+.applyBtn.active{
+    background-color: #fff !important;
+    border: 1px solid #ff0060 !important;
+    color: #ff0060 !important;
 }
 /* / Checkout / */
 

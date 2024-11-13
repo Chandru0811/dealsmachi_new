@@ -118,7 +118,7 @@ class HomeController extends Controller
     {
         $shortBy = $request->input('short_by');
         if ($shortBy) {
-            return redirect()->route('dealcategorybasedproducts', ['slug' => $shortBy] + $request->except('short_by'));
+            return redirect()->route('deals.categorybased', ['slug' => $shortBy] + $request->except('short_by'));
         }
 
         $perPage = $request->input('per_page', 10);

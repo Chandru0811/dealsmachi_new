@@ -9,9 +9,9 @@
     <form method="GET"
         action="{{ 
         $isCategory 
-        ? route('subcategorybasedproducts', ['slug' => $category->slug]) 
+        ? route('deals.subcategorybased', ['slug' => $category->slug]) 
         : ($isHotpick 
-            ? route('dealcategorybasedproducts', ['slug' => request()->segment(2)]) 
+            ? route('deals.categorybased', ['slug' => request()->segment(2)]) 
             : route('search')
           ) }}"
         id="filterForm">
@@ -625,7 +625,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
 <script>
-    const clearUrl = "{{ $isCategory ? route('subcategorybasedproducts', ['slug' => $category->slug]) : ($isHotpick ? route('dealcategorybasedproducts', ['slug' => request()->segment(2)]) : route('search')) }}";
+    const clearUrl = "{{ $isCategory ? route('deals.subcategorybased', ['slug' => $category->slug]) : ($isHotpick ? route('deals.categorybased', ['slug' => request()->segment(2)]) : route('search')) }}";
 
     document.getElementById('clearButton').addEventListener('click', function() {
         document.getElementById('filterForm').reset();

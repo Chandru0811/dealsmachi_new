@@ -32,7 +32,7 @@ Route::get('/social/{provider}/callback', [AuthController::class, 'handlesociall
 require __DIR__ . '/auth.php';
 
 Route::middleware('auth')->group(function () {
-    Route::get('/directCheckout', [CheckoutController::class, 'directcheckout'])->name('checkout.direct');
+    Route::get('/directCheckout/{product_id}', [CheckoutController::class, 'directcheckout'])->name('checkout.direct');
 });
 
 Route::get('/checkout', function () {
