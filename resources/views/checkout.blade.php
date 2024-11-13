@@ -2,6 +2,24 @@
 
 @section('content')
     <section>
+        @if (session('status'))
+            <div class="alert alert-success alert-dismissible fade show" role="alert"
+                style="position: absolute; top: 15px; right: 40px;">
+                {{ session('status') }}
+                <button type="button" class="btn-close btn-sm" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        @endif
+        @if ($errors->any())
+            <div class="alert alert-danger alert-dismissible fade show" role="alert"
+                style="position: absolute; top: 15px; right: 40px;">
+                <ul class="mb-0">
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+                <button type="button" class="btn-close btn-sm" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        @endif
         <div class="container" style="margin-top: 100px;">
             <h2 class="text-center">Checkout</h2>
             <form id="checkoutForm" action="{{ route('checkout.checkout') }}" method="POST"
@@ -77,8 +95,8 @@
                                 </div>
                                 <div class="col-md-6 col-12 mb-3">
                                     <label class="form-label">Country</label>
-                                    <input type="text" class="form-control" name="billing_country" id="billing_country"
-                                        required />
+                                    <input type="text" class="form-control" name="billing_country"
+                                        id="billing_country" required />
                                 </div>
                                 <div class="col-md-6 col-12 mb-3">
                                     <label class="form-label">Zip Code</label>
@@ -273,6 +291,5 @@
             }
             updateValues();
         });
-
     </script>
 @endsection
