@@ -30,12 +30,11 @@ return new class extends Migration
             $table->integer('quantity')->nullable();
             $table->string('billing_address')->nullable();
             $table->string('shipping_address')->nullable();
-            $table->string('billing_address')->nullable();
             $table->decimal('shipping_cost', 8, 2)->nullable();
             $table->date('shipping_date')->nullable();
             $table->date('delivery_date')->nullable();
             $table->string('tracking_id')->nullable();
-            $table->boolean('coupon_appied')->nullable();
+            $table->boolean('coupon_applied')->nullable();
             $table->boolean('send_invoice_to_customer')->nullable();
             $table->boolean('approved')->nullable();
             $table->timestamps();

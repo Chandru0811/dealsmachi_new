@@ -8,4 +8,54 @@ use Illuminate\Database\Eloquent\Model;
 class Order extends Model
 {
     use HasFactory;
+
+    protected $fillable = [
+        'order_number',
+        'customer_id',
+        'shop_id',
+        'first_name',
+        'last_name',
+        'email',
+        'mobile',
+        'order_type',
+        'status',
+        'notes',
+        'payment_type',
+        'payment_status',
+        'service_date',
+        'service_time',
+        'quantity',
+        'billing_address',
+        'shipping_address',
+        'shipping_cost',
+        'shipping_date',
+        'delivery_date',
+        'tracking_id',
+        'coupon_applied',
+        'send_invoice_to_customer',
+        'approved'
+    ];
+
+    protected static function booted()
+    {
+        static::created(function ($order) {
+            $order->order_number = 'DEALSLAH_O' . $order->id;
+            $order->save();
+        });
+    }
+
+    public function items()
+    {
+        return $this->hasMany(OrderItems::class);
+    }
+
+    public function customer()
+    {
+        return $this->belongsTo(User::class, 'customer_id');
+    }
+
+    public function shop()
+    {
+        return $this->belongsTo(Shop::class, 'shop_id');
+    }
 }
