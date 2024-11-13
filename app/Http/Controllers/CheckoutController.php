@@ -33,6 +33,7 @@ class CheckoutController extends Controller
             'order_type'        => 'required|string|max:50',
             'notes'             => 'nullable|string',
             'payment_type'      => 'required|string|max:50',
+            'total'             => 'nullable|numeric|min:0.01',
             'service_date'      => 'nullable|date',
             'service_time'      => 'nullable|string|max:10',
             'quantity'          => 'nullable|integer|min:1',
@@ -64,6 +65,9 @@ class CheckoutController extends Controller
             'payment_type.required' => 'Please specify the payment type.',
             'payment_type.string' => 'Payment type must be a valid text.',
             'payment_type.max' => 'Payment type may not exceed 50 characters.',
+
+            'total.numeric' => 'The total amount must be a valid number.',
+            'total.min' => 'The total amount must be greater than 0.',
 
             'service_date.date' => 'Please provide a valid service date.',
 

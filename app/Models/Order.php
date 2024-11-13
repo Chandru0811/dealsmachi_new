@@ -22,6 +22,7 @@ class Order extends Model
         'notes',
         'payment_type',
         'payment_status',
+        'total',
         'service_date',
         'service_time',
         'quantity',

@@ -33,6 +33,7 @@ require __DIR__ . '/auth.php';
 
 Route::middleware('auth')->group(function () {
     Route::get('/directCheckout/{product_id}', [CheckoutController::class, 'directcheckout'])->name('checkout.direct');
+    Route::post('/checkout', [CheckoutController::class, 'checkout'])->name('checkout.checkout');
 });
 
 Route::get('/checkout', function () {
