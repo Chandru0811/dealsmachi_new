@@ -38,14 +38,21 @@
                             </a>
                             <ul class="dropdown-menu">
                                 <li>
-                                    <span class="dropdown-item">Chandru</span>
-
+                                    <span class="dropdown-item">{{ auth()->user()->name }}</span>
                                 </li>
                                 <li>
-                                    <a class="dropdown-item" href="{{ url('logout') }}">Logout</a>
+                                    <!-- Logout Link that submits a POST request -->
+                                    <a class="dropdown-item" href="{{ route('logout') }}"
+                                       onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                                        Logout
+                                    </a>
                                 </li>
                             </ul>
                         </div>
+                        <!-- Hidden logout form -->
+                        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                            @csrf
+                        </form>
                     @else
                         <a href="{{ url('login') }}" class="text-decoration-none d-xl-none">
                             <span class="d-xl-none">

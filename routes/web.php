@@ -36,21 +36,12 @@ Route::middleware('auth')->group(function () {
     Route::post('/checkout', [CheckoutController::class, 'checkout'])->name('checkout.checkout');
 });
 
-Route::get('/checkout', function () {
-    return view('checkout');
-});
-Route::get('/support', function () {
-    return view('support');
-});
-Route::get('/privacyPolicy', function () {
-    return view('privacyPolicy');
-});
-Route::get('/terms_conditions', function () {
-    return view('termsandconditions');
-});
-Route::get('/contactus', function () {
-    return view('contactus');
-});
+
+Route::get('/support', function () {return view('support');});
+Route::get('/privacyPolicy', function () {return view('privacypolicy');});
+Route::get('/terms_conditions', function () {return view('termsandconditions');});
+Route::get('/contactus', function () {return view('contactus');});
+Route::get('/checkout', function () {return view('checkout');});
 
 // Route::get('/dashboard', function () {
 //     return view('dashboard');

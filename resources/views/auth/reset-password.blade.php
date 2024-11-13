@@ -60,10 +60,11 @@
                     <h3 class="login-title text-center mb-4">Reset Password</h3>
                     <form id="loginForm" class="w-75" method="POST" action="{{ route('password.store') }}">
                         @csrf
+                        <input type="hidden" name="token" value="{{ $request->route('token') }}">
                         <div class="mb-3 email-container">
                             <label class="form-label">Email Address</label>
                             <input type="email" class="form-control" id="email" name="email"
-                                value="{{ old('email') }}" />
+                            value="{{ old('email', $request->email) }}" />
                             @error('email')
                                 <span class="error">{{ $message }}</span>
                             @enderror
