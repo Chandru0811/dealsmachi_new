@@ -3,13 +3,15 @@
 use App\Http\Controllers\BookmarkController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\CheckoutController;
+
 
 Route::fallback(function () {
     return response()->view('errors.404', [], 404);
 });
 
 
-Route::get('/', [HomeController::class, 'index']);
+Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('hotpick/{slug}', [HomeController::class, 'dealcategorybasedproducts']);
 Route::get('categories/{slug}', [HomeController::class, 'subcategorybasedproducts'])->name('subcategorybasedproducts');
 Route::get('deal/{id}', [HomeController::class, 'productdescription']);
@@ -29,6 +31,9 @@ Route::get('/sociallogin/{provider}/{role}', [AuthController::class, 'socialredi
 Route::get('/social/{provider}/callback', [AuthController::class, 'handlesociallogin']);
 require __DIR__ . '/auth.php';
 
+Route::middleware('auth')->group(function () {
+    Route::get('/directCheckout', [CheckoutController::class, 'directcheckout'])->name('checkout.direct');
+});
 
 Route::get('/checkout', function () {
     return view('checkout');

@@ -222,7 +222,7 @@ $reviewData = [
                                 @endif
                             </div>
                             <div class="mt-2">
-                                <a href="{{ url('/checkout') }}" class="btn showNumBtn" style="text-decoration: none;">
+                                <a href="{{ route('checkout.direct') }}" class="btn showNumBtn" style="text-decoration: none;">
                                     <i class="fa-solid fa-cart-shopping"></i>&nbsp;&nbsp;Buy Now
                                 </a>
                             </div>

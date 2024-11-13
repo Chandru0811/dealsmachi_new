@@ -17,6 +17,7 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Hash;
 use App\Mail\AdminProductAddedNotification;
 use App\Mail\ProductAddedSuccessfully;
+use Illuminate\Validation\Rule;
 
 class AuthController extends Controller
 {
