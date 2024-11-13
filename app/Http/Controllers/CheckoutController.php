@@ -25,6 +25,7 @@ class CheckoutController extends Controller
 
     public function checkout(Request $request)
     {
+
         $validator = Validator::make($request->all(), [
             'first_name'        => 'required|string|max:200',
             'last_name'         => 'required|string|max:200',
@@ -37,8 +38,17 @@ class CheckoutController extends Controller
             'service_date'      => 'nullable|date',
             'service_time'      => 'nullable|string|max:10',
             'quantity'          => 'nullable|integer|min:1',
-            'billing_address'   => 'required|string|max:255',
-            'shipping_address'  => 'required|string|max:255',
+            'billing_street'   => 'required|string',
+            'billing_city'   => 'required|string',
+            'billing_state'   => 'required|string',
+            'billing_country'   => 'required|string',
+            'billing_zipCode'   => 'required|string',
+            'sameAsShipping' => 'nullable|integer|in:0,1',
+            'shipping_street'   => 'nullable|string',
+            'shipping_city'   => 'nullable|string',
+            'shipping_state'   => 'nullable|string',
+            'shipping_country'   => 'nullable|string',
+            'shipping_zipCode'   => 'nullable|string',
             'coupon_applied'    => 'nullable|boolean',
             'product_id'        => 'required|integer'
         ], [
@@ -97,6 +107,12 @@ class CheckoutController extends Controller
 
         // Begin database transaction
         $validatedData = $validator->validated();
+
+        $billingAddress = "{$validatedData['billing_street']}, {$validatedData['billing_city']}, {$validatedData['billing_state']}, {$validatedData['billing_country']}, {$validatedData['billing_zipCode']}";
+        $sameAsShipping = $validatedData['sameAsShipping'] ?? 0;
+        $shippingAddress = ($sameAsShipping  !== "1")
+            ? "{$validatedData['shipping_street']}, {$validatedData['shipping_city']}, {$validatedData['shipping_state']}, {$validatedData['shipping_country']}, {$validatedData['shipping_zipCode']}"
+            : "{$validatedData['billing_street']}, {$validatedData['billing_city']}, {$validatedData['billing_state']}, {$validatedData['billing_country']}, {$validatedData['billing_zipCode']}";
         $user_id = Auth::check() ? Auth::id() : null;
         $product = Product::with(['shop'])->where('id', $validatedData['product_id'])->where('active', 1)->first();
         $order = Order::create([
@@ -109,13 +125,14 @@ class CheckoutController extends Controller
             'order_type' => $validatedData['order_type'],
             'notes' => $validatedData['notes'] ?? null,
             'payment_type' => $validatedData['payment_type'],
-            'payment_status' => $validatedData['payment_status'],
-            'service_date' => $validatedData['service_date'],
-            'service_time' => $validatedData['service_time'],
-            'quantity' => $validatedData['quantity'],
-            'billing_address' => $validatedData['billing_address'],
-            'shipping_address' => $validatedData['shipping_address'],
+            'payment_status' => $validatedData['payment_status'] ?? "Pending",
+            'service_date' => $validatedData['service_date'] ?? null,
+            'service_time' => $validatedData['service_time'] ?? null,
+            'quantity' => $validatedData['quantity'] ?? null,
+            'billing_address' => $billingAddress,
+            'shipping_address' => $shippingAddress,
             'coupon_applied' => $validatedData['coupon_applied'] ?? false,
+            'total' => $validatedData['total']
         ]);
 
         OrderItems::create([

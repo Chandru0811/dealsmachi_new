@@ -82,10 +82,9 @@
                                 <input type="password" class="form-control" id="password" name="password"
                                     aria-label="password">
                                 <span class="input-group-text" id="togglePassword">
-                                    <i class="fa fa-eye" id="eyeIcon"></i>
+                                    <i class="fa fa-eye" id="eyeIconPassword"></i>
                                 </span>
                             </div>
-
                             @error('password')
                                 <span class="error">{{ $message }}</span>
                             @enderror

@@ -38,13 +38,16 @@
                             </a>
                             <ul class="dropdown-menu">
                                 <li>
+                                    <span class="dropdown-item">Chandru</span>
+
+                                </li>
+                                <li>
                                     <a class="dropdown-item" href="{{ url('logout') }}">Logout</a>
                                 </li>
                             </ul>
                         </div>
                     @else
-                        <a href="{{ url('login') }}" class="dropdown-toggle text-decoration-none d-xl-none" role="button"
-                            data-bs-toggle="dropdown" aria-expanded="false">
+                        <a href="{{ url('login') }}" class="text-decoration-none d-xl-none">
                             <span class="d-xl-none">
                                 <i class="fa-solid fa-circle-user"
                                     style="--fa-primary-color: #ff0060; --fa-secondary-color: #ff0060; font-size: 20px;"></i>
@@ -97,8 +100,8 @@
                     </button>
                     @auth
                         <div class="dropdown">
-                            <a href="{{ url('login') }}" class="dropdown-toggle text-decoration-none d-none d-xl-inline"
-                                role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <a href="#" class="dropdown-toggle text-decoration-none d-none d-xl-inline" role="button"
+                                data-bs-toggle="dropdown" aria-expanded="false">
                                 <span class="d-none d-xl-block">
                                     <i class="fa-solid fa-circle-user"
                                         style="--fa-primary-color: #ff0060; --fa-secondary-color: #ff0060; font-size: 20px;"></i>
@@ -106,13 +109,15 @@
                             </a>
                             <ul class="dropdown-menu">
                                 <li>
+                                    <span class="dropdown-item">Chandru</span>
+                                </li>
+                                <li>
                                     <a class="dropdown-item" href="{{ url('logout') }}">Logout</a>
                                 </li>
                             </ul>
                         </div>
                     @else
-                        <a href="{{ url('login') }}" class="dropdown-toggle text-decoration-none d-none d-xl-inline"
-                            role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <a href="{{ url('login') }}" class="text-decoration-none d-none d-xl-inline">
                             <span class="d-none d-xl-block">
                                 <i class="fa-solid fa-circle-user"
                                     style="--fa-primary-color: #ff0060; --fa-secondary-color: #ff0060; font-size: 20px;"></i>
