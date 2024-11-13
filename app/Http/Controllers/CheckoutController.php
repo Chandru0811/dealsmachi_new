@@ -128,7 +128,7 @@ class CheckoutController extends Controller
             'payment_status' => $validatedData['payment_status'] ?? "Pending",
             'service_date' => $validatedData['service_date'] ?? null,
             'service_time' => $validatedData['service_time'] ?? null,
-            'quantity' => $validatedData['quantity'] ?? null,
+            'quantity' => $validatedData['quantity'] ?? 1,
             'billing_address' => $billingAddress,
             'shipping_address' => $shippingAddress,
             'coupon_applied' => $validatedData['coupon_applied'] ?? false,
@@ -140,7 +140,7 @@ class CheckoutController extends Controller
                 'order_id' => $order->id,
                 'product_id' => $product->id,
                 'item_description' => $product->description ?? null,
-                'quantity' => $validatedData['quantity'],
+                'quantity' => $validatedData['quantity'] ?? 1,
                 'unit_price' => $product['discounted_price'],
             ]);
         }
