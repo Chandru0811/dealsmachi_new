@@ -635,70 +635,132 @@ function selectPaymentOption(optionId) {
 }
 
 $(document).ready(function () {
+    const dealType = parseInt($('#checkoutForm').data('deal-type'), 10);
+
     $("#checkoutForm").validate({
         rules: {
-            firstName: {
+            first_name: {
                 required: true,
             },
-            lastName: {
+            last_name: {
                 required: true,
             },
             email: {
                 required: true,
                 email: true,
             },
-            mobileNumber: {
+            mobile: {
                 required: true,
                 digits: true,
                 minlength: 10,
                 maxlength: 10,
             },
-            address: {
+            billing_street: {
                 required: true,
             },
-            city: {
+            billing_city: {
                 required: true,
             },
-            state: {
+            billing_state: {
                 required: true,
             },
-            country: {
+            billing_country: {
                 required: true,
             },
-            zipCode: {
+            billing_zipCode: {
                 required: true,
                 digits: true,
             },
-            payment_method: {
+            payment_type: {
                 required: true,
+            },
+            shipping_street: {
+                required: function () {
+                    return !$('#sameAsShipping').is(':checked');
+                },
+            },
+            shipping_city: {
+                required: function () {
+                    return !$('#sameAsShipping').is(':checked');
+                },
+            },
+            shipping_state: {
+                required: function () {
+                    return !$('#sameAsShipping').is(':checked');
+                },
+            },
+            shipping_country: {
+                required: function () {
+                    return !$('#sameAsShipping').is(':checked');
+                },
+            },
+            shipping_zipCode: {
+                required: function () {
+                    return !$('#sameAsShipping').is(':checked');
+                },
+                digits: true,
+            },
+            notes: {
+                required: true,
+            },
+            service_date: {
+                required: function () {
+                    return dealType === 2;
+                },
+                date: true,
+            },
+            service_time: {
+                required: function () {
+                    return dealType === 2;
+                },
+                time: true,
             },
         },
         messages: {
-            firstName: "First name is required",
-            lastName: "Last name is required",
+            first_name: "First name is required",
+            last_name: "Last name is required",
             email: {
                 required: "Email is required",
                 email: "Please enter a valid email address",
             },
-            mobileNumber: {
+            mobile: {
                 required: "Mobile number is required",
                 digits: "Please enter a valid mobile number",
                 minlength: "Mobile number must be 10 digits",
                 maxlength: "Mobile number must be 10 digits",
             },
-            address: "Address is required",
-            city: "City is required",
-            state: "State is required",
-            country: "Country is required",
-            zipCode: {
+            billing_street: "Street is required",
+            billing_city: "City is required",
+            billing_state: "State is required",
+            billing_country: "Country is required",
+            billing_zipCode: {
                 required: "Zip Code is required",
                 digits: "Zip Code should contain only numbers",
             },
-            payment_method: "Please select a payment method",
+            payment_type: "Please select a payment method",
+            shipping_street: "Street is required",
+            shipping_city: "City is required",
+            shipping_state: "State is required",
+            shipping_country: "Country is required",
+            shipping_zipCode: {
+                required: "Zip Code is required",
+                digits: "Zip Code should contain only numbers",
+            },
+            service_date: {
+                required: "Service date is required",
+                date: "Please enter a valid date",
+            },
+            service_time: {
+                required: "Service time is required",
+                time: "Please enter a valid time",
+            },
+            notes: {
+                required: "Note is required",
+            },
         },
         errorPlacement: function (error, element) {
             error.addClass("text-danger mt-1");
-            if (element.attr("name") === "payment_method") {
+            if (element.attr("name") === "payment_type") {
                 error.insertAfter(".payment-option:first");
             } else {
                 error.insertAfter(element);
@@ -709,27 +771,20 @@ $(document).ready(function () {
         },
         unhighlight: function (element) {
             $(element).removeClass("is-invalid");
-        },
-        submitHandler: function (form) {
-            alert("Form is valid! Submitting...");
-
-            // Log form data to the console
-            const formData = {
-                firstName: $("#firstName").val(),
-                lastName: $("#lastName").val(),
-                email: $("#email").val(),
-                mobileNumber: $("#mobileNumber").val(),
-                address: $("#address").val(),
-                city: $("#city").val(),
-                state: $("#state").val(),
-                country: $("#country").val(),
-                zipCode: $("#zipCode").val(),
-                payment_method: $("input[name='payment_method']:checked").val(),
-            };
-            console.log(formData);
-
-            // Reset the form after submission
-            form.reset();
-        },
+        }
     });
+
+    $('#sameAsShipping').change(function () {
+        if ($(this).is(':checked')) {
+            $('#shippingAddress').hide();
+            $('#checkoutForm').valid();
+        } else {
+            $('#shippingAddress').show();
+            $('#checkoutForm').valid();
+        }
+    });
+
+    if ($('#sameAsShipping').is(':checked')) {
+        $('#shippingAddress').hide();
+    }
 });
