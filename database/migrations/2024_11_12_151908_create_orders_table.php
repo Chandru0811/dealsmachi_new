@@ -21,7 +21,7 @@ return new class extends Migration
             $table->string('email')->nullable();
             $table->string('mobile')->nullable();
             $table->enum('order_type', ['product', 'service'])->index();
-            $table->string('status')->default('pending'); // e.g., pending, completed, canceled
+            $table->string('status')->default('pending'); // e.g., pending, completed, cancelled
             $table->text('notes')->nullable();
             $table->string('payment_type')->nullable();
             $table->string('payment_status')->nullable();
