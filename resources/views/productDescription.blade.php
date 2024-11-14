@@ -222,9 +222,15 @@ $reviewData = [
                                 @endif
                             </div>
                             <div class="mt-2">
+                                @if($product->deal_type == 1)
                                 <a href="{{ route('checkout.direct', ['product_id' => $product->id]) }}" class="btn showNumBtn" style="text-decoration: none;">
                                     <i class="fa-solid fa-cart-shopping"></i>&nbsp;&nbsp;Buy Now
                                 </a>
+                                @elseif($product->deal_type == 2)
+                                <a href="{{ route('checkout.direct', ['product_id' => $product->id]) }}" class="btn showNumBtn" style="text-decoration: none;">
+                                    <i class="fa-solid fa-calendar-check"></i>&nbsp;&nbsp;Book Now
+                                </a>
+                                @endif
                             </div>
                         </div>
                         <div class="col-lg-5 col-12">

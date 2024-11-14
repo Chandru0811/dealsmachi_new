@@ -18,17 +18,17 @@ class CheckoutController extends Controller
             session(['url.intended' => route('checkout.direct')]);
             return redirect()->route("login");
         } else {
+            $user = Auth::user(); 
             $product = Product::with(['shop'])->where('id', $id)->where('active', 1)->first();
-            return view('checkout', compact('product'));
+            return view('checkout', compact('product', 'user'));
         }
     }
 
     public function checkout(Request $request)
     {
-
         $validator = Validator::make($request->all(), [
             'first_name'        => 'required|string|max:200',
-            'last_name'         => 'required|string|max:200',
+            'last_name'         => 'nullable|string|max:200',
             'email'             => 'required|email|max:200',
             'mobile'            => 'required|string|max:15',
             'order_type'        => 'required|string|max:50',
@@ -56,7 +56,6 @@ class CheckoutController extends Controller
             'first_name.string' => 'First name must be a valid text.',
             'first_name.max' => 'First name may not exceed 200 characters.',
 
-            'last_name.required' => 'Please provide your last name.',
             'last_name.string' => 'Last name must be a valid text.',
             'last_name.max' => 'Last name may not exceed 200 characters.',
 
@@ -102,10 +101,9 @@ class CheckoutController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return response()->json(['errors' => $validator->errors()], 422);
+            return redirect()->back()->withErrors($validator)->withInput();
         }
 
-        // Begin database transaction
         $validatedData = $validator->validated();
 
         $billingAddress = "{$validatedData['billing_street']}, {$validatedData['billing_city']}, {$validatedData['billing_state']}, {$validatedData['billing_country']}, {$validatedData['billing_zipCode']}";

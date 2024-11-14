@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\Vendor;
 
 use App\Http\Controllers\Controller;
+use App\Models\Order;
 use App\Models\Shop;
 use App\Models\ShopHour;
 use App\Models\ShopPolicy;
@@ -16,13 +17,13 @@ class ShopController extends Controller
 
     public function showshopdetails($id)
     {
-        $shop = Shop::select('name', 'legal_name','company_registeration_no', 'slug', 'email', 'mobile', 'external_url', 'shop_type', 'logo', 'banner', 'shop_ratings', 'description')->where('id', $id)->first();
+        $shop = Shop::select('name', 'legal_name', 'company_registeration_no', 'slug', 'email', 'mobile', 'external_url', 'shop_type', 'logo', 'banner', 'shop_ratings', 'description')->where('id', $id)->first();
         return $this->success('Shop Details Retrieved Successfully!', $shop);
     }
 
     public function showshoplocation($id)
     {
-        $shop = Shop::select('street', 'street2', 'city', 'zip_code', 'state','country', 'address', 'map_url', 'shop_lattitude', 'shop_longtitude')->where('id', $id)->first();
+        $shop = Shop::select('street', 'street2', 'city', 'zip_code', 'state', 'country', 'address', 'map_url', 'shop_lattitude', 'shop_longtitude')->where('id', $id)->first();
         return $this->success('Shop Location Retrieved Successfully!', $shop);
     }
 
@@ -102,7 +103,7 @@ class ShopController extends Controller
             }
 
             $image = $request->file('logo');
-            $imagePath ='assets/images/shops/' . $shop->id . '/logo';
+            $imagePath = 'assets/images/shops/' . $shop->id . '/logo';
 
             if (!file_exists($imagePath)) {
                 mkdir($imagePath, 0755, true);
@@ -260,10 +261,39 @@ class ShopController extends Controller
     public function status($id)
     {
         $shopStatus = Shop::select('active')->where('id', $id)->first();
-        if($shopStatus->active == 1)
-        {
-            $shopStatus = Shop::select('active','logo')->where('id', $id)->first();
+        if ($shopStatus->active == 1) {
+            $shopStatus = Shop::select('active', 'logo')->where('id', $id)->first();
         }
         return $this->success('Shop Status Retrived Successfully!', $shopStatus);
+    }
+
+    public function getAllOrdersByShop($shop_id)
+    {
+        $orders = Order::where('shop_id', $shop_id)
+            ->with([
+                'items.product' => function ($query) {
+                    $query->select('id', 'name');
+                },
+                'shop' => function ($query) {
+                    $query->select('id', 'name');
+                },
+                'customer' => function ($query) {
+                    $query->select('id', 'name');
+                }
+            ])
+            ->get();
+
+        return $this->success('Orders retrieved successfully.', $orders);
+    }
+
+    public function showOrderById($id)
+    {
+        $order = Order::with(['items.product','shop','customer',])->find($id);
+
+        if (!$order) {
+            return $this->error('Order Summary Not Found.', ['error' => 'Order Summary Not Found']);
+        }
+
+        return $this->success('Order Summary Retrived Successfully', $order);
     }
 }

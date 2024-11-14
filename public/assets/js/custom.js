@@ -632,15 +632,23 @@ function selectPaymentOption(optionId) {
     selectedCard.classList.add("selected");
 
     document.getElementById(optionId).checked = true;
+
+    $("#checkoutForm").validate().element("#" + optionId);
 }
 
 $(document).ready(function () {
     const dealType = parseInt($('#checkoutForm').data('deal-type'), 10);
 
+    $.validator.addMethod("futureDate", function (value, element) {
+        const selectedDate = new Date(value);
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        return selectedDate >= today;
+    }, "Service date cannot be in the past");
+
     const validator = $("#checkoutForm").validate({
         rules: {
             first_name: { required: true },
-            last_name: { required: true },
             email: { required: true, email: true },
             mobile: { required: true, digits: true, minlength: 10, maxlength: 10 },
             billing_street: { required: true },
@@ -680,6 +688,7 @@ $(document).ready(function () {
                     return dealType === 2;
                 },
                 date: true,
+                futureDate: true
             },
             service_time: {
                 required: function () {
@@ -690,7 +699,6 @@ $(document).ready(function () {
         },
         messages: {
             first_name: "First name is required",
-            last_name: "Last name is required",
             email: {
                 required: "Email is required",
                 email: "Please enter a valid email address",
@@ -721,6 +729,7 @@ $(document).ready(function () {
             service_date: {
                 required: "Service date is required",
                 date: "Please enter a valid date",
+                futureDate: "Service date cannot be in the past",
             },
             service_time: {
                 required: "Service time is required",

@@ -3,14 +3,14 @@
 @section('content')
     @if (session('status'))
         <div class="alert alert-success alert-dismissible fade show" role="alert"
-            style="position: absolute; top: 15px; right: 40px;">
+            style="position: fixed; top: 70px; right: 40px; z-index: 1050;">
             {{ session('status') }}
             <button type="button" class="btn-close btn-sm" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
     @endif
     @if ($errors->any())
         <div class="alert alert-danger alert-dismissible fade show" role="alert"
-            style="position: absolute; top: 15px; right: 40px;">
+            style="position: fixed; top: 70px; right: 40px; z-index: 1050;">
             <ul class="mb-0">
                 @foreach ($errors->all() as $error)
                     <li>{{ $error }}</li>

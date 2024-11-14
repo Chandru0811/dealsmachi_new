@@ -64,7 +64,7 @@
                             {{ $errors->first('msg') }}
                         </div>
                     @endif
-                    <h3 class="login-title text-center mb-4">Login</h3>
+                    <h3 class="login-title text-center mb-4">Login/Register</h3>
                     <form class="w-75" method="POST" action="{{ route('login') }}">
                         @csrf
                         <div class="mb-3 email-container">
