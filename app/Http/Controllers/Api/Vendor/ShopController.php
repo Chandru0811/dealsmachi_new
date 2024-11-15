@@ -280,8 +280,7 @@ class ShopController extends Controller
                 'customer' => function ($query) {
                     $query->select('id', 'name');
                 }
-            ])
-            ->get();
+            ])->orderBy('created_at', 'desc')->get();
 
         return $this->success('Orders retrieved successfully.', $orders);
     }

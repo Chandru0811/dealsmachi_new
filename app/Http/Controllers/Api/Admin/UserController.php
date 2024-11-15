@@ -41,7 +41,7 @@ class UserController extends Controller
             'customer' => function ($query) {
                 $query->select('id', 'name');
             }
-        ])->get();
+        ])->orderBy('created_at', 'desc')->get();
 
         return $this->success('Orders Retrived Successfully', $orders);
     }
