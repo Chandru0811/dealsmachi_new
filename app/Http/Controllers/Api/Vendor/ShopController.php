@@ -48,7 +48,7 @@ class ShopController extends Controller
             'email' => 'sometimes|required|email|unique:shops,email,' . $id,
             'mobile' => 'sometimes|required|string|unique:shops,mobile,' . $id,
             'description' => 'sometimes|required|string',
-            'external_url' => 'nullable|url',
+            'external_url' => 'nullable',
             'logo' => (!$shop->logo ? 'required|' : 'sometimes|') . 'image|mimes:jpeg,png,jpg,gif,svg,webp|max:2048',
             // 'banner' => (!$shop->banner ? 'required|' : 'sometimes|') . 'image|mimes:jpeg,png,jpg,gif,svg,webp|max:2048',
             // 'map_url' => (!$shop->map_url ? 'required|' : 'sometimes|') . 'url'
@@ -146,9 +146,9 @@ class ShopController extends Controller
         }
 
         $validator = Validator::make($request->all(), [
-            'street' => 'sometimes|required|string',
-            'zip_code' => 'sometimes|required|string',
-            'country' => 'sometimes|required|string',
+            'street' => 'nullable|string',
+            'zip_code' => 'nullable|string',
+            'country' => 'nullable|string',
         ], [
             'street.required' => 'Street is required.',
             'zip_code.required' => 'Zip Code is required.',
