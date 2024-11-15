@@ -81,7 +81,7 @@
                             @elseif($product->deal_type == 2)
                             <div class="col-md-6 col-12 mb-3">
                                 <label class="form-label">Service Date</label>
-                                <input type="date" class="form-control" name="service_date" id="service_date" min="{{ date('Y-m-d') }}" value="{{ old('service_date') }}" />
+                                <input type="date" class="form-control" name="service_date" id="service_date" min="{{ date('Y-m-d') }}" value="{{ old('service_date', date('Y-m-d')) }}" />
                                 @error('service_date')
                                 <span class="text-danger">{{ $message }}</span>
                                 @enderror
@@ -276,9 +276,9 @@
                             <div class="input-group mb-4">
                                 <input type="text" class="form-control" placeholder="Enter a coupon code"
                                     value="{{ $product->coupon_code }}" readonly>
-                                <button class="btn applyBtn" type="button" id="button-addon2">Applied</button>
+                                <button class="btn applyBtn" type="button" id="button-addon2" disabled>Applied</button>
                             </div>
-                            <button type="submit" class="btn applyBtn w-100">Place Order</button>
+                            <button type="submit" class="btn placeOrderBtn w-100">Place Order</button>
                         </div>
                     </div>
                 </div>

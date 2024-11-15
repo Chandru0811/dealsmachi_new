@@ -303,41 +303,41 @@
                         </div>
                         <div class="form-check pt-3">
                             <input class="form-check-input" type="checkbox" name="price_range[]"
-                                value="Rs0-Rs1000" id="price_0_1000"
+                                value="Rs0-Rs1000" id="price_0_to_1000"
                                 {{ in_array('Rs0-Rs1000', request()->get('price_range', [])) ? 'checked' : '' }}>
-                            <label class="form-check-label categoryLable" for="price_0_1000">
+                            <label class="form-check-label categoryLable" for="price_0_to_1000">
                                 Under Rs 1000
                             </label>
                         </div>
                         <div class="form-check pt-3">
                             <input class="form-check-input" type="checkbox" name="price_range[]"
-                                value="Rs1000-Rs2000" id="price_1000_2000"
+                                value="Rs1000-Rs2000" id="price_1000_to_2000"
                                 {{ in_array('Rs1000-Rs2000', request()->get('price_range', [])) ? 'checked' : '' }}>
-                            <label class="form-check-label categoryLable" for="price_1000_2000">
+                            <label class="form-check-label categoryLable" for="price_1000_to_2000">
                                 Rs 1000 - Rs 2000
                             </label>
                         </div>
                         <div class="form-check pt-3">
                             <input class="form-check-input" type="checkbox" name="price_range[]"
-                                value="Rs2000-Rs5000" id="price_2000_5000"
+                                value="Rs2000-Rs5000" id="price_2000_to_5000"
                                 {{ in_array('Rs2000-Rs5000', request()->get('price_range', [])) ? 'checked' : '' }}>
-                            <label class="form-check-label categoryLable" for="price_2000_5000">
+                            <label class="form-check-label categoryLable" for="price_2000_to_5000">
                                 Rs 2000 - Rs 5000
                             </label>
                         </div>
                         <div class="form-check pt-3">
                             <input class="form-check-input" type="checkbox" name="price_range[]"
-                                value="Rs5000-Rs10000" id="price_5000_10000"
+                                value="Rs5000-Rs10000" id="price_5000_to_10000"
                                 {{ in_array('Rs5000-Rs10000', request()->get('price_range', [])) ? 'checked' : '' }}>
-                            <label class="form-check-label categoryLable" for="price_5000_10000">
+                            <label class="form-check-label categoryLable" for="price_5000_to_10000">
                                 Rs 5000 - Rs 10000
                             </label>
                         </div>
                         <div class="form-check pt-3">
                             <input class="form-check-input" type="checkbox" name="price_range[]"
-                                value="Rs10000-Rs100000" id="price_10000_100000"
+                                value="Rs10000-Rs100000" id="price_10000_to_100000"
                                 {{ in_array('Rs10000-Rs100000', request()->get('price_range', [])) ? 'checked' : '' }}>
-                            <label class="form-check-label categoryLable" for="price_10000_100000">
+                            <label class="form-check-label categoryLable" for="price_10000_to_100000">
                                 Above Rs 10000
                             </label>
                         </div>
@@ -628,14 +628,27 @@
     const clearUrl = "{{ $isCategory ? route('deals.subcategorybased', ['slug' => $category->slug]) : ($isHotpick ? route('deals.categorybased', ['slug' => request()->segment(2)]) : route('search')) }}";
 
     document.getElementById('clearButton').addEventListener('click', function() {
-        document.getElementById('filterForm').reset();
-        window.location.href = clearUrl;
+        preserveLatLonAndClear();
     });
 
     document.getElementById('clearButtonLarge').addEventListener('click', function() {
-        document.getElementById('filterForm').reset();
-        window.location.href = clearUrl;
+        preserveLatLonAndClear();
     });
+
+    function preserveLatLonAndClear() {
+        const latitude = document.getElementById('latitude').value;
+        const longitude = document.getElementById('longitude').value;
+
+        let url = new URL(clearUrl, window.location.origin);
+        if (latitude && longitude) {
+            url.searchParams.set('latitude', latitude);
+            url.searchParams.set('longitude', longitude);
+        }
+
+        document.getElementById('filterForm').reset();
+
+        window.location.href = url.toString();
+    }
 
     $(document).ready(function() {
         if (navigator.geolocation) {

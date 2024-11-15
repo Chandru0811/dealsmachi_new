@@ -222,7 +222,7 @@ class HomeController extends Controller
             'early_bird' => 'EARLY BIRD',
             'last_chance' => 'LAST CHANCE',
             'limited_time' => 'LIMITED TIME',
-            'nearby' => 'NEAREST DEALS',
+            'nearby' => 'NEAR BY',
             default => '',
         };
 

@@ -523,30 +523,6 @@ document
         });
     });
 
-$('input[type="checkbox"]').change(function () {
-    var selectedPriceRanges = [];
-
-    $('input[name="price_range[]"]:checked').each(function () {
-        selectedPriceRanges.push($(this).val());
-    });
-
-    $.ajax({
-        url: "/your-api-endpoint",
-        method: "GET", // or POST depending on your API
-        data: {
-            price_range: selectedPriceRanges,
-            // include other data if needed
-        },
-        success: function (response) {
-            // Update the page content dynamically
-            $("#your-products-list").html(response);
-        },
-        error: function (error) {
-            console.error(error);
-        },
-    });
-});
-
 function clickCount(dealId) {
     $.ajax({
         url: `${window.location.origin}/deals/count/click`,
@@ -562,6 +538,32 @@ function clickCount(dealId) {
             console.log("Error occurred: " + xhr.statusText);
         },
     });
+}
+
+function enquireCount(dealId) {
+    $.ajax({
+        url: `${window.location.origin}/deals/count/enquire`,
+        type: "POST",
+        data: {
+            _token: $('meta[name="csrf-token"]').attr("content"),
+            id: dealId,
+        },
+        success: function (response) {
+            console.log(response.message);
+        },
+        error: function (xhr) {
+            console.log("Error occurred: " + xhr.statusText);
+        },
+    });
+}
+
+function sendEnquiry(dealId, shopMobile, productName, productDescription) {
+    enquireCount(dealId);
+    
+    const whatsappUrl = `https://wa.me/91${shopMobile}?text=` + 
+        encodeURIComponent(`*Hello! I visited dealslah website and found an amazing product:*\n\n${productName}\n${productDescription}\n\nHere is the product page: ${window.location.href}`);
+    
+    window.open(whatsappUrl, '_blank');
 }
 
 function showAddress(country) {
@@ -767,4 +769,15 @@ $(document).ready(function () {
     if ($('#sameAsShipping').is(':checked')) {
         $('#shippingAddress').hide();
     }
+});
+
+$(document).ready(function () {
+    $('.alert').each(function () {
+        const alert = $(this);
+        setTimeout(function () {
+            if (alert.hasClass('show')) {
+                alert.alert('close');
+            }
+        }, 5000);
+    });
 });
