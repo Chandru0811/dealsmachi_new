@@ -36,11 +36,29 @@ Route::middleware('auth')->group(function () {
     Route::post('/checkout', [CheckoutController::class, 'checkout'])->name('checkout.checkout');
 });
 
-Route::get('/support', function () {return view('support');});
-Route::get('/privacyPolicy', function () {return view('privacypolicy');});
-Route::get('/terms_conditions', function () {return view('termsandconditions');});
-Route::get('/contactus', function () {return view('contactus');});
-Route::get('/checkout', function () {return view('checkout');});
+Route::get('/support', function () {
+    return view('support');
+});
+Route::get('/privacyPolicy', function () {
+    return view('privacypolicy');
+});
+Route::get('/terms_conditions', function () {
+    return view('termsandconditions');
+});
+Route::get('/contactus', function () {
+    return view('contactus');
+});
+Route::get('/checkout', function () {
+    return view('checkout');
+});
+
+
+Route::get('/orders', function () {
+    return view('orders');
+});
+Route::get('/orderView', function () {
+    return view('orderView');
+});
 
 // Route::get('/dashboard', function () {
 //     return view('dashboard');
@@ -51,4 +69,3 @@ Route::get('/checkout', function () {return view('checkout');});
 //     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
 //     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 // });
-
