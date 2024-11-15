@@ -64,7 +64,7 @@
                         <div class="mb-3 email-container">
                             <label class="form-label">Email Address</label>
                             <input type="email" class="form-control" id="email" name="email"
-                            value="{{ old('email', $request->email) }}" />
+                            value="{{ old('email', $request->email) }}" readonly/>
                             @error('email')
                                 <span class="error">{{ $message }}</span>
                             @enderror

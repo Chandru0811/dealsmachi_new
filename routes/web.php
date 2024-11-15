@@ -4,7 +4,7 @@ use App\Http\Controllers\BookmarkController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\CheckoutController;
-
+use Illuminate\Support\Facades\Auth;
 
 Route::fallback(function () {
     return response()->view('errors.404', [], 404);
@@ -35,7 +35,6 @@ Route::middleware('auth')->group(function () {
     Route::get('/directCheckout/{product_id}', [CheckoutController::class, 'directcheckout'])->name('checkout.direct');
     Route::post('/checkout', [CheckoutController::class, 'checkout'])->name('checkout.checkout');
 });
-
 
 Route::get('/support', function () {return view('support');});
 Route::get('/privacyPolicy', function () {return view('privacypolicy');});

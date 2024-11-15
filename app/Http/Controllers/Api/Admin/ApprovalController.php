@@ -31,20 +31,4 @@ class ApprovalController extends Controller
         return $this->ok('Category Approved Successfully!');
     }
 
-    public function getAllUser()
-    {
-        $users = User::where('role', 3)->get();
-        return $this->success('User retrieved successfully.', $users);
-    }
-
-    public function userShow($id)
-    {
-        $user = User::where('role', 3)->find($id);
-
-        if (!$user) {
-            return $this->error('User Not Found.', ['error' => 'User Not Found'], 404);
-        }
-
-        return $this->success('User Retrived Succesfully!', $user);
-    }
 }

@@ -3,7 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthController;
-use App\Http\Controllers\Api\Vendor\ShopController;
+use App\Http\Controllers\Api\vendor\ShopController;
 use App\Http\Controllers\Api\Admin\CategoryGroupsController;
 use App\Http\Controllers\Api\Admin\DealCategoryController;
 use App\Http\Controllers\Api\Admin\CategoriesController;
@@ -11,6 +11,7 @@ use App\Http\Controllers\Api\Admin\ShopController as AdminShopController;
 use App\Http\Controllers\Api\Admin\SliderController;
 use App\Http\Controllers\Api\Vendor\ProductController;
 use App\Http\Controllers\Api\Admin\ApprovalController;
+use App\Http\Controllers\Api\Admin\UserController;
 use App\Http\Controllers\Api\AppController;
 use App\Http\Controllers\Api\Vendor\DashboardController;
 
@@ -97,8 +98,12 @@ Route::middleware('auth:api')->group(function () {
         Route::post('deal/{id}/disapprove', [ApprovalController::class, 'disapproveProduct']);
 
         // user
-        Route::get('users', [ApprovalController::class, 'getAllUser']);
-        Route::get('users/{id}', [ApprovalController::class, 'userShow']);
+        Route::get('users', [UserController::class, 'getAllUser']);
+        Route::get('users/{id}', [UserController::class, 'userShow']);
+
+        // order
+        Route::get('orders', [UserController::class, 'getAllOrders']);
+        Route::get('order/{id}', [UserController::class, 'getOrderById']);
     });
 
     //Vendor
@@ -132,6 +137,10 @@ Route::middleware('auth:api')->group(function () {
         Route::get('categorygroups', [ProductController::class, 'getAllCategoryGroups']);
         Route::get('categories/categorygroups/{id}', [ProductController::class, 'getAllCategoriesByCategoryGroupId']);
         Route::post('categories/create', [ProductController::class, 'categoriesCreate']);
+
+        // order
+        Route::get('orders/{shop_id}', [ShopController::class, 'getAllOrdersByShop']);
+        Route::get('order/{id}', [ShopController::class, 'showOrderById']);
     });
 });
 
