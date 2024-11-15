@@ -18,7 +18,7 @@ class CheckoutController extends Controller
             session(['url.intended' => route('checkout.direct')]);
             return redirect()->route("login");
         } else {
-            $user = Auth::user(); 
+            $user = Auth::user();
             $product = Product::with(['shop'])->where('id', $id)->where('active', 1)->first();
             return view('checkout', compact('product', 'user'));
         }
@@ -143,6 +143,10 @@ class CheckoutController extends Controller
             ]);
         }
 
-        return redirect()->route('home')->with('status', 'Order Created Successfully!');
+        $statusMessage = $validatedData['order_type'] == 'Product'
+            ? 'Order Created Successfully!'
+            : 'Service Booked Successfully!';
+
+        return redirect()->route('home')->with('status', $statusMessage);
     }
 }
