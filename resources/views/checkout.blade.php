@@ -95,104 +95,50 @@
                             </div>
                             @endif
                         </div>
-                        <!-- Billing Address Section -->
-                        <div class="row" id="billingAddress">
-                            <h5 class="py-3" style="color: #ff0060;">Billing Address</h5>
+                        <!-- Address Section -->
+                        <div class="row">
+                            <h5 class="py-3" style="color: #ff0060;">
+                                {{ $product->deal_type == 1 ? 'Delivery Address' : 'Address' }}
+                            </h5>
                             <div class="col-12 mb-3">
                                 <label class="form-label">Street</label>
-                                <input type="text" class="form-control" name="billing_street" id="billing_street" value="{{ old('billing_street') }}"
+                                <input type="text" class="form-control" name="street" id="street" value="{{ old('street') }}"
                                     required />
-                                @error('billing_street')
+                                @error('street')
                                 <span class="text-danger">{{ $message }}</span>
                                 @enderror
                             </div>
                             <div class="col-md-6 col-12 mb-3">
                                 <label class="form-label">City</label>
-                                <input type="text" class="form-control" name="billing_city" id="billing_city" value="{{ old('billing_city') }}"
+                                <input type="text" class="form-control" name="city" id="city" value="{{ old('city') }}"
                                     required />
-                                @error('billing_city')
+                                @error('city')
                                 <span class="text-danger">{{ $message }}</span>
                                 @enderror
                             </div>
                             <div class="col-md-6 col-12 mb-3">
                                 <label class="form-label">State</label>
-                                <input type="text" class="form-control" name="billing_state" id="billing_state" value="{{ old('billing_state') }}"
+                                <input type="text" class="form-control" name="state" id="state" value="{{ old('state') }}"
                                     required />
-                                @error('billing_state')
+                                @error('state')
                                 <span class="text-danger">{{ $message }}</span>
                                 @enderror
                             </div>
                             <div class="col-md-6 col-12 mb-3">
                                 <label class="form-label">Country</label>
-                                <input type="text" class="form-control" name="billing_country" value="{{ old('billing_country') }}"
-                                    id="billing_country" required />
-                                @error('billing_country')
+                                <input type="text" class="form-control" name="country" value="{{ old('country') }}"
+                                    id="country" required />
+                                @error('country')
                                 <span class="text-danger">{{ $message }}</span>
                                 @enderror
                             </div>
                             <div class="col-md-6 col-12 mb-3">
                                 <label class="form-label">Zip Code</label>
-                                <input type="text" class="form-control" name="billing_zipCode" value="{{ old('billing_zipCode') }}"
-                                    id="billing_zipCode" required />
-                                @error('billing_zipCode')
+                                <input type="text" class="form-control" name="zipCode" value="{{ old('zipCode') }}"
+                                    id="zipCode" required />
+                                @error('zipCode')
                                 <span class="text-danger">{{ $message }}</span>
                                 @enderror
-                            </div>
-                        </div>
-                        <!-- "Same as Shipping Address" Checkbox -->
-                        <div class="col-12 mb-3 mt-1">
-                            <input type="checkbox" class="form-check-input me-2" id="sameAsShipping"
-                                name="sameAsShipping" value="1" checked>
-                            <label class="form-label" for="sameAsShipping">Same as Shipping Address</label>
-                            @error('sameAsShipping')
-                            <span class="text-danger">{{ $message }}</span>
-                            @enderror
-                        </div>
-
-                        <!-- Shipping Address Section -->
-                        <div id="shippingAddress" style="display: none;">
-                            <h5 class="mt-1 mb-3" style="color: #ff0060;">Shipping Address</h5>
-                            <div class="row">
-                                <div class="col-12 mb-3">
-                                    <label class="form-label">Street</label>
-                                    <input type="text" class="form-control" name="shipping_street"
-                                        id="shipping_street" value="{{ old('shipping_street') }}" required />
-                                    @error('shipping_street')
-                                    <span class="text-danger">{{ $message }}</span>
-                                    @enderror
-                                </div>
-                                <div class="col-md-6 col-12 mb-3">
-                                    <label class="form-label">City</label>
-                                    <input type="text" class="form-control" name="shipping_city"
-                                        id="shipping_city" value="{{ old('shipping_city') }}" required />
-                                    @error('shipping_city')
-                                    <span class="text-danger">{{ $message }}</span>
-                                    @enderror
-                                </div>
-                                <div class="col-md-6 col-12 mb-3">
-                                    <label class="form-label">State</label>
-                                    <input type="text" class="form-control" name="shipping_state"
-                                        id="shipping_state" value="{{ old('shipping_state') }}" required />
-                                    @error('shipping_state')
-                                    <span class="text-danger">{{ $message }}</span>
-                                    @enderror
-                                </div>
-                                <div class="col-md-6 col-12 mb-3">
-                                    <label class="form-label">Country</label>
-                                    <input type="text" class="form-control" name="shipping_country"
-                                        id="shipping_country" value="{{ old('shipping_country') }}" required />
-                                    @error('shipping_country')
-                                    <span class="text-danger">{{ $message }}</span>
-                                    @enderror
-                                </div>
-                                <div class="col-md-6 col-12 mb-3">
-                                    <label class="form-label">Zip Code</label>
-                                    <input type="text" class="form-control" name="shipping_zipCode"
-                                        id="shipping_zipCode" value="{{ old('shipping_zipCode') }}" required />
-                                    @error('shipping_zipCode')
-                                    <span class="text-danger">{{ $message }}</span>
-                                    @enderror
-                                </div>
                             </div>
                         </div>
                         <div class="col-12 mb-3 mt-1">
@@ -292,8 +238,16 @@
         return new Intl.NumberFormat('en-IN').format(number);
     }
 
-    const originalPrice = {{ $product->original_price }};
-    const discountedPrice = {{ $product->discounted_price }};
+    const originalPrice = {
+        {
+            $product - > original_price
+        }
+    };
+    const discountedPrice = {
+        {
+            $product - > discounted_price
+        }
+    };
 
     function updateTotals() {
         let quantity = parseInt($('#quantity').val()) || 1;
