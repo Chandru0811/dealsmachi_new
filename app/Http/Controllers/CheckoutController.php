@@ -120,17 +120,16 @@ class CheckoutController extends Controller
             ? 'Order Created Successfully!'
             : 'Service Booked Successfully!';
 
-        return redirect()->route('home')->with('status', $statusMessage);
+        return redirect()->route('customer.orderById', ['id' => $order->id])->with('status', $statusMessage);
     }
 
-    
     public function getAllOrdersByCustomer()
     {
         $customerId = Auth::check() ? Auth::id() : null;
         $orders = Order::where('customer_id', $customerId)
             ->with([
                 'items.product' => function ($query) {
-                    $query->select('id', 'name', 'image_url1', 'description');
+                    $query->select('id', 'name', 'image_url1', 'description', 'original_price', 'discounted_price', 'discount_percentage');
                 },
                 'shop' => function ($query) {
                     $query->select('id', 'name');
@@ -145,6 +144,7 @@ class CheckoutController extends Controller
     public function showOrderByCustomerId($id)
     {
         $order = Order::with(['items.product', 'shop', 'customer',])->find($id);
+        // dd($order);
         return view('orderView', compact('order'));
     }
 }

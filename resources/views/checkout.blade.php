@@ -238,16 +238,8 @@
         return new Intl.NumberFormat('en-IN').format(number);
     }
 
-    const originalPrice = {
-        {
-            $product - > original_price
-        }
-    };
-    const discountedPrice = {
-        {
-            $product - > discounted_price
-        }
-    };
+    const originalPrice = {{ $product->original_price }};
+    const discountedPrice = {{ $product->discounted_price }};
 
     function updateTotals() {
         let quantity = parseInt($('#quantity').val()) || 1;
