@@ -34,6 +34,8 @@ require __DIR__ . '/auth.php';
 Route::middleware('auth')->group(function () {
     Route::get('/directCheckout/{product_id}', [CheckoutController::class, 'directcheckout'])->name('checkout.direct');
     Route::post('/checkout', [CheckoutController::class, 'checkout'])->name('checkout.checkout');
+    Route::get('/orders', [CheckoutController::class, 'getAllOrdersByCustomer'])->name('customer.orders');
+    Route::get('/orders/{id}', [CheckoutController::class, 'showOrderByCustomerId'])->name('customer.orderById');
 });
 
 Route::get('/support', function () {
@@ -51,15 +53,6 @@ Route::get('/contactus', function () {
 Route::get('/checkout', function () {
     return view('checkout');
 });
-
-
-Route::get('/orders', function () {
-    return view('orders');
-});
-Route::get('/orderView', function () {
-    return view('orderView');
-});
-
 // Route::get('/dashboard', function () {
 //     return view('dashboard');
 // })->middleware(['auth', 'verified'])->name('dashboard');

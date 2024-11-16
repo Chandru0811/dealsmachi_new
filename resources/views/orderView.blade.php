@@ -1,62 +1,17 @@
 @extends('layouts.master')
 
 @section('content')
-    @php
-        $data = (object) [
-            'payment_status' => 'pending',
-            'order_type' => 'product', // or 'service'
-            'status' => 'Completed',
-            'items' => [
-                (object) [
-                    'product' => (object) [
-                        'name' => 'Sample Product',
-                        'description' => 'This is a sample product description.',
-                        'original_price' => 1500,
-                        'discounted_price' => 1200,
-                        'discount_percentage' => 20,
-                        'image_url1' => null,
-                        'coupon_code' => 'DEAL2023',
-                    ],
-                    'unit_price' => 1200,
-                ],
-            ],
-            'quantity' => 1,
-            'service_date' => '2024-12-01',
-            'service_time' => '10:00 AM',
-            'shop' => (object) [
-                'legal_name' => 'Sample Shop',
-                'email' => 'shop@example.com',
-                'mobile' => '1234567890',
-                'description' => 'A great place to shop!',
-                'street' => '123 Main St',
-            ],
-            'total' => 1200,
-            'payment_type' => 'online_payment',
-            'first_name' => 'John',
-            'last_name' => 'Doe',
-            'email' => 'johndoe@example.com',
-            'customer' => (object) [
-                'name' => 'John Doe',
-                'email' => 'johndoe@example.com',
-            ],
-            'mobile' => '9876543210',
-            'shipping_address' => '123 Shipping Ln',
-            'billing_address' => '123 Billing Blvd',
-            'notes' => 'Leave package at the door.',
-        ];
-    @endphp
-
     <div class="container categoryIcons p-3">
         <div>
             <div class="d-flex align-items-center mb-4">
                 <h4 class="text-dark order_id">
-                    Order ID: DEALSLAH_002&nbsp;
+                    Order ID: <span>{{ $order->order_number }}</span>&nbsp;
                 </h4>
                 <span class="badge_warning">
-                    {{ $data->payment_status ?? 'N/A' }}
+                    {{ $order->status ?? 'N/A' }}
                 </span>
-                <span class="{{ $data->order_type === 'service' ? 'badge_default' : 'badge_payment' }}">
-                    {{ $data->order_type ?? 'N/A' }}
+                <span class="{{ $order->order_type === 'service' ? 'badge_default' : 'badge_payment' }}">
+                    {{ $order->order_type ?? 'N/A' }}
                 </span>
             </div>
 
@@ -67,20 +22,20 @@
                     <div class="card mb-4">
                         <div class="card-header m-0 p-2 d-flex gap-2 align-items-center" style="background: #ffecee">
                             <p class="mb-0">Order Item</p>
-                            <span class="badge_danger">{{ $data->status ?? 'N/A' }}</span>
-                            @if ($data->items && count($data->items) > 0 && $data->items[0]->product->coupon_code)
-                                <span class="badge_payment">{{ $data->items[0]->product->coupon_code }}</span>
+                            <span class="badge_danger">{{ $order->status ?? 'N/A' }}</span>
+                            @if ($order->items && count($order->items) > 0 && $order->items[0]->product->coupon_code)
+                                <span class="badge_payment">{{ $order->items[0]->product->coupon_code }}</span>
                             @endif
                         </div>
                         <div class="card-body m-0 p-4">
-                            @foreach ($data->items as $item)
+                            @foreach ($order->items as $item)
                                 <div class="row align-items-center mb-3">
                                     <div class="col-md-3">
-                                        <img src="{{ $item->product->image_url1 ? asset($item->product->image_url1) : asset('noImage.png') }}"
-                                            alt="{{ $item->product->name }}" style="width: 100%;" />
+                                        <img src="{{ asset($item->product->image_url1) }}" alt="{{ $item->product->name }}"
+                                            class="img-fluid" />
                                     </div>
                                     <div class="col">
-                                        <p>{{ $item->product->category_id ?? 'Category' }} :
+                                        <p>
                                             {{ $item->product->name }}</p>
                                         <p>{{ $item->product->description }}</p>
                                         <p>
@@ -96,18 +51,17 @@
                                 </div>
                             @endforeach
 
-
                             <div class="row">
                                 <div class="col-md-3"></div>
                                 <div class="col-md-9">
-                                    @if ($data->order_type === 'service')
+                                    @if ($order->order_type === 'service')
                                         <div class="d-flex gap-4">
-                                            <p>Service Date: {{ $data->service_date ?? ' ' }}</p>
-                                            <p>Service Time: {{ $data->service_time ?? ' ' }}</p>
+                                            <p>Service Date: {{ $order->service_date ?? ' ' }}</p>
+                                            <p>Service Time: {{ $order->service_time ?? ' ' }}</p>
                                         </div>
                                     @else
                                         <div class="d-flex gap-4">
-                                            <p>Quantity: {{ $data->quantity ?? ' ' }}</p>
+                                            <p>Quantity: {{ $order->quantity ?? ' ' }}</p>
                                         </div>
                                     @endif
                                 </div>
@@ -121,7 +75,7 @@
                             <p class="mb-0">Shop Details</p>
                         </div>
                         <div class="card-body m-0 p-4">
-                            @if ($data->shop)
+                            @if ($order->shop)
                                 <div class="row align-items-center mb-3">
                                     <div class="col">
                                         <div class="row">
@@ -129,31 +83,31 @@
                                                 <p>Company Name</p>
                                             </div>
                                             <div class="col-md-9">
-                                                <p>: {{ $data->shop->legal_name ?? 'N/A' }}</p>
+                                                <p>: {{ $order->shop->legal_name ?? 'N/A' }}</p>
                                             </div>
                                             <div class="col-md-3">
                                                 <p>Company Email</p>
                                             </div>
                                             <div class="col-md-9">
-                                                <p>: {{ $data->shop->email ?? 'N/A' }}</p>
+                                                <p>: {{ $order->shop->email ?? 'N/A' }}</p>
                                             </div>
                                             <div class="col-md-3">
                                                 <p>Company Mobile</p>
                                             </div>
                                             <div class="col-md-9">
-                                                <p>: {{ $data->shop->mobile ?? 'N/A' }}</p>
+                                                <p>: {{ $order->shop->mobile ?? 'N/A' }}</p>
                                             </div>
                                             <div class="col-md-3">
                                                 <p>Description</p>
                                             </div>
                                             <div class="col-md-9">
-                                                <p>: {{ $data->shop->description ?? 'N/A' }}</p>
+                                                <p>: {{ $order->shop->description ?? 'N/A' }}</p>
                                             </div>
                                             <div class="col-md-3">
                                                 <p>Address</p>
                                             </div>
                                             <div class="col-md-9">
-                                                <p>: {{ $data->shop->street ?? 'N/A' }}</p>
+                                                <p>: {{ $order->shop->street ?? 'N/A' }}</p>
                                             </div>
                                         </div>
                                     </div>
@@ -171,30 +125,30 @@
                             <p class="mb-0">Order Summary</p>
                             <p>
                                 <span
-                                    class="{{ $data->payment_type === 'online_payment' ? 'badge_default' : 'badge_payment' }}">
-                                    {{ ucfirst(str_replace('_', ' ', $data->payment_type ?? 'Pending')) }}
+                                    class="{{ $order->payment_type === 'online_payment' ? 'badge_default' : 'badge_payment' }}">
+                                    {{ ucfirst(str_replace('_', ' ', $order->payment_type ?? 'Pending')) }}
                                 </span>&nbsp;
-                                <span class="badge_warning">{{ $data->payment_status ?? 'Pending' }}</span>
+                                <span class="badge_warning">{{ $order->payment_status ?? 'Pending' }}</span>
                             </p>
                         </div>
                         <div class="card-body m-0 p-4">
                             <div class="d-flex justify-content-between">
                                 <span>Unit Price</span>
-                                <span>₹ {{ number_format($data->items[0]->unit_price ?? 0, 2) }}</span>
+                                <span>₹ {{ number_format($order->items[0]->unit_price ?? 0, 2) }}</span>
                             </div>
                             <div class="d-flex justify-content-between">
                                 <span>Subtotal</span>
-                                <span>₹ {{ number_format($data->total, 2) }}</span>
+                                <span>₹ {{ number_format($order->total, 2) }}</span>
                             </div>
                             <hr />
                             <div class="d-flex justify-content-between pb-3">
                                 <span>Total</span>
-                                <span>₹ {{ number_format($data->total, 2) }}</span>
+                                <span>₹ {{ number_format($order->total, 2) }}</span>
                             </div>
-                            <div class="d-flex align-items-center gap-1">
+                            {{-- <div class="d-flex align-items-center gap-1">
                                 <button class="badge_outline_dark">Send Invoice</button>
                                 <button class="badge_outline_pink">Collect Payment</button>
-                            </div>
+                            </div> --}}
                         </div>
                     </div>
                 </div>
@@ -207,7 +161,7 @@
                             <p class="mb-0">Notes</p>
                         </div>
                         <div class="card-body m-0 p-4">
-                            <p>{{ $data->notes ?? 'No notes available' }}</p>
+                            <p>{{ $order->notes ?? 'No notes available' }}</p>
                         </div>
                     </div>
 
@@ -217,8 +171,8 @@
                             <p class="mb-0">Customer</p>
                         </div>
                         <div class="card-body m-0 p-4">
-                            <p>Name : {{ $data->first_name }} {{ $data->last_name ?? '' }}</p>
-                            <p>Email : {{ $data->email ?? 'No Email provided' }}</p>
+                            <p>Name : {{ $order->first_name }} {{ $order->last_name ?? '' }}</p>
+                            <p>Email : {{ $order->email ?? 'No Email provided' }}</p>
                         </div>
                     </div>
 
@@ -228,9 +182,9 @@
                             <p class="mb-0">Contact Information</p>
                         </div>
                         <div class="card-body m-0 p-4">
-                            <p>Name : {{ $data->customer->name ?? 'N/A' }}</p>
-                            <p>Email : {{ $data->customer->email ?? 'N/A' }}</p>
-                            <p>Phone : {{ $data->mobile ?? 'No phone number provided' }}</p>
+                            <p>Name : {{ $order->customer->name ?? 'N/A' }}</p>
+                            <p>Email : {{ $order->customer->email ?? 'N/A' }}</p>
+                            <p>Phone : {{ $order->mobile ?? 'No phone number provided' }}</p>
                         </div>
                     </div>
 
@@ -240,8 +194,8 @@
                             <p class="mb-0">Address</p>
                         </div>
                         <div class="card-body m-0 p-4">
-                            <p>Shipping : {{ $data->shipping_address ?? 'No shipping address provided' }}</p>
-                            <p>Billing : {{ $data->billing_address ?? 'No billing address provided' }}</p>
+                            <p>Shipping : {{ $order->shipping_address ?? 'No shipping address provided' }}</p>
+                            <p>Billing : {{ $order->billing_address ?? 'No billing address provided' }}</p>
                         </div>
                     </div>
                 </div>
