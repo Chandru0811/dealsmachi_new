@@ -144,7 +144,6 @@ class CheckoutController extends Controller
     public function showOrderByCustomerId($id)
     {
         $order = Order::with(['items.product', 'shop', 'customer',])->find($id);
-        // dd($order);
         return view('orderView', compact('order'));
     }
 }
