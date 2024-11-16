@@ -41,10 +41,10 @@
                                     <span class="dropdown-item"><i class="fa-solid fa-user"></i>&nbsp;&nbsp;
                                         {{ auth()->user()->name }}</span>
                                 </li>
-                                {{-- <li>
+                                <li>
                                     <a class="dropdown-item" href="{{ url('orders') }}"><i
                                             class="fa-regular fa-box-open"></i>&nbsp;&nbsp; Orders</a>
-                                </li> --}}
+                                </li>
                                 <li>
                                     <!-- Logout Link that submits a POST request -->
                                     <a class="dropdown-item" href="{{ route('logout') }}"
@@ -124,12 +124,13 @@
                                     <span class="dropdown-item"><i class="fa-solid fa-user"></i>
                                         &nbsp;&nbsp; {{ auth()->user()->name }}</span>
                                 </li>
-                                {{-- <li>
+                                <li>
                                     <a class="dropdown-item" href="{{ url('orders') }}"><i
                                             class="fa-regular fa-box-open"></i>&nbsp;&nbsp; Orders</a>
-                                </li> --}}
+                                </li>
                                 <li>
-                                    <a class="dropdown-item" href="{{ url('logout') }}"><i
+                                    <a class="dropdown-item" href="{{ url('logout') }}" 
+                                    onclick="event.preventDefault(); document.getElementById('logout-form').submit();" ><i
                                             class="fa-solid fa-right-from-bracket"></i>&nbsp;&nbsp; Logout</a>
                                 </li>
                             </ul>
