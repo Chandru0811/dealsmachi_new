@@ -20,7 +20,8 @@ class CheckoutController extends Controller
         } else {
             $user = Auth::user(); 
             $product = Product::with(['shop'])->where('id', $id)->where('active', 1)->first();
-            return view('checkout', compact('product', 'user'));
+            $order = Order::where('customer_id',$user->id)->first();
+            return view('checkout', compact('product', 'user','order'));
         }
     }
 
