@@ -102,11 +102,42 @@
                     </div>
                     <div class="card-body m-0 p-4">
                         @if ($order->shop)
-                        <p>Company Name : {{ $order->shop->legal_name ?? 'N/A' }}</p>
-                        <p>Company Email : {{ $order->shop->email ?? 'N/A' }}</p>
-                        <p>Company Mobile : {{ $order->shop->mobile ?? 'N/A' }}</p>
-                        <p>Description : {{ $order->shop->description ?? 'N/A' }}</p>
-                        <p>Address : {{ $order->shop->street ?? 'N/A' }}</p>
+                        <div class="row align-items-center mb-3">
+                            <div class="col">
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <p>Company Name</p>
+                                    </div>
+                                    <div class="col-md-9">
+                                        <p>: {{ $order->shop->legal_name ?? 'N/A' }}</p>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <p>Company Email</p>
+                                    </div>
+                                    <div class="col-md-9">
+                                        <p>: {{ $order->shop->email ?? 'N/A' }}</p>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <p>Company Mobile</p>
+                                    </div>
+                                    <div class="col-md-9">
+                                        <p>: {{ $order->shop->mobile ?? 'N/A' }}</p>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <p>Description</p>
+                                    </div>
+                                    <div class="col-md-9">
+                                        <p>: {{ $order->shop->description ?? 'N/A' }}</p>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <p>Address</p>
+                                    </div>
+                                    <div class="col-md-9">
+                                        <p>: {{ $order->shop->street ?? 'N/A' }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                         @else
                         <p>No Shop Details Available</p>
                         @endif
@@ -114,7 +145,7 @@
                 </div>
 
                 {{-- Order Summary --}}
-                <div class="card mb-4">
+                <div class="card">
                     <div class="card-header m-0 p-2 d-flex justify-content-between align-items-center"
                         style="background: #ffecee">
                         <p class="mb-0">Order Summary</p>
@@ -140,6 +171,10 @@
                             <span>Total</span>
                             <span id="total"></span>
                         </div>
+                        {{-- <div class="d-flex align-items-center gap-1">
+                                <button class="badge_outline_dark">Send Invoice</button>
+                                <button class="badge_outline_pink">Collect Payment</button>
+                            </div> --}}
                     </div>
                 </div>
             </div>
@@ -147,7 +182,7 @@
             {{-- Right Column: Notes, Customer Info, Contact, and Address --}}
             <div class="col-md-4">
                 {{-- Notes --}}
-                <div class="card mb-4">
+                <div class="card mb-2">
                     <div class="card-header m-0 p-2" style="background: #ffecee">
                         <p class="mb-0">Notes</p>
                     </div>
@@ -155,8 +190,20 @@
                         <p>{{ $order->notes ?? 'No notes available' }}</p>
                     </div>
                 </div>
+
+                <!--{{-- Customer Info --}}-->
+                <!--<div class="card mb-2">-->
+                <!--    <div class="card-header m-0 p-2" style="background: #ffecee">-->
+                <!--        <p class="mb-0">Customer</p>-->
+                <!--    </div>-->
+                <!--    <div class="card-body m-0 p-4">-->
+                <!--        <p>Name : {{ $order->first_name }} {{ $order->last_name ?? '' }}</p>-->
+                <!--        <p>Email : {{ $order->email ?? 'No Email provided' }}</p>-->
+                <!--    </div>-->
+                <!--</div>-->
+
                 {{-- Contact Information --}}
-                <div class="card mb-4">
+                <div class="card mb-2">
                     <div class="card-header m-0 p-2" style="background: #ffecee">
                         <p class="mb-0">Contact Information</p>
                     </div>
@@ -168,14 +215,26 @@
                 </div>
 
                 {{-- Shipping Address --}}
-                <div class="card mb-4">
+                @php
+                    $address = json_decode($order->delivery_address, true);
+                @endphp
+                <div class="card mb-2">
                     <div class="card-header m-0 p-2" style="background: #ffecee">
                         <p class="mb-0">Address</p>
                     </div>
                     <div class="card-body m-0 p-4">
-                        <p>{{ $order->delivery_address ?? 'No address provided' }}</p>
+                        @if($address)
+                            <p>Street: {{ $address['street'] ?? 'N/A' }}</p>
+                            <p>City: {{ $address['city'] ?? 'N/A' }}</p>
+                            <p>State: {{ $address['state'] ?? 'N/A' }}</p>
+                            <p>Country: {{ $address['country'] ?? 'N/A' }}</p>
+                            <p>Zip Code: {{ $address['zipCode'] ?? 'N/A' }}</p>
+                        @else
+                            <p>No address provided</p>
+                        @endif
                     </div>
                 </div>
+
             </div>
         </div>
     </div>
@@ -183,32 +242,16 @@
 <script>
     const orderItems = @json($order -> items);
 
-    let subtotal = orderItems.reduce((sum, item) => {
-        const price = item.product && item.product.original_price ? item.product.original_price : 0;
-        return sum + (price * item.quantity);
-    }, 0);
-
-    let total = orderItems.reduce((sum, item) => {
-        const price = item.product && item.product.discounted_price ? item.product.discounted_price : 0;
-        return sum + (price * item.quantity);
-    }, 0);
-
+    let subtotal = orderItems.reduce((sum, item) => sum + (item.product.original_price * item.quantity), 0);
+    let total = orderItems.reduce((sum, item) => sum + (item.product.discounted_price * item.quantity), 0);
     let discount = subtotal - total;
-
-    let totalQuantity = orderItems.reduce((sum, item) => {
-        return sum + item.quantity;
-    }, 0);
 
     function formatIndianNumber(number) {
         return new Intl.NumberFormat('en-IN').format(number);
     }
 
-    function formatAmountWithQuantity(amount, quantity) {
-        return quantity > 1 ? `₹${formatIndianNumber(amount.toFixed(2))} (${quantity})` : `₹${formatIndianNumber(amount.toFixed(2))}`;
-    }
-
-    document.getElementById('subtotal').innerText = formatAmountWithQuantity(subtotal, totalQuantity);
-    document.getElementById('discount').innerText = formatAmountWithQuantity(discount, totalQuantity);
-    document.getElementById('total').innerText = formatAmountWithQuantity(total, totalQuantity);
+    document.getElementById('subtotal').innerText = `₹${formatIndianNumber(subtotal.toFixed(2))}`;
+    document.getElementById('discount').innerText = `₹${formatIndianNumber(discount.toFixed(2))}`;
+    document.getElementById('total').innerText = `₹${formatIndianNumber(total.toFixed(2))}`;
 </script>
 @endsection

@@ -32,18 +32,11 @@ class Order extends Model
         'delivery_date',
         'tracking_id',
         'coupon_applied',
+        'coupon_code',
         'send_invoice_to_customer',
         'approved'
     ];
-
-    protected static function booted()
-    {
-        static::created(function ($order) {
-            $order->order_number = 'DEALSMACHI_O' . $order->id;
-            $order->save();
-        });
-    }
-
+    
     public function items()
     {
         return $this->hasMany(OrderItems::class);

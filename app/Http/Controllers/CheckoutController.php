@@ -9,6 +9,7 @@ use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
 
 class CheckoutController extends Controller
 {
@@ -20,7 +21,7 @@ class CheckoutController extends Controller
         } else {
             $user = Auth::user();
             $product = Product::with(['shop'])->where('id', $id)->where('active', 1)->first();
-            $order = Order::where('customer_id',$user->id)->first();
+            $order = Order::where('customer_id',$user->id)->orderBy('id', 'desc')->first();
             return view('checkout', compact('product', 'user','order'));
         }
     }
@@ -29,22 +30,15 @@ class CheckoutController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'first_name'        => 'required|string|max:200',
-            'last_name'         => 'nullable|string|max:200',
             'email'             => 'required|email|max:200',
             'mobile'            => 'required|string|max:15',
             'order_type'        => 'required|string|max:50',
-            'notes'             => 'nullable|string',
             'payment_type'      => 'required|string|max:50',
-            'total'             => 'nullable|numeric|min:0.01',
-            'service_date'      => 'nullable|date',
-            'service_time'      => 'nullable|string|max:10',
-            'quantity'          => 'nullable|integer|min:1',
             'street'            => 'required|string',
             'city'              => 'required|string',
             'state'             => 'required|string',
             'country'           => 'required|string',
             'zipCode'           => 'required|string',
-            'coupon_applied'    => 'nullable|boolean',
             'product_id'        => 'required|integer'
         ], [
             'first_name.required'    => 'Please provide your first name.',
@@ -62,19 +56,6 @@ class CheckoutController extends Controller
             'payment_type.required'  => 'Please specify the payment type.',
             'payment_type.string'    => 'Payment type must be a valid text.',
             'payment_type.max'       => 'Payment type may not exceed 50 characters.',
-            'total.numeric'          => 'The total amount must be a valid number.',
-            'total.min'              => 'The total amount must be greater than 0.',
-            'service_date.date'      => 'Please provide a valid service date.',
-            'service_time.string'    => 'Service time must be a valid text.',
-            'service_time.max'       => 'Service time may not exceed 10 characters.',
-            'quantity.integer'       => 'Quantity must be a whole number.',
-            'quantity.min'           => 'Quantity must be at least 1.',
-            'street.required'        => 'Street is required.',
-            'city.required'          => 'City is required.',
-            'state.required'         => 'State is required.',
-            'country.required'       => 'Country is required.',
-            'zipCode.required'       => 'Zip Code is required.',
-            'coupon_applied.boolean' => 'Coupon applied must be either true or false.',
             'product_id.required'    => 'Product ID is required.',
             'product_id.integer'     => 'Product ID must be a valid integer.',
         ]);
@@ -83,41 +64,55 @@ class CheckoutController extends Controller
             return redirect()->back()->withErrors($validator)->withInput();
         }
 
-        $validatedData = $validator->validated();
-
-        $deliveryAddress = "{$validatedData['street']}, {$validatedData['city']}, {$validatedData['state']}, {$validatedData['country']}, {$validatedData['zipCode']}";
+        $address = [
+            'street' => $request->input('street'),
+            'city' => $request->input('city'),
+            'country' => $request->input('country'),
+            'state' => $request->input('state'),
+            'zipCode' => $request->input('zipCode'),
+        ];
         $user_id = Auth::check() ? Auth::id() : null;
-        $product = Product::with(['shop'])->where('id', $validatedData['product_id'])->where('active', 1)->first();
+        $product = Product::with(['shop'])->where('id', $request->input('product_id'))->where('active', 1)->first();
+        $latestOrder = Order::orderBy('id', 'desc')->first();
+        $customOrderId = $latestOrder ? intval(Str::after($latestOrder->order_id, '-')) + 1 : 1;
+        $orderNumber = 'DEALSMACHI_O' . $customOrderId;
+        
         $order = Order::create([
+            'order_number'     => $orderNumber,
             'customer_id'      => $user_id,
             'shop_id'          => $product->shop_id,
-            'first_name'       => $validatedData['first_name'],
-            'last_name'        => $validatedData['last_name'],
-            'email'            => $validatedData['email'],
-            'mobile'           => $validatedData['mobile'],
-            'order_type'       => $validatedData['order_type'],
-            'notes'            => $validatedData['notes'] ?? null,
-            'payment_type'     => $validatedData['payment_type'],
-            'payment_status'   => $validatedData['payment_status'] ?? "Pending",
-            'service_date'     => $validatedData['service_date'] ?? null,
-            'service_time'     => $validatedData['service_time'] ?? null,
-            'quantity'         => $validatedData['quantity'] ?? 1,
-            'delivery_address' => $deliveryAddress,
-            'coupon_applied'   => $validatedData['coupon_applied'] ?? false,
-            'total'            => $validatedData['total']
+            'first_name'       => $request->input('first_name'),
+            'last_name'        => $request->input('last_name'),
+            'email'            => $request->input('email'),
+            'mobile'           => $request->input('mobile'),
+            'order_type'       => $request->input('order_type'),
+            'status'           => 1, //created
+            'notes'            => $request->input('notes') ?? null,
+            'payment_type'     => $request->input('payment_type'),
+            'payment_status'   => $request->input('payment_status') ?? "Pending",
+            'total'            => $request->input('total'),
+            'service_date'     => $request->input('service_date') ?? null,
+            'service_time'     => $request->input('service_time') ?? null,
+            'quantity'         => $request->input('quantity') ?? 1,
+            'delivery_address' => json_encode($address),
+            'coupon_applied'   => $request->input('coupon_applied') ?? false,
+            'coupon_code'      => $request->input('coupon_code'),
+            
         ]);
 
         if ($order) {
             OrderItems::create([
                 'order_id'         => $order->id,
-                'product_id'       => $product->id,
-                'item_description' => $product->description ?? null,
+                'deal_id'       => $product->id,
+                'deal_name'         => $product->name,
+                'deal_originalprice' => $product->original_price,
+                'deal_description' => $product->description ?? null,
                 'quantity'         => $validatedData['quantity'] ?? 1,
-                'unit_price'       => $product['discounted_price'],
+                'deal_price'       => $product['discounted_price'],
             ]);
         }
 
-        $statusMessage = $validatedData['order_type'] == 'Product'
+        $statusMessage = $request->input('order_type') == 'Product'
             ? 'Order Created Successfully!'
             : 'Service Booked Successfully!';
 
@@ -127,7 +122,6 @@ class CheckoutController extends Controller
     public function getAllOrdersByCustomer()
     {
         $customerId = Auth::check() ? Auth::id() : null;
-
         $orders = Order::where('customer_id', $customerId)
             ->with([
                 'items.product' => function ($query) {
@@ -140,16 +134,13 @@ class CheckoutController extends Controller
                     $query->select('id', 'name');
                 }
             ])->orderBy('created_at', 'desc')->get();
-
-        $orders_count = $orders->count();
-
-        return view('orders', compact('orders', 'orders_count'));
+        return view('orders', compact('orders'));
     }
 
     public function showOrderByCustomerId($id)
     {
         $order = Order::with(['items.product', 'shop', 'customer',])->find($id);
-
+        // dd($order);
         return view('orderView', compact('order'));
     }
 }
