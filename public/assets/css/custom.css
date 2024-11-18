@@ -2261,3 +2261,9 @@ footer hr {
     left: auto !important;
     right: 0 !important;
 }
+
+.nodata{
+    display: flex;
+    align-items: center;
+    height: 100%;
+}

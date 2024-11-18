@@ -44,7 +44,7 @@
                         @if ($order->items && count($order->items) > 0 && $order->items[0]->product && $order->items[0]->product->coupon_code)
                         <span class="badge_payment">{{ $order->items[0]->product->coupon_code }}</span>
                         @else
-                        <span class="badge_payment">-</span>
+                        <span class="badge_payment">No Coupon Code</span>
                         @endif
                     </div>
                     <div class="card-body m-0 p-4">
@@ -55,12 +55,12 @@
                                     class="img-fluid" />
                             </div>
                             <div class="col">
+                                @if ($item->product)
                                 <p>
                                     {{ $item->product->name  ?? 'No Product Name Available' }}
                                 </p>
                                 <p>{{ $item->product->description  ?? 'No Product Description Available' }}</p>
                                 <p>
-                                    @if($item->product)
                                     <del class="original-price">{{ $item->product->original_price }}</del>
                                     &nbsp;&nbsp;
                                     <span class="discounted-price" style="color: #ff0060; font-size:24px">{{ $item->product->discounted_price }}</span>
@@ -69,12 +69,10 @@
                                         class="badge_danger">{{ number_format($item->product->discount_percentage, 0) }}%
                                         saved
                                     </span>
-                                    @else
-                                    <span class="original-price">-</span>
-                                    <span class="discounted-price" style="color: #ff0060; font-size:24px">-</span>&nbsp;
-                                    <span class="badge_danger">-%</span>
-                                    @endif
                                 </p>
+                                @else
+                                <div class="nodata">No Product Data Available!</div>
+                                @endif
                             </div>
                         </div>
                         @endforeach
@@ -142,10 +140,6 @@
                             <span>Total</span>
                             <span id="total"></span>
                         </div>
-                        {{-- <div class="d-flex align-items-center gap-1">
-                                <button class="badge_outline_dark">Send Invoice</button>
-                                <button class="badge_outline_pink">Collect Payment</button>
-                            </div> --}}
                     </div>
                 </div>
             </div>
@@ -198,14 +192,23 @@
         const price = item.product && item.product.discounted_price ? item.product.discounted_price : 0;
         return sum + (price * item.quantity);
     }, 0);
+
     let discount = subtotal - total;
+
+    let totalQuantity = orderItems.reduce((sum, item) => {
+        return sum + item.quantity;
+    }, 0);
 
     function formatIndianNumber(number) {
         return new Intl.NumberFormat('en-IN').format(number);
     }
 
-    document.getElementById('subtotal').innerText = `₹${formatIndianNumber(subtotal.toFixed(2))}`;
-    document.getElementById('discount').innerText = `₹${formatIndianNumber(discount.toFixed(2))}`;
-    document.getElementById('total').innerText = `₹${formatIndianNumber(total.toFixed(2))}`;
+    function formatAmountWithQuantity(amount, quantity) {
+        return quantity > 1 ? `₹${formatIndianNumber(amount.toFixed(2))} (${quantity})` : `₹${formatIndianNumber(amount.toFixed(2))}`;
+    }
+
+    document.getElementById('subtotal').innerText = formatAmountWithQuantity(subtotal, totalQuantity);
+    document.getElementById('discount').innerText = formatAmountWithQuantity(discount, totalQuantity);
+    document.getElementById('total').innerText = formatAmountWithQuantity(total, totalQuantity);
 </script>
 @endsection
