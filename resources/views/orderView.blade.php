@@ -41,10 +41,10 @@
                     <div class="card-header m-0 p-2 d-flex gap-2 align-items-center" style="background: #ffecee">
                         <p class="mb-0">Order Item</p>
                         <span class="badge_danger">{{ ucfirst($order->status ?? 'N/A') }}</span>
-                        @if ($order->items && count($order->items) > 0 && $order->items[0]->product && $order->items[0]->product->coupon_code)
-                        <span class="badge_payment">{{ $order->items[0]->product->coupon_code }}</span>
-                        @else
+                        @if ($order->coupon_code == null)
                         <span class="badge_payment">No Coupon Code</span>
+                        @else
+                        <span class="badge_payment">{{ $order->coupon_code }}</span>
                         @endif
                     </div>
                     <div class="card-body m-0 p-4">
@@ -55,18 +55,18 @@
                                     class="img-fluid" />
                             </div>
                             <div class="col">
-                                @if ($item->product)
+                                @if ($item->order_id)
                                 <p>
-                                    {{ $item->product->name  ?? 'No Product Name Available' }}
+                                    {{ $item->deal_name  ?? 'No Product Name Available' }}
                                 </p>
-                                <p>{{ $item->product->description  ?? 'No Product Description Available' }}</p>
+                                <p>{{ $item->deal_description  ?? 'No Product Description Available' }}</p>
                                 <p>
-                                    <del class="original-price">{{ $item->product->original_price }}</del>
+                                    <del class="original-price">{{ $item->deal_originalprice }}</del>
                                     &nbsp;&nbsp;
-                                    <span class="discounted-price" style="color: #ff0060; font-size:24px">{{ $item->product->discounted_price }}</span>
+                                    <span class="discounted-price" style="color: #ff0060; font-size:24px">{{ $item->deal_price }}</span>
                                     &nbsp;&nbsp;
                                     <span
-                                        class="badge_danger">{{ number_format($item->product->discount_percentage, 0) }}%
+                                        class="badge_danger">{{ number_format($item->deal_price, 0) }}%
                                         saved
                                     </span>
                                 </p>
