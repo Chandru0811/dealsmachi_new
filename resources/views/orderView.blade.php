@@ -243,7 +243,7 @@
 
                 {{-- Shipping Address --}}
                 @php
-                    $address = json_decode($order->delivery_address, true);
+                $address = json_decode($order->delivery_address, true);
                 @endphp
                 <div class="card mb-2">
                     <div class="card-header m-0 p-2" style="background: #ffecee">
@@ -251,9 +251,9 @@
                     </div>
                     <div class="card-body m-0 p-4">
                         @if($address)
-                            <p>{{ $address['street'] ?? '--' }}, {{ $address['city'] ?? '--' }}, {{ $address['state'] ?? '--' }}, {{ $address['country'] ?? '--' }},{{ $address['zipCode'] ?? '--' }}.</p>
+                        <p>{{ $address['street'] ?? '--' }}, {{ $address['city'] ?? '--' }}, {{ $address['state'] ?? '--' }}, {{ $address['country'] ?? '--' }},{{ $address['zipCode'] ?? '--' }}.</p>
                         @else
-                            <p>No address provided</p>
+                        <p>No address provided</p>
                         @endif
                     </div>
                 </div>
@@ -265,16 +265,19 @@
 <script>
     const orderItems = @json($order -> items);
 
-    let subtotal = orderItems.reduce((sum, item) => sum + (item.product.original_price * item.quantity), 0);
-    let total = orderItems.reduce((sum, item) => sum + (item.product.discounted_price * item.quantity), 0);
+    let subtotal = orderItems.reduce((sum, item) => sum + (parseFloat(item.deal_originalprice) * item.quantity), 0);
+    let total = orderItems.reduce((sum, item) => sum + (parseFloat(item.deal_price) * item.quantity), 0);
     let discount = subtotal - total;
+    let totalQuantity = orderItems.reduce((sum, item) => sum + item.quantity, 0);
 
     function formatIndianNumber(number) {
         return new Intl.NumberFormat('en-IN').format(number);
     }
 
-    document.getElementById('subtotal').innerText = `₹${formatIndianNumber(subtotal.toFixed(2))}`;
-    document.getElementById('discount').innerText = `₹${formatIndianNumber(discount.toFixed(2))}`;
-    document.getElementById('total').innerText = `₹${formatIndianNumber(total.toFixed(2))}`;
+    let quantityString = totalQuantity > 1 ? ` (${totalQuantity})` : '';
+
+    document.getElementById('subtotal').innerText = `₹${formatIndianNumber(subtotal.toFixed(2))}${quantityString}`;
+    document.getElementById('discount').innerText = `₹${formatIndianNumber(discount.toFixed(2))}${quantityString}`;
+    document.getElementById('total').innerText = `₹${formatIndianNumber(total.toFixed(2))}${quantityString}`;
 </script>
 @endsection

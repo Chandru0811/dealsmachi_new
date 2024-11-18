@@ -107,7 +107,7 @@ class CheckoutController extends Controller
                 'deal_name'         => $product->name,
                 'deal_originalprice' => $product->original_price,
                 'deal_description' => $product->description ?? null,
-                'quantity'         => $validatedData['quantity'] ?? 1,
+                'quantity'         => $request->input('quantity') ?? 1,
                 'deal_price'       => $product['discounted_price'],
             ]);
         }
@@ -122,6 +122,7 @@ class CheckoutController extends Controller
     public function getAllOrdersByCustomer()
     {
         $customerId = Auth::check() ? Auth::id() : null;
+        
         $orders = Order::where('customer_id', $customerId)
             ->with([
                 'items.product' => function ($query) {
@@ -134,13 +135,14 @@ class CheckoutController extends Controller
                     $query->select('id', 'name');
                 }
             ])->orderBy('created_at', 'desc')->get();
+
         return view('orders', compact('orders'));
     }
 
     public function showOrderByCustomerId($id)
     {
         $order = Order::with(['items.product', 'shop', 'customer',])->find($id);
-        //dd($order);
+
         return view('orderView', compact('order'));
     }
 }
