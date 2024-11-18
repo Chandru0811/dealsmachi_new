@@ -36,12 +36,10 @@
                     "Unknown Status")))))
                 }}
             </span>
-
             <span class="{{ $order->order_type === 'service' ? 'badge_default' : 'badge_payment' }}">
                 {{ ucfirst($order->order_type ?? 'N/A') }}
             </span>
         </div>
-
         <div class="row">
             {{-- Left Column: Order Item & Order Summary --}}
             <div class="col-md-8">
@@ -76,9 +74,9 @@
                             <div class="col">
                                 @if ($item->order_id)
                                 <p>
-                                    {{ $item->deal_name  ?? 'No Product Name Available' }}
+                                    {{ $item->deal_name }}
                                 </p>
-                                <p>{{ $item->deal_description  ?? 'No Product Description Available' }}</p>
+                                <p>{{ $item->deal_description }}</p>
                                 <p>
                                     <del class="original-price">{{ $item->deal_originalprice }}</del>
                                     &nbsp;&nbsp;
@@ -113,7 +111,6 @@
                         </div>
                     </div>
                 </div>
-
                 {{-- Shop Details --}}
                 <div class="card mb-4">
                     <div class="card-header m-0 p-2 d-flex gap-2 align-items-center" style="background: #ffecee">
@@ -121,50 +118,19 @@
                     </div>
                     <div class="card-body m-0 p-4">
                         @if ($order->shop)
-                        <div class="row align-items-center mb-3">
-                            <div class="col">
-                                <div class="row">
-                                    <div class="col-md-3">
-                                        <p>Company Name</p>
-                                    </div>
-                                    <div class="col-md-9">
-                                        <p>: {{ $order->shop->legal_name ?? 'N/A' }}</p>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <p>Company Email</p>
-                                    </div>
-                                    <div class="col-md-9">
-                                        <p>: {{ $order->shop->email ?? 'N/A' }}</p>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <p>Company Mobile</p>
-                                    </div>
-                                    <div class="col-md-9">
-                                        <p>: {{ $order->shop->mobile ?? 'N/A' }}</p>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <p>Description</p>
-                                    </div>
-                                    <div class="col-md-9">
-                                        <p>: {{ $order->shop->description ?? 'N/A' }}</p>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <p>Address</p>
-                                    </div>
-                                    <div class="col-md-9">
-                                        <p>: {{ $order->shop->street ?? 'N/A' }}</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                        <p>Company Name : {{ $order->shop->legal_name ?? 'N/A' }}</p>
+                        <p>Company Email : {{ $order->shop->email ?? 'N/A' }}</p>
+                        <p>Company Mobile : {{ $order->shop->mobile ?? 'N/A' }}</p>
+                        <p>Description : {{ $order->shop->description ?? 'N/A' }}</p>
+                        <p>Address : {{ $order->shop->street ?? 'N/A' }}</p>
+                        <p>Company Name : {{ $order->shop->legal_name ?? 'N/A' }}</p>
                         @else
                         <p>No Shop Details Available</p>
                         @endif
                     </div>
                 </div>
-
                 {{-- Order Summary --}}
-                <div class="card">
+                <div class="card mb-4">
                     <div class="card-header m-0 p-2 d-flex justify-content-between align-items-center"
                         style="background: #ffecee">
                         <p class="mb-0">Order Summary</p>
@@ -205,11 +171,10 @@
                     </div>
                 </div>
             </div>
-
             {{-- Right Column: Notes, Customer Info, Contact, and Address --}}
             <div class="col-md-4">
                 {{-- Notes --}}
-                <div class="card mb-2">
+                <div class="card mb-4">
                     <div class="card-header m-0 p-2" style="background: #ffecee">
                         <p class="mb-0">Notes</p>
                     </div>
@@ -217,20 +182,8 @@
                         <p>{{ $order->notes ?? 'No notes available' }}</p>
                     </div>
                 </div>
-
-                <!--{{-- Customer Info --}}-->
-                <!--<div class="card mb-2">-->
-                <!--    <div class="card-header m-0 p-2" style="background: #ffecee">-->
-                <!--        <p class="mb-0">Customer</p>-->
-                <!--    </div>-->
-                <!--    <div class="card-body m-0 p-4">-->
-                <!--        <p>Name : {{ $order->first_name }} {{ $order->last_name ?? '' }}</p>-->
-                <!--        <p>Email : {{ $order->email ?? 'No Email provided' }}</p>-->
-                <!--    </div>-->
-                <!--</div>-->
-
                 {{-- Contact Information --}}
-                <div class="card mb-2">
+                <div class="card mb-4">
                     <div class="card-header m-0 p-2" style="background: #ffecee">
                         <p class="mb-0">Contact Information</p>
                     </div>
@@ -240,12 +193,11 @@
                         <p>Phone : {{ $order->mobile ?? 'No phone number provided' }}</p>
                     </div>
                 </div>
-
                 {{-- Shipping Address --}}
                 @php
                 $address = json_decode($order->delivery_address, true);
                 @endphp
-                <div class="card mb-2">
+                <div class="card mb-4">
                     <div class="card-header m-0 p-2" style="background: #ffecee">
                         <p class="mb-0">Address</p>
                     </div>
@@ -257,7 +209,6 @@
                         @endif
                     </div>
                 </div>
-
             </div>
         </div>
     </div>
