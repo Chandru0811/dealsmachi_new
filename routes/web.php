@@ -34,14 +34,25 @@ require __DIR__ . '/auth.php';
 Route::middleware('auth')->group(function () {
     Route::get('/directCheckout/{product_id}', [CheckoutController::class, 'directcheckout'])->name('checkout.direct');
     Route::post('/checkout', [CheckoutController::class, 'checkout'])->name('checkout.checkout');
+    Route::get('/orders', [CheckoutController::class, 'getAllOrdersByCustomer'])->name('customer.orders');
+    Route::get('/orders/{id}', [CheckoutController::class, 'showOrderByCustomerId'])->name('customer.orderById');
 });
 
-Route::get('/support', function () {return view('support');});
-Route::get('/privacyPolicy', function () {return view('privacypolicy');});
-Route::get('/terms_conditions', function () {return view('termsandconditions');});
-Route::get('/contactus', function () {return view('contactus');});
-Route::get('/checkout', function () {return view('checkout');});
-
+Route::get('/support', function () {
+    return view('support');
+});
+Route::get('/privacyPolicy', function () {
+    return view('privacypolicy');
+});
+Route::get('/terms_conditions', function () {
+    return view('termsandconditions');
+});
+Route::get('/contactus', function () {
+    return view('contactus');
+});
+Route::get('/checkout', function () {
+    return view('checkout');
+});
 // Route::get('/dashboard', function () {
 //     return view('dashboard');
 // })->middleware(['auth', 'verified'])->name('dashboard');
@@ -51,4 +62,3 @@ Route::get('/checkout', function () {return view('checkout');});
 //     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
 //     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 // });
-

@@ -38,13 +38,18 @@
                             </a>
                             <ul class="dropdown-menu">
                                 <li>
-                                    <span class="dropdown-item">{{ auth()->user()->name }}</span>
+                                    <span class="dropdown-item"><i class="fa-solid fa-user"></i>&nbsp;&nbsp;
+                                        {{ auth()->user()->name }}</span>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" href="{{ url('orders') }}"><i
+                                            class="fa-regular fa-box-open"></i>&nbsp;&nbsp; Orders</a>
                                 </li>
                                 <li>
                                     <!-- Logout Link that submits a POST request -->
                                     <a class="dropdown-item" href="{{ route('logout') }}"
-                                       onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                                        Logout
+                                        onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                                        <i class="fa-solid fa-right-from-bracket"></i>&nbsp;&nbsp; Logout
                                     </a>
                                 </li>
                             </ul>
@@ -107,8 +112,8 @@
                     </button>
                     @auth
                         <div class="dropdown">
-                            <a href="#" class="dropdown-toggle text-decoration-none d-none d-xl-inline" role="button"
-                                data-bs-toggle="dropdown" aria-expanded="false">
+                            <a href="#" class="dropdown-toggle text-decoration-none d-none d-xl-inline"
+                                role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 <span class="d-none d-xl-block">
                                     <i class="fa-solid fa-circle-user"
                                         style="--fa-primary-color: #ff0060; --fa-secondary-color: #ff0060; font-size: 20px;"></i>
@@ -116,10 +121,17 @@
                             </a>
                             <ul class="dropdown-menu">
                                 <li>
-                                    <span class="dropdown-item">Chandru</span>
+                                    <span class="dropdown-item"><i class="fa-solid fa-user"></i>
+                                        &nbsp;&nbsp; {{ auth()->user()->name }}</span>
                                 </li>
                                 <li>
-                                    <a class="dropdown-item" href="{{ url('logout') }}">Logout</a>
+                                    <a class="dropdown-item" href="{{ url('orders') }}"><i
+                                            class="fa-regular fa-box-open"></i>&nbsp;&nbsp; Orders</a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" href="{{ url('logout') }}" 
+                                    onclick="event.preventDefault(); document.getElementById('logout-form').submit();" ><i
+                                            class="fa-solid fa-right-from-bracket"></i>&nbsp;&nbsp; Logout</a>
                                 </li>
                             </ul>
                         </div>

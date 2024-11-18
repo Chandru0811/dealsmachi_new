@@ -97,7 +97,7 @@ class AuthController extends Controller
             'slug' => 'required|unique:shops,slug',
             'email' => 'required|email|unique:shops,email,',
             'description' => 'required|string',
-            'external_url' => 'nullable|url',
+            'external_url' => 'nullable',
             'mobile' => 'required|string|unique:shops,mobile',
             'street' => 'nullable|string',
             'zip_code' => 'nullable|string',
