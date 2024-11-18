@@ -39,7 +39,7 @@
                             <div class="col-md-6 col-12 mb-3">
                                 <label class="form-label">First Name</label>
                                 <input type="text" class="form-control" name="first_name" id="first_name"
-                                    value="{{ old('first_name') ?: (isset($user) ? explode(' ', $user->name)[0] : '') }}" required />
+                                    value="{{ old('first_name') ?: (isset($user) ? $user->name : '') }}" required />
                                 @error('first_name')
                                 <span class="text-danger">{{ $message }}</span>
                                 @enderror
