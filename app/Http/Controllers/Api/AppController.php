@@ -20,6 +20,9 @@ use App\Models\DealClick;
 use App\Models\Dealenquire;
 use App\Models\DealShare;
 use App\Models\DealViews;
+use App\Models\Order;
+use App\Models\OrderItems;
+use Illuminate\Support\Facades\Validator;
 
 class AppController extends Controller
 {
@@ -593,4 +596,134 @@ class AppController extends Controller
         return $this->ok('Dealenquire Added Successfully!');       
     }
 
+    public function directCheckout($id, Request $request)
+    {
+        if (!Auth::check()) {
+            return $this->error('User is not authenticated. Redirecting to login.', null, 401);
+        }
+
+        $user = Auth::user();
+        $product = Product::with(['shop'])->where('id', $id)->where('active', 1)->first();
+
+        if (!$product) {
+            return $this->error('Product not found or inactive.', null, 404);
+        }
+
+        return $this->success('Direct checkout data retrieved successfully.', [
+            'product' => $product,
+            'user' => $user
+        ]);
+    }
+
+    public function checkout(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'first_name'        => 'required|string|max:200',
+            'last_name'         => 'nullable|string|max:200',
+            'email'             => 'required|email|max:200',
+            'mobile'            => 'required|string|max:15',
+            'order_type'        => 'required|string|max:50',
+            'notes'             => 'nullable|string',
+            'payment_type'      => 'required|string|max:50',
+            'total'             => 'nullable|numeric|min:0.01',
+            'service_date'      => 'nullable|date',
+            'service_time'      => 'nullable|string|max:10',
+            'quantity'          => 'nullable|integer|min:1',
+            'street'            => 'required|string',
+            'city'              => 'required|string',
+            'state'             => 'required|string',
+            'country'           => 'required|string',
+            'zipCode'           => 'required|string',
+            'coupon_applied'    => 'nullable|boolean',
+            'product_id'        => 'required|integer'
+        ]);
+
+        if ($validator->fails()) {
+            return $this->error('Validation failed.', $validator->errors(), 422);
+        }
+
+        $validatedData = $validator->validated();
+
+        $deliveryAddress = "{$validatedData['street']}, {$validatedData['city']}, {$validatedData['state']}, {$validatedData['country']}, {$validatedData['zipCode']}";
+        $user_id = Auth::check() ? Auth::id() : null;
+        $product = Product::with(['shop'])->where('id', $validatedData['product_id'])->where('active', 1)->first();
+
+        if (!$product) {
+            return $this->error('Product not found or inactive.', null, 404);
+        }
+
+        $order = Order::create([
+            'customer_id'      => $user_id,
+            'shop_id'          => $product->shop_id,
+            'first_name'       => $validatedData['first_name'],
+            'last_name'        => $validatedData['last_name'],
+            'email'            => $validatedData['email'],
+            'mobile'           => $validatedData['mobile'],
+            'order_type'       => $validatedData['order_type'],
+            'notes'            => $validatedData['notes'] ?? null,
+            'payment_type'     => $validatedData['payment_type'],
+            'payment_status'   => $validatedData['payment_status'] ?? "Pending",
+            'service_date'     => $validatedData['service_date'] ?? null,
+            'service_time'     => $validatedData['service_time'] ?? null,
+            'quantity'         => $validatedData['quantity'] ?? 1,
+            'delivery_address' => $deliveryAddress,
+            'coupon_applied'   => $validatedData['coupon_applied'] ?? false,
+            'total'            => $validatedData['total']
+        ]);
+
+        if (!$order) {
+            return $this->error('Failed to create order.', null, 500);
+        }
+
+        OrderItems::create([
+            'order_id'         => $order->id,
+            'product_id'       => $product->id,
+            'item_description' => $product->description ?? null,
+            'quantity'         => $validatedData['quantity'] ?? 1,
+            'unit_price'       => $product['discounted_price'],
+        ]);
+
+        $statusMessage = $validatedData['order_type'] == 'Product'
+            ? 'Order Created Successfully!'
+            : 'Service Booked Successfully!';
+
+        return $this->success($statusMessage, $order);
+    }
+
+    public function getAllOrdersByCustomer()
+    {
+        $customerId = Auth::check() ? Auth::id() : null;
+
+        if (!$customerId) {
+            return $this->error('User is not authenticated.', null, 401);
+        }
+
+        $orders = Order::where('customer_id', $customerId)
+            ->with([
+                'items.product' => function ($query) {
+                    $query->select('id', 'name', 'image_url1', 'description', 'original_price', 'discounted_price', 'discount_percentage');
+                },
+                'shop' => function ($query) {
+                    $query->select('id', 'name');
+                },
+                'customer' => function ($query) {
+                    $query->select('id', 'name');
+                }
+            ])
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        return $this->success('Orders retrieved successfully.', $orders);
+    }
+
+    public function showOrderByCustomerId($id)
+    {
+        $order = Order::with(['items.product', 'shop', 'customer'])->find($id);
+
+        if (!$order) {
+            return $this->error('Order not found.', null, 404);
+        }
+
+        return $this->success('Order details retrieved successfully.', $order);
+    }
 }
