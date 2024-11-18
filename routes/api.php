@@ -142,6 +142,14 @@ Route::middleware('auth:api')->group(function () {
         Route::get('orders/{shop_id}', [ShopController::class, 'getAllOrdersByShop']);
         Route::get('order/{id}', [ShopController::class, 'showOrderById']);
     });
+
+    //Customer
+    Route::middleware('role:3')->prefix('customer')->group(function () {
+        Route::get('/directCheckout/{product_id}', [AppController::class, 'directcheckout']);
+        Route::post('/checkout', [AppController::class, 'checkout']);
+        Route::get('/orders', [AppController::class, 'getAllOrdersByCustomer']);
+        Route::get('/orders/{id}', [AppController::class, 'showOrderByCustomerId']);
+    });
 });
 
 // //Announcements
