@@ -39,7 +39,7 @@ class Order extends Model
     protected static function booted()
     {
         static::created(function ($order) {
-            $order->order_number = 'DEALSLAH_O' . $order->id;
+            $order->order_number = 'DEALSMACHI_O' . $order->id;
             $order->save();
         });
     }

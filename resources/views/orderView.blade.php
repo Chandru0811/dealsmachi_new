@@ -26,10 +26,10 @@
                 Order ID: <span>{{ $order->order_number }}</span>&nbsp;
             </h4>
             <span class="badge_warning">
-                {{ $order->status ?? 'N/A' }}
+                {{ ucfirst($order->status ?? 'N/A') }}
             </span>
             <span class="{{ $order->order_type === 'service' ? 'badge_default' : 'badge_payment' }}">
-                {{ $order->order_type ?? 'N/A' }}
+                {{ ucfirst($order->order_type ?? 'N/A') }}
             </span>
         </div>
 
@@ -40,31 +40,40 @@
                 <div class="card mb-4">
                     <div class="card-header m-0 p-2 d-flex gap-2 align-items-center" style="background: #ffecee">
                         <p class="mb-0">Order Item</p>
-                        <span class="badge_danger">{{ $order->status ?? 'N/A' }}</span>
-                        @if ($order->items && count($order->items) > 0 && $order->items[0]->product->coupon_code)
+                        <span class="badge_danger">{{ ucfirst($order->status ?? 'N/A') }}</span>
+                        @if ($order->items && count($order->items) > 0 && $order->items[0]->product && $order->items[0]->product->coupon_code)
                         <span class="badge_payment">{{ $order->items[0]->product->coupon_code }}</span>
+                        @else
+                        <span class="badge_payment">-</span>
                         @endif
                     </div>
                     <div class="card-body m-0 p-4">
                         @foreach ($order->items as $item)
                         <div class="row align-items-center mb-3">
                             <div class="col-md-3">
-                                <img src="{{ asset($item->product->image_url1) }}" alt="{{ $item->product->name }}"
+                                <img src="{{ asset($item->product->image_url1 ?? 'assets/images/home/noImage.png') }}" alt="{{ $item->product->name  ?? 'No Product Name Available' }}"
                                     class="img-fluid" />
                             </div>
                             <div class="col">
                                 <p>
-                                    {{ $item->product->name }}
+                                    {{ $item->product->name  ?? 'No Product Name Available' }}
                                 </p>
-                                <p>{{ $item->product->description }}</p>
+                                <p>{{ $item->product->description  ?? 'No Product Description Available' }}</p>
                                 <p>
-                                    <del>₹
-                                        {{ number_format($item->product->original_price, 0) }}</del>&nbsp;&nbsp;
-                                    <span style="color: #dc3545; font-size:24px">₹
-                                        {{ number_format($item->product->discounted_price, 0) }}</span>&nbsp;&nbsp;
+                                    @if($item->product)
+                                    <del class="original-price">{{ $item->product->original_price }}</del>
+                                    &nbsp;&nbsp;
+                                    <span class="discounted-price" style="color: #ff0060; font-size:24px">{{ $item->product->discounted_price }}</span>
+                                    &nbsp;&nbsp;
                                     <span
                                         class="badge_danger">{{ number_format($item->product->discount_percentage, 0) }}%
-                                        saved</span>
+                                        saved
+                                    </span>
+                                    @else
+                                    <span class="original-price">-</span>
+                                    <span class="discounted-price" style="color: #ff0060; font-size:24px">-</span>&nbsp;
+                                    <span class="badge_danger">-%</span>
+                                    @endif
                                 </p>
                             </div>
                         </div>
@@ -76,7 +85,7 @@
                                 @if ($order->order_type === 'service')
                                 <div class="d-flex gap-4">
                                     <p>Service Date: {{ $order->service_date ?? ' ' }}</p>
-                                    <p>Service Time: {{ $order->service_time ?? ' ' }}</p>
+                                    <p>Service Time: {{ \Carbon\Carbon::parse($order->service_time)->format('h:i A') ?? ' ' }}</p>
                                 </div>
                                 @else
                                 <div class="d-flex gap-4">
@@ -95,42 +104,11 @@
                     </div>
                     <div class="card-body m-0 p-4">
                         @if ($order->shop)
-                        <div class="row align-items-center mb-3">
-                            <div class="col">
-                                <div class="row">
-                                    <div class="col-md-3">
-                                        <p>Company Name</p>
-                                    </div>
-                                    <div class="col-md-9">
-                                        <p>: {{ $order->shop->legal_name ?? 'N/A' }}</p>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <p>Company Email</p>
-                                    </div>
-                                    <div class="col-md-9">
-                                        <p>: {{ $order->shop->email ?? 'N/A' }}</p>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <p>Company Mobile</p>
-                                    </div>
-                                    <div class="col-md-9">
-                                        <p>: {{ $order->shop->mobile ?? 'N/A' }}</p>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <p>Description</p>
-                                    </div>
-                                    <div class="col-md-9">
-                                        <p>: {{ $order->shop->description ?? 'N/A' }}</p>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <p>Address</p>
-                                    </div>
-                                    <div class="col-md-9">
-                                        <p>: {{ $order->shop->street ?? 'N/A' }}</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                        <p>Company Name : {{ $order->shop->legal_name ?? 'N/A' }}</p>
+                        <p>Company Email : {{ $order->shop->email ?? 'N/A' }}</p>
+                        <p>Company Mobile : {{ $order->shop->mobile ?? 'N/A' }}</p>
+                        <p>Description : {{ $order->shop->description ?? 'N/A' }}</p>
+                        <p>Address : {{ $order->shop->street ?? 'N/A' }}</p>
                         @else
                         <p>No Shop Details Available</p>
                         @endif
@@ -138,7 +116,7 @@
                 </div>
 
                 {{-- Order Summary --}}
-                <div class="card">
+                <div class="card mb-4">
                     <div class="card-header m-0 p-2 d-flex justify-content-between align-items-center"
                         style="background: #ffecee">
                         <p class="mb-0">Order Summary</p>
@@ -175,7 +153,7 @@
             {{-- Right Column: Notes, Customer Info, Contact, and Address --}}
             <div class="col-md-4">
                 {{-- Notes --}}
-                <div class="card mb-2">
+                <div class="card mb-4">
                     <div class="card-header m-0 p-2" style="background: #ffecee">
                         <p class="mb-0">Notes</p>
                     </div>
@@ -183,20 +161,8 @@
                         <p>{{ $order->notes ?? 'No notes available' }}</p>
                     </div>
                 </div>
-
-                {{-- Customer Info --}}
-                <div class="card mb-2">
-                    <div class="card-header m-0 p-2" style="background: #ffecee">
-                        <p class="mb-0">Customer</p>
-                    </div>
-                    <div class="card-body m-0 p-4">
-                        <p>Name : {{ $order->first_name }} {{ $order->last_name ?? '' }}</p>
-                        <p>Email : {{ $order->email ?? 'No Email provided' }}</p>
-                    </div>
-                </div>
-
                 {{-- Contact Information --}}
-                <div class="card mb-2">
+                <div class="card mb-4">
                     <div class="card-header m-0 p-2" style="background: #ffecee">
                         <p class="mb-0">Contact Information</p>
                     </div>
@@ -208,7 +174,7 @@
                 </div>
 
                 {{-- Shipping Address --}}
-                <div class="card mb-2">
+                <div class="card mb-4">
                     <div class="card-header m-0 p-2" style="background: #ffecee">
                         <p class="mb-0">Address</p>
                     </div>
@@ -223,8 +189,15 @@
 <script>
     const orderItems = @json($order -> items);
 
-    let subtotal = orderItems.reduce((sum, item) => sum + (item.product.original_price * item.quantity), 0);
-    let total = orderItems.reduce((sum, item) => sum + (item.product.discounted_price * item.quantity), 0);
+    let subtotal = orderItems.reduce((sum, item) => {
+        const price = item.product && item.product.original_price ? item.product.original_price : 0;
+        return sum + (price * item.quantity);
+    }, 0);
+
+    let total = orderItems.reduce((sum, item) => {
+        const price = item.product && item.product.discounted_price ? item.product.discounted_price : 0;
+        return sum + (price * item.quantity);
+    }, 0);
     let discount = subtotal - total;
 
     function formatIndianNumber(number) {

@@ -36,7 +36,7 @@
                                         style="--fa-primary-color: #ff0060; --fa-secondary-color: #ff0060; font-size: 20px;"></i>
                                 </span>
                             </a>
-                            <ul class="dropdown-menu">
+                            <ul class="dropdown-menu profile-menu">
                                 <li>
                                     <span class="dropdown-item"><i class="fa-solid fa-user"></i>&nbsp;&nbsp;
                                         {{ auth()->user()->name }}</span>
@@ -119,7 +119,7 @@
                                         style="--fa-primary-color: #ff0060; --fa-secondary-color: #ff0060; font-size: 20px;"></i>
                                 </span>
                             </a>
-                            <ul class="dropdown-menu">
+                            <ul class="dropdown-menu profile-menu">
                                 <li>
                                     <span class="dropdown-item"><i class="fa-solid fa-user"></i>
                                         &nbsp;&nbsp; {{ auth()->user()->name }}</span>

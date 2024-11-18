@@ -11,6 +11,7 @@ use App\Models\Shop;
 use App\Models\Dealenquire;
 use App\Models\DealShare;
 use App\Models\CouponCodeUsed;
+use App\Models\Order;
 use Carbon\Carbon;
 use App\Traits\ApiResponses;
 use Illuminate\Support\Facades\Auth;
@@ -32,7 +33,7 @@ class DashboardController extends Controller
         $discountcopied = CouponCodeUsed::whereIn('deal_id',$productIds)->Count();
         $dealshares = DealShare::whereIn('deal_id',$productIds)->Count();
         $dealenquires = Dealenquire::whereIn('deal_id',$productIds)->Count();
-
+        $orderscount = Order::where('shop_id', $shopId)->count();
 
         $startOfWeek = Carbon::now()->startOfWeek();
         $endOfWeek = Carbon::now()->endOfWeek();
@@ -42,7 +43,6 @@ class DashboardController extends Controller
         $discountCopiedData = [];
         $dealSharesData = [];
         $dealEnquiresData = [];
-
 
         foreach (range(0, 6) as $day) {
             $currentDay = $startOfWeek->copy()->addDays($day);
@@ -94,7 +94,6 @@ class DashboardController extends Controller
             ]
         ];
 
-
         $dashboardData = [
             'totaldealclicks' => $dealclicks,
             'totaldealviews' => $dealviews,
@@ -102,6 +101,7 @@ class DashboardController extends Controller
             'totaldealshared' => $dealshares,
             'totaldealenquired' => $dealenquires,
             'totalproductscount' => $productscount,
+            'totalorderscount' => $orderscount,
             'products'=>$products,
             'chatdata' => $chartdata
         ];

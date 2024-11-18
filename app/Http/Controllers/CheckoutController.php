@@ -126,6 +126,7 @@ class CheckoutController extends Controller
     public function getAllOrdersByCustomer()
     {
         $customerId = Auth::check() ? Auth::id() : null;
+
         $orders = Order::where('customer_id', $customerId)
             ->with([
                 'items.product' => function ($query) {
@@ -138,12 +139,16 @@ class CheckoutController extends Controller
                     $query->select('id', 'name');
                 }
             ])->orderBy('created_at', 'desc')->get();
-        return view('orders', compact('orders'));
+
+        $orders_count = $orders->count();
+
+        return view('orders', compact('orders', 'orders_count'));
     }
 
     public function showOrderByCustomerId($id)
     {
         $order = Order::with(['items.product', 'shop', 'customer',])->find($id);
+
         return view('orderView', compact('order'));
     }
 }

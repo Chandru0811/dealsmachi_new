@@ -597,6 +597,8 @@ function showAddress(country) {
 
 document.addEventListener("DOMContentLoaded", function () {
     function formatIndianNumber(number) {
+        if (isNaN(number)) return "-";
+        
         let [integerPart, decimalPart] = number.toString().split(".");
 
         let lastThree = integerPart.slice(-3);

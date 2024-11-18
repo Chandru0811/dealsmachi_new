@@ -63,7 +63,6 @@ class ShopController extends Controller
             'email.email' => 'The email must be a valid email address.',
             'email.unique' => 'The email must be unique.',
             'description.required' => 'The description field is required.',
-            'external_url.url' => 'The website URL must be a valid URL.',
             'mobile.required' => 'The mobile number is required.',
             'mobile.unique' => 'Mobile number already exists',
             'logo.required' => 'The logo field is required.',

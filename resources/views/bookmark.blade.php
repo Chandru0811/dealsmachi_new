@@ -20,7 +20,7 @@
             @php
             $deal = $bookmark->deal;
             @endphp
-            <div class="col-md-4 col-lg-4 col-12 mb-3 d-flex align-items-stretch justify-content-center">
+            <div class="col-md-4 col-lg-3 col-12 mb-3 d-flex align-items-stretch justify-content-center">
                 <!-- Click event on this wrapper div instead of <a> tag -->
                 <div class="clickable-card" data-deal-id="{{ $deal->id }}">
                     <a href="{{ url('/deal/' . $deal->id) }}" style="text-decoration: none;" onclick="clickCount('{{ $deal->id }}')">
