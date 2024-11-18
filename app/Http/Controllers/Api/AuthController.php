@@ -74,7 +74,7 @@ class AuthController extends Controller
             'name' => $request->name,
             'email' => $request->email,
             'password' => bcrypt($request->password),
-            'role' => 2
+            'role' => $request->role
         ]);
 
         Auth::login($user);
@@ -83,7 +83,7 @@ class AuthController extends Controller
         $success['token'] = $token;
         $success['userDetails'] =  $user;
 
-        return $this->success('Vendor Registered Successfully!', $success);
+        return $this->success('Registered Successfully!', $success);
     }
 
     public function shopregistration(Request $request)

@@ -35,7 +35,6 @@ class RegisteredUserController extends Controller
             'email' => [
                 'required',
                 'string',
-                'lowercase',
                 'email',
                 'max:255',
                 Rule::unique(User::class)->where(function ($query) {
