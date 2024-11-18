@@ -89,7 +89,7 @@ class CheckoutController extends Controller
             'status'           => 1, //created
             'notes'            => $request->input('notes') ?? null,
             'payment_type'     => $request->input('payment_type'),
-            'payment_status'   => $request->input('payment_status') ?? "Pending",
+            'payment_status'   => $request->input('payment_status') ?? "1",
             'total'            => $request->input('total'),
             'service_date'     => $request->input('service_date') ?? null,
             'service_time'     => $request->input('service_time') ?? null,

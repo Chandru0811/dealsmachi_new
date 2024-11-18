@@ -11,7 +11,7 @@
         </h3>
         <a href="/" class="text-decoration-none">
             <button type="button" class="btn showmoreBtn">
-                Show more
+                Shop more
             </button>
         </a>
     </div>
@@ -22,7 +22,15 @@
             <div class="d-flex justify-content-between align-items-center">
                 <p>
                     Order Id: <span>{{ $order->order_number ?? 'N/A' }}</span>&nbsp;
-                    <span class="badge_payment">{{ ucfirst($order->status ?? 'N/A') }}</span>&nbsp;
+                    <span class="badge_payment">{{
+                        $order->status === "1" ? "Created" :
+                        ($order->status === "2" ? "Payment Error" :
+                        ($order->status === "3" ? "Confirmed" :
+                        ($order->status === "4" ? "Awaiting Delivery" :
+                        ($order->status === "5" ? "Delivered" :
+                        ($order->status === "6" ? "Returned" :
+                        ($order->status === "7" ? "Cancelled" : "Unknown Status"))))))
+                    }}</span>&nbsp;
                     @if ($order->coupon_applied)
                     <span class="badge_warning">
                         {{ ucfirst($order->order_type ?? 'N/A') }}
@@ -40,19 +48,19 @@
                     </div>
                     <div class="col-lg-9 col-md-9 col-12">
                         @foreach ($order->items as $item)
-                        @if ($item->product)
+                        @if ($item)
                         <p class="mb-1">
-                            {{ $item->product->name }}
+                            {{ $item->deal_name }}
                         </p>
                         <p class="mb-1">
-                            {{ $item->product->description }}
+                            {{ $item->deal_description }}
                         </p>
                         <p>
-                            <del class="original-price">{{ $item->product->original_price }}</del> &nbsp;
+                            <del class="original-price">{{ $item->deal_originalprice }}</del> &nbsp;
                             <span class="discounted-price" style="color: #ff0060; font-size:24px">
-                                {{ $item->product->discounted_price }}
+                                {{ $item->deal_price }}
                             </span> &nbsp;
-                            <span class="badge_payment">{{ number_format($item->product->discount_percentage, 0) }}%
+                            <span class="badge_payment">{{ number_format($item->discount_percentage, 0) }}%
                                 saved</span>
                         </p>
                         @else
