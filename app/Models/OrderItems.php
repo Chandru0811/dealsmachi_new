@@ -15,6 +15,8 @@ class OrderItems extends Model
         'deal_name',
         'deal_originalprice',
         'deal_description',
+        'coupon_code',
+        'discount_percentage',
         'quantity',
         'deal_price'
     ];

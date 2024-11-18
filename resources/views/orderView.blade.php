@@ -26,8 +26,17 @@
                 Order ID: <span>{{ $order->order_number }}</span>&nbsp;
             </h4>
             <span class="badge_warning">
-                {{ ucfirst($order->status ?? 'N/A') }}
+                {{
+                    $order->payment_status	 === "1" ? "Unpaid" :
+                    ($order->payment_status	 === "2" ? "Pending" :
+                    ($order->payment_status	 === "3" ? "Paid" :
+                    ($order->payment_status	 === "4" ? "Refund Initiated" :
+                    ($order->payment_status	 === "5" ? "Refunded" :
+                    ($order->payment_status	 === "6" ? "Refund Error" :
+                    "Unknown Status")))))
+                }}
             </span>
+
             <span class="{{ $order->order_type === 'service' ? 'badge_default' : 'badge_payment' }}">
                 {{ ucfirst($order->order_type ?? 'N/A') }}
             </span>
@@ -40,11 +49,21 @@
                 <div class="card mb-4">
                     <div class="card-header m-0 p-2 d-flex gap-2 align-items-center" style="background: #ffecee">
                         <p class="mb-0">Order Item</p>
-                        <span class="badge_danger">{{ ucfirst($order->status ?? 'N/A') }}</span>
-                        @if ($order->coupon_code == null)
+                        <span class="badge_danger">
+                            {{
+                                $order->status === "1" ? "Created" :
+                                ($order->status === "2" ? "Payment Error" :
+                                ($order->status === "3" ? "Confirmed" :
+                                ($order->status === "4" ? "Awaiting Delivery" :
+                                ($order->status === "5" ? "Delivered" :
+                                ($order->status === "6" ? "Returned" :
+                                ($order->status === "7" ? "Cancelled" : "Unknown Status"))))))
+                            }}
+                        </span>
+                        @if ($order->items[0]->coupon_code == null)
                         <span class="badge_payment">No Coupon Code</span>
                         @else
-                        <span class="badge_payment">{{ $order->coupon_code }}</span>
+                        <span class="badge_payment">{{ $order->items[0]->coupon_code }}</span>
                         @endif
                     </div>
                     <div class="card-body m-0 p-4">
@@ -66,7 +85,7 @@
                                     <span class="discounted-price" style="color: #ff0060; font-size:24px">{{ $item->deal_price }}</span>
                                     &nbsp;&nbsp;
                                     <span
-                                        class="badge_danger">{{ number_format($item->deal_price, 0) }}%
+                                        class="badge_danger">{{ number_format($item->discount_percentage, 0) }}%
                                         saved
                                     </span>
                                 </p>
@@ -154,7 +173,15 @@
                                 class="{{ $order->payment_type === 'online_payment' ? 'badge_default' : 'badge_payment' }}">
                                 {{ ucfirst(str_replace('_', ' ', $order->payment_type ?? 'Pending')) }}
                             </span>&nbsp;
-                            <span class="badge_warning">{{ $order->payment_status ?? 'Pending' }}</span>
+                            <span class="badge_warning">{{
+                                $order->payment_status	 === "1" ? "Unpaid" :
+                                ($order->payment_status	 === "2" ? "Pending" :
+                                ($order->payment_status	 === "3" ? "Paid" :
+                                ($order->payment_status	 === "4" ? "Refund Initiated" :
+                                ($order->payment_status	 === "5" ? "Refunded" :
+                                ($order->payment_status	 === "6" ? "Refund Error" :
+                                "Unknown Status")))))
+                            }}</span>
                         </p>
                     </div>
                     <div class="card-body m-0 p-4">
@@ -224,11 +251,7 @@
                     </div>
                     <div class="card-body m-0 p-4">
                         @if($address)
-                            <p>Street: {{ $address['street'] ?? 'N/A' }}</p>
-                            <p>City: {{ $address['city'] ?? 'N/A' }}</p>
-                            <p>State: {{ $address['state'] ?? 'N/A' }}</p>
-                            <p>Country: {{ $address['country'] ?? 'N/A' }}</p>
-                            <p>Zip Code: {{ $address['zipCode'] ?? 'N/A' }}</p>
+                            <p>{{ $address['street'] ?? '--' }}, {{ $address['city'] ?? '--' }}, {{ $address['state'] ?? '--' }}, {{ $address['country'] ?? '--' }},{{ $address['zipCode'] ?? '--' }}.</p>
                         @else
                             <p>No address provided</p>
                         @endif

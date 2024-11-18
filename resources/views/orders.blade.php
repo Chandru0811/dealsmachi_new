@@ -5,8 +5,8 @@
     <div class="d-flex justify-content-between mb-3">
         <h3 style="color: #ff0060">
             My Orders
-            @if($orders_count > 0)
-            ({{ $orders_count }})
+            @if(count($orders) > 0)
+            ({{ count($orders) }})
             @endif
         </h3>
         <a href="/" class="text-decoration-none">
@@ -35,7 +35,8 @@
                 <div class="row">
                     <div class="col-lg-3 col-md-3 col-12">
                         <img src="{{ asset($order->items->first()->product->image_url1 ?? 'assets/images/home/noImage.png') }}"
-                            alt="{{ $order->items->first()->product->name ?? 'No Product Available' }}" class="img-fluid" />
+                            alt="{{ $order->items->first()->product->name ?? 'No Product Available' }}"
+                            class="img-fluid" />
                     </div>
                     <div class="col-lg-9 col-md-9 col-12">
                         @foreach ($order->items as $item)
