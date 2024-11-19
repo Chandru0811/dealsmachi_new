@@ -23,6 +23,7 @@ use App\Models\DealViews;
 use App\Models\Order;
 use App\Models\OrderItems;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
 
 class AppController extends Controller
 {
@@ -682,6 +683,8 @@ class AppController extends Controller
                 'deal_description' => $product->description ?? null,
                 'quantity'         => $request->input('quantity') ?? 1,
                 'deal_price'       => $product['discounted_price'],
+                'discount_percentage' => $product->discount_percentage,
+                'coupon_code' => $product->coupon_code
             ]);
         }
 

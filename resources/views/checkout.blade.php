@@ -207,8 +207,8 @@
                             <hr />
                             <div class="d-flex justify-content-between">
                                 <div>
-                                    <p>Subtotal</p>
-                                    <p>Discount</p>
+                                    <p>Subtotal <span id="quantitySubtotal"></span></p>
+                                    <p>Discount <span id="quantityDiscount"></span></p>
                                 </div>
                                 <div>
                                     <p id="subtotal"></p>
@@ -217,7 +217,7 @@
                             </div>
                             <hr class="mt-1" />
                             <div class="d-flex justify-content-between">
-                                <p class="mb-0">Total</p>
+                                <p class="mb-0">Total <span id="quantityTotal"></span></p>
                                 <p class="mb-0" id="displayedtotal" style="color: #ff0060; font-size: 24px;"></p>
                             </div>
                             <!-- Hidden Total Input Field -->
@@ -259,6 +259,12 @@
         $('#total').val(newTotal.toFixed(2));
 
         $('#savings').text(`₹${formatIndianNumber(discount.toFixed(2))}`);
+
+        if (quantity > 1) {
+            $('#quantitySubtotal, #quantityDiscount, #quantityTotal').text(`(x${quantity})`);
+        } else {
+            $('#quantitySubtotal, #quantityDiscount, #quantityTotal').text('');
+        }
     }
 
     $('#increaseQuantity').click(function() {

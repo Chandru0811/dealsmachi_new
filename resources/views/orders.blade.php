@@ -42,8 +42,9 @@
             <div class="d-flex justify-content-between align-items-start">
                 <div class="row">
                     <div class="col-lg-3 col-md-3 col-12">
-                        <img src="{{ asset($order->items->first()->product->image_url1 ?? 'assets/images/home/noImage.png') }}"
+                        <img src="{{ asset($order->items->first()->product->image_url1 ?? 'assets/images/home/noImage.webp') }}"
                             alt="{{ $order->items->first()->product->name ?? 'No Product Available' }}"
+                            onerror="this.onerror=null; this.src='{{ asset('assets/images/home/noImage.webp') }}';"
                             class="img-fluid" />
                     </div>
                     <div class="col-lg-9 col-md-9 col-12">
@@ -52,13 +53,16 @@
                         <p class="mb-1">
                             {{ $item->deal_name }}
                         </p>
-                        <p class="mb-1">
+                        <p class="mb-1 descTruncate">
                             {{ $item->deal_description }}
                         </p>
+                        @if($order->order_type === 'product')
+                        <p class="mt-1 mb-0">Quantity : {{ $item->quantity }}</p>
+                        @endif
                         <p>
-                            <del class="original-price">{{ $item->deal_originalprice }}</del> &nbsp;
+                            <del class="original-price">{{ $item->deal_originalprice * $item->quantity }}</del> &nbsp;
                             <span class="discounted-price" style="color: #ff0060; font-size:24px">
-                                {{ $item->deal_price }}
+                                {{ $item->deal_price * $item->quantity }}
                             </span> &nbsp;
                             <span class="badge_payment">{{ number_format($item->discount_percentage, 0) }}%
                                 saved</span>

@@ -68,7 +68,9 @@
                         @foreach ($order->items as $item)
                         <div class="row align-items-center mb-3">
                             <div class="col-md-3">
-                                <img src="{{ asset($item->product->image_url1 ?? 'assets/images/home/noImage.png') }}" alt="{{ $item->product->name  ?? 'No Product Name Available' }}"
+                                <img src="{{ asset($item->product->image_url1 ?? 'assets/images/home/.webp') }}" 
+                                    alt="{{ $item->product->name  ?? 'No Product Name Available' }}"
+                                    onerror="this.onerror=null; this.src='{{ asset('assets/images/home/noImage.webp') }}';"
                                     class="img-fluid" />
                             </div>
                             <div class="col">
@@ -123,7 +125,6 @@
                         <p>Company Mobile : {{ $order->shop->mobile ?? 'N/A' }}</p>
                         <p>Description : {{ $order->shop->description ?? 'N/A' }}</p>
                         <p>Address : {{ $order->shop->street ?? 'N/A' }}</p>
-                        <p>Company Name : {{ $order->shop->legal_name ?? 'N/A' }}</p>
                         @else
                         <p>No Shop Details Available</p>
                         @endif
@@ -152,22 +153,30 @@
                     </div>
                     <div class="card-body m-0 p-4">
                         <div class="d-flex justify-content-between mb-2">
-                            <span>Subtotal</span>
+                            <span>Subtotal
+                                @if($order->quantity != 1)
+                                (x{{ $order->quantity }})
+                                @endif
+                            </span>
                             <span id="subtotal"></span>
                         </div>
                         <div class="d-flex justify-content-between">
-                            <span>Discount</span>
+                            <span>Discount 
+                                @if($order->quantity != 1)
+                                (x{{ $order->quantity }})
+                                @endif
+                            </span>
                             <span id="discount"></span>
                         </div>
                         <hr />
                         <div class="d-flex justify-content-between pb-3">
-                            <span>Total</span>
+                            <span>Total
+                                @if($order->quantity != 1)
+                                (x{{ $order->quantity }})
+                                @endif
+                            </span>
                             <span id="total"></span>
                         </div>
-                        {{-- <div class="d-flex align-items-center gap-1">
-                                <button class="badge_outline_dark">Send Invoice</button>
-                                <button class="badge_outline_pink">Collect Payment</button>
-                            </div> --}}
                     </div>
                 </div>
             </div>
@@ -203,7 +212,7 @@
                     </div>
                     <div class="card-body m-0 p-4">
                         @if($address)
-                        <p>{{ $address['street'] ?? '--' }}, {{ $address['city'] ?? '--' }}, {{ $address['state'] ?? '--' }}, {{ $address['country'] ?? '--' }},{{ $address['zipCode'] ?? '--' }}.</p>
+                        <p>{{ $address['street'] ?? '--' }}, {{ $address['city'] ?? '--' }}, {{ $address['state'] ?? '--' }}, {{ $address['country'] ?? '--' }}, {{ $address['zipCode'] ?? '--' }}.</p>
                         @else
                         <p>No address provided</p>
                         @endif
@@ -219,16 +228,13 @@
     let subtotal = orderItems.reduce((sum, item) => sum + (parseFloat(item.deal_originalprice) * item.quantity), 0);
     let total = orderItems.reduce((sum, item) => sum + (parseFloat(item.deal_price) * item.quantity), 0);
     let discount = subtotal - total;
-    let totalQuantity = orderItems.reduce((sum, item) => sum + item.quantity, 0);
 
     function formatIndianNumber(number) {
         return new Intl.NumberFormat('en-IN').format(number);
     }
 
-    let quantityString = totalQuantity > 1 ? ` (${totalQuantity})` : '';
-
-    document.getElementById('subtotal').innerText = `₹${formatIndianNumber(subtotal.toFixed(2))}${quantityString}`;
-    document.getElementById('discount').innerText = `₹${formatIndianNumber(discount.toFixed(2))}${quantityString}`;
-    document.getElementById('total').innerText = `₹${formatIndianNumber(total.toFixed(2))}${quantityString}`;
+    document.getElementById('subtotal').innerText = `₹${formatIndianNumber(subtotal.toFixed(2))}`;
+    document.getElementById('discount').innerText = `₹${formatIndianNumber(discount.toFixed(2))}`;
+    document.getElementById('total').innerText = `₹${formatIndianNumber(total.toFixed(2))}`;
 </script>
 @endsection

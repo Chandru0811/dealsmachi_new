@@ -274,7 +274,7 @@ class ShopController extends Controller
                     $query->select('id', 'name');
                 },
                 'shop' => function ($query) {
-                    $query->select('id', 'name');
+                    $query->select('id', 'legal_name');
                 },
                 'customer' => function ($query) {
                     $query->select('id', 'name');

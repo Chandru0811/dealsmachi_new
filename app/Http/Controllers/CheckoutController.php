@@ -74,7 +74,7 @@ class CheckoutController extends Controller
         $user_id = Auth::check() ? Auth::id() : null;
         $product = Product::with(['shop'])->where('id', $request->input('product_id'))->where('active', 1)->first();
         $latestOrder = Order::orderBy('id', 'desc')->first();
-        $customOrderId = $latestOrder ? intval(Str::after($latestOrder->order_id, '-')) + 1 : 1;
+        $customOrderId = $latestOrder ? intval(Str::after($latestOrder->id, '-')) + 1 : 1;
         $orderNumber = 'DEALSMACHI_O' . $customOrderId;
         
         $order = Order::create([
@@ -109,6 +109,8 @@ class CheckoutController extends Controller
                 'deal_description' => $product->description ?? null,
                 'quantity'         => $request->input('quantity') ?? 1,
                 'deal_price'       => $product['discounted_price'],
+                'discount_percentage' => $product->discount_percentage,
+                'coupon_code' => $product->coupon_code
             ]);
         }
 
