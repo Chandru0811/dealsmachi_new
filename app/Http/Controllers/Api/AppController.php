@@ -659,7 +659,7 @@ class AppController extends Controller
             'email'            => $request->input('email'),
             'mobile'           => $request->input('mobile'),
             'order_type'       => $request->input('order_type'),
-            'status'           => 1, //created
+            'status'           => 1, 
             'notes'            => $request->input('notes') ?? null,
             'payment_type'     => $request->input('payment_type'),
             'payment_status'   => $request->input('payment_status') ?? "1",
@@ -680,7 +680,7 @@ class AppController extends Controller
                 'deal_name'         => $product->name,
                 'deal_originalprice' => $product->original_price,
                 'deal_description' => $product->description ?? null,
-                'quantity'         => $validatedData['quantity'] ?? 1,
+                'quantity'         => $request->input('quantity') ?? 1,
                 'deal_price'       => $product['discounted_price'],
             ]);
         }
