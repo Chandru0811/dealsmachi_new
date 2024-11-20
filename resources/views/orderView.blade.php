@@ -53,10 +53,11 @@
             <div class="col-md-8">
                 {{-- Order Item --}}
                 <div class="card mb-4">
-                    <div class="card-header m-0 p-2 d-flex gap-2 align-items-center" style="background: #ffecee">
-                        <p class="mb-0">Order Item</p>
-                        <span class="badge_danger">
-                            {{
+                    <div class="card-header m-0 p-2 d-flex gap-2 align-items-center justify-content-between" style="background: #ffecee">
+                        <p class="mb-0">
+                            <span>Order Item</span>
+                            <span class="badge_danger">
+                                {{
                                 $order->status === "1" ? "Created" :
                                 ($order->status === "2" ? "Payment Error" :
                                 ($order->status === "3" ? "Confirmed" :
@@ -65,12 +66,18 @@
                                 ($order->status === "6" ? "Returned" :
                                 ($order->status === "7" ? "Cancelled" : "Unknown Status"))))))
                             }}
-                        </span>
-                        @if ($order->items[0]->coupon_code == null)
-                        <span class="badge_payment">No Coupon Code</span>
-                        @else
-                        <span class="badge_payment">{{ $order->items[0]->coupon_code }}</span>
-                        @endif
+                            </span>
+                            @if ($order->items[0]->coupon_code == null)
+                            <span class="badge_payment">No Coupon Code</span>
+                            @else
+                            <span class="badge_payment">{{ $order->items[0]->coupon_code }}</span>
+                            @endif
+                        </p>
+                        <p class="mb-0">
+                            <span>Date : <span>{{ \Carbon\Carbon::parse($order->created_at)->format('d/m/Y') }}</span></span>
+                            &nbsp;&nbsp;
+                            <span>Time : <span>{{ \Carbon\Carbon::parse($order->created_at)->format('h:i A') }}</span></span>
+                        </p>
                     </div>
                     <div class="card-body m-0 p-4">
                         @foreach ($order->items as $item)
