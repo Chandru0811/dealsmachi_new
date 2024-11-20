@@ -101,15 +101,15 @@
                                 {{ $product->deal_type == 1 ? 'Delivery Address' : 'Address' }}
                             </h5>
                             @php
-                                // Decode the JSON data if $order is not null
-                                $orderAddress = $order ? json_decode($order->delivery_address, true) : [];
+                            // Decode the JSON data if $order is not null
+                            $orderAddress = $order ? json_decode($order->delivery_address, true) : [];
                             @endphp
                             <div class="col-12 mb-3">
                                 <label class="form-label">Street</label>
                                 <input type="text" class="form-control" name="street" id="street"
                                     value="{{ old('street', $orderAddress['street'] ?? '') }}" required />
                                 @error('street')
-                                    <span class="text-danger">{{ $message }}</span>
+                                <span class="text-danger">{{ $message }}</span>
                                 @enderror
                             </div>
                             <div class="col-md-6 col-12 mb-3">
@@ -117,7 +117,7 @@
                                 <input type="text" class="form-control" name="city" id="city"
                                     value="{{ old('city', $orderAddress['city'] ?? '') }}" required />
                                 @error('city')
-                                    <span class="text-danger">{{ $message }}</span>
+                                <span class="text-danger">{{ $message }}</span>
                                 @enderror
                             </div>
                             <div class="col-md-6 col-12 mb-3">
@@ -125,7 +125,7 @@
                                 <input type="text" class="form-control" name="state" id="state"
                                     value="{{ old('state', $orderAddress['state'] ?? '') }}" required />
                                 @error('state')
-                                    <span class="text-danger">{{ $message }}</span>
+                                <span class="text-danger">{{ $message }}</span>
                                 @enderror
                             </div>
                             <div class="col-md-6 col-12 mb-3">
@@ -133,7 +133,7 @@
                                 <input type="text" class="form-control" name="country" id="country"
                                     value="{{ old('country', $orderAddress['country'] ?? '') }}" required />
                                 @error('country')
-                                    <span class="text-danger">{{ $message }}</span>
+                                <span class="text-danger">{{ $message }}</span>
                                 @enderror
                             </div>
                             <div class="col-md-6 col-12 mb-3">
@@ -141,7 +141,7 @@
                                 <input type="text" class="form-control" name="zipCode" id="zipCode"
                                     value="{{ old('zipCode', $orderAddress['zipCode'] ?? '') }}" required />
                                 @error('zipCode')
-                                    <span class="text-danger">{{ $message }}</span>
+                                <span class="text-danger">{{ $message }}</span>
                                 @enderror
                             </div>
                         </div>
@@ -228,7 +228,16 @@
                                     value="{{ $product->coupon_code }}" readonly>
                                 <button class="btn applyBtn" type="button" id="button-addon2" disabled>Applied</button>
                             </div>
-                            <button type="submit" class="btn placeOrderBtn w-100">Place Order</button>
+                            <button
+                                type="submit"
+                                class="btn placeOrderBtn w-100 d-flex align-items-center justify-content-center"
+                                id="placeOrderBtn">
+                                <span
+                                    id="placeOrderSpinner"
+                                    class="spinner-border spinner-border-sm me-2 d-none"
+                                    aria-hidden="true"></span>
+                                Place Order
+                            </button>
                         </div>
                     </div>
                 </div>

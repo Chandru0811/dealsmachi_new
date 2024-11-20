@@ -18,7 +18,7 @@
     @if ($orders->isNotEmpty())
     @foreach ($orders as $order)
     <a class="text-decoration-none" href="{{ url('orders', ['id' => $order->id]) }}">
-        <div class="card p-3 mb-3">
+        <div class="card p-3 mb-3 orderCard">
             <div class="d-flex justify-content-between align-items-center">
                 <p>
                     Order Id: <span>{{ $order->order_number ?? 'N/A' }}</span>&nbsp;
@@ -37,7 +37,11 @@
                     </span>
                     @endif
                 </p>
-                <p>Date: <span>{{ \Carbon\Carbon::parse($order->created_at)->format('d/m/Y') }}</span></p>
+                <div class="d-flex">
+                    <p>Date : <span>{{ \Carbon\Carbon::parse($order->created_at)->format('d/m/Y') }}</span></p>
+                    &nbsp;&nbsp;
+                    <p>Time : <span>{{ \Carbon\Carbon::parse($order->created_at)->format('h:i A') }}</span></p>
+                </div>
             </div>
             <div class="d-flex justify-content-between align-items-start">
                 <div class="row">

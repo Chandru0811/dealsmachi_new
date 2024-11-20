@@ -288,6 +288,11 @@ class ShopController extends Controller
     {
         $order = Order::with(['items.product','shop','customer',])->find($id);
 
+        if ($order->approved !== 1) {
+            $order->approved = 1;
+            $order->save();
+        }
+
         if (!$order) {
             return $this->error('Order Summary Not Found.', ['error' => 'Order Summary Not Found']);
         }

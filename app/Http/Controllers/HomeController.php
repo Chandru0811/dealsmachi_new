@@ -90,6 +90,10 @@ class HomeController extends Controller
             ->where('active', 1)
             ->first();
 
+        if (!$product) {
+            return redirect()->route('home')->with('error', 'Product not found or inactive.');
+        }
+
         $bookmarkedProducts = collect();
 
         if (Auth::check()) {
@@ -99,7 +103,6 @@ class HomeController extends Controller
             $ipAddress = $request->ip();
             $bookmarkedProducts = Bookmark::where('ip_address', $ipAddress)->pluck('deal_id');
         }
-
 
         $pageurl = url()->current();
         $pagetitle = $product->name;

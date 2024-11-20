@@ -14,7 +14,7 @@ class UserController extends Controller
 
     public function getAllUser()
     {
-        $users = User::where('role', 3)->get();
+        $users = User::where('role', 3)->orderBy('created_at', 'desc')->get();
         return $this->success('User retrieved successfully.', $users);
     }
 

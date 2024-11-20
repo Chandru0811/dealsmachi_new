@@ -21,6 +21,9 @@ class CheckoutController extends Controller
         } else {
             $user = Auth::user();
             $product = Product::with(['shop'])->where('id', $id)->where('active', 1)->first();
+            if (!$product) {
+                return redirect()->route('home')->with('error', 'Product not found or inactive.');
+            }
             $order = Order::where('customer_id',$user->id)->orderBy('id', 'desc')->first();
             return view('checkout', compact('product', 'user','order'));
         }
@@ -144,6 +147,10 @@ class CheckoutController extends Controller
     public function showOrderByCustomerId($id)
     {
         $order = Order::with(['items.product', 'shop', 'customer',])->find($id);
+
+        if (!$order || Auth::id() !== $order->customer_id) {
+            return view('orderView', ['order' => null]);
+        }
 
         return view('orderView', compact('order'));
     }

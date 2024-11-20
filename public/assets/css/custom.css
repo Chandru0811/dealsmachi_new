@@ -2138,15 +2138,32 @@ footer hr {
 
 .placeOrderBtn{
     background-color: #ff0060;
-    border: 1px solid #ff0060;
+    border: 2px solid #ff0060;
     color: #fff;
 }
 
 .placeOrderBtn:hover,
 .placeOrderBtn.active{
     background-color: #fff !important;
-    border: 1px solid #ff0060 !important;
+    border: 2px solid #ff0060 !important;
     color: #ff0060 !important;
+}
+
+.placeOrderBtn:disabled {
+    background-color: #ff0060;
+    border: 1px solid #ff0060;
+    color: #fff;
+    opacity: 0.6;
+}
+
+.spinner-border {
+    color: #ff0060;
+    border-width: 2px;
+}
+
+.spinner-border-sm {
+    width: 1rem;
+    height: 1rem;
 }
 /* / Checkout / */
 
@@ -2161,6 +2178,7 @@ footer hr {
     font-size: 10px;
     border-radius: 10px;
     padding: 0 8px;
+    cursor: default;
 }
 .badge_payment {
     color: #1c9c2d;
@@ -2168,6 +2186,7 @@ footer hr {
     font-size: 10px;
     border-radius: 10px;
     padding: 0 8px;
+    cursor: default;
 }
 .badge_default {
     color: #0c61a2;
@@ -2175,6 +2194,7 @@ footer hr {
     font-size: 10px;
     border-radius: 10px;
     padding: 0 8px;
+    cursor: default;
 }
 .badge_info {
     color: #4da3ff;
@@ -2182,6 +2202,7 @@ footer hr {
     font-size: 10px;
     border-radius: 10px;
     padding: 0 8px;
+    cursor: default;
 }
 
 .badge_danger {
@@ -2190,6 +2211,7 @@ footer hr {
     font-size: 10px;
     border-radius: 10px;
     padding: 0 8px;
+    cursor: default;
 }
 .badge_outline_dark {
     color: #ff0060;
@@ -2269,4 +2291,15 @@ footer hr {
     -webkit-box-orient: vertical;
     overflow: hidden;
     text-overflow: ellipsis;
-  }
+}
+
+.orderCard {
+    border: 1px solid #ff0060;
+}
+
+.orderCard:hover {
+    transform: translateY(-2px);
+    box-shadow: 2px 2px 5px #ff4d8546;
+    border: 1px solid #ff0060;
+    cursor: pointer;
+}

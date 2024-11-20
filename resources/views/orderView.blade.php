@@ -19,14 +19,16 @@
     <button type="button" class="btn-close btn-sm" data-bs-dismiss="alert" aria-label="Close"></button>
 </div>
 @endif
+@if($order)
 <div class="container categoryIcons p-3">
     <div>
-        <div class="d-flex align-items-center mb-4">
-            <h4 class="text-dark order_id">
-                Order ID: <span>{{ $order->order_number }}</span>&nbsp;
-            </h4>
-            <span class="badge_warning">
-                {{
+        <div class="d-flex justify-content-between">
+            <div class="d-flex align-items-center mb-4">
+                <h4 class="text-dark order_id">
+                    Order ID: <span>{{ $order->order_number }}</span>&nbsp;
+                </h4>
+                <span class="badge_warning">
+                    {{
                     $order->payment_status	 === "1" ? "Unpaid" :
                     ($order->payment_status	 === "2" ? "Pending" :
                     ($order->payment_status	 === "3" ? "Paid" :
@@ -35,10 +37,16 @@
                     ($order->payment_status	 === "6" ? "Refund Error" :
                     "Unknown Status")))))
                 }}
-            </span>
-            <span class="{{ $order->order_type === 'service' ? 'badge_default' : 'badge_payment' }}">
-                {{ ucfirst($order->order_type ?? 'N/A') }}
-            </span>
+                </span>
+                <span class="{{ $order->order_type === 'service' ? 'badge_default' : 'badge_payment' }}">
+                    {{ ucfirst($order->order_type ?? 'N/A') }}
+                </span>
+            </div>
+            <div>
+                <a href="{{ route('checkout.direct', $order->items[0]->deal_id) }}" class="text-decoration-none">
+                    <button type="button" class="btn showmoreBtn">Order again</button>
+                </a>
+            </div>
         </div>
         <div class="row">
             {{-- Left Column: Order Item & Order Summary --}}
@@ -68,16 +76,19 @@
                         @foreach ($order->items as $item)
                         <div class="row align-items-center mb-3">
                             <div class="col-md-3">
-                                <img src="{{ asset($item->product->image_url1 ?? 'assets/images/home/.webp') }}" 
+                                <img src="{{ asset($item->product->image_url1 ?? 'assets/images/home/.webp') }}"
                                     alt="{{ $item->product->name  ?? 'No Product Name Available' }}"
                                     onerror="this.onerror=null; this.src='{{ asset('assets/images/home/noImage.webp') }}';"
                                     class="img-fluid" />
                             </div>
                             <div class="col">
                                 @if ($item->order_id)
-                                <p>
-                                    {{ $item->deal_name }}
-                                </p>
+                                <a href="{{ url('/deal/' . $order->items[0]->deal_id) }}" style="color: #000;"
+                                    onclick="clickCount('{{ $order->items[0]->deal_id }}')">
+                                    <p style="font-size: 24px;">
+                                        {{ $item->deal_name }}
+                                    </p>
+                                </a>
                                 <p>{{ $item->deal_description }}</p>
                                 <p>
                                     <del class="original-price">{{ $item->deal_originalprice }}</del>
@@ -161,7 +172,7 @@
                             <span id="subtotal"></span>
                         </div>
                         <div class="d-flex justify-content-between">
-                            <span>Discount 
+                            <span>Discount
                                 @if($order->quantity != 1)
                                 (x{{ $order->quantity }})
                                 @endif
@@ -197,8 +208,8 @@
                         <p class="mb-0">Contact Information</p>
                     </div>
                     <div class="card-body m-0 p-4">
-                        <p>Name : {{ $order->customer->name ?? 'N/A' }}</p>
-                        <p>Email : {{ $order->customer->email ?? 'N/A' }}</p>
+                        <p>Name : {{ $order->first_name . ' ' . $order->last_name ?? 'N/A' }}</p>
+                        <p>Email : {{ $order->email ?? 'N/A' }}</p>
                         <p>Phone : {{ $order->mobile ?? 'No phone number provided' }}</p>
                     </div>
                 </div>
@@ -222,7 +233,19 @@
         </div>
     </div>
 </div>
+@else
+<div class="col-12 d-flex justify-content-center align-items-center text-center"
+    style="min-height: 75vh;">
+    <div class="col-12 col-md-12" style="color: rgb(128, 128, 128);">
+        <h4>Oh no! We couldn't find the order you're looking for.</h4>
+        <p style="margin-top: 10px; font-size: 14px;">Please check the order ID and try again.</p>
+        <a href="{{ url('/') }}" style="color: #007BFF; text-decoration: underline;">Back to
+            Home</a>
+    </div>
+</div>
+@endif
 <script>
+    @if($order)
     const orderItems = @json($order -> items);
 
     let subtotal = orderItems.reduce((sum, item) => sum + (parseFloat(item.deal_originalprice) * item.quantity), 0);
@@ -236,5 +259,6 @@
     document.getElementById('subtotal').innerText = `₹${formatIndianNumber(subtotal.toFixed(2))}`;
     document.getElementById('discount').innerText = `₹${formatIndianNumber(discount.toFixed(2))}`;
     document.getElementById('total').innerText = `₹${formatIndianNumber(total.toFixed(2))}`;
+    @endif
 </script>
 @endsection

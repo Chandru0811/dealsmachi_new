@@ -19,6 +19,13 @@
             <button type="button" class="btn-close btn-sm" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
     @endif
+    @if (session('error'))
+    <div class="alert alert-danger alert-dismissible fade show" role="alert"
+        style="position: fixed; top: 70px; right: 40px; z-index: 1050;">
+        {{ session('error') }}
+        <button type="button" class="btn-close btn-sm" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    @endif
     <!-- Category & Banner Start  -->
     <!-- hero section -->
     <section class="categoryIcons">
@@ -113,30 +120,6 @@
                 const baseUrl = nearestDealsLink.attr('href');
                 const newUrl = `${baseUrl}?latitude=${latitude}&longitude=${longitude}`;
                 nearestDealsLink.attr('href', newUrl);
-
-
-                // Initialize the geocoder
-                const geocoder = new google.maps.Geocoder();
-                const latlng = {
-                    lat: latitude,
-                    lng: longitude
-                };
-
-                geocoder.geocode({
-                    location: latlng
-                }, function(results, status) {
-                    if (status === 'OK') {
-                        if (results[0]) {
-                            const address = results[0].formatted_address;
-                            console.log('User Address:', address);
-                            $('.user_address').text(address);
-                        } else {
-                            console.log('No address found');
-                        }
-                    } else {
-                        console.log('Geocoder failed due to:', status);
-                    }
-                });
             }
 
             function showError(error) {
@@ -155,6 +138,52 @@
                     case error.UNKNOWN_ERROR:
                         alert("An unknown error occurred.");
                         break;
+                }
+            }
+
+            $('#nearest_deals').on('click',function(){
+                event.preventDefault();
+                navigator.permissions.query({ name: 'geolocation' }).then(function(result) {
+                            if (result.state === 'granted') {
+                                if (navigator.geolocation) {
+                            navigator.geolocation.getCurrentPosition(showlocation, showError);
+                        } else {
+                            alert("Geolocation is not supported by this browser.");
+                        }
+                    } else if (result.state === 'prompt') {
+                               if (navigator.geolocation) {
+                            navigator.geolocation.getCurrentPosition(showlocation, showError);
+                        } else {
+                            alert("Geolocation is not supported by this browser.");
+                        }
+                    } else if (result.state === 'denied') {
+                        // Notify the user to enable location permissions manually
+                        alert("Location access is denied. Please enable it in your browser settings.");
+                    }
+                });
+            });
+            
+            function showlocation(position)
+            {
+                const latitude = position.coords.latitude;
+                const longitude = position.coords.longitude;
+
+                console.log('Latitude:', latitude);
+                console.log('Longitude:', longitude);
+                
+                const nearestDealsLink = $('#nearest_deals');
+                const baseUrl = nearestDealsLink.attr('href');
+            
+                // Check if the URL already has latitude and longitude to avoid appending them again
+                if (!baseUrl.includes("latitude") && !baseUrl.includes("longitude")) {
+                    const newUrl = `${baseUrl}?latitude=${latitude}&longitude=${longitude}`;
+                    nearestDealsLink.attr('href', newUrl);
+            
+                    // Redirect to the updated URL
+                    window.location.href = newUrl;
+                } else {
+                    // If the URL already contains latitude and longitude, just navigate to it
+                    window.location.href = baseUrl;
                 }
             }
         });

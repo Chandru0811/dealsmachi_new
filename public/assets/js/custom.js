@@ -53,7 +53,7 @@ $(document).ready(function () {
             },
         },
         errorPlacement: function (error, element) {
-            error.addClass("text-light mt-1");
+            error.addClass("text-danger mt-1");
             error.insertAfter(element);
         },
         highlight: function (element) {
@@ -92,7 +92,7 @@ $(document).ready(function () {
             },
         },
         errorPlacement: function (error, element) {
-            error.addClass("text-light mt-1");
+            error.addClass("text-danger mt-1");
             error.insertAfter(element);
         },
         highlight: function (element) {
@@ -411,7 +411,7 @@ $(document).ready(function () {
 
                         handleRemoveBookmark();
                     },
-                    error: function (xhr) {},
+                    error: function (xhr) { },
                 });
             });
     }
@@ -559,10 +559,10 @@ function enquireCount(dealId) {
 
 function sendEnquiry(dealId, shopMobile, productName, productDescription) {
     enquireCount(dealId);
-    
-    const whatsappUrl = `https://wa.me/91${shopMobile}?text=` + 
+
+    const whatsappUrl = `https://wa.me/91${shopMobile}?text=` +
         encodeURIComponent(`*Hello! I visited dealslah website and found an amazing product:*\n\n${productName}\n${productDescription}\n\nHere is the product page: ${window.location.href}`);
-    
+
     window.open(whatsappUrl, '_blank');
 }
 
@@ -598,7 +598,7 @@ function showAddress(country) {
 document.addEventListener("DOMContentLoaded", function () {
     function formatIndianNumber(number) {
         if (isNaN(number)) return "-";
-        
+
         let [integerPart, decimalPart] = number.toString().split(".");
 
         let lastThree = integerPart.slice(-3);
@@ -672,7 +672,6 @@ $(document).ready(function () {
                 required: function () {
                     return dealType === 2;
                 },
-                time: true,
             },
         },
         messages: {
@@ -703,7 +702,6 @@ $(document).ready(function () {
             },
             service_time: {
                 required: "Service time is required",
-                time: "Please enter a valid time",
             },
         },
         errorPlacement: function (error, element) {
@@ -731,5 +729,30 @@ $(document).ready(function () {
                 alert.alert('close');
             }
         }, 5000);
+    });
+});
+
+$(document).ready(function () {
+    var $placeOrderSpinner = $('#placeOrderSpinner');
+
+    $('#checkoutForm').submit(function (e) {
+        e.preventDefault();
+
+        var isValid = true;
+
+        $('#checkoutForm input[required]').each(function () {
+            if ($(this).val().trim() === '') {
+                isValid = false;
+                $(this).addClass('is-invalid');
+            } else {
+                $(this).removeClass('is-invalid');
+            }
+        });
+
+        if (isValid) {
+            $placeOrderSpinner.removeClass('d-none');
+            $placeOrderSpinner.addClass('show');
+            this.submit();
+        }
     });
 });
