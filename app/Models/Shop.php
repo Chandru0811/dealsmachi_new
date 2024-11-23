@@ -40,7 +40,10 @@ class Shop extends Model
         'shop_type',
         'logo',
         'banner',
-        'map_url'
+        'map_url',
+        'shop_lattitude',
+        'shop_longtitude',
+        'address'
     ];
 
     protected $dates = ['deleted_at'];

@@ -50,9 +50,6 @@ Route::get('/terms_conditions', function () {
 Route::get('/contactus', function () {
     return view('contactus');
 });
-Route::get('/checkout', function () {
-    return view('checkout');
-});
 // Route::get('/dashboard', function () {
 //     return view('dashboard');
 // })->middleware(['auth', 'verified'])->name('dashboard');
