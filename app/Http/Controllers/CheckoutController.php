@@ -74,6 +74,7 @@ class CheckoutController extends Controller
             'state' => $request->input('state'),
             'zipCode' => $request->input('zipCode'),
         ];
+        $mobile = $request->input('mobile');
         $user_id = Auth::check() ? Auth::id() : null;
         $product = Product::with(['shop'])->where('id', $request->input('product_id'))->where('active', 1)->first();
         $latestOrder = Order::orderBy('id', 'desc')->first();
@@ -87,7 +88,7 @@ class CheckoutController extends Controller
             'first_name'       => $request->input('first_name'),
             'last_name'        => $request->input('last_name'),
             'email'            => $request->input('email'),
-            'mobile'           => $request->input('mobile'),
+            'mobile'           => $mobile,
             'order_type'       => $request->input('order_type'),
             'status'           => 1, //created
             'notes'            => $request->input('notes') ?? null,
@@ -99,8 +100,6 @@ class CheckoutController extends Controller
             'quantity'         => $request->input('quantity') ?? 1,
             'delivery_address' => json_encode($address),
             'coupon_applied'   => $request->input('coupon_applied') ?? false,
-            'coupon_code'      => $request->input('coupon_code'),
-            
         ]);
 
         if ($order) {

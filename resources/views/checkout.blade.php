@@ -60,7 +60,7 @@
                             </div>
                             <div class="col-md-6 col-12 mb-3">
                                 <label class="form-label">Mobile Number</label>
-                                <input type="text" class="form-control" name="mobile" id="mobile" value="{{ old('mobile') }}" required />
+                                <input type="text" class="form-control" name="mobile" id="mobile" value="{{ old('mobile') ?: (isset($order) ? $order->mobile : '') }}" required />
                                 @error('mobile')
                                 <span class="text-danger">{{ $message }}</span>
                                 @enderror

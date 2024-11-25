@@ -642,15 +642,10 @@ function selectPaymentOption(optionId) {
 
 $(document).ready(function () {
     const dealType = parseInt($('#checkoutForm').data('deal-type'), 10);
+    const $placeOrderSpinner = $('#placeOrderSpinner');
+    const $checkoutForm = $('#checkoutForm');
 
-    $.validator.addMethod("futureDate", function (value, element) {
-        const selectedDate = new Date(value);
-        const today = new Date();
-        today.setHours(0, 0, 0, 0);
-        return selectedDate >= today;
-    }, "Service date cannot be in the past");
-
-    const validator = $("#checkoutForm").validate({
+    $checkoutForm.validate({
         rules: {
             first_name: { required: true },
             email: { required: true, email: true },
@@ -665,8 +660,6 @@ $(document).ready(function () {
                 required: function () {
                     return dealType === 2;
                 },
-                date: true,
-                futureDate: true
             },
             service_time: {
                 required: function () {
@@ -697,8 +690,6 @@ $(document).ready(function () {
             payment_type: "Please select a payment method",
             service_date: {
                 required: "Service date is required",
-                date: "Please enter a valid date",
-                futureDate: "Service date cannot be in the past",
             },
             service_time: {
                 required: "Service time is required",
@@ -719,6 +710,19 @@ $(document).ready(function () {
             $(element).removeClass("is-invalid");
         }
     });
+
+    $checkoutForm.on('submit', function (e) {
+        e.preventDefault();
+
+        const isValid = $checkoutForm.valid();
+
+        if (isValid) {
+            $placeOrderSpinner.removeClass('d-none');
+            $placeOrderSpinner.addClass('show');
+
+            this.submit();
+        }
+    });
 });
 
 $(document).ready(function () {
@@ -729,30 +733,5 @@ $(document).ready(function () {
                 alert.alert('close');
             }
         }, 5000);
-    });
-});
-
-$(document).ready(function () {
-    var $placeOrderSpinner = $('#placeOrderSpinner');
-
-    $('#checkoutForm').submit(function (e) {
-        e.preventDefault();
-
-        var isValid = true;
-
-        $('#checkoutForm input[required]').each(function () {
-            if ($(this).val().trim() === '') {
-                isValid = false;
-                $(this).addClass('is-invalid');
-            } else {
-                $(this).removeClass('is-invalid');
-            }
-        });
-
-        if (isValid) {
-            $placeOrderSpinner.removeClass('d-none');
-            $placeOrderSpinner.addClass('show');
-            this.submit();
-        }
     });
 });

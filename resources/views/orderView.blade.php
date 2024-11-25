@@ -142,7 +142,7 @@
                         <p>Company Email : {{ $order->shop->email ?? 'N/A' }}</p>
                         <p>Company Mobile : {{ $order->shop->mobile ?? 'N/A' }}</p>
                         <p>Description : {{ $order->shop->description ?? 'N/A' }}</p>
-                        <p>Address : {{ $order->shop->street ?? 'N/A' }}</p>
+                        <p>Address : {{ $order->shop->address ?? 'N/A' }}</p>
                         @else
                         <p>No Shop Details Available</p>
                         @endif
