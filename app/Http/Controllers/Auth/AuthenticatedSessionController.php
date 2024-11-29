@@ -28,8 +28,11 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
+        $user = Auth::user();
+        $message = "Welcome {$user->name}, You have successfully logged in. \nGrab the latest DealsMachi offers now!";
+
         return redirect()->intended(route('home', [], false))
-                 ->with('status', 'LoggedIn successfully!');
+                 ->with('status', $message);
     }
 
     /**
@@ -43,6 +46,6 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerateToken();
 
-        return redirect('/');
+        return redirect('/')->with('status', 'Logged Out Successfully!');
     }
 }

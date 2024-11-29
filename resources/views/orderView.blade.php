@@ -29,7 +29,7 @@
                 </h4>
                 <span class="badge_warning">
                     {{
-                    $order->payment_status	 === "1" ? "Unpaid" :
+                    $order->payment_status	 === "1" ? "Not Paid" :
                     ($order->payment_status	 === "2" ? "Pending" :
                     ($order->payment_status	 === "3" ? "Paid" :
                     ($order->payment_status	 === "4" ? "Refund Initiated" :
@@ -138,7 +138,7 @@
                     </div>
                     <div class="card-body m-0 p-4">
                         @if ($order->shop)
-                        <p>Company Name : {{ $order->shop->legal_name ?? 'N/A' }}</p>
+                        <p>Company Name : {{ $order->shop->name ?? 'N/A' }}</p>
                         <p>Company Email : {{ $order->shop->email ?? 'N/A' }}</p>
                         <p>Company Mobile : {{ $order->shop->mobile ?? 'N/A' }}</p>
                         <p>Description : {{ $order->shop->description ?? 'N/A' }}</p>
@@ -159,7 +159,7 @@
                                 {{ ucfirst(str_replace('_', ' ', $order->payment_type ?? 'Pending')) }}
                             </span>&nbsp;
                             <span class="badge_warning">{{
-                                $order->payment_status	 === "1" ? "Unpaid" :
+                                $order->payment_status	 === "1" ? "Not Paid" :
                                 ($order->payment_status	 === "2" ? "Pending" :
                                 ($order->payment_status	 === "3" ? "Paid" :
                                 ($order->payment_status	 === "4" ? "Refund Initiated" :
