@@ -756,9 +756,47 @@ class AppController extends Controller
             ]
         );
 
-        Mail::send('email.forgotPassword', ['name' => $username, 'otp' => $otp], function($message) use($request){
+        Mail::send('email.resetpasswordbyotp', ['name' => $username, 'otp' => $otp], function($message) use($request){
             $message->to($request->email);
             $message->subject('Reset Password');
         });
+
+        return response()->json(['message' => 'We have e-mailed your password reset link!']);
     }
+
+    public function checkotp(Request $request)
+    {
+        $request->validate([
+        ]);
+
+        $updatePassword = DB::table('password_reset_otps')
+            ->where([
+                'email' => $request->email,
+                'otp' => $request->otp
+            ])
+            ->first();
+
+            if (!$updatePassword) {
+                return response()->json(['message' => 'Invalid otp']);
+            }
+
+            return response()->json(['message' => 'User Verified Successfully!']);
+    }
+
+    public function resetpassword(Request $request)
+    {
+        $request->validate([
+            'email' => 'required|email|exists:users',
+            'password' => 'required|string|min:6|confirmed',
+            'password_confirmation' => 'required'
+        ]);
+
+        $user = User::where('email', $request->email)
+            ->update(['password' => Hash::make($request->password)]);
+
+        DB::table('password_reset_otps')->where(['email' => $request->email])->delete();
+
+        return response()->json(['message' => 'Your password has been changed!']);
+    }
+
 }

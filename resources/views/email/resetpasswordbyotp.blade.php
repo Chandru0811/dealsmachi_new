@@ -92,8 +92,8 @@
 
         <!-- Content -->
         <div class="content">
-            <p style="font-size: 24px; font-weight: 750; margin-bottom: 0px;">Hello Kishore,</p>
-            <p style="margin-bottom: 0px !important;">We received a request to reset your password. Use the OTP below to reset your password, your DealsMachi OTP-1123.</p>
+            <p style="font-size: 24px; font-weight: 750; margin-bottom: 0px;">Hello {{$name}},</p>
+            <p style="margin-bottom: 0px !important;">We received a request to reset your password. Use the OTP below to reset your password, your DealsMachi OTP-{{$otp}}.</p>
             <p style="margin-top: 0px !important;">If you did not request a password reset, please ignore this email. Your password will not be changed.</p>
             <p style="border-bottom: 1px solid #c2c2c2; margin-bottom: 0px;"></p>
         </div>
