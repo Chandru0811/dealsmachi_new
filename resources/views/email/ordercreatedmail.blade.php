@@ -151,18 +151,18 @@
         <!-- Warming Message -->
         <div class="message">
             <p>Hello {{ $shop->name }},</p>
-            <p>We are excited to inform you that <strong>{{ $customer->name }}</strong> has placed an order in your shop on <span style="color: #ff0060;">DealsMachi</span>.</p>
+            <p>We are excited to inform you that <strong>{{ $orderdetails->first_name }}{{ isset($orderdetails->last_name) ? ' ' . $orderdetails->last_name : '' }}</strong> has placed an order in your shop on <span style="color: #ff0060;">DealsMachi</span>. You can contact the customer at <strong>Email: {{ $orderdetails->email }}</strong> or <strong>Mobile: {{ $orderdetails->mobile }}</strong>. Thank you for being a valued partner.</p>
         </div>
         <!-- Content -->
         <div class="content">
             <h4>Order Details</h4>
             <div class="product-details">
                 <h2>{{$orderdetails->order_number}}</h2>
-                @foreach($orderdeatils->items as $item)
-                <p class="sub-heading">Deal Name : <span class="price">{{$item->deal_name}}</span></p>
-                <p class="sub-heading">Regular Price : <span class="price">₹{{$item->deal_originalprice}}</span></p>
-                <p class="sub-heading">Offer Price: <span>₹{{$item->deal_price}}</span></p>
-                <p class="sub-heading">Discount Percentage : <span>{{$item->discount_percentage}}%</span></p>
+                @foreach($orderdetails->items as $item)
+                <p class="sub-heading">Deal Name : {{$item->deal_name}}</p>
+                <p class="sub-heading">Regular Price : <span class="price">₹{{ number_format($item->deal_originalprice, 2) }}</span></p>
+                <p class="sub-heading">Offer Price: <span>₹{{ number_format($item->deal_price, 2) }}</span></p>
+                <p class="sub-heading">Discount Percentage : <span>{{ number_format($item->discount_percentage, 0) }}%</span></p>
                 <p class="sub-heading">Coupon Code : <span>{{$item->coupon_code}}</span></p>
                 <p class="sub-heading">Quantity: <span>{{$item->quantity}}</span></p>
                 <!-- <p class="sub-heading">Service Date: <span>18-11-2024</span></p>

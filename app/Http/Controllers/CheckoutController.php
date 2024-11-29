@@ -124,7 +124,7 @@ class CheckoutController extends Controller
             ? 'Order Created Successfully!'
             : 'Service Booked Successfully!';
 
-            $shop = Shop::where('id',$product->shop_id)->first();
+        $shop = Shop::where('id',$product->shop_id)->first();
         $customer = User::where('id',$user_id)->first();
         $orderdetails = Order::where('id',$order->id)->with(['items'])->first();
 

@@ -4,7 +4,7 @@
     @if (session('status'))
         <div class="alert alert-success alert-dismissible fade show" role="alert"
             style="position: fixed; top: 70px; right: 40px; z-index: 1050;">
-            {{ session('status') }}
+            {!! nl2br(e(session('status'))) !!}
             <button type="button" class="btn-close btn-sm" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
     @endif
