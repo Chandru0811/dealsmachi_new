@@ -10,6 +10,10 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\OrderCreated;
+use App\Models\Shop;
+use App\Models\User;
 
 class CheckoutController extends Controller
 {
@@ -119,6 +123,12 @@ class CheckoutController extends Controller
         $statusMessage = $request->input('order_type') == 'Product'
             ? 'Order Created Successfully!'
             : 'Service Booked Successfully!';
+
+            $shop = Shop::where('id',$product->shop_id)->first();
+        $customer = User::where('id',$user_id)->first();
+        $orderdetails = Order::where('id',$order->id)->with(['items'])->first();
+
+        Mail::to($shop->email)->send(new OrderCreated($shop,$customer,$orderdetails));
 
         return redirect()->route('customer.orderById', ['id' => $order->id])->with('status', $statusMessage);
     }

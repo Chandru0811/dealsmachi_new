@@ -24,6 +24,7 @@ use App\Models\Order;
 use App\Models\OrderItems;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
+use App\Models\User;
 
 class AppController extends Controller
 {
@@ -728,5 +729,36 @@ class AppController extends Controller
         }
 
         return $this->success('Order details retrieved successfully.', $order);
+    }
+
+    public function forgetpassword(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'email' => 'required|email|exists:users,email',
+        ], [
+            'email.exists'   => 'The email does not exist.',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['error' => $validator->errors()], 422);
+        }
+
+        $user = User::where('email', $request->email)->first();
+        $username = $user->name;
+
+        $otp = mt_rand(100000, 999999);
+
+        DB::table('password_reset_otps')->updateOrInsert(
+            ['email' => $request->email],
+            [
+                'otp' => $otp,
+                'created_at' => Carbon::now(),
+            ]
+        );
+
+        Mail::send('email.forgotPassword', ['name' => $username, 'otp' => $otp], function($message) use($request){
+            $message->to($request->email);
+            $message->subject('Reset Password');
+        });
     }
 }
