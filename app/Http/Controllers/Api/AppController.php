@@ -606,6 +606,7 @@ class AppController extends Controller
 
         $user = Auth::user();
         $product = Product::with(['shop'])->where('id', $id)->where('active', 1)->first();
+        $order = Order::where('customer_id',$user->id)->orderBy('id', 'desc')->first();
 
         if (!$product) {
             return $this->error('Product not found or inactive.', null, 404);
@@ -613,7 +614,8 @@ class AppController extends Controller
 
         return $this->success('Direct checkout data retrieved successfully.', [
             'product' => $product,
-            'user' => $user
+            'user' => $user,
+            'order' => $order
         ]);
     }
 
