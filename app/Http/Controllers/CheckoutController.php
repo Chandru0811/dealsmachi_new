@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Mail;
 use App\Mail\OrderCreated;
 use App\Models\Shop;
 use App\Models\User;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class CheckoutController extends Controller
 {
@@ -162,4 +163,35 @@ class CheckoutController extends Controller
 
         return view('orderView', compact('order'));
     }
+
+    public function orderInvoice($id)
+    {
+        $order = Order::with('items', 'shop')->find($id);
+
+        if (!$order || Auth::id() !== $order->customer_id) {
+            return redirect()->route('orders')->with('error', 'Order not found or unauthorized access.');
+        }
+
+        $logoPath = public_path('assets/images/home/header-logo.webp');
+        $logoBase64 = null;
+
+        if (file_exists($logoPath)) {
+            $logoBase64 = 'data:image/png;base64,' . base64_encode(file_get_contents($logoPath));
+        } else {
+            $logoBase64 = 'https://dealsmachi.com/assets/images/home/header-logo.webp';
+        }
+
+        $data = [
+            'order' => $order,
+            'items' => $order->items,
+            'shop' => $order->shop,
+            'logo' => $logoBase64,
+        ];
+
+        $pdf = Pdf::loadView('orderinvoice', $data)->setOptions(['isRemoteEnabled' => true]);
+
+        $fileName = $order->order_number . '.pdf';
+        return $pdf->download($fileName);
+    }
+
 }

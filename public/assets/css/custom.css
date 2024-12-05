@@ -1243,9 +1243,9 @@ footer hr {
 .apply-button:hover,
 .apply-button.active,
 .apply-button:focus {
-    background-color: #ff0060;
+    background-color: #ff0060 !important;
     color: #fff !important;
-    font-size: 14px;
+    font-size: 14px !important;
 }
 
 .filterdropdown {
@@ -2302,4 +2302,73 @@ footer hr {
     box-shadow: 2px 2px 5px #ff4d8546;
     border: 1px solid #ff0060;
     cursor: pointer;
+}
+
+.invoiceBtn{
+    background-color: #fff;
+    border: 2px solid #ff0060;
+    color: #ff0060;
+}
+
+.invoiceBtn:hover,
+.invoiceBtn.active{
+    background-color: #ff0060 !important;
+    border: 2px solid #ff0060 !important;
+    color: #fff !important;
+}
+
+.topbarContainer{
+    white-space: nowrap;
+    background-color: #fff;
+    border-radius: 8px;
+    border: 1px solid #e8e9ea;
+    position: sticky;
+    top: 85px;
+    z-index: 1000;
+    width: 100%;
+}
+
+.topBar {
+    overflow: hidden;
+    display: flex;
+    padding: 7px;
+    scroll-behavior: smooth;
+}
+
+.topBar::-webkit-scrollbar {
+    display: none;
+}
+
+.topBar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+.topBar .btn {
+    flex-shrink: 0;
+    color: #0f172a;
+    padding: 3px 10px;
+    text-decoration: none;
+}
+  
+.topBar .btn.active {
+    color: #ff0060;
+    border: none;
+    position: relative;
+}
+
+.topBar .btn.active::after {
+    content: '';
+    position: absolute;
+    bottom: -7px;
+    left: 0;
+    right: 0;
+    height: 2.5px;
+    background-color: #ff0060;
+}
+  
+.topBar  .btn:hover {
+    background-color: #eaa7a726;
+    color: #ff0060;
+    border-radius: 20px;
 }

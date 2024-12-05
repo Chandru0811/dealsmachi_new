@@ -43,6 +43,9 @@
                 </span>
             </div>
             <div>
+                <a href="{{ route('order.invoice', $order->id) }}" class="text-decoration-none pe-2">
+                    <button type="button" class="btn invoiceBtn" data-bs-toggle="tooltip" data-bs-placement="top" title="Download Invoice"><i class="fa-solid fa-file-invoice"></i></button>
+                </a>
                 <a href="{{ route('checkout.direct', $order->items[0]->deal_id) }}" class="text-decoration-none">
                     <button type="button" class="btn showmoreBtn">Order again</button>
                 </a>
