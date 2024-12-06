@@ -24,46 +24,39 @@ class AuthController extends Controller
     use ApiResponses;
 
     public function login(Request $request)
-{
-    $validator = Validator::make($request->all(), [
-        'email' => 'required|email',
-        'password' => 'required',
-        'role' => 'required',
-    ]);
+    {
 
-    if ($validator->fails()) {
-        return response()->json(['error' => $validator->errors()], 422);
-    }
+        $validator = Validator::make($request->all(), [
+            'email' => 'required|email',
+            'password' => 'required',
+        ]);
 
-    $credentials = $request->only('email', 'password');
-    $role = $request->input('role');
-
-    // Validate user credentials along with the role
-    $user = User::where('email', $credentials['email'])
-        ->where('role', $role) // Check role to ensure correct user type
-        ->first();
-
-    if ($user && Auth::guard('web')->attempt($credentials)) {
-        $token = $user->createToken('Personal Access Token')->accessToken;
-
-        $success = [
-            'token' => $token,
-            'userDetails' => $user,
-        ];
-
-        if ($role == 3) {
-            $message = "Welcome Vendor {$user->name}, You have successfully logged in!";
-        } else {
-            $message = "Welcome User {$user->name}, You have successfully logged in!";
+        if ($validator->fails()) {
+            return response()->json(['error' => $validator->errors()], 422);
         }
 
-        return $this->success($message, $success);
-    }
+        $credentials = $request->only('email', 'password');
+        $role = $request->input('role');
 
-    return $this->error('Invalid email, password, or role. Please try again.', [
-        'error' => 'Invalid email, password, or role.',
-    ]);
-}
+        $user = User::where('email', $credentials['email'])
+        ->where('role', $role)->whereNull('deleted_at')->first();
+
+        if ($user && Auth::attempt($credentials)) {
+            $token = $user->createToken('Personal Access Token')->accessToken;
+            $success['token'] = $token;
+            $success['userDetails'] =  $user;
+
+            if ($user->role == 3) {
+                $message = "Welcome {$user->name}, You have successfully logged in. Grab the latest DealsMachi offers now!";
+            } else {
+                $message = 'LoggedIn Successfully!';
+            }
+
+            return $this->success($message, $success);
+        }
+
+        return $this->error('Invalid email or password. Please check your credentials and try again.,Email.', ['error' => 'Invalid email or password. Please check your credentials and try again.,Email']);
+    }
 
 
     public function register(Request $request)
