@@ -195,7 +195,42 @@ class AppController extends Controller
             }
         }
 
-        if ($request->has('category')) {
+        if ($request->input('category') == 0) {
+            $categorygroup = CategoryGroup::whereHas('categories')->first();
+            $query->whereHas('category', function ($query) use ($categorygroup) {
+                $query->where('category_group_id', $categorygroup->id);
+            });
+    
+            $brands = Product::where('active', 1)
+                ->whereHas('category', function ($query) use ($categorygroup) {
+                    $query->where('category_group_id', $categorygroup->id);
+                })
+                ->whereNotNull('brand')
+                ->where('brand', '!=', '')
+                ->distinct()
+                ->orderBy('brand', 'asc')
+                ->pluck('brand');
+    
+            $discounts = Product::where('active', 1)
+                ->whereHas('category', function ($query) use ($categorygroup) {
+                    $query->where('category_group_id', $categorygroup->id);
+                })
+                ->pluck('discount_percentage')
+                ->map(function ($discount) {
+                    return round($discount);
+                })
+                ->unique()
+                ->sort()
+                ->values();
+    
+            $minPrice = Product::whereHas('category', function ($query) use ($categorygroup) {
+                $query->where('category_group_id', $categorygroup->id);
+            })->min(DB::raw('LEAST(original_price, discounted_price)'));
+    
+            $maxPrice = Product::whereHas('category', function ($query) use ($categorygroup) {
+                $query->where('category_group_id', $categorygroup->id);
+            })->max(DB::raw('GREATEST(original_price, discounted_price)'));
+        } elseif ($request->has('category')) {
             $categoryId = $request->input('category');
             $query->where('category_id', $categoryId);
             
@@ -606,6 +641,7 @@ class AppController extends Controller
 
         $user = Auth::user();
         $product = Product::with(['shop'])->where('id', $id)->where('active', 1)->first();
+        $order = Order::where('customer_id',$user->id)->orderBy('id', 'desc')->first();
 
         if (!$product) {
             return $this->error('Product not found or inactive.', null, 404);
@@ -613,7 +649,8 @@ class AppController extends Controller
 
         return $this->success('Direct checkout data retrieved successfully.', [
             'product' => $product,
-            'user' => $user
+            'user' => $user,
+            'order' => $order
         ]);
     }
 

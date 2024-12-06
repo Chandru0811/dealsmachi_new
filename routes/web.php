@@ -36,6 +36,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/checkout', [CheckoutController::class, 'checkout'])->name('checkout.checkout');
     Route::get('/orders', [CheckoutController::class, 'getAllOrdersByCustomer'])->name('customer.orders');
     Route::get('/orders/{id}', [CheckoutController::class, 'showOrderByCustomerId'])->name('customer.orderById');
+    Route::get('/order/invoice/{id}', [CheckoutController::class, 'orderInvoice'])->name('order.invoice');
 });
 
 Route::get('/support', function () {
@@ -48,7 +49,7 @@ Route::get('/terms_conditions', function () {
     return view('termsandconditions');
 });
 Route::get('/contactus', function () {
-    return view('contactus');
+    return view('email.ordercreatedmail');
 });
 // Route::get('/dashboard', function () {
 //     return view('dashboard');

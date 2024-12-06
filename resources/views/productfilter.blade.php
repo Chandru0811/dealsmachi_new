@@ -8,8 +8,8 @@
     @endphp
     <form method="GET"
         action="{{ 
-        $isCategory 
-        ? route('deals.subcategorybased', ['slug' => $category->slug]) 
+        $isCategory || request('slug') === 'all' 
+        ? route('deals.subcategorybased', ['slug' => request('slug') ?? 'all'])  
         : ($isHotpick 
             ? route('deals.categorybased', ['slug' => request()->segment(2)]) 
             : route('search')
@@ -356,238 +356,256 @@
             </div>
             @endif
 
-            <div class="col-md-12 col-lg-7 col-12">
-                <div class="row pb-4">
-
-                    @foreach ($deals as $product)
-                    <div
-                        class="col-md-4 col-lg-6 col-xl-4 col-12 mb-3 d-flex justify-content-center align-items-stretch">
-                        <a href="{{ url('/deal/' . $product->id) }}" style="text-decoration: none;"
-                            onclick="clickCount('{{ $product->id }}')">
-                            <div class="card sub_topCard h-100 d-flex flex-column">
-                                <div style="min-height: 50px">
-                                    <span class="badge trending-badge">{{ $product->label }}</span>
-                                    <img src="{{ asset($product->image_url1) }}"
-                                        class="img-fluid card-img-top1" alt="card_image" />
-                                </div>
-                                <div
-                                    class="card-body card_section flex-grow-1 d-flex flex-column justify-content-between">
-                                    <div>
-                                        <div class="mt-3 d-flex align-items-center justify-content-between">
-                                            <h5 class="card-title ps-3">{{ $product->name }}</h5>
-                                            <span class="badge mx-3 p-0 trending-bookmark-badge" onclick="event.stopPropagation();">
-                                                @if ($bookmarkedProducts->contains($product->id))
-                                                <button type="button"
-                                                    class="bookmark-button remove-bookmark"
-                                                    data-deal-id="{{ $product->id }}"
-                                                    style="border: none; background: none;">
-                                                    <p style="height:fit-content;cursor:pointer"
-                                                        class="p-1 px-2">
-                                                        <i class="fa-solid fa-bookmark bookmark-icon"
-                                                            style="color: #ff0060;"></i>
-                                                    </p>
-                                                </button>
-                                                @else
-                                                <button type="button"
-                                                    class="bookmark-button add-bookmark"
-                                                    data-deal-id="{{ $product->id }}"
-                                                    style="border: none; background: none;">
-                                                    <p style="height:fit-content;cursor:pointer"
-                                                        class="p-1 px-2">
-                                                        <i class="fa-regular fa-bookmark bookmark-icon"
-                                                            style="color: #ff0060;"></i>
-                                                    </p>
-                                                </button>
-                                                @endif
-
-                                            </span>
+            <div class="col-md-12 col-lg-9 col-12">
+                @if(request()->routeIs('deals.subcategorybased'))
+                <div class="container mb-3 topbarContainer">
+                    <div class="d-flex overflow-auto topBar">
+                        <a href="{{ route('deals.subcategorybased', ['slug' => 'all']) }}"
+                            class="btn me-2 {{ request('slug') === 'all' ? 'active' : '' }}">
+                            All
+                        </a>
+                        @foreach ($categorygroup->categories as $cat)
+                        <a href="{{ route('deals.subcategorybased', ['slug' => $cat->slug]) }}"
+                            class="btn mx-2 {{ request('slug') === $cat->slug && request('slug') !== 'all' ? 'active' : '' }}">
+                            {{ $cat->name }}
+                        </a>
+                        @endforeach
+                    </div>
+                </div>
+                @endif
+                <div class="row">
+                    <div class="col-md-12 col-lg-9 col-12">
+                        <div class="row pb-4">
+                            @foreach ($deals as $product)
+                            <div
+                                class="col-md-4 col-lg-6 col-xl-4 col-12 mb-3 d-flex justify-content-center align-items-stretch">
+                                <a href="{{ url('/deal/' . $product->id) }}" style="text-decoration: none;"
+                                    onclick="clickCount('{{ $product->id }}')">
+                                    <div class="card sub_topCard h-100 d-flex flex-column">
+                                        <div style="min-height: 50px">
+                                            <span class="badge trending-badge">{{ $product->label }}</span>
+                                            <img src="{{ asset($product->image_url1) }}"
+                                                class="img-fluid card-img-top1" alt="card_image" />
                                         </div>
-                                        <span class="px-3">
-                                            @php
-                                            $fullStars = floor($product->shop->shop_ratings);
-                                            $hasHalfStar =
-                                            $product->shop->shop_ratings - $fullStars >= 0.5;
-                                            $remaining =
-                                            5 - ($hasHalfStar ? $fullStars + 1 : $fullStars);
-                                            @endphp
-                                            @for ($i = 0; $i < $fullStars; $i++)
-                                                <i class="fa-solid fa-star" style="color: #ffc200;"></i>
-                                                @endfor
-                                                @if ($hasHalfStar)
-                                                <i class="fa-solid fa-star-half-stroke"
-                                                    style="color: #ffc200;"></i>
-                                                @endif
-                                                @for ($i = 0; $i < $remaining; $i++)
-                                                    <i class="fa-regular fa-star" style="color: #ffc200;"></i>
-                                                    @endfor
-                                        </span>
-                                        <p class="px-3 fw-normal truncated-description">
-                                            {{ $product->description }}
-                                        </p>
-                                    </div>
-                                    <div>
-                                        <div class="card-divider"></div>
-                                        <p class="ps-3 fw-medium d-flex align-items-center justify-content-between"
-                                            style="color: #ff0060">
-                                            <span
-                                                class="discounted-price">{{ $product->discounted_price }}</span>
-                                            @if (!empty($product->coupon_code))
-                                            <span id="mySpan" class="mx-3 px-2 couponBadge"
-                                                onclick="copySpanText(this, event)"
-                                                data-bs-toggle="tooltip" data-bs-placement="bottom"
-                                                title="Click to Copy" style="position:relative;">
+                                        <div
+                                            class="card-body card_section flex-grow-1 d-flex flex-column justify-content-between">
+                                            <div>
+                                                <div class="mt-3 d-flex align-items-center justify-content-between">
+                                                    <h5 class="card-title ps-3">{{ $product->name }}</h5>
+                                                    <span class="badge mx-3 p-0 trending-bookmark-badge" onclick="event.stopPropagation();">
+                                                        @if ($bookmarkedProducts->contains($product->id))
+                                                        <button type="button"
+                                                            class="bookmark-button remove-bookmark"
+                                                            data-deal-id="{{ $product->id }}"
+                                                            style="border: none; background: none;">
+                                                            <p style="height:fit-content;cursor:pointer"
+                                                                class="p-1 px-2">
+                                                                <i class="fa-solid fa-bookmark bookmark-icon"
+                                                                    style="color: #ff0060;"></i>
+                                                            </p>
+                                                        </button>
+                                                        @else
+                                                        <button type="button"
+                                                            class="bookmark-button add-bookmark"
+                                                            data-deal-id="{{ $product->id }}"
+                                                            style="border: none; background: none;">
+                                                            <p style="height:fit-content;cursor:pointer"
+                                                                class="p-1 px-2">
+                                                                <i class="fa-regular fa-bookmark bookmark-icon"
+                                                                    style="color: #ff0060;"></i>
+                                                            </p>
+                                                        </button>
+                                                        @endif
 
-                                                {{ $product->coupon_code }}
+                                                    </span>
+                                                </div>
+                                                <span class="px-3">
+                                                    @php
+                                                    $fullStars = floor($product->shop->shop_ratings);
+                                                    $hasHalfStar =
+                                                    $product->shop->shop_ratings - $fullStars >= 0.5;
+                                                    $remaining =
+                                                    5 - ($hasHalfStar ? $fullStars + 1 : $fullStars);
+                                                    @endphp
+                                                    @for ($i = 0; $i < $fullStars; $i++)
+                                                        <i class="fa-solid fa-star" style="color: #ffc200;"></i>
+                                                        @endfor
+                                                        @if ($hasHalfStar)
+                                                        <i class="fa-solid fa-star-half-stroke"
+                                                            style="color: #ffc200;"></i>
+                                                        @endif
+                                                        @for ($i = 0; $i < $remaining; $i++)
+                                                            <i class="fa-regular fa-star" style="color: #ffc200;"></i>
+                                                            @endfor
+                                                </span>
+                                                <p class="px-3 fw-normal truncated-description">
+                                                    {{ $product->description }}
+                                                </p>
+                                            </div>
+                                            <div>
+                                                <div class="card-divider"></div>
+                                                <p class="ps-3 fw-medium d-flex align-items-center justify-content-between"
+                                                    style="color: #ff0060">
+                                                    <span
+                                                        class="discounted-price">{{ $product->discounted_price }}</span>
+                                                    @if (!empty($product->coupon_code))
+                                                    <span id="mySpan" class="mx-3 px-2 couponBadge"
+                                                        onclick="copySpanText(this, event)"
+                                                        data-bs-toggle="tooltip" data-bs-placement="bottom"
+                                                        title="Click to Copy" style="position:relative;">
 
-                                                <!-- Tooltip container -->
-                                                <span class="tooltip-text"
-                                                    style="visibility: hidden; background-color: black; color: #fff; text-align: center;
+                                                        {{ $product->coupon_code }}
+
+                                                        <!-- Tooltip container -->
+                                                        <span class="tooltip-text"
+                                                            style="visibility: hidden; background-color: black; color: #fff; text-align: center;
                                                     border-radius: 6px; padding: 5px; position: absolute; z-index: 1;
                                                     bottom: 125%; left: 50%; margin-left: -60px;">
-                                                    Copied!
-                                                </span>
-                                            </span>
-                                            @endif
-                                        </p>
-                                        <div class="card-divider"></div>
-                                        <div class="ps-3">
-                                            <p>Regular Price</p>
-                                            <p><s class="original-price">{{ $product->original_price }}</s>
-                                            </p>
+                                                            Copied!
+                                                        </span>
+                                                    </span>
+                                                    @endif
+                                                </p>
+                                                <div class="card-divider"></div>
+                                                <div class="ps-3">
+                                                    <p>Regular Price</p>
+                                                    <p><s class="original-price">{{ $product->original_price }}</s>
+                                                    </p>
+                                                </div>
+                                                <div class="card-divider"></div>
+                                                <p class="ps-3 fw-medium"
+                                                    style="color: #ff0060; font-weight: 400 !important;">
+                                                    <i
+                                                        class="fa-solid fa-location-dot"></i>&nbsp;{{ str_replace(',', ' ',  $product->shop->city) }}
+                                                </p>
+                                            </div>
                                         </div>
-                                        <div class="card-divider"></div>
-                                        <p class="ps-3 fw-medium"
-                                            style="color: #ff0060; font-weight: 400 !important;">
-                                            <i
-                                                class="fa-solid fa-location-dot"></i>&nbsp;{{ str_replace(',', ' ',  $product->shop->city) }}
-                                        </p>
+                                    </div>
+                                </a>
+                            </div>
+                            @endforeach
+                            <div class="d-flex justify-content-center align-items-center">
+                                <style>
+                                    .pagination .page-link {
+                                        background-color: white;
+                                        color: lightcoral;
+                                        border: 1px solid #ff0060;
+                                    }
+
+                                    .pagination .page-link:hover {
+                                        background-color: rgba(228, 72, 72, 0.318);
+                                        color: white;
+                                    }
+
+                                    .pagination .active .page-link {
+                                        background-color: #ff0060;
+                                        color: white;
+                                        border-color: #ff0060;
+                                    }
+                                </style>
+
+                                {{ $deals->appends(request()->except('page'))->links() }}
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12 col-lg-3 col-12 mb-3">
+                        <div class="card p-2 d-flex justify-content-center align-items-center"
+                            style="border-radius: 10px;border: none">
+                            <div class="row justify-content-center">
+                                <div class="col-6 p-1">
+                                    <div class="card h-100 prodFilterCard"
+                                        style="border-color: #1878f3; border-radius: 10px;">
+                                        <a href="https://www.facebook.com/profile.php?id=61566743978973" target="_blank"
+                                            style="text-decoration: none;">
+                                            <div class="p-2 qr-code">
+                                                <img src="{{ asset('assets/images/home/facebook_qr_code.webp') }}"
+                                                    alt="Facebook QR" class="img-fluid">
+                                            </div>
+                                            <div class="icon-facebook icon-text">
+                                                <i class="fa-brands fa-facebook-f"
+                                                    style="color: #1878f3; padding: 3px 5px;"></i>
+                                                <span style="white-space: nowrap;">Follow Us</span>
+                                            </div>
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="col-6 p-1">
+                                    <div class="card h-100 prodFilterCard"
+                                        style="border-color: #cc2366; border-radius: 10px;">
+                                        <a href="https://www.instagram.com/dealsmachi/" target="_blank"
+                                            style="text-decoration: none;">
+                                            <div class="p-2 qr-code">
+                                                <img src="{{ asset('assets/images/home/instagram_qr_code.webp') }}"
+                                                    alt="Instagram QR" class="img-fluid">
+                                            </div>
+                                            <div class="icon-instagram icon-text">
+                                                <i class="fa-brands fa-instagram"
+                                                    style="color: #cc2366; padding: 3px 4px;"></i>
+                                                <span style="white-space: nowrap;">Follow Us</span>
+                                            </div>
+                                        </a>
                                     </div>
                                 </div>
                             </div>
-                        </a>
-                    </div>
-                    @endforeach
-                    <div class="d-flex justify-content-center align-items-center">
-                        <style>
-                            .pagination .page-link {
-                                background-color: white;
-                                color: lightcoral;
-                                border: 1px solid #ff0060;
-                            }
-
-                            .pagination .page-link:hover {
-                                background-color: rgba(228, 72, 72, 0.318);
-                                color: white;
-                            }
-
-                            .pagination .active .page-link {
-                                background-color: #ff0060;
-                                color: white;
-                                border-color: #ff0060;
-                            }
-                        </style>
-
-                        {{ $deals->appends(request()->except('page'))->links() }}
-
-                    </div>
-
-                </div>
-            </div>
-
-            <div class="col-md-12 col-lg-2 col-12 mb-3">
-                <div class="card p-2 d-flex justify-content-center align-items-center"
-                    style="border-radius: 10px;border: none">
-                    <div class="row justify-content-center">
-                        <div class="col-6 p-1">
-                            <div class="card h-100 prodFilterCard"
-                                style="border-color: #1878f3; border-radius: 10px;">
-                                <a href="https://www.facebook.com/profile.php?id=61566743978973" target="_blank"
-                                    style="text-decoration: none;">
-                                    <div class="p-2 qr-code">
-                                        <img src="{{ asset('assets/images/home/facebook_qr_code.webp') }}"
-                                            alt="Facebook QR" class="img-fluid">
+                            <div class="row justify-content-center">
+                                <div class="col-6 p-1">
+                                    <div class="card h-100 prodFilterCard"
+                                        style="border-color: #FF0000; border-radius: 10px;">
+                                        <a href="https://www.youtube.com/channel/UCAyH2wQ2srJE8WqvII8JNrQ" target="_blank"
+                                            style="text-decoration: none;">
+                                            <div class="p-2 qr-code">
+                                                <img src="{{ asset('assets/images/home/youtube_qr_code.webp') }}"
+                                                    alt="YouTube QR" class="img-fluid">
+                                            </div>
+                                            <div class="icon-youtube icon-text">
+                                                <i class="fa-brands fa-youtube" style="color: #FF0000;"></i>
+                                                <span>Subscribe</span>
+                                            </div>
+                                        </a>
                                     </div>
-                                    <div class="icon-facebook icon-text">
-                                        <i class="fa-brands fa-facebook-f"
-                                            style="color: #1878f3; padding: 3px 5px;"></i>
-                                        <span style="white-space: nowrap;">Follow Us</span>
+                                </div>
+                                <div class="col-6 p-1">
+                                    <div class="card h-100 prodFilterCard"
+                                        style="border-color: #25D366; border-radius: 10px;">
+                                        <a href="https://chat.whatsapp.com/Ef23qGMU1d6EXYpRvomaLx" target="_blank"
+                                            style="text-decoration: none;">
+                                            <div class="p-2 qr-code">
+                                                <img src="{{ asset('assets/images/home/whatsapp_qr_code.webp') }}"
+                                                    alt="WhatsApp QR" class="img-fluid">
+                                            </div>
+                                            <div class="icon-whatsapp icon-text">
+                                                <i class="fa-brands fa-whatsapp"
+                                                    style="color: #25D366; padding: 3px 4px;"></i>
+                                                <span>Join Us</span>
+                                            </div>
+                                        </a>
                                     </div>
-                                </a>
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-6 p-1">
-                            <div class="card h-100 prodFilterCard"
-                                style="border-color: #cc2366; border-radius: 10px;">
-                                <a href="https://www.instagram.com/dealsmachi/" target="_blank"
-                                    style="text-decoration: none;">
-                                    <div class="p-2 qr-code">
-                                        <img src="{{ asset('assets/images/home/instagram_qr_code.webp') }}"
-                                            alt="Instagram QR" class="img-fluid">
+                            <div class="row justify-content-end">
+                                <div class="col-6 p-1">
+                                    <div class="card h-100 prodFilterCard"
+                                        style="border-color: #28a8e9; border-radius: 10px;">
+                                        <a href="https://t.me/+UTD7rFen3K4zNDFl" target="_blank"
+                                            style="text-decoration: none;">
+                                            <div class="p-2 qr-code">
+                                                <img src="{{ asset('assets/images/home/telegram_qr_code.webp') }}"
+                                                    alt="Telegram QR" class="img-fluid">
+                                            </div>
+                                            <div class="icon-telegram icon-text">
+                                                <i class="fa-brands fa-telegram" style="color: #28a8e9;"></i>
+                                                <span>Follow Us</span>
+                                            </div>
+                                        </a>
                                     </div>
-                                    <div class="icon-instagram icon-text">
-                                        <i class="fa-brands fa-instagram"
-                                            style="color: #cc2366; padding: 3px 4px;"></i>
-                                        <span style="white-space: nowrap;">Follow Us</span>
-                                    </div>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row justify-content-center">
-                        <div class="col-6 p-1">
-                            <div class="card h-100 prodFilterCard"
-                                style="border-color: #FF0000; border-radius: 10px;">
-                                <a href="https://www.youtube.com/channel/UCAyH2wQ2srJE8WqvII8JNrQ" target="_blank"
-                                    style="text-decoration: none;">
-                                    <div class="p-2 qr-code">
-                                        <img src="{{ asset('assets/images/home/youtube_qr_code.webp') }}"
-                                            alt="YouTube QR" class="img-fluid">
-                                    </div>
-                                    <div class="icon-youtube icon-text">
-                                        <i class="fa-brands fa-youtube" style="color: #FF0000;"></i>
-                                        <span>Subscribe</span>
-                                    </div>
-                                </a>
-                            </div>
-                        </div>
-                        <div class="col-6 p-1">
-                            <div class="card h-100 prodFilterCard"
-                                style="border-color: #25D366; border-radius: 10px;">
-                                <a href="https://chat.whatsapp.com/Ef23qGMU1d6EXYpRvomaLx" target="_blank"
-                                    style="text-decoration: none;">
-                                    <div class="p-2 qr-code">
-                                        <img src="{{ asset('assets/images/home/whatsapp_qr_code.webp') }}"
-                                            alt="WhatsApp QR" class="img-fluid">
-                                    </div>
-                                    <div class="icon-whatsapp icon-text">
-                                        <i class="fa-brands fa-whatsapp"
-                                            style="color: #25D366; padding: 3px 4px;"></i>
-                                        <span>Join Us</span>
-                                    </div>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row justify-content-end">
-                        <div class="col-6 p-1">
-                            <div class="card h-100 prodFilterCard"
-                                style="border-color: #28a8e9; border-radius: 10px;">
-                                <a href="https://t.me/+UTD7rFen3K4zNDFl" target="_blank"
-                                    style="text-decoration: none;">
-                                    <div class="p-2 qr-code">
-                                        <img src="{{ asset('assets/images/home/telegram_qr_code.webp') }}"
-                                            alt="Telegram QR" class="img-fluid">
-                                    </div>
-                                    <div class="icon-telegram icon-text">
-                                        <i class="fa-brands fa-telegram" style="color: #28a8e9;"></i>
-                                        <span>Follow Us</span>
-                                    </div>
-                                </a>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+
 
             <!-- Filters Section for Empty Product Show -->
             @else
@@ -625,7 +643,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
 <script>
-    const clearUrl = "{{ $isCategory ? route('deals.subcategorybased', ['slug' => $category->slug]) : ($isHotpick ? route('deals.categorybased', ['slug' => request()->segment(2)]) : route('search')) }}";
+    const clearUrl = "{{ $isCategory || request('slug') === 'all' ? route('deals.subcategorybased', ['slug' => request('slug') ?? 'all']) : ($isHotpick ? route('deals.categorybased', ['slug' => request()->segment(2)]) : route('search')) }}";
 
     document.getElementById('clearButton').addEventListener('click', function() {
         preserveLatLonAndClear();
