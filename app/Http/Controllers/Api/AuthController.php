@@ -25,6 +25,7 @@ class AuthController extends Controller
 
     public function login(Request $request)
     {
+
         $validator = Validator::make($request->all(), [
             'email' => 'required|email',
             'password' => 'required',
@@ -34,12 +35,13 @@ class AuthController extends Controller
             return response()->json(['error' => $validator->errors()], 422);
         }
 
-        $user = User::where('email', $request->email)
-            ->whereNull('deleted_at')
-            ->first();
+        $credentials = $request->only('email', 'password');
+        $role = $request->input('role');
 
-        if ($user && Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
-            $user = Auth::user();
+        $user = User::where('email', $credentials['email'])
+        ->where('role', $role)->whereNull('deleted_at')->first();
+
+        if ($user && Auth::attempt($credentials)) {
             $token = $user->createToken('Personal Access Token')->accessToken;
             $success['token'] = $token;
             $success['userDetails'] =  $user;
@@ -55,6 +57,7 @@ class AuthController extends Controller
 
         return $this->error('Invalid email or password. Please check your credentials and try again.,Email.', ['error' => 'Invalid email or password. Please check your credentials and try again.,Email']);
     }
+
 
     public function register(Request $request)
     {
