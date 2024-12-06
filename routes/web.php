@@ -49,7 +49,7 @@ Route::get('/terms_conditions', function () {
     return view('termsandconditions');
 });
 Route::get('/contactus', function () {
-    return view('email.ordercreatedmail');
+    return view('contactus');
 });
 // Route::get('/dashboard', function () {
 //     return view('dashboard');
