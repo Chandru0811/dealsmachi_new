@@ -5,16 +5,25 @@
     @php
     $isCategory = !empty($category);
     $isHotpick = request()->is('hotpick/*');
+    $slug = request('slug') ?? 'all';
     @endphp
     <form method="GET"
         action="{{ 
-        $isCategory || request('slug') === 'all' 
-        ? route('deals.subcategorybased', ['slug' => request('slug') ?? 'all'])  
-        : ($isHotpick 
-            ? route('deals.categorybased', ['slug' => request()->segment(2)]) 
-            : route('search')
-          ) }}"
+            $isCategory || $slug === 'all' 
+            ? route('deals.subcategorybased', [
+                'slug' => $slug, 
+                'category_group_id' => $slug === 'all' ? $categorygroup->id ?? null : null
+              ])  
+            : ($isHotpick 
+                ? route('deals.categorybased', ['slug' => request()->segment(2)]) 
+                : route('search')
+              ) }}"
         id="filterForm">
+
+        <!-- Hidden fields to handle both conditions -->
+        @if($slug === 'all' && !empty($categorygroup->id))
+        <input type="hidden" name="category_group_id" value="{{ $categorygroup->id }}">
+        @endif
         <input type="hidden" id="latitude" name="latitude">
         <input type="hidden" id="longitude" name="longitude">
         <div class="p-4 topFilter">
@@ -360,8 +369,8 @@
                 @if(request()->routeIs('deals.subcategorybased'))
                 <div class="container mb-3 topbarContainer">
                     <div class="d-flex overflow-auto topBar">
-                        <a href="{{ route('deals.subcategorybased', ['slug' => 'all']) }}"
-                            class="btn me-2 {{ request('slug') === 'all' ? 'active' : '' }}">
+                        <a href="{{ route('deals.subcategorybased', ['slug' => 'all', 'category_group_id' => $categorygroup->id]) }}"
+                            class="btn me-2 {{ request('slug') === 'all' && request('category_group_id') == $categorygroup->id ? 'active' : '' }}">
                             All
                         </a>
                         @foreach ($categorygroup->categories as $cat)
@@ -658,6 +667,14 @@
         const longitude = document.getElementById('longitude').value;
 
         let url = new URL(clearUrl, window.location.origin);
+
+        if (url.pathname.includes('/all')) {
+            const categoryGroupId = "{{ $categorygroup->id ?? '' }}";
+            if (categoryGroupId) {
+                url.searchParams.set('category_group_id', categoryGroupId);
+            }
+        }
+
         if (latitude && longitude) {
             url.searchParams.set('latitude', latitude);
             url.searchParams.set('longitude', longitude);

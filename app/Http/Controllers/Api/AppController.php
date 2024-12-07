@@ -38,10 +38,10 @@ class AppController extends Controller
         $sliders = Slider::get();
         $cashBackDeals = DealCategory::where('active', 1)->get();
 
-        $products = Product::where('active',1)->with(['shop:id,city,shop_ratings'])->get();
+        $products = Product::where('active', 1)->with(['shop:id,city,shop_ratings'])->get();
 
-        $treandingdeals = DealViews::whereDate('viewed_at',Carbon::today())->get();
-        $populardeals = DealViews::select('deal_id', DB::raw('count(*) as total_views'))->groupBy('deal_id')->limit(5)->orderBy('total_views', 'desc')->having('total_views', '>', 10)->get(); 
+        $treandingdeals = DealViews::whereDate('viewed_at', Carbon::today())->get();
+        $populardeals = DealViews::select('deal_id', DB::raw('count(*) as total_views'))->groupBy('deal_id')->limit(5)->orderBy('total_views', 'desc')->having('total_views', '>', 10)->get();
         $earlybirddeals = Product::where('active', 1)->whereDate('start_date', now())->get();
         $lastchancedeals = Product::where('active', 1)->whereDate('end_date', now())->get();
         $limitedtimedeals = Product::where('active', 1)->whereRaw('DATEDIFF(end_date, start_date) <= ?', [2])->get();
@@ -75,10 +75,10 @@ class AppController extends Controller
     public function categories($id)
     {
         $categories = Category::where('active', 1)
-        ->where('category_group_id', $id)
-        ->withCount(['products' => function ($query) {
-            $query->where('active', 1);
-        }])
+            ->where('category_group_id', $id)
+            ->withCount(['products' => function ($query) {
+                $query->where('active', 1);
+            }])
             ->get();
 
         return $this->success('Categories Retrieved Successfully!', $categories);
@@ -196,11 +196,18 @@ class AppController extends Controller
         }
 
         if ($request->input('category') == 0) {
-            $categorygroup = CategoryGroup::whereHas('categories')->first();
+            $categoryGroupId = $request->input('category_group_id');
+
+            if ($categoryGroupId) {
+                $categorygroup = CategoryGroup::find($categoryGroupId);
+            } else {
+                $categorygroup = CategoryGroup::whereHas('categories')->first();
+            }
+
             $query->whereHas('category', function ($query) use ($categorygroup) {
                 $query->where('category_group_id', $categorygroup->id);
             });
-    
+
             $brands = Product::where('active', 1)
                 ->whereHas('category', function ($query) use ($categorygroup) {
                     $query->where('category_group_id', $categorygroup->id);
@@ -210,7 +217,7 @@ class AppController extends Controller
                 ->distinct()
                 ->orderBy('brand', 'asc')
                 ->pluck('brand');
-    
+
             $discounts = Product::where('active', 1)
                 ->whereHas('category', function ($query) use ($categorygroup) {
                     $query->where('category_group_id', $categorygroup->id);
@@ -222,23 +229,23 @@ class AppController extends Controller
                 ->unique()
                 ->sort()
                 ->values();
-    
+
             $minPrice = Product::whereHas('category', function ($query) use ($categorygroup) {
                 $query->where('category_group_id', $categorygroup->id);
             })->min(DB::raw('LEAST(original_price, discounted_price)'));
-    
+
             $maxPrice = Product::whereHas('category', function ($query) use ($categorygroup) {
                 $query->where('category_group_id', $categorygroup->id);
             })->max(DB::raw('GREATEST(original_price, discounted_price)'));
         } elseif ($request->has('category')) {
             $categoryId = $request->input('category');
             $query->where('category_id', $categoryId);
-            
-            $brands = Product::where('active', 1)->where('category_id',$categoryId)->distinct()->pluck('brand');
-            $discounts = Product::where('active', 1)->where('category_id',$categoryId)->distinct()->pluck('discount_percentage');
-            $minPrice = Product::where('category_id',$categoryId)->min(DB::raw('LEAST(original_price, discounted_price)'));
-            $maxPrice = Product::where('category_id',$categoryId)->max(DB::raw('GREATEST(original_price, discounted_price)'));
-        }else{
+
+            $brands = Product::where('active', 1)->where('category_id', $categoryId)->distinct()->pluck('brand');
+            $discounts = Product::where('active', 1)->where('category_id', $categoryId)->distinct()->pluck('discount_percentage');
+            $minPrice = Product::where('category_id', $categoryId)->min(DB::raw('LEAST(original_price, discounted_price)'));
+            $maxPrice = Product::where('category_id', $categoryId)->max(DB::raw('GREATEST(original_price, discounted_price)'));
+        } else {
             $brands = Product::where('active', 1)->distinct()->pluck('brand');
             $discounts = Product::where('active', 1)->distinct()->pluck('discount_percentage');
             $minPrice = Product::min(DB::raw('LEAST(original_price, discounted_price)'));
@@ -287,11 +294,11 @@ class AppController extends Controller
 
         if ($request->has('short_by')) {
             $shortby = $request->input('short_by');
-        
+
             if ($shortby == 'trending') {
                 $query->withCount(['views' => function ($viewQuery) {
-                        $viewQuery->whereDate('viewed_at', now()->toDateString());
-                    }])
+                    $viewQuery->whereDate('viewed_at', now()->toDateString());
+                }])
                     ->with(['shop:id,country,state,city,street,street2,zip_code,shop_ratings'])
                     ->orderBy('views_count', 'desc')
                     ->addSelect(DB::raw("'TRENDING' as label"));
@@ -324,7 +331,7 @@ class AppController extends Controller
 
         $priceRanges = [];
         $priceStep = 2000;
-        
+
         for ($start = $minPrice; $start <= $maxPrice; $start += $priceStep) {
             $end = $start + $priceStep;
 
@@ -399,8 +406,7 @@ class AppController extends Controller
                 ->with(['shop:id,country,state,city,street,street2,zip_code,shop_ratings'])
                 ->whereRaw('DATEDIFF(end_date, start_date) <= ?', [2])
                 ->paginate($perPage);
-        }elseif($slug == 'nearby')
-        {
+        } elseif ($slug == 'nearby') {
             $user_latitude = $request->input('latitude');
             $user_longitude = $request->input('longitude');
 
@@ -408,21 +414,24 @@ class AppController extends Controller
                 return response()->json(['error' => "user's location is empty"]);
             }
 
-            $shops = Shop::select("shops.id", "shops.name",
-                        DB::raw("6371 * acos(cos(radians(" . $user_latitude . "))
+            $shops = Shop::select(
+                "shops.id",
+                "shops.name",
+                DB::raw("6371 * acos(cos(radians(" . $user_latitude . "))
                         * cos(radians(shops.shop_lattitude))
                         * cos(radians(shops.shop_longtitude) - radians(" . $user_longitude . "))
                         + sin(radians(" . $user_latitude . "))
-                        * sin(radians(shops.shop_lattitude))) AS distance"))
-                        ->having('distance', '<', 10)
-                        ->orderBy('distance', 'asc')
-                        ->get();
+                        * sin(radians(shops.shop_lattitude))) AS distance")
+            )
+                ->having('distance', '<', 10)
+                ->orderBy('distance', 'asc')
+                ->get();
 
             $shopIds = $shops->pluck('id');
 
-            $deals = Product::whereIn('shop_id', $shopIds)->where('active',1)
-                    ->with(['shop:id,country,state,city,street,street2,zip_code,shop_ratings'])
-                    ->paginate($perPage);
+            $deals = Product::whereIn('shop_id', $shopIds)->where('active', 1)
+                ->with(['shop:id,country,state,city,street,street2,zip_code,shop_ratings'])
+                ->paginate($perPage);
         }
 
         $brands = Product::where('active', 1)->distinct()->pluck('brand');
@@ -559,10 +568,10 @@ class AppController extends Controller
         $userId = Auth::check() ? Auth::id() : null;
 
         DealClick::create([
-            'deal_id' => $dealId, 
-            'user_id' => $userId, 
+            'deal_id' => $dealId,
+            'user_id' => $userId,
             'ip_address' => request()->ip(),
-            'clicked_at' => Carbon::now(), 
+            'clicked_at' => Carbon::now(),
         ]);
 
         return $this->ok('DealClicks Added SuccessFully!');
@@ -587,18 +596,18 @@ class AppController extends Controller
     public function couponCopied(Request $request)
     {
         $dealId = $request->id;
-            $userId = Auth::check() ? Auth::id() : null;
-            $ipAddress = $request->ip();
+        $userId = Auth::check() ? Auth::id() : null;
+        $ipAddress = $request->ip();
 
-            CouponCodeUsed::create([
-                'deal_id' => $dealId,
-                'coupon_code' => $request->coupon_code,
-                'user_id' => $userId,
-                'ip_address' => $ipAddress,
-                'copied_at' => Carbon::now(),
-            ]);
+        CouponCodeUsed::create([
+            'deal_id' => $dealId,
+            'coupon_code' => $request->coupon_code,
+            'user_id' => $userId,
+            'ip_address' => $ipAddress,
+            'copied_at' => Carbon::now(),
+        ]);
 
-            return $this->ok('CouponCode Copied Successfully!');
+        return $this->ok('CouponCode Copied Successfully!');
     }
 
     public function dealshare(Request $request)
@@ -614,7 +623,7 @@ class AppController extends Controller
             'share_at' => Carbon::now(),
         ]);
 
-        return $this->ok('DealShare Added Successfully!');      
+        return $this->ok('DealShare Added Successfully!');
     }
 
     public function dealenquire(Request $request)
@@ -630,7 +639,7 @@ class AppController extends Controller
             'enquire_at' => Carbon::now(),
         ]);
 
-        return $this->ok('Dealenquire Added Successfully!');       
+        return $this->ok('Dealenquire Added Successfully!');
     }
 
     public function directCheckout($id, Request $request)
@@ -641,7 +650,7 @@ class AppController extends Controller
 
         $user = Auth::user();
         $product = Product::with(['shop'])->where('id', $id)->where('active', 1)->first();
-        $order = Order::where('customer_id',$user->id)->orderBy('id', 'desc')->first();
+        $order = Order::where('customer_id', $user->id)->orderBy('id', 'desc')->first();
 
         if (!$product) {
             return $this->error('Product not found or inactive.', null, 404);
@@ -688,7 +697,7 @@ class AppController extends Controller
         $latestOrder = Order::orderBy('id', 'desc')->first();
         $customOrderId = $latestOrder ? intval(Str::after($latestOrder->order_id, '-')) + 1 : 1;
         $orderNumber = 'DEALSMACHI_O' . $customOrderId;
-        
+
         $order = Order::create([
             'order_number'     => $orderNumber,
             'customer_id'      => $user_id,
@@ -698,7 +707,7 @@ class AppController extends Controller
             'email'            => $request->input('email'),
             'mobile'           => $request->input('mobile'),
             'order_type'       => $request->input('order_type'),
-            'status'           => 1, 
+            'status'           => 1,
             'notes'            => $request->input('notes') ?? null,
             'payment_type'     => $request->input('payment_type'),
             'payment_status'   => $request->input('payment_status') ?? "1",
@@ -709,7 +718,7 @@ class AppController extends Controller
             'delivery_address' => json_encode($address),
             'coupon_applied'   => $request->input('coupon_applied') ?? false,
             'coupon_code'      => $request->input('coupon_code'),
-            
+
         ]);
 
         if ($order) {
@@ -742,17 +751,17 @@ class AppController extends Controller
         }
 
         $orders = Order::where('customer_id', $customerId)
-        ->with([
-            'items.product' => function ($query) {
-                $query->select('id', 'name', 'image_url1', 'description', 'original_price', 'discounted_price', 'discount_percentage');
-            },
-            'shop' => function ($query) {
-                $query->select('id', 'name');
-            },
-            'customer' => function ($query) {
-                $query->select('id', 'name');
-            }
-        ])->orderBy('created_at', 'desc')->get();
+            ->with([
+                'items.product' => function ($query) {
+                    $query->select('id', 'name', 'image_url1', 'description', 'original_price', 'discounted_price', 'discount_percentage');
+                },
+                'shop' => function ($query) {
+                    $query->select('id', 'name');
+                },
+                'customer' => function ($query) {
+                    $query->select('id', 'name');
+                }
+            ])->orderBy('created_at', 'desc')->get();
 
         return $this->success('Orders retrieved successfully.', $orders);
     }
@@ -793,7 +802,7 @@ class AppController extends Controller
             ]
         );
 
-        Mail::send('email.resetpasswordbyotp', ['name' => $username, 'otp' => $otp], function($message) use($request){
+        Mail::send('email.resetpasswordbyotp', ['name' => $username, 'otp' => $otp], function ($message) use ($request) {
             $message->to($request->email);
             $message->subject('Reset Password');
         });
@@ -803,8 +812,7 @@ class AppController extends Controller
 
     public function checkotp(Request $request)
     {
-        $request->validate([
-        ]);
+        $request->validate([]);
 
         $updatePassword = DB::table('password_reset_otps')
             ->where([
@@ -813,11 +821,11 @@ class AppController extends Controller
             ])
             ->first();
 
-            if (!$updatePassword) {
-                return response()->json(['message' => 'Invalid otp']);
-            }
+        if (!$updatePassword) {
+            return response()->json(['message' => 'Invalid otp']);
+        }
 
-            return response()->json(['message' => 'User Verified Successfully!']);
+        return response()->json(['message' => 'User Verified Successfully!']);
     }
 
     public function resetpassword(Request $request)
@@ -835,5 +843,4 @@ class AppController extends Controller
 
         return response()->json(['message' => 'Your password has been changed!']);
     }
-
 }

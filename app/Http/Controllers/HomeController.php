@@ -269,32 +269,37 @@ class HomeController extends Controller
             ->where('active', 1);
     
         if ($slug === 'all') {
-            $categorygroup = CategoryGroup::whereHas('categories')->first(); // Adjust as needed for default group selection
+            $categoryGroupId = $request->input('category_group_id');
+            if ($categoryGroupId) {
+                $categorygroup = CategoryGroup::find($categoryGroupId);
+            } else {
+                $categorygroup = CategoryGroup::whereHas('categories')->first();
+            }
             $category = null;
             $query->whereHas('category', function ($query) use ($categorygroup) {
                 $query->where('category_group_id', $categorygroup->id);
             });
             $brands = Product::where('active', 1)
-            ->whereHas('category', function ($query) use ($categorygroup) {
-                $query->where('category_group_id', $categorygroup->id);
-            })
-            ->whereNotNull('brand')
-            ->where('brand', '!=', '')
-            ->distinct()
-            ->orderBy('brand', 'asc')
-            ->pluck('brand');
+                ->whereHas('category', function ($query) use ($categorygroup) {
+                    $query->where('category_group_id', $categorygroup->id);
+                })
+                ->whereNotNull('brand')
+                ->where('brand', '!=', '')
+                ->distinct()
+                ->orderBy('brand', 'asc')
+                ->pluck('brand');
 
-        $discounts = Product::where('active', 1)
-            ->whereHas('category', function ($query) use ($categorygroup) {
-                $query->where('category_group_id', $categorygroup->id);
-            })
-            ->pluck('discount_percentage')
-            ->map(function ($discount) {
-                return round($discount);
-            })
-            ->unique()
-            ->sort()
-            ->values();
+            $discounts = Product::where('active', 1)
+                ->whereHas('category', function ($query) use ($categorygroup) {
+                    $query->where('category_group_id', $categorygroup->id);
+                })
+                ->pluck('discount_percentage')
+                ->map(function ($discount) {
+                    return round($discount);
+                })
+                ->unique()
+                ->sort()
+                ->values();
         } else {
             $category = Category::where('slug', $slug)->first();
             $categorygroup = CategoryGroup::where('id', $category->category_group_id)->first();
@@ -306,7 +311,7 @@ class HomeController extends Controller
             $discounts = Product::where('active', 1)->where('category_id', $category->id)->pluck('discount_percentage')->map(function ($discount) {
                 return round($discount);
             })->unique()->sort()->values();
-        }   
+        }
 
         if ($request->has('brand') && is_array($request->brand)) {
             $query->whereIn('brand', $request->brand);
@@ -396,7 +401,6 @@ class HomeController extends Controller
 
         $deals = $query->paginate($perPage);
 
-      
         $rating_items = Shop::where('active', 1)->select('shop_ratings', DB::raw('count(*) as rating_count'))->groupBy('shop_ratings')->get();
 
         $priceRanges = [];
