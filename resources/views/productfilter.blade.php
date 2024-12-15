@@ -5,24 +5,24 @@
     @php
     $isCategory = !empty($category);
     $isHotpick = request()->is('hotpick/*');
-    $slug = request('slug') ?? 'all';
+    $isAll = request('slug') === 'all';
     @endphp
-    <form method="GET"
+    <form
+        method="GET"
         action="{{ 
-            $isCategory || $slug === 'all' 
-            ? route('deals.subcategorybased', [
-                'slug' => $slug, 
-                'category_group_id' => $slug === 'all' ? $categorygroup->id ?? null : null
-              ])  
-            : ($isHotpick 
-                ? route('deals.categorybased', ['slug' => request()->segment(2)]) 
-                : route('search')
-              ) }}"
+            $isAll 
+            ? route('deals.subcategorybased', ['slug' => 'all']) 
+            : ($isCategory 
+                ? route('deals.subcategorybased', ['slug' => $category->slug]) 
+                : ($isHotpick 
+                    ? route('deals.categorybased', ['slug' => request()->segment(2)]) 
+                    : route('search')
+                  )
+              ) 
+        }}"
         id="filterForm">
-
-        <!-- Hidden fields to handle both conditions -->
-        @if($slug === 'all' && !empty($categorygroup->id))
-        <input type="hidden" name="category_group_id" value="{{ $categorygroup->id }}">
+        @if($isAll)
+        <input type="hidden" id="category_group_id" name="category_group_id" value="{{ request('category_group_id') }}">
         @endif
         <input type="hidden" id="latitude" name="latitude">
         <input type="hidden" id="longitude" name="longitude">
@@ -652,7 +652,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
 <script>
-    const clearUrl = "{{ $isCategory || request('slug') === 'all' ? route('deals.subcategorybased', ['slug' => request('slug') ?? 'all']) : ($isHotpick ? route('deals.categorybased', ['slug' => request()->segment(2)]) : route('search')) }}";
+    const clearUrl = "{{ $isCategory ? route('deals.subcategorybased', ['slug' => $category->slug]) : ($isHotpick ? route('deals.categorybased', ['slug' => request()->segment(2)]) : ($isAll ? route('deals.subcategorybased', ['slug' => 'all']) : route('search')) ) }}";
 
     document.getElementById('clearButton').addEventListener('click', function() {
         preserveLatLonAndClear();
@@ -663,16 +663,14 @@
     });
 
     function preserveLatLonAndClear() {
+        const categoryGroupId = "{{ request('category_group_id') }}";
         const latitude = document.getElementById('latitude').value;
         const longitude = document.getElementById('longitude').value;
 
         let url = new URL(clearUrl, window.location.origin);
 
-        if (url.pathname.includes('/all')) {
-            const categoryGroupId = "{{ $categorygroup->id ?? '' }}";
-            if (categoryGroupId) {
-                url.searchParams.set('category_group_id', categoryGroupId);
-            }
+        if (categoryGroupId) {
+            url.searchParams.set('category_group_id', categoryGroupId);
         }
 
         if (latitude && longitude) {

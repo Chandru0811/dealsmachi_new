@@ -36,7 +36,7 @@ class AppController extends Controller
 
         $categoryGroups = CategoryGroup::where('active', 1)->take(10)->get();
         $sliders = Slider::get();
-        $cashBackDeals = DealCategory::where('active', 1)->get();
+        $cashBackDeals = DealCategory::where('active', 1)->take(5)->get();
 
         $products = Product::where('active', 1)->with(['shop:id,city,shop_ratings'])->get();
 
@@ -108,7 +108,7 @@ class AppController extends Controller
                 'label' => '$' . number_format($start, 2) . ' - $' . number_format($end, 2)
             ];
         }
-        $shortby = DealCategory::where('active', 1)->get();
+        $shortby = DealCategory::where('active', 1)->take(5)->get();
         $totaldeals = $deals->count();
 
         $bookmarkedProducts = collect();
@@ -346,7 +346,7 @@ class AppController extends Controller
             ];
         }
 
-        $shortby = DealCategory::where('active', 1)->get();
+        $shortby = DealCategory::where('active', 1)->take(5)->get();
         $totaldeals = $deals->total();
 
         $bookmarkedProducts = collect();
@@ -434,9 +434,19 @@ class AppController extends Controller
                 ->paginate($perPage);
         }
 
-        $brands = Product::where('active', 1)->distinct()->pluck('brand');
-        $discounts = Product::where('active', 1)->distinct()->pluck('discount_percentage');
-        $rating_items = Shop::where('active', 1)
+        $productIds = $deals->pluck('id');
+
+        $brands = Product::whereIn('id', $productIds)
+            ->where('active', 1)
+            ->distinct()
+            ->pluck('brand');
+
+        $discounts = Product::whereIn('id', $productIds)
+            ->where('active', 1)
+            ->distinct()
+            ->pluck('discount_percentage');
+
+        $rating_items = Shop::whereIn('id', $deals->pluck('shop_id'))
             ->select('shop_ratings', DB::raw('count(*) as rating_count'))
             ->groupBy('shop_ratings')
             ->get();
@@ -460,7 +470,7 @@ class AppController extends Controller
             ];
         }
 
-        $shortby = DealCategory::where('active', 1)->get();
+        $shortby = DealCategory::where('active', 1)->take(5)->get();
         $totaldeals = $deals->total();
 
         $bookmarkedProducts = collect();
