@@ -683,6 +683,49 @@
         window.location.href = url.toString();
     }
 
+    document.addEventListener('DOMContentLoaded', function() {
+        document.getElementById('applyButton').addEventListener('click', function(event) {
+            event.preventDefault();
+            updateFilters('mobile');
+        });
+
+        document.getElementById('applyButtonLarge').addEventListener('click', function(event) {
+            event.preventDefault();
+            updateFilters('desktop');
+        });
+
+
+        function updateFilters(screenType) {
+            const latitude = document.getElementById('latitude').value;
+            const longitude = document.getElementById('longitude').value;
+
+            let url = new URL(window.location.href);
+
+            const formSelector = screenType === 'mobile' ? '#filterOffcanvas input[type="checkbox"]' : '.filterlarge input[type="checkbox"]';
+            const filters = document.querySelectorAll(formSelector);
+
+            filters.forEach(filter => {
+                if (filter.checked) {
+                    url.searchParams.append(filter.name, filter.value);
+                } else {
+                    const currentValues = url.searchParams.getAll(filter.name);
+                    const updatedValues = currentValues.filter(value => value !== filter.value);
+
+                    url.searchParams.delete(filter.name);
+                    updatedValues.forEach(value => url.searchParams.append(filter.name, value));
+                }
+            });
+
+            if (latitude && longitude) {
+                url.searchParams.set('latitude', latitude);
+                url.searchParams.set('longitude', longitude);
+            }
+
+            console.log("Updated URL:", url.toString());
+            window.location.href = url.toString();
+        }
+    });
+
     $(document).ready(function() {
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(showPosition, showError);
