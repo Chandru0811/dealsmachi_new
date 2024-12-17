@@ -28,6 +28,7 @@ Route::get('deals/{category_id}', [AppController::class, 'getDeals']);
 Route::get('deal/details/{id}', [AppController::class, 'dealDescription']);
 Route::get('search', [AppController::class, 'search']);
 Route::get('hotpick/{slug}', [AppController::class, 'dealcategorybasedproductsformobile']);
+Route::get('categories/{id}', [AppController::class, 'subcategorybasedproductsformobile']);
 Route::post('dealbookmark/add/{id}', [AppController::class, 'addBookmark']);
 Route::post('dealbookmark/remove/{id}', [AppController::class, 'removeBookmark']);
 Route::get('dealbookmarks', [AppController::class, 'getBookmarks']);
