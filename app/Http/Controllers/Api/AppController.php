@@ -671,7 +671,7 @@ class AppController extends Controller
             ];
         }
 
-        $shortby = DealCategory::where('active', 1)->get();
+        $shortby = DealCategory::where('active', 1)->take(5)->get();
         $totaldeals = $deals->count();
         $bookmarkedProducts = collect();
         if (Auth::check()) {
