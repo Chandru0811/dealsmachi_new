@@ -197,7 +197,7 @@ class HomeController extends Controller
             $priceRanges = $request->input('price_range');
             $query->where(function ($priceQuery) use ($priceRanges) {
                 foreach ($priceRanges as $range) {
-                    $cleanRange = str_replace(['$', ',', ' '], '', $range);
+                    $cleanRange = str_replace(['Rs', ',', ' '], '', $range);
                     $priceRange = explode('-', $cleanRange);
                     $minPrice = isset($priceRange[0]) ? (float)$priceRange[0] : null;
                     $maxPrice = isset($priceRange[1]) ? (float)$priceRange[1] : null;
@@ -485,7 +485,7 @@ class HomeController extends Controller
             $priceRanges = $request->input('price_range');
             $query->where(function ($priceQuery) use ($priceRanges) {
                 foreach ($priceRanges as $range) {
-                    $cleanRange = str_replace(['$', ',', ' '], '', $range);
+                    $cleanRange = str_replace(['Rs', ',', ' '], '', $range);
                     $priceRange = explode('-', $cleanRange);
 
                     $minPrice = isset($priceRange[0]) ? (float)$priceRange[0] : null;

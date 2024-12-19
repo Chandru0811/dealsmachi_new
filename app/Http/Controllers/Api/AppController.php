@@ -25,6 +25,8 @@ use App\Models\OrderItems;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use App\Models\User;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Hash;
 
 class AppController extends Controller
 {
@@ -207,24 +209,24 @@ class AppController extends Controller
         }
 
         if ($request->has('price_range')) {
+            $priceRanges = $request->input('price_range');
 
-            $priceRange = $request->input('price_range');
+            // Apply price range filters for each selected range
+            $query->where(function ($priceQuery) use ($priceRanges) {
+                foreach ($priceRanges as $range) {
+                    // Clean and split the price range
+                    $cleanRange = str_replace(['Rs', ',', ' '], '', $range);
+                    $priceRange = explode('-', $cleanRange);
 
-            $priceRange = str_replace(['$', ',', ' '], '', $priceRange[0]);
-            $priceRange = explode('-', $priceRange);
+                    $minPrice = isset($priceRange[0]) ? (float)$priceRange[0] : null;
+                    $maxPrice = isset($priceRange[1]) ? (float)$priceRange[1] : null;
 
-            $minPrice = isset($priceRange[0]) ? (float)$priceRange[0] : null;
-            $maxPrice = isset($priceRange[1]) ? (float)$priceRange[1] : null;
-
-            $query->where(function ($priceQuery) use ($minPrice, $maxPrice) {
-                if ($maxPrice !== null) {
-
-                    $priceQuery->whereBetween('original_price', [$minPrice, $maxPrice])
-                        ->orWhereBetween('discounted_price', [$minPrice, $maxPrice]);
-                } else {
-
-                    $priceQuery->where('original_price', '>=', $minPrice)
-                        ->orWhere('discounted_price', '>=', $minPrice);
+                    // Apply the range filter
+                    if ($maxPrice !== null) {
+                        $priceQuery->orWhereBetween('discounted_price', [$minPrice, $maxPrice]);
+                    } else {
+                        $priceQuery->orWhere('discounted_price', '>=', $minPrice);
+                    }
                 }
             });
         }
@@ -430,7 +432,7 @@ class AppController extends Controller
 
             $priceRange = $request->input('price_range');
 
-            $priceRange = str_replace(['$', ',', ' '], '', $priceRange[0]);
+            $priceRange = str_replace(['Rs', ',', ' '], '', $priceRange[0]);
             $priceRange = explode('-', $priceRange);
 
             $minPrice = isset($priceRange[0]) ? (float)$priceRange[0] : null;
