@@ -40,7 +40,7 @@ class AppController extends Controller
         $sliders = Slider::get();
         $cashBackDeals = DealCategory::where('active', 1)->take(5)->get();
 
-        $products = Product::where('active', 1)->with(['shop:id,city,shop_ratings'])->get();
+        $products = Product::where('active', 1)->with(['shop:id,city,shop_ratings'])->orderBy('created_at', 'desc')->get();
 
         $treandingdeals = DealViews::whereDate('viewed_at', Carbon::today())->get();
         $populardeals = DealViews::select('deal_id', DB::raw('count(*) as total_views'))->groupBy('deal_id')->limit(5)->orderBy('total_views', 'desc')->having('total_views', '>', 10)->get();
@@ -519,7 +519,7 @@ class AppController extends Controller
         $query = Product::with('shop')
             ->with(['shop:id,country,state,city,street,street2,zip_code,shop_ratings'])
             ->where('active', 1);
-    
+
         if ($id === '0') {
             $categoryGroupId = $request->input('category_group_id');
             if ($categoryGroupId) {
