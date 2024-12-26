@@ -32,7 +32,6 @@ class Order extends Model
         'delivery_date',
         'tracking_id',
         'coupon_applied',
-        'coupon_code',
         'send_invoice_to_customer',
         'approved'
     ];

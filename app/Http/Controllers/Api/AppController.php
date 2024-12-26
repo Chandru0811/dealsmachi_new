@@ -928,8 +928,6 @@ class AppController extends Controller
             'quantity'         => $request->input('quantity') ?? 1,
             'delivery_address' => json_encode($address),
             'coupon_applied'   => $request->input('coupon_applied') ?? false,
-            'coupon_code'      => $request->input('coupon_code'),
-
         ]);
 
         if ($order) {
