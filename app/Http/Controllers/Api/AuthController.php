@@ -25,10 +25,10 @@ class AuthController extends Controller
 
     public function login(Request $request)
     {
-
         $validator = Validator::make($request->all(), [
             'email' => 'required|email',
             'password' => 'required',
+            'role' => 'required',
         ]);
 
         if ($validator->fails()) {
@@ -58,7 +58,6 @@ class AuthController extends Controller
         return $this->error('Invalid email or password. Please check your credentials and try again.,Email.', ['error' => 'Invalid email or password. Please check your credentials and try again.,Email']);
     }
 
-
     public function register(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -68,11 +67,12 @@ class AuthController extends Controller
                 'string',
                 'email',
                 'max:255',
-                Rule::unique('users')->where(function ($query) {
-                    return $query->where('role', 2);
+                Rule::unique('users')->where(function ($query) use ($request) {
+                    return $query->where('role', $request->role);
                 }),
             ],
             'password' => 'required|string|min:8|confirmed',
+            'role' => 'required'
         ]);
 
         if ($validator->fails()) {
@@ -83,7 +83,7 @@ class AuthController extends Controller
             'name' => $request->name,
             'email' => $request->email,
             'password' => bcrypt($request->password),
-            'role' => 2
+            'role' => $request->role
         ]);
 
         Auth::login($user);

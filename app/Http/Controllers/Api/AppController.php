@@ -25,6 +25,8 @@ use App\Models\OrderItems;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use App\Models\User;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Hash;
 
 class AppController extends Controller
 {
@@ -38,7 +40,7 @@ class AppController extends Controller
         $sliders = Slider::get();
         $cashBackDeals = DealCategory::where('active', 1)->take(5)->get();
 
-        $products = Product::where('active', 1)->with(['shop:id,city,shop_ratings'])->get();
+        $products = Product::where('active', 1)->with(['shop:id,city,shop_ratings'])->orderBy('created_at', 'desc')->get();
 
         $treandingdeals = DealViews::whereDate('viewed_at', Carbon::today())->get();
         $populardeals = DealViews::select('deal_id', DB::raw('count(*) as total_views'))->groupBy('deal_id')->limit(5)->orderBy('total_views', 'desc')->having('total_views', '>', 10)->get();
@@ -207,24 +209,24 @@ class AppController extends Controller
         }
 
         if ($request->has('price_range')) {
+            $priceRanges = $request->input('price_range');
 
-            $priceRange = $request->input('price_range');
+            // Apply price range filters for each selected range
+            $query->where(function ($priceQuery) use ($priceRanges) {
+                foreach ($priceRanges as $range) {
+                    // Clean and split the price range
+                    $cleanRange = str_replace(['Rs', ',', ' '], '', $range);
+                    $priceRange = explode('-', $cleanRange);
 
-            $priceRange = str_replace(['$', ',', ' '], '', $priceRange[0]);
-            $priceRange = explode('-', $priceRange);
+                    $minPrice = isset($priceRange[0]) ? (float)$priceRange[0] : null;
+                    $maxPrice = isset($priceRange[1]) ? (float)$priceRange[1] : null;
 
-            $minPrice = isset($priceRange[0]) ? (float)$priceRange[0] : null;
-            $maxPrice = isset($priceRange[1]) ? (float)$priceRange[1] : null;
-
-            $query->where(function ($priceQuery) use ($minPrice, $maxPrice) {
-                if ($maxPrice !== null) {
-
-                    $priceQuery->whereBetween('original_price', [$minPrice, $maxPrice])
-                        ->orWhereBetween('discounted_price', [$minPrice, $maxPrice]);
-                } else {
-
-                    $priceQuery->where('original_price', '>=', $minPrice)
-                        ->orWhere('discounted_price', '>=', $minPrice);
+                    // Apply the range filter
+                    if ($maxPrice !== null) {
+                        $priceQuery->orWhereBetween('discounted_price', [$minPrice, $maxPrice]);
+                    } else {
+                        $priceQuery->orWhere('discounted_price', '>=', $minPrice);
+                    }
                 }
             });
         }
@@ -430,7 +432,7 @@ class AppController extends Controller
 
             $priceRange = $request->input('price_range');
 
-            $priceRange = str_replace(['$', ',', ' '], '', $priceRange[0]);
+            $priceRange = str_replace(['Rs', ',', ' '], '', $priceRange[0]);
             $priceRange = explode('-', $priceRange);
 
             $minPrice = isset($priceRange[0]) ? (float)$priceRange[0] : null;
@@ -517,7 +519,7 @@ class AppController extends Controller
         $query = Product::with('shop')
             ->with(['shop:id,country,state,city,street,street2,zip_code,shop_ratings'])
             ->where('active', 1);
-    
+
         if ($id === '0') {
             $categoryGroupId = $request->input('category_group_id');
             if ($categoryGroupId) {
@@ -671,7 +673,7 @@ class AppController extends Controller
             ];
         }
 
-        $shortby = DealCategory::where('active', 1)->get();
+        $shortby = DealCategory::where('active', 1)->take(5)->get();
         $totaldeals = $deals->count();
         $bookmarkedProducts = collect();
         if (Auth::check()) {
@@ -926,8 +928,6 @@ class AppController extends Controller
             'quantity'         => $request->input('quantity') ?? 1,
             'delivery_address' => json_encode($address),
             'coupon_applied'   => $request->input('coupon_applied') ?? false,
-            'coupon_code'      => $request->input('coupon_code'),
-
         ]);
 
         if ($order) {
