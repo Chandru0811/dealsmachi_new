@@ -21,6 +21,7 @@ Route::post('forgot-password', [AuthController::class, 'forgetpassword']);
 Route::post('reset-password', [AuthController::class, 'resetpassword']);
 Route::get('account/verify/{id}', [AuthController::class, 'verifyAccount'])->name('vendor.verify');
 
+
 //user
 Route::get('appHome', [AppController::class, 'homepage']);
 Route::get('get/{id}/categories', [AppController::class, 'categories']);
@@ -38,6 +39,9 @@ Route::post('deal/viewed', [AppController::class, 'viewcounts']);
 Route::post('coupon/copied', [AppController::class, 'couponCopied']);
 Route::post('deal/shared', [AppController::class, 'dealshare']);
 Route::post('deal/enquired', [AppController::class, 'dealenquire']);
+Route::post('appForgotpassword', [AppController::class, 'forgetpassword']);
+Route::post('app/verify/otp', [AppController::class, 'checkotp']); 
+Route::post('appResetpassword', [AppController::class, 'resetpassword']);
 
 Route::middleware('auth:api')->group(function () {
     Route::get('/user', function (Request $request) {
