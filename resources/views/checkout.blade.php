@@ -2,21 +2,28 @@
 
 @section('content')
 <section>
-    @if (session('status'))
-    <div class="alert alert-success alert-dismissible fade show" role="alert"
-        style="position: fixed; top: 70px; right: 40px; z-index: 1050;">
-        {{ session('status') }}
-        <button type="button" class="btn-close btn-sm" data-bs-dismiss="alert" aria-label="Close"></button>
-    </div>
+@if (session('status'))
+        <div class="alert alert-success alert-dismissible fade show" role="alert"
+            style="position: fixed; top: 70px; right: 40px; z-index: 1050;">
+            {!! nl2br(e(session('status'))) !!}
+            <button type="button" class="btn-close btn-sm" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
     @endif
     @if ($errors->any())
+        <div class="alert alert-danger alert-dismissible fade show" role="alert"
+            style="position: fixed; top: 70px; right: 40px; z-index: 1050;">
+            <ul class="mb-0">
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+            <button type="button" class="btn-close btn-sm" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    @endif
+    @if (session('error'))
     <div class="alert alert-danger alert-dismissible fade show" role="alert"
         style="position: fixed; top: 70px; right: 40px; z-index: 1050;">
-        <ul class="mb-0">
-            @foreach ($errors->all() as $error)
-            <li>{{ $error }}</li>
-            @endforeach
-        </ul>
+        {{ session('error') }}
         <button type="button" class="btn-close btn-sm" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
     @endif
@@ -222,7 +229,7 @@
                             </div>
                             <!-- Hidden Total Input Field -->
                             <input type="hidden" name="total" id="total">
-                            <p style="color: #b12704">Your Savings : <span id="savings"></span> ({{ number_format($product->discount_percentage, 0) }}%)</p>
+                            <p class="text-success">Your Savings : <span id="savings"></span> ({{ number_format($product->discount_percentage, 0) }}%)</p>
                             <div class="input-group mb-4">
                                 <input type="text" class="form-control" placeholder="Enter a coupon code"
                                     value="{{ $product->coupon_code }}" readonly>

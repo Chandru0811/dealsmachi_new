@@ -37,6 +37,7 @@ class RegisteredUserController extends Controller
                 'string',
                 'email',
                 'max:255',
+                'regex:/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/',
                 Rule::unique(User::class)->where(function ($query) {
                     return $query->where('role', 3);
                 }),

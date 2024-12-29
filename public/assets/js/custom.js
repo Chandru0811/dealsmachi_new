@@ -645,16 +645,20 @@ $(document).ready(function () {
     const $placeOrderSpinner = $('#placeOrderSpinner');
     const $checkoutForm = $('#checkoutForm');
 
+    $.validator.addMethod("emailPattern", function (value, element) {
+        return this.optional(element) || /^[a-zA-Z0-9._%-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(value);
+    }, "Please enter a valid email address");
+
     $checkoutForm.validate({
         rules: {
             first_name: { required: true },
-            email: { required: true, email: true },
+            email: { required: true, email: true, emailPattern: true },
             mobile: { required: true, digits: true, minlength: 10, maxlength: 10 },
             street: { required: true },
             city: { required: true },
             state: { required: true },
             country: { required: true },
-            zipCode: { required: true, digits: true },
+            zipCode: { required: true, digits: true, minlength: 6, maxlength: 6 },
             payment_type: { required: true },
             service_date: {
                 required: function () {
@@ -686,6 +690,8 @@ $(document).ready(function () {
             zipCode: {
                 required: "Zip Code is required",
                 digits: "Zip Code should contain only numbers",
+                minlength: "Mobile number must be 6 digits",
+                maxlength: "Mobile number must be 6 digits",
             },
             payment_type: "Please select a payment method",
             service_date: {
