@@ -135,6 +135,10 @@
                                 </a>
                             </div>
                         </div>
+                        <div class="text-center">
+                            <p class="mb-4 mt-1" style="color: #fff;">Already have an account? &nbsp; <a
+                                    href="{{ url('login') }}" style="color: #fff;">Login</a></p>
+                        </div>
                     </form>
                 </div>
             </div>
