@@ -81,13 +81,27 @@
 <body>
     <div class="container">
         <!-- Header -->
-        <div class="header">
-            <img src="https://dealsmachi.com/assets/images/home/email_logo.png" alt="DealsMachi" />
-            <div class="headerText">
-                <a href="https://dealsmachi.com/" target="_blank">Your <span style="color: #ff0060;">dealsmachi.com</span></a> |
-                <a href="tel:+6588941306" target="_blank">+65 8894 1306</a> |
-                <a href="https://play.google.com/store/apps/details?id=com.dealsmachi.dealsmachi" target="_blank">Get <span style="color: #ff0060;">DealsMachi</span> App</a>
-            </div>
+        <div class="header" style="padding: 25px; border-bottom: 1px solid #ddd; text-align: center;">
+            <table width="100%" cellspacing="0" cellpadding="0" style="border-collapse: collapse;">
+                <tr>
+                    <td align="left" style="vertical-align: middle;">
+                        <img src="https://dealsmachi.com/assets/images/home/email_logo.png" alt="Deals Machi" style="max-width: 150px; height: auto;">
+                    </td>
+                    <td align="right" style="vertical-align: middle;">
+                        <div class="headerText" style="font-size: 14px; color: #333;">
+                            <a href="https://dealsmachi.com/" target="_blank" style="text-decoration: none; color: #333;">
+                                Your <span style="color: #ff0060;">dealsmachi.com</span>
+                            </a> |
+                            <a href="tel:919150150687 " target="_blank" style="text-decoration: none; color: #333;">
+                                +91 9150150687
+                            </a> |
+                            <a href="https://play.google.com/store/apps/details?id=com.dealsmachi.dealsmachi" target="_blank" style="text-decoration: none; color: #333;">
+                                Get <span style="color: #ff0060;">DealsMachi</span> App
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+            </table>
         </div>
 
         <!-- Content -->
@@ -99,9 +113,19 @@
         </div>
 
         <!-- Footer -->
-        <div class="footer">
-            <img src="https://dealsmachi.com/assets/images/home/email_logo.png" alt="DealsMachi" />
-            <p>Connect with <a href="https://dealsmachi.com/" target="_blank" style="color: #ff0060; text-decoration: none;">DealsMachi</a> India</p>
+        <div class="footer" style="padding: 15px 25px; text-align: center;">
+            <table width="100%" cellspacing="0" cellpadding="0" style="border-collapse: collapse;">
+                <tr>
+                    <td align="left" style="vertical-align: middle;">
+                        <img src="https://dealsmachi.com/assets/images/home/email_logo.png" alt="dealsmachi" style="max-width: 150px; height: auto; margin-bottom: 10px;">
+                    </td>
+                    <td align="right" style="vertical-align: middle;">
+                        <p style="font-size: 12px; color: #333; margin: 0;">
+                            Connect with <a href="https://dealsmachi.com/" target="_blank" style="color: #ff0060; text-decoration: none;">dealsmachi</a> India
+                        </p>
+                    </td>
+                </tr>
+            </table>
         </div>
     </div>
 </body>
