@@ -89,8 +89,10 @@ class AppController extends Controller
     public function getDeals($category_id, Request $request)
     {
         $deals = Product::with('shop')->where('category_id', $category_id)->where('active', 1)->get();
-        $brands = Product::where('active', 1)->distinct()->pluck('brand');
-        $discounts = Product::where('active', 1)->distinct()->pluck('discount_percentage');
+        $brands = Product::where('active', 1)->where('category_id', $category_id)->whereNotNull('brand')->where('brand', '!=', '')->distinct()->orderBy('brand', 'asc')->pluck('brand');
+        $discounts = Product::where('active', 1)->where('category_id', $category_id)->pluck('discount_percentage')->map(function ($discount) {
+            return round($discount);
+        })->unique()->sort()->values();
         $rating_items = Shop::where('active', 1)->select('shop_ratings', DB::raw('count(*) as rating_count'))->groupBy('shop_ratings')->get();
         $priceRanges = [];
         $priceStep = 2000;
