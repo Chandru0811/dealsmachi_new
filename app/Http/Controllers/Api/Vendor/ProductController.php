@@ -151,6 +151,7 @@ class ProductController extends Controller
             }
         }
         $validatedData['active'] = 0;
+        $validatedData['additional_details'] = $request->additional_details;
         $product = Product::create($validatedData);
 
         $shop = Shop::where('id', $shopId)->first();
@@ -459,6 +460,7 @@ class ProductController extends Controller
             $validatedData['image_url4'] = $imagePath . '/' . $imageName4;
         }
 
+        $validatedData['additional_details'] = $request->additional_details;
         $product->update($validatedData);
 
         return $this->success('Product updated successfully!', $product);

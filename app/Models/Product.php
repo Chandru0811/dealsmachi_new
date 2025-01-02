@@ -34,6 +34,7 @@ class Product extends Model
         'image_url2',
         'image_url3',
         'image_url4',
+        'additional_details',
         'active',
         'coupon_code'
     ];
