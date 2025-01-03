@@ -37,7 +37,7 @@
                         <div class="card h-100 silderCard" style="border-color: #1878f3; border-radius: 10px;">
                             <a href="https://www.facebook.com/profile.php?id=61566743978973" target="_blank" style="text-decoration: none;">
                                 <div class="p-2 qr-code">
-                                    <img src="{{ asset('assets/images/home/facebook_qr_code.png') }}" alt="Facebook QR" class="img-fluid">
+                                    <img src="{{ asset('assets/images/home/facebook_qr_code.webp') }}" alt="Facebook QR" class="img-fluid">
                                 </div>
                                 <div class="icon-facebook icon-text">
                                     <i class="fa-brands fa-facebook-f" style="color: #1878f3; padding: 3px 5px;"></i>
@@ -50,7 +50,7 @@
                         <div class="card h-100 silderCard" style="border-color: #cc2366; border-radius: 10px;">
                             <a href="https://www.instagram.com/dealsmachi/" target="_blank" style="text-decoration: none;">
                                 <div class="p-2 qr-code">
-                                    <img src="{{ asset('assets/images/home/instagram_qr_code.png') }}" alt="Instagram QR" class="img-fluid">
+                                    <img src="{{ asset('assets/images/home/instagram_qr_code.webp') }}" alt="Instagram QR" class="img-fluid">
                                 </div>
                                 <div class="icon-instagram icon-text">
                                     <i class="fa-brands fa-instagram " style="color: #cc2366; padding: 3px 4px;"></i>
@@ -63,7 +63,7 @@
                         <a href="https://www.youtube.com/channel/UCAyH2wQ2srJE8WqvII8JNrQ" target="_blank" style="text-decoration: none;">
                             <div class="card h-100 silderCard" style="border-color: #FF0000; border-radius: 10px;">
                                 <div class="p-2 qr-code">
-                                    <img src="{{ asset('assets/images/home/youtube_qr_code.png') }}" alt="YouTube QR" class="img-fluid">
+                                    <img src="{{ asset('assets/images/home/youtube_qr_code.webp') }}" alt="YouTube QR" class="img-fluid">
                                 </div>
                                 <div class="icon-youtube icon-text">
                                     <i class="fa-brands fa-youtube" style="color: #FF0000;"></i>
@@ -78,7 +78,7 @@
                         <div class="card h-100 silderCard1" style="border-color: #25D366; border-radius: 10px;">
                             <a href="https://chat.whatsapp.com/Ef23qGMU1d6EXYpRvomaLx" target="_blank" style="text-decoration: none;">
                                 <div class="p-2 qr-code1">
-                                    <img src="{{ asset('assets/images/home/whatsapp_qr_code.png') }}" alt="WhatsApp QR" class="img-fluid">
+                                    <img src="{{ asset('assets/images/home/whatsapp_qr_code.webp') }}" alt="WhatsApp QR" class="img-fluid">
                                 </div>
                                 <div class="icon-whatsapp icon-text">
                                     <i class="fa-brands fa-whatsapp" style="color: #25D366; padding: 3px 4px;"></i>
@@ -91,7 +91,7 @@
                         <div class="card h-100 silderCard1" style="border-color: #28a8e9; border-radius: 10px;">
                             <a href="https://t.me/+UTD7rFen3K4zNDFl" target="_blank" style="text-decoration: none;">
                                 <div class="p-2 qr-code1">
-                                    <img src="{{ asset('assets/images/home/telegram_qr_code.png') }}" alt="Telegram QR" class="img-fluid">
+                                    <img src="{{ asset('assets/images/home/telegram_qr_code.webp') }}" alt="Telegram QR" class="img-fluid">
                                 </div>
                                 <div class="icon-telegram icon-text">
                                     <i class="fa-brands fa-telegram" style="color: #28a8e9;"></i>
