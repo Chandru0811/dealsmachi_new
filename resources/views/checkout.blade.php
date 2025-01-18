@@ -94,7 +94,7 @@
                                 </span>
                                 &nbsp;&nbsp;
                                 <span class="ms-1" style="font-size:12px; color:#00DD21">
-                                    Dealslah Discount
+                                    DealsMachi Discount
                                     &nbsp;<span>${{ number_format($cart->items->sum(fn($item) => ($item->product->original_price - $item->product->discounted_price) * $item->quantity), 2) }}</span>
                                 </span>
                             </h4>
@@ -243,7 +243,7 @@
                                 </span> &nbsp;&nbsp; <span class="ms-1" style="color:#000">
                                     ${{ number_format($cart->grand_total, 2) }}
                                 </span> &nbsp;&nbsp; <span class="ms-1" style="font-size:12px; color:#00DD21">
-                                    Dealslah Discount
+                                    DealsMachi Discount
                                     &nbsp;<span>${{ number_format($cart->discount, 2) }}</span></span></h4>
                         </div>
                     </div>
