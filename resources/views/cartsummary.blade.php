@@ -10,7 +10,7 @@
     @endif
     @if ($errors->any())
         <div class="alert alert-dismissible fade show" role="alert"
-            style="position: fixed; top: 70px; right: 40px; z-index: 1050; background:#ef4444; color:#fff">
+            style="position: fixed; top: 70px; right: 40px; z-index: 1050; background:#ff0060; color:#fff">
             <ul class="mb-0">
                 @foreach ($errors->all() as $error)
                     <li>{{ $error }}</li>
@@ -21,7 +21,7 @@
     @endif
     @if (session('error'))
         <div class="alert alert-dismissible fade show" role="alert"
-            style="position: fixed; top: 70px; right: 40px; z-index: 1050; background:#ef4444; color:#fff">
+            style="position: fixed; top: 70px; right: 40px; z-index: 1050; background:#ff0060; color:#fff">
             {{ session('error') }}
             <button type="button" class="btn-close btn-sm" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
@@ -87,10 +87,17 @@
                             @endphp
                             <div class="row px-4 pt-4">
                                 <div class="col-md-3 d-flex flex-column justify-content-center align-items-center">
-                                    <div class="bg-light d-flex justify-content-center align-items-center"
-                                        style="border: 1px solid #ddd;">
-                                        <img src="{{ asset($product->image_url1) }}" alt="{{ $product->name }}"
-                                            style="max-width: 100%; max-height: 100%;">
+                                    <div class="d-flex justify-content-center align-items-center">
+                                            @php
+                                                $image = $product->productMedia
+                                                    ->where('order', 1)
+                                                    ->where('type', 'image')
+                                                    ->first();
+                                            @endphp
+                                            <img
+                                                src="{{ $image ? asset($image->path) : asset('assets/images/home/noImage.webp') }}"
+                                                style="max-width: 100%; max-height: 100%;"
+                                                alt="{{ $product->name }}" />
                                     </div>
                                 </div>
                                 <div class="col-md-9">
@@ -100,10 +107,10 @@
                                     <p>Seller : {{ $product->shop->email ?? '' }}</p>
                                     <div>
                                         <span style="text-decoration: line-through; color:#c7c7c7">
-                                            ${{ $product->original_price }}
+                                            ₹{{ $product->original_price }}
                                         </span>
-                                        <span class="ms-1" style="font-size:22px;color:#ef4444">
-                                            ${{ $product->discounted_price }}
+                                        <span class="ms-1" style="font-size:22px;color:#ff0060">
+                                            ₹{{ $product->discounted_price }}
                                         </span>
                                         <span class="ms-1" style="font-size:12px; color:#00DD21">
                                             {{ round($product->discount_percentage) }}% off
@@ -117,7 +124,7 @@
                                         @endif
                                     </div>
                                 </div>
-                                <hr class="mt-2 mb-0">
+                                <hr class="mt-2">
                             </div>
                         @endforeach
                     </div>
@@ -128,31 +135,32 @@
                         <div class="card-body m-0 p-4">
                             <div class="d-flex justify-content-between align-items-center">
                                 <p>Subtotal</p>
-                                <p>${{ $subtotal }}</p>
+                                <p>₹{{ $subtotal }}</p>
                             </div>
                             <div class="d-flex justify-content-between align-items-center">
                                 <p>Discount</p>
-                                <p>${{ $total_discount }}</p>
+                                <p>₹{{ $total_discount }}</p>
                             </div>
                             <hr />
                             <div class="d-flex justify-content-between pb-3">
                                 <span>Total</span>
-                                <span>${{ $subtotal - $total_discount }}</span>
+                                <span>₹{{ $subtotal - $total_discount }}</span>
                             </div>
                         </div>
-                        <div class="d-flex justify-content-end align-items-center p-3">
-                            @if ($default_address)
-                                <a href="{{ url('/checkout/' . $carts->id . '/' . $default_address->id) }}" class="btn"
-                                    style="padding:14px 36px; background:#00DD21; font-size:22px; color:#fff; text-decoration: none;">
-                                    Order Now
-                                </a>
-                            @else
-                                <a href="#" class="btn" data-bs-toggle="modal" data-bs-target="#newAddressModal"
-                                    style="padding:14px 36px; background:#00DD21; font-size:22px; color:#fff; text-decoration: none;">
-                                    Order Now
-                                </a>
-                            @endif
-                        </div>
+                    </div>
+                    <div class="d-flex justify-content-end align-items-center p-3"
+                        style="position: sticky; bottom: 0px; background: #fff">
+                        @if ($default_address)
+                            <a href="{{ url('/checkout/' . $carts->id) }}?address_id={{ $default_address->id }}"
+                                class="btn check_out_btn">
+                                Checkout
+                            </a>
+                        @else
+                            <a href="#" class="btn check_out_btn" data-bs-toggle="modal"
+                                data-bs-target="#newAddressModal">
+                                Checkout
+                            </a>
+                        @endif
                     </div>
                 </div>
             </div>

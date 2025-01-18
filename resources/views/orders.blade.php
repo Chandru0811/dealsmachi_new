@@ -5,8 +5,8 @@
     <div class="d-flex justify-content-between mb-3">
         <h3 style="color: #ff0060">
             My Orders
-            @if(count($orders) > 0)
-            ({{ count($orders) }})
+            @if($orders->isNotEmpty())
+                ({{ $orders->sum(function ($order) { return $order->items->count(); }) }})
             @endif
         </h3>
         <a href="/" class="text-decoration-none">
@@ -17,72 +17,71 @@
     </div>
     @if ($orders->isNotEmpty())
     @foreach ($orders as $order)
-    <a class="text-decoration-none" href="{{ url('orders', ['id' => $order->id]) }}">
-        <div class="card p-3 mb-3 orderCard">
-            <div class="d-flex justify-content-between align-items-center">
-                <p>
-                    Order Id: <span>{{ $order->order_number ?? 'N/A' }}</span>&nbsp;
-                    <span class="badge_payment">{{
-                        $order->status === "1" ? "Created" :
-                        ($order->status === "2" ? "Payment Error" :
-                        ($order->status === "3" ? "Confirmed" :
-                        ($order->status === "4" ? "Awaiting Delivery" :
-                        ($order->status === "5" ? "Delivered" :
-                        ($order->status === "6" ? "Returned" :
-                        ($order->status === "7" ? "Cancelled" : "Unknown Status"))))))
-                    }}</span>&nbsp;
-                    @if ($order->coupon_applied)
-                    <span class="badge_warning">
-                        {{ ucfirst($order->order_type ?? 'N/A') }}
-                    </span>
-                    @endif
-                </p>
-                <div class="d-flex">
-                    <p>Date : <span>{{ \Carbon\Carbon::parse($order->created_at)->format('d/m/Y') }}</span></p>
-                    &nbsp;&nbsp;
-                    <p>Time : <span>{{ \Carbon\Carbon::parse($order->created_at)->format('h:i A') }}</span></p>
-                </div>
-            </div>
-            <div class="d-flex justify-content-between align-items-start">
-                <div class="row">
-                    <div class="col-lg-3 col-md-3 col-12">
-                        <img src="{{ asset($order->items->first()->product->image_url1 ?? 'assets/images/home/noImage.webp') }}"
-                            alt="{{ $order->items->first()->product->name ?? 'No Product Available' }}"
-                            onerror="this.onerror=null; this.src='{{ asset('assets/images/home/noImage.webp') }}';"
-                            class="img-fluid" />
-                    </div>
-                    <div class="col-lg-9 col-md-9 col-12">
-                        @foreach ($order->items as $item)
-                        @if ($item)
-                        <p class="mb-1">
-                            {{ $item->deal_name }}
-                        </p>
-                        <p class="mb-1 descTruncate">
-                            {{ $item->deal_description }}
-                        </p>
-                        @if($order->order_type === 'product')
-                        <p class="mt-1 mb-0">Quantity : {{ $item->quantity }}</p>
-                        @endif
-                        <p>
-                            <del class="original-price">{{ $item->deal_originalprice * $item->quantity }}</del> &nbsp;
-                            <span class="discounted-price" style="color: #ff0060; font-size:24px">
-                                {{ $item->deal_price * $item->quantity }}
-                            </span> &nbsp;
-                            <span class="badge_payment">{{ number_format($item->discount_percentage, 0) }}%
-                                saved</span>
-                        </p>
-                        @else
-                        <div class="nodata">No Product Data Available!</div>
-                        @endif
-                        @endforeach
+        @foreach ($order->items as $item)
+        <a class="text-decoration-none" href="{{ url('order', ['id' => $order->id, 'product_id' => $item->product_id]) }}">
+            <div class="card orderCard p-3 mb-3">
+                <div class="d-flex justify-content-between align-items-center">
+                    <p>
+                        Order Id: <span>{{ $order->order_number ?? 'N/A' }}</span>&nbsp;
+                        <span class="badge_payment">{{
+                            $order->status === "1" ? "Created" :
+                            ($order->status === "2" ? "Payment Error" :
+                            ($order->status === "3" ? "Confirmed" :
+                            ($order->status === "4" ? "Awaiting Delivery" :
+                            ($order->status === "5" ? "Delivered" :
+                            ($order->status === "6" ? "Returned" :
+                            ($order->status === "7" ? "Cancelled" : "Unknown Status"))))))
+                        }}</span>&nbsp;
+                        <span class="badge_warning">
+                            {{ $item->deal_type == 1 ? 'Product' : ($item->deal_type == 2 ? 'Service' : '') }}
+                        </span>
+                    </p>
+                    <div class="d-flex">
+                        <p>Date : <span>{{ \Carbon\Carbon::parse($order->created_at)->format('d/m/Y') }}</span></p>
+                        &nbsp;&nbsp;
+                        <p>Time : <span>{{ \Carbon\Carbon::parse($order->created_at)->format('h:i A') }}</span></p>
                     </div>
                 </div>
+                <div class="d-flex justify-content-between align-items-start">
+                    <div class="row">
+                        <div class="col-lg-3 col-md-3 col-12">
+                            @php
+                                $image = $item->product->productMedia
+                                    ->where('order', 1)
+                                    ->where('type', 'image')
+                                    ->first();
+                            @endphp
+                            <img
+                                src="{{ $image ? asset($image->path) : asset('assets/images/home/noImage.webp') }}"
+                                class="img-fluid"
+                                alt="{{ $item->product->name }}" />
+                        </div>
+                        <div class="col-lg-9 col-md-9 col-12">
+                            <p class="mb-1">
+                                {{ $item->item_description?? 'No Name Available' }}
+                            </p>
+                            <p class="mb-1 truncated-description">
+                                {{ $item->product->description ?? 'No Description Available' }}
+                            </p>
+                            @if($item->deal_type === '1' || $item->deal_type === 'Product')
+                            <p class="mt-1 mb-0">Quantity : {{ $item->quantity }}</p>
+                            @endif
+                            <p>
+                                <del>${{ number_format($item->unit_price * $item->quantity, 2) }}</del> &nbsp;
+                                <span style="color: #ff0060; font-size:24px">
+                                    ${{ number_format($item->discount * $item->quantity, 2) }}
+                                </span> &nbsp;
+                                <span class="badge_payment">{{ number_format($item->discount_percent, 0) }}% saved</span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="d-flex justify-content-end align-items-center">
+                    <span class="badge_warning">{{ ucfirst(str_replace('_', ' ', $order->payment_type ?? 'N/A')) }}</span>
+                </div>
             </div>
-            <div class="d-flex justify-content-end align-items-center">
-                <span class="badge_warning">{{ ucfirst(str_replace('_', ' ', $order->payment_type ?? 'N/A')) }}</span>
-            </div>
-        </div>
-    </a>
+        </a>
+        @endforeach
     @endforeach
     @else
     <p>No orders available.</p>
