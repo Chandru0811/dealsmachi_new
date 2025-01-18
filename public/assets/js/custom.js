@@ -1,33 +1,81 @@
 $(document).ready(function () {
+    function updateDropdownToggle() {
+        if ($(window).width() < 992) {
+            $(".dropdown-toggle").attr("data-bs-toggle", "dropdown");
+            $(".dropdown-toggle").on("click", function (event) {
+                event.preventDefault();
+
+                const $menu = $(this).next(".dropdown-menu");
+                const isExpanded = $(this).attr("aria-expanded") === "true";
+
+                $(this).toggleClass("show", !isExpanded);
+                $menu.toggleClass("show", !isExpanded);
+                $(this).attr("aria-expanded", !isExpanded);
+            });
+        } else {
+            $(".dropdown-toggle").removeAttr("data-bs-toggle");
+        }
+    }
+
+    updateDropdownToggle();
+
+    $(window).resize(function () {
+        updateDropdownToggle();
+    });
+});
+
+// $(document).ready(function () {
+//     $("#moveToCartForm").on("submit", function (e) {
+//         e.preventDefault(); // Prevent the default form submission
+
+//         // Collect selected deal IDs
+//         let selectedDeals = [];
+//         $("input[name='deal_ids[]']:checked").each(function () {
+//             selectedDeals.push($(this).val());
+//         });
+
+//         // Show a warning if no items are selected
+//         if (selectedDeals.length === 0) {
+//             $("#moveToCartResponse").html(
+//                 '<div class="alert alert-warning">Please select at least one item to move to the cart.</div>'
+//             );
+//             return;
+//         }
+
+//       $.ajax({
+//           url: "/saveforlater/multiple",
+//           type: "POST",
+//           data: {
+//               _token: $('meta[name="csrf-token"]').attr("content"), // Fetch the CSRF token from the meta tag
+//               deal_ids: selectedDeals, // Array of selected deal IDs
+//           },
+//           success: function (response) {
+//               if (response.status === "success") {
+//                   $("#moveToCartResponse").html(
+//                       '<div class="alert alert-success">' +
+//                           response.message +
+//                           "</div>"
+//                   );
+//               }
+//           },
+//           error: function (xhr) {
+//               let errorMessage =
+//                   xhr.responseJSON?.message ||
+//                   "Something went wrong. Please try again.";
+//               $("#moveToCartResponse").html(
+//                   '<div class="alert alert-danger">' + errorMessage + "</div>"
+//               );
+//           },
+//       });
+
+//     });
+// });
+
+$(document).ready(function () {
+    // Validation for Main Form
     $(".social-button .fab.fa-twitter")
         .removeClass("fa-twitter")
         .addClass("fa-x-twitter");
-
-    $("#togglePassword").on("click", function () {
-        const passwordField = $("#password");
-        const eyeIcon = $("#eyeIconPassword");
-
-        if (passwordField.attr("type") === "password") {
-            passwordField.attr("type", "text");
-            eyeIcon.removeClass("fa-eye").addClass("fa-eye-slash");
-        } else {
-            passwordField.attr("type", "password");
-            eyeIcon.removeClass("fa-eye-slash").addClass("fa-eye");
-        }
-    });
-
-    $("#toggleConfirmPassword").on("click", function () {
-        const confirmPasswordField = $("#password_confirmation");
-        const eyeIconConfirm = $("#eyeIconConfirm");
-
-        if (confirmPasswordField.attr("type") === "password") {
-            confirmPasswordField.attr("type", "text");
-            eyeIconConfirm.removeClass("fa-eye").addClass("fa-eye-slash");
-        } else {
-            confirmPasswordField.attr("type", "password");
-            eyeIconConfirm.removeClass("fa-eye-slash").addClass("fa-eye");
-        }
-    });
 
     $("#enquiryFormMain").validate({
         rules: {
@@ -64,6 +112,84 @@ $(document).ready(function () {
         },
         submitHandler: function (form) {
             submitEnquiryForm(form);
+        },
+    });
+
+    $("#contactForm").validate({
+        rules: {
+            first_name: {
+                required: true,
+                minlength: 2,
+            },
+            email: {
+                required: true,
+                email: true,
+            },
+            mobile: {
+                required: true,
+                number: true,
+                minlength: 8,
+                maxlength: 10,
+            },
+            description_info: {
+                required: true,
+            },
+        },
+        messages: {
+            first_name: {
+                required: "Please enter your first name*",
+                minlength: "Your name must be at least 2 characters long",
+            },
+            email: {
+                required: "Please enter your email*",
+                email: "Please enter a valid email address",
+            },
+            mobile: {
+                required: "Please enter your phone number*",
+                number: "Please enter a valid phone number",
+                minlength: "Your phone number must be at least 8 digits long",
+                maxlength: "Your phone number must be at most 10 digits long",
+            },
+            description_info: {
+                required: "Please enter your message*",
+            },
+        },
+        errorPlacement: function (error, element) {
+            error.appendTo(element.next(".error"));
+        },
+        submitHandler: function (form) {
+            var payload = {
+                first_name: $("#first_name").val(),
+                last_name: $("#last_name").val(),
+                email: $("#email").val(),
+                phone: $("#mobile").val(),
+                company_id: 40,
+                company: "Dealslah",
+                lead_status: "PENDING",
+                description_info: $("#description_info").val(),
+                lead_source: "Contact Us",
+                country_code: "65",
+                createdBy: $("#first_name").val(),
+            };
+
+            // console.log("Form data:", $("#description_info").val());
+
+            // AJAX call to the newClient API
+            $.ajax({
+                url: "https://crmlah.com/ecscrm/api/newClient",
+                type: "POST",
+                contentType: "application/json",
+                data: JSON.stringify(payload),
+                success: function (response) {
+                    console.log("API response:", response);
+                    $("#successModal").modal("show");
+                    $(form).trigger("reset"); // Reset form after successful submission
+                },
+                error: function (xhr, status, error) {
+                    console.error("API call failed:", error);
+                    $("#errorModal").modal("show");
+                },
+            });
         },
     });
 
@@ -114,15 +240,15 @@ $(document).ready(function () {
             name: $currentForm.find("[name='name']").val(),
             email: $currentForm.find("[name='email']").val(),
             phone: $currentForm.find("[name='phone']").val(),
-            company_id: 42,
-            company: "Dealsmachi",
+            company_id: 40,
+            company: "ECSCloudInfotech",
             lead_status: "PENDING",
             lead_source: "Product Page",
-            country_code: "91",
+            country_code: "65",
         };
 
         var laravelRequest = $.ajax({
-            url: "/deals/count/enquire",
+            url: "http://127.0.0.1:8000/deals/count/enquire",
             type: "POST",
             headers: {
                 "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
@@ -160,12 +286,217 @@ $(document).ready(function () {
                 $("#enquiryModal").modal("hide");
             });
     }
+    // Validation for Profile
+    $("#profileFormModal").validate({
+        rules: {
+            name: {
+                required: true,
+            },
+            email: {
+                required: true,
+            },
+        },
+        messages: {
+            name: {
+                required: "Please enter your name",
+            },
+            email: {
+                required: "Please enter your email",
+            },
+        },
+        errorPlacement: function (error, element) {
+            error.addClass("text-danger mt-1");
+            error.insertAfter(element);
+        },
+        highlight: function (element) {
+            $(element).addClass("is-invalid");
+        },
+        unhighlight: function (element) {
+            $(element).removeClass("is-invalid");
+        },
+        submitHandler: function (form) {
+             form.submit();
+        },
+    });
+
+    // Validation for New Address Form
+    $("#addressNewForm").validate({
+        rules: {
+            first_name: {
+                required: true,
+                maxlength: 200,
+            },
+            email: {
+                required: true,
+                email: true,
+                maxlength: 200,
+            },
+            phone: {
+                required: true,
+                digits: true,
+                minlength: 8,
+                maxlength: 8, // Exactly 8 digits as per backend
+            },
+            postalcode: {
+                required: true,
+                digits: true,
+                minlength: 6,
+                maxlength: 6, // Exactly 6 digits as per backend
+            },
+            address: {
+                required: true,
+            },
+            type: {
+                required: true,
+            },
+        },
+        messages: {
+            first_name: {
+                required: "Please provide your first name.",
+                maxlength: "First name may not exceed 200 characters.",
+            },
+            email: {
+                required: "Please provide an email address.",
+                email: "Please provide a valid email address.",
+                maxlength: "Email may not exceed 200 characters.",
+            },
+            phone: {
+                required: "Please provide a phone number.",
+                digits: "Phone number must be exactly 8 digits.",
+                minlength: "Phone number must be exactly 8 digits.",
+                maxlength: "Phone number must be exactly 8 digits.",
+            },
+            postalcode: {
+                required: "Please provide a postal code.",
+                digits: "Postal code must be exactly 6 digits.",
+                minlength: "Postal code must be exactly 6 digits.",
+                maxlength: "Postal code must be exactly 6 digits.",
+            },
+            address: {
+                required: "Please provide an address.",
+            },
+        },
+        errorPlacement: function (error, element) {
+            error.addClass("text-danger mt-1");
+            error.insertAfter(element);
+        },
+        highlight: function (element) {
+            $(element).addClass("is-invalid");
+        },
+        unhighlight: function (element) {
+            $(element).removeClass("is-invalid");
+        },
+        submitHandler: function (form) {
+            form.submit();
+        },
+    });
+
+    // Validation for New Address Form
+    $("#addressEditForm").validate({
+        rules: {
+            first_name: {
+                required: true,
+                maxlength: 200,
+            },
+            email: {
+                required: true,
+                email: true,
+                maxlength: 200,
+            },
+            phone: {
+                required: true,
+                digits: true,
+                minlength: 8,
+                maxlength: 8, // Exactly 8 digits as per backend
+            },
+            postalcode: {
+                required: true,
+                digits: true,
+                minlength: 6,
+                maxlength: 6, // Exactly 6 digits as per backend
+            },
+            address: {
+                required: true,
+            },
+            type: {
+                required: true,
+            },
+        },
+        messages: {
+            first_name: {
+                required: "Please provide your first name.",
+                maxlength: "First name may not exceed 200 characters.",
+            },
+            email: {
+                required: "Please provide an email address.",
+                email: "Please provide a valid email address.",
+                maxlength: "Email may not exceed 200 characters.",
+            },
+            phone: {
+                required: "Please provide a phone number.",
+                digits: "Phone number must be exactly 8 digits.",
+                minlength: "Phone number must be exactly 8 digits.",
+                maxlength: "Phone number must be exactly 8 digits.",
+            },
+            postalcode: {
+                required: "Please provide a postal code.",
+                digits: "Postal code must be exactly 6 digits.",
+                minlength: "Postal code must be exactly 6 digits.",
+                maxlength: "Postal code must be exactly 6 digits.",
+            },
+            address: {
+                required: "Please provide an address.",
+            },
+            type: {
+                required: "Please provide the address type.",
+            },
+        },
+        errorPlacement: function (error, element) {
+            error.addClass("text-danger mt-1");
+            error.insertAfter(element);
+        },
+        highlight: function (element) {
+            $(element).addClass("is-invalid");
+        },
+        unhighlight: function (element) {
+            $(element).removeClass("is-invalid");
+        },
+        submitHandler: function (form) {
+            form.submit();
+        },
+    });
 });
 
 function closePopup() {
     $("#successModal").modal("hide");
     $("#errorModal").modal("hide");
 }
+
+$(document).ready(function () {
+    $(".image-slider1").owlCarousel({
+        items: 1,
+        nav: true,
+        margin: 10,
+        loop: true,
+        autoplay: false,
+        dots: false,
+        navText: [
+            '<span class="custom-prev-btn"><i class="fa-solid fa-arrow-left"></i></span>',
+            '<span class="custom-next-btn"><i class="fa-solid fa-arrow-right"></i></span>',
+        ],
+        responsive: {
+            0: {
+                items: 1,
+            },
+            600: {
+                items: 3,
+            },
+            1000: {
+                items: 4,
+            },
+        },
+    });
+});
 
 $(document).ready(function () {
     $(".carousel_slider").owlCarousel({
@@ -191,82 +522,394 @@ $(document).ready(function () {
     });
 });
 
-$("#contactForm").validate({
-    rules: {
-        first_name: {
-            required: true,
-            minlength: 2,
-        },
-        email: {
-            required: true,
-            email: true,
-        },
-        mobile: {
-            required: true,
-            number: true,
-            minlength: 8,
-            maxlength: 10,
-        },
-        description_info: {
-            required: true,
-        },
-    },
-    messages: {
-        first_name: {
-            required: "Please enter your first name*",
-            minlength: "Your name must be at least 2 characters long",
-        },
-        email: {
-            required: "Please enter your email*",
-            email: "Please enter a valid email address",
-        },
-        mobile: {
-            required: "Please enter your phone number*",
-            number: "Please enter a valid phone number",
-            minlength: "Your phone number must be at least 8 digits long",
-            maxlength: "Your phone number must be at most 10 digits long",
-        },
-        description_info: {
-            required: "Please enter your message*",
-        },
-    },
-    errorPlacement: function (error, element) {
-        error.appendTo(element.next(".error"));
-    },
-    submitHandler: function (form) {
-        var payload = {
-            first_name: $("#first_name").val(),
-            last_name: $("#last_name").val(),
-            email: $("#email").val(),
-            phone: $("#mobile").val(),
-            company_id: 42,
-            company: "DealsMachi",
-            lead_status: "PENDING",
-            description_info: $("#description_info").val(),
-            lead_source: "Contact Us",
-            country_code: "65",
-            createdBy: $("#first_name").val(),
-        };
-
-        // console.log("Form data:", $("#description_info").val());
-
-        // AJAX call to the newClient API
-        $.ajax({
-            url: "https://crmlah.com/ecscrm/api/newClient",
-            type: "POST",
-            contentType: "application/json",
-            data: JSON.stringify(payload),
-            success: function (response) {
-                console.log("API response:", response);
-                $("#successModal").modal("show");
-                $(form).trigger("reset"); // Reset form after successful submission
+// Validation for Login Page
+$(document).ready(function () {
+    $("#loginForm").validate({
+        rules: {
+            email: {
+                required: true,
+                email: true,
             },
-            error: function (xhr, status, error) {
-                console.error("API call failed:", error);
-                $("#errorModal").modal("show");
+            password: {
+                required: true,
+                minlength: 8,
+                maxlength: 16,
             },
-        });
-    },
+            password_confirmation: {
+                required: true,
+                equalTo: "#password",
+                minlength: 8,
+                maxlength: 16,
+            },
+        },
+        messages: {
+            email: {
+                required: "Email is required",
+                email: "Invalid email address",
+            },
+            password: {
+                required: "Password is required",
+                minlength: "Password must be at least 8 characters long",
+                maxlength: "Password must not exceed 16 characters",
+            },
+            password_confirmation: {
+                required: "Confirm Password is required",
+                equalTo: "Passwords do not match",
+                minlength: "Password must be at least 8 characters long",
+                maxlength: "Password must not exceed 16 characters",
+            },
+        },
+        errorPlacement: function (error, element) {
+            error.addClass("text-danger mt-1");
+            error.insertAfter(element);
+
+            if (element.attr("name") === "password") {
+                adjustIconPosition(element);
+            }
+        },
+        highlight: function (element) {
+            $(element).addClass("is-invalid");
+            if ($(element).attr("name") === "password") {
+                $("#toggleLoginPassword").addClass("is-invalid");
+                adjustIconPosition($(element));
+            }
+        },
+        unhighlight: function (element) {
+            $(element).removeClass("is-invalid");
+            if ($(element).attr("name") === "password") {
+                $("#toggleLoginPassword").removeClass("is-invalid");
+                adjustIconPosition($(element));
+            }
+        },
+        submitHandler: function (form) {
+            alert("Form is valid! Submitting...");
+            form.submit();
+        },
+    });
+
+    function adjustIconPosition(passwordField) {
+        const icon = $("#toggleLoginPassword");
+        const errorElement = passwordField.next(".text-danger");
+
+        if (errorElement.length) {
+            icon.css("right", `${passwordField.outerHeight() - 5}px`);
+            icon.css("top", `${passwordField.outerHeight() + 13}px`);
+        } else {
+            icon.css("right", "10px");
+            icon.css("top", "71%");
+        }
+    }
+
+    // Password visibility toggle
+    $(document).ready(function () {
+        const toggleLoginPassword = document.querySelector(
+            "#toggleLoginPassword"
+        );
+        const loginPassword = document.querySelector("#password");
+
+        if (toggleLoginPassword && loginPassword) {
+            toggleLoginPassword.addEventListener("click", function () {
+                const type =
+                    loginPassword.getAttribute("type") === "password"
+                        ? "text"
+                        : "password";
+                loginPassword.setAttribute("type", type);
+                $(this).toggleClass("fa-eye-slash fa-eye");
+            });
+        }
+    });
+});
+
+// Validation for Register Page
+$(document).ready(function () {
+    $("#registerForm").validate({
+        rules: {
+            name: {
+                required: true,
+            },
+            email: {
+                required: true,
+                email: true,
+            },
+            password: {
+                required: true,
+                minlength: 8,
+            },
+            confirm_password: {
+                required: true,
+                equalTo: "#password",
+            },
+        },
+        messages: {
+            name: {
+                required: "Name is required",
+            },
+            email: {
+                required: "Email is required",
+                email: "Invalid email address",
+            },
+            password: {
+                required: "Password is required",
+                minlength: "Password must be at least 8 characters long",
+            },
+            confirm_password: {
+                required: "Confirm Password is required",
+                equalTo: "Passwords do not match",
+            },
+        },
+        errorPlacement: function (error, element) {
+            error.addClass("text-danger mt-1");
+            error.insertAfter(element);
+
+            if (
+                element.attr("name") === "password" ||
+                element.attr("name") === "confirm_password"
+            ) {
+                adjustRegisterIconPosition(element);
+            }
+        },
+        highlight: function (element) {
+            $(element).addClass("is-invalid");
+            if (
+                $(element).attr("name") === "password" ||
+                $(element).attr("name") === "confirm_password"
+            ) {
+                adjustRegisterIconPosition($(element));
+            }
+        },
+        unhighlight: function (element) {
+            $(element).removeClass("is-invalid");
+            if (
+                $(element).attr("name") === "password" ||
+                $(element).attr("name") === "confirm_password"
+            ) {
+                adjustRegisterIconPosition($(element));
+            }
+        },
+        submitHandler: function (form) {
+            alert("Registration form is valid! Submitting...");
+            form.submit();
+        },
+    });
+
+    function adjustRegisterIconPosition(passwordField) {
+        const icon =
+            passwordField.attr("name") === "password"
+                ? $("#toggleRegisterPassword")
+                : $("#toggleRegisterConfirmPassword");
+        const errorElement = passwordField.next(".text-danger");
+
+        if (errorElement.length) {
+            icon.css("right", `${passwordField.outerHeight() - 5}px`);
+            icon.css("top", `${passwordField.outerHeight() + 13}px`);
+        } else {
+            icon.css("right", "10px");
+            icon.css("top", "71%");
+        }
+    }
+
+    // Password visibility toggle for register form
+    $(document).ready(function () {
+        const toggleRegisterPassword = document.querySelector(
+            "#toggleRegisterPassword"
+        );
+        const registerPassword = document.querySelector("#password");
+
+        if (toggleRegisterPassword && registerPassword) {
+            toggleRegisterPassword.addEventListener("click", function () {
+                const type =
+                    registerPassword.getAttribute("type") === "password"
+                        ? "text"
+                        : "password";
+                registerPassword.setAttribute("type", type);
+                this.classList.toggle("fa-eye-slash");
+                this.classList.toggle("fa-eye");
+            });
+        }
+    });
+
+    $(document).ready(function () {
+        const toggleRegisterConfirmPassword = document.querySelector(
+            "#toggleRegisterConfirmPassword"
+        );
+        const registerConfirmPassword =
+            document.querySelector("#confirm_password");
+
+        // Check if both elements exist
+        if (toggleRegisterConfirmPassword && registerConfirmPassword) {
+            toggleRegisterConfirmPassword.addEventListener(
+                "click",
+                function () {
+                    const type =
+                        registerConfirmPassword.getAttribute("type") ===
+                        "password"
+                            ? "text"
+                            : "password";
+                    registerConfirmPassword.setAttribute("type", type);
+                    this.classList.toggle("fa-eye-slash");
+                    this.classList.toggle("fa-eye");
+                }
+            );
+        }
+    });
+});
+
+// Validation for Forgot Password Page
+$(document).ready(function () {
+    $("#forgotForm").validate({
+        rules: {
+            email: {
+                required: true,
+                email: true,
+            },
+        },
+        messages: {
+            email: {
+                required: "Email is required",
+                email: "Invalid email address",
+            },
+        },
+        errorPlacement: function (error, element) {
+            error.addClass("text-danger mt-1");
+            error.insertAfter(element);
+        },
+        highlight: function (element) {
+            $(element).addClass("is-invalid");
+        },
+        unhighlight: function (element) {
+            $(element).removeClass("is-invalid");
+        },
+        submitHandler: function (form) {
+            alert("Reset Password request is valid! Submitting...");
+            form.submit();
+        },
+    });
+});
+
+// Validation for Reset Password Page
+$(document).ready(function () {
+    $("#resetForm").validate({
+        rules: {
+            email: {
+                required: true,
+                email: true,
+            },
+            new_password: {
+                required: true,
+                minlength: 8,
+            },
+            confirm_new_password: {
+                required: true,
+                equalTo: "#new_password",
+            },
+        },
+        messages: {
+            email: {
+                required: "Email is required",
+                email: "Invalid email address",
+            },
+            new_password: {
+                required: "Password is required",
+                minlength: "Password must be at least 8 characters long",
+            },
+            confirm_new_password: {
+                required: "Confirm Password is required",
+                equalTo: "Passwords do not match",
+            },
+        },
+        errorPlacement: function (error, element) {
+            error.addClass("text-danger mt-1");
+            error.insertAfter(element);
+
+            if (
+                element.attr("name") === "new_password" ||
+                element.attr("name") === "confirm_new_password"
+            ) {
+                adjustResetIconPosition(element);
+            }
+        },
+        highlight: function (element) {
+            $(element).addClass("is-invalid");
+            if (
+                $(element).attr("name") === "new_password" ||
+                $(element).attr("name") === "confirm_new_password"
+            ) {
+                adjustResetIconPosition($(element));
+            }
+        },
+        unhighlight: function (element) {
+            $(element).removeClass("is-invalid");
+            if (
+                $(element).attr("name") === "new_password" ||
+                $(element).attr("name") === "confirm_new_password"
+            ) {
+                adjustResetIconPosition($(element));
+            }
+        },
+        submitHandler: function (form) {
+            alert("Reset Password form is valid! Submitting...");
+            form.submit();
+        },
+    });
+
+    function adjustResetIconPosition(passwordField) {
+        const icon =
+            passwordField.attr("name") === "new_password"
+                ? $("#toggleResetPassword")
+                : $("#toggleResetConfirmPassword");
+        const errorElement = passwordField.next(".text-danger");
+
+        if (errorElement.length) {
+            icon.css("right", `${passwordField.outerHeight() - 5}px`);
+            icon.css("top", `${passwordField.outerHeight() + 13}px`);
+        } else {
+            icon.css("right", "10px");
+            icon.css("top", "71%");
+        }
+    }
+
+    // Password visibility toggle for reset password form
+    $(document).ready(function () {
+        const toggleResetPassword = document.querySelector(
+            "#toggleResetPassword"
+        );
+        const resetPassword = document.querySelector("#new_password");
+
+        // Check if both elements exist
+        if (toggleResetPassword && resetPassword) {
+            toggleResetPassword.addEventListener("click", function () {
+                const type =
+                    resetPassword.getAttribute("type") === "password"
+                        ? "text"
+                        : "password";
+                resetPassword.setAttribute("type", type);
+                this.classList.toggle("fa-eye-slash");
+                this.classList.toggle("fa-eye");
+            });
+        }
+    });
+
+    $(document).ready(function () {
+        const toggleResetConfirmPassword = document.querySelector(
+            "#toggleResetConfirmPassword"
+        );
+        const resetConfirmPassword = document.querySelector(
+            "#confirm_new_password"
+        );
+
+        // Check if both elements exist
+        if (toggleResetConfirmPassword && resetConfirmPassword) {
+            toggleResetConfirmPassword.addEventListener("click", function () {
+                const type =
+                    resetConfirmPassword.getAttribute("type") === "password"
+                        ? "text"
+                        : "password";
+                resetConfirmPassword.setAttribute("type", type);
+                this.classList.toggle("fa-eye-slash");
+                this.classList.toggle("fa-eye");
+            });
+        }
+    });
 });
 
 function copySpanText(element, event) {
@@ -286,7 +929,7 @@ function copySpanText(element, event) {
     var dealId = element.closest("a").getAttribute("href").split("/").pop();
 
     $.ajax({
-        url: "/deals/coupon/copied",
+        url: "http://127.0.0.1:8000/deals/coupon/copied",
         type: "POST",
         data: {
             _token: $('meta[name="csrf-token"]').attr("content"),
@@ -318,7 +961,7 @@ function copyLinkToClipboard(element, event, dealId) {
     document.body.removeChild(tempInput);
 
     $.ajax({
-        url: "/deals/count/share",
+        url: "http://127.0.0.1:8000/deals/count/share",
         type: "POST",
         data: {
             _token: $('meta[name="csrf-token"]').attr("content"),
@@ -366,6 +1009,7 @@ function toggleNumber(event) {
 }
 
 $(document).ready(function () {
+    // Setup CSRF token for AJAX
     $.ajaxSetup({
         headers: {
             "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
@@ -392,7 +1036,7 @@ $(document).ready(function () {
                 let dealId = $(this).data("deal-id");
 
                 $.ajax({
-                    url: `/bookmark/${dealId}/add`,
+                    url: `http://127.0.0.1:8000/bookmark/${dealId}/add`,
                     method: "POST",
                     success: function (response) {
                         updateBookmarkCount(response.total_items);
@@ -411,7 +1055,7 @@ $(document).ready(function () {
 
                         handleRemoveBookmark();
                     },
-                    error: function (xhr) { },
+                    error: function (xhr) {},
                 });
             });
     }
@@ -425,7 +1069,7 @@ $(document).ready(function () {
                 let dealId = $(this).data("deal-id");
 
                 $.ajax({
-                    url: `/bookmark/${dealId}/remove`,
+                    url: `http://127.0.0.1:8000/bookmark/${dealId}/remove`,
                     method: "DELETE",
                     success: function (response) {
                         updateBookmarkCount(response.total_items);
@@ -458,7 +1102,7 @@ $(document).ready(function () {
     // Initial Load of Bookmark Count
     function loadBookmarkCount() {
         $.ajax({
-            url: "/totalbookmark",
+            url: "http://127.0.0.1:8000/totalbookmark",
             method: "GET",
             success: function (response) {
                 updateBookmarkCount(response.total_items);
@@ -481,6 +1125,7 @@ $(document).ready(function () {
     );
 });
 
+// Link Shared Capture the current page URL dynamically
 const currentUrl = encodeURIComponent(window.location.href);
 
 function shareOnInstagram() {
@@ -503,7 +1148,7 @@ document
             var shareUrl = event.target.closest("a").href;
 
             $.ajax({
-                url: "/deals/count/share",
+                url: "http://127.0.0.1:8000/deals/count/share",
                 type: "POST",
                 data: {
                     _token: $('meta[name="csrf-token"]').attr("content"),
@@ -525,7 +1170,7 @@ document
 
 function clickCount(dealId) {
     $.ajax({
-        url: `${window.location.origin}/deals/count/click`,
+        url: "http://127.0.0.1:8000/deals/count/click",
         type: "POST",
         data: {
             _token: $('meta[name="csrf-token"]').attr("content"),
@@ -542,7 +1187,7 @@ function clickCount(dealId) {
 
 function enquireCount(dealId) {
     $.ajax({
-        url: `${window.location.origin}/deals/count/enquire`,
+        url: "http://127.0.0.1:8000/deals/count/enquire",
         type: "POST",
         data: {
             _token: $('meta[name="csrf-token"]').attr("content"),
@@ -560,13 +1205,17 @@ function enquireCount(dealId) {
 function sendEnquiry(dealId, shopMobile, productName, productDescription) {
     enquireCount(dealId);
 
-    const whatsappUrl = `https://wa.me/91${shopMobile}?text=` +
-        encodeURIComponent(`*Hello! I visited dealslah website and found an amazing product:*\n\n${productName}\n${productDescription}\n\nHere is the product page: ${window.location.href}`);
+    const whatsappUrl =
+        `https://wa.me/65${shopMobile}?text=` +
+        encodeURIComponent(
+            `*Hello! I visited dealslah website and found an amazing product:*\n\n${productName}\n${productDescription}\n\nHere is the product page: ${window.location.href}`
+        );
 
-    window.open(whatsappUrl, '_blank');
+    window.open(whatsappUrl, "_blank");
 }
 
 function showAddress(country) {
+    // Hide all addresses
     var contents = document.getElementsByClassName("address-content");
     for (var i = 0; i < contents.length; i++) {
         contents[i].classList.remove("active-address");
@@ -586,46 +1235,14 @@ function showAddress(country) {
     var phoneLink = document.getElementById("phone-link");
     var phoneNumber = document.getElementById("phone-number");
 
-    if (country === "india") {
-        phoneLink.href = "tel:+919361365818";
-        phoneNumber.innerHTML = "+91 93613 65818";
-    } else if (country === "india") {
-        phoneLink.href = "tel:+919361365818";
-        phoneNumber.innerHTML = "+91 93613 65818";
+    if (country === "singapore") {
+        phoneLink.href = "tel:+6588941306";
+        phoneNumber.innerHTML = "+65 8894 1306";
+    } else if (country === "singapore") {
+        phoneLink.href = "tel:+6588941306";
+        phoneNumber.innerHTML = "+65 8894 1306";
     }
 }
-
-document.addEventListener("DOMContentLoaded", function () {
-    function formatIndianNumber(number) {
-        if (isNaN(number)) return "-";
-
-        let [integerPart, decimalPart] = number.toString().split(".");
-
-        let lastThree = integerPart.slice(-3);
-        let rest = integerPart.slice(0, -3);
-
-        if (rest.length > 0) {
-            rest = rest.replace(/\B(?=(\d{2})+(?!\d))/g, ",") + ",";
-        }
-
-        let formattedNumber = "₹" + rest + lastThree;
-
-        if (decimalPart !== undefined) {
-            formattedNumber += "." + decimalPart;
-        }
-        return formattedNumber;
-    }
-
-    document.querySelectorAll(".discounted-price").forEach((element) => {
-        let price = parseFloat(element.innerText);
-        element.innerText = formatIndianNumber(price);
-    });
-
-    document.querySelectorAll(".original-price").forEach((element) => {
-        let price = parseFloat(element.innerText);
-        element.innerText = formatIndianNumber(price);
-    });
-});
 
 function selectPaymentOption(optionId) {
     document.querySelectorAll(".card.payment-option").forEach((card) => {
@@ -637,28 +1254,47 @@ function selectPaymentOption(optionId) {
 
     document.getElementById(optionId).checked = true;
 
-    $("#checkoutForm").validate().element("#" + optionId);
+    $("#checkoutForm")
+        .validate()
+        .element("#" + optionId);
 }
 
 $(document).ready(function () {
-    const dealType = parseInt($('#checkoutForm').data('deal-type'), 10);
-    const $placeOrderSpinner = $('#placeOrderSpinner');
-    const $checkoutForm = $('#checkoutForm');
+    const dealType = parseInt($("#checkoutForm").data("deal-type"), 10);
+    const $placeOrderSpinner = $("#placeOrderSpinner");
+    const $checkoutForm = $("#checkoutForm");
 
-    $.validator.addMethod("emailPattern", function (value, element) {
-        return this.optional(element) || /^[a-zA-Z0-9._%-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(value);
-    }, "Please enter a valid email address");
+    $.validator.addMethod(
+        "emailPattern",
+        function (value, element) {
+            return (
+                this.optional(element) ||
+                /^[a-zA-Z0-9._%-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(value)
+            );
+        },
+        "Please enter a valid email address"
+    );
 
     $checkoutForm.validate({
         rules: {
             first_name: { required: true },
             email: { required: true, email: true, emailPattern: true },
-            mobile: { required: true, digits: true, minlength: 10, maxlength: 10 },
+            mobile: {
+                required: true,
+                digits: true,
+                minlength: 8,
+                maxlength: 8,
+            },
             street: { required: true },
             city: { required: true },
             state: { required: true },
             country: { required: true },
-            zipCode: { required: true, digits: true, minlength: 6, maxlength: 6 },
+            zipCode: {
+                required: true,
+                digits: true,
+                minlength: 6,
+                maxlength: 6,
+            },
             payment_type: { required: true },
             service_date: {
                 required: function () {
@@ -680,8 +1316,8 @@ $(document).ready(function () {
             mobile: {
                 required: "Mobile number is required",
                 digits: "Please enter a valid mobile number",
-                minlength: "Mobile number must be 10 digits",
-                maxlength: "Mobile number must be 10 digits",
+                minlength: "Mobile number must be 8 digits",
+                maxlength: "Mobile number must be 8 digits",
             },
             street: "Street is required",
             city: "City is required",
@@ -714,17 +1350,17 @@ $(document).ready(function () {
         },
         unhighlight: function (element) {
             $(element).removeClass("is-invalid");
-        }
+        },
     });
 
-    $checkoutForm.on('submit', function (e) {
+    $checkoutForm.on("submit", function (e) {
         e.preventDefault();
 
         const isValid = $checkoutForm.valid();
 
         if (isValid) {
-            $placeOrderSpinner.removeClass('d-none');
-            $placeOrderSpinner.addClass('show');
+            $placeOrderSpinner.removeClass("d-none");
+            $placeOrderSpinner.addClass("show");
 
             this.submit();
         }
@@ -732,12 +1368,39 @@ $(document).ready(function () {
 });
 
 $(document).ready(function () {
-    $('.alert').each(function () {
+    $(".alert").each(function () {
         const alert = $(this);
         setTimeout(function () {
-            if (alert.hasClass('show')) {
-                alert.alert('close');
+            if (alert.hasClass("show")) {
+                alert.alert("close");
             }
         }, 5000);
     });
 });
+
+$(document).ready(function () {
+    var hasVisited = sessionStorage.getItem("hasVisited") === "true";
+
+    if (!hasVisited) {
+        $(document).on("mouseleave", function (e) {
+            if (e.clientY < 0 && !sessionStorage.getItem("hasVisited")) {
+                $("#errorModal").modal("hide");
+                $("#successModal").modal("hide");
+                $("#successIndexLeadMagnetModal").modal("hide");
+                $("#indexLeadMagnetModal").modal("show");
+                sessionStorage.setItem("hasVisited", "true");
+            }
+        });
+    }
+    $("#closePopupButton").on("click", function () {
+        $("#indexLeadMagnetModal").modal("hide");
+    });
+});
+
+function closePopup() {
+    $("#leadMagnetModal").modal("hide");
+    $("#indexLeadMagnetModal").modal("hide");
+    $("#contactForm").modal("hide");
+    $("#successModal").modal("hide");
+    $("#errorModal").modal("hide");
+}
