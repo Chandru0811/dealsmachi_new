@@ -85,7 +85,6 @@ $(document).ready(function () {
             phone: {
                 required: true,
                 digits: true,
-                minlength: 8,
                 maxlength: 10,
             },
         },
@@ -96,7 +95,6 @@ $(document).ready(function () {
             phone: {
                 required: "Please enter your phone number",
                 digits: "Phone number must be numeric",
-                minlength: "Phone number must be at least 8 digits",
                 maxlength: "Phone number can't exceed 10 digits",
             },
         },
@@ -128,7 +126,6 @@ $(document).ready(function () {
             mobile: {
                 required: true,
                 number: true,
-                minlength: 8,
                 maxlength: 10,
             },
             description_info: {
@@ -147,7 +144,6 @@ $(document).ready(function () {
             mobile: {
                 required: "Please enter your phone number*",
                 number: "Please enter a valid phone number",
-                minlength: "Your phone number must be at least 8 digits long",
                 maxlength: "Your phone number must be at most 10 digits long",
             },
             description_info: {
@@ -164,7 +160,7 @@ $(document).ready(function () {
                 email: $("#email").val(),
                 phone: $("#mobile").val(),
                 company_id: 40,
-                company: "Dealslah",
+                company: "DealsMachi",
                 lead_status: "PENDING",
                 description_info: $("#description_info").val(),
                 lead_source: "Contact Us",
@@ -202,7 +198,6 @@ $(document).ready(function () {
             phone: {
                 required: true,
                 digits: true,
-                minlength: 8,
                 maxlength: 10,
             },
         },
@@ -213,7 +208,6 @@ $(document).ready(function () {
             phone: {
                 required: "Please enter your phone number",
                 digits: "Phone number must be numeric",
-                minlength: "Phone number must be at least 8 digits",
                 maxlength: "Phone number can't exceed 10 digits",
             },
         },
@@ -334,8 +328,7 @@ $(document).ready(function () {
             phone: {
                 required: true,
                 digits: true,
-                minlength: 8,
-                maxlength: 8, // Exactly 8 digits as per backend
+                maxlength: 10, // Exactly 8 digits as per backend
             },
             postalcode: {
                 required: true,
@@ -362,9 +355,8 @@ $(document).ready(function () {
             },
             phone: {
                 required: "Please provide a phone number.",
-                digits: "Phone number must be exactly 8 digits.",
-                minlength: "Phone number must be exactly 8 digits.",
-                maxlength: "Phone number must be exactly 8 digits.",
+                digits: "Phone number must be exactly 10 digits.",
+                maxlength: "Phone number must be exactly 10 digits.",
             },
             postalcode: {
                 required: "Please provide a postal code.",
@@ -406,14 +398,13 @@ $(document).ready(function () {
             phone: {
                 required: true,
                 digits: true,
-                minlength: 8,
-                maxlength: 8, // Exactly 8 digits as per backend
+                maxlength: 10, 
             },
             postalcode: {
                 required: true,
                 digits: true,
                 minlength: 6,
-                maxlength: 6, // Exactly 6 digits as per backend
+                maxlength: 6, 
             },
             address: {
                 required: true,
@@ -435,8 +426,7 @@ $(document).ready(function () {
             phone: {
                 required: "Please provide a phone number.",
                 digits: "Phone number must be exactly 8 digits.",
-                minlength: "Phone number must be exactly 8 digits.",
-                maxlength: "Phone number must be exactly 8 digits.",
+                maxlength: "Phone number must be exactly 10 digits.",
             },
             postalcode: {
                 required: "Please provide a postal code.",
@@ -1208,7 +1198,7 @@ function sendEnquiry(dealId, shopMobile, productName, productDescription) {
     const whatsappUrl =
         `https://wa.me/65${shopMobile}?text=` +
         encodeURIComponent(
-            `*Hello! I visited dealslah website and found an amazing product:*\n\n${productName}\n${productDescription}\n\nHere is the product page: ${window.location.href}`
+            `*Hello! I visited dealsmachi website and found an amazing product:*\n\n${productName}\n${productDescription}\n\nHere is the product page: ${window.location.href}`
         );
 
     window.open(whatsappUrl, "_blank");
@@ -1235,12 +1225,12 @@ function showAddress(country) {
     var phoneLink = document.getElementById("phone-link");
     var phoneNumber = document.getElementById("phone-number");
 
-    if (country === "singapore") {
-        phoneLink.href = "tel:+6588941306";
-        phoneNumber.innerHTML = "+65 8894 1306";
-    } else if (country === "singapore") {
-        phoneLink.href = "tel:+6588941306";
-        phoneNumber.innerHTML = "+65 8894 1306";
+    if (country === "india") {
+        phoneLink.href = "tel:+9188941306";
+        phoneNumber.innerHTML = "+91 8894 1306";
+    } else if (country === "india") {
+        phoneLink.href = "tel:+9188941306";
+        phoneNumber.innerHTML = "+91 8894 1306";
     }
 }
 
@@ -1282,8 +1272,7 @@ $(document).ready(function () {
             mobile: {
                 required: true,
                 digits: true,
-                minlength: 8,
-                maxlength: 8,
+                maxlength: 10,
             },
             street: { required: true },
             city: { required: true },
@@ -1316,8 +1305,7 @@ $(document).ready(function () {
             mobile: {
                 required: "Mobile number is required",
                 digits: "Please enter a valid mobile number",
-                minlength: "Mobile number must be 8 digits",
-                maxlength: "Mobile number must be 8 digits",
+                maxlength: "Mobile number must be 10 digits",
             },
             street: "Street is required",
             city: "City is required",
