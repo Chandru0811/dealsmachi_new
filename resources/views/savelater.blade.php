@@ -60,10 +60,10 @@
                             <p>Seller : {{ $savedItem->deal->shop->email }}</p>
                             <div>
                                 <span style="text-decoration: line-through; color:#c7c7c7">
-                                    ${{ $savedItem->deal->original_price }}
+                                    ₹{{ $savedItem->deal->original_price }}
                                 </span>
                                 <span class="ms-1" style="font-size:22px;color:#ff0060">
-                                    ${{ $savedItem->deal->discounted_price }}
+                                    ₹{{ $savedItem->deal->discounted_price }}
                                 </span>
                                 <span class="ms-1" style="font-size:12px; color:#00DD21">
                                     {{ round($savedItem->deal->discount_percentage) }}% off

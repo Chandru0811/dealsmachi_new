@@ -97,10 +97,10 @@
                                     <h6 class="truncated-description">{{ $product->description }}</h6>
                                     <div>
                                         <span style="text-decoration: line-through; color:#c7c7c7">
-                                            ${{ $product->original_price }}
+                                            ₹{{ $product->original_price }}
                                         </span>
                                         <span class="ms-1" style="font-size:22px;color:#ff0060">
-                                            ${{ $product->discounted_price }}
+                                            ₹{{ $product->discounted_price }}
                                         </span>
                                         <span class="ms-1" style="font-size:12px; color:#00DD21">
                                             {{ round($product->discount_percentage) }}% off

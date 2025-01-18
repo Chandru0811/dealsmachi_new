@@ -67,9 +67,9 @@
                             <p class="mt-1 mb-0">Quantity : {{ $item->quantity }}</p>
                             @endif
                             <p>
-                                <del>${{ number_format($item->unit_price * $item->quantity, 2) }}</del> &nbsp;
+                                <del>₹{{ number_format($item->unit_price * $item->quantity, 2) }}</del> &nbsp;
                                 <span style="color: #ff0060; font-size:24px">
-                                    ${{ number_format($item->discount * $item->quantity, 2) }}
+                                    ₹{{ number_format($item->discount * $item->quantity, 2) }}
                                 </span> &nbsp;
                                 <span class="badge_payment">{{ number_format($item->discount_percent, 0) }}% saved</span>
                             </p>
