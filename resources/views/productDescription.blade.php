@@ -198,7 +198,7 @@
                             <div class="col-6 p-1">
                                 <div class="card h-100 prodFilterCard"
                                     style="border-color: #1878f3; border-radius: 10px;white-space: nowrap;">
-                                    <a href="https://www.facebook.com/profile.php?id=61567112492283" target="_blank"
+                                    <a href="https://www.facebook.com/profile.php?id=61566743978973" target="_blank"
                                         style="text-decoration: none;">
                                         <div class="p-2 qr-code">
                                             <img src="{{ asset('assets/images/home/facebook_qr_code.webp') }}"
@@ -215,7 +215,7 @@
                             <div class="col-6 p-1">
                                 <div class="card h-100 prodFilterCard"
                                     style="border-color: #cc2366; border-radius: 10px;white-space: nowrap;">
-                                    <a href="https://www.instagram.com/dealslah/" target="_blank"
+                                    <a href="https://www.instagram.com/dealsmachi/" target="_blank"
                                         style="text-decoration: none;">
                                         <div class="p-2 qr-code">
                                             <img src="{{ asset('assets/images/home/instagram_qr_code.webp') }}"
@@ -233,7 +233,7 @@
                             <div class="col-6 p-1">
                                 <div class="card h-100 prodFilterCard"
                                     style="border-color: #FF0000; border-radius: 10px;  white-space: nowrap;">
-                                    <a href="https://www.youtube.com/@DEALSLAH" target="_blank"
+                                    <a href="https://www.youtube.com/channel/UCAyH2wQ2srJE8WqvII8JNrQ" target="_blank"
                                         style="text-decoration: none;">
                                         <div class="p-2 qr-code">
                                             <img src="{{ asset('assets/images/home/youtube_qr_code.webp') }}"
@@ -249,7 +249,7 @@
                             <div class="col-6 p-1">
                                 <div class="card h-100 prodFilterCard"
                                     style="border-color: #25D366; border-radius: 10px;  white-space: nowrap;">
-                                    <a href="https://chat.whatsapp.com/KR2syYEj3Eo3JwsClx5Zws" target="_blank"
+                                    <a href="https://chat.whatsapp.com/Ef23qGMU1d6EXYpRvomaLx" target="_blank"
                                         style="text-decoration: none;">
                                         <div class="p-2 qr-code">
                                             <img src="{{ asset('assets/images/home/whatsapp_qr_code.webp') }}"
@@ -267,7 +267,7 @@
                             <div class="col-6 p-1">
                                 <div class="card h-100 prodFilterCard"
                                     style="border-color: #28a8e9; border-radius: 10px;  white-space: nowrap;">
-                                    <a href="https://t.me/dealslah" target="_blank" style="text-decoration: none;">
+                                    <a href="https://t.me/+UTD7rFen3K4zNDFl" target="_blank" style="text-decoration: none;">
                                         <div class="p-2 qr-code">
                                             <img src="{{ asset('assets/images/home/telegram_qr_code.webp') }}"
                                                 alt="Telegram QR" class="img-fluid">
@@ -445,9 +445,9 @@
 
                             <div class="price-section mt-4">
                                 <h3>
-                                    <span class="current-price">${{ number_format($product->discounted_price, 2) }}</span>
-                                    <span class="original-price">${{ number_format($product->original_price, 2) }}</span>
-                                    <span class="discount-price">${{ number_format($product->discount_percentage, 2) }}%
+                                    <span class="current-price">₹{{ number_format($product->discounted_price, 2) }}</span>
+                                    <span class="original-price">₹{{ number_format($product->original_price, 2) }}</span>
+                                    <span class="discount-price">₹{{ number_format($product->discount_percentage, 2) }}%
                                         off</span>
                                     @if (!empty($product->coupon_code))
                                         <span id="mySpan" class="deal-badge" style="cursor: pointer"

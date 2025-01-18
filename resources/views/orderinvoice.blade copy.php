@@ -106,7 +106,7 @@
             <table width="100%" cellspacing="0" cellpadding="0" style="border-collapse: collapse;">
                 <tr>
                     <td align="left" style="vertical-align: middle;">
-                        <img src="{{ $logo }}" alt="Dealslah" width="200">
+                        <img src="{{ $logo }}" alt="DealsMachi" width="200">
                     </td>
                     <td align="right" style="vertical-align: middle;" class="headerText">
                         <h1>Invoice</h1>
@@ -186,18 +186,18 @@
                             <strong>{{ $item->deal_name }}</strong>
                             <p class="desc">{{ Str::limit($item->deal_description, 85, '...') }}</p>
                         </td>
-                        <td>${{ number_format($item->deal_originalprice, 2) }}</td>
+                        <td>₹{{ number_format($item->deal_originalprice, 2) }}</td>
                         <td>{{ $item->quantity }}</td>
-                        <td>${{ number_format($item->deal_originalprice * $item->quantity, 2) }}</td>
-                        <td>${{ number_format(($item->deal_originalprice - $item->deal_price) * $item->quantity, 2) }}</td>
-                        <td>${{ number_format($item->deal_price * $item->quantity, 2) }}</td>
+                        <td>₹{{ number_format($item->deal_originalprice * $item->quantity, 2) }}</td>
+                        <td>₹{{ number_format(($item->deal_originalprice - $item->deal_price) * $item->quantity, 2) }}</td>
+                        <td>₹{{ number_format($item->deal_price * $item->quantity, 2) }}</td>
                     </tr>
                     @endforeach
                 </tbody>
                 <tfoot>
                     <tr>
                         <td colspan="6" style="text-align: right;">Total</td>
-                        <td>${{ number_format($item->deal_price * $item->quantity, 2) }}</td>
+                        <td>₹{{ number_format($item->deal_price * $item->quantity, 2) }}</td>
                     </tr>
                     <tr class="amountinwords">
                         <th colspan="7">Amount in Words:</th>
@@ -209,8 +209,8 @@
             </table>
         </div>
         <div class="footer">
-            <h6>Thank you for shopping with <span style="color: #ff0060;">Dealslah</span>! For assistance, contact us at info@dealslah.com.</h6>
-            <p>2024 © Copyright Dealslah. All Rights Reserved.</p>
+            <h6>Thank you for shopping with <span style="color: #ff0060;">DealsMachi</span>! For assistance, contact us at info@dealsmachi.com.</h6>
+            <p>2024 © Copyright DealsMachi. All Rights Reserved.</p>
         </div>
     </div>
 </body>

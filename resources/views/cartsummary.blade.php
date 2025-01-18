@@ -107,10 +107,10 @@
                                     <p>Seller : {{ $product->shop->email ?? '' }}</p>
                                     <div>
                                         <span style="text-decoration: line-through; color:#c7c7c7">
-                                            ${{ $product->original_price }}
+                                            ₹{{ $product->original_price }}
                                         </span>
                                         <span class="ms-1" style="font-size:22px;color:#ff0060">
-                                            ${{ $product->discounted_price }}
+                                            ₹{{ $product->discounted_price }}
                                         </span>
                                         <span class="ms-1" style="font-size:12px; color:#00DD21">
                                             {{ round($product->discount_percentage) }}% off
@@ -135,16 +135,16 @@
                         <div class="card-body m-0 p-4">
                             <div class="d-flex justify-content-between align-items-center">
                                 <p>Subtotal</p>
-                                <p>${{ $subtotal }}</p>
+                                <p>₹{{ $subtotal }}</p>
                             </div>
                             <div class="d-flex justify-content-between align-items-center">
                                 <p>Discount</p>
-                                <p>${{ $total_discount }}</p>
+                                <p>₹{{ $total_discount }}</p>
                             </div>
                             <hr />
                             <div class="d-flex justify-content-between pb-3">
                                 <span>Total</span>
-                                <span>${{ $subtotal - $total_discount }}</span>
+                                <span>₹{{ $subtotal - $total_discount }}</span>
                             </div>
                         </div>
                     </div>
