@@ -177,7 +177,7 @@
                                                             {{ $item->product->name }}
                                                         </p>
                                                         <p class="px-1 text_size text-danger">
-                                                            ${{ number_format($item->discount, 2) }}
+                                                            Rs {{ number_format($item->discount, 2) }}
                                                         </p>
                                                     </div>
                                                 </div>
@@ -254,7 +254,7 @@
                     @endauth
                     <span class="navbar-text d-none d-xl-inline align-items-center justify-content-end"
                         style="margin-left: 10px">
-                        <a href="https://dealslah.com/dealslahVendor/" style="text-decoration: none">
+                        <a href="https://dealsmachi.com/dealsmachiVendor/" style="text-decoration: none">
                             <button
                                 class="btn btn-button login-button userlogin-button-large py-2 px-4 d-flex justify-content-center align-items-center text-nowrap"
                                 type="submit">
