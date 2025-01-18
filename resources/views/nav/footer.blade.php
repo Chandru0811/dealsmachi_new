@@ -123,7 +123,7 @@
                     <a href="{{ url('/privacyPolicy') }}" class="text-light text-decoration-none me-1">Privacy Policy |
                     </a>
                     2024 - 2025 &copy; Copyright
-                    DealsMachi Pvt Ltd. All Rights Reserved.
+                    DealsMachi Pte Ltd. All Rights Reserved.
                 </p>
             </div>
         </footer>
