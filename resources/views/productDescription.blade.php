@@ -305,97 +305,83 @@
 
                 <div class="row m-0 p-2">
                     <div class="col-md-6 column">
-                        <div class="row m-0" style="position:sticky; top:170px">
+                        <div class="row m-0" style="position:sticky; top:100px">
                             <div class="col-md-2 col-3 pe-md-0">
                                 <div class="text-center arrow-button mb-2">
                                     <button type="button" style="border:none; background-color: #eaeaea"
                                         id="scrollUpBtn" title="Scroll up" aria-label="Scroll up" onclick="scrollUp()">
                                         <i class="fa fa-angle-up"></i>
                                     </button>
-                                </div>
-                                <div class="thumbnail" id="thumbnailContainer">
-                                    <div>
-                                        <img class="thumb-img active" data-zoom="{{ asset($product->image_url1) }}"
-                                            src="{{ asset($product->image_url1) }}" alt="Image 1" />
-                                    </div>
-                                    <div>
-                                        <img class="thumb-img" data-zoom="{{ asset($product->image_url2) }}"
-                                            src="{{ asset($product->image_url2) }}" alt="Image 2" />
-                                    </div>
-                                    <div>
-                                        <img class="thumb-img" data-zoom="{{ asset($product->image_url3) }}"
-                                            src="{{ asset($product->image_url3) }}" alt="Image 3" />
-                                    </div>
-                                    <div>
-                                        <img class="thumb-img" data-zoom="{{ asset($product->image_url4) }}"
-                                            src="{{ asset($product->image_url4) }}" alt="Image 4" />
-                                    </div>
-                                    @php
-                                        $videos = json_decode($product->additional_details, true);
-
-                                        if (is_array($videos)) {
-                                            usort($videos, function ($a, $b) {
-                                                return $a['order'] <=> $b['order'];
-                                            });
-                                        }
-                                    @endphp
-                                    @if (is_array($videos))
-                                        @foreach ($videos as $video)
+                                 </div>
+                                 <div class="thumbnail" id="thumbnailContainer">
+                                    @foreach ($product->productMedia->sortBy('order') as $media)
+                                        @if ($media->type == 'image')
+                                            <div>
+                                                <img class="thumb-img" data-zoom="{{ asset($media->path) }}"
+                                                     src="{{ asset($media->path) }}" alt="Image" />
+                                            </div>
+                                        @elseif ($media->type == 'video')
                                             @php
-                                                $videoId = preg_match(
-                                                    '/(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=))([\w-]+)/',
-                                                    $video['video_url'],
-                                                    $matches,
-                                                )
+                                                // Extract YouTube video ID
+                                                $videoId = preg_match('/(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=))([\w-]+)/', $media->path, $matches)
                                                     ? $matches[1]
-                                                    : $video['video_url'];
+                                                    : $media->path;
                                             @endphp
                                             <div>
                                                 <img src="https://img.youtube.com/vi/{{ $videoId }}/0.jpg"
-                                                    class="thumbnail img-fluid"
-                                                    style="height: 60px; cursor: pointer; object-fit: cover;"
-                                                    data-bs-toggle="modal" data-bs-target="#videoModal"
-                                                    onclick="updateVideoModal('{{ $videoId }}')">
+                                                     class="thumbnail img-fluid"
+                                                     style="height: 60px; cursor: pointer; object-fit: cover;"
+                                                     data-bs-toggle="modal" data-bs-target="#videoModal"
+                                                     onclick="updateVideoModal('{{ $videoId }}')">
                                             </div>
-                                        @endforeach
-                                    @else
-                                    @endif
+                                        @endif
+                                    @endforeach
                                 </div>
                                 <div class="text-center arrow-button mt-2">
                                     <button type="button" style="border:none; background-color: #eaeaea"
-                                        id="scrollDownBtn" title="Scroll up" aria-label="Scroll up"
-                                        onclick="scrollDown()">
+                                            id="scrollDownBtn" title="Scroll down" aria-label="Scroll down"
+                                            onclick="scrollDown()">
                                         <i class="fa fa-angle-down"></i>
                                     </button>
                                 </div>
                             </div>
                             <div class="col-md-10 col-9 p-lg-0">
                                 <div class="thumbnail-container">
+                                    @php
+                                        // Get the first image
+                                        $firstImage = $product->productMedia->sortBy('order')->firstWhere('type', 'image');
+                                    @endphp
                                     <img id="main-image" alt="Product Image" class="drift-demo-trigger image-fluid"
-                                        data-zoom="{{ asset($product->image_url1) }}"
-                                        src="{{ asset($product->image_url1) }}" />
+                                         data-zoom="{{ $firstImage ? asset($firstImage->path) : asset('assets/images/home/noImage.webp') }}"
+                                         src="{{ $firstImage ? asset($firstImage->path) : asset('assets/images/home/noImage.webp') }}" />
                                 </div>
                             </div>
                             <div class="col-md-2 col-3"></div>
                             <div class="col-md-10 col-9">
-                                <div class="add_cart_btns mt-4">
+                                <div class="add_cart_btns">
                                     <form action="{{ route('cart.add', ['slug' => $product->slug]) }}" method="POST">
                                         @csrf
-                                        <button type="submit" class="cart_btn media_fonts_conent">
+                                        <button type="submit" class="cart_btn media_fonts_conent text-nowrap">
                                             <i class="fa-solid fa-cart-shopping"></i>&nbsp;&nbsp;Add to Cart
                                         </button>&nbsp;&nbsp;
                                     </form>
 
                                     <form action="{{ route('cart.add', ['slug' => $product->slug]) }}" method="POST">
                                         @csrf
-                                        <input type="hidden" name="saveoption" id="saveoption" value="buy now">
-                                        <button type="submit" class="Buy_btn media_fonts_conent">
-                                            <i class="fa-thin fa-bag-shopping"></i>&nbsp;&nbsp;Buy Now
-                                        </button>
+                                        @if ($product->deal_type == 1)
+                                            <input type="hidden" name="saveoption" id="saveoption" value="buy now">
+                                            <button type="submit" class="Buy_btn media_fonts_conent text-nowrap">
+                                                <i class="fa-thin fa-bag-shopping"></i>&nbsp;&nbsp;Buy Now
+                                            </button>
+                                        @elseif ($product->deal_type == 2)
+                                            <input type="hidden" name="saveoption" id="saveoption" value="buy now">
+                                            <button type="submit" class="Buy_btn media_fonts_conent text-nowrap">
+                                                <i class="fa-thin fa-bag-shopping"></i>&nbsp;&nbsp;Book Now
+                                            </button>
+                                        @endif
                                     </form>
                                 </div>
                             </div>
-
                         </div>
                     </div>
                     <div class="col-md-6 ps-4 mt-3 space_ctrl column">
@@ -625,48 +611,41 @@
 
                 {{-- owl carousel  --}}
                 <div class="row m-0 mt-3 px-3">
-                    <div class="col-12 px-2">
-                        @php
-                            $videos = json_decode($product->additional_details, true);
+    <div class="col-12 px-2">
+        @php
+            // Filter and sort product media for videos only
+            $videos = $product->productMedia->where('type', 'video')->sortBy('order');
+        @endphp
 
-                            if (is_array($videos)) {
-                                usort($videos, function ($a, $b) {
-                                    return $a['order'] <=> $b['order'];
-                                });
-                            }
+        @if ($videos->count() > 0)
+            <div class="p-3 position-relative" style="border-color: #ff0060;">
+                <div class="owl-carousel carousel_content owl-theme image-slider1 d-flex gap-3 overflow-hidden carousel-container"
+                    id="carousel_slider"
+                    style="scroll-snap-type: x mandatory; overflow-x: auto; white-space: nowrap;">
+
+                    @foreach ($videos as $video)
+                        @php
+                            // Extract YouTube video ID if it's a YouTube URL
+                            $videoId = preg_match(
+                                '/(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=))([\w-]+)/',
+                                $video->path,
+                                $matches
+                            ) ? $matches[1] : $video->path;
                         @endphp
 
-                        @if (is_array($videos) && count($videos) > 0)
-                            <div class=" p-3 position-relative" style="border-color: #ff0060;">
-                                <div class="owl-carousel carousel_content owl-theme image-slider1 d-flex gap-3 overflow-hidden carousel-container"
-                                    id="carousel_slider"
-                                    style="scroll-snap-type: x mandatory; overflow-x: auto; white-space: nowrap;">
-
-                                    @foreach ($videos as $video)
-                                        @php
-                                            $videoId = preg_match(
-                                                '/(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=))([\w-]+)/',
-                                                $video['video_url'],
-                                                $matches,
-                                            )
-                                                ? $matches[1]
-                                                : $video['video_url'];
-                                        @endphp
-
-                                        <img src="https://img.youtube.com/vi/{{ $videoId }}/0.jpg"
-                                            alt="Video Thumbnail {{ $video['order'] }}" class="img-fluid item"
-                                            data-bs-toggle="modal" data-bs-target="#videoModal"
-                                            onclick="updateVideoModal('{{ $videoId }}')">
-                                    @endforeach
-                                </div>
-
-                                <!-- Navigation arrows should work automatically if `nav: true` is set -->
-                            </div>
-                        @else
-                            <p>No videos available.</p>
-                        @endif
-                    </div>
+                        <img src="https://img.youtube.com/vi/{{ $videoId }}/0.jpg"
+                            alt="Video Thumbnail {{ $video->order }}" class="img-fluid item"
+                            data-bs-toggle="modal" data-bs-target="#videoModal"
+                            onclick="updateVideoModal('{{ $videoId }}')">
+                    @endforeach
                 </div>
+            </div>
+        @else
+            <p>No videos available.</p>
+        @endif
+    </div>
+</div>
+
 
                 {{-- review section   --}}
                 <div class="review-section mt-4 px-2">
@@ -1153,13 +1132,25 @@
 
         // Zoom functionality
         const mainImage = document.querySelector("#main-image");
+        const detailsContainer = document.querySelector(".details");
         const thumbnails = document.querySelectorAll(".thumb-img");
         const thumbnailContainer = document.querySelector("#thumbnailContainer");
         const scrollUpBtn = document.querySelector("#scrollUpBtn");
         const scrollDownBtn = document.querySelector("#scrollDownBtn");
 
+        detailsContainer.style.pointerEvents = "none";
+
+        mainImage.addEventListener("mouseenter", () => {
+            detailsContainer.style.pointerEvents = "auto";
+        });
+
+
+        mainImage.addEventListener("mouseleave", () => {
+            detailsContainer.style.pointerEvents = "none"; 
+        });
+
         let driftInstance = new Drift(mainImage, {
-            paneContainer: document.querySelector(".details"),
+            paneContainer: detailsContainer,
             inlinePane: 769,
             inlineOffsetY: -85,
             containInline: true,
