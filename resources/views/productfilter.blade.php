@@ -504,7 +504,7 @@
                                                             <div class="card-divider"></div>
                                                             <p class="ps-3 fw-medium d-flex align-items-center justify-content-between"
                                                                 style="color: #ff0060">
-                                                                <span>Rs {{ $product->discounted_price }}</span>
+                                                                <span>₹ {{ $product->discounted_price }}</span>
                                                                 @if (!empty($product->coupon_code))
                                                                     <span id="mySpan" class="mx-3 px-2 couponBadge"
                                                                         onclick="copySpanText(this, event)"
@@ -528,7 +528,7 @@
                                                             <div class="ps-3 d-flex justify-content-between align-items-center pe-2">
                                                                 <div>
                                                                     <p>Regular Price</p>
-                                                                <p><s>Rs {{ $product->original_price }}</s></p>
+                                                                <p><s>₹ {{ $product->original_price }}</s></p>
                                                                 </div>
                                                                 <div>
                                                                 <form action="{{ route('cart.add', ['slug' => $product->slug]) }}" method="POST">
