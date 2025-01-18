@@ -1,10 +1,15 @@
 <?php
 
+use App\Http\Controllers\AddressController;
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BookmarkController;
+use App\Http\Controllers\CartController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\CheckoutController;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
+use Laravel\Socialite\Facades\Socialite;
 
 Route::fallback(function () {
     return response()->view('errors.404', [], 404);
@@ -33,11 +38,30 @@ require __DIR__ . '/auth.php';
 
 Route::middleware('auth')->group(function () {
     Route::get('/directCheckout/{product_id}', [CheckoutController::class, 'directcheckout'])->name('checkout.direct');
-    Route::post('/checkout', [CheckoutController::class, 'checkout'])->name('checkout.checkout');
+    Route::get('/checkout/{cart_id}', [CheckoutController::class, 'cartcheckout'])->name('checkout.cart');
+    Route::get('/cartSummary/{cart_id}', [CartController::class, 'cartSummary'])->name('cart.address');
+    Route::get('/checkoutSummary/{product_id}', [CheckoutController::class, 'checkoutsummary'])->name('checkout.summary');
+    Route::post('/checkout', [CheckoutController::class, 'createorder'])->name('checkout.checkout');
+    Route::post('/createAddress', [AddressController::class, 'store'])->name('address.create');
+    Route::put('/updateAddress', [AddressController::class, 'update'])->name('address.update');
+    Route::post('/selectaddress', [AddressController::class, 'changeSelectedId'])->name('address.change');
     Route::get('/orders', [CheckoutController::class, 'getAllOrdersByCustomer'])->name('customer.orders');
-    Route::get('/orders/{id}', [CheckoutController::class, 'showOrderByCustomerId'])->name('customer.orderById');
+    Route::get('/order/{id}/{product_id}', [CheckoutController::class, 'showOrderByCustomerId'])->name('customer.orderById');
     Route::get('/order/invoice/{id}', [CheckoutController::class, 'orderInvoice'])->name('order.invoice');
+    Route::put('/updateUser', [HomeController::class, 'updateUser'])->name('user.update');
 });
+
+
+Route::get('get/cartitems', [CartController::class, 'getCartItem'])->name('cartitems.get');
+Route::post('addtocart/{slug}', [CartController::class, 'addToCart'])->name('cart.add');
+Route::get('cart', [CartController::class, 'index'])->name('cart.index');
+Route::Post('cart/remove', [CartController::class, 'removeItem'])->name('cart.remove');
+Route::post('cart/update', [CartController::class, 'updateCart'])->name('cart.update');
+Route::post('saveforlater/add', [CartController::class, 'saveForLater'])->name('savelater.add');
+// Route::post('saveforlater/multiple', [CartController::class, 'multipleMoveToCart'])->name('savelater.multiple');
+Route::post('saveforlater/toCart', [CartController::class, 'moveToCart'])->name('movetocart');
+Route::post('saveforlater/remove', [CartController::class, 'removeFromSaveLater'])->name('savelater.remove');
+Route::get('saveforlater/all', [CartController::class, 'getsaveforlater'])->name('savelater.index');
 
 Route::get('/support', function () {
     return view('support');
@@ -51,6 +75,37 @@ Route::get('/terms_conditions', function () {
 Route::get('/contactus', function () {
     return view('contactus');
 });
+
+
+
+Route::get('auth/google', function () {
+    return Socialite::driver('google')->redirect();
+})->name('google.login');
+
+Route::get('auth/google/callback', function () {
+    $googleUser = Socialite::driver('google')->stateless()->user();
+
+    // Check if user already exists
+    $user = User::where('email', $googleUser->getEmail())->first();
+
+    if (!$user) {
+        // If the user does not exist, create a new user
+        $user = User::create([
+            'name' => $googleUser->getName(),
+            'email' => $googleUser->getEmail(),
+            'google_id' => $googleUser->getId(),
+            'avatar' => $googleUser->getAvatar(), // Optionally store avatar
+            'password' => bcrypt(12345678), // Set a random password
+        ]);
+    }
+
+    // Log the user in
+    Auth::login($user);
+
+    return redirect('/');
+});
+
+
 // Route::get('/dashboard', function () {
 //     return view('dashboard');
 // })->middleware(['auth', 'verified'])->name('dashboard');
@@ -60,3 +115,5 @@ Route::get('/contactus', function () {
 //     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
 //     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 // });
+
+require __DIR__ . '/auth.php';
