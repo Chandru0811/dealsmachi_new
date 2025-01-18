@@ -32,8 +32,8 @@ class CheckoutController extends Controller
             if (!$product) {
                 return redirect()->route('home')->with('error', 'Product not found or inactive.');
             }
-            $order = Order::where('customer_id',$user->id)->orderBy('id', 'desc')->first();
-            return view('checkout', compact('product', 'user','order'));
+            $order = Order::where('customer_id', $user->id)->orderBy('id', 'desc')->first();
+            return view('checkout', compact('product', 'user', 'order'));
         }
     }
 
@@ -127,11 +127,11 @@ class CheckoutController extends Controller
             ? 'Order Created Successfully!'
             : 'Service Booked Successfully!';
 
-        $shop = Shop::where('id',$product->shop_id)->first();
-        $customer = User::where('id',$user_id)->first();
-        $orderdetails = Order::where('id',$order->id)->with(['items'])->first();
+        $shop = Shop::where('id', $product->shop_id)->first();
+        $customer = User::where('id', $user_id)->first();
+        $orderdetails = Order::where('id', $order->id)->with(['items'])->first();
 
-        Mail::to($shop->email)->send(new OrderCreated($shop,$customer,$orderdetails));
+        Mail::to($shop->email)->send(new OrderCreated($shop, $customer, $orderdetails));
 
         return redirect()->route('customer.orderById', ['id' => $order->id])->with('status', $statusMessage);
     }
@@ -143,7 +143,7 @@ class CheckoutController extends Controller
         $orders = Order::where('customer_id', $customerId)
             ->with([
                 'items.product' => function ($query) {
-                    $query->select('id', 'name', 'image_url1', 'description', 'original_price', 'discounted_price', 'discount_percentage');
+                    $query->select('id', 'name', 'description', 'original_price', 'discounted_price', 'discount_percentage')->with('productMedia');
                 },
                 'shop' => function ($query) {
                     $query->select('id', 'name');
@@ -151,7 +151,8 @@ class CheckoutController extends Controller
                 'customer' => function ($query) {
                     $query->select('id', 'name');
                 }
-            ])->orderBy('created_at', 'desc')->get();
+            ])
+            ->get();
 
         return view('orders', compact('orders'));
     }
@@ -239,6 +240,4 @@ class CheckoutController extends Controller
             return view('summary', compact('products', 'user', 'carts', 'addresses', 'savedItem'));
         }
     }
-
-
 }
