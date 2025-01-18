@@ -12,6 +12,9 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\OrderCreated;
+use App\Models\Address;
+use App\Models\Cart;
+use App\Models\SavedItem;
 use App\Models\Shop;
 use App\Models\User;
 use Barryvdh\DomPDF\Facade\Pdf;
@@ -84,7 +87,7 @@ class CheckoutController extends Controller
         $latestOrder = Order::orderBy('id', 'desc')->first();
         $customOrderId = $latestOrder ? intval(Str::after($latestOrder->id, '-')) + 1 : 1;
         $orderNumber = 'DEALSMACHI_O' . $customOrderId;
-        
+
         $order = Order::create([
             'order_number'     => $orderNumber,
             'customer_id'      => $user_id,
@@ -136,7 +139,7 @@ class CheckoutController extends Controller
     public function getAllOrdersByCustomer()
     {
         $customerId = Auth::check() ? Auth::id() : null;
-        
+
         $orders = Order::where('customer_id', $customerId)
             ->with([
                 'items.product' => function ($query) {
@@ -193,5 +196,49 @@ class CheckoutController extends Controller
         $fileName = $order->order_number . '.pdf';
         return $pdf->download($fileName);
     }
+
+    public function checkoutsummary($id, Request $request)
+    {
+        if (!Auth::check()) {
+            session(['url.intended' => route('checkout.summary')]);
+            return redirect()->route("login");
+        } else {
+            $user = Auth::user();
+            $products = Product::with(['shop'])->where('id', $id)->where('active', 1)->get();
+            // dd($products);
+
+            if (!$products) {
+                return redirect()->route('home')->with('error', 'Product not found or inactive.');
+            }
+
+            $carts = Cart::whereNull('customer_id')->where('ip_address', $request->ip());
+
+            if (Auth::guard()->check()) {
+                $carts = $carts->orWhere('customer_id', Auth::guard()->user()->id);
+            }
+
+            $carts = $carts->first();
+            if ($carts) {
+                $carts->load(['items' => function ($query) use ($id) {
+                    $query->where('product_id', '!=', $id);
+                }, 'items.product.shop']);
+            }
+
+            $savedItem = SavedItem::whereNull('user_id')->where('ip_address', $request->ip());
+
+            if (Auth::guard()->check()) {
+                $savedItem = $savedItem->orWhere('user_id', Auth::guard()->user()->id);
+            }
+
+            $savedItem = $savedItem->get();
+            $savedItem->load(['deal']);
+
+            $addresses = Address::where('user_id', $user->id)->get();
+            // $order = Order::where('customer_id', $user->id)->orderBy('id', 'desc')->first();
+            // dd($address);
+            return view('summary', compact('products', 'user', 'carts', 'addresses', 'savedItem'));
+        }
+    }
+
 
 }
