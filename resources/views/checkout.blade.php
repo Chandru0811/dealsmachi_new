@@ -1,302 +1,301 @@
 @extends('layouts.master')
 
 @section('content')
-<section>
-@if (session('status'))
-        <div class="alert alert-success alert-dismissible fade show" role="alert"
-            style="position: fixed; top: 70px; right: 40px; z-index: 1050;">
-            {!! nl2br(e(session('status'))) !!}
-            <button type="button" class="btn-close btn-sm" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-    @endif
-    @if ($errors->any())
-        <div class="alert alert-danger alert-dismissible fade show" role="alert"
-            style="position: fixed; top: 70px; right: 40px; z-index: 1050;">
-            <ul class="mb-0">
-                @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
-            <button type="button" class="btn-close btn-sm" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-    @endif
-    @if (session('error'))
-    <div class="alert alert-danger alert-dismissible fade show" role="alert"
-        style="position: fixed; top: 70px; right: 40px; z-index: 1050;">
-        {{ session('error') }}
-        <button type="button" class="btn-close btn-sm" data-bs-dismiss="alert" aria-label="Close"></button>
-    </div>
-    @endif
-    <div class="container" style="margin-top: 100px;">
-        <h2 class="text-center">Checkout</h2>
-        <form id="checkoutForm" action="{{ route('checkout.checkout') }}" method="POST"
-            data-deal-type="{{ $product->deal_type }}">
-            @csrf
-            <!-- Hidden Fields -->
-            <input type="hidden" name="product_id" value="{{ $product->id }}">
-            <input type="hidden" name="order_type" id="order_type"
-                value="{{ $product->deal_type == 1 ? 'Product' : ($product->deal_type == 2 ? 'Service' : '') }}">
-            <input type="hidden" name="coupon_applied" value="1" id="coupon_applied">
-            <div class="row my-5">
-                <div class="col-md-7 col-12">
-                    <div class="card p-3">
-                        <!-- Customer Info Section -->
-                        <div class="row">
-                            <h5 class="mb-4" style="color: #ff0060;">Customer Info</h5>
-                            <div class="col-md-6 col-12 mb-3">
-                                <label class="form-label">First Name</label>
-                                <input type="text" class="form-control" name="first_name" id="first_name"
-                                    value="{{ old('first_name') ?: (isset($user) ? $user->name : '') }}" required />
-                                @error('first_name')
-                                <span class="text-danger">{{ $message }}</span>
-                                @enderror
-                            </div>
-                            <div class="col-md-6 col-12 mb-3">
-                                <label class="form-label">Last Name</label>
-                                <input type="text" class="form-control" name="last_name" id="last_name" value="{{ old('last_name') }}" />
-                                @error('last_name')
-                                <span class="text-danger">{{ $message }}</span>
-                                @enderror
-                            </div>
-                            <div class="col-md-6 col-12 mb-3">
-                                <label class="form-label">Email</label>
-                                <input type="email" class="form-control" name="email" id="email" value="{{ old('email') ?: (isset($user) ? explode(' ', $user->email)[0] : '') }}" required />
-                                @error('email')
-                                <span class="text-danger">{{ $message }}</span>
-                                @enderror
-                            </div>
-                            <div class="col-md-6 col-12 mb-3">
-                                <label class="form-label">Mobile Number</label>
-                                <input type="text" class="form-control" name="mobile" id="mobile" value="{{ old('mobile') ?: (isset($order) ? $order->mobile : '') }}" required />
-                                @error('mobile')
-                                <span class="text-danger">{{ $message }}</span>
-                                @enderror
-                            </div>
-                            @if ($product->deal_type == 1)
-                            <div class="col-md-6 col-12 mb-3">
-                                <label class="form-label">Quantity</label>
-                                <div class="input-group" style="width: 150px">
-                                    <button type="button" class="btn btn-light" id="decreaseQuantity">-</button>
-                                    <input type="number" class="form-control text-center" name="quantity"
-                                        id="quantity" value="{{ old('quantity', 1) }}" required readonly />
-                                    <button type="button" class="btn btn-light" id="increaseQuantity">+</button>
-                                </div>
-                                @error('quantity')
-                                <span class="text-danger">{{ $message }}</span>
-                                @enderror
-                            </div>
-                            @elseif($product->deal_type == 2)
-                            <div class="col-md-6 col-12 mb-3">
-                                <label class="form-label">Service Date</label>
-                                <input type="date" class="form-control" name="service_date" id="service_date" min="{{ date('Y-m-d') }}" value="{{ old('service_date', date('Y-m-d')) }}" />
-                                @error('service_date')
-                                <span class="text-danger">{{ $message }}</span>
-                                @enderror
-                            </div>
-                            <div class="col-md-6 col-12 mb-3">
-                                <label class="form-label">Service Time</label>
-                                <input type="time" class="form-control" name="service_time" id="service_time" value="{{ old('service_time') }}" />
-                                @error('service_time')
-                                <span class="text-danger">{{ $message }}</span>
-                                @enderror
-                            </div>
-                            @endif
-                        </div>
-                        <!-- Address Section -->
-                        <div class="row">
-                            <h5 class="py-3" style="color: #ff0060;">
-                                {{ $product->deal_type == 1 ? 'Delivery Address' : 'Address' }}
-                            </h5>
-                            @php
-                            // Decode the JSON data if $order is not null
-                            $orderAddress = $order ? json_decode($order->delivery_address, true) : [];
-                            @endphp
-                            <div class="col-12 mb-3">
-                                <label class="form-label">Street</label>
-                                <input type="text" class="form-control" name="street" id="street"
-                                    value="{{ old('street', $orderAddress['street'] ?? '') }}" required />
-                                @error('street')
-                                <span class="text-danger">{{ $message }}</span>
-                                @enderror
-                            </div>
-                            <div class="col-md-6 col-12 mb-3">
-                                <label class="form-label">City</label>
-                                <input type="text" class="form-control" name="city" id="city"
-                                    value="{{ old('city', $orderAddress['city'] ?? '') }}" required />
-                                @error('city')
-                                <span class="text-danger">{{ $message }}</span>
-                                @enderror
-                            </div>
-                            <div class="col-md-6 col-12 mb-3">
-                                <label class="form-label">State</label>
-                                <input type="text" class="form-control" name="state" id="state"
-                                    value="{{ old('state', $orderAddress['state'] ?? '') }}" required />
-                                @error('state')
-                                <span class="text-danger">{{ $message }}</span>
-                                @enderror
-                            </div>
-                            <div class="col-md-6 col-12 mb-3">
-                                <label class="form-label">Country</label>
-                                <input type="text" class="form-control" name="country" id="country"
-                                    value="{{ old('country', $orderAddress['country'] ?? '') }}" required />
-                                @error('country')
-                                <span class="text-danger">{{ $message }}</span>
-                                @enderror
-                            </div>
-                            <div class="col-md-6 col-12 mb-3">
-                                <label class="form-label">Zip Code</label>
-                                <input type="text" class="form-control" name="zipCode" id="zipCode"
-                                    value="{{ old('zipCode', $orderAddress['zipCode'] ?? '') }}" required />
-                                @error('zipCode')
-                                <span class="text-danger">{{ $message }}</span>
-                                @enderror
-                            </div>
-                        </div>
-                        <div class="col-12 mb-3 mt-1">
-                            <label class="form-label">Customer Note</label>
-                            <textarea rows="4" class="form-control" name="notes" id="notes">{{ old('notes') }}</textarea>
-                            @error('notes')
-                            <span class="text-danger">{{ $message }}</span>
-                            @enderror
-                        </div>
-                        <div>
-                            <h5 style="color: #ff0060;">Payment Methods</h5>
-                            <div class="row justify-content-center mt-3">
-                                <div class="col-lg-5 col-10 mb-3">
-                                    <div class="card payment-option"
-                                        onclick="selectPaymentOption('cash_on_delivery')">
-                                        <div class="d-flex align-items-center p-3 w-100">
-                                            <input type="radio" name="payment_type" id="cash_on_delivery"
-                                                value="cash_on_delivery" class="form-check-input" {{ old('payment_type') == 'cash_on_delivery' ? 'checked' : '' }}>
-                                            <label for="cash_on_delivery" class="d-flex align-items-center m-0">
-                                                <img src="{{ asset('assets/images/home/cash_payment.png') }}"
-                                                    alt="Cash on Delivery" class="mx-3"
-                                                    style="width: 24px; height: auto;">
-                                                <span>Cash on Delivery</span>
-                                            </label>
-                                        </div>
+    @if ($orderoption == 'buynow')
+        <section>
+            @if (session('status'))
+                <div class="alert alert-dismissible fade show" role="alert"
+                    style="position: fixed; top: 70px; right: 40px; z-index: 1050; background:#00e888; color:#fff">
+                    {!! nl2br(e(session('status'))) !!}
+                    <button type="button" class="btn-close btn-sm" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            @endif
+            @if ($errors->any())
+                <div class="alert alert-dismissible fade show" role="alert"
+                    style="position: fixed; top: 70px; right: 40px; z-index: 1050; background:#ef4444; color:#fff">
+                    <ul class="mb-0">
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                    <button type="button" class="btn-close btn-sm" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            @endif
+            @if (session('error'))
+                <div class="alert alert-dismissible fade show" role="alert"
+                    style="position: fixed; top: 70px; right: 40px; z-index: 1050; background:#ef4444; color:#fff">
+                    {{ session('error') }}
+                    <button type="button" class="btn-close btn-sm" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            @endif
+            <div class="container" style="margin-top: 100px;">
+                <h2 class="text-center">Checkout</h2>
+                <form id="checkoutForm" action="{{ route('checkout.checkout') }}" method="POST">
+                    @csrf
+                    <!-- Hidden Fields -->
+                    <input type="hidden" name="product_id" value="{{ $product->id }}" id="product_id">
+                    <div class="row my-5">
+                        <div class="col-12">
+
+                            {{-- Saved Address --}}
+                            <div class="card p-3 mb-3">
+                                <h5 class="mb-4 p-0">Delivery Addresses</h5>
+
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        {{-- @php
+                                            $orderAddress = $order ? json_decode($order->delivery_address, true) : [];
+                                        @endphp --}}
+                                        <p>
+                                            <strong>{{ $address->first_name ?? '' }}
+                                                {{ $address->last_name ?? '' }} (+65)
+                                                {{ $address->phone ?? '' }}</strong>&nbsp;&nbsp;
+                                            {{ $address->address ?? '' }} - {{ $address->postalcode ?? '' }}
+                                            {{-- <span>
+                                                <span class="badge badge_infos py-1" data-bs-toggle="modal"
+                                                    data-bs-target="#myAddressModal">Change</span>
+                                            </span> --}}
+                                        </p>
                                     </div>
                                 </div>
-                                <div class="col-lg-5 col-10">
-                                    <div class="card payment-option" onclick="selectPaymentOption('online_payment')">
-                                        <div class="d-flex align-items-center p-3 w-100">
-                                            <input type="radio" name="payment_type" id="online_payment"
-                                                value="online_payment" class="form-check-input" {{ old('payment_type') == 'online_payment' ? 'checked' : '' }}>
-                                            <label for="online_payment" class="d-flex align-items-center m-0">
-                                                <img src="{{ asset('assets/images/home/online_banking.png') }}"
-                                                    alt="Online Payment" class="mx-3"
-                                                    style="width: 24px; height: auto;">
-                                                <span>Online Payment</span>
-                                            </label>
-                                        </div>
+                            </div>
+
+
+                            <!-- Order summary -->
+                            <div class="card p-3 mb-3">
+                                <h5 class="mb-4" style="color: #ef4444;">Order Summary</h5>
+                                <div class="d-flex justify-content-between">
+                                    <div>
+                                        <p>{{ $product->name }} x{{ $quantity ?: 1 }}</p>
+                                    </div>
+                                    <div>
+                                        <span style="text-decoration: line-through; color:#c7c7c7">
+                                            ${{ number_format($product->original_price * $quantity, 2) }}
+                                        </span>
+                                        <span class="ms-1" style="font-size:22px;color:#ef4444">
+                                            ${{ number_format($product->discounted_price * $quantity, 2) }}
+                                        </span>
+                                        <span class="ms-1" style="font-size:12px; color:#00DD21">
+                                            ({{ number_format($product->discount_percentage, 0) }}%) off
+                                        </span>
                                     </div>
                                 </div>
-                                @error('payment_type')
-                                <span class="text-danger">{{ $message }}</span>
-                                @enderror
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- Product Info Section -->
-                <div class="col-md-5 col-12">
-                    <div class="card p-3">
-                        <h5 style="color: #ff0060;">Product Info</h5>
-                        <div>
-                            <img src="{{ asset($product->image_url1) }}" alt="Product Name"
-                                class="img-fluid px-5 py-3">
-                            <h5 class="text-center">{{ $product->name }}</h5>
-                            <div class="d-flex justify-content-center align-items-center">
-                                <p class="original-price" style="text-decoration: line-through; color: gray;">{{ $product->original_price }}</p>
-                                &nbsp;&nbsp;
-                                <p class="discounted-price" style="color: #ff0060; font-size: 24px;">{{ $product->discounted_price }}</p>
-                            </div>
-                            <hr />
-                            <div class="d-flex justify-content-between">
-                                <div>
-                                    <p>Subtotal <span id="quantitySubtotal"></span></p>
-                                    <p>Discount <span id="quantityDiscount"></span></p>
-                                </div>
-                                <div>
-                                    <p id="subtotal"></p>
-                                    <p id="discount"></p>
+                                <hr>
+                                <div class="d-flex justify-content-end align-items-center">
+                                    <h4>Total Amount &nbsp;&nbsp;
+                                        <span style="text-decoration: line-through; color:#c7c7c7">
+                                            ${{ number_format($product->original_price * $quantity, 2) }}
+                                        </span>
+                                        &nbsp;&nbsp;
+                                        <span class="ms-1" style="color:#000">
+                                            ${{ number_format($product->discounted_price * $quantity, 2) }}
+                                        </span>
+                                        &nbsp;&nbsp;
+                                        <span class="ms-1" style="font-size:12px; color:#00DD21">
+                                            Dealslah Discount
+                                            &nbsp;<span>${{ number_format(($product->original_price - $product->discounted_price) * $quantity, 2) }}</span>
+                                        </span>
+                                    </h4>
                                 </div>
                             </div>
-                            <hr class="mt-1" />
-                            <div class="d-flex justify-content-between">
-                                <p class="mb-0">Total <span id="quantityTotal"></span></p>
-                                <p class="mb-0" id="displayedtotal" style="color: #ff0060; font-size: 24px;"></p>
+                            <!-- Payment Methods -->
+                            <div class="card p-3 mb-3">
+                                <div>
+                                    <h5 style="color: #ef4444;">Payment Methods</h5>
+                                    <div class="row justify-content-center mt-3">
+                                        <div class="col-lg-5 col-10 mb-3">
+                                            <div class="card payment-option"
+                                                onclick="selectPaymentOption('cash_on_delivery')">
+                                                <div class="d-flex align-items-center p-3 w-100">
+                                                    <input type="radio" name="payment_type" id="cash_on_delivery"
+                                                        value="cash_on_delivery" class="form-check-input"
+                                                        {{ old('payment_type') == 'cash_on_delivery' ? 'checked' : '' }}>
+                                                    <label for="cash_on_delivery" class="d-flex align-items-center m-0">
+                                                        <img src="{{ asset('assets/images/home/cash_payment.png') }}"
+                                                            alt="Cash on Delivery" class="mx-3"
+                                                            style="width: 24px; height: auto;">
+                                                        <span>Cash on Delivery</span>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-5 col-10">
+                                            <div class="card payment-option"
+                                                onclick="selectPaymentOption('online_payment')">
+                                                <div class="d-flex align-items-center p-3 w-100">
+                                                    <input type="radio" name="payment_type" id="online_payment"
+                                                        value="online_payment" class="form-check-input"
+                                                        {{ old('payment_type') == 'online_payment' ? 'checked' : '' }}>
+                                                    <label for="online_payment" class="d-flex align-items-center m-0">
+                                                        <img src="{{ asset('assets/images/home/online_banking.png') }}"
+                                                            alt="Online Payment" class="mx-3"
+                                                            style="width: 24px; height: auto;">
+                                                        <span>Online Payment</span>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        @error('payment_type')
+                                            <span class="text-danger">{{ $message }}</span>
+                                        @enderror
+                                    </div>
+                                </div>
                             </div>
-                            <!-- Hidden Total Input Field -->
-                            <input type="hidden" name="total" id="total">
-                            <p class="text-success">Your Savings : <span id="savings"></span> ({{ number_format($product->discount_percentage, 0) }}%)</p>
-                            <div class="input-group mb-4">
-                                <input type="text" class="form-control" placeholder="Enter a coupon code"
-                                    value="{{ $product->coupon_code }}" readonly>
-                                <button class="btn applyBtn" type="button" id="button-addon2" disabled>Applied</button>
+                            <div class="d-flex justify-content-end align-items-center ">
+                                <button type="submit" class="btn"
+                                    style="padding:14px 36px ; background:#00DD21; font-size:22px; color:#fff">
+                                    Place Order
+                                </button>
                             </div>
-                            <button
-                                type="submit"
-                                class="btn placeOrderBtn w-100 d-flex align-items-center justify-content-center"
-                                id="placeOrderBtn">
-                                <span
-                                    id="placeOrderSpinner"
-                                    class="spinner-border spinner-border-sm me-2 d-none"
-                                    aria-hidden="true"></span>
-                                Place Order
-                            </button>
                         </div>
-                    </div>
-                </div>
+                </form>
+
             </div>
-        </form>
-    </div>
-</section>
-<script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
-<script>
-    function formatIndianNumber(number) {
-        return new Intl.NumberFormat('en-IN').format(number);
-    }
+        </section>
+    @else
+        <section>
+            @if (session('status'))
+                <div class="alert alert-success alert-dismissible fade show" role="alert"
+                    style="position: fixed; top: 70px; right: 40px; z-index: 1050;">
+                    {!! nl2br(e(session('status'))) !!}
+                    <button type="button" class="btn-close btn-sm" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            @endif
+            @if ($errors->any())
+                <div class="alert alert-danger alert-dismissible fade show" role="alert"
+                    style="position: fixed; top: 70px; right: 40px; z-index: 1050;">
+                    <ul class="mb-0">
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                    <button type="button" class="btn-close btn-sm" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            @endif
+            @if (session('error'))
+                <div class="alert alert-danger alert-dismissible fade show" role="alert"
+                    style="position: fixed; top: 70px; right: 40px; z-index: 1050;">
+                    {{ session('error') }}
+                    <button type="button" class="btn-close btn-sm" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            @endif
+            <div class="container" style="margin-top: 100px;">
+                <h2 class="text-center">Checkout</h2>
+                <form id="checkoutForm" action="{{ route('checkout.checkout') }}" method="POST">
+                    @csrf
+                    <!-- Hidden Fields -->
+                    <input type="hidden" name="cart_id" value="{{ $cart->id }}" id="cart_id">
+                    <input type="hidden" name="address_id" value="{{ $address->id }}" id="address_id">
+                    <div class="row my-5">
+                        <div class="col-12">
+                            <!-- Customer Info Section -->
+                            <div class="card p-3 mb-3">
+                                <div class="row">
+                                    <h5 class="mb-4" style="color: #ef4444;"> Delivery Address</h5>
+                                    <p>
+                                        <strong>{{ $address->first_name ?? '' }}
+                                            {{ $address->last_name ?? '' }} (+65)
+                                            {{ $address->phone ?? '' }}</strong>&nbsp;&nbsp;
+                                        {{ $address->address ?? '' }} - {{ $address->postalcode ?? '' }}
+                                        <span>
+                                            @if ($address->default)
+                                                <span class="badge badge_danger py-1">Default</span>&nbsp;&nbsp;
+                                            @endif
+                                            {{-- <span class="badge badge_infos py-1" data-bs-toggle="modal"
+                                                    data-bs-target="#myAddressModal">Change</span> --}}
+                                        </span>
+                                    </p>
 
-    const originalPrice = {{ $product->original_price }};
-    const discountedPrice = {{ $product->discounted_price }};
-
-    function updateTotals() {
-        let quantity = parseInt($('#quantity').val()) || 1;
-
-        const newSubtotal = originalPrice * quantity;
-        const newTotal = discountedPrice * quantity;
-        const discount = newSubtotal - newTotal;
-
-        $('#subtotal').text(`₹${formatIndianNumber(newSubtotal.toFixed(2))}`);
-        $('#discount').text(`₹${formatIndianNumber(discount.toFixed(2))}`);
-        $('#displayedtotal').text(`₹${formatIndianNumber(newTotal.toFixed(2))}`);
-
-        $('#total').val(newTotal.toFixed(2));
-
-        $('#savings').text(`₹${formatIndianNumber(discount.toFixed(2))}`);
-
-        if (quantity > 1) {
-            $('#quantitySubtotal, #quantityDiscount, #quantityTotal').text(`(x${quantity})`);
-        } else {
-            $('#quantitySubtotal, #quantityDiscount, #quantityTotal').text('');
-        }
-    }
-
-    $('#increaseQuantity').click(function() {
-        let quantity = parseInt($('#quantity').val()) || 1;
-        $('#quantity').val(quantity + 1);
-        updateTotals();
-    });
-
-    $('#decreaseQuantity').click(function() {
-        let quantity = parseInt($('#quantity').val()) || 1;
-        if (quantity > 1) $('#quantity').val(quantity - 1);
-        updateTotals();
-    });
-
-    $(document).ready(function() {
-        updateTotals();
-    });
-</script>
+                                </div>
+                            </div>
+                            <!-- Order summary -->
+                            <div class="card p-3 mb-3">
+                                <div class="row">
+                                    <h5 class="mb-4" style="color: #ef4444;">Order Summary</h5>
+                                    @foreach ($cart->items as $item)
+                                        <div class="d-flex justify-content-between">
+                                            <div>
+                                                <p>{{ $item->product->name }} x{{ $item->quantity }}</p>
+                                            </div>
+                                            <div>
+                                                <span style="text-decoration: line-through; color:#c7c7c7">
+                                                    ${{ number_format($item->product->original_price * $item->quantity, 2) }}
+                                                </span>
+                                                <span class="ms-1" style="font-size:22px;color:#ef4444">
+                                                    ${{ number_format($item->product->discounted_price * $item->quantity, 2) }}
+                                                </span>
+                                                <span class="ms-1" style="font-size:12px; color:#00DD21">
+                                                    ({{ number_format($item->product->discount_percentage, 0) }}%)
+                                                    off
+                                                </span>
+                                            </div>
+                                        </div>
+                                    @endforeach
+                                    <hr>
+                                </div>
+                                <div class="d-flex justify-content-end align-items-center ">
+                                    <h4>Total Amount &nbsp;&nbsp; <span
+                                            style="text-decoration: line-through; color:#c7c7c7">
+                                            ${{ number_format($cart->total, 2) }}
+                                        </span> &nbsp;&nbsp; <span class="ms-1" style="color:#000">
+                                            ${{ number_format($cart->grand_total, 2) }}
+                                        </span> &nbsp;&nbsp; <span class="ms-1" style="font-size:12px; color:#00DD21">
+                                            Dealslah Discount
+                                            &nbsp;<span>${{ number_format($cart->discount, 2) }}</span></span></h4>
+                                </div>
+                            </div>
+                            <!-- Payment Methods -->
+                            <div class="card p-3 mb-3">
+                                <div>
+                                    <h5 style="color: #ef4444;">Payment Methods</h5>
+                                    <div class="row justify-content-center mt-3">
+                                        <div class="col-lg-5 col-10 mb-3">
+                                            <div class="card payment-option"
+                                                onclick="selectPaymentOption('cash_on_delivery')">
+                                                <div class="d-flex align-items-center p-3 w-100">
+                                                    <input type="radio" name="payment_type" id="cash_on_delivery"
+                                                        value="cash_on_delivery" class="form-check-input"
+                                                        {{ old('payment_type') == 'cash_on_delivery' ? 'checked' : '' }}>
+                                                    <label for="cash_on_delivery" class="d-flex align-items-center m-0">
+                                                        <img src="{{ asset('assets/images/home/cash_payment.png') }}"
+                                                            alt="Cash on Delivery" class="mx-3"
+                                                            style="width: 24px; height: auto;">
+                                                        <span>Cash on Delivery</span>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-5 col-10">
+                                            <div class="card payment-option"
+                                                onclick="selectPaymentOption('online_payment')">
+                                                <div class="d-flex align-items-center p-3 w-100">
+                                                    <input type="radio" name="payment_type" id="online_payment"
+                                                        value="online_payment" class="form-check-input"
+                                                        {{ old('payment_type') == 'online_payment' ? 'checked' : '' }}>
+                                                    <label for="online_payment" class="d-flex align-items-center m-0">
+                                                        <img src="{{ asset('assets/images/home/online_banking.png') }}"
+                                                            alt="Online Payment" class="mx-3"
+                                                            style="width: 24px; height: auto;">
+                                                        <span>Online Payment</span>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        @error('payment_type')
+                                            <span class="text-danger">{{ $message }}</span>
+                                        @enderror
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="d-flex justify-content-end align-items-center ">
+                                <button type="submit" class="btn"
+                                    style="padding:14px 36px ; background:#00DD21; font-size:22px; color:#fff">
+                                    Place Order
+                                </button>
+                            </div>
+                        </div>
+                </form>
+            </div>
+        </section>
+    @endif
 @endsection
