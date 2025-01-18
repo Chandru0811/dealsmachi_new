@@ -11,14 +11,23 @@ class OrderItems extends Model
 
     protected $fillable = [
         'order_id',
-        'deal_id',
-        'deal_name',
-        'deal_originalprice',
-        'deal_description',
-        'coupon_code',
-        'discount_percentage',
+        'product_id',
+        'seller_id',
+        'item_description',
         'quantity',
-        'deal_price'
+        'unit_price',
+        'delivery_date',
+        'coupon_code',
+        'discount',
+        'discount_percent',
+        'deal_type',
+        'service_date',
+        'service_time',
+        'shipping',
+        'packaging',
+        'handling',
+        'taxes',
+        'shipping_weight'
     ];
 
     public function order()
@@ -28,6 +37,6 @@ class OrderItems extends Model
 
     public function product()
     {
-        return $this->belongsTo(Product::class,'deal_id');
+        return $this->belongsTo(Product::class, 'product_id');
     }
 }

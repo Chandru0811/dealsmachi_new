@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Mail;
 use App\Mail\OrderCreated;
 use App\Models\Address;
 use App\Models\Cart;
+use App\Models\CartItem;
 use App\Models\SavedItem;
 use App\Models\Shop;
 use App\Models\User;
@@ -153,7 +154,7 @@ class CheckoutController extends Controller
                 }
             ])
             ->get();
-
+        // dd($orders);
         return view('orders', compact('orders'));
     }
 
@@ -239,5 +240,196 @@ class CheckoutController extends Controller
             // dd($address);
             return view('summary', compact('products', 'user', 'carts', 'addresses', 'savedItem'));
         }
+    }
+
+    public function cartcheckout($cart_id, Request $request)
+    {
+        $address_id = $request->address_id;
+
+        $address = Address::where('id', $address_id)->first();
+        // dd($address);
+        $cart = Cart::where('id', $cart_id)->with('items')->first();
+        if (!$cart) {
+            return redirect()->route('home')->with('error', 'Cart not found.');
+        }
+
+        if (!Auth::check()) {
+            session(['url.intended' => route('checkout.cart', ['cart_id' => $cart_id])]);
+            return redirect()->route("login");
+        } else {
+            $user = Auth::user();
+            $order = Order::where('customer_id', $user->id)->orderBy('id', 'desc')->first();
+            $orderoption = 'cart';
+            return view('checkout', compact('cart', 'user', 'address', 'order', 'orderoption'));
+        }
+    }
+
+    public function createorder(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+
+            'payment_type'      => 'required|string|max:50',
+            'address_id'        => 'required|integer',
+            'cart_id'           => 'required_without:product_id|integer',
+            'product_id'        => 'required_without:cart_id|integer'
+        ], [
+            'payment_type.required'      => 'Payment Type is required.',
+            'payment_type.string'        => 'Payment Type must be a valid text.',
+            'payment_type.max'           => 'Payment Type may not exceed 50 characters.',
+            'address_id.required'        => 'Address ID is required.',
+            'address_id.integer'         => 'Address ID must be a valid number.',
+            'cart_id.required_without'   => 'Cart ID is required when Product ID is not provided.',
+            'cart_id.integer'            => 'Cart ID must be a valid number.',
+            'product_id.required_without' => 'Product ID is required when Cart ID is not provided.',
+            'product_id.integer'         => 'Product ID must be a valid number.',
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator)->withInput();
+        }
+
+        $user_id = Auth::check() ? Auth::id() : null;
+        $cart_id = $request->input('cart_id');
+        $product_ids = $request->input('product_ids');
+        // dd($product_ids);
+        if ($product_ids != null) {
+
+
+            // Handle single product order
+            $product = Product::with(['shop'])->where('id', $product_id)->where('active', 1)->first();
+            if (!$product) {
+                return redirect()->route('home')->with('error', 'Product not found or inactive.');
+            }
+
+            $cartItem = CartItem::where('product_id', $product_id)->first();
+            if ($cartItem) {
+                $latestOrder = Order::orderBy('id', 'desc')->first();
+                $customOrderId = $latestOrder ? intval(Str::after($latestOrder->id, '-')) + 1 : 1;
+                $orderNumber = 'DEALSLAH_O' . $customOrderId;
+
+                $order = Order::create([
+                    'order_number'     => $orderNumber,
+                    'customer_id'      => $user_id,
+                    'address_id'       => $request->address_id,
+                    'item_count'       => 1,
+                    'quantity'         => $cartItem->quantity,
+                    'total'            => $cartItem->unit_price,
+                    'discount'         => $cartItem->discount,
+                    'shipping'         => $cartItem->shipping,
+                    'packaging'        => $cartItem->packaging,
+                    'handling'         => $cartItem->handling,
+                    'taxes'            => $cartItem->taxes,
+                    'grand_total'      => $cartItem->unit_price + $cartItem->shipping + $cartItem->packaging + $cartItem->handling + $cartItem->taxes,
+                    'shipping_weight'  => $cartItem->shipping_weight,
+                    'payment_type'     => $request->input('payment_type'),
+                    'payment_status'   => 1,
+                ]);
+
+                $order_items = [
+                    'order_id'         => $order->id,
+                    'product_id'       => $product_id,
+                    'seller_id'        => $product->shop_id,
+                    'item_description' => $product->name,
+                    'quantity'         => $cartItem->quantity,
+                    'unit_price'       => $cartItem->unit_price,
+                    'delivery_date'    => $cartItem->delivery_date,
+                    'coupon_code'      => $cartItem->coupon_code,
+                    'discount'         => $cartItem->discount,
+                    'discount_percent' => $cartItem->discount_percent,
+                    'deal_type'        => $cartItem->deal_type,
+                    'service_date'     => $cartItem->service_date,
+                    'service_time'     => $cartItem->service_time,
+                    'shipping'         => $cartItem->shipping ?? 0,
+                    'packaging'        => $cartItem->packaging ?? 0,
+                    'handling'         => $cartItem->handling ?? 0,
+                    'taxes'            => $cartItem->taxes ?? 0,
+                    'shipping_weight'  => $cartItem->shipping_weight ?? 0
+                ];
+
+                $order_items = OrderItems::create($order_items);
+
+                $cart = Cart::where('id', $cartItem->cart_id)->first();
+
+                //update cart
+                $cartItem->delete();
+                $cart->item_count = $cart->item_count - 1;
+                $cart->quantity = $cart->quantity - $cartItem->quantity;
+                $cart->total = $cart->total - ($cartItem->unit_price * $cartItem->quantity);
+                $cart->discount = $cart->discount - ($cartItem->discount * $cartItem->quantity);
+                $cart->shipping = $cart->shipping - $cartItem->shipping;
+                $cart->packaging = $cart->packaging - $cartItem->packaging;
+                $cart->handling = $cart->handling - $cartItem->handling;
+                $cart->taxes = $cart->taxes - $cartItem->taxes;
+                $cart->grand_total = $cart->grand_total - ($cartItem->unit_price + $cartItem->shipping + $cartItem->packaging + $cartItem->handling + $cartItem->taxes);
+                $cart->shipping_weight = $cart->shipping_weight - $cartItem->shipping_weight;
+                $cart->save();
+            }
+        } elseif ($cart_id != null && $product_ids == null) {
+            // Handle cart order
+            $cart = Cart::with('items')->where('id', $cart_id)->first();
+            if (!$cart) {
+                return redirect()->route('home')->with('error', 'Cart not found.');
+            }
+
+            // Create order for the cart items
+            $latestOrder = Order::orderBy('id', 'desc')->first();
+            $customOrderId = $latestOrder ? intval(Str::after($latestOrder->id, '-')) + 1 : 1;
+            $orderNumber = 'DEALSLAH_O' . $customOrderId;
+
+            $order = Order::create([
+                'order_number'     => $orderNumber,
+                'customer_id'      => $user_id,
+                'item_count'       => $cart->item_count ?? "0",
+                'quantity'         => $cart->quantity,
+                'total'            => $cart->total,
+                'discount'         => $cart->discount,
+                'shipping'         => $cart->shipping,
+                'packaging'        => $cart->packaging,
+                'handling'         => $cart->handling,
+                'taxes'            => $cart->taxes,
+                'grand_total'      => $cart->grand_total,
+                'shipping_weight'  => $cart->shipping_weight,
+                'payment_type'     => $request->input('payment_type'),
+                'payment_status'   => 1,
+                'address_id'       => $request->address_id
+            ]);
+
+            foreach ($cart->items as $item) {
+                OrderItems::create([
+                    'order_id' => $order->id,
+                    'product_id' => $item->product_id,
+                    'seller_id' => $item->product->shop_id,
+                    'item_description' => $item->item_description,
+                    'quantity' => $item->quantity,
+                    'unit_price' => $item->unit_price,
+                    'delivery_date' => $item->delivery_date,
+                    'coupon_code' => $item->coupon_code,
+                    'discount' => $item->discount,
+                    'discount_percent' => $item->discount_percent,
+                    'deal_type' => $item->deal_type,
+                    'service_date' => $item->service_date,
+                    'service_time' => $item->service_time,
+                    'shipping' => $item->shipping ?? 0,
+                    'packaging' => $item->packaging ?? 0,
+                    'handling' => $item->handling ?? 0,
+                    'taxes' => $item->taxes ?? 0,
+                    'shipping_weight' => $item->shipping_weight ?? 0,
+                ]);
+            }
+            // Delete cart and cart items
+            $cart->items()->delete();
+            $cart->delete();
+        } else {
+            return redirect()->route('home')->with('error', 'Invalid request.');
+        }
+
+        // $shop = Shop::where('id',$product->shop_id)->first();
+        //$customer = User::where('id', $user_id)->first();
+        //$orderdetails = Order::where('id', $order->id)->with(['items'])->first();
+
+        // Mail::to($shop->email)->send(new OrderCreated($shop,$customer,$orderdetails));
+        // dd($order);
+
+        return redirect()->route('home')->with('status', 'Order Placed Successfully!');
     }
 }
