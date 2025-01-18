@@ -65,4 +65,9 @@ class Product extends Model
     {
         return $this->hasMany(Bookmark::class, 'deal_id');
     }
+
+    public function productMedia()
+    {
+        return $this->morphMany(ProductMedia::class, 'imageable');
+    }
 }
