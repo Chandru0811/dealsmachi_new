@@ -1,6 +1,32 @@
 @extends('layouts.master')
 
 @section('content')
+@if (session('status'))
+<div class="alert alert-dismissible fade show" role="alert"
+    style="position: fixed; top: 70px; right: 40px; z-index: 1050; background:#00e888; color:#fff">
+    {!! nl2br(e(session('status'))) !!}
+    <button type="button" class="btn-close btn-sm" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+@endif
+@if ($errors->any())
+<div class="alert alert-dismissible fade show" role="alert"
+    style="position: fixed; top: 70px; right: 40px; z-index: 1050; background:#ff0060; color:#fff">
+    <ul class="mb-0">
+        @foreach ($errors->all() as $error)
+        <li>{{ $error }}</li>
+        @endforeach
+    </ul>
+    <button type="button" class="btn-close btn-sm" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+@endif
+@if (session('error'))
+<div class="alert alert-dismissible fade show" role="alert"
+    style="position: fixed; top: 70px; right: 40px; z-index: 1050; background:#ff0060; color:#fff">
+    {{ session('error') }}
+    <button type="button" class="btn-close btn-sm" style="" data-bs-dismiss="alert"
+        aria-label="Close"></button>
+</div>
+@endif
 <section>
     <div class="container" style="margin-top: 100px">
         @if (isset($bookmarks) && $bookmarks->isNotEmpty())
@@ -23,11 +49,19 @@
             <div class="col-md-4 col-lg-3 col-12 mb-3 d-flex align-items-stretch justify-content-center">
                 <!-- Click event on this wrapper div instead of <a> tag -->
                 <div class="clickable-card" data-deal-id="{{ $deal->id }}">
-                    <a href="{{ url('/deal/' . $deal->id) }}" style="text-decoration: none;" onclick="clickCount('{{ $deal->id }}')">
+                    <a href="{{ url('/deal/' . $deal->id) }}" style="text-decoration: none;">
                         <div class="card sub_topCard h-100 d-flex flex-column">
                             <div style="min-height: 50px">
                                 <span class="badge trending-badge">TRENDING</span>
-                                <img src="{{ asset($deal->image_url1) }}" class="img-fluid card-img-top1"
+                                @php
+                                $image = $deal->productMedia
+                                ->where('order', 1)
+                                ->where('type', 'image')
+                                ->first();
+                                @endphp
+                                <img
+                                    src="{{ $image ? asset($image->path) : asset('assets/images/home/noImage.webp') }}"
+                                    class="img-fluid card-img-top1"
                                     alt="{{ $deal->name }}" />
                             </div>
                             <div
@@ -69,7 +103,7 @@
                                     <div class="card-divider"></div>
                                     <p class="ps-3 fw-medium d-flex align-items-center justify-content-between"
                                         style="color: #ff0060">
-                                        <span class="discounted-price">{{ $deal->discounted_price }}</span>
+                                        <span>₹{{ $deal->discounted_price }}</span>
                                         @if (!empty($deal->coupon_code))
                                         <span id="mySpan" class="mx-3 px-2 couponBadge"
                                             onclick="copySpanText(this, event)" data-bs-toggle="tooltip"
@@ -89,9 +123,19 @@
                                         @endif
                                     </p>
                                     <div class="card-divider"></div>
-                                    <div class="ps-3">
-                                        <p>Regular Price</p>
-                                        <p><s class="original-price">{{ $deal->original_price }}</s></p>
+                                    <div class="ps-3 d-flex justify-content-between align-items-center pe-2">
+                                        <div>
+                                            <p>Regular Price</p>
+                                            <p><s>₹ {{ $deal->original_price }}</s></p>
+                                        </div>
+                                        <div>
+                                            <form action="{{ route('cart.add', ['slug' => $deal->slug]) }}" method="POST">
+                                                @csrf
+                                                <button type="submit" class="btn card_cart">
+                                                    Add to Cart
+                                                </button>&nbsp;&nbsp;
+                                            </form>
+                                        </div>
                                     </div>
                                     <div class="card-divider"></div>
                                     <p class="ps-3 fw-medium" style="color: #ff0060; font-weight: 400 !important;">
@@ -111,7 +155,7 @@
             style="min-height: 60vh">
             <img src="{{ asset('assets/images/home/empty_bookmark.webp') }}" alt="Empty Bookmark"
                 class="img-fluid">
-            <h2 class="mt-5" style="color: #ff0060">Your bookmark is waiting to be filled with treasures!</h2>
+            <h2 class="mt-5 mb-3" style="color: #ff0060">Your bookmark is waiting to be filled with treasures!</h2>
         </div>
         @endif
         <div class="pagination justify-content-center">

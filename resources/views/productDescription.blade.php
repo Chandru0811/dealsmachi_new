@@ -28,156 +28,117 @@
         </div>
     @endif
     @php
-        $reviewData = [
-            [
-                'productId' => '1',
-                'reviews' => [
-                    [
-                        'reviewerName' => 'Tan Wei Ming',
-                        'review' =>
-                            'Thank you Trucklah for the wonderful job. I am very much happy with your service. I got track updates regularly and everything went well!',
-                        'rating' => 4.3,
-                        'reviewDate' => '2024-09-10',
-                        'advertisement' => 'assets/images/product_view/trucklah_add.png',
-                    ],
-                    [
-                        'reviewerName' => 'Lim Xin Wei',
-                        'review' =>
-                            'Thank you Trucklah for your prompt service. We were in difficulty with lack of space in our apartment. Thankfully, Trucklah managed it well and were on time and budget friendly.',
-                        'rating' => 5,
-                        'reviewDate' => '2024-09-12',
-                        'advertisement' => 'assets/images/product_view/trucklah_add.png',
-                    ],
-                ],
-            ],
-            [
-                'productId' => '3',
-                'reviews' => [
-                    [
-                        'reviewerName' => 'Goh Meih Lin',
-                        'review' =>
-                            'I did an item move last week with Trucklah. The service was excellent. I recommend their service, they are professional in approach.',
-                        'rating' => 4,
-                        'reviewDate' => '2024-09-15',
-                        'advertisement' => 'assets/images/product_view/trucklah_add.png',
-                    ],
-                    [
-                        'reviewerName' => 'Wong Kok Seng',
-                        'review' =>
-                            'Trucklah helped us to move our office last week. Their service was really appreciable. The best thing I noted is that they were professional in approach and they did really well to relocate our office. I am really thankful for their effort!',
-                        'rating' => 5,
-                        'reviewDate' => '2024-09-17',
-                        'advertisement' => 'assets/images/product_view/trucklah_add.png',
-                    ],
-                ],
-            ],
-            [
-                'productId' => '4',
-                'reviews' => [
-                    [
-                        'reviewerName' => 'Liu Zhang',
-                        'review' =>
-                            'We were in a hurry and there was no one we trust. Thanks to Trucklah, for helping us on time like a friend. Their delivery experts handled everything without errors.',
-                        'rating' => 5,
-                        'reviewDate' => '2024-09-20',
-                        'advertisement' => 'assets/images/product_view/trucklah_add.png',
-                    ],
-                    [
-                        'reviewerName' => 'Zhang Wei',
-                        'review' =>
-                            'As a business, we never rely much on third party services. But Trucklah changed us. We are full partnership with Trucklah now. Complete peace of mind.',
-                        'rating' => 5,
-                        'reviewDate' => '2024-09-22',
-                        'advertisement' => 'assets/images/product_view/trucklah_add.png',
-                    ],
-                ],
-            ],
-            [
-                'productId' => '7',
-                'reviews' => [
-                    [
-                        'reviewerName' => 'Wang Fang',
-                        'review' =>
-                            'E-commerce is tricky. But if you have a logistics partner like Trucklah, life is more easy than we expect. Timely delivery, on schedule, all the time.',
-                        'rating' => 4,
-                        'reviewDate' => '2024-09-25',
-                        'advertisement' => 'assets/images/product_view/trucklah_add.png',
-                    ],
-                    [
-                        'reviewerName' => 'Li Na',
-                        'review' =>
-                            'We never thought moving would be this easy. Not until we had our move scheduled with Trucklah. App booking, online payment, everything went well.',
-                        'rating' => 5,
-                        'reviewDate' => '2024-09-27',
-                        'advertisement' => 'assets/images/product_view/trucklah_add.png',
-                    ],
-                ],
-            ],
-            [
-                'productId' => '11',
-                'reviews' => [
-                    [
-                        'reviewerName' => 'Chen Ming',
-                        'review' =>
-                            'Space issues were too much for us. Until Trucklah cleared it for us without any headaches. For any moving work, I recommend Trucklah.',
-                        'rating' => 4,
-                        'reviewDate' => '2024-09-30',
-                        'advertisement' => 'assets/images/product_view/trucklah_add.png',
-                    ],
-                    [
-                        'reviewerName' => 'Xiao Mei',
-                        'review' =>
-                            'Moving is not easy in Singapore. But with Trucklah by your side, nothing is impossible. Faster, reliable and safe delivery from Trucklah has changed the scene.',
-                        'rating' => 5,
-                        'reviewDate' => '2024-10-02',
-                        'advertisement' => 'assets/images/product_view/trucklah_add.png',
-                    ],
-                ],
-            ],
-            [
-                'productId' => '50',
-                'reviews' => [
-                    [
-                        'reviewerName' => 'Tan Ah Kow',
-                        'review' =>
-                            'I recently used Trucklah’s new partnership service for moving items with DHL. The process was seamless, and my belongings arrived on time and in great condition. Highly recommended!',
-                        'rating' => 4.5,
-                        'reviewDate' => '2024-10-10',
-                        'advertisement' => 'assets/images/product_view/trucklah_dhl_moving_ad.png', // Example image path
-                    ],
-                    [
-                        'reviewerName' => 'Lim Siang',
-                        'review' =>
-                            'Trucklah made my move easy with their new service. They coordinated everything with DHL, ensuring that my items were handled carefully and delivered promptly.',
-                        'rating' => 5,
-                        'reviewDate' => '2024-10-12',
-                        'advertisement' => 'assets/images/product_view/trucklah_dhl_moving_ad.png', // Example image path
-                    ],
-                ],
-            ],
-            [
-                'productId' => '48',
-                'reviews' => [
-                    [
-                        'reviewerName' => 'Lee Wei Jie',
-                        'review' =>
-                            'Using Trucklah for air cargo was a great experience. They efficiently handled my shipment anywhere I needed. Everything arrived safely and on schedule!',
-                        'rating' => 4.8,
-                        'reviewDate' => '2024-10-15',
-                        'advertisement' => 'assets/images/product_view/trucklah_air_cargo_ad.png', // Example image path
-                    ],
-                    [
-                        'reviewerName' => 'Chong Lin',
-                        'review' =>
-                            'I was impressed with the air cargo service provided by Trucklah. The team ensured quick processing and excellent support throughout the shipment.',
-                        'rating' => 5,
-                        'reviewDate' => '2024-10-17',
-                        'advertisement' => 'assets/images/product_view/trucklah_air_cargo_ad.png', // Example image path
-                    ],
-                ],
-            ],
-        ];
+    $reviewData = [
+    [
+    'productId' => '1',
+    'reviews' => [
+    [
+    'reviewerName' => 'Sangeetha',
+    'review' =>
+    'Thank you Trucklah for the wonderful job. I am very much happy with your service. I got track updates regularly and everything went well!',
+    'rating' => 4.3,
+    'reviewDate' => '2024-09-10',
+    'advertisement' => 'assets/images/product_view/trucklah_add.png',
+    ],
+    [
+    'reviewerName' => 'Mari Muthu',
+    'review' =>
+    'Thank you Trucklah for your prompt service. We were in difficulty with lack of space in our apartment. Thankfully, Trucklah managed it well and were on time and budget friendly.',
+    'rating' => 5,
+    'reviewDate' => '2024-09-12',
+    'advertisement' => 'assets/images/product_view/trucklah_add.png',
+    ],
+    ],
+    ],
+    [
+    'productId' => '3',
+    'reviews' => [
+    [
+    'reviewerName' => 'Chandru',
+    'review' =>
+    'I did an item move last week with Trucklah. The service was excellent. I recommend their service, they are professional in approach.',
+    'rating' => 4,
+    'reviewDate' => '2024-09-15',
+    'advertisement' => 'assets/images/product_view/trucklah_add.png',
+    ],
+    [
+    'reviewerName' => 'Leela',
+    'review' =>
+    'Trucklah helped us to move our office last week. Their service was really appreciable. The best thing I noted is that they were professional in approach and they did really well to relocate our office. I am really thankful for their effort!',
+    'rating' => 5,
+    'reviewDate' => '2024-09-17',
+    'advertisement' => 'assets/images/product_view/trucklah_add.png',
+    ],
+    ],
+    ],
+    [
+    'productId' => '4',
+    'reviews' => [
+    [
+    'reviewerName' => 'Suriya',
+    'review' =>
+    'We were in a hurry and there was no one we trust. Thanks to Trucklah, for helping us on time like a friend. Their delivery experts handled everything without errors.',
+    'rating' => 5,
+    'reviewDate' => '2024-09-20',
+    'advertisement' => 'assets/images/product_view/trucklah_add.png',
+    ],
+    [
+    'reviewerName' => 'Kishore',
+    'review' =>
+    'As a business, we never rely much on third party services. But Trucklah changed us. We are full partnership with Trucklah now. Complete peace of mind.',
+    'rating' => 5,
+    'reviewDate' => '2024-09-22',
+    'advertisement' => 'assets/images/product_view/trucklah_add.png',
+    ],
+    ],
+    ],
+    [
+    'productId' => '6',
+    'reviews' => [
+    [
+    'reviewerName' => 'Manikandan',
+    'review' =>
+    'E-commerce is tricky. But if you have a logistics partner like Trucklah, life is more easy than we expect. Timely delivery, on schedule, all the time.',
+    'rating' => 4,
+    'reviewDate' => '2024-09-25',
+    'advertisement' => 'assets/images/product_view/trucklah_add.png',
+    ],
+    [
+    'reviewerName' => 'Saravanan',
+    'review' =>
+    'We never thought moving would be this easy. Not until we had our move scheduled with Trucklah. App booking, online payment, everything went well.',
+    'rating' => 5,
+    'reviewDate' => '2024-09-27',
+    'advertisement' => 'assets/images/product_view/trucklah_add.png',
+    ],
+    ],
+    ],
+    [
+    'productId' => '11',
+    'reviews' => [
+    [
+    'reviewerName' => 'Manoj',
+    'review' =>
+    'Space issues were too much for us. Until Trucklah cleared it for us without any headaches. For any moving work, I recommend Trucklah.',
+    'rating' => 4,
+    'reviewDate' => '2024-09-30',
+    'advertisement' => 'assets/images/product_view/trucklah_add.png',
+    ],
+    [
+    'reviewerName' => 'Siva',
+    'review' =>
+    'Moving is not easy in India. But with Trucklah by your side, nothing is impossible. Faster, reliable and safe delivery from Trucklah has changed the scene.',
+    'rating' => 5,
+    'reviewDate' => '2024-10-02',
+    'advertisement' => 'assets/images/product_view/trucklah_add.png',
+    ],
+    ],
+    ],
+    ];
     @endphp
+    
+    
+    
     <section class="categoryIcons container-fluid p-0">
 
         <div class="productContainer">

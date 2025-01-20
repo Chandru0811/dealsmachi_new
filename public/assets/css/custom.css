@@ -3297,6 +3297,9 @@ footer hr {
 .owl-next {
     right: -10px;
 }
+.owl-theme .owl-dots .owl-dot {
+    display: none;
+}
 .owl-carousel .owl-nav button.owl-next, .owl-carousel .owl-nav button.owl-prev, .owl-carousel button.owl-dot {
     background-color: #fff;
     border: 2px solid #ff0060;
@@ -3347,4 +3350,36 @@ footer hr {
     border: 1px solid #ff0060 !important;
     color: #ff0060 !important;
     font-size: 10px !important;
+}
+
+.tooltip_dec{
+    visibility: hidden; 
+    background-color: black; 
+    color: #fff; 
+    text-align: center;
+    border-radius: 6px; 
+    padding: 5px; 
+    position: absolute; 
+    z-index: 1;
+    bottom: -60%; 
+    left: 50%; 
+    margin-left: 70px;
+}
+@media screen and (max-width:450px) {
+    .deal-badge{
+        margin: 0 !important;
+    }
+    .tooltip_dec{
+        visibility: hidden; 
+        background-color: black; 
+        color: #fff; 
+        text-align: center;
+        border-radius: 6px; 
+        padding: 5px; 
+        position: absolute; 
+        z-index: 1;
+        bottom: 90%; 
+        left: 50%; 
+        margin-left: 60px !important;
+    }
 }
