@@ -41,6 +41,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/checkout', [CheckoutController::class, 'createorder'])->name('checkout.checkout');
     Route::post('/createAddress', [AddressController::class, 'store'])->name('address.create');
     Route::put('/updateAddress', [AddressController::class, 'update'])->name('address.update');
+    Route::delete('/address/{id}', [AddressController::class, 'destroy'])->name('address.destroy');
     Route::post('/selectaddress', [AddressController::class, 'changeSelectedId'])->name('address.change');
     Route::get('/orders', [CheckoutController::class, 'getAllOrdersByCustomer'])->name('customer.orders');
     Route::get('/order/{id}/{product_id}', [CheckoutController::class, 'showOrderByCustomerId'])->name('customer.orderById');

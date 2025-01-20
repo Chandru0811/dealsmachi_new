@@ -388,10 +388,19 @@
                                         </div>
                                         <div class="col-2">
                                             <div class="d-flex align-items-center justify-content-end">
-                                                <button type="button" class="badge_edit" data-bs-toggle="modal"
-                                                    data-bs-target="#editAddressModal">
-                                                    Edit
-                                                </button>
+                                                <div class="d-flex gap-3">
+                                                    <button type="button" class="badge_edit" data-bs-toggle="modal"
+                                                        data-bs-target="#editAddressModal">
+                                                        Edit
+                                                    </button>
+                                                    @if (!$addr->default)
+                                                        <button type="button" class="badge_del"
+                                                            data-bs-toggle="modal"
+                                                            data-bs-target="#deleteAddressModal">
+                                                            Delete
+                                                        </button>
+                                                    @endif
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -413,6 +422,37 @@
                     </div>
                 </div>
             </form>
+        </div>
+
+        <!-- Delete Address Modal -->
+        <div class="modal fade" id="deleteAddressModal" tabindex="-1" aria-labelledby="deleteAddressModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="deleteAddressModalLabel">Delete Address</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                            aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p>Are you sure you want to delete this address?</p>
+                    </div>
+
+
+                    <div class="modal-footer d-flex justify-content-end">
+                        <button type="button" class="btn outline_secondary_btn"
+                            data-bs-dismiss="modal">Close</button>
+                        @if (isset($addr))
+                            <form id="deleteAddressForm" method="POST"
+                                action="{{ route('address.destroy', $addr->id) }}">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn outline_primary_btn">Delete</button>
+                            </form>
+                        @endif
+                    </div>
+                </div>
+            </div>
         </div>
 
         <!-- Edit Address Modal -->

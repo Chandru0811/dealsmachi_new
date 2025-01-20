@@ -29,7 +29,7 @@ class AddressController extends Controller
         $validator = Validator::make($request->all(), [
             'first_name'  => 'required|string|max:200',
             'email'       => 'required|email|max:200',
-            'phone'       => 'required|digits:8',
+            'phone'       => 'required|digits:10',
             'postalcode'  => 'required|digits:6',
             'address'     => 'required|string',
             'type'         => 'required|string',
@@ -42,7 +42,7 @@ class AddressController extends Controller
             'email.email'            => 'Please provide a valid email address.',
             'email.max'              => 'Email may not exceed 200 characters.',
             'phone.required'         => 'Please provide a phone number.',
-            'phone.digits'           => 'Phone number must be exactly 8 digits.',
+            'phone.digits'           => 'Phone number must be exactly 10 digits.',
             'postalcode.required'    => 'Please provide a postal code.',
             'postalcode.digits'      => 'Postal code must be exactly 6 digits.',
             'address.required'       => 'Please provide an address.',
@@ -98,7 +98,7 @@ class AddressController extends Controller
         $validator = Validator::make($request->all(), [
             'first_name'  => 'required|string|max:200',
             'email'       => 'required|email|max:200',
-            'phone'       => 'required|digits:8',
+            'phone'       => 'required|digits:10',
             'postalcode'  => 'required|digits:6',
             'address'     => 'required|string',
             'type'        => 'required|string',
@@ -111,7 +111,7 @@ class AddressController extends Controller
             'email.email'            => 'Please provide a valid email address.',
             'email.max'              => 'Email may not exceed 200 characters.',
             'phone.required'         => 'Please provide a phone number.',
-            'phone.digits'           => 'Phone number must be exactly 8 digits.',
+            'phone.digits'           => 'Phone number must be exactly 10 digits.',
             'postalcode.required'    => 'Please provide a postal code.',
             'postalcode.digits'      => 'Postal code must be exactly 6 digits.',
             'address.required'       => 'Please provide an address.',
@@ -159,9 +159,14 @@ class AddressController extends Controller
      */
     public function destroy(string $id)
     {
-        $address = Address::findOrFail($id);
+        $address = Address::where('id', $id)->where('user_id', Auth::id())->first();
+
+        if (!$address) {
+            return redirect()->back()->with(['error' => 'Address not found or unauthorized action!'], 404);
+        }
+
         $address->delete();
 
-        return redirect()->back()->with('success', 'Address deleted successfully!');
+        return redirect()->back()->with(['status' => 'Address Deleted Successfully'], 200);
     }
 }
