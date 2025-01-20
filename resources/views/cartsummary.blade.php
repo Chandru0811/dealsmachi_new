@@ -31,11 +31,10 @@
         $default_address =
             $addresses->firstWhere('id', $selectedAddressId) ?? ($addresses->firstWhere('default', true) ?? null); // Add fallback to null
     @endphp
-
     @php
-        $subtotal = 0;
-        $total_discount = 0;
+        use Carbon\Carbon;
     @endphp
+
     <section>
         <div class="container" style="margin-top: 100px">
             <div class="row">
@@ -81,29 +80,40 @@
                         @foreach ($carts->items as $item)
                             @php
                                 $product = $item->product;
-                                $subtotal += $product->original_price * $item->quantity;
-                                $total_discount +=
-                                    ($product->original_price - $product->discounted_price) * $item->quantity;
+                                $image = $product->productMedia->where('order', 1)->where('type', 'image')->first();
                             @endphp
                             <div class="row px-4 pt-4">
                                 <div class="col-md-3 d-flex flex-column justify-content-center align-items-center">
                                     <div class="d-flex justify-content-center align-items-center">
-                                            @php
-                                                $image = $product->productMedia
-                                                    ->where('order', 1)
-                                                    ->where('type', 'image')
-                                                    ->first();
-                                            @endphp
-                                            <img
-                                                src="{{ $image ? asset($image->path) : asset('assets/images/home/noImage.webp') }}"
-                                                style="max-width: 100%; max-height: 100%;"
-                                                alt="{{ $product->name }}" />
+                                        <img src="{{ $image ? asset($image->path) : asset('assets/images/home/noImage.webp') }}"
+                                            style="max-width: 100%; max-height: 100%;" alt="{{ $product->name }}" />
                                     </div>
                                 </div>
                                 <div class="col-md-9">
                                     <h5>{{ $product->name }}</h5>
                                     <h6 class="truncated-description">{{ $product->description }}</h6>
-                                    <p class="mb-1">Delivery Date : {{ $product->delivery_date }}</p>
+                                    @php
+                                        $currentDate = Carbon::now();
+
+                                        $deliveryDays = is_numeric($product->delivery_days)
+                                            ? (int) $product->delivery_days
+                                            : 0;
+
+                                        $deliveryDate =
+                                            $deliveryDays > 0
+                                                ? $currentDate->addDays($deliveryDays)->format('d-m-y')
+                                                : null;
+                                    @endphp
+                                    @if ($product->deal_type == 1)
+                                        <div class="rating my-2">
+                                            <span>Delivery Date :</span><span class="stars">
+                                                <span>
+                                                    {{ $deliveryDays > 0 ? $deliveryDate : 'No delivery date available' }}
+                                                </span>
+                                            </span>
+                                        </div>
+                                    @endif
+
                                     <p>Seller : {{ $product->shop->email ?? '' }}</p>
                                     <div>
                                         <span style="text-decoration: line-through; color:#c7c7c7">
@@ -134,33 +144,52 @@
                         </div>
                         <div class="card-body m-0 p-4">
                             <div class="d-flex justify-content-between align-items-center">
-                                <p>Subtotal</p>
-                                <p>₹{{ $subtotal }}</p>
+                                <p>Subtotal (x{{ $carts->quantity }})</p>
+                                <p>₹{{ number_format($carts->total, 2) }}</p>
                             </div>
                             <div class="d-flex justify-content-between align-items-center">
-                                <p>Discount</p>
-                                <p>₹{{ $total_discount }}</p>
+                                <p>Discount (x{{ $carts->quantity }})</p>
+                                <p>₹{{ number_format($carts->discount, 2) }}</p>
                             </div>
                             <hr />
                             <div class="d-flex justify-content-between pb-3">
-                                <span>Total</span>
-                                <span>₹{{ $subtotal - $total_discount }}</span>
+                                <span>Total (x{{ $carts->quantity }})</span>
+                                <span>₹{{ number_format($carts->grand_total, 2) }}</span>
                             </div>
                         </div>
                     </div>
-                    <div class="d-flex justify-content-end align-items-center p-3"
-                        style="position: sticky; bottom: 0px; background: #fff">
-                        @if ($default_address)
-                            <a href="{{ url('/checkout/' . $carts->id) }}?address_id={{ $default_address->id }}"
-                                class="btn check_out_btn">
-                                Checkout
-                            </a>
-                        @else
-                            <a href="#" class="btn check_out_btn" data-bs-toggle="modal"
-                                data-bs-target="#newAddressModal">
-                                Checkout
-                            </a>
-                        @endif
+
+                    <div class="d-flex justify-content-between align-items-center py-3 mt-4"
+                        style="position: sticky; bottom: 0px; background: #fff;border-top: 1px solid #dcdcdc">
+                        <div class="d-flex justify-content-end align-items-center">
+                            <h4>Total Amount (x{{ $carts->quantity }}) &nbsp;&nbsp;
+                                <span style="text-decoration: line-through; color:#c7c7c7">
+                                    ${{ number_format($carts->total, 2) }}
+                                </span>
+                                &nbsp;&nbsp;
+                                <span class="ms-1" style="color:#000">
+                                    ${{ number_format($carts->grand_total, 2) }} </span>
+                                &nbsp;&nbsp;
+                                <span class="ms-1" style="font-size:12px; color:#00DD21">
+                                    Dealslah Discount
+                                    &nbsp;<span>${{ number_format($carts->discount, 2) }}</span>
+                                </span>
+                            </h4>
+                        </div>
+                        <div class="d-flex justify-content-end align-items-center p-3"
+                            style="position: sticky; bottom: 0px; background: #fff">
+                            @if ($default_address)
+                                <a href="{{ url('/checkout/' . $carts->id) }}?address_id={{ $default_address->id }}"
+                                    class="btn check_out_btn">
+                                    Checkout
+                                </a>
+                            @else
+                                <a href="#" class="btn check_out_btn" data-bs-toggle="modal"
+                                    data-bs-target="#newAddressModal">
+                                    Checkout
+                                </a>
+                            @endif
+                        </div>
                     </div>
                 </div>
             </div>

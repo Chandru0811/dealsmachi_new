@@ -26,6 +26,9 @@
             <button type="button" class="btn-close btn-sm" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
     @endif
+    @php
+        use Carbon\Carbon;
+    @endphp
     <section>
         <div class="container" style="margin-top: 100px">
             @php
@@ -59,6 +62,14 @@
                             $total_discount +=
                                 ($product->original_price - $product->discounted_price) * $item->quantity;
                         @endphp
+                        @php
+                            $currentDate = Carbon::now();
+
+                            $deliveryDays = is_numeric($product->delivery_days) ? (int) $product->delivery_days : 0;
+
+                            $deliveryDate =
+                                $deliveryDays > 0 ? $currentDate->addDays($deliveryDays)->format('d-m-y') : null;
+                        @endphp
                         <div class="row p-4">
                             <div class="col-md-4 mb-3">
                                 <div class="d-flex justify-content-center align-items-center">
@@ -75,21 +86,28 @@
                             <div class="col-md-8">
                                 <h5>{{ $product->name }}</h5>
                                 <h6 class="truncated-description">{{ $product->description }}</h6>
-                                <p class="mb-1">Delivery Date : {{ $product->delivery_date }}</p>
+                                @if ($product->deal_type == 1)
+                                    <div class="rating my-2">
+                                        <span>Delivery Date :</span><span class="stars">
+                                            <span>
+                                                {{ $deliveryDays > 0 ? $deliveryDate : 'No delivery date available' }}
+                                            </span>
+                                        </span>
+                                    </div>
+                                @endif
                                 <p>Seller : {{ $product->shop->email ?? '' }}</p>
                                 <div>
                                     <span style="text-decoration: line-through; color:#c7c7c7">
                                         ₹{{ $product->original_price }}
                                     </span>
                                     <span class="ms-1" style="font-size:22px;color:#ff0060">
-                                        ₹{{ $product->discounted_price }}
+                                    ₹{{ $product->discounted_price }}
                                     </span>
                                     <span class="ms-1" style="font-size:12px; color:#00DD21">
                                         {{ round($product->discount_percentage) }}% off
                                     </span>
                                 </div>
                             </div>
-
                         </div>
                         <div class="row d-flex align-items-center">
                             <div class="col-md-6">
@@ -155,25 +173,44 @@
                         </div>
                         <div class="card-body m-0 p-4 order-summary">
                             <div class="d-flex justify-content-between align-items-center">
-                                <p>Subtotal x<span class="quantity-value">{{ $cart->quantity }}</span></p>
+                                <p>Subtotal (x<span class="quantity-value">{{ $cart->quantity }})</span></p>
                                 <p class="subtotal">₹{{ $subtotal }}</p>
                             </div>
                             <div class="d-flex justify-content-between align-items-center">
-                                <p>Discount x<span class="quantity-value">{{ $cart->quantity }}</span></p>
+                                <p>Discount (x<span class="quantity-value">{{ $cart->quantity }})</span></p>
                                 <p class="discount">₹{{ $total_discount }}</p>
                             </div>
                             <hr />
                             <div class="d-flex justify-content-between pb-3">
-                                <span>Total x<span class="quantity-value">{{ $cart->quantity }}</span></span>
+                                <span>Total (x<span class="quantity-value">{{ $cart->quantity }})</span></span>
                                 <span class="total">₹{{ $subtotal - $total_discount }}</span>
                             </div>
                         </div>
                     </div>
-                    <div class="d-flex justify-content-end align-items-center p-3"
-                        style="position: sticky; bottom: 0px; background: #fff">
-                        <a href="{{ url('/cartSummary/' . $cart->id) }}" class="btn  order-button">
-                            Checkout
-                        </a>
+                    <div class="d-flex justify-content-between align-items-center py-3 mt-4"
+                        style="position: sticky; bottom: 0px; background: #fff;border-top: 1px solid #dcdcdc">
+                        <div class="d-flex justify-content-end align-items-center">
+                            <h4>Total Amount (x<span class="quantity-value">{{ $cart->quantity }})&nbsp;&nbsp;
+                                    <span style="text-decoration: line-through; color:#c7c7c7">
+                                        ${{ number_format($cart->items->sum(fn($item) => $item->product->original_price * $item->quantity), 2) }}
+                                    </span>
+                                    &nbsp;&nbsp;
+                                    <span class="ms-1" style="color:#000">
+                                        ${{ number_format($cart->items->sum(fn($item) => $item->product->discounted_price * $item->quantity), 2) }}
+                                    </span>
+                                    &nbsp;&nbsp;
+                                    <span class="ms-1" style="font-size:12px; color:#00DD21">
+                                        Dealslah Discount
+                                        &nbsp;<span>${{ number_format($cart->items->sum(fn($item) => ($item->product->original_price - $item->product->discounted_price) * $item->quantity), 2) }}</span>
+                                    </span>
+                            </h4>
+                        </div>
+                        <div class="d-flex justify-content-end align-items-center p-3"
+                            style="position: sticky; bottom: 0px; background: #fff">
+                            <a href="{{ url('/cartSummary/' . $cart->id) }}" class="btn  order-button">
+                                Checkout
+                            </a>
+                        </div>
                     </div>
                 @endforeach
             @endif
@@ -189,7 +226,18 @@
                 </div>
             @else
                 <hr>
+
                 @foreach ($savedItems as $savedItem)
+                    @php
+                        $currentDate = Carbon::now();
+
+                        $deliveryDays = is_numeric($savedItem->deal->delivery_days)
+                            ? (int) $savedItem->deal->delivery_days
+                            : 0;
+
+                        $deliveryDate =
+                            $deliveryDays > 0 ? $currentDate->addDays($deliveryDays)->format('d-m-y') : null;
+                    @endphp
                     <div class="row p-4">
                         <div class="col-md-3 d-flex flex-column justify-content-center align-items-center">
                             <div class="d-flex justify-content-center align-items-center">
@@ -206,14 +254,22 @@
                         <div class="col-md-6">
                             <h5>{{ $savedItem->deal->name }}</h5>
                             <h6 class="truncated-description">{{ $savedItem->deal->description }}</h6>
-                            <p class="mb-1">Delivery Date :</p>
+                            @if ($savedItem->deal->deal_type == 1)
+                                <div class="rating my-2">
+                                    <span>Delivery Date :</span><span class="stars">
+                                        <span>
+                                            {{ $deliveryDays > 0 ? $deliveryDate : 'No delivery date available' }}
+                                        </span>
+                                    </span>
+                                </div>
+                            @endif
                             <p>Seller : {{ $savedItem->deal->shop->email }}</p>
                             <div>
                                 <span style="text-decoration: line-through; color:#c7c7c7">
-                                    ₹{{ $savedItem->deal->original_price }}
+                                ₹{{ $savedItem->deal->original_price }}
                                 </span>
                                 <span class="ms-1" style="font-size:22px;color:#ff0060">
-                                    ₹{{ $savedItem->deal->discounted_price }}
+                                ₹{{ $savedItem->deal->discounted_price }}
                                 </span>
                                 <span class="ms-1" style="font-size:12px; color:#00DD21">
                                     {{ round($savedItem->deal->discount_percentage) }}% off
@@ -246,7 +302,6 @@
             @endif
         </div>
     </section>
-
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const orderNowButton = document.querySelector('.btn[href*="/cartSummary"]');
@@ -261,23 +316,19 @@
                 const serviceDateField = document.querySelector('.service-date');
                 const serviceTimeField = document.querySelector('.service-time');
 
-                // Clear any existing error messages
                 document.querySelectorAll('.error-message').forEach(error => error.remove());
 
-                // Validate Service Date
                 if (!serviceDateField.value) {
                     valid = false;
                     displayError(serviceDateField, 'Service Date is required');
                     if (!firstInvalidField) firstInvalidField = serviceDateField;
                 }
 
-                // Validate Service Time
                 if (!serviceTimeField.value) {
                     valid = false;
                     displayError(serviceTimeField, 'Service Time is required');
                     if (!firstInvalidField) firstInvalidField = serviceTimeField;
                 } else if (serviceDateField.value) {
-                    // Additional validation if Service Date is today
                     const selectedDate = new Date(serviceDateField.value);
                     if (selectedDate.toDateString() === currentDate.toDateString()) {
                         const [inputHours, inputMinutes] = serviceTimeField.value.split(':').map(Number);
@@ -294,7 +345,6 @@
                     event.preventDefault();
                     if (firstInvalidField) firstInvalidField.focus();
                 } else {
-                    // Proceed to update the cart
                     const cartId = serviceDateField.getAttribute('data-cart-id');
                     const productId = serviceDateField.getAttribute('data-product-id');
                     const serviceDate = serviceDateField.value;
@@ -304,72 +354,19 @@
                 }
             });
 
-            document.querySelectorAll('.decrease-btn, .increase-btn').forEach((btn) => {
-                btn.addEventListener('click', function() {
-                    const cartId = this.getAttribute('data-cart-id');
-                    const productId = this.getAttribute('data-product-id');
-                    const quantityInput = this.parentElement.querySelector('.quantity-input');
-                    let quantity = parseInt(quantityInput.value);
-
-                    if (this.classList.contains('decrease-btn') && quantity > 1) quantity -= 1;
-                    else if (this.classList.contains('increase-btn')) quantity += 1;
-
-                    quantityInput.value = quantity;
-                    updateCart(cartId, productId, quantity);
-                });
-            });
-
-            document.querySelectorAll('.service-date, .service-time').forEach((input) => {
-                input.addEventListener('change', function() {
-                    const cartId = this.getAttribute('data-cart-id');
-                    const productId = this.getAttribute('data-product-id');
-                    const serviceDate = document.querySelector(
-                        `.service-date[data-product-id="${productId}"]`).value;
-                    const serviceTime = document.querySelector(
-                        `.service-time[data-product-id="${productId}"]`).value;
-
-                    updateCart(cartId, productId, null, serviceDate, serviceTime);
-                });
-            });
-
-            function updateCart(cartId, productId, quantity = null, serviceDate = null, serviceTime = null) {
-                const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-                const data = {
-                    cart_id: cartId,
-                    product_id: productId,
-                    quantity: quantity,
-                    service_date: serviceDate,
-                    service_time: serviceTime,
-                    _token: csrfToken,
-                };
-
-                fetch("{{ route('cart.update') }}", {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify(data),
-                    })
-                    .then((response) => response.json())
-                    .then((data) => {
-                        if (data.status === 'success') {
-                            document.querySelectorAll('.quantity-value').forEach((element) => {
-                                element.textContent = data.updatedCart.quantity;
-                            });
-                            document.querySelector('.subtotal').textContent =
-                                `$${data.updatedCart.total.toFixed(2)}`;
-                            document.querySelector('.discount').textContent =
-                                `$${data.updatedCart.discount.toFixed(2)}`;
-                            document.querySelector('.total').textContent =
-                                `$${data.updatedCart.grand_total.toFixed(2)}`;
-                        } else {
-                            alert(data.message);
-                        }
-                    })
-                    .catch((error) => {
-                        console.error('Error updating cart:', error);
-                    });
+            function removeErrorMessage(event) {
+                const field = event.target;
+                const error = field.nextElementSibling;
+                if (error && error.classList.contains('error-message')) {
+                    error.remove();
+                }
             }
+
+            const serviceDateField = document.querySelector('.service-date');
+            const serviceTimeField = document.querySelector('.service-time');
+
+            serviceDateField.addEventListener('input', removeErrorMessage);
+            serviceTimeField.addEventListener('input', removeErrorMessage);
 
             function displayError(field, message) {
                 const fieldContainer = field.closest('.d-flex');
@@ -381,5 +378,64 @@
                 fieldContainer.appendChild(errorMessage);
             }
         });
+
+        document.querySelectorAll('.decrease-btn, .increase-btn').forEach((btn) => {
+            btn.addEventListener('click', function() {
+                const cartId = this.getAttribute('data-cart-id');
+                const productId = this.getAttribute('data-product-id');
+                const quantityInput = this.parentElement.querySelector('.quantity-input');
+                let quantity = parseInt(quantityInput.value);
+                if (this.classList.contains('decrease-btn') && quantity > 1) quantity -= 1;
+                else if (this.classList.contains('increase-btn')) quantity += 1;
+                quantityInput.value = quantity;
+                updateCart(cartId, productId, quantity);
+            });
+        });
+        document.querySelectorAll('.service-date, .service-time').forEach((input) => {
+            input.addEventListener('change', function() {
+                const cartId = this.getAttribute('data-cart-id');
+                const productId = this.getAttribute('data-product-id');
+                const serviceDate = document.querySelector(`.service-date[data-product-id="${productId}"]`)
+                    .value;
+                const serviceTime = document.querySelector(`.service-time[data-product-id="${productId}"]`)
+                    .value;
+                updateCart(cartId, productId, null, serviceDate, serviceTime);
+            });
+        });
+
+        function updateCart(cartId, productId, quantity, serviceDate = null, serviceTime = null) {
+            const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+            const data = {
+                cart_id: cartId,
+                product_id: productId,
+                quantity: quantity,
+                service_date: serviceDate,
+                service_time: serviceTime,
+                _token: csrfToken,
+            };
+            fetch("{{ route('cart.update') }}", {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(data),
+                })
+                .then((response) => response.json())
+                .then((data) => {
+                    if (data.status === 'success') {
+                        document.querySelectorAll('.quantity-value').forEach((element) => {
+                            element.textContent = data.updatedCart.quantity;
+                        });
+                        document.querySelector('.subtotal').textContent = `$${data.updatedCart.subtotal.toFixed(2)}`;
+                        document.querySelector('.discount').textContent = `$${data.updatedCart.discount.toFixed(2)}`;
+                        document.querySelector('.total').textContent = `$${data.updatedCart.grand_total.toFixed(2)}`;
+                    } else {
+                        alert(data.message);
+                    }
+                })
+                .catch((error) => {
+                    console.error('Error updating cart:', error);
+                });
+        }
     </script>
 @endsection

@@ -116,7 +116,7 @@
             <p style="margin: 2rem 0 0;">Best regards,</p>
             <h4 style="margin: 0;">Dealsmachi</h4>
             <p style="margin: 0;">info@ecsaio.com</p>
-            <p style="margin: 0;">+65 8894 1306</p>
+            <p style="margin: 0;">+91 91501 50687</p>
             <p style="margin: 0 0 2rem 0;"><a href="https://dealsmachi.com/">https://dealsmachi.com</a></p>
             <hr />
         </div>
