@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Bookmark;
+use App\Models\Cart;
+use App\Models\CartItem;
 use Illuminate\Http\Request;
 use App\Models\CategoryGroup;
 use App\Models\Category;
@@ -22,11 +24,12 @@ use App\Models\DealShare;
 use App\Models\DealViews;
 use App\Models\Order;
 use App\Models\OrderItems;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Str;
 use App\Models\User;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Hash;
+use App\Mail\OrderCreated;
 
 class AppController extends Controller
 {
@@ -40,7 +43,7 @@ class AppController extends Controller
         $sliders = Slider::get();
         $cashBackDeals = DealCategory::where('active', 1)->take(5)->get();
 
-        $products = Product::where('active', 1)->with(['shop:id,city,shop_ratings'])->orderBy('created_at', 'desc')->get();
+        $products = Product::where('active', 1)->with(['productMedia', 'shop:id,city,shop_ratings'])->orderBy('created_at', 'desc')->get();
 
         $treandingdeals = DealViews::whereDate('viewed_at', Carbon::today())->get();
         $populardeals = DealViews::select('deal_id', DB::raw('count(*) as total_views'))->groupBy('deal_id')->limit(5)->orderBy('total_views', 'desc')->having('total_views', '>', 10)->get();
@@ -88,7 +91,7 @@ class AppController extends Controller
 
     public function getDeals($category_id, Request $request)
     {
-        $deals = Product::with('shop')->where('category_id', $category_id)->where('active', 1)->get();
+        $deals = Product::with('productMedia', 'shop')->where('category_id', $category_id)->where('active', 1)->get();
         $brands = Product::where('active', 1)->where('category_id', $category_id)->whereNotNull('brand')->where('brand', '!=', '')->distinct()->orderBy('brand', 'asc')->pluck('brand');
         $discounts = Product::where('active', 1)->where('category_id', $category_id)->pluck('discount_percentage')->map(function ($discount) {
             return round($discount);
@@ -141,9 +144,8 @@ class AppController extends Controller
 
     public function dealDescription($id, Request $request)
     {
-        $deal = Product::with(['shop', 'shop.hour', 'shop.policy'])
+        $deal = Product::with(['productMedia', 'shop', 'shop.hour', 'shop.policy'])
             ->where('id', $id)
-            ->where('active', 1)
             ->first();
 
         if (!$deal) {
@@ -170,7 +172,7 @@ class AppController extends Controller
     {
         $term = $request->input('q');
 
-        $query = Product::with('shop')->where('active', 1);
+        $query = Product::with('productMedia', 'shop')->where('active', 1);
 
         if (!empty($term)) {
             $query->where(function ($subQuery) use ($term) {
@@ -217,7 +219,7 @@ class AppController extends Controller
             $query->where(function ($priceQuery) use ($priceRanges) {
                 foreach ($priceRanges as $range) {
                     // Clean and split the price range
-                    $cleanRange = str_replace(['Rs', ',', ' '], '', $range);
+                    $cleanRange = str_replace(['$', ',', ' '], '', $range);
                     $priceRange = explode('-', $cleanRange);
 
                     $minPrice = isset($priceRange[0]) ? (float)$priceRange[0] : null;
@@ -351,7 +353,7 @@ class AppController extends Controller
         $today = now()->toDateString();
         $deals = collect();
 
-        $query = Product::where('active', 1)->with('shop:id,country,state,city,street,street2,zip_code,shop_ratings');
+        $query = Product::where('active', 1)->with('productMedia', 'shop:id,country,state,city,street,street2,zip_code,shop_ratings');
 
         if ($slug == 'trending') {
             $query->withCount(['views' => function ($query) use ($today) {
@@ -431,24 +433,24 @@ class AppController extends Controller
         }
 
         if ($request->has('price_range')) {
+            $priceRanges = $request->input('price_range');
 
-            $priceRange = $request->input('price_range');
+            // Apply price range filters for each selected range
+            $query->where(function ($priceQuery) use ($priceRanges) {
+                foreach ($priceRanges as $range) {
+                    // Clean and split the price range
+                    $cleanRange = str_replace(['$', ',', ' '], '', $range);
+                    $priceRange = explode('-', $cleanRange);
 
-            $priceRange = str_replace(['Rs', ',', ' '], '', $priceRange[0]);
-            $priceRange = explode('-', $priceRange);
+                    $minPrice = isset($priceRange[0]) ? (float)$priceRange[0] : null;
+                    $maxPrice = isset($priceRange[1]) ? (float)$priceRange[1] : null;
 
-            $minPrice = isset($priceRange[0]) ? (float)$priceRange[0] : null;
-            $maxPrice = isset($priceRange[1]) ? (float)$priceRange[1] : null;
-
-            $query->where(function ($priceQuery) use ($minPrice, $maxPrice) {
-                if ($maxPrice !== null) {
-
-                    $priceQuery->whereBetween('original_price', [$minPrice, $maxPrice])
-                        ->orWhereBetween('discounted_price', [$minPrice, $maxPrice]);
-                } else {
-
-                    $priceQuery->where('original_price', '>=', $minPrice)
-                        ->orWhere('discounted_price', '>=', $minPrice);
+                    // Apply the range filter
+                    if ($maxPrice !== null) {
+                        $priceQuery->orWhereBetween('discounted_price', [$minPrice, $maxPrice]);
+                    } else {
+                        $priceQuery->orWhere('discounted_price', '>=', $minPrice);
+                    }
                 }
             });
         }
@@ -518,7 +520,7 @@ class AppController extends Controller
 
     public function subcategorybasedproductsformobile($id, Request $request)
     {
-        $query = Product::with('shop')
+        $query = Product::with('productMedia', 'shop')
             ->with(['shop:id,country,state,city,street,street2,zip_code,shop_ratings'])
             ->where('active', 1);
 
@@ -770,7 +772,7 @@ class AppController extends Controller
             } else {
                 $query->whereNull('user_id')->where('ip_address', $request->ip());
             }
-        })->with('deal')->paginate(10);
+        })->with('deal.productMedia')->paginate(10);
 
         return $this->success('Item Added SuccessFully!', $bookmarks);
     }
@@ -853,139 +855,6 @@ class AppController extends Controller
         ]);
 
         return $this->ok('Dealenquire Added Successfully!');
-    }
-
-    public function directCheckout($id, Request $request)
-    {
-        if (!Auth::check()) {
-            return $this->error('User is not authenticated. Redirecting to login.', null, 401);
-        }
-
-        $user = Auth::user();
-        $product = Product::with(['shop'])->where('id', $id)->where('active', 1)->first();
-        $order = Order::where('customer_id', $user->id)->orderBy('id', 'desc')->first();
-
-        if (!$product) {
-            return $this->error('Product not found or inactive.', null, 404);
-        }
-
-        return $this->success('Direct checkout data retrieved successfully.', [
-            'product' => $product,
-            'user' => $user,
-            'order' => $order
-        ]);
-    }
-
-    public function checkout(Request $request)
-    {
-        $validator = Validator::make($request->all(), [
-            'first_name'        => 'required|string|max:200',
-            'email'             => 'required|email|max:200',
-            'mobile'            => 'required|string|max:15',
-            'order_type'        => 'required|string|max:50',
-            'payment_type'      => 'required|string|max:50',
-            'street'            => 'required|string',
-            'city'              => 'required|string',
-            'state'             => 'required|string',
-            'country'           => 'required|string',
-            'zipCode'           => 'required|string',
-            'product_id'        => 'required|integer'
-        ]);
-
-        if ($validator->fails()) {
-            return $this->error('Validation failed.', $validator->errors(), 422);
-        }
-
-        $validatedData = $validator->validated();
-
-        $address = [
-            'street' => $request->input('street'),
-            'city' => $request->input('city'),
-            'country' => $request->input('country'),
-            'state' => $request->input('state'),
-            'zipCode' => $request->input('zipCode'),
-        ];
-        $user_id = Auth::check() ? Auth::id() : null;
-        $product = Product::with(['shop'])->where('id', $request->input('product_id'))->where('active', 1)->first();
-        $latestOrder = Order::orderBy('id', 'desc')->first();
-        $customOrderId = $latestOrder ? intval(Str::after($latestOrder->order_id, '-')) + 1 : 1;
-        $orderNumber = 'DEALSMACHI_O' . $customOrderId;
-
-        $order = Order::create([
-            'order_number'     => $orderNumber,
-            'customer_id'      => $user_id,
-            'shop_id'          => $product->shop_id,
-            'first_name'       => $request->input('first_name'),
-            'last_name'        => $request->input('last_name'),
-            'email'            => $request->input('email'),
-            'mobile'           => $request->input('mobile'),
-            'order_type'       => $request->input('order_type'),
-            'status'           => 1,
-            'notes'            => $request->input('notes') ?? null,
-            'payment_type'     => $request->input('payment_type'),
-            'payment_status'   => $request->input('payment_status') ?? "1",
-            'total'            => $request->input('total'),
-            'service_date'     => $request->input('service_date') ?? null,
-            'service_time'     => $request->input('service_time') ?? null,
-            'quantity'         => $request->input('quantity') ?? 1,
-            'delivery_address' => json_encode($address),
-            'coupon_applied'   => $request->input('coupon_applied') ?? false,
-        ]);
-
-        if ($order) {
-            OrderItems::create([
-                'order_id'         => $order->id,
-                'deal_id'       => $product->id,
-                'deal_name'         => $product->name,
-                'deal_originalprice' => $product->original_price,
-                'deal_description' => $product->description ?? null,
-                'quantity'         => $request->input('quantity') ?? 1,
-                'deal_price'       => $product['discounted_price'],
-                'discount_percentage' => $product->discount_percentage,
-                'coupon_code' => $product->coupon_code
-            ]);
-        }
-
-        $statusMessage = $request->input('order_type') == 'Product'
-            ? 'Order Created Successfully!'
-            : 'Service Booked Successfully!';
-
-        return $this->success($statusMessage, $order);
-    }
-
-    public function getAllOrdersByCustomer()
-    {
-        $customerId = Auth::check() ? Auth::id() : null;
-
-        if (!$customerId) {
-            return $this->error('User is not authenticated.', null, 401);
-        }
-
-        $orders = Order::where('customer_id', $customerId)
-            ->with([
-                'items.product' => function ($query) {
-                    $query->select('id', 'name', 'image_url1', 'description', 'original_price', 'discounted_price', 'discount_percentage');
-                },
-                'shop' => function ($query) {
-                    $query->select('id', 'name');
-                },
-                'customer' => function ($query) {
-                    $query->select('id', 'name');
-                }
-            ])->orderBy('created_at', 'desc')->get();
-
-        return $this->success('Orders retrieved successfully.', $orders);
-    }
-
-    public function showOrderByCustomerId($id)
-    {
-        $order = Order::with(['items.product', 'shop', 'customer'])->find($id);
-
-        if (!$order) {
-            return $this->error('Order not found.', null, 404);
-        }
-
-        return $this->success('Order details retrieved successfully.', $order);
     }
 
     public function forgetpassword(Request $request)

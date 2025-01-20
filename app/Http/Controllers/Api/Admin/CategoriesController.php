@@ -97,7 +97,7 @@ class CategoriesController extends Controller
 
         return response()->json(['message' => 'Category Created Successfully!', 'data' => $category], 201);
     }
-
+    
     public function show($id)
     {
         $category = Category::with(['categoryGroup'])->find($id);

@@ -120,5 +120,4 @@ class SliderController extends Controller
         $slider->delete();
         return $this->ok('Slider Deleted Successfully!');
     }
-
 }
