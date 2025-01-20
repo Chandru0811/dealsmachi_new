@@ -299,7 +299,7 @@
                                 <hr />
                                 <p><strong>Email :</strong> {{ $user->email ?? '' }}</p>
                                 <p><strong>Phone :</strong>
-                                    {{ $default_address && $default_address->phone ? '(+65) ' . $default_address->phone : '--' }}
+                                    {{ $default_address && $default_address->phone ? '(+91) ' . $default_address->phone : '--' }}
                                 </p>
 
                                 <hr />
@@ -321,7 +321,7 @@
                                             @if ($default_address)
                                                 <p>
                                                     <strong>{{ $default_address->first_name ?? '' }}
-                                                        {{ $default_address->last_name ?? '' }} (+65)
+                                                        {{ $default_address->last_name ?? '' }} (+91)
                                                         {{ $default_address->phone ?? '' }}</strong>&nbsp;&nbsp;<br>
                                                     {{ $default_address->address ?? '' }} -
                                                     {{ $default_address->postalcode ?? '' }}
@@ -374,7 +374,7 @@
                                                 <p class="text-turncate fs_common">
                                                     <span class="px-2">
                                                         {{ $addr->first_name }} {{ $addr->last_name ?? '' }} |
-                                                        <span style="color: #c7c7c7;">&nbsp;+65
+                                                        <span style="color: #c7c7c7;">&nbsp;+91
                                                             {{ $addr->phone }}</span>
                                                     </span><br>
                                                     <span class="px-2"
@@ -550,7 +550,7 @@
                                 </div>
                             </div>
 
-                            <div class="d-flex justify-content-end gap-3">
+                            <div class="d-flex justify-content-end gap-2">
                                 <button type="button" class="btn btn-sm btn-outline-secondary"
                                     data-bs-toggle="modal" data-bs-target="#myAddressModal">Back</button>
                                 <button type="submit" class="btn btn-sm outline_primary_btn">Save Address</button>
@@ -705,7 +705,7 @@
                             </div>
 
                             <!-- Submit Button -->
-                            <div class="d-flex justify-content-end gap-3">
+                            <div class="d-flex justify-content-end gap-2">
                                 <button type="button" class="btn btn-sm btn-outline-secondary"
                                     data-bs-toggle="modal" data-bs-target="#myAddressModal">Back</button>
                                 <button type="submit" class="btn btn-sm outline_primary_btn">Save Address</button>

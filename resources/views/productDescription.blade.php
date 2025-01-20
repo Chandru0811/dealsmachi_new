@@ -603,6 +603,7 @@ from Trucklah has changed the scene.',
                             </div>
 
                             {{-- specification  --}}
+                            @if (!empty($product->specifications))
                             <div class="specification-section mt-4">
                                 <h5>Specifications :</h5>
                                 <div class="card_offers">
@@ -611,6 +612,8 @@ from Trucklah has changed the scene.',
                                     </p>
                                 </div>
                             </div>
+                            @else
+                            @endif
                         </div>
                     </div>
                 </div>

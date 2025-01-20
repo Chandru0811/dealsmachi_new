@@ -50,7 +50,7 @@
                                         @endphp --}}
                                         <p>
                                             <strong>{{ $address->first_name ?? '' }}
-                                                {{ $address->last_name ?? '' }} (+65)
+                                                {{ $address->last_name ?? '' }} (+91)
                                                 {{ $address->phone ?? '' }}</strong>&nbsp;&nbsp;
                                             {{ $address->address ?? '' }} - {{ $address->postalcode ?? '' }}
                                             {{-- <span>
@@ -202,7 +202,7 @@
                                     <h5 class="mb-4" style="color:#ff0060;"> Delivery Address</h5>
                                     <p>
                                         <strong>{{ $address->first_name ?? '' }}
-                                            {{ $address->last_name ?? '' }} (+65)
+                                            {{ $address->last_name ?? '' }} (+91)
                                             {{ $address->phone ?? '' }}</strong>&nbsp;&nbsp;
                                         {{ $address->address ?? '' }} - {{ $address->postalcode ?? '' }}
                                         <span>

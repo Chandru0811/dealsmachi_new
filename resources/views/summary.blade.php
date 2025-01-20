@@ -55,7 +55,7 @@
                                 @if ($default_address)
                                     <p>
                                         <strong>{{ $default_address->first_name ?? '' }}
-                                            {{ $default_address->last_name ?? '' }} (+65)
+                                            {{ $default_address->last_name ?? '' }} (+91)
                                             {{ $default_address->phone ?? '' }}</strong>&nbsp;&nbsp;<br>
                                         {{ $default_address->address ?? '' }} -
                                         {{ $default_address->postalcode ?? '' }}

@@ -504,7 +504,7 @@
                                                             <div class="card-divider"></div>
                                                             <p class="ps-3 fw-medium d-flex align-items-center justify-content-between"
                                                                 style="color: #ff0060">
-                                                                <span>₹ {{ number_format( $product->discounted_price, 2) }}</span>
+                                                                <span>₹ {{ number_format( $product->discounted_price, 0) }}</span>
                                                                 @if (!empty($product->coupon_code))
                                                                     <span id="mySpan" class="mx-3 px-2 couponBadge"
                                                                         onclick="copySpanText(this, event)"

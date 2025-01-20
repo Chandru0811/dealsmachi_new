@@ -98,10 +98,10 @@
                                 <p>Seller : {{ $product->shop->legal_name ?? '' }}</p>
                                 <div>
                                     <span style="text-decoration: line-through; color:#c7c7c7">
-                                        ₹{{ $product->original_price }}
+                                        ₹{{ number_format( $product->original_price, 2) }}
                                     </span>
                                     <span class="ms-1" style="font-size:22px;color:#ff0060">
-                                        ₹{{ $product->discounted_price }}
+                                        ₹{{ number_format( $product->discounted_price, 2) }}
                                     </span>
                                     <span class="ms-1" style="font-size:12px; color:#00DD21">
                                         {{ round($product->discount_percentage) }}% off
@@ -186,11 +186,6 @@
                                 <p>Discount (x<span class="quantity-value">{{ $cart->quantity }})</span></p>
                                 <p class="discount">₹{{ $total_discount }}</p>
                             </div>
-                            <hr />
-                            <div class="d-flex justify-content-between pb-3">
-                                <span>Total (x<span class="quantity-value">{{ $cart->quantity }})</span></span>
-                                <span class="total">₹{{ $subtotal - $total_discount }}</span>
-                            </div>
                         </div>
                     </div>
                     <div class="d-flex justify-content-between align-items-center py-3 mt-4"
@@ -272,10 +267,10 @@
                             <p>Seller : {{ $savedItem->deal->shop->legal_name }}</p>
                             <div>
                                 <span style="text-decoration: line-through; color:#c7c7c7">
-                                    ₹{{ $savedItem->deal->original_price }}
+                                    ₹{{ number_format( $savedItem->deal->original_price , 2) }}
                                 </span>
                                 <span class="ms-1" style="font-size:22px;color:#ff0060">
-                                    ₹{{ $savedItem->deal->discounted_price }}
+                                    ₹{{ number_format( $savedItem->deal->discounted_price , 2) }}
                                 </span>
                                 <span class="ms-1" style="font-size:12px; color:#00DD21">
                                     {{ round($savedItem->deal->discount_percentage) }}% off
