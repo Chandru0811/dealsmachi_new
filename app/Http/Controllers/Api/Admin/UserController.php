@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Order;
+use App\Models\OrderItems;
 use App\Models\User;
 use Illuminate\Http\Request;
 use App\Traits\ApiResponses;
@@ -31,30 +32,38 @@ class UserController extends Controller
 
     public function getAllOrders()
     {
-        $orders = Order::with([
-            'items.product' => function ($query) {
+        $orderItems = OrderItems::with([
+            'order' => function ($query) {
+                $query->select('id', 'order_number', 'customer_id', 'created_at');
+            },
+            'order.customer' => function ($query) {
                 $query->select('id', 'name');
             },
             'shop' => function ($query) {
                 $query->select('id', 'legal_name');
-            },
-            'customer' => function ($query) {
-                $query->select('id', 'name');
             }
         ])->orderBy('created_at', 'desc')->get();
 
-        return $this->success('Orders Retrived Successfully', $orders);
+        return $this->success('Order Items Retrieved Successfully', $orderItems);
     }
 
-    public function getOrderById($id)
-    {
-        $order = Order::with(['items.product','shop','customer',])->find($id);
 
-        if (!$order) {
-            return $this->error('Order Summary Not Found.', ['error' => 'Order Summary Not Found']);
+    public function getOrderById($order_id, $product_id)
+    {
+        $orderItem = OrderItems::with([
+            'product.productMedia',
+            'shop',
+            'order.customer',
+            'order.address'
+        ])
+            ->where('order_id', $order_id)
+            ->where('product_id', $product_id)
+            ->first();
+
+        if (!$orderItem) {
+            return $this->error('Order Item Not Found.', ['error' => 'Order Item Not Found']);
         }
 
-        return $this->success('Order Summary Retrived Successfully', $order);
-
+        return $this->success('Order Item Retrieved Successfully', $orderItem);
     }
 }

@@ -1,9 +1,10 @@
 <?php
 
+use App\Http\Controllers\Api\AddressController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthController;
-use App\Http\Controllers\Api\vendor\ShopController;
+use App\Http\Controllers\Api\Vendor\ShopController;
 use App\Http\Controllers\Api\Admin\CategoryGroupsController;
 use App\Http\Controllers\Api\Admin\DealCategoryController;
 use App\Http\Controllers\Api\Admin\CategoriesController;
@@ -14,13 +15,17 @@ use App\Http\Controllers\Api\Admin\ApprovalController;
 use App\Http\Controllers\Api\Admin\UserController;
 use App\Http\Controllers\Api\AppController;
 use App\Http\Controllers\Api\Vendor\DashboardController;
+use App\Http\Controllers\Api\CartController;
+use App\Http\Controllers\Api\CheckoutController;
 
 Route::post('login', [AuthController::class, 'login']);
 Route::post('register', [AuthController::class, 'register']);
 Route::post('forgot-password', [AuthController::class, 'forgetpassword']);
 Route::post('reset-password', [AuthController::class, 'resetpassword']);
 Route::get('account/verify/{id}', [AuthController::class, 'verifyAccount'])->name('vendor.verify');
-
+Route::post('app/forgotPassword', [AppController::class, 'forgetpassword']);
+Route::post('app/resetPassword', [AppController::class, 'resetpassword']);
+Route::post('checkotp', [AppController::class, 'checkotp']);
 
 //user
 Route::get('appHome', [AppController::class, 'homepage']);
@@ -39,9 +44,19 @@ Route::post('deal/viewed', [AppController::class, 'viewcounts']);
 Route::post('coupon/copied', [AppController::class, 'couponCopied']);
 Route::post('deal/shared', [AppController::class, 'dealshare']);
 Route::post('deal/enquired', [AppController::class, 'dealenquire']);
-Route::post('appForgotpassword', [AppController::class, 'forgetpassword']);
-Route::post('app/verify/otp', [AppController::class, 'checkotp']); 
-Route::post('appResetpassword', [AppController::class, 'resetpassword']);
+
+//cart
+Route::post('addtocart/{slug}', [CartController::class, 'addtoCart']);
+Route::get('cart', [CartController::class, 'getCart']);
+Route::post('cart/remove', [CartController::class, 'removeItem']);
+Route::post('cart/update', [CartController::class, 'updateCart']);
+Route::get('cart/totalitems', [CartController::class, 'totalItems']);
+
+//saveforlater
+Route::post('saveforlater', [CartController::class, 'saveForLater']);
+Route::get('saveforlater/all', [CartController::class, 'getsaveforlater']);
+Route::post('saveforlater/toCart', [CartController::class, 'moveToCart']);
+Route::post('saveforlater/remove', [CartController::class, 'removeFromSaveLater']);
 
 Route::middleware('auth:api')->group(function () {
     Route::get('/user', function (Request $request) {
@@ -74,9 +89,9 @@ Route::middleware('auth:api')->group(function () {
         Route::get('shop/{id}/details', [AdminShopController::class, 'getshopbasics']);
         Route::get('shop/{id}/location', [AdminShopController::class, 'getshoplocation']);
         Route::get('shop/{id}/payment', [AdminShopController::class, 'getshoppayment']);
+        Route::get('shop/{id}/logindetails', [AdminShopController::class, 'getlogindetails']);
         Route::get('shop/{id}/policy', [AdminShopController::class, 'getshoppolicy']);
         Route::get('shop/{id}/hours', [AdminShopController::class, 'getshophours']);
-        Route::get('shop/{id}/logindetails', [AdminShopController::class, 'getlogindetails']);
         Route::get('shop/{id}/products', [AdminShopController::class, 'getshopproducts']);
         Route::post('shop/{id}/activate', [AdminShopController::class, 'activateshop']);
         Route::post('shop/{id}/deactivate', [AdminShopController::class, 'deactivateshop']);
@@ -102,13 +117,13 @@ Route::middleware('auth:api')->group(function () {
         Route::post('deal/{id}/approve', [ApprovalController::class, 'approveProduct']);
         Route::post('deal/{id}/disapprove', [ApprovalController::class, 'disapproveProduct']);
 
-        // user
+        // User
         Route::get('users', [UserController::class, 'getAllUser']);
-        Route::get('users/{id}', [UserController::class, 'userShow']);
+        Route::get('user/{id}', [UserController::class, 'userShow']);
 
-        // order
+        // Order
         Route::get('orders', [UserController::class, 'getAllOrders']);
-        Route::get('order/{id}', [UserController::class, 'getOrderById']);
+        Route::get('order/{order_id}/{product_id}', [UserController::class, 'getOrderById']);
     });
 
     //Vendor
@@ -137,23 +152,33 @@ Route::middleware('auth:api')->group(function () {
         Route::get('product/{id}/get', [ProductController::class, 'show']);
         Route::put('product/{id}/update', [ProductController::class, 'update']);
         Route::delete('product/{id}/delete', [ProductController::class, 'destroy']);
+        Route::delete('product/media/{id}/delete', [ProductController::class, 'destroyProductMedia']);
 
         // Category Group and Categories
         Route::get('categorygroups', [ProductController::class, 'getAllCategoryGroups']);
         Route::get('categories/categorygroups/{id}', [ProductController::class, 'getAllCategoriesByCategoryGroupId']);
         Route::post('categories/create', [ProductController::class, 'categoriesCreate']);
 
-        // order
+        // Order
         Route::get('orders/{shop_id}', [ShopController::class, 'getAllOrdersByShop']);
-        Route::get('order/{id}', [ShopController::class, 'showOrderById']);
+        Route::get('order/{order_id}/{product_id}', [ShopController::class, 'showOrderById']);
     });
 
     //Customer
     Route::middleware('role:3')->prefix('customer')->group(function () {
-        Route::get('/directCheckout/{product_id}', [AppController::class, 'directcheckout']);
-        Route::post('/checkout', [AppController::class, 'checkout']);
-        Route::get('/orders', [AppController::class, 'getAllOrdersByCustomer']);
-        Route::get('/orders/{id}', [AppController::class, 'showOrderByCustomerId']);
+        Route::get('/cartSummary/{cart_id}', [CartController::class, 'cartSummary']);
+        Route::get('/checkout/{cart_id}', [CheckoutController::class, 'cartcheckout']);
+        Route::get('/checkoutSummary/{product_id}', [CheckoutController::class, 'checkoutsummary']);
+        Route::get('/directCheckout', [CheckoutController::class, 'directCheckout']);
+        Route::post('/checkout', [CheckoutController::class, 'createorder']);
+        Route::get('/orders', [CheckoutController::class, 'getAllOrdersByCustomer']);
+        Route::get('/order/{id}/{product_id}', [CheckoutController::class, 'showOrderByCustomerId']);
+
+        Route::get('/address', [AddressController::class, 'index']);
+        Route::post('/address', [AddressController::class, 'store']);
+        Route::get('/address/{id}', [AddressController::class, 'show']);
+        Route::put('/address/update/{id}', [AddressController::class, 'update']);
+        Route::delete('/address/{id}', [AddressController::class, 'destroy']);
     });
 });
 

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\Vendor;
 
 use App\Http\Controllers\Controller;
 use App\Models\Order;
+use App\Models\OrderItems;
 use App\Models\Shop;
 use App\Models\ShopHour;
 use App\Models\ShopPolicy;
@@ -63,6 +64,7 @@ class ShopController extends Controller
             'email.email' => 'The email must be a valid email address.',
             'email.unique' => 'The email must be unique.',
             'description.required' => 'The description field is required.',
+            'external_url.url' => 'The website URL must be a valid URL.',
             'mobile.required' => 'The mobile number is required.',
             'mobile.unique' => 'Mobile number already exists',
             'logo.required' => 'The logo field is required.',
@@ -268,35 +270,40 @@ class ShopController extends Controller
 
     public function getAllOrdersByShop($shop_id)
     {
-        $orders = Order::where('shop_id', $shop_id)
-            ->with([
-                'items.product' => function ($query) {
-                    $query->select('id', 'name');
-                },
-                'shop' => function ($query) {
-                    $query->select('id', 'legal_name');
-                },
-                'customer' => function ($query) {
-                    $query->select('id', 'name');
-                }
-            ])->orderBy('created_at', 'desc')->get();
+        $orderItems = OrderItems::with([
+            'order' => function ($query) {
+                $query->select('id', 'order_number', 'customer_id', 'created_at');
+            },
+            'order.customer' => function ($query) {
+                $query->select('id', 'name');
+            },
+            'shop' => function ($query) {
+                $query->select('id', 'legal_name');
+            }
+        ])
+            ->where('seller_id', $shop_id)
+            ->orderBy('created_at', 'desc')
+            ->get();
 
-        return $this->success('Orders retrieved successfully.', $orders);
+        return $this->success('Order Items retrieved successfully.', $orderItems);
     }
 
-    public function showOrderById($id)
+    public function showOrderById($order_id, $product_id)
     {
-        $order = Order::with(['items.product','shop','customer',])->find($id);
+        $orderItem = OrderItems::with([
+            'product.productMedia',
+            'shop',
+            'order.customer',
+            'order.address'
+        ])
+            ->where('order_id', $order_id)
+            ->where('product_id', $product_id)
+            ->first();
 
-        if ($order->approved !== 1) {
-            $order->approved = 1;
-            $order->save();
+        if (!$orderItem) {
+            return $this->error('Order Item Not Found.', ['error' => 'Order Item Not Found']);
         }
 
-        if (!$order) {
-            return $this->error('Order Summary Not Found.', ['error' => 'Order Summary Not Found']);
-        }
-
-        return $this->success('Order Summary Retrived Successfully', $order);
+        return $this->success('Order Item Retrieved Successfully', $orderItem);
     }
 }

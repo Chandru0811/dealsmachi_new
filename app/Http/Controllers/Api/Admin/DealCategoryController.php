@@ -31,6 +31,7 @@ class DealCategoryController extends Controller
         return $this->success('Deal Category Restored Successfully!', $dealCategory);
     }
 
+
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -125,6 +126,7 @@ class DealCategoryController extends Controller
     
         return $this->success('Deal Category Updated Successfully!', $dealCategory);
     }
+    
     
     public function show($id)
     {

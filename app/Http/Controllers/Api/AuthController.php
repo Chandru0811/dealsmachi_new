@@ -47,7 +47,7 @@ class AuthController extends Controller
             $success['userDetails'] =  $user;
 
             if ($user->role == 3) {
-                $message = "Welcome {$user->name}, You have successfully logged in. Grab the latest DealsMachi offers now!";
+                $message = "Welcome {$user->name}, You have successfully logged in. Grab the latest Dealslah offers now!";
             } else {
                 $message = 'LoggedIn Successfully!';
             }
@@ -97,8 +97,6 @@ class AuthController extends Controller
 
     public function shopregistration(Request $request)
     {
-        $user_id = Auth::id();
-
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|unique:shops,name',
             'company_registeration_no' => 'required|string',
@@ -122,6 +120,7 @@ class AuthController extends Controller
             'email.email' => 'The email must be a valid email address.',
             'email.unique' => 'The email must be unique.',
             'description.required' => 'The description field is required.',
+            'external_url.url' => 'The website URL must be a valid URL.',
             'mobile.required' => 'The mobile number  is required.',
             'mobile.unique' => 'Mobile number already exists.',
         ]);
@@ -132,7 +131,7 @@ class AuthController extends Controller
 
         $Shop = Shop::create($request->all());
 
-        $user = User::where('id', $user_id)->update(['shop_id' => $Shop->id]);
+        $user = User::where('id', $Shop->owner_id)->update(['shop_id' => $Shop->id]);
 
         return $this->success('Shop Registered Successfully!', $Shop);
     }
@@ -145,7 +144,7 @@ class AuthController extends Controller
         // Revoke the token
         $token->revoke();
 
-        return $this->ok('Logged Out Successfully!');
+        return $this->ok('logged Out Successfully!');
     }
 
     public function forgetpassword(Request $request)
@@ -173,9 +172,9 @@ class AuthController extends Controller
             ]
         );
 
-        $resetLink = "https://dealsmachi.com/dealsmachiVendor/resetpassword?token=" . $token . "&email=" . urlencode($request->email);
+        $resetLink = "https://dealslah.com/dealslahVendor/resetpassword?token=" . $token . "&email=" . urlencode($request->email);
 
-        Mail::send('email.forgotPassword', ['resetLink' => $resetLink, 'name' => $username, 'token' => $token], function ($message) use ($request) {
+        Mail::send('email.forgotPassword', ['resetLink' => $resetLink, 'name' => $username, 'token' => $token], function($message) use($request){
             $message->to($request->email);
             $message->subject('Reset Password');
         });
@@ -213,16 +212,16 @@ class AuthController extends Controller
     public function verifyAccount($id)
     {
         $user = User::find($id);
-        $shop = Shop::where('owner_id', $user->id)->first();
-        $product = Product::where('shop_id', $shop->id)->latest()->first();
+        $shop = Shop::where('owner_id',$user->id)->first();
+        $product = Product::where('shop_id',$shop->id)->latest()->first();
 
         if ($user && !$user->email_verified_at) {
             $user->email_verified_at = Carbon::now();
             $user->save();
 
-            Mail::to($shop->email)->send(new ProductAddedSuccessfully($shop, $product));
+            Mail::to($shop->email)->send(new ProductAddedSuccessfully($shop,$product));
 
-            $adminEmail = 'info@ecsaio.com';
+            $adminEmail = 'info@dealslah.com';
 
             Mail::to($adminEmail)->send(new AdminProductAddedNotification($user, $product));
 
