@@ -12,30 +12,23 @@ class Order extends Model
     protected $fillable = [
         'order_number',
         'customer_id',
-        'shop_id',
-        'first_name',
-        'last_name',
-        'email',
-        'mobile',
-        'order_type',
+        'item_count',
+        'quantity',
+        'total',
+        'discount',
+        'shipping',
+        'packaging',
+        'handling',
+        'taxes',
+        'grand_total',
+        'shipping_weight',
         'status',
-        'notes',
         'payment_type',
         'payment_status',
-        'total',
-        'service_date',
-        'service_time',
-        'quantity',
         'delivery_address',
-        'shipping_cost',
-        'shipping_date',
-        'delivery_date',
-        'tracking_id',
-        'coupon_applied',
-        'send_invoice_to_customer',
-        'approved'
+        'address_id'
     ];
-    
+
     public function items()
     {
         return $this->hasMany(OrderItems::class);
@@ -49,5 +42,10 @@ class Order extends Model
     public function shop()
     {
         return $this->belongsTo(Shop::class, 'shop_id');
+    }
+
+    public function address()
+    {
+        return $this->belongsTo(Address::class, 'address_id');
     }
 }

@@ -8,10 +8,9 @@
             <button type="button" class="btn-close btn-sm" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
     @endif
-
     @if ($errors->any())
         <div class="alert alert-dismissible fade show" role="alert"
-            style="position: fixed; top: 70px; right: 40px; z-index: 1050; background:#ff0060; color:#fff">
+            style="position: fixed; top: 70px; right: 40px; z-index: 1050; background:#ef4444; color:#fff">
             <ul class="mb-0">
                 @foreach ($errors->all() as $error)
                     <li>{{ $error }}</li>
@@ -20,10 +19,9 @@
             <button type="button" class="btn-close btn-sm" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
     @endif
-
     @if (session('error'))
         <div class="alert alert-dismissible fade show" role="alert"
-            style="position: fixed; top: 70px; right: 40px; z-index: 1050; background:#ff0060; color:#fff">
+            style="position: fixed; top: 70px; right: 40px; z-index: 1050; background:#ef4444; color:#fff">
             {{ session('error') }}
             <button type="button" class="btn-close btn-sm" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
@@ -52,7 +50,6 @@
                                 </button>
                             @endif
                         </div>
-
                         <div class="row mt-3">
                             <div class="col-12">
                                 @if ($default_address)
@@ -77,7 +74,7 @@
                     </div>
                     <div class="card p-3 mb-3" id="product_list">
                         @foreach ($products as $product)
-                            <div class="row px-4 pt-2">
+                            <div class="row px-4 pt-2" id="product_{{ $product->id }}">
                                 <div class="col-md-4 col-12 d-flex flex-column justify-content-center align-items-center">
                                     <div class="d-flex justify-content-center align-items-center">
                                         @php
@@ -86,10 +83,8 @@
                                                 ->where('type', 'image')
                                                 ->first();
                                         @endphp
-                                        <img
-                                            src="{{ $image ? asset($image->path) : asset('assets/images/home/noImage.webp') }}"
-                                            style="max-width: 100%; max-height: 100%;"
-                                            alt="{{ $product->name }}" />
+                                        <img src="{{ $image ? asset($image->path) : asset('assets/images/home/noImage.webp') }}"
+                                            style="max-width: 100%; max-height: 100%;" alt="{{ $product->name }}" />
                                     </div>
                                 </div>
                                 <div class="col-md-8 col-12">
@@ -99,7 +94,7 @@
                                         <span style="text-decoration: line-through; color:#c7c7c7">
                                             ₹{{ $product->original_price }}
                                         </span>
-                                        <span class="ms-1" style="font-size:22px;color:#ff0060">
+                                        <span class="ms-1" style="font-size:22px;color:#ef4444">
                                             ₹{{ $product->discounted_price }}
                                         </span>
                                         <span class="ms-1" style="font-size:12px; color:#00DD21">
@@ -111,34 +106,36 @@
                                     @if ($product->deal_type === 2)
                                         <div class="d-flex align-items-center">
                                             <div class="form-group">
-                                                <label for="service_date" class="form-label">Service Date</label>
-                                                <input type="date" id="service_date" name="service_date"
-                                                    class="form-control form-control-sm service-date"
-                                                    value="{{ old('service_date') }}" min="{{ date('Y-m-d') }}" required>
+                                                <label for="service_date_{{ $product->id }}" class="form-label">Service
+                                                    Date</label>
+                                                <input type="date" id="service_date_{{ $product->id }}"
+                                                    name="service_date" class="form-control form-control-sm service-date"
+                                                    value="" min="{{ date('Y-m-d') }}" required>
                                             </div>
                                             <div class="form-group ms-2">
-                                                <label for="service_time" class="form-label">Service Time</label>
-                                                <input type="time" id="service_time" name="service_time"
-                                                    class="form-control form-control-sm service-time"
-                                                    value="{{ old('service_time') }}" required>
+                                                <label for="service_time_{{ $product->id }}" class="form-label">Service
+                                                    Time</label>
+                                                <input type="time" id="service_time_{{ $product->id }}"
+                                                    name="service_time" class="form-control form-control-sm service-time"
+                                                    value="" required>
                                             </div>
                                         </div>
                                     @else
                                         <div class="d-flex align-items-center my-3">
                                             <span class="me-2">Qty</span>
-                                            <button class="btn rounded btn-sm decrease-btn"
-                                                style="background: #c7c7c75b">-</button>
-                                            <input type="text" id="quantityInput" value="1"
+                                            <button class="btn rounded btn-sm decrease-btn" style="background: #c7c7c75b"
+                                                data-product-id="{{ $product->id }}">-</button>
+                                            <input type="text" id="quantityInput_{{ $product->id }}" value="1"
                                                 class="form-control form-control-sm mx-2 text-center quantity-input"
                                                 style="width: 50px;" readonly>
-                                            <button class="btn rounded btn-sm increase-btn"
-                                                style="background: #c7c7c75b">+</button>
+                                            <button class="btn rounded btn-sm increase-btn" style="background: #c7c7c75b"
+                                                data-product-id="{{ $product->id }}">+</button>
                                         </div>
                                     @endif
                                     @if (count($products) > 1)
                                         <span class="px-2">
                                             <button class="btn btn-sm btn-danger rounded remove-btn"
-                                                style="background: #ff0060; color:#fff;
+                                                style="background: #ef4444; color:#fff;
                                      margin-top: {{ $product->deal_type === 2 ? '30px;' : '3px;' }}">Remove</button>
                                         </span>
                                     @endif
@@ -153,14 +150,15 @@
                     <div class="container mb-4">
                         <div class="card p-3">
                             <!-- Card 1 -->
-                             <!-- cart items -->
-                              <div id="cart_items">
+                            <!-- cart items -->
+                            <div id="cart_items">
                                 @if ($carts->items->count() > 0)
                                     @foreach ($carts->items as $cart)
-                                        <div class="row d-flex align-items-center mb-3" id="cart_item_{{ $cart->product->id }}">
+                                        <div class="row d-flex align-items-center mb-3"
+                                            id="cart_item_{{ $cart->product->id }}">
                                             <div class="col-1">
-                                                <input type="checkbox" class="cartItem_check" value="{{ $cart->product->id }}"
-                                                    class="me-1" />
+                                                <input type="checkbox" class="cartItem_check"
+                                                    value="{{ $cart->product->id }}" class="me-1" />
                                             </div>
                                             <div class="col-3">
                                                 @php
@@ -169,10 +167,8 @@
                                                         ->where('type', 'image')
                                                         ->first();
                                                 @endphp
-                                                <img
-                                                    src="{{ $image ? asset($image->path) : asset('assets/images/home/noImage.webp') }}"
-                                                    class="img-fluid card_img_cont"
-                                                    alt="{{ $cart->product->name }}" />
+                                                <img src="{{ $image ? asset($image->path) : asset('assets/images/home/noImage.webp') }}"
+                                                    class="img-fluid card_img_cont" alt="{{ $cart->product->name }}" />
                                             </div>
                                             <div class="col-8">
                                                 <div class="d-flex flex-column justify-content-start">
@@ -192,12 +188,12 @@
                                         <p class="text-muted">No items found in the cart.</p>
                                     </div>
                                 @endif
-</div>
+                            </div>
 
-                                <!-- Add Button -->
-                                <div class="d-flex justify-content-end" >
-                                    <button class="btn btn-orange fs_common my-2" id="get_cartItems">Add Item</button>
-                                </div>
+                            <!-- Add Button -->
+                            <div class="d-flex justify-content-end">
+                                <button class="btn btn-orange fs_common my-2" id="get_cartItems">Add Item</button>
+                            </div>
                             <!-- saved items -->
                             <p>Saved Items</p>
                             @if ($savedItem->count() > 0)
@@ -213,10 +209,8 @@
                                                     ->where('type', 'image')
                                                     ->first();
                                             @endphp
-                                            <img
-                                                src="{{ $image ? asset($image->path) : asset('assets/images/home/noImage.webp') }}"
-                                                class="img-fluid card_img_cont"
-                                                alt="{{ $list->deal->name }}" />
+                                            <img src="{{ $image ? asset($image->path) : asset('assets/images/home/noImage.webp') }}"
+                                                class="img-fluid card_img_cont" alt="{{ $list->deal->name }}" />
                                         </div>
                                         <div class="col-8">
                                             <div class="d-flex flex-column justify-content-start">
@@ -252,12 +246,29 @@
 
                 </div>
             </div>
-            <div class="d-flex justify-content-end align-items-center py-3"
-                style="position: sticky; bottom: 0px; background: #fff">
+            <div class="d-flex justify-content-between align-items-center py-3"
+                style="position: sticky; bottom: 0px; background: #fff;border-top: 1px solid #dcdcdc">
+                <div class="d-flex justify-content-end align-items-center">
+                    <h4>Total Amount &nbsp;&nbsp;
+                        <span id="original-price-strike" style="text-decoration: line-through; color:#c7c7c7">
+                            ${{ $product->original_price }}
+                        </span>
+                        &nbsp;&nbsp;
+                        <span id="discounted-price" style="color:#000">
+                            ${{ $product->discounted_price }}
+                        </span>
+                        &nbsp;&nbsp;
+                        <span class="ms-1" style="font-size:12px; color:#00DD21" id="deal-discount">
+                            Dealslah Discount
+                            &nbsp;<span>${{ number_format($product->original_price - $product->discounted_price, 2) }}</span>
+                        </span>
+                    </h4>
+                </div>
                 @if ($default_address)
                     <form action="{{ route('checkout.direct') }}" method="POST" id="checkoutForm">
                         @csrf
-                        <input type="hidden" id="all_products_to_buy" name="all_products_to_buy" value="{{ json_encode($products->pluck('id')) }}">
+                        <input type="hidden" id="all_products_to_buy" name="all_products_to_buy"
+                            value="{{ json_encode($products->pluck('id')) }}">
                         <input type="hidden" name="address_id" value="{{ $default_address->id }}">
                         <input type="hidden" name="cart_id" value="{{ $carts->id }}">
                         <button type="submit" class="btn check_out_btn" id="submitBtn">
@@ -271,52 +282,12 @@
                     </a>
                 @endif
             </div>
+
         </div>
     </section>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>                 
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script>
-        $(document).ready(function () {
-
-            // $('#checkoutForm').on('submit', function(event) {
-            //     let valid = true;
-            //     const serviceFields = $('.service-date, .service-time');
-            //     let firstInvalidField = null;
-
-            //     serviceFields.each(function() {
-            //     const field = $(this);
-            //     const fieldContainer = field.closest('.form-group');
-            //     let errorElement = fieldContainer.find('.error-message');
-
-            //     if (!field.val()) {
-            //         valid = false;
-
-            //         if (errorElement.length === 0) {
-            //         const errorMessage = $('<span>')
-            //             .text('This field is required')
-            //             .css({ color: 'red', fontSize: '12px' })
-            //             .addClass('error-message');
-            //         fieldContainer.append(errorMessage);
-            //         }
-
-            //         if (!firstInvalidField) {
-            //         firstInvalidField = field;
-            //         }
-            //     } else {
-            //         if (errorElement.length > 0) {
-            //         errorElement.remove();
-            //         }
-            //     }
-            //     });
-
-            //     if (!valid) {
-            //         event.preventDefault(); // Prevent form submission
-
-            //         if (firstInvalidField) {
-            //             firstInvalidField.focus(); // Focus the first invalid field
-            //         }
-            //     }
-            // });
-
+        $(document).ready(function() {
             $('#get_cartItems').on('click', function() {
                 let product_ids = [];
                 $('.cartItem_check:checked').each(function() {
@@ -339,7 +310,7 @@
                                         <div class="col-md-4 col-12 d-flex flex-column justify-content-center align-items-center">
                                             <div class="d-flex justify-content-center align-items-center">
                                                 <img
-                                                    src="${product.image ? product.image : '{{ asset('assets/images/home/noImage.webp') }}'}"
+                                                    src="${product.image}"
                                                     style="max-width: 100%; max-height: 100%;"
                                                     alt="${product.name}" />
                                             </div>
@@ -351,7 +322,7 @@
                                                 <span style="text-decoration: line-through; color:#c7c7c7">
                                                     $${product.original_price}
                                                 </span>
-                                                <span class="ms-1" style="font-size:22px;color:#ff0060">
+                                                <span class="ms-1" style="font-size:22px;color:#ef4444">
                                                     $${product.discounted_price}
                                                 </span>
                                                 <span class="ms-1" style="font-size:12px; color:#00DD21">
@@ -361,55 +332,57 @@
                                         </div>
                                         <div class="col-12 d-flex flex-wrap align-items-center mt-2">
                                             ${product.deal_type === 2 ? `
-                                                <div class="d-flex align-items-center">
-                                                    <div class="form-group">
-                                                        <label for="service_date_${product.id}" class="form-label">Service Date</label>
-                                                        <input type="date" id="service_date_${product.id}" name="service_date"
-                                                            class="form-control form-control-sm service-date"
-                                                            value="" min="${new Date().toISOString().split('T')[0]}" required>
-                                                    </div>
-                                                    <div class="form-group ms-2">
-                                                        <label for="service_time_${product.id}" class="form-label">Service Time</label>
-                                                        <input type="time" id="service_time_${product.id}" name="service_time"
-                                                            class="form-control form-control-sm service-time"
-                                                            value="" required>
-                                                    </div>
-                                                </div>
-                                            ` : `
-                                                <div class="d-flex align-items-center my-3">
-                                                    <span class="me-2">Qty</span>
-                                                    <button class="btn rounded btn-sm decrease-btn"
-                                                        style="background: #c7c7c75b">-</button>
-                                                    <input type="text" id="quantityInput_${product.id}" value="1"
-                                                        class="form-control form-control-sm mx-2 text-center quantity-input"
-                                                        style="width: 50px;" readonly>
-                                                    <button class="btn rounded btn-sm increase-btn"
-                                                        style="background: #c7c7c75b">+</button>
-                                                </div>
-                                            `}
+                                                                        <div class="d-flex align-items-center">
+                                                                            <div class="form-group">
+                                                                                <label for="service_date_${product.id}" class="form-label">Service Date</label>
+                                                                                <input type="date" id="service_date_${product.id}" name="service_date"
+                                                                                    class="form-control form-control-sm service-date"
+                                                                                    value="" min="${new Date().toISOString().split('T')[0]}" required>
+                                                                            </div>
+                                                                            <div class="form-group ms-2">
+                                                                                <label for="service_time_${product.id}" class="form-label">Service Time</label>
+                                                                                <input type="time" id="service_time_${product.id}" name="service_time"
+                                                                                    class="form-control form-control-sm service-time"
+                                                                                    value="" required>
+                                                                            </div>
+                                                                        </div>
+                                                                    ` : `
+                                                                        <div class="d-flex align-items-center my-3">
+                                                                            <span class="me-2">Qty</span>
+                                                                            <button class="btn rounded btn-sm decrease-btn"
+                                                                                style="background: #c7c7c75b" data-product-id="${product.id}">-</button>
+                                                                            <input type="text" id="quantityInput_${product.id}" value="1"
+                                                                                class="form-control form-control-sm mx-2 text-center quantity-input"
+                                                                                style="width: 50px;" readonly>
+                                                                            <button class="btn rounded btn-sm increase-btn"
+                                                                                style="background: #c7c7c75b" data-product-id="${product.id}">+</button>
+                                                                        </div>
+                                                                    `}
                                             ${response.data.length > 1 ? `
-                                                <span class="px-2">
-                                                    <button class="btn btn-sm btn-danger rounded remove-btn"
-                                                        style="background: #ff0060; color:#fff;
-                                                        margin-top: ${product.deal_type === 2 ? '30px;' : '3px;'}">Remove</button>
-                                                </span>
-                                            ` : ''}
+                                                                                            <span class="px-2">
+                                                                                                <button class="btn btn-sm btn-danger rounded remove-btn"
+                                                                                                    style="background: #ef4444; color:#fff;
+                                                                                                    margin-top: ${product.deal_type === 2 ? '30px;' : '3px;'}">Remove</button>
+                                                                                            </span>
+                                                                                        ` : ''}
                                         </div>
                                         <hr class="mt-3">
                                     </div>
                                 `);
 
                                 $('#cart_item_' + product.id).remove();
-                                if($('#cart_items').children().length === 0){
+                                if ($('#cart_items').children().length === 0) {
                                     $('#cart_items').append(`<div class="text-center" id="no_items">
                                         <p class="text-muted">No items found in the cart.</p>
                                     </div>`);
                                     $('#get_cartItems').hide();
                                 }
 
-                                let allProducts = JSON.parse($('#all_products_to_buy').val());
+                                let allProducts = JSON.parse($('#all_products_to_buy')
+                                    .val());
                                 allProducts.push(product.id);
-                                $('#all_products_to_buy').val(JSON.stringify(allProducts));
+                                $('#all_products_to_buy').val(JSON.stringify(
+                                    allProducts));
                             }
                         });
                     },
@@ -419,21 +392,94 @@
                 });
             });
 
+            $(document).on('change', '.service-date', function() {
+                let productId = $(this).closest('.row').attr('id').split('_')[1];
+                let cartId = $('input[name="cart_id"]').val();
+                let serviceDate = $(this).val();
+
+                $.ajax({
+                    url: "{{ route('cart.update') }}",
+                    type: 'POST',
+                    data: {
+                        _token: '{{ csrf_token() }}',
+                        product_id: productId,
+                        service_date: serviceDate,
+                        cart_id: cartId
+                    },
+                    success: function(response) {
+                        // Optionally handle success response
+                    },
+                    error: function(error) {
+                        console.log(error);
+                        // Optionally handle error response
+                    }
+                });
+            });
+
+            $(document).on('change', '.service-time', function() {
+                let productId = $(this).closest('.row').attr('id').split('_')[1];
+                let cartId = $('input[name="cart_id"]').val();
+                let serviceTime = $(this).val();
+
+                $.ajax({
+                    url: "{{ route('cart.update') }}",
+                    type: 'POST',
+                    data: {
+                        _token: '{{ csrf_token() }}',
+                        product_id: productId,
+                        service_time: serviceTime,
+                        cart_id: cartId
+                    },
+                    success: function(response) {
+                        // Optionally handle success response
+                    },
+                    error: function(error) {
+                        console.log(error);
+                        // Optionally handle error response
+                    }
+                });
+            });
+
             function attachQuantityListeners() {
                 $(document).on('click', '.increase-btn', function() {
-                    let quantityInput = $(this).siblings('.quantity-input');
+                    let productId = $(this).data('product-id');
+                    let quantityInput = $(`#quantityInput_${productId}`);
                     let currentQuantity = parseInt(quantityInput.val());
-                    quantityInput.val(currentQuantity + 1);
+                    let newQuantity = currentQuantity + 1;
+                    updateCart(productId, newQuantity, quantityInput);
                 });
 
                 $(document).on('click', '.decrease-btn', function() {
-                    let quantityInput = $(this).siblings('.quantity-input');
+                    let productId = $(this).data('product-id');
+                    let quantityInput = $(`#quantityInput_${productId}`);
                     let currentQuantity = parseInt(quantityInput.val());
                     if (currentQuantity > 1) {
-                        quantityInput.val(currentQuantity - 1);
+                        let newQuantity = currentQuantity - 1;
+                        updateCart(productId, newQuantity, quantityInput);
                     }
                 });
-            }   
+            }
+
+            function updateCart(productId, newQuantity, quantityInput) {
+                $.ajax({
+                    url: "{{ route('cart.update') }}", // Update this route to your actual update route
+                    type: 'POST',
+                    data: {
+                        _token: '{{ csrf_token() }}',
+                        product_id: productId,
+                        quantity: newQuantity,
+                        cart_id: $('input[name="cart_id"]').val()
+                    },
+                    success: function(response) {
+                        quantityInput.val(newQuantity);
+                        // Optionally update other parts of the cart UI, like total price
+                    },
+                    error: function(error) {
+                        console.log(error);
+                        // Optionally show an error message to the user
+                    }
+                });
+            }
 
             // Initial call to attach event listeners
             attachQuantityListeners();
@@ -464,28 +510,18 @@
                     </div>
                 `);
 
-
-                
-
                 attachQuantityListeners();
 
-                
-
-                if($('#cart_items').children().length === 0){
+                if ($('#cart_items').children().length === 0) {
                     $('#cart_items').append(`<div class="text-center" id="no_items">
                                         <p class="text-muted">No items found in the cart.</p>
                                     </div>`);
                     $('#get_cartItems').hide();
                 }
-                
+
                 $('#get_cartItems').show();
 
             });
-
-            
-
-});
+        });
     </script>
-
-
 @endsection

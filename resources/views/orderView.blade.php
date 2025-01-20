@@ -10,7 +10,7 @@
     @endif
     @if ($errors->any())
         <div class="alert alert-dismissible fade show" role="alert"
-            style="position: fixed; top: 70px; right: 40px; z-index: 1050; background:#ff0060; color:#fff">
+            style="position: fixed; top: 70px; right: 40px; z-index: 1050; background:#ef4444; color:#fff">
             <ul class="mb-0">
                 @foreach ($errors->all() as $error)
                     <li>{{ $error }}</li>
@@ -21,7 +21,7 @@
     @endif
     @if (session('error'))
         <div class="alert alert-dismissible fade show" role="alert"
-            style="position: fixed; top: 70px; right: 40px; z-index: 1050; background:#ff0060; color:#fff">
+            style="position: fixed; top: 70px; right: 40px; z-index: 1050; background:#ef4444; color:#fff">
             {{ session('error') }}
             <button type="button" class="btn-close btn-sm" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
@@ -53,15 +53,17 @@
                             {{ $order->items[0]->deal_type == 1 ? 'Product' : ($order->items[0]->deal_type == 2 ? 'Service' : '') }}
                         </span>
                     </div>
-                    <div>
-                        <a href="{{ route('order.invoice', $order->id) }}" class="text-decoration-none pe-2">
+                    {{-- <a href="{{ route('order.invoice', $order->id) }}" class="text-decoration-none pe-2">
                             <button type="button" class="btn invoiceBtn" data-bs-toggle="tooltip" data-bs-placement="top"
                                 title="Download Invoice"><i class="fa-solid fa-file-invoice"></i></button>
-                        </a>
-                        <a href="{{ route('checkout.direct', $order->items[0]->product_id) }}" class="text-decoration-none">
-                            <button type="button" class="btn showmoreBtn">Order again</button>
-                        </a>
-                    </div>
+                        </a> --}}
+                    @if (isset($order->items[0]->product->slug) && $order->items[0]->product->slug)
+                        <form action="{{ route('cart.add', ['slug' => $order->items[0]->product->slug]) }}" method="POST">
+                            @csrf
+                            <input type="hidden" name="saveoption" id="saveoption" value="buy now">
+                            <button type="submit" class="btn showmoreBtn">Order again</button>
+                        </form>
+                    @endif
                 </div>
                 <div class="row">
                     {{-- Left Column: Order Item & Order Summary --}}
@@ -99,8 +101,8 @@
                                     <span>Date :
                                         <span>{{ \Carbon\Carbon::parse($order->created_at)->format('d/m/Y') }}</span></span>
                                     &nbsp;&nbsp;
-                                    <span>Time :
-                                        <span>{{ \Carbon\Carbon::parse($order->created_at)->format('h:i A') }}</span></span>
+                                    {{-- <span>Time :
+                                        <span>{{ \Carbon\Carbon::parse($order->created_at)->format('h:i A') }}</span></span> --}}
                                 </p>
                             </div>
                             <div class="card-body m-0 p-4">
@@ -113,10 +115,8 @@
                                                     ->where('type', 'image')
                                                     ->first();
                                             @endphp
-                                            <img
-                                                src="{{ $image ? asset($image->path) : asset('assets/images/home/noImage.webp') }}"
-                                                class="img-fluid"
-                                                alt="{{ $item->product->name }}" />
+                                            <img src="{{ $image ? asset($image->path) : asset('assets/images/home/noImage.webp') }}"
+                                                class="img-fluid" alt="{{ $item->product->name }}" />
                                         </div>
                                         <div class="col">
                                             @if ($item->order_id)
@@ -136,10 +136,10 @@
                                                 @endif
                                                 <p class="truncated-description">{{ $item->product->description }}</p>
                                                 <p class="mb-0">
-                                                    <del>${{ number_format($item->unit_price, 2) }}</del>
+                                                    <del>₹{{ number_format($item->unit_price, 2) }}</del>
                                                     &nbsp;&nbsp;
                                                     <span
-                                                        style="color: #ff0060; font-size:24px">${{ number_format($item->discount, 2) }}</span>
+                                                        style="color: #ef4444; font-size:24px">₹{{ number_format($item->discount, 2) }}</span>
                                                     &nbsp;&nbsp;
                                                     <span
                                                         class="badge_danger">{{ number_format($item->discount_percent, 0) }}%
@@ -156,18 +156,20 @@
                                 <div class="row">
                                     <div class="col-md-3"></div>
                                     <div class="col-md-9">
-                                        @if ($item->deal_type === '2')
-                                            <div class="d-flex gap-4">
-                                                <p>Service Date: {{ $item->service_date ?? ' ' }}</p>
-                                                <p>Service Time:
-                                                    {{ \Carbon\Carbon::parse($item->service_time)->format('h:i A') ?? ' ' }}
-                                                </p>
-                                            </div>
-                                        @else
-                                            <div class="d-flex gap-4">
-                                                <p>Quantity: {{ $item->quantity ?? ' ' }}</p>
-                                            </div>
-                                        @endif
+                                        @foreach ($order->items as $item)
+                                            @if ($item->deal_type === '2')
+                                                <div class="d-flex gap-4">
+                                                    <p>Service Date: {{ $item->service_date ?? 'N/A' }}</p>
+                                                    <p>Service Time:
+                                                        {{ \Carbon\Carbon::parse($item->service_time)->format('h:i A') ?? 'N/A' }}
+                                                    </p>
+                                                </div>
+                                            @else
+                                                <div class="d-flex gap-4">
+                                                    <p>Quantity: {{ $item->quantity ?? ' ' }}</p>
+                                                </div>
+                                            @endif
+                                        @endforeach
                                     </div>
                                 </div>
                             </div>
@@ -178,15 +180,27 @@
                                 <p class="mb-0">Shop Details</p>
                             </div>
                             <div class="card-body m-0 p-4">
-                                @if ($order->shop)
-                                    <p>Company Name : {{ $order->shop->name ?? 'N/A' }}</p>
-                                    <p>Company Email : {{ $order->shop->email ?? 'N/A' }}</p>
-                                    <p>Company Mobile : {{ $order->shop->mobile ?? 'N/A' }}</p>
-                                    <p>Description : {{ $order->shop->description ?? 'N/A' }}</p>
-                                    <p>Address : {{ $order->shop->address ?? 'N/A' }}</p>
+                                @if ($order->items->isNotEmpty() && $order->items->first()->shop)
+                                    <p>Company Name : {{ $order->items->first()->shop->name ?? 'N/A' }}</p>
+                                    <p>Company Email : {{ $order->items->first()->shop->email ?? 'N/A' }}</p>
+                                    <p>Company Mobile : {{ $order->items->first()->shop->mobile ?? 'N/A' }}</p>
+                                    <p>Description : {{ $order->items->first()->shop->description ?? 'N/A' }}</p>
+                                    <p>
+                                        Address:
+                                        @if ($order->items->first()->shop->street)
+                                            {{ $order->items->first()->shop->street }}
+                                        @endif
+                                        @if ($order->items->first()->shop->city)
+                                            , {{ $order->items->first()->shop->city }}
+                                        @endif
+                                        @if ($order->items->first()->shop->zip_code)
+                                            , {{ $order->items->first()->shop->zip_code }}
+                                        @endif
+                                    </p>
                                 @else
                                     <p>No Shop Details Available</p>
                                 @endif
+
                             </div>
                         </div>
                         {{-- Order Summary --}}
@@ -246,24 +260,23 @@
                     </div>
                     {{-- Right Column: Notes, Customer Info, Contact, and Address --}}
                     <div class="col-md-4">
-                        {{-- Notes --}}
-                        <div class="card mb-4">
+                        {{-- Notes {{--
+                      {{--  <div class="card mb-4">
                             <div class="card-header m-0 p-2" style="background: #ffecee">
                                 <p class="mb-0">Notes</p>
                             </div>
                             <div class="card-body m-0 p-4">
-                                <p>{{ $order->notes ?? 'No notes available' }}</p>
+                                <p>{{ $order->items->first()?->item_description ?? 'No notes available' }}</p>
                             </div>
-                        </div>
+                        </div> --}}
                         {{-- Contact Information --}}
                         <div class="card mb-4">
                             <div class="card-header m-0 p-2" style="background: #ffecee">
                                 <p class="mb-0">Contact Information</p>
                             </div>
                             <div class="card-body m-0 p-4">
-                                <p>Name : {{ $order->first_name . ' ' . $order->last_name ?? 'N/A' }}</p>
-                                <p>Email : {{ $order->email ?? 'N/A' }}</p>
-                                <p>Phone : {{ $order->mobile ?? 'No phone number provided' }}</p>
+                                <p>Name : {{ $order->customer->name ?? 'N/A' }}</p>
+                                <p>Email : {{ $order->customer->email ?? 'N/A' }}</p>
                             </div>
                         </div>
                         {{-- Shipping Address --}}
@@ -275,9 +288,15 @@
                                 <p class="mb-0">Address</p>
                             </div>
                             <div class="card-body m-0 p-4">
-                                @if ($address)
-                                    <p>{{ $address['street'] ?? '--' }}, {{ $address['city'] ?? '--' }},
-                                        {{ $address['country'] ?? '--' }}, {{ $address['zipCode'] ?? '--' }}.</p>
+                                @if ($order->address)
+                                    <p>Name : {{ $order->address->first_name ?? '' }}
+                                        {{ $order->address->last_name ?? '' }}</p>
+                                    <p>Email : {{ $order->address->email ?? 'N/A' }}</p>
+                                    <p>Phone : {{ $order->address->phone ?? 'No phone number provided' }}</p>
+                                    <p>Address :
+                                        {{ $order->address->address ?? '--' }},
+                                        {{ $order->address->postalcode ?? '--' }}
+                                    </p>
                                 @else
                                     <p>No address provided</p>
                                 @endif
@@ -305,9 +324,9 @@
             let total = orderItems.reduce((sum, item) => sum + (parseFloat(item.discount) * item.quantity), 0);
             let discount = subtotal - total;
 
-            document.getElementById('subtotal').innerText = `$${subtotal.toFixed(2)}`;
-            document.getElementById('discount').innerText = `$${discount.toFixed(2)}`;
-            document.getElementById('total').innerText = `$${total.toFixed(2)}`;
+            document.getElementById('subtotal').innerText = `₹${subtotal.toFixed(2)}`;
+            document.getElementById('discount').innerText = `₹${discount.toFixed(2)}`;
+            document.getElementById('total').innerText = `₹${total.toFixed(2)}`;
         @endif
     </script>
 @endsection

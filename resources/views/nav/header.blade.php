@@ -177,7 +177,7 @@
                                                             style="font-size: 10px;white-space: normal;">
                                                             {{ $item->product->name }}
                                                         </p>
-                                                        <p class="px-1 text_size text-danger">
+                                                        <p class="px-1 text_size" style="color: #ff0060">
                                                             ₹ {{ number_format($item->discount, 2) }}
                                                         </p>
                                                     </div>

@@ -71,6 +71,7 @@ class CheckoutController extends Controller
 
     public function directcheckout(Request $request)
     {
+
         $product_ids = $request->input('all_products_to_buy');
         $ids = json_decode($product_ids);
         $address_id = $request->input('address_id');
@@ -119,6 +120,7 @@ class CheckoutController extends Controller
 
     public function createorder(Request $request)
     {
+        // dd($request->all());
         // $validator = Validator::make($request->all(), [
 
         //     'payment_type'      => 'required|string|max:50',
@@ -163,6 +165,7 @@ class CheckoutController extends Controller
             $orderNumber = 'DEALSLAH_O' . $customOrderId;
 
             $itemCount = $cart->items->whereIn('product_id', $ids)->sum('quantity');
+
             $total = $cart->items->whereIn('product_id', $ids)->sum(function ($item) {
                 return $item->unit_price * $item->quantity;
             });

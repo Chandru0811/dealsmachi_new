@@ -2,15 +2,15 @@
 
 @section('content')
     @if (session('status'))
-        <div class="alert alert-success alert-dismissible fade show" role="alert"
-            style="position: fixed; top: 70px; right: 40px; z-index: 1050;">
+        <div class="alert alert-dismissible fade show" role="alert"
+            style="position: fixed; top: 70px; right: 40px; z-index: 1050; background:#00e888; color:#fff">
             {!! nl2br(e(session('status'))) !!}
             <button type="button" class="btn-close btn-sm" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
     @endif
     @if ($errors->any())
-        <div class="alert alert-danger alert-dismissible fade show" role="alert"
-            style="position: fixed; top: 70px; right: 40px; z-index: 1050;">
+        <div class="alert alert-dismissible fade show" role="alert"
+            style="position: fixed; top: 70px; right: 40px; z-index: 1050; background:#ef4444; color:#fff">
             <ul class="mb-0">
                 @foreach ($errors->all() as $error)
                     <li>{{ $error }}</li>
@@ -20,11 +20,11 @@
         </div>
     @endif
     @if (session('error'))
-    <div class="alert alert-danger alert-dismissible fade show" role="alert"
-        style="position: fixed; top: 70px; right: 40px; z-index: 1050;">
-        {{ session('error') }}
-        <button type="button" class="btn-close btn-sm" data-bs-dismiss="alert" aria-label="Close"></button>
-    </div>
+        <div class="alert alert-dismissible fade show" role="alert"
+            style="position: fixed; top: 70px; right: 40px; z-index: 1050; background:#ef4444; color:#fff">
+            {{ session('error') }}
+            <button type="button" class="btn-close btn-sm" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
     @endif
     <!-- Category & Banner Start  -->
     <!-- hero section -->
@@ -141,44 +141,47 @@
                 }
             }
 
-            $('#nearest_deals').on('click',function(){
+            $('#nearest_deals').on('click', function() {
                 event.preventDefault();
-                navigator.permissions.query({ name: 'geolocation' }).then(function(result) {
-                            if (result.state === 'granted') {
-                                if (navigator.geolocation) {
+                navigator.permissions.query({
+                    name: 'geolocation'
+                }).then(function(result) {
+                    if (result.state === 'granted') {
+                        if (navigator.geolocation) {
                             navigator.geolocation.getCurrentPosition(showlocation, showError);
                         } else {
                             alert("Geolocation is not supported by this browser.");
                         }
                     } else if (result.state === 'prompt') {
-                               if (navigator.geolocation) {
+                        if (navigator.geolocation) {
                             navigator.geolocation.getCurrentPosition(showlocation, showError);
                         } else {
                             alert("Geolocation is not supported by this browser.");
                         }
                     } else if (result.state === 'denied') {
                         // Notify the user to enable location permissions manually
-                        alert("Location access is denied. Please enable it in your browser settings.");
+                        alert(
+                            "Location access is denied. Please enable it in your browser settings."
+                            );
                     }
                 });
             });
-            
-            function showlocation(position)
-            {
+
+            function showlocation(position) {
                 const latitude = position.coords.latitude;
                 const longitude = position.coords.longitude;
 
                 console.log('Latitude:', latitude);
                 console.log('Longitude:', longitude);
-                
+
                 const nearestDealsLink = $('#nearest_deals');
                 const baseUrl = nearestDealsLink.attr('href');
-            
+
                 // Check if the URL already has latitude and longitude to avoid appending them again
                 if (!baseUrl.includes("latitude") && !baseUrl.includes("longitude")) {
                     const newUrl = `${baseUrl}?latitude=${latitude}&longitude=${longitude}`;
                     nearestDealsLink.attr('href', newUrl);
-            
+
                     // Redirect to the updated URL
                     window.location.href = newUrl;
                 } else {
