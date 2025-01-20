@@ -1968,7 +1968,7 @@ footer hr {
     background-color: #3b5998;
     border-radius: 3px;
     font-size: 16px;
-    margin:0 5px;
+    margin: 0 5px;
 }
 #social-links .fa-x-twitter {
     padding: 6px 7px;
@@ -1977,7 +1977,7 @@ footer hr {
     background-color: #000;
     border-radius: 3px;
     font-size: 16px;
-    margin:0 5px;
+    margin: 0 5px;
 }
 #social-links .fa-linkedin {
     padding: 6px 8px;
@@ -1986,7 +1986,7 @@ footer hr {
     background-color: #0077b5;
     border-radius: 3px;
     font-size: 16px;
-    margin:0 5px;
+    margin: 0 5px;
 }
 #social-links .fa-whatsapp {
     padding: 6px 8px;
@@ -1995,7 +1995,7 @@ footer hr {
     background-color: #25d366;
     border-radius: 3px;
     font-size: 16px;
-    margin:0 5px;
+    margin: 0 5px;
 }
 
 #social-links .fa-telegram {
@@ -2005,7 +2005,7 @@ footer hr {
     background-color: #28a8e9;
     border-radius: 3px;
     font-size: 16px;
-    margin:0 5px;
+    margin: 0 5px;
 }
 
 .social-link-container {
@@ -3197,6 +3197,26 @@ footer hr {
     padding: 0 8px;
     cursor: default;
 }
+.badge_del {
+    color: #f9675f;
+    background: #fff;
+    border: 1px solid #f9675f;
+    cursor: pointer !important;
+    font-size: 10px;
+    border-radius: 3px;
+    padding: 0 8px;
+    cursor: default;
+}
+.badge_del:hover {
+    color: #fff;
+    background: #f9675f;
+    border: 1px solid #f9675f;
+    cursor: pointer !important;
+    font-size: 10px;
+    border-radius: 3px;
+    padding: 0 8px;
+    cursor: default;
+}
 .badge_edit:hover {
     color: #fff;
     background: #83c7ff;
@@ -3238,46 +3258,45 @@ footer hr {
     color: #ff0060;
     border: 1px solid #ff0060;
 }
-.user_list:hover{
+.user_list:hover {
     color: #fff;
     background: #ff0060;
     border-radius: 4px;
 }
-.user_list_icon:hover{
+.user_list_icon:hover {
     color: #fff !important;
 }
-.default_badge{
+.default_badge {
     color: #ff999d;
     border-color: #ff999d;
 }
 
-
 @media screen and (max-width: 335px) and (min-width: 320px) {
-    .service-time{
+    .service-time {
         width: 90%;
     }
 }
 
-
-.order-button{
-    padding:8px 22px ;
-    background-color:#00DD21 !important;
-    font-size:18px;
-    color:#fff;
+.order-button {
+    padding: 8px 22px;
+    background-color: #00dd21 !important;
+    font-size: 18px;
+    color: #fff;
     text-decoration: none;
 }
-.order-button:hover{
-    padding:8px 22px ;
-    background-color:#01a119 !important;
-    font-size:18px;
-    color:#fff
+.order-button:hover {
+    padding: 8px 22px;
+    background-color: #01a119 !important;
+    font-size: 18px;
+    color: #fff;
 }
 
 /* .owl-carousel .owl-dots.disabled, .owl-carousel .owl-nav.disabled {
     display: inline;
 } */
 
-.owl-prev, .owl-next {
+.owl-prev,
+.owl-next {
     position: absolute;
     top: 50%;
     z-index: 10;
@@ -3310,22 +3329,22 @@ footer hr {
     padding: 0 22px;
 }
 
-.carousel_content{
+.carousel_content {
     border: 1px solid #ff0060;
     border-radius: 5px;
     padding: 10px;
 }
-.owl-theme .owl-nav [class*=owl-]:hover {
+.owl-theme .owl-nav [class*="owl-"]:hover {
     background-color: #ff999d;
     border: 2px solid #ff999d;
     color: #fff;
     border-radius: 100%;
 }
-.check_out_btn{
-    padding:8px 22px ;
-    background:#00DD21;
-    font-size:18px;
-    color:#fff !important;
+.check_out_btn {
+    padding: 8px 22px;
+    background: #00dd21;
+    font-size: 18px;
+    color: #fff !important;
     text-decoration: none;
     border: none !important;
 }
@@ -3335,21 +3354,21 @@ footer hr {
     box-shadow: 2px 1px 3px 1px rgba(0, 0, 0, 0.2) !important;
 }
 
-.card_cart{
+.card_cart {
     background-color: #ff0060;
     color: #fff;
     border: 1px solid #ff0060;
     font-size: 10px;
 }
 .card_cart:hover,
-.card_cart.active{
+.card_cart.active {
     background-color: #fff !important;
     border: 1px solid #ff0060 !important;
     color: #ff0060 !important;
     font-size: 10px !important;
 }
 
-.tooltip_dec{
+.tooltip_dec {
     visibility: hidden;
     background-color: black;
     color: #fff;
@@ -3362,11 +3381,11 @@ footer hr {
     left: 50%;
     margin-left: 70px;
 }
-@media screen and (max-width:450px) {
-    .deal-badge{
+@media screen and (max-width: 450px) {
+    .deal-badge {
         margin: 0 !important;
     }
-    .tooltip_dec{
+    .tooltip_dec {
         visibility: hidden;
         background-color: black;
         color: #fff;
