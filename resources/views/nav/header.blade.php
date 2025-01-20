@@ -136,12 +136,13 @@
                         <button class="btn btn-button ps-0" style="border: none; position: relative;" id="cartButton"
                             data-bs-toggle="dropdown" aria-expanded="false">
                             <i class="fa-regular fa-cart-shopping fa-xl icon_size" style="color: #ff0060;"></i>
-                            @if ($cartItemCount !== 0)
+                            @if (isset($cartItemCount) && $cartItemCount !== 0)
                                 <span class="total-counts translate-middle d-none d-xl-block"
                                     style="position: absolute; top: 16px; right: 5px;">
                                     {{ $cartItemCount }}
                                 </span>
                             @endif
+
                         </button>
                         <div class="dropdown_cart dropdown-menu shadow-lg" aria-labelledby="cartButton"
                             style="left: 0; transform: translate(-85%, 0);">
@@ -538,7 +539,7 @@
                             <div class="row">
                                 <div class="col-md-6 col-12 mb-3">
                                     <label for="name" class="form-label">Name <span
-                                            class="text-danger" >*</span></label>
+                                            class="text-danger">*</span></label>
                                     <input type="text" class="form-control" name="name" id="name"
                                         placeholder="Enter your name" value="{{ $user->name ?? '' }}" required />
                                 </div>
@@ -547,7 +548,7 @@
                                     <label for="email" class="form-label">Email <span
                                             class="text-danger">*</span></label>
                                     <input type="email" class="form-control" name="email" id="email"
-                                        placeholder="Enter your email"  value="{{ $user->email ?? '' }}" />
+                                        placeholder="Enter your email" value="{{ $user->email ?? '' }}" />
                                 </div>
                             </div>
                             <div class="d-flex justify-content-end">

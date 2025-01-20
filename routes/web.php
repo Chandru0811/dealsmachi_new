@@ -1,20 +1,21 @@
 <?php
 
 use App\Http\Controllers\AddressController;
-use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BookmarkController;
-use App\Http\Controllers\CartController;
+use App\Http\Controllers\CheckoutController;
+use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
-use App\Http\Controllers\CheckoutController;
+use Laravel\Socialite\Facades\Socialite;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
-use Laravel\Socialite\Facades\Socialite;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Hash;
+use App\Http\Controllers\CartController;
 
 Route::fallback(function () {
-    return response()->view('errors.404', [], 404);
+    return redirect()->route('home');
 });
-
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('hotpick/{slug}', [HomeController::class, 'dealcategorybasedproducts'])->name('deals.categorybased');
@@ -30,17 +31,13 @@ Route::post('deals/count/views', [HomeController::class, 'viewcounts']);
 Route::post('deals/coupon/copied', [HomeController::class, 'couponCodeCopied']);
 Route::post('deals/count/share', [HomeController::class, 'dealshare']);
 Route::post('deals/count/enquire', [HomeController::class, 'dealenquire']);
-
-//Auth
-Route::get('/sociallogin/{provider}/{role}', [AuthController::class, 'socialredirect']);
-Route::get('/social/{provider}/callback', [AuthController::class, 'handlesociallogin']);
-require __DIR__ . '/auth.php';
-
 Route::middleware('auth')->group(function () {
-    Route::get('/directCheckout/{product_id}', [CheckoutController::class, 'directcheckout'])->name('checkout.direct');
-    Route::get('/checkout/{cart_id}', [CheckoutController::class, 'cartcheckout'])->name('checkout.cart');
-    Route::get('/cartSummary/{cart_id}', [CartController::class, 'cartSummary'])->name('cart.address');
     Route::get('/checkoutSummary/{product_id}', [CheckoutController::class, 'checkoutsummary'])->name('checkout.summary');
+    Route::get('/checkout/{cart_id}', [CheckoutController::class, 'cartcheckout'])->name('checkout.cart');
+    Route::post('/directCheckout', [CheckoutController::class, 'directcheckout'])->name('checkout.direct');
+
+
+    Route::get('/cartSummary/{cart_id}', [CartController::class, 'cartSummary'])->name('cart.address');
     Route::post('/checkout', [CheckoutController::class, 'createorder'])->name('checkout.checkout');
     Route::post('/createAddress', [AddressController::class, 'store'])->name('address.create');
     Route::put('/updateAddress', [AddressController::class, 'update'])->name('address.update');
@@ -50,8 +47,6 @@ Route::middleware('auth')->group(function () {
     Route::get('/order/invoice/{id}', [CheckoutController::class, 'orderInvoice'])->name('order.invoice');
     Route::put('/updateUser', [HomeController::class, 'updateUser'])->name('user.update');
 });
-
-
 Route::get('get/cartitems', [CartController::class, 'getCartItem'])->name('cartitems.get');
 Route::post('addtocart/{slug}', [CartController::class, 'addToCart'])->name('cart.add');
 Route::get('cart', [CartController::class, 'index'])->name('cart.index');
@@ -63,11 +58,8 @@ Route::post('saveforlater/toCart', [CartController::class, 'moveToCart'])->name(
 Route::post('saveforlater/remove', [CartController::class, 'removeFromSaveLater'])->name('savelater.remove');
 Route::get('saveforlater/all', [CartController::class, 'getsaveforlater'])->name('savelater.index');
 
-Route::get('/support', function () {
-    return view('support');
-});
 Route::get('/privacyPolicy', function () {
-    return view('privacypolicy');
+    return view('privacyPolicy');
 });
 Route::get('/terms_conditions', function () {
     return view('termsandconditions');
@@ -104,6 +96,7 @@ Route::get('auth/google/callback', function () {
 
     return redirect('/');
 });
+
 
 
 // Route::get('/dashboard', function () {

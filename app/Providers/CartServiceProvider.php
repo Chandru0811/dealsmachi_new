@@ -32,7 +32,7 @@ class CartServiceProvider extends ServiceProvider
             if (Auth::check()) {
                 $cart = Cart::where('customer_id', Auth::id())->first();
             } else {
-                $cart = Cart::whereNull('customer_id')->where('ip_address', request()->ip())->first();
+                $cart = Cart::where('ip_address', request()->ip())->first();
             }
 
             if ($cart) {

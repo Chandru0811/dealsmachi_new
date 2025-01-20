@@ -37,8 +37,6 @@ class CartController extends Controller
 
         $carts->load(['items.product.shop', 'items.product.productMedia']);
 
-        // dd($carts);
-
         $savedItems = collect();
 
         $user_id = Auth::check() ? Auth::user()->id : null;
@@ -48,7 +46,6 @@ class CartController extends Controller
         } else {
             $savedItems = SavedItem::where('user_id', $user_id)->with('deal.productMedia', 'deal.shop')->get();
         }
-        // dd($carts);
 
         return view('cart', compact('carts', 'bookmarkedProducts', 'savedItems'));
     }
@@ -64,11 +61,14 @@ class CartController extends Controller
         $customer_id = Auth::check() ? Auth::user()->id : null;
 
         if ($customer_id) {
-            $old_cart = Cart::where('customer_id', $customer_id)->orWhere(function ($q) {
-                $q->whereNull('customer_id')->where('ip_address', request()->ip());
+            $old_cart = Cart::where(function ($query) use ($customer_id) {
+                $query->where('customer_id', $customer_id)
+                    ->orWhere(function ($q) {
+                        $q->whereNull('customer_id')->where('ip_address', request()->ip());
+                    });
             })->first();
         } else {
-            $old_cart = Cart::whereNull('customer_id')->where('ip_address', $request->ip())->first();
+            $old_cart = Cart::where('ip_address', $request->ip())->first();
         }
 
         // Check if the item is alrealy in the cart
@@ -179,15 +179,24 @@ class CartController extends Controller
         $cart->save();
 
         $cart_item->quantity = $qtt;
-        $cart_item->service_date = $request->service_date;
-        $cart_item->service_time = $request->service_time;
+        if ($request->service_date) {
+            $cart_item->service_date = $request->service_date;
+        }
+        if ($request->service_time) {
+            $cart_item->service_time = $request->service_time;
+        }
         $cart_item->save();
 
         return response()->json([
             'status' => 'success',
             'message' => 'Cart Updated Successfully!',
             'redirect' => url()->previous(),
-            'updatedCart' => $cart
+            'updatedCart' => [
+                'quantity' => $cart->quantity,
+                'subtotal' => $cart->total,
+                'discount' => $cart->discount,
+                'grand_total' => $cart->grand_total,
+            ],
         ]);
     }
 
@@ -229,7 +238,7 @@ class CartController extends Controller
         } else {
             $cart = Cart::where(function ($query) {
                 $query->whereNull('customer_id')
-                ->where('ip_address', request()->ip());
+                    ->where('ip_address', request()->ip());
             })->first();
         }
 
@@ -431,10 +440,18 @@ class CartController extends Controller
     public function getCartItem(Request $request)
     {
         $product_ids = $request->input('product_ids');
+
         $products = Product::whereIn('id', $product_ids)->with('shop')->with('productMedia')->get();
+
+        $products = $products->map(function ($product) {
+            $image = $product->productMedia->first();
+            $product->image = $image ? asset($image->path) : asset('assets/images/home/noImage.webp');
+            return $product;
+        });
+
         return response()->json([
             'status' => 'success',
-            'message' => 'Cart Items fetched successfully!',
+            'message' => 'Cart Items Fetched Successfully!',
             'data' => $products,
         ]);
     }
