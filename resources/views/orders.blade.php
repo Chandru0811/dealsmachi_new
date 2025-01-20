@@ -39,7 +39,7 @@
                     <div class="d-flex">
                         <p>Date : <span>{{ \Carbon\Carbon::parse($order->created_at)->format('d/m/Y') }}</span></p>
                         &nbsp;&nbsp;
-                        <p>Time : <span>{{ \Carbon\Carbon::parse($order->created_at)->format('h:i A') }}</span></p>
+                        {{-- <p>Time : <span>{{ \Carbon\Carbon::parse($order->created_at)->format('h:i A') }}</span></p> --}}
                     </div>
                 </div>
                 <div class="d-flex justify-content-between align-items-start">
@@ -63,9 +63,17 @@
                             <p class="mb-1 truncated-description">
                                 {{ $item->product->description ?? 'No Description Available' }}
                             </p>
-                            @if($item->deal_type === '1' || $item->deal_type === 'Product')
-                            <p class="mt-1 mb-0">Quantity : {{ $item->quantity }}</p>
-                            @endif
+                            <div class="d-flex">
+                                @if($item->deal_type === '1' || $item->deal_type === 'Product')
+                                <p class="mt-1 mb-0">Quantity : {{ $item->quantity }}</p> &nbsp;&nbsp;&nbsp;
+                                @endif
+                                @if ($item->deal_type === '1' || $item->deal_type === 'Product')
+                                <p class="mt-1 mb-0">Delivery Date:
+                                    {{ \Carbon\Carbon::parse($order->created_at)->addDays(5)->format('d/m/Y') ?? 'N/A' }}
+                                </p>
+                                @else
+                                @endif
+                            </div>
                             <p>
                                 <del>₹{{ number_format($item->unit_price * $item->quantity, 2) }}</del> &nbsp;
                                 <span style="color: #ff0060; font-size:24px">

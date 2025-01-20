@@ -467,7 +467,7 @@ $(document).ready(function () {
         items: 1,
         nav: true,
         margin: 10,
-        loop: true,
+        loop: false,
         autoplay: false,
         dots: false,
         navText: [
