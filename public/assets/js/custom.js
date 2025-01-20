@@ -242,7 +242,7 @@ $(document).ready(function () {
         };
 
         var laravelRequest = $.ajax({
-            url: "http://dealsmachi.com/deals/count/enquire",
+            url: "https://dealsmachi.com/deals/count/enquire",
             type: "POST",
             headers: {
                 "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
@@ -943,7 +943,7 @@ function copySpanText(element, event) {
     var dealId = element.closest("a").getAttribute("href").split("/").pop();
 
     $.ajax({
-        url: "http://dealsmachi.com/deals/coupon/copied",
+        url: "https://dealsmachi.com/deals/coupon/copied",
         type: "POST",
         data: {
             _token: $('meta[name="csrf-token"]').attr("content"),
@@ -975,7 +975,7 @@ function copyLinkToClipboard(element, event, dealId) {
     document.body.removeChild(tempInput);
 
     $.ajax({
-        url: "http://dealsmachi.com/deals/count/share",
+        url: "https://dealsmachi.com/deals/count/share",
         type: "POST",
         data: {
             _token: $('meta[name="csrf-token"]').attr("content"),
@@ -1050,7 +1050,7 @@ $(document).ready(function () {
                 let dealId = $(this).data("deal-id");
 
                 $.ajax({
-                    url: `http://dealsmachi.com/bookmark/${dealId}/add`,
+                    url: `https://dealsmachi.com/bookmark/${dealId}/add`,
                     method: "POST",
                     success: function (response) {
                         updateBookmarkCount(response.total_items);
@@ -1083,7 +1083,7 @@ $(document).ready(function () {
                 let dealId = $(this).data("deal-id");
 
                 $.ajax({
-                    url: `http://dealsmachi.com/bookmark/${dealId}/remove`,
+                    url: `https://dealsmachi.com/bookmark/${dealId}/remove`,
                     method: "DELETE",
                     success: function (response) {
                         updateBookmarkCount(response.total_items);
@@ -1116,7 +1116,7 @@ $(document).ready(function () {
     // Initial Load of Bookmark Count
     function loadBookmarkCount() {
         $.ajax({
-            url: "http://dealsmachi.com/totalbookmark",
+            url: "https://dealsmachi.com/totalbookmark",
             method: "GET",
             success: function (response) {
                 updateBookmarkCount(response.total_items);
@@ -1162,7 +1162,7 @@ document
             var shareUrl = event.target.closest("a").href;
 
             $.ajax({
-                url: "http://dealsmachi.com/deals/count/share",
+                url: "https://dealsmachi.com/deals/count/share",
                 type: "POST",
                 data: {
                     _token: $('meta[name="csrf-token"]').attr("content"),
@@ -1184,7 +1184,7 @@ document
 
 function clickCount(dealId) {
     $.ajax({
-        url: "http://dealsmachi.com/deals/count/click",
+        url: "https://dealsmachi.com/deals/count/click",
         type: "POST",
         data: {
             _token: $('meta[name="csrf-token"]').attr("content"),
@@ -1201,7 +1201,7 @@ function clickCount(dealId) {
 
 function enquireCount(dealId) {
     $.ajax({
-        url: "http://dealsmachi.com/deals/count/enquire",
+        url: "https://dealsmachi.com/deals/count/enquire",
         type: "POST",
         data: {
             _token: $('meta[name="csrf-token"]').attr("content"),
