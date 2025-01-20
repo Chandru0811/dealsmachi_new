@@ -192,7 +192,7 @@
 
                                     @if ($itemsDisplayed < $carts->sum(fn($cart) => $cart->items->count()))
                                         <div class="text-end mb-2">
-                                            <a href="{{ route('cart.index') }}">View All</a>
+                                            <a style="font-size: 12px" href="{{ route('cart.index') }}">View All</a>
                                         </div>
                                     @endif
                                 @endif
