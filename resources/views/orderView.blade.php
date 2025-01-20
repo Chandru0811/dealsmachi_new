@@ -333,9 +333,14 @@
             let total = orderItems.reduce((sum, item) => sum + (parseFloat(item.discount) * item.quantity), 0);
             let discount = subtotal - total;
 
-            document.getElementById('subtotal').innerText = `₹${subtotal.toFixed(2)}`;
-            document.getElementById('discount').innerText = `₹${discount.toFixed(2)}`;
-            document.getElementById('total').innerText = `₹${total.toFixed(2)}`;
+            const formattedSubtotal = `₹{{ number_format($order->items->reduce(fn($sum, $item) => $sum + ($item['unit_price'] * $item['quantity']), 0), 2) }}`;
+            const formattedTotal = `₹{{ number_format($order->items->reduce(fn($sum, $item) => $sum + ($item['discount'] * $item['quantity']), 0), 2) }}`;
+            const formattedDiscount = `₹{{ number_format($order->items->reduce(fn($sum, $item) => $sum + ($item['unit_price'] * $item['quantity']), 0) - $order->items->reduce(fn($sum, $item) => $sum + ($item['discount'] * $item['quantity']), 0), 2) }}`;
+
+            document.getElementById('subtotal').innerText = formattedSubtotal;
+            document.getElementById('discount').innerText = formattedDiscount;
+            document.getElementById('total').innerText = formattedTotal;
         @endif
     </script>
+
 @endsection
