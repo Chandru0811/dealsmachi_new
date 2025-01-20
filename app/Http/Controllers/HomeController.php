@@ -10,15 +10,18 @@ use App\Models\Category;
 use App\Traits\ApiResponses;
 use App\Models\Product;
 use App\Models\Bookmark;
-use App\Models\CouponCodeUsed;
 use App\Models\DealClick;
-use App\Models\Dealenquire;
-use App\Models\DealShare;
 use App\Models\Shop;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use App\Models\DealViews;
+use App\Models\CouponCodeUsed;
+use App\Models\Dealenquire;
+use App\Models\DealShare;
+use App\Models\User;
+use Stevebauman\Location\Facades\Location;
+use Illuminate\Support\Facades\Validator;
 
 class HomeController extends Controller
 {
@@ -28,14 +31,16 @@ class HomeController extends Controller
     {
         $categoryGroups = CategoryGroup::where('active', 1)->with('categories')->take(10)->get();
         $hotpicks = DealCategory::where('active', 1)->get();
-        $products = Product::where('active', 1)->with(['shop:id,city,shop_ratings'])->orderBy('created_at', 'desc')->get();
-
+        $products = Product::where('active', 1)
+            ->with(['productMedia', 'shop:id,country,shop_ratings'])
+            ->orderBy('created_at', 'desc')
+            ->get();
+        // dd($products);
         $treandingdeals = DealViews::whereDate('viewed_at', Carbon::today())->get();
         $populardeals = DealViews::select('deal_id', DB::raw('count(*) as total_views'))->groupBy('deal_id')->limit(5)->orderBy('total_views', 'desc')->having('total_views', '>', 10)->get();
         $earlybirddeals = Product::where('active', 1)->whereDate('start_date', now())->get();
         $lastchancedeals = Product::where('active', 1)->whereDate('end_date', now())->get();
         $limitedtimedeals = Product::where('active', 1)->whereRaw('DATEDIFF(end_date, start_date) <= ?', [2])->get();
-
 
         $bookmarkedProducts = collect();
 
@@ -86,13 +91,8 @@ class HomeController extends Controller
     {
         $this->viewcounts($request);
 
-        $product = Product::with(['shop', 'shop.hour', 'shop.policy'])->where('id', $id)
-            ->where('active', 1)
+        $product = Product::with(['productMedia', 'shop', 'shop.hour', 'shop.policy'])->where('id', $id)
             ->first();
-
-        if (!$product) {
-            return redirect()->route('home')->with('error', 'Product not found or inactive.');
-        }
 
         $bookmarkedProducts = collect();
 
@@ -104,36 +104,45 @@ class HomeController extends Controller
             $bookmarkedProducts = Bookmark::where('ip_address', $ipAddress)->pluck('deal_id');
         }
 
+
+        $url = url()->current(); // Get the current URL
+        $title = $product->name; // Fetch the product's title dynamically
+        $description = $product->description; // Fetch the product's description
+        $image = $product->image_url1;
+
         $pageurl = url()->current();
         $pagetitle = $product->name;
         $pagedescription = $product->description;
         $pageimage = $product->image_url1;
+        $vedios = $product->additional_details;
 
         $shareButtons = \Share::page(
             $pageurl,
             $pagetitle
         )->facebook()->twitter()->linkedin()->whatsapp()->telegram();
 
-        return view('productDescription', compact('product', 'bookmarkedProducts', 'shareButtons', 'pageurl', 'pagetitle', 'pagedescription', 'pageimage'));
+        return view('productDescription', compact('product', 'bookmarkedProducts', 'shareButtons', 'pageurl', 'pagetitle', 'pagedescription', 'pageimage', 'vedios'));
     }
 
     public function dealcategorybasedproducts($slug, Request $request)
     {
         $shortBy = $request->input('short_by');
         if ($shortBy) {
-            return redirect()->route('deals.categorybased', ['slug' => $shortBy] + $request->except('short_by'));
+            return redirect()->route('dealcategorybasedproducts', ['slug' => $shortBy] + $request->except('short_by'));
         }
 
         $perPage = $request->input('per_page', 10);
         $today = now()->toDateString();
         $deals = collect();
 
-        $query = Product::where('active', 1)->with('shop:id,country,state,city,street,street2,zip_code,shop_ratings');
+        $query = Product::where('active', 1)->with('productMedia', 'shop:id,country,state,city,street,street2,zip_code,shop_ratings');
 
         if ($slug == 'trending') {
-            $query->withCount(['views' => function ($query) use ($today) {
-                $query->whereDate('viewed_at', $today);
-            }])->orderBy('views_count', 'desc');
+            $query->withCount([
+                'views' => function ($query) use ($today) {
+                    $query->whereDate('viewed_at', $today);
+                }
+            ])->orderBy('views_count', 'desc');
             $brands = $query->get()->pluck('brand')->filter(fn($brand) => !empty($brand))->unique()->sortBy(fn($brand) => strtolower($brand))->values();
             $discounts = $query->get()->pluck('discount_percentage')->map(fn($d) => round($d))->unique()->sort()->values();
             $shopIds = $query->get()->pluck('shop_id');
@@ -197,10 +206,10 @@ class HomeController extends Controller
             $priceRanges = $request->input('price_range');
             $query->where(function ($priceQuery) use ($priceRanges) {
                 foreach ($priceRanges as $range) {
-                    $cleanRange = str_replace(['Rs', ',', ' '], '', $range);
+                    $cleanRange = str_replace(['$', ',', ' '], '', $range);
                     $priceRange = explode('-', $cleanRange);
-                    $minPrice = isset($priceRange[0]) ? (float)$priceRange[0] : null;
-                    $maxPrice = isset($priceRange[1]) ? (float)$priceRange[1] : null;
+                    $minPrice = isset($priceRange[0]) ? (float) $priceRange[0] : null;
+                    $maxPrice = isset($priceRange[1]) ? (float) $priceRange[1] : null;
                     if ($maxPrice !== null) {
                         $priceQuery->orWhereBetween('discounted_price', [$minPrice, $maxPrice]);
                     } else {
@@ -216,7 +225,7 @@ class HomeController extends Controller
                 $q->whereIn('shop_ratings', $ratings);
             });
         }
-        
+
         $deals = $query->paginate($perPage);
 
         $label = match ($slug) {
@@ -263,11 +272,9 @@ class HomeController extends Controller
     public function subcategorybasedproducts(Request $request, $slug)
     {
         $perPage = $request->input('per_page', 10);
-    
-        $query = Product::with('shop')
-            ->with(['shop:id,country,state,city,street,street2,zip_code,shop_ratings'])
+        $query = Product::with(['productMedia', 'shop:id,country,state,city,street,street2,zip_code,shop_ratings'])
             ->where('active', 1);
-    
+
         if ($slug === 'all') {
             $categoryGroupId = $request->input('category_group_id');
             if ($categoryGroupId) {
@@ -332,11 +339,11 @@ class HomeController extends Controller
             $query->where(function ($priceQuery) use ($priceRanges) {
                 foreach ($priceRanges as $range) {
                     // Clean and split the price range
-                    $cleanRange = str_replace(['Rs', ',', ' '], '', $range);
+                    $cleanRange = str_replace(['$', ',', ' '], '', $range);
                     $priceRange = explode('-', $cleanRange);
 
-                    $minPrice = isset($priceRange[0]) ? (float)$priceRange[0] : null;
-                    $maxPrice = isset($priceRange[1]) ? (float)$priceRange[1] : null;
+                    $minPrice = isset($priceRange[0]) ? (float) $priceRange[0] : null;
+                    $maxPrice = isset($priceRange[1]) ? (float) $priceRange[1] : null;
 
                     // Apply the range filter
                     if ($maxPrice !== null) {
@@ -361,9 +368,11 @@ class HomeController extends Controller
         if ($request->has('short_by')) {
             $shortby = $request->input('short_by');
             if ($shortby == 'trending') {
-                $query->withCount(['views' => function ($viewQuery) {
-                    $viewQuery->whereDate('viewed_at', now()->toDateString());
-                }])->orderBy('views_count', 'desc');
+                $query->withCount([
+                    'views' => function ($viewQuery) {
+                        $viewQuery->whereDate('viewed_at', now()->toDateString());
+                    }
+                ])->orderBy('views_count', 'desc');
             } elseif ($shortby == 'popular') {
                 $query->withCount('views')->orderBy('views_count', 'desc');
             } elseif ($shortby == 'early_bird') {
@@ -413,12 +422,12 @@ class HomeController extends Controller
 
             if ($end > $maxPrice) {
                 $priceRanges[] = [
-                    'label' => 'Rs' . number_format($start, 2) . ' - Rs' . number_format($end, 2)
+                    'label' => '$' . number_format($start, 2) . ' - $' . number_format($end, 2)
                 ];
                 break;
             }
             $priceRanges[] = [
-                'label' => 'Rs' . number_format($start, 2) . ' - Rs' . number_format($end, 2)
+                'label' => '$' . number_format($start, 2) . ' - $' . number_format($end, 2)
             ];
         }
 
@@ -441,7 +450,7 @@ class HomeController extends Controller
         $term = $request->input('q');
         $perPage = $request->input('per_page', 10);
 
-        $query = Product::with('shop')->where('active', 1);
+        $query = Product::with('productMedia', 'shop')->where('active', 1);
 
         if (!empty($term)) {
             $query->where(function ($subQuery) use ($term) {
@@ -485,11 +494,11 @@ class HomeController extends Controller
             $priceRanges = $request->input('price_range');
             $query->where(function ($priceQuery) use ($priceRanges) {
                 foreach ($priceRanges as $range) {
-                    $cleanRange = str_replace(['Rs', ',', ' '], '', $range);
+                    $cleanRange = str_replace(['$', ',', ' '], '', $range);
                     $priceRange = explode('-', $cleanRange);
 
-                    $minPrice = isset($priceRange[0]) ? (float)$priceRange[0] : null;
-                    $maxPrice = isset($priceRange[1]) ? (float)$priceRange[1] : null;
+                    $minPrice = isset($priceRange[0]) ? (float) $priceRange[0] : null;
+                    $maxPrice = isset($priceRange[1]) ? (float) $priceRange[1] : null;
 
                     if ($maxPrice !== null) {
                         $priceQuery->orWhereBetween('discounted_price', [$minPrice, $maxPrice]);
@@ -503,9 +512,11 @@ class HomeController extends Controller
         if ($request->has('short_by')) {
             $shortby = $request->input('short_by');
             if ($shortby == 'trending') {
-                $query->withCount(['views' => function ($viewQuery) {
-                    $viewQuery->whereDate('viewed_at', now()->toDateString());
-                }])
+                $query->withCount([
+                    'views' => function ($viewQuery) {
+                        $viewQuery->whereDate('viewed_at', now()->toDateString());
+                    }
+                ])
                     ->with(['shop:id,country,state,city,street,street2,zip_code,shop_ratings'])
                     ->orderBy('views_count', 'desc')
                     ->addSelect(DB::raw("'TRENDING' as label"));
@@ -522,7 +533,7 @@ class HomeController extends Controller
             } elseif ($shortby == 'last_chance') {
                 $query->with(['shop:id,country,state,city,street,street2,zip_code,shop_ratings'])
                     ->whereDate('end_date', now())
-                    ->addSelect(DB::raw("'LAST CHANCE' as label"));
+                    ->select('*', DB::raw("'LAST CHANCE' as label"));
             } elseif ($shortby == 'limited_time') {
                 $query->with(['shop:id,country,state,city,street,street2,zip_code,shop_ratings'])
                     ->whereRaw('DATEDIFF(end_date, start_date) <= ?', [2])
@@ -570,10 +581,14 @@ class HomeController extends Controller
         for ($start = $minPrice; $start <= $maxPrice; $start += $priceStep) {
             $end = $start + $priceStep;
             if ($end > $maxPrice) {
-                $priceRanges[] = ['label' => '$' . number_format($start, 2) . ' - $' . number_format($end, 2)];
+                $priceRanges[] = [
+                    'label' => '$' . number_format($start, 2) . ' - $' . number_format($end, 2)
+                ];
                 break;
             }
-            $priceRanges[] = ['label' => '$' . number_format($start, 2) . ' - $' . number_format($end, 2)];
+            $priceRanges[] = [
+                'label' => '$' . number_format($start, 2) . ' - $' . number_format($end, 2)
+            ];
         }
 
         $shortby = DealCategory::where('active', 1)->get();
@@ -637,5 +652,52 @@ class HomeController extends Controller
         ]);
 
         return $this->ok('Dealenquire Added Successfully!');
+    }
+
+    public function getnearbydeals(Request $request)
+    {
+        $user_latitude = $request->input('latitude');
+        $user_lontitude = $request->input('longtitude');
+
+        $shops = Shop::select(
+            "shops.id",
+            DB::raw("6371 * acos(cos(radians(" . $user_latitude . "))
+                        * cos(radians(shops.shop_lattitude))
+                        * cos(radians(shops.shop_longtitude) - radians(" . $user_lontitude . "))
+                        + sin(radians(" . $user_latitude . "))
+                        * sin(radians(shops.shop_lattitude))) AS distance")
+        )
+            ->having('distance', '<', 20)
+            ->orderBy('distance', 'asc')
+            ->get();
+        // dd($shops);
+    }
+
+    public function updateUser(Request $request)
+    {
+        // dd($request->all());
+        $userId = Auth::id();
+
+        $user = User::find($userId);
+
+        if (!$user) {
+            return redirect()->back()->withErrors(['error' => 'User not found.']);
+        }
+
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:users,email,' . $userId,
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator)->withInput();
+        }
+
+        $user->update([
+            'name' => $request->name,
+            'email' => $request->email,
+        ]);
+
+        return redirect()->back()->with(['status' => 'User Updated Successfully'], 200);
     }
 }

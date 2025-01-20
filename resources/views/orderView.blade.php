@@ -139,7 +139,7 @@
                                                     <del>₹{{ number_format($item->unit_price, 2) }}</del>
                                                     &nbsp;&nbsp;
                                                     <span
-                                                        style="color: #ef4444; font-size:24px">₹{{ number_format($item->discount, 2) }}</span>
+                                                        style="color:#ff0060; font-size:24px">₹{{ number_format($item->discount, 2) }}</span>
                                                     &nbsp;&nbsp;
                                                     <span
                                                         class="badge_danger">{{ number_format($item->discount_percent, 0) }}%

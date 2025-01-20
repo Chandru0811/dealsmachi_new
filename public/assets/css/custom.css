@@ -3039,7 +3039,7 @@ footer hr {
 }
 
 .thumbnail img.active {
-    border-color: red;
+    border-color: #ff0060;
 }
 
 /* .text-center button {

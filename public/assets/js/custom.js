@@ -902,6 +902,30 @@ $(document).ready(function () {
     });
 });
 
+function copySpan(element, event) {
+    // Find the coupon code text (excluding tooltip text)
+    const couponCode = element.childNodes[0].nodeValue.trim();
+
+    // Copy the coupon code to the clipboard
+    navigator.clipboard.writeText(couponCode);
+
+    // Find the tooltip-text span
+    const tooltip = element.querySelector('.tooltip-text');
+
+    if (tooltip) {
+        // Show the tooltip
+        tooltip.style.visibility = 'visible';
+        tooltip.style.opacity = '1';
+
+        // Hide the tooltip after 2 seconds
+        setTimeout(() => {
+            tooltip.style.visibility = 'hidden';
+            tooltip.style.opacity = '0';
+        }, 2000); // Adjust timing as needed
+    }
+}
+
+
 function copySpanText(element, event) {
     event.preventDefault();
     event.stopPropagation();

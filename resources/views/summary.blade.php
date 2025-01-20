@@ -135,7 +135,7 @@
                                     @if (count($products) > 1)
                                         <span class="px-2">
                                             <button class="btn btn-sm btn-danger rounded remove-btn"
-                                                style="background: #ef4444; color:#fff;
+                                                style="background:#ff0060; color:#fff;
                                      margin-top: {{ $product->deal_type === 2 ? '30px;' : '3px;' }}">Remove</button>
                                         </span>
                                     @endif
@@ -361,7 +361,7 @@
                                             ${response.data.length > 1 ? `
                                                                                             <span class="px-2">
                                                                                                 <button class="btn btn-sm btn-danger rounded remove-btn"
-                                                                                                    style="background: #ef4444; color:#fff;
+                                                                                                    style="background:#ff0060; color:#fff;
                                                                                                     margin-top: ${product.deal_type === 2 ? '30px;' : '3px;'}">Remove</button>
                                                                                             </span>
                                                                                         ` : ''}

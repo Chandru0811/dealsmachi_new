@@ -65,7 +65,7 @@
 
                             <!-- Order Summary -->
                             <div class="card p-3 mb-3">
-                                <h5 class="mb-4" style="color: #ef4444;">Order Summary</h5>
+                                <h5 class="mb-4" style="color:#ff0060;">Order Summary</h5>
                                 @foreach ($cart->items as $item)
                                     <div class="d-flex justify-content-between">
                                         <div>
@@ -90,7 +90,7 @@
                             <!-- Payment Methods -->
                             <div class="card p-3 mb-3">
                                 <div>
-                                    <h5 style="color: #ef4444;">Payment Methods</h5>
+                                    <h5 style="color:#ff0060;">Payment Methods</h5>
                                     <div class="row justify-content-center mt-3">
                                         <div class="col-lg-5 col-10 mb-3">
                                             <div class="card payment-option"
@@ -199,7 +199,7 @@
                             <!-- Customer Info Section -->
                             <div class="card p-3 mb-3">
                                 <div class="row">
-                                    <h5 class="mb-4" style="color: #ef4444;"> Delivery Address</h5>
+                                    <h5 class="mb-4" style="color:#ff0060;"> Delivery Address</h5>
                                     <p>
                                         <strong>{{ $address->first_name ?? '' }}
                                             {{ $address->last_name ?? '' }} (+65)
@@ -219,7 +219,7 @@
                             <!-- Order summary -->
                             <div class="card p-3 mb-3">
                                 <div class="row">
-                                    <h5 class="mb-4" style="color: #ef4444;">Order Summary</h5>
+                                    <h5 class="mb-4" style="color:#ff0060;">Order Summary</h5>
                                     @foreach ($cart->items as $item)
                                         <div class="d-flex justify-content-between">
                                             <div>
@@ -244,7 +244,7 @@
                             <!-- Payment Methods -->
                             <div class="card p-3 mb-3">
                                 <div>
-                                    <h5 style="color: #ef4444;">Payment Methods</h5>
+                                    <h5 style="color:#ff0060;">Payment Methods</h5>
                                     <div class="row justify-content-center mt-3">
                                         <div class="col-lg-5 col-10 mb-3">
                                             <div class="card payment-option"

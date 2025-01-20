@@ -427,20 +427,19 @@ from Trucklah has changed the scene.',
                                 <span class="original-price">₹{{ number_format($product->original_price, 2) }}</span>
                                 <span class="discount-price">₹{{ number_format($product->discount_percentage, 2) }}%
                                     off</span>
-                                @if (!empty($product->coupon_code))
-                                <span id="mySpan" class="deal-badge" style="cursor: pointer"
-                                    onclick="copySpanText(this, event)" data-bs-toggle="tooltip"
-                                    data-bs-placement="bottom" title="Click to Copy" style="position:relative;">
+                                    @if (!empty($product->coupon_code))
+                                    <span id="mySpan" class="deal-badge"
+                                        style="cursor: pointer; position:relative;-" onclick="copySpan(this, event)"
+                                        data-bs-toggle="tooltip" data-bs-placement="bottom" title="Click to Copy">
 
-                                    {{ $product->coupon_code }}
+                                        {{ $product->coupon_code }}
 
-                                    <!-- Tooltip container -->
-                                    <span class="tooltip-text tooltip_dec">
-                                        Copied!
+                                        <!-- Tooltip container -->
+                                        <span class="tooltip-text tooltip_dec">
+                                            Copied!
+                                        </span>
                                     </span>
-                                </span>
-                                @endif
-                            </h3>
+                                @endif                            </h3>
                         </div>
 
                         <div>
@@ -1076,136 +1075,136 @@ from Trucklah has changed the scene.',
 </div>
 
 <script>
-function toggleDropdown() {
-    const socialDropdown = document.getElementById("social_dropdown");
-    socialDropdown.style.display = socialDropdown.style.display === "none" ? "block" : "none";
+    function toggleDropdown() {
+        const socialDropdown = document.getElementById("social_dropdown");
+        socialDropdown.style.display = socialDropdown.style.display === "none" ? "block" : "none";
 
-    if (socialDropdown.style.display === "block") {
-        document.addEventListener("click", closeDropdownOnClickOutside);
-    } else {
-        document.removeEventListener("click", closeDropdownOnClickOutside);
-    }
-}
-
-function closeDropdownOnClickOutside(event) {
-    const socialDropdown = document.getElementById("social_dropdown");
-    const socialButton = document.querySelector(".social_links");
-
-    if (!socialDropdown.contains(event.target) && !socialButton.contains(event.target)) {
-        socialDropdown.style.display = "none";
-        document.removeEventListener("click", closeDropdownOnClickOutside);
-    }
-}
-
-function navigateToRoute() {
-    window.location.href = '/summary';
-}
-
-function submitServiceForm(route, method, saveoption = null) {
-    const form = document.getElementById('service_form');
-
-    if (saveoption) {
-        let hiddenInput = document.getElementById('saveOptionInput');
-        if (!hiddenInput) {
-            hiddenInput = document.createElement('input');
-            hiddenInput.type = 'hidden';
-            hiddenInput.name = 'saveoption';
-            hiddenInput.id = 'saveOptionInput';
-            form.appendChild(hiddenInput);
+        if (socialDropdown.style.display === "block") {
+            document.addEventListener("click", closeDropdownOnClickOutside);
+        } else {
+            document.removeEventListener("click", closeDropdownOnClickOutside);
         }
-        hiddenInput.value = saveoption;
     }
 
-    if (form.checkValidity()) {
-        form.action = route;
-        form.method = method;
-        form.submit();
-    } else {
-        form.reportValidity();
+    function closeDropdownOnClickOutside(event) {
+        const socialDropdown = document.getElementById("social_dropdown");
+        const socialButton = document.querySelector(".social_links");
+
+        if (!socialDropdown.contains(event.target) && !socialButton.contains(event.target)) {
+            socialDropdown.style.display = "none";
+            document.removeEventListener("click", closeDropdownOnClickOutside);
+        }
     }
-}
 
-// Zoom functionality
-const mainImage = document.querySelector("#main-image");
-const detailsContainer = document.querySelector(".details");
-const thumbnails = document.querySelectorAll(".thumb-img");
-const thumbnailContainer = document.querySelector("#thumbnailContainer");
-const scrollUpBtn = document.querySelector("#scrollUpBtn");
-const scrollDownBtn = document.querySelector("#scrollDownBtn");
+    function navigateToRoute() {
+        window.location.href = '/summary';
+    }
 
-detailsContainer.style.pointerEvents = "none";
+    function submitServiceForm(route, method, saveoption = null) {
+        const form = document.getElementById('service_form');
 
-mainImage.addEventListener("mouseenter", () => {
-    detailsContainer.style.pointerEvents = "auto";
-});
+        if (saveoption) {
+            let hiddenInput = document.getElementById('saveOptionInput');
+            if (!hiddenInput) {
+                hiddenInput = document.createElement('input');
+                hiddenInput.type = 'hidden';
+                hiddenInput.name = 'saveoption';
+                hiddenInput.id = 'saveOptionInput';
+                form.appendChild(hiddenInput);
+            }
+            hiddenInput.value = saveoption;
+        }
 
+        if (form.checkValidity()) {
+            form.action = route;
+            form.method = method;
+            form.submit();
+        } else {
+            form.reportValidity();
+        }
+    }
 
-mainImage.addEventListener("mouseleave", () => {
+    // Zoom functionality
+    const mainImage = document.querySelector("#main-image");
+    const detailsContainer = document.querySelector(".details");
+    const thumbnails = document.querySelectorAll(".thumb-img");
+    const thumbnailContainer = document.querySelector("#thumbnailContainer");
+    const scrollUpBtn = document.querySelector("#scrollUpBtn");
+    const scrollDownBtn = document.querySelector("#scrollDownBtn");
+
     detailsContainer.style.pointerEvents = "none";
-});
 
-let driftInstance = new Drift(mainImage, {
-    paneContainer: detailsContainer,
-    inlinePane: 769,
-    inlineOffsetY: -85,
-    containInline: true,
-    hoverBoundingBox: true,
-});
-
-function checkScrollLimits() {
-    scrollUpBtn.disabled = thumbnailContainer.scrollTop === 0;
-    scrollDownBtn.disabled =
-        thumbnailContainer.scrollTop + thumbnailContainer.clientHeight >=
-        thumbnailContainer.scrollHeight;
-}
-
-function scrollUp() {
-    thumbnailContainer.scrollBy({
-        top: -80,
-        behavior: "smooth",
+    mainImage.addEventListener("mouseenter", () => {
+        detailsContainer.style.pointerEvents = "auto";
     });
-    setTimeout(checkScrollLimits, 300);
-}
 
-// Scroll Down Function
-function scrollDown() {
-    thumbnailContainer.scrollBy({
-        top: 80,
-        behavior: "smooth",
+
+    mainImage.addEventListener("mouseleave", () => {
+        detailsContainer.style.pointerEvents = "none";
     });
-    setTimeout(checkScrollLimits, 300);
-}
 
-checkScrollLimits();
+    let driftInstance = new Drift(mainImage, {
+        paneContainer: detailsContainer,
+        inlinePane: 769,
+        inlineOffsetY: -85,
+        containInline: true,
+        hoverBoundingBox: true,
+    });
 
-thumbnails.forEach((thumbnail) => {
-    thumbnail.addEventListener("click", (e) => {
-        thumbnails.forEach((thumb) => thumb.classList.remove("active"));
-        e.target.classList.add("active");
+    function checkScrollLimits() {
+        scrollUpBtn.disabled = thumbnailContainer.scrollTop === 0;
+        scrollDownBtn.disabled =
+            thumbnailContainer.scrollTop + thumbnailContainer.clientHeight >=
+            thumbnailContainer.scrollHeight;
+    }
 
-        mainImage.src = e.target.src;
-        mainImage.setAttribute("data-zoom", e.target.dataset.zoom);
+    function scrollUp() {
+        thumbnailContainer.scrollBy({
+            top: -80,
+            behavior: "smooth",
+        });
+        setTimeout(checkScrollLimits, 300);
+    }
 
-        driftInstance.destroy();
-        driftInstance = new Drift(mainImage, {
-            paneContainer: document.querySelector(".details"),
-            inlinePane: 769,
-            inlineOffsetY: -85,
-            containInline: true,
-            hoverBoundingBox: true,
+    // Scroll Down Function
+    function scrollDown() {
+        thumbnailContainer.scrollBy({
+            top: 80,
+            behavior: "smooth",
+        });
+        setTimeout(checkScrollLimits, 300);
+    }
+
+    checkScrollLimits();
+
+    thumbnails.forEach((thumbnail) => {
+        thumbnail.addEventListener("click", (e) => {
+            thumbnails.forEach((thumb) => thumb.classList.remove("active"));
+            e.target.classList.add("active");
+
+            mainImage.src = e.target.src;
+            mainImage.setAttribute("data-zoom", e.target.dataset.zoom);
+
+            driftInstance.destroy();
+            driftInstance = new Drift(mainImage, {
+                paneContainer: document.querySelector(".details"),
+                inlinePane: 769,
+                inlineOffsetY: -85,
+                containInline: true,
+                hoverBoundingBox: true,
+            });
         });
     });
-});
 
-function updateVideoModal(videoId) {
-    const iframe = document.getElementById('videoFrame');
-    iframe.src = `https://www.youtube.com/embed/${videoId}`;
-}
+    function updateVideoModal(videoId) {
+        const iframe = document.getElementById('videoFrame');
+        iframe.src = `https://www.youtube.com/embed/${videoId}`;
+    }
 
-document.getElementById('videoModal').addEventListener('hidden.bs.modal', function() {
-    const iframe = document.getElementById('videoFrame');
-    iframe.src = '';
-});
+    document.getElementById('videoModal').addEventListener('hidden.bs.modal', function() {
+        const iframe = document.getElementById('videoFrame');
+        iframe.src = '';
+    });
 </script>
 
 @endsection
