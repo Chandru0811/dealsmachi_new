@@ -10,7 +10,7 @@
     @endif
     @if ($errors->any())
         <div class="alert alert-dismissible fade show" role="alert"
-            style="position: fixed; top: 70px; right: 40px; z-index: 1050; background:#ef4444; color:#fff">
+            style="position: fixed; top: 70px; right: 40px; z-index: 1050; background:#ff0060; color:#fff">
             <ul class="mb-0">
                 @foreach ($errors->all() as $error)
                     <li>{{ $error }}</li>
@@ -21,7 +21,7 @@
     @endif
     @if (session('error'))
         <div class="alert alert-dismissible fade show" role="alert"
-            style="position: fixed; top: 70px; right: 40px; z-index: 1050; background:#ef4444; color:#fff">
+            style="position: fixed; top: 70px; right: 40px; z-index: 1050; background:#ff0060; color:#fff">
             {{ session('error') }}
             <button type="button" class="btn-close btn-sm" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
@@ -169,6 +169,12 @@
                                                     <p>Quantity: {{ $item->quantity ?? ' ' }}</p>
                                                 </div>
                                             @endif
+                                            @if ($item->deal_type === '1')
+                                                <div class="d-flex gap-4">
+                                                    <p>Delivery Date: {{ \Carbon\Carbon::parse($order->created_at)->addDays(5)->format('d/m/Y') ?? 'N/A' }}</p>
+                                                </div>
+                                            @else
+                                            @endif
                                         @endforeach
                                     </div>
                                 </div>
@@ -190,6 +196,9 @@
                                         @if ($order->items->first()->shop->street)
                                             {{ $order->items->first()->shop->street }}
                                         @endif
+                                        @if ($order->items->first()->shop->street2)
+                                        ,{{ $order->items->first()->shop->street2 }}
+                                    @endif
                                         @if ($order->items->first()->shop->city)
                                             , {{ $order->items->first()->shop->city }}
                                         @endif

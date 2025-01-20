@@ -365,7 +365,7 @@ class CheckoutController extends Controller
                     ->with('productMedia');
             },
             'items.shop' => function ($query) {
-                $query->select('id', 'name', 'email', 'mobile', 'description', 'street', 'city', 'zip_code',);
+                $query->select('id', 'name', 'email', 'mobile', 'description', 'street','street2', 'city', 'zip_code',);
             },
             'address'
         ])->find($id);

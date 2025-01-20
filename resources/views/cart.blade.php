@@ -95,13 +95,13 @@
                                         </span>
                                     </div>
                                 @endif
-                                <p>Seller : {{ $product->shop->email ?? '' }}</p>
+                                <p>Seller : {{ $product->shop->legal_name ?? '' }}</p>
                                 <div>
                                     <span style="text-decoration: line-through; color:#c7c7c7">
                                         ₹{{ $product->original_price }}
                                     </span>
                                     <span class="ms-1" style="font-size:22px;color:#ff0060">
-                                    ₹{{ $product->discounted_price }}
+                                        ₹{{ $product->discounted_price }}
                                     </span>
                                     <span class="ms-1" style="font-size:12px; color:#00DD21">
                                         {{ round($product->discount_percentage) }}% off
@@ -145,20 +145,26 @@
                             </div>
                             <div class="col-md-6 d-flex justify-content-md-end">
                                 <div class="btn-group" role="group" aria-label="Basic example">
-                                    <form action="{{ route('savelater.add') }}" method="POST">
+                                    <form action="{{ route('savelater.add') }}" method="POST"
+                                        onsubmit="showLoader(this)">
                                         @csrf
                                         <input type="hidden" name="product_id" value="{{ $product->id }}">
                                         <button type="submit" class="btn border btn-outline-secondary"
                                             style="padding: 14px 20px; border-top-right-radius: 0px; border-bottom-right-radius: 0px;">
+                                            <span class="loader spinner-border spinner-border-sm me-2"
+                                                style="display: none;"></span>
                                             Buy Later
                                         </button>
                                     </form>
-                                    <form action="{{ route('cart.remove') }}" method="POST">
+                                    <form action="{{ route('cart.remove') }}" method="POST"
+                                        onsubmit="showLoader(this)">
                                         @csrf
                                         <input type="hidden" name="cart_id" value="{{ $cart->id }}">
                                         <input type="hidden" name="product_id" value="{{ $product->id }}">
                                         <button type="submit" class="btn border btn-outline-secondary"
                                             style="padding: 14px 20px; border-top-left-radius: 0px; border-bottom-left-radius: 0px;">
+                                            <span class="loader spinner-border spinner-border-sm me-2"
+                                                style="display: none;"></span>
                                             Remove
                                         </button>
                                     </form>
@@ -192,16 +198,16 @@
                         <div class="d-flex justify-content-end align-items-center">
                             <h4>Total Amount (x<span class="quantity-value">{{ $cart->quantity }})&nbsp;&nbsp;
                                     <span style="text-decoration: line-through; color:#c7c7c7">
-                                        ${{ number_format($cart->items->sum(fn($item) => $item->product->original_price * $item->quantity), 2) }}
+                                        ₹ {{ number_format($cart->items->sum(fn($item) => $item->product->original_price * $item->quantity), 2) }}
                                     </span>
                                     &nbsp;&nbsp;
                                     <span class="ms-1" style="color:#000">
-                                        ${{ number_format($cart->items->sum(fn($item) => $item->product->discounted_price * $item->quantity), 2) }}
+                                        ₹ {{ number_format($cart->items->sum(fn($item) => $item->product->discounted_price * $item->quantity), 2) }}
                                     </span>
                                     &nbsp;&nbsp;
                                     <span class="ms-1" style="font-size:12px; color:#00DD21">
                                         Dealslah Discount
-                                        &nbsp;<span>${{ number_format($cart->items->sum(fn($item) => ($item->product->original_price - $item->product->discounted_price) * $item->quantity), 2) }}</span>
+                                        &nbsp;<span>₹ {{ number_format($cart->items->sum(fn($item) => ($item->product->original_price - $item->product->discounted_price) * $item->quantity), 2) }}</span>
                                     </span>
                             </h4>
                         </div>
@@ -263,13 +269,13 @@
                                     </span>
                                 </div>
                             @endif
-                            <p>Seller : {{ $savedItem->deal->shop->email }}</p>
+                            <p>Seller : {{ $savedItem->deal->shop->legal_name }}</p>
                             <div>
                                 <span style="text-decoration: line-through; color:#c7c7c7">
-                                ₹{{ $savedItem->deal->original_price }}
+                                    ₹{{ $savedItem->deal->original_price }}
                                 </span>
                                 <span class="ms-1" style="font-size:22px;color:#ff0060">
-                                ₹{{ $savedItem->deal->discounted_price }}
+                                    ₹{{ $savedItem->deal->discounted_price }}
                                 </span>
                                 <span class="ms-1" style="font-size:12px; color:#00DD21">
                                     {{ round($savedItem->deal->discount_percentage) }}% off
@@ -278,19 +284,24 @@
                         </div>
                         <div class="col-md-3 d-flex flex-column justify-content-end align-items-end mb-3">
                             <div class="btn-group" role="group" aria-label="Basic example">
-                                <form action="{{ route('movetocart') }}" method="POST">
+                                <form action="{{ route('movetocart') }}" method="POST" onsubmit="showLoader(this)">
                                     @csrf
                                     <input type="hidden" name="product_id" value="{{ $savedItem->deal_id }}">
                                     <button type="submit" class="btn border btn-outline-secondary"
                                         style="padding: 14px 20px; border-top-right-radius: 0px; border-bottom-right-radius: 0px;">
+                                        <span class="loader spinner-border spinner-border-sm me-2"
+                                            style="display: none;"></span>
                                         Move to Cart
                                     </button>
                                 </form>
-                                <form action="{{ route('savelater.remove') }}" method="POST">
+                                <form action="{{ route('savelater.remove') }}" method="POST"
+                                    onsubmit="showLoader(this)">
                                     @csrf
                                     <input type="hidden" name="product_id" value="{{ $savedItem->deal_id }}">
                                     <button type="submit" class="btn border btn-outline-secondary"
                                         style="padding: 14px 20px; border-top-left-radius: 0px; border-bottom-left-radius: 0px;">
+                                        <span class="loader spinner-border spinner-border-sm me-2"
+                                            style="display: none;"></span>
                                         Remove
                                     </button>
                                 </form>
@@ -436,6 +447,16 @@
                 .catch((error) => {
                     console.error('Error updating cart:', error);
                 });
+        }
+
+
+        function showLoader(form) {
+            const button = form.querySelector('button[type="submit"]');
+            const loader = button.querySelector('.loader');
+
+            loader.style.display = 'inline-block';
+
+            button.disabled = true;
         }
     </script>
 @endsection

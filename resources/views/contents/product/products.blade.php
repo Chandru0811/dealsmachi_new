@@ -52,14 +52,14 @@
                                     <div class="card-divider"></div>
                                     <p class="ps-3 fw-medium d-flex align-items-center justify-content-between"
                                         style="color: #ff0060">
-                                        <span>${{ $product->discounted_price }}</span>
+                                        <span>₹{{ $product->discounted_price }}</span>
                                         <span
                                             class="mx-3 px-2 couponBadge">DEALSMACHI{{ round($product->discount_percentage) }}</span>
                                     </p>
                                     <div class="card-divider"></div>
                                     <div class="ps-3">
                                         <p>Regular Price</p>
-                                        <p><s>${{ $product->original_price }}</s></p>
+                                        <p><s>₹{{ $product->original_price }}</s></p>
                                     </div>
                                     <div class="card-divider"></div>
                                     <p class="ps-3 fw-medium" style="color: #ff0060; font-weight: 400 !important;">

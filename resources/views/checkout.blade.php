@@ -12,7 +12,7 @@
             @endif
             @if ($errors->any())
                 <div class="alert alert-dismissible fade show" role="alert"
-                    style="position: fixed; top: 70px; right: 40px; z-index: 1050; background:#ef4444; color:#fff">
+                    style="position: fixed; top: 70px; right: 40px; z-index: 1050; background:#ff0060; color:#fff">
                     <ul class="mb-0">
                         @foreach ($errors->all() as $error)
                             <li>{{ $error }}</li>
@@ -23,7 +23,7 @@
             @endif
             @if (session('error'))
                 <div class="alert alert-dismissible fade show" role="alert"
-                    style="position: fixed; top: 70px; right: 40px; z-index: 1050; background:#ef4444; color:#fff">
+                    style="position: fixed; top: 70px; right: 40px; z-index: 1050; background:#ff0060; color:#fff">
                     {{ session('error') }}
                     <button type="button" class="btn-close btn-sm" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
@@ -75,7 +75,7 @@
                                             <span style="text-decoration: line-through; color:#c7c7c7">
                                                 ₹{{ number_format($item->product->original_price * $item->quantity, 2) }}
                                             </span>
-                                            <span class="ms-1" style="font-size:22px;color:#ef4444">
+                                            <span class="ms-1" style="font-size:22px;color:#ff0060">
                                                 ₹{{ number_format($item->product->discounted_price * $item->quantity, 2) }}
                                             </span>
                                             <span class="ms-1" style="font-size:12px; color:#00DD21">
@@ -144,7 +144,7 @@
                                         &nbsp;&nbsp;
                                         <span class="ms-1" style="font-size:12px; color:#00DD21">
                                             Dealslah Discount
-                                            &nbsp;<span>${{ number_format($cart->items->sum(fn($item) => ($item->product->original_price - $item->product->discounted_price) * $item->quantity), 2) }}</span>
+                                            &nbsp;<span>₹{{ number_format($cart->items->sum(fn($item) => ($item->product->original_price - $item->product->discounted_price) * $item->quantity), 2) }}</span>
                                         </span>
                                     </h4>
                                 </div>
@@ -227,10 +227,10 @@
                                             </div>
                                             <div>
                                                 <span style="text-decoration: line-through; color:#c7c7c7">
-                                                    ${{ number_format($item->product->original_price * $item->quantity, 2) }}
+                                                    ₹{{ number_format($item->product->original_price * $item->quantity, 2) }}
                                                 </span>
-                                                <span class="ms-1" style="font-size:22px;color:#ef4444">
-                                                    ${{ number_format($item->product->discounted_price * $item->quantity, 2) }}
+                                                <span class="ms-1" style="font-size:22px;color:#ff0060">
+                                                    ₹{{ number_format($item->product->discounted_price * $item->quantity, 2) }}
                                                 </span>
                                                 <span class="ms-1" style="font-size:12px; color:#00DD21">
                                                     ({{ number_format($item->product->discount_percentage, 0) }}%)
