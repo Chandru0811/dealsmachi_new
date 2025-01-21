@@ -98,8 +98,8 @@
                         <ul class="navbar-nav pt-2" id="default-search">
                             <li class="nav-item mb-2">
                                 <div class="input-wrapper w-100">
-                                    <input type="text" name="q" placeholder="Search..."
-                                        class="form-control mx-1 search-input" />
+                                    <input type="text" name="q" placeholder="Search..." 
+                                        class="form-control mx-1 search-input"  value="{{ request()->input('q') }}" />
                                     <i class="fa-solid fa-magnifying-glass icon-input" style="font-size: 20px"></i>
                                 </div>
                             </li>
@@ -114,7 +114,7 @@
                                 <li class="nav-item mb-2">
                                     <div class="input-wrapper">
                                         <input type="text" name="q" placeholder="Search..."
-                                            class="form-control me-2 search-input-large" />
+                                            class="form-control me-2 search-input-large"  value="{{ request()->input('q') }}"/>
                                         <i class="fa-solid fa-magnifying-glass icon-input"
                                             style="font-size: 20px"></i>
                                     </div>
@@ -174,7 +174,7 @@
                                                         alt="{{ $item->product->name }}" />
                                                     <div class="text-start">
                                                         <p class="text-center px-1 text-wrap m-0 p-0"
-                                                            style="font-size: 10px;white-space: normal;">
+                                                            style="font-size: 12px;white-space: normal;">
                                                             {{ $item->product->name }}
                                                         </p>
                                                         <p class="px-1 text_size" style="color: #ff0060">
@@ -192,7 +192,7 @@
 
                                     @if ($itemsDisplayed < $carts->sum(fn($cart) => $cart->items->count()))
                                         <div class="text-end mb-2">
-                                            <a style="font-size: 12px" href="{{ route('cart.index') }}">View All</a>
+                                            <a style="font-size: 13px" href="{{ route('cart.index') }}">View All</a>
                                         </div>
                                     @endif
                                 @endif
@@ -217,7 +217,7 @@
                                     <i class="fa-regular fa-circle-user fa-xl icon_size" style="color: #ff0060;"></i>
                                 </span>
                             </a>
-                            <div class="dropdown-menu dropdown_cart custom-dropdown shadow-lg border-0"
+                            <div class="dropdown-menu user-dropdown_cart custom-dropdown shadow-lg border-0"
                                 style="left: 45%; top:35px; transform: translate(-85%, 0);">
                                 <div class="dropdown_child p-2">
                                     <div class="d-flex justify-content-start align-items-start mb-2">
