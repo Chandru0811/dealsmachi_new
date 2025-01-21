@@ -1550,13 +1550,13 @@ footer hr {
 }
 
 .successMagnetButton {
-    background-color: green;
+    background-color: #FF0000;
     color: #fff;
     font-weight: 600;
     position: relative;
 }
 .successMagnetButton:hover {
-    background-color: green;
+    background-color: #FF0000;
     color: #fff !important;
 }
 

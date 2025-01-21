@@ -69,7 +69,8 @@
                         @csrf
                         <div class="mb-3 email-container">
                             <label class="form-label">Email</label>
-                            <input type="email" class="form-control" id="email" name="email" value="{{ old('email') }}"/>
+                            <input type="email" class="form-control" id="email" name="email"
+                                value="{{ old('email') }}" />
                             @error('email')
                                 <span class="error">{{ $message }}</span>
                             @enderror
@@ -81,7 +82,7 @@
                             <div class="input-group">
                                 <input type="password" class="form-control" id="password" name="password"
                                     aria-label="password">
-                                <span class="input-group-text" id="togglePassword">
+                                <span class="input-group-text" id="togglePassword" style="cursor: pointer;">
                                     <i class="fa fa-eye" id="eyeIconPassword"></i>
                                 </span>
                             </div>
@@ -94,8 +95,8 @@
                                 <p class="mb-2" style="color: #fff;">Forgot Password ?</p>
                             </a>
                         </div>
-                        <div class="mb-3 text-center">
-                            <button type="submit" class="btn btn-light w-100" style="color: #ff0060">Submit</button>
+                        <div class="mb-3">
+                            <button type="submit" class="btn btn-light login-btn w-100" style="color: #ff0060">Submit</button>
                         </div>
                         <div class="d-flex justify-content-center align-items-center mb-3 line-divider-container">
                             <hr class="line-divider" />
@@ -142,6 +143,22 @@
 
     <!-- Custom JS -->
     <script src="{{ asset('assets/js/custom.js') }}"></script>
+    <script>
+        document.getElementById('togglePassword').addEventListener('click', function() {
+            const passwordField = document.getElementById('password');
+            const eyeIcon = document.getElementById('eyeIconPassword');
+
+            if (passwordField.type === 'password') {
+                passwordField.type = 'text'; // Show password
+                eyeIcon.classList.remove('fa-eye');
+                eyeIcon.classList.add('fa-eye-slash');
+            } else {
+                passwordField.type = 'password'; // Hide password
+                eyeIcon.classList.remove('fa-eye-slash');
+                eyeIcon.classList.add('fa-eye');
+            }
+        });
+    </script>
 </body>
 
 </html>

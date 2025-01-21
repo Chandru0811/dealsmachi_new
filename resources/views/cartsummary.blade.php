@@ -151,11 +151,11 @@
                                 <p>Discount (x{{ $carts->quantity }})</p>
                                 <p>₹{{ number_format($carts->discount, 2) }}</p>
                             </div>
-                            <hr />
+                            {{-- <hr />
                             <div class="d-flex justify-content-between pb-3">
                                 <span>Total (x{{ $carts->quantity }})</span>
                                 <span>₹{{ number_format($carts->grand_total, 2) }}</span>
-                            </div>
+                            </div> --}}
                         </div>
                     </div>
 
@@ -164,11 +164,11 @@
                         <div class="d-flex justify-content-end align-items-center">
                             <h4>Total Amount (x{{ $carts->quantity }}) &nbsp;&nbsp;
                                 <span style="text-decoration: line-through; color:#c7c7c7">
-                                    ${{ number_format($carts->total, 2) }}
+                                    ₹{{ number_format($carts->total, 2) }}
                                 </span>
                                 &nbsp;&nbsp;
                                 <span class="ms-1" style="color:#000">
-                                    ${{ number_format($carts->grand_total, 2) }} </span>
+                                    ₹{{ number_format($carts->grand_total, 2) }} </span>
                                 &nbsp;&nbsp;
                                 <span class="ms-1" style="font-size:12px; color:#00DD21">
                                     Dealslah Discount
