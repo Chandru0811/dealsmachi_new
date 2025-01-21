@@ -162,7 +162,7 @@ class CheckoutController extends Controller
             // Generate a custom order number
             $latestOrder = Order::orderBy('id', 'desc')->first();
             $customOrderId = $latestOrder ? intval(Str::after($latestOrder->id, '-')) + 1 : 1;
-            $orderNumber = 'DEALSLAH_O' . $customOrderId;
+            $orderNumber = 'DEALSMACHI_O' . $customOrderId;
 
             $itemCount = $cart->items->whereIn('product_id', $ids)->sum('quantity');
 
@@ -261,7 +261,7 @@ class CheckoutController extends Controller
             // Create order for the cart items
             $latestOrder = Order::orderBy('id', 'desc')->first();
             $customOrderId = $latestOrder ? intval(Str::after($latestOrder->id, '-')) + 1 : 1;
-            $orderNumber = 'DEALSLAH_O' . $customOrderId;
+            $orderNumber = 'DEALSMACHI_O' . $customOrderId;
 
             $order = Order::create([
                 'order_number'     => $orderNumber,
@@ -328,10 +328,7 @@ class CheckoutController extends Controller
         $orders = Order::where('customer_id', $customerId)
             ->with([
                 'items.product' => function ($query) {
-                    $query->where('active', true)
-                        ->whereNull('deleted_at')
-                        ->select('id', 'name', 'description', 'original_price', 'discounted_price', 'discount_percentage')
-                        ->with('productMedia');
+                    $query->select('id', 'name', 'description', 'original_price', 'discounted_price', 'discount_percentage')->with('productMedia');
                 },
                 'shop' => function ($query) {
                     $query->select('id', 'name');
@@ -342,13 +339,6 @@ class CheckoutController extends Controller
             ])
             ->orderBy('created_at', 'desc')
             ->get();
-
-        // Filter out items with null products
-        foreach ($orders as $order) {
-            $order->items = $order->items->filter(function ($item) {
-                return $item->product !== null; // Keep only items with a valid product
-            });
-        }
 
         return view('orders', compact('orders'));
     }
@@ -364,8 +354,8 @@ class CheckoutController extends Controller
                     ->whereNull('deleted_at')
                     ->with('productMedia');
             },
-            'items.shop' => function ($query) {
-                $query->select('id', 'name', 'email', 'mobile', 'description', 'street','street2', 'city', 'zip_code',);
+           'items.shop' => function ($query) {
+                $query->select('id', 'name', 'email', 'mobile', 'description','street','street2','city','zip_code',);
             },
             'address'
         ])->find($id);
@@ -374,10 +364,6 @@ class CheckoutController extends Controller
         if (!$order || Auth::id() !== $order->customer_id) {
             return view('orderView', ['order' => null]);
         }
-
-        $order->items = $order->items->filter(function ($item) {
-            return $item->product !== null;
-        });
 
         return view('orderView', compact('order'));
     }

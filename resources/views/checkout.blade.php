@@ -73,10 +73,10 @@
                                         </div>
                                         <div>
                                             <span style="text-decoration: line-through; color:#c7c7c7">
-                                                ₹{{ number_format($item->product->original_price * $item->quantity, 2) }}
+                                                ₹{{ number_format($item->product->original_price * $item->quantity, 0) }}
                                             </span>
                                             <span class="ms-1" style="font-size:22px;color:#ff0060">
-                                                ₹{{ number_format($item->product->discounted_price * $item->quantity, 2) }}
+                                                ₹{{ number_format($item->product->discounted_price * $item->quantity, 0) }}
                                             </span>
                                             <span class="ms-1" style="font-size:12px; color:#00DD21">
                                                 ({{ number_format($item->product->discount_percentage, 0) }}%)
@@ -134,17 +134,17 @@
                                 style="position: sticky; bottom: 0px; background: #fff;border-top: 1px solid #dcdcdc">
                                 <div class="d-flex justify-content-end align-items-center">
                                     <h4>Total Amount &nbsp;&nbsp;
-                                        <span style="text-decoration: line-through; color:#c7c7c7">
-                                            ₹{{ number_format($cart->items->sum(fn($item) => $item->product->original_price * $item->quantity), 2) }}
+                                        <span style="text-decoration: line-through; color:#c7c7c7" class="subtotal">
+                                            ₹{{ number_format($cart->items->sum(fn($item) => $item->product->original_price * $item->quantity), 0) }}
                                         </span>
                                         &nbsp;&nbsp;
                                         <span class="ms-1" style="color:#000">
-                                            ₹{{ number_format($cart->items->sum(fn($item) => $item->product->discounted_price * $item->quantity), 2) }}
+                                            ₹{{ number_format($cart->items->sum(fn($item) => $item->product->discounted_price * $item->quantity), 0) }}
                                         </span>
                                         &nbsp;&nbsp;
-                                        <span class="ms-1" style="font-size:12px; color:#00DD21">
-                                            Dealslah Discount
-                                            &nbsp;<span>₹{{ number_format($cart->items->sum(fn($item) => ($item->product->original_price - $item->product->discounted_price) * $item->quantity), 2) }}</span>
+                                        <span  class="total ms-1" style="font-size:12px; color:#00DD21;white-space: nowrap;">
+                                            Dealsmachi Discount
+                                            &nbsp;<span class="discount">₹{{ number_format($cart->items->sum(fn($item) => ($item->product->original_price - $item->product->discounted_price) * $item->quantity), 2) }}</span>
                                         </span>
                                     </h4>
                                 </div>
@@ -227,10 +227,10 @@
                                             </div>
                                             <div>
                                                 <span style="text-decoration: line-through; color:#c7c7c7">
-                                                    ₹{{ number_format($item->product->original_price * $item->quantity, 2) }}
+                                                    ₹{{ number_format($item->product->original_price * $item->quantity, 0) }}
                                                 </span>
                                                 <span class="ms-1" style="font-size:22px;color:#ff0060">
-                                                    ₹{{ number_format($item->product->discounted_price * $item->quantity, 2) }}
+                                                    ₹{{ number_format($item->product->discounted_price * $item->quantity, 0) }}
                                                 </span>
                                                 <span class="ms-1" style="font-size:12px; color:#00DD21">
                                                     ({{ number_format($item->product->discount_percentage, 0) }}%)
@@ -289,20 +289,20 @@
                                 style="position: sticky; bottom: 0px; background: #fff;border-top: 1px solid #dcdcdc">
                                 <div class="d-flex justify-content-end align-items-center ">
                                     <h4>Total Amount &nbsp;&nbsp; <span
-                                            style="text-decoration: line-through; color:#c7c7c7">
-                                            ₹{{ number_format($cart->total, 2) }}
-                                        </span> &nbsp;&nbsp; <span class="ms-1" style="color:#000">
-                                            ₹{{ number_format($cart->grand_total, 2) }}
-                                        </span> &nbsp;&nbsp; <span class="ms-1" style="font-size:12px; color:#00DD21">
-                                            Dealslah Discount
-                                            &nbsp;<span>₹{{ number_format($cart->discount, 2) }}</span></span></h4>
+                                            style="text-decoration: line-through; color:#c7c7c7" class="subtotal">
+                                            ₹{{ number_format($cart->total, 0) }}
+                                        </span> &nbsp;&nbsp; <span class="total ms-1" style="color:#000">
+                                            ₹{{ number_format($cart->grand_total, 0) }}
+                                        </span> &nbsp;&nbsp; <span class="ms-1" style="font-size:12px; color:#00DD21;white-space: nowrap;">
+                                            Dealsmachi Discount
+                                            &nbsp;<span class="discount">₹{{ number_format($cart->discount, 2) }}</span></span></h4>
                                 </div>
-                                <div class="d-flex justify-content-end align-items-center py-3"
-                                    style="position:sticky; bottom:10px; background:#fff">
+                                {{-- <div class="d-flex justify-content-end align-items-center py-3"
+                                    style="position:sticky; bottom:10px; background:#fff"> --}}
                                     <button type="submit" class="btn check_out_btn">
                                         Place Order
                                     </button>
-                                </div>
+                                {{-- </div> --}}
                             </div>
                         </div>
                 </form>

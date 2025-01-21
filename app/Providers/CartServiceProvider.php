@@ -36,7 +36,12 @@ class CartServiceProvider extends ServiceProvider
             }
 
             if ($cart) {
-                $cartItemCount = $cart->items()->count();
+                $cartItemCount = $cart->items()
+                                      ->whereHas('product', function ($query) {
+                                          $query->where('active', 1)
+                                                ->whereNull('deleted_at');
+                                      })
+                                      ->count();
             }
 
             $view->with('cartItemCount', $cartItemCount);

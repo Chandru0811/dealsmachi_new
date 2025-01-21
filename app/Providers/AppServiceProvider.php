@@ -36,7 +36,14 @@ class AppServiceProvider extends ServiceProvider
                 $carts = $carts->orWhere('customer_id', Auth::id());
             }
 
-            $carts = $carts->with('items.product.productMedia')->get();
+            $carts = $carts->with(['items.product.shop', 'items.product.productMedia'])
+                ->get();
+
+            $carts->each(function ($cart) {
+                $cart->items = $cart->items->filter(function ($item) {
+                    return $item->product && $item->product->active == 1 && !$item->product->deleted_at;
+                });
+            });
 
             $address = Address::where('user_id', Auth::id())->get();
 

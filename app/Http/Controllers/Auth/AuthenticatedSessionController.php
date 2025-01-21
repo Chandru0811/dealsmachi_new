@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
+use App\Models\SavedItem;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -29,7 +30,14 @@ class AuthenticatedSessionController extends Controller
         $request->session()->regenerate();
 
         $user = Auth::user();
-        $message = "Welcome {$user->name}, You have successfully logged in. \nGrab the latest DealsMachi offers now!";
+
+        $ip_address = $request->ip();
+
+        SavedItem::whereNull('user_id')
+            ->where('ip_address', $ip_address)
+            ->update(['user_id' => $user->id]);
+
+        $message = "Welcome {$user->name}, You have successfully logged in. \nGrab the latest Dealsmachi offers now!";
 
         return redirect()->intended(route('home', [], false))
                  ->with('status', $message);
