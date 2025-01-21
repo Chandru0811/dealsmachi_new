@@ -95,10 +95,10 @@ $addresses->firstWhere('id', $selectedAddressId) ?? ($addresses->firstWhere('def
                             <h6 class="truncated-description">{{ $product->description }}</h6>
                             <div>
                                 <span class="original-price" style="text-decoration: line-through; color:#c7c7c7">
-                                    ₹{{ number_format($product->original_price, 0) }}
+                                    ₹{{ number_format($product->original_price, 0, '.', ',') }}
                                 </span>
                                 <span class="discounted-price ms-1" style="font-size:22px;color:#ff0060">
-                                    ₹{{ number_format($product->discounted_price, 0) }}
+                                    ₹{{ number_format($product->discounted_price, 0, '.', ',') }}
                                 </span>
                                 <span class="ms-1" style="font-size:12px; color:#00DD21">
                                     {{ round($product->discount_percentage) }}% off
@@ -254,18 +254,19 @@ $addresses->firstWhere('id', $selectedAddressId) ?? ($addresses->firstWhere('def
         <div class="d-flex justify-content-between align-items-center py-3"
             style="position: sticky; bottom: 0px; background: #fff;border-top: 1px solid #dcdcdc">
             <div class="d-flex justify-content-end align-items-center">
-                <h4>Total Amount &nbsp;&nbsp;
+                <h4>
+                    Total Amount &nbsp;&nbsp;
                     <span id="original-price-strike" style="text-decoration: line-through; color:#c7c7c7">
-                        ₹{{ number_format($product->original_price, 0) }}
+                        ₹{{ number_format($product->original_price, 0, '.', ',') }}
                     </span>
                     &nbsp;&nbsp;
                     <span id="discounted-price" style="color:#000">
-                        ₹{{ number_format($product->discounted_price, 0) }}
+                        ₹{{ number_format($product->discounted_price, 0, '.', ',') }}
                     </span>
                     &nbsp;&nbsp;
                     <span class="ms-1" style="font-size:12px; color:#00DD21" id="deal-discount">
                         Dealsmachi Discount
-                        &nbsp;<span>₹{{ number_format($product->original_price - $product->discounted_price, 2) }}</span>
+                        &nbsp;<span>₹{{ number_format($product->original_price - $product->discounted_price, 0, '.', ',') }}</span>
                     </span>
                 </h4>
             </div>
@@ -292,56 +293,65 @@ $addresses->firstWhere('id', $selectedAddressId) ?? ($addresses->firstWhere('def
 </section>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <script>
-   $(document).ready(function() {
-    function updateRemoveButtonVisibility() {
-        const productCount = $('#product_list .row').length;
-        if (productCount > 1) {
-            $('.remove-btn').show(); // Show Remove button for all products
-        } else {
-            $('.remove-btn').hide(); // Hide Remove button if only one product remains
+    $(document).ready(function() {
+        // Function to format numbers in Indian style
+        function formatIndianNumber(num) {
+            const x = num.toString().split('.');
+            const lastThree = x[0].slice(-3);
+            const otherNumbers = x[0].slice(0, -3);
+            const formatted =
+                otherNumbers !== '' ?
+                otherNumbers.replace(/\B(?=(\d{2})+(?!\d))/g, ',') + ',' + lastThree :
+                lastThree;
+            return formatted;
         }
-    }
 
-    $('#get_cartItems').on('click', function() {
-        let product_ids = [];
-        $('.cartItem_check:checked').each(function() {
-            product_ids.push($(this).val());
-        });
-        $.ajax({
-            url: "{{ route('cartitems.get') }}",
-            type: 'GET',
-            data: {
-                product_ids: product_ids
-            },
-            success: function(response) {
-                console.log(response.data);
-                response.data.forEach(function(product) {
-                    // Check if the product is already in the DOM
-                    if ($(`#product_${product.id}`).length === 0) {
-                        // If not, append the product
-                        $('#product_list').append(`
-                            <div class="row px-4 pt-2" id="product_${product.id}">
-                                <div class="col-md-4 col-12 d-flex flex-column justify-content-center align-items-center">
-                                    <div class="d-flex justify-content-center align-items-center">
+        function updateRemoveButtonVisibility() {
+            const productCount = $('#product_list .row').length;
+            if (productCount > 1) {
+                $('.remove-btn').show(); // Show Remove button for all products
+            } else {
+                $('.remove-btn').hide(); // Hide Remove button if only one product remains
+            }
+        }
+
+        // Add products to cart
+        $('#get_cartItems').on('click', function() {
+            let product_ids = [];
+            $('.cartItem_check:checked').each(function() {
+                product_ids.push($(this).val());
+            });
+
+            $.ajax({
+                url: "{{ route('cartitems.get') }}",
+                type: 'GET',
+                data: {
+                    product_ids: product_ids
+                },
+                success: function(response) {
+                    response.data.forEach(function(product) {
+                        if ($(`#product_${product.id}`).length === 0) {
+                            $('#product_list').append(`
+                                <div class="row px-4 pt-2" id="product_${product.id}">
+                                    <div class="col-md-4 col-12 d-flex flex-column justify-content-center align-items-center">
                                         <img src="${product.image}" style="max-width: 100%; max-height: 100%;" alt="${product.name}" />
                                     </div>
-                                </div>
-                                <div class="col-md-8 col-12">
-                                    <h5>${product.name}</h5>
-                                    <h6 class="truncated-description">${product.description}</h6>
-                                    <div>
-                                        <span class="original-price" style="text-decoration: line-through; color:#c7c7c7">
-                                            ₹${parseFloat(product.original_price).toFixed(0)}
-                                        </span>
-                                        <span class="discounted-price ms-1" style="font-size:22px;color:#ff0060">
-                                            ₹${parseFloat(product.discounted_price).toFixed(0)}
-                                        </span>
-                                        <span class="ms-1" style="font-size:12px; color:#00DD21">
-                                            ${Math.round(product.discount_percentage)}% off
-                                        </span>
+                                    <div class="col-md-8 col-12">
+                                        <h5>${product.name}</h5>
+                                        <h6 class="truncated-description">${product.description}</h6>
+                                        <div>
+                                            <span class="original-price" style="text-decoration: line-through; color:#c7c7c7">
+                                                ₹${formatIndianNumber(product.original_price)}
+                                            </span>
+                                            <span class="discounted-price ms-1" style="font-size:22px;color:#ff0060">
+                                                ₹${formatIndianNumber(product.discounted_price)}
+                                            </span>
+                                            <span class="ms-1" style="font-size:12px; color:#00DD21">
+                                                ${Math.round(product.discount_percentage)}% off
+                                            </span>
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="col-12 d-flex flex-wrap align-items-center mt-2">
+                                    <div class="col-12 d-flex flex-wrap align-items-center mt-2">
                                     ${product.deal_type === 2 ? `
                                         <div class="d-flex align-items-center">
                                             <div class="form-group">
@@ -374,259 +384,252 @@ $addresses->firstWhere('id', $selectedAddressId) ?? ($addresses->firstWhere('def
                                 </div>
                                 <hr class="mt-3">
                             </div>
-                        `);
+                            `);
 
-                        $('#cart_item_' + product.id).remove();
-                        if ($('#cart_items').children().length === 0) {
-                            $('#cart_items').append(`<div class="text-center" id="no_items">
+                            $('#cart_item_' + product.id).remove();
+                            if ($('#cart_items').children().length === 0) {
+                                $('#cart_items').append(`<div class="text-center" id="no_items">
                                     <p class="text-muted">No items found in the cart.</p>
                                 </div>`);
-                            $('#get_cartItems').hide();
+                                $('#get_cartItems').hide();
+                            }
+
+                            updateRemoveButtonVisibility();
+                            updateCartTotals();
+                            updateProductsToBuy();
                         }
-
-                        let allProducts = JSON.parse($('#all_products_to_buy').val());
-                        allProducts.push(product.id);
-                        $('#all_products_to_buy').val(JSON.stringify(allProducts));
-                    }
-                });
-                updateRemoveButtonVisibility();
-                updateCartTotals(); // Call to update totals after adding items
-                updateProductsToBuy();
-            },
-            error: function(error) {
-                console.log(error);
-            }
-        });
-    });
-
-    // Function to update cart totals
-    function updateCartTotals() {
-        let totalOriginalPrice = 0;
-        let totalDiscountedPrice = 0;
-        let totalDiscount = 0;
-
-        // Loop through each product in the cart and calculate totals
-        $('#product_list .row').each(function() {
-            const productId = $(this).attr('id').split('_')[1];
-            const originalPrice = parseFloat($(this).find('.original-price').text().replace('₹', '').trim());
-            const discountedPrice = parseFloat($(this).find('.discounted-price').text().replace('₹', '').trim());
-            const quantity = parseInt($(`#quantityInput_${productId}`).val()) || 1;
-
-            // Add to the totals
-            totalOriginalPrice += originalPrice * quantity;
-            totalDiscountedPrice += discountedPrice * quantity;
-            totalDiscount += (originalPrice - discountedPrice) * quantity;
-        });
-
-        // Update the displayed totals
-        $('#original-price-strike').text(`₹ ${totalOriginalPrice.toFixed(0)}`);
-        $('#discounted-price').text(`₹ ${totalDiscountedPrice.toFixed(0)}`);
-        $('#deal-discount span').text(`₹ ${totalDiscount.toFixed(2)}`);
-    }
-
-    function updateProductsToBuy() {
-        let productIds = [];
-        $('#product_list .row').each(function () {
-            const productId = $(this).attr('id').split('_')[1];
-            productIds.push(productId);
-        });
-
-        // Update the hidden input with the updated product IDs
-        $('#all_products_to_buy').val(JSON.stringify(productIds));
-    }
-
-    // Initialize Remove button visibility
-    updateRemoveButtonVisibility();
-    updateProductsToBuy();
-
-    $(document).on('change', '.service-date', function() {
-        let productId = $(this).closest('.row').attr('id').split('_')[1];
-        let cartId = $('input[name="cart_id"]').val();
-        let serviceDate = $(this).val();
-
-        $.ajax({
-            url: "{{ route('cart.update') }}",
-            type: 'POST',
-            data: {
-                _token: '{{ csrf_token() }}',
-                product_id: productId,
-                service_date: serviceDate,
-                cart_id: cartId
-            },
-            success: function(response) {
-                // Optionally handle success response
-            },
-            error: function(error) {
-                console.log(error);
-                // Optionally handle error response
-            }
-        });
-    });
-
-    $(document).on('change', '.service-time', function() {
-        let productId = $(this).closest('.row').attr('id').split('_')[1];
-        let cartId = $('input[name="cart_id"]').val();
-        let serviceTime = $(this).val();
-
-        $.ajax({
-            url: "{{ route('cart.update') }}",
-            type: 'POST',
-            data: {
-                _token: '{{ csrf_token() }}',
-                product_id: productId,
-                service_time: serviceTime,
-                cart_id: cartId
-            },
-            success: function(response) {
-                // Optionally handle success response
-            },
-            error: function(error) {
-                console.log(error);
-                // Optionally handle error response
-            }
-        });
-    });
-
-    // Validation before checkout
-    $('#submitBtn').on('click', function(e) {
-        let isValid = true;
-        $('.service-date').each(function() {
-            const serviceDate = $(this).val();
-            const serviceTime = $(this).closest('.row').find('.service-time').val();
-            const currentDate = new Date();
-            const selectedDate = new Date(serviceDate);
-
-            // Reset error messages before validation
-            $(this).next('.error-message').text('');
-            $(this).closest('.form-group').find('.error-message').text('');
-
-            // Validate service date
-            if (!serviceDate) {
-                isValid = false;
-                $(this).next('.error-message').text('Service Date is required');
-            }
-        });
-
-        $('.service-time').each(function() {
-            const serviceTime = $(this).val();
-            const serviceDate = $(this).closest('.row').find('.service-date').val();
-            const currentDate = new Date();
-
-            // Reset error messages before validation
-            $(this).next('.error-message').text('');
-            $(this).closest('.form-group').find('.error-message').text('');
-
-            // Validate service time
-            if (!serviceTime) {
-                isValid = false;
-                $(this).next('.error-message').text('Service Time is required');
-            }
-
-            // Validate future service time if date is today
-            if (serviceDate === currentDate.toISOString().split('T')[0]) {
-                const [hours, minutes] = serviceTime.split(':');
-                const selectedTime = new Date(currentDate);
-                selectedTime.setHours(hours, minutes, 0);
-                if (selectedTime <= currentDate) {
-                    isValid = false;
-                    $(this).closest('.form-group').find('.error-message').text('Service Time must be in the future');
+                    });
+                },
+                error: function(error) {
+                    console.log(error);
                 }
+            });
+        });
+
+        // Function to update cart totals
+        function updateCartTotals() {
+            let totalOriginalPrice = 0;
+            let totalDiscountedPrice = 0;
+            let totalDiscount = 0;
+
+            // Loop through each product in the cart and calculate totals
+            $('#product_list .row').each(function() {
+                const productId = $(this).attr('id').split('_')[1];
+                const originalPrice = parseFloat(
+                    $(this).find('.original-price').text().replace('₹', '').replace(/,/g, '').trim()
+                );
+                const discountedPrice = parseFloat(
+                    $(this).find('.discounted-price').text().replace('₹', '').replace(/,/g, '').trim()
+                );
+                const quantity = parseInt($(`#quantityInput_${productId}`).val()) || 1;
+
+                // Add to the totals
+                totalOriginalPrice += originalPrice * quantity;
+                totalDiscountedPrice += discountedPrice * quantity;
+                totalDiscount += (originalPrice - discountedPrice) * quantity;
+            });
+
+            // Update the displayed totals with formatted numbers
+            $('#original-price-strike').text(`₹ ${formatIndianNumber(totalOriginalPrice)}`);
+            $('#discounted-price').text(`₹ ${formatIndianNumber(totalDiscountedPrice)}`);
+            $('#deal-discount span').text(`₹ ${formatIndianNumber(totalDiscount)}`);
+        }
+
+        // Function to update the products to buy hidden input
+        function updateProductsToBuy() {
+            let productIds = [];
+            $('#product_list .row').each(function() {
+                const productId = $(this).attr('id').split('_')[1];
+                productIds.push(productId);
+            });
+
+            // Update the hidden input with the updated product IDs
+            $('#all_products_to_buy').val(JSON.stringify(productIds));
+        }
+
+        $(document).on('change', '.service-date', function() {
+            let productId = $(this).closest('.row').attr('id').split('_')[1];
+            let cartId = $('input[name="cart_id"]').val();
+            let serviceDate = $(this).val();
+
+            $.ajax({
+                url: "{{ route('cart.update') }}",
+                type: 'POST',
+                data: {
+                    _token: '{{ csrf_token() }}',
+                    product_id: productId,
+                    service_date: serviceDate,
+                    cart_id: cartId
+                },
+                success: function(response) {
+                    // Optionally handle success response
+                },
+                error: function(error) {
+                    console.log(error);
+                    // Optionally handle error response
+                }
+            });
+        });
+
+        $(document).on('change', '.service-time', function() {
+            let productId = $(this).closest('.row').attr('id').split('_')[1];
+            let cartId = $('input[name="cart_id"]').val();
+            let serviceTime = $(this).val();
+
+            $.ajax({
+                url: "{{ route('cart.update') }}",
+                type: 'POST',
+                data: {
+                    _token: '{{ csrf_token() }}',
+                    product_id: productId,
+                    service_time: serviceTime,
+                    cart_id: cartId
+                },
+                success: function(response) {
+                    // Optionally handle success response
+                },
+                error: function(error) {
+                    console.log(error);
+                    // Optionally handle error response
+                }
+            });
+        });
+
+        // Validation before checkout
+        $('#submitBtn').on('click', function(e) {
+            let isValid = true;
+            $('.service-date').each(function() {
+                const serviceDate = $(this).val();
+                const serviceTime = $(this).closest('.row').find('.service-time').val();
+                const currentDate = new Date();
+                const selectedDate = new Date(serviceDate);
+
+                // Reset error messages before validation
+                $(this).next('.error-message').text('');
+                $(this).closest('.form-group').find('.error-message').text('');
+
+                // Validate service date
+                if (!serviceDate) {
+                    isValid = false;
+                    $(this).next('.error-message').text('Service Date is required');
+                }
+            });
+
+            $('.service-time').each(function() {
+                const serviceTime = $(this).val();
+                const serviceDate = $(this).closest('.row').find('.service-date').val();
+                const currentDate = new Date();
+
+                // Reset error messages before validation
+                $(this).next('.error-message').text('');
+                $(this).closest('.form-group').find('.error-message').text('');
+
+                // Validate service time
+                if (!serviceTime) {
+                    isValid = false;
+                    $(this).next('.error-message').text('Service Time is required');
+                }
+
+                // Validate future service time if date is today
+                if (serviceDate === currentDate.toISOString().split('T')[0]) {
+                    const [hours, minutes] = serviceTime.split(':');
+                    const selectedTime = new Date(currentDate);
+                    selectedTime.setHours(hours, minutes, 0);
+                    if (selectedTime <= currentDate) {
+                        isValid = false;
+                        $(this).closest('.form-group').find('.error-message').text('Service Time must be in the future');
+                    }
+                }
+            });
+
+            if (!isValid) {
+                e.preventDefault();
             }
         });
 
-        if (!isValid) {
-            e.preventDefault();
-        }
-    });
-
-    // Remove error message when service date is selected
-    $(document).on('change', '.service-date', function() {
-        const serviceDate = $(this).val();
-        if (serviceDate) {
-            $(this).next('.error-message').text(''); // Remove error message for service date
-        }
-    });
-
-    // Remove error message when service time is selected
-    $(document).on('change', '.service-time', function() {
-        const serviceTime = $(this).val();
-        if (serviceTime) {
-            $(this).closest('.form-group').find('.error-message').text(''); // Remove error message for service time
-        }
-    });
-
-    function attachQuantityListeners() {
-        $(document).on('click', '.increase-btn', function() {
-            let productId = $(this).data('product-id');
-            let quantityInput = $(`#quantityInput_${productId}`);
-            let currentQuantity = parseInt(quantityInput.val());
-            let newQuantity = currentQuantity + 1;
-            quantityInput.val(newQuantity);
-            updateCartTotals();
-            updateCart(productId, newQuantity);
+        // Remove error message when service date is selected
+        $(document).on('change', '.service-date', function() {
+            const serviceDate = $(this).val();
+            if (serviceDate) {
+                $(this).next('.error-message').text(''); // Remove error message for service date
+            }
         });
 
-        $(document).on('click', '.decrease-btn', function() {
-            let productId = $(this).data('product-id');
-            let quantityInput = $(`#quantityInput_${productId}`);
-            let currentQuantity = parseInt(quantityInput.val());
-            if (currentQuantity > 1) {
-                let newQuantity = currentQuantity - 1;
+        // Remove error message when service time is selected
+        $(document).on('change', '.service-time', function() {
+            const serviceTime = $(this).val();
+            if (serviceTime) {
+                $(this).closest('.form-group').find('.error-message').text(''); // Remove error message for service time
+            }
+        });
+
+        // Event listeners for quantity changes
+        function attachQuantityListeners() {
+            $(document).on('click', '.increase-btn', function() {
+                let productId = $(this).data('product-id');
+                let quantityInput = $(`#quantityInput_${productId}`);
+                let currentQuantity = parseInt(quantityInput.val());
+                let newQuantity = currentQuantity + 1;
                 quantityInput.val(newQuantity);
                 updateCartTotals();
                 updateCart(productId, newQuantity);
-            }
-        });
-    }
+            });
 
-    function updateCart(productId, newQuantity, quantityInput) {
-        $.ajax({
-            url: "{{ route('cart.update') }}", // Update this route to your actual update route
-            type: 'POST',
-            data: {
-                _token: '{{ csrf_token() }}',
-                product_id: productId,
-                quantity: newQuantity,
-                cart_id: $('input[name="cart_id"]').val()
-            },
-            success: function(response) {
-                quantityInput.val(newQuantity);
-                // Optionally update other parts of the cart UI, like total price
-                updateCartTotals(); // Recalculate totals
-            },
-            error: function(error) {
-                console.log(error);
-                // Optionally show an error message to the user
-            }
-        });
-    }
+            $(document).on('click', '.decrease-btn', function() {
+                let productId = $(this).data('product-id');
+                let quantityInput = $(`#quantityInput_${productId}`);
+                let currentQuantity = parseInt(quantityInput.val());
+                if (currentQuantity > 1) {
+                    let newQuantity = currentQuantity - 1;
+                    quantityInput.val(newQuantity);
+                    updateCartTotals();
+                    updateCart(productId, newQuantity);
+                }
+            });
+        }
 
-    // Initial call to attach event listeners
-    attachQuantityListeners();
+        // Update cart via AJAX
+        function updateCart(productId, newQuantity) {
+            $.ajax({
+                url: "{{ route('cart.update') }}",
+                type: 'POST',
+                data: {
+                    _token: '{{ csrf_token() }}',
+                    product_id: productId,
+                    quantity: newQuantity,
+                    cart_id: $('input[name="cart_id"]').val()
+                },
+                success: function(response) {
+                    updateCartTotals(); // Recalculate totals
+                },
+                error: function(error) {
+                    console.log(error);
+                }
+            });
+        }
 
-    $(document).on('click', '.remove-btn', function () {
-        const productId = $(this).closest('.row').attr('id').split('_')[1]; // Get the product ID
+        // Remove products from cart
+        $(document).on('click', '.remove-btn', function() {
+            const productId = $(this).closest('.row').attr('id').split('_')[1];
+            $(this).closest('.row').remove();
+            updateCartTotals();
+            updateProductsToBuy();
+            updateRemoveButtonVisibility();
 
-        // Remove the product from the product list
-        $(this).closest('.row').remove();
-        updateRemoveButtonVisibility(); // Update Remove button visibility after removing products
-        updateCartTotals(); // Update totals
-        updateProductsToBuy(); // Update the list of products to buy
+            // Get the product details from the server to add back to the cart items
+            $.ajax({
+                url: "{{ route('cartitems.get') }}",
+                type: 'GET',
+                data: {
+                    product_ids: [productId] // Send the product ID to get its details
+                },
+                success: function(response) {
+                    // Check if the product was returned from the server
+                    if (response.data && response.data.length > 0) {
+                        const product = response.data[0]; // Assuming one product is returned
 
-        // Get the product details from the server to add back to the cart items
-        $.ajax({
-            url: "{{ route('cartitems.get') }}",
-            type: 'GET',
-            data: {
-                product_ids: [productId] // Send the product ID to get its details
-            },
-            success: function (response) {
-                // Check if the product was returned from the server
-                if (response.data && response.data.length > 0) {
-                    const product = response.data[0]; // Assuming one product is returned
-
-                    // Append the product to the cart items
-                    $('#cart_items').append(`
+                        // Append the product to the cart items
+                        $('#cart_items').append(`
                         <div class="row d-flex align-items-center mb-3" id="cart_item_${product.id}">
                             <div class="col-1">
                                 <input type="checkbox" class="cartItem_check" value="${product.id}" class="me-1" />
@@ -643,43 +646,49 @@ $addresses->firstWhere('id', $selectedAddressId) ?? ($addresses->firstWhere('def
                         </div>
                     `);
 
-                    // Update the total count if needed
-                    if ($('#cart_items').children().length > 0) {
-                        $('#get_cartItems').show();
+                        // Update the total count if needed
+                        if ($('#cart_items').children().length > 0) {
+                            $('#get_cartItems').show();
+                        }
                     }
+                },
+                error: function(error) {
+                    console.log(error);
                 }
-            },
-            error: function (error) {
-                console.log(error);
-            }
+            });
+        });
+
+        // Initial function calls
+        attachQuantityListeners();
+        updateRemoveButtonVisibility();
+        updateCartTotals();
+        updateProductsToBuy();
+    });
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const today = new Date();
+        const currentDate = today.toISOString().split('T')[0]; // Format 'YYYY-MM-DD'
+
+        // Calculate the next date
+        const nextDate = new Date(today);
+        nextDate.setDate(today.getDate() + 1);
+        const nextDateString = nextDate.toISOString().split('T')[0];
+
+        document.querySelectorAll('.service-date').forEach((serviceDateField) => {
+            // Set the minimum date to the day after tomorrow
+            const restrictedMinDate = new Date(nextDate);
+            restrictedMinDate.setDate(nextDate.getDate() + 1);
+
+            serviceDateField.setAttribute('min', restrictedMinDate.toISOString().split('T')[0]);
+
+            // Handle user-typed values (if they bypass the UI)
+            serviceDateField.addEventListener('change', () => {
+                const selectedDate = serviceDateField.value;
+                if (selectedDate === currentDate || selectedDate === nextDateString) {
+                    serviceDateField.value = ''; // Clear invalid date
+                }
+            });
         });
     });
-});
-
-document.addEventListener('DOMContentLoaded', () => {
-    const today = new Date();
-    const currentDate = today.toISOString().split('T')[0]; // Format 'YYYY-MM-DD'
-
-    // Calculate the next date
-    const nextDate = new Date(today);
-    nextDate.setDate(today.getDate() + 1);
-    const nextDateString = nextDate.toISOString().split('T')[0];
-
-    document.querySelectorAll('.service-date').forEach((serviceDateField) => {
-        // Set the minimum date to the day after tomorrow
-        const restrictedMinDate = new Date(nextDate);
-        restrictedMinDate.setDate(nextDate.getDate() + 1);
-
-        serviceDateField.setAttribute('min', restrictedMinDate.toISOString().split('T')[0]);
-
-        // Handle user-typed values (if they bypass the UI)
-        serviceDateField.addEventListener('change', () => {
-            const selectedDate = serviceDateField.value;
-            if (selectedDate === currentDate || selectedDate === nextDateString) {
-                serviceDateField.value = ''; // Clear invalid date
-            }
-        });
-    });
-});
 </script>
 @endsection
