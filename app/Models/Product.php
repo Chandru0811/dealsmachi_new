@@ -30,13 +30,11 @@ class Product extends Model
         'end_date',
         'stock',
         'sku',
-        'image_url1',
-        'image_url2',
-        'image_url3',
-        'image_url4',
-        'additional_details',
         'active',
-        'coupon_code'
+        'coupon_code',
+        'specifications',
+        'varient',
+        'delivery_days'
     ];
 
     protected $dates = ['deleted_at', 'start_date', 'end_date'];
