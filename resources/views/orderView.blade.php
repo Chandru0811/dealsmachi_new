@@ -124,11 +124,12 @@
                                     <div class="row align-items-center mb-3">
                                         <div class="col-md-3">
                                             @php
-                                                $image = $item->product->productMedia
-                                                    ->where('order', 1)
-                                                    ->where('type', 'image')
-                                                    ->first();
-                                            @endphp
+                                            $image =isset($item->product->productMedia)
+                                                ? $item->product->productMedia
+                                                ->where('order', 1)
+                                                ->where('type', 'image')
+                                                ->first() : null;
+                                        @endphp
                                             <img src="{{ $image ? asset($image->path) : asset('assets/images/home/noImage.webp') }}"
                                                 class="img-fluid" alt="{{ $item->product->name }}" />
                                         </div>
@@ -150,10 +151,10 @@
                                                 @endif
                                                 <p class="truncated-description">{{ $item->product->description }}</p>
                                                 <p class="mb-0">
-                                                    <del>₹{{ number_format($item->unit_price, 2) }}</del>
+                                                    <del>₹{{ number_format($item->unit_price, 0) }}</del>
                                                     &nbsp;&nbsp;
                                                     <span
-                                                        style="color:#ff0060; font-size:24px">₹{{ number_format($item->discount, 2) }}</span>
+                                                        style="color:#ff0060; font-size:24px">₹{{ number_format($item->discount, 0) }}</span>
                                                     &nbsp;&nbsp;
                                                     <span
                                                         class="badge_danger">{{ number_format($item->discount_percent, 0) }}%
@@ -261,7 +262,7 @@
                                     </span>
                                     <span id="subtotal"></span>
                                 </div>
-                                <div class="d-flex justify-content-between">
+                                <div class="d-flex justify-content-between"  style="color: #00DD21;">
                                     <span>Discount
                                         @if ($item->quantity != 1)
                                             (x{{ $item->quantity }})
@@ -347,8 +348,8 @@
             let total = orderItems.reduce((sum, item) => sum + (parseFloat(item.discount) * item.quantity), 0);
             let discount = subtotal - total;
 
-            const formattedSubtotal = `₹{{ number_format($order->items->reduce(fn($sum, $item) => $sum + ($item['unit_price'] * $item['quantity']), 0), 2) }}`;
-            const formattedTotal = `₹{{ number_format($order->items->reduce(fn($sum, $item) => $sum + ($item['discount'] * $item['quantity']), 0), 2) }}`;
+            const formattedSubtotal = `₹{{ number_format($order->items->reduce(fn($sum, $item) => $sum + ($item['unit_price'] * $item['quantity']), 0), 0) }}`;
+            const formattedTotal = `₹{{ number_format($order->items->reduce(fn($sum, $item) => $sum + ($item['discount'] * $item['quantity']), 0), 0) }}`;
             const formattedDiscount = `₹{{ number_format($order->items->reduce(fn($sum, $item) => $sum + ($item['unit_price'] * $item['quantity']), 0) - $order->items->reduce(fn($sum, $item) => $sum + ($item['discount'] * $item['quantity']), 0), 2) }}`;
 
             document.getElementById('subtotal').innerText = formattedSubtotal;

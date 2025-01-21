@@ -31,7 +31,7 @@
                     </div>
                     <!-- Footer Columns -->
                     <!-- Company Section -->
-                    <div class="col-md-3 col-12 mb-4">
+                    <div class="col-md-2 col-12 mb-4">
                         <h6 class="text-uppercase fw-medium mb-3 text-light" style="font-size: 16px">
                             Company
                         </h6>
@@ -56,7 +56,7 @@
                     </div>
 
                     <!-- Product Section -->
-                    <div class="col-md-3 col-12 mb-4">
+                    <div class="col-md-2 col-12 mb-4">
                         <h6 class="text-uppercase fw-medium mb-3 text-light" style="font-size: 16px">
                             Categories
                         </h6>
@@ -77,6 +77,11 @@
                             <li>
                                 <a href="{{ url('/') }}" class="text-light text-decoration-none">Groceries</a>
                             </li>
+                        </ul>
+                    </div>
+
+                    <div class="col-md-2 col-12" style="padding-top: 36px;">
+                        <ul class="list-unstyled">
                             <li>
                                 <a href="{{ url('/') }}" class="text-light text-decoration-none">Wellness</a>
                             </li>
@@ -96,7 +101,7 @@
                     </div>
 
                     <!-- Partnerships Section -->
-                    <div class="col-md-3 col-12 mb-4">
+                    <div class="col-md-2 col-12 mb-4">
                         <h6 class="text-uppercase fw-medium mb-3 text-light" style="font-size: 16px">
                             Partnerships
                         </h6>
@@ -123,7 +128,7 @@
                     <a href="{{ url('/privacyPolicy') }}" class="text-light text-decoration-none me-1">Privacy Policy |
                     </a>
                     2024 - 2025 &copy; Copyright
-                    DealsMachi Pte Ltd. All Rights Reserved.
+                    Cloud ECS Infotech Pvt. Ltd. All Rights Reserved.
                 </p>
             </div>
         </footer>

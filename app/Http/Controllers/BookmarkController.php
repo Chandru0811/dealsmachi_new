@@ -112,6 +112,15 @@ class BookmarkController extends Controller
 
     public function index(Request $request)
     {
+        if (Auth::check()) {
+            $user_id = Auth::id();
+            $ip_address = $request->ip();
+
+            Bookmark::whereNull('user_id')
+                ->where('ip_address', $ip_address)
+                ->update(['user_id' => $user_id]);
+        }
+
         $user_id = Auth::check() ? Auth::id() : null;
 
         $bookmarks = Bookmark::where(function ($query) use ($user_id, $request) {
@@ -121,14 +130,14 @@ class BookmarkController extends Controller
                 $query->whereNull('user_id')->where('ip_address', $request->ip());
             }
         })
-            ->whereHas('deal', function ($query) {
-                $query->where('active', 1)
-                    ->whereNull('deleted_at');
-            })
-            ->with(['deal' => function ($query) {
-                $query->where('active', 1)->whereNull('deleted_at');
-            }, 'deal.shop'])
-            ->paginate(10);
+        ->whereHas('deal', function ($query) {
+            $query->where('active', 1)
+                  ->whereNull('deleted_at');
+        })
+        ->with(['deal' => function($query) {
+            $query->where('active', 1)->whereNull('deleted_at')->with(['productMedia']);
+        }, 'deal.shop'])
+        ->paginate(10);
 
         return view('bookmark', compact('bookmarks'));
     }

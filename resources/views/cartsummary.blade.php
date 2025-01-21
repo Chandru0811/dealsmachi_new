@@ -78,9 +78,9 @@
                     </div>
                     <div class="card mb-3">
                         @foreach ($carts->items as $item)
-                            @php
-                                $product = $item->product;
-                                $image = $product->productMedia->where('order', 1)->where('type', 'image')->first();
+                        @php
+                        $product = $item->product;
+                        $image = isset($product->productMedia) ? $product->productMedia->where('order', 1)->where('type', 'image')->first() : null;
                             @endphp
                             <div class="row px-4 pt-4">
                                 <div class="col-md-3 d-flex flex-column justify-content-center align-items-center">
@@ -145,9 +145,9 @@
                         <div class="card-body m-0 p-4">
                             <div class="d-flex justify-content-between align-items-center">
                                 <p>Subtotal (x{{ $carts->quantity }})</p>
-                                <p>₹{{ number_format($carts->total, 2) }}</p>
+                                <p>₹{{ number_format($carts->total, 0) }}</p>
                             </div>
-                            <div class="d-flex justify-content-between align-items-center">
+                            <div class="d-flex justify-content-between align-items-center"  style="color: #00DD21;">
                                 <p>Discount (x{{ $carts->quantity }})</p>
                                 <p>₹{{ number_format($carts->discount, 2) }}</p>
                             </div>
@@ -163,16 +163,16 @@
                         style="position: sticky; bottom: 0px; background: #fff;border-top: 1px solid #dcdcdc">
                         <div class="d-flex justify-content-end align-items-center">
                             <h4>Total Amount (x{{ $carts->quantity }}) &nbsp;&nbsp;
-                                <span style="text-decoration: line-through; color:#c7c7c7">
-                                    ₹{{ number_format($carts->total, 2) }}
+                                <span style="text-decoration: line-through; color:#c7c7c7" class="subtotal">
+                                    ₹{{ number_format($carts->total, 0) }}
                                 </span>
                                 &nbsp;&nbsp;
-                                <span class="ms-1" style="color:#000">
-                                    ₹{{ number_format($carts->grand_total, 2) }} </span>
+                                <span class="total ms-1" style="color:#000">
+                                    ₹{{ number_format($carts->grand_total, 0) }} </span>
                                 &nbsp;&nbsp;
-                                <span class="ms-1" style="font-size:12px; color:#00DD21">
-                                    Dealslah Discount
-                                    &nbsp;<span>${{ number_format($carts->discount, 2) }}</span>
+                                <span class="ms-1" style="font-size:12px; color:#00DD21;white-space: nowrap;">
+                                    Dealsmachi Discount
+                                    &nbsp;<span class="discount">₹{{ number_format($carts->discount, 2) }}</span>
                                 </span>
                             </h4>
                         </div>

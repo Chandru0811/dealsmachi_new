@@ -54,10 +54,11 @@
                             <div style="min-height: 50px">
                                 <span class="badge trending-badge">TRENDING</span>
                                 @php
-                                $image = $deal->productMedia
+                                $image = isset($deal->productMedia)
+                                ? $deal->productMedia
                                 ->where('order', 1)
                                 ->where('type', 'image')
-                                ->first();
+                                ->first() : null;
                                 @endphp
                                 <img
                                     src="{{ $image ? asset($image->path) : asset('assets/images/home/noImage.webp') }}"
@@ -103,7 +104,7 @@
                                     <div class="card-divider"></div>
                                     <p class="ps-3 fw-medium d-flex align-items-center justify-content-between"
                                         style="color: #ff0060">
-                                        <span>₹{{ number_format( $deal->discounted_price, 2) }}</span>
+                                        <span>₹{{ number_format( $deal->discounted_price, 0) }}</span>
                                         @if (!empty($deal->coupon_code))
                                         <span id="mySpan" class="mx-3 px-2 couponBadge"
                                             onclick="copySpanText(this, event)" data-bs-toggle="tooltip"
@@ -126,7 +127,7 @@
                                     <div class="ps-3 d-flex justify-content-between align-items-center pe-2">
                                         <div>
                                             <p>Regular Price</p>
-                                            <p><s>₹{{ number_format( $deal->discounted_price, 2) }}</s></p>
+                                            <p><s>₹{{ number_format( $deal->discounted_price, 0) }}</s></p>
                                         </div>
                                         <div>
                                             <form action="{{ route('cart.add', ['slug' => $deal->slug]) }}" method="POST">

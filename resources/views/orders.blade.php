@@ -46,11 +46,12 @@
                     <div class="row">
                         <div class="col-lg-3 col-md-3 col-12">
                             @php
-                                $image = $item->product->productMedia
-                                    ->where('order', 1)
-                                    ->where('type', 'image')
-                                    ->first();
-                            @endphp
+                            $image = isset($item->product->productMedia)
+                            ? $item->product->productMedia
+                            ->where('order', 1)
+                            ->where('type', 'image')
+                            ->first()
+                            : null;
                             <img
                                 src="{{ $image ? asset($image->path) : asset('assets/images/home/noImage.webp') }}"
                                 class="img-fluid"
@@ -75,9 +76,9 @@
                                 @endif
                             </div>
                             <p>
-                                <del>₹{{ number_format($item->unit_price * $item->quantity, 2) }}</del> &nbsp;
+                                <del>₹{{ number_format($item->unit_price * $item->quantity, 0) }}</del> &nbsp;
                                 <span style="color: #ff0060; font-size:24px">
-                                    ₹{{ number_format($item->discount * $item->quantity, 2) }}
+                                    ₹{{ number_format($item->discount * $item->quantity, 0) }}
                                 </span> &nbsp;
                                 <span class="badge_payment">{{ number_format($item->discount_percent, 0) }}% saved</span>
                             </p>

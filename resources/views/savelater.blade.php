@@ -42,11 +42,12 @@
                         <div class="col-md-3 d-flex flex-column justify-content-center align-items-center">
                             <div class="d-flex justify-content-center align-items-center">
                                 @php
-                                    $image = $savedItem->deal->productMedia
-                                        ->where('order', 1)
-                                        ->where('type', 'image')
-                                        ->first();
-                                @endphp
+                                $image = isset($savedItem->deal->productMedia)
+                                    ? $savedItem->deal->productMedia
+                                    ->where('order', 1)
+                                    ->where('type', 'image')
+                                    ->first() : null;
+                            @endphp
                                 <img
                                     src="{{ $image ? asset($image->path) : asset('assets/images/home/noImage.webp') }}"
                                     style="max-width: 100%; max-height: 100%;"

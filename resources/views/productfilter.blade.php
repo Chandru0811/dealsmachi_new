@@ -426,12 +426,13 @@
                                                 <div class="card sub_topCard h-100 d-flex flex-column">
                                                     <div style="min-height: 50px">
                                                         <span class="badge trending-badge">{{ $product->label }}</span>
-                                                            @php
-                                                                $image = $product->productMedia
-                                                                    ->where('order', 1)
-                                                                    ->where('type', 'image')
-                                                                    ->first();
-                                                            @endphp
+                                                        @php
+                                                        $image = isset($product->productMedia)
+                                                            ? $product->productMedia
+                                                            ->where('order', 1)
+                                                            ->where('type', 'image')
+                                                            ->first() : null;
+                                                    @endphp
                                                             <img
                                                                 src="{{ $image ? asset($image->path) : asset('assets/images/home/noImage.webp') }}"
                                                                 class="img-fluid card-img-top1"
@@ -528,7 +529,7 @@
                                                             <div class="ps-3 d-flex justify-content-between align-items-center pe-2">
                                                                 <div>
                                                                     <p>Regular Price</p>
-                                                                <p><s>₹ {{ number_format( $product->original_price, 2) }}</s></p>
+                                                                <p><s>₹ {{ number_format( $product->original_price, 0) }}</s></p>
                                                                 </div>
                                                                 <div>
                                                                 <form action="{{ route('cart.add', ['slug' => $product->slug]) }}" method="POST">

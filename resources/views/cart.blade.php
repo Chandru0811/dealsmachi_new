@@ -48,7 +48,7 @@ use Carbon\Carbon;
         @else
         @foreach ($carts as $cart)
         <div class="d-flex justify-content-between mb-3">
-            <h5>Your Cart <span style="color: #ff0060"> ({{ $cart->item_count }})</span></h5>
+            <h5>Your Cart <span style="color: #ff0060"> ({{ $cart->items->count() }})</span></h5>
             <a href="/" class="text-decoration-none">
                 <button type="button" class="btn showmoreBtn">
                     Shop more
@@ -74,10 +74,11 @@ use Carbon\Carbon;
             <div class="col-md-4 mb-3">
                 <div class="d-flex justify-content-center align-items-center">
                     @php
-                    $image = $product->productMedia
+                    $image = isset($product->productMedia)
+                    ? $product->productMedia
                     ->where('order', 1)
                     ->where('type', 'image')
-                    ->first();
+                    ->first() : null;
                     @endphp
                     <img src="{{ $image ? asset($image->path) : asset('assets/images/home/noImage.webp') }}"
                         style="max-width: 100%; max-height: 100%;" alt="{{ $product->name }}" />
@@ -98,10 +99,10 @@ use Carbon\Carbon;
                 <p>Seller : {{ $product->shop->legal_name ?? '' }}</p>
                 <div>
                     <span style="text-decoration: line-through; color:#c7c7c7">
-                        ₹{{ number_format( $product->original_price, 2) }}
+                        ₹{{ number_format( $product->original_price, 0) }}
                     </span>
                     <span class="ms-1" style="font-size:22px;color:#ff0060">
-                        ₹{{ number_format( $product->discounted_price, 2) }}
+                        ₹{{ number_format( $product->discounted_price, 0) }}
                     </span>
                     <span class="ms-1" style="font-size:12px; color:#00DD21">
                         {{ round($product->discount_percentage) }}% off
@@ -113,13 +114,21 @@ use Carbon\Carbon;
             <div class="col-md-6">
                 @if ($product->deal_type === 2)
                 <div class="d-flex align-items-start my-3">
-                    <div class="d-flex flex-column me-3" style="width: 30%;">
+                    {{-- <div class="d-flex flex-column me-3" style="width: 30%;">
                         <label for="service_date" class="form-label">Service Date</label>
                         <input type="date" id="service_date" name="service_date"
                             class="form-control form-control-sm service-date"
                             value="{{ $item->service_date }}" data-cart-id="{{ $cart->id }}"
                             data-product-id="{{ $product->id }}" min="{{ date('Y-m-d') }}">
+                    </div> --}}
+                    <div class="d-flex flex-column me-3" style="width: 30%;">
+                        <label for="service_date" class="form-label">Service Date</label>
+                        <input type="date" id="service_date" name="service_date"
+                            class="form-control form-control-sm service-date"
+                            data-cart-id="{{ $cart->id }}"
+                            data-product-id="{{ $product->id }}">
                     </div>
+
                     <div class="d-flex flex-column" style="width: 30%;">
                         <label for="service_time" class="form-label">Service Time</label>
                         <input type="time" id="service_time" name="service_time"
@@ -176,37 +185,39 @@ use Carbon\Carbon;
             <div class="card-body m-0 p-4 order-summary">
                 <div class="d-flex justify-content-between align-items-center">
                     <p>Subtotal (x<span class="quantity-value">{{ $cart->quantity }}</span>)</p>
-                    <p class="subtotal">₹{{ number_format($subtotal, 2) }}</p>
+                    <p class="subtotal">₹{{ number_format($subtotal, 0) }}</p>
                 </div>
-                <div class="d-flex justify-content-between align-items-center">
+                <div class="d-flex justify-content-between align-items-center"  style="color: #00DD21;">
                     <p>Discount (x<span class="quantity-value">{{ $cart->quantity }}</span>)</p>
-                    <p class="discount">₹{{ number_format($total_discount, 2) }}</p>
+                    <p class="discount">₹{{ number_format($total_discount, 0) }}</p>
                 </div>
                 <!-- <hr />
                 <div class="d-flex justify-content-between pb-3">
                     <span>Total (x<span class="quantity-value">{{ $cart->quantity }}</span>)</span>
-                    <span class="total">${{ number_format($subtotal - $total_discount, 2) }}</span>
+                    <span class="total">${{ number_format($subtotal - $total_discount, 0) }}</span>
                 </div> -->
             </div>
         </div>
         <div class="d-flex justify-content-between align-items-center py-3 mt-4"
             style="position: sticky; bottom: 0px; background: #fff;border-top: 1px solid #dcdcdc">
             <div class="d-flex justify-content-end align-items-center">
-                <h4>Total Amount (x<span class="quantity-value">{{ $cart->quantity }}</span>)&nbsp;&nbsp;
+                <h4>
+                    Total Amount (x<span class="quantity-value">{{ $cart->quantity }}</span>)&nbsp;&nbsp;
                     <span style="text-decoration: line-through; color:#c7c7c7" class="subtotal">
-                        ₹{{ number_format($subtotal,2) }}
+                        ₹{{ number_format($subtotal, 0) }}
                     </span>
                     &nbsp;&nbsp;
                     <span class="total ms-1" style="color:#000">
-                        ₹{{ number_format($subtotal - $total_discount, 2) }}
+                        ₹{{ number_format($subtotal - $total_discount, 0) }}
                     </span>
                     &nbsp;&nbsp;
-                    <span class="ms-1" style="font-size:12px; color:#00DD21">
-                        Dealslah Discount
-                        &nbsp;<span class="discount">${{ number_format($total_discount, 2) }}</span>
+                    <span class="ms-1" style="font-size:12px; color:#00DD21; white-space: nowrap;">
+                        Dealsmachi Discount
+                        &nbsp;<span class="discount">₹{{ number_format($total_discount, 0) }}</span>
                     </span>
                 </h4>
             </div>
+
             <div class="d-flex justify-content-end align-items-center p-3"
                 style="position: sticky; bottom: 0px; background: #fff">
                 <a href="{{ url('/cartSummary/' . $cart->id) }}" class="btn  order-button">
@@ -244,10 +255,11 @@ use Carbon\Carbon;
             <div class="col-md-3 d-flex flex-column justify-content-center align-items-center">
                 <div class="d-flex justify-content-center align-items-center">
                     @php
-                    $image = $savedItem->deal->productMedia
+                    $image = isset($savedItem->deal->productMedia)
+                    ? $savedItem->deal->productMedia
                     ->where('order', 1)
                     ->where('type', 'image')
-                    ->first();
+                    ->first() : null;
                     @endphp
                     <img src="{{ $image ? asset($image->path) : asset('assets/images/home/noImage.webp') }}"
                         style="max-width: 100%; max-height: 100%;" alt="{{ $savedItem->deal->name }}" />
@@ -268,10 +280,10 @@ use Carbon\Carbon;
                 <p>Seller : {{ $savedItem->deal->shop->legal_name }}</p>
                 <div>
                     <span style="text-decoration: line-through; color:#c7c7c7">
-                        ₹{{ number_format($savedItem->deal->original_price, 2) }}
+                        ₹{{ number_format($savedItem->deal->original_price, 0) }}
                     </span>
                     <span class="ms-1" style="font-size:22px;color:#ff0060">
-                       ₹{{ number_format($savedItem->deal->discounted_price, 2) }}
+                       ₹{{ number_format($savedItem->deal->discounted_price, 0) }}
                     </span>
                     <span class="ms-1" style="font-size:12px; color:#00DD21">
                         {{ round($savedItem->deal->discount_percentage) }}% off
@@ -460,5 +472,31 @@ use Carbon\Carbon;
 
         button.disabled = true;
     }
+    document.addEventListener('DOMContentLoaded', () => {
+    const today = new Date();
+    const currentDate = today.toISOString().split('T')[0]; // Format 'YYYY-MM-DD'
+
+    // Calculate the next date
+    const nextDate = new Date(today);
+    nextDate.setDate(today.getDate() + 1);
+    const nextDateString = nextDate.toISOString().split('T')[0];
+
+    document.querySelectorAll('.service-date').forEach((serviceDateField) => {
+        // Set the minimum date to the day after tomorrow
+        const restrictedMinDate = new Date(nextDate);
+        restrictedMinDate.setDate(nextDate.getDate() + 1);
+
+        serviceDateField.setAttribute('min', restrictedMinDate.toISOString().split('T')[0]);
+
+        // Handle user-typed values (if they bypass the UI)
+        serviceDateField.addEventListener('change', () => {
+            const selectedDate = serviceDateField.value;
+            if (selectedDate === currentDate || selectedDate === nextDateString) {
+                serviceDateField.value = ''; // Clear invalid date
+            }
+        });
+    });
+});
+
 </script>
 @endsection
