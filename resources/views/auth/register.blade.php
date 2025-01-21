@@ -81,8 +81,7 @@
                                 <label class="form-label">Password</label>
                             </div>
                             <div class="input-group">
-                                <input type="password" class="form-control" id="password" name="password"
-                                    aria-label="password">
+                                <input type="password" class="form-control" id="password" name="password" aria-label="password">
                                 <span class="input-group-text" id="togglePassword">
                                     <i class="fa fa-eye" id="eyeIconPassword"></i>
                                 </span>
@@ -96,8 +95,7 @@
                                 <label class="form-label">Confirm Password</label>
                             </div>
                             <div class="input-group">
-                                <input type="password" class="form-control" id="password_confirmation"
-                                    name="password_confirmation" aria-label="password_confirmation">
+                                <input type="password" class="form-control" id="password_confirmation" name="password_confirmation" aria-label="password_confirmation">
                                 <span class="input-group-text" id="toggleConfirmPassword">
                                     <i class="fa fa-eye" id="eyeIconConfirm"></i>
                                 </span>
@@ -106,8 +104,10 @@
                                 <span class="error">{{ $message }}</span>
                             @enderror
                         </div>
-                        <div class="mb-3 mt-5 text-center">
-                            <button type="submit" class="btn btn-light w-100"
+
+
+                        <div class="mb-3 mt-5">
+                            <button type="submit" class="btn btn-light login-btn w-100"
                                 style="color: #ff0060">Register</button>
                         </div>
                         <div class="d-flex justify-content-center align-items-center mb-3 line-divider-container">
@@ -155,6 +155,30 @@
 
     <!-- Custom JS -->
     <script src="{{ asset('assets/js/custom.js') }}"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const togglePassword = document.getElementById('togglePassword');
+            const passwordInput = document.getElementById('password');
+            const toggleConfirmPassword = document.getElementById('toggleConfirmPassword');
+            const confirmPasswordInput = document.getElementById('password_confirmation');
+
+            // Toggle password visibility
+            togglePassword.addEventListener('click', () => {
+                const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+                passwordInput.setAttribute('type', type);
+                togglePassword.querySelector('i').classList.toggle('fa-eye');
+                togglePassword.querySelector('i').classList.toggle('fa-eye-slash');
+            });
+
+            // Toggle confirm password visibility
+            toggleConfirmPassword.addEventListener('click', () => {
+                const type = confirmPasswordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+                confirmPasswordInput.setAttribute('type', type);
+                toggleConfirmPassword.querySelector('i').classList.toggle('fa-eye');
+                toggleConfirmPassword.querySelector('i').classList.toggle('fa-eye-slash');
+            });
+        });
+    </script>
 </body>
 
 </html>

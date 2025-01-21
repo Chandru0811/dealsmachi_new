@@ -1042,7 +1042,7 @@ $videoId = preg_match(
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content modalContent">
                 <div class="modal-header d-flex align-items-center justify-content-between errorHeading shadow-none mb-2"
-                    style="background: green; color: white;">
+                    style="background: #FF0000; color: white;">
                     <h5 class="modal-title" id="errorModalLabel" style="font-size: 28px;">
                         There was an error
                     </h5>

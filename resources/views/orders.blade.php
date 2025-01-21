@@ -81,6 +81,15 @@
                                 </span> &nbsp;
                                 <span class="badge_payment">{{ number_format($item->discount_percent, 0) }}% saved</span>
                             </p>
+                            <div class="d-flex justify-content-start align-items-center">
+                                @if($item->deal_type === '2' || $item->deal_type === 'Product')
+                                <p class="mt-1 mb-0">Service Date : {{ $item->service_date }}</p>
+                                @endif
+                              &nbsp;&nbsp;
+                                @if($item->deal_type === '2' || $item->deal_type === 'Product')
+                                <p class="mt-1 mb-0">Service Time : {{ $item->service_time ? \Carbon\Carbon::parse($item->service_time)->format('h:i A') : 'N/A'}}</p>
+                                @endif
+                                </div>
                         </div>
                     </div>
                 </div>

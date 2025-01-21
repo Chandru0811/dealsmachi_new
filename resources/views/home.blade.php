@@ -45,6 +45,26 @@
     <!-- App & PlayStore Start  -->
     @include('contents.home.playstoreContent')
     <!-- App & PlayStore End  -->
+
+    <!-- Lead Magnet Model -->
+    <div class="modal fade" id="indexLeadMagnetModal" tabindex="-1" role="dialog"
+        aria-labelledby="indexLeadMagnetModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-md" role="document">
+            <div class="modal-content modalContent" style="background-color: #1e1e1e">
+                <div class="modal-body p-0 text-center position-relative">
+                    <div type="button" class="position-absolute top-0 end-0 m-3" data-bs-dismiss="modal"
+                        aria-label="Close"><i class="fa-solid fa-circle-xmark"
+                            style="color: #fff; font-size: 20px"></i></div>
+                    <img src="{{ asset('assets/images/Demo.svg') }}" alt="lead-magnet" width="500" height="500"
+                        class="img-fluid">
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
     <!-- Permission Denied Modal -->
     <div class="modal fade" id="permissionDeniedModal" tabindex="-1" aria-labelledby="permissionDeniedModalLabel"
         aria-hidden="true">
@@ -120,6 +140,30 @@
                 const baseUrl = nearestDealsLink.attr('href');
                 const newUrl = `${baseUrl}?latitude=${latitude}&longitude=${longitude}`;
                 nearestDealsLink.attr('href', newUrl);
+
+
+                // Initialize the geocoder
+                // const geocoder = new google.maps.Geocoder();
+                // const latlng = {
+                //     lat: latitude,
+                //     lng: longitude
+                // };
+
+                // geocoder.geocode({
+                //     location: latlng
+                // }, function(results, status) {
+                //     if (status === 'OK') {
+                //         if (results[0]) {
+                //             const address = results[0].formatted_address;
+                //             console.log('User Address:', address);
+                //             $('.user_address').text(address);
+                //         } else {
+                //             console.log('No address found');
+                //         }
+                //     } else {
+                //         console.log('Geocoder failed due to:', status);
+                //     }
+                // });
             }
 
             function showError(error) {
@@ -162,7 +206,7 @@
                         // Notify the user to enable location permissions manually
                         alert(
                             "Location access is denied. Please enable it in your browser settings."
-                            );
+                        );
                     }
                 });
             });

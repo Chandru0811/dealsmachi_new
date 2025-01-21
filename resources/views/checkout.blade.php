@@ -290,12 +290,12 @@
                                 <div class="d-flex justify-content-end align-items-center ">
                                     <h4>Total Amount &nbsp;&nbsp; <span
                                             style="text-decoration: line-through; color:#c7c7c7">
-                                            ${{ number_format($cart->total, 2) }}
+                                            ₹{{ number_format($cart->total, 2) }}
                                         </span> &nbsp;&nbsp; <span class="ms-1" style="color:#000">
-                                            ${{ number_format($cart->grand_total, 2) }}
+                                            ₹{{ number_format($cart->grand_total, 2) }}
                                         </span> &nbsp;&nbsp; <span class="ms-1" style="font-size:12px; color:#00DD21">
                                             Dealslah Discount
-                                            &nbsp;<span>${{ number_format($cart->discount, 2) }}</span></span></h4>
+                                            &nbsp;<span>₹{{ number_format($cart->discount, 2) }}</span></span></h4>
                                 </div>
                                 <div class="d-flex justify-content-end align-items-center py-3"
                                     style="position:sticky; bottom:10px; background:#fff">
