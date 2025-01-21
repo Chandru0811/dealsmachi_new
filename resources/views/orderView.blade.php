@@ -1,6 +1,20 @@
 @extends('layouts.master')
 
 @section('content')
+                <?php
+                use Carbon\Carbon;
+
+                $currentDate = Carbon::now();
+
+                $deliveryDays = is_numeric($order->items[0]->product->delivery_days)
+                    ? (int) $order->items[0]->product->delivery_days
+                    : 0;
+
+                $deliveryDate = $deliveryDays > 0
+                    ? Carbon::parse($order->created_at)->addDays($deliveryDays)->format('d-m-Y')
+                    : null;
+                ?>
+
     @if (session('status'))
         <div class="alert alert-dismissible fade show" role="alert"
             style="position: fixed; top: 70px; right: 40px; z-index: 1050; background:#00e888; color:#fff">
@@ -171,7 +185,7 @@
                                             @endif
                                             @if ($item->deal_type === '1')
                                                 <div class="d-flex gap-4">
-                                                    <p>Delivery Date: {{ \Carbon\Carbon::parse($order->created_at)->addDays(5)->format('d/m/Y') ?? 'N/A' }}</p>
+                                                    <p>Delivery Date: {{ $deliveryDays > 0 ? $deliveryDate : 'No delivery date available' }}</p>
                                                 </div>
                                             @else
                                             @endif
