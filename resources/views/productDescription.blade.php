@@ -154,98 +154,106 @@ from Trucklah has changed the scene.',
     <div class="productContainer">
 
         {{-- social QR links  --}}
-        <div class="">
-            <button type="button" class="social_links" onclick="toggleDropdown()">Social</button>
-            <div id="social_dropdown" class="dropdown_items" style="display: none">
-                <div class="d-flex justify-content-between align-items-center">
-                    <p class="text-center m-0">Follow Us On</p>
-                    <button type="button" class="btn border-0" onclick="toggleDropdown()"><i
-                            class="fa-light fa-xmark"></i>
-                    </button>
-                </div>
-                <div class="card p-2 d-flex justify-content-center align-items-start"
+        <div>
+            <button type="button" class="social_links">
+                <i class="fixex_icons fa-brands fa-facebook-f" style="color:#fff; background: #1878f3;"
+                    aria-label="Facebook" onclick="toggleDropdown('social_dropdown_fb', '.social_links')"></i>
+
+                <i class="fixex_icons fa-brands fa-instagram" style="color:#fff; background: #e4405f;"
+                    aria-label="Instagram" onclick="toggleDropdown('social_dropdown_ig', '.social_links')"></i>
+
+                <i class="fixex_icons fa-brands fa-youtube" style="color:#fff; background: #FF0000;"
+                    aria-label="YouTube" onclick="toggleDropdown('social_dropdown_yt', '.social_links')"></i>
+
+                <i class="fixex_icons fa-brands fa-whatsapp" style="color:#fff; background: #25D366;"
+                    aria-label="WhatsApp" onclick="toggleDropdown('social_dropdown_wa', '.social_links')"></i>
+
+                <i class="fixex_icons fa-brands fa-telegram" style="color:#fff; background: #0088CC;"
+                    aria-label="Telegram" onclick="toggleDropdown('social_dropdown_tg', '.social_links')"></i>
+            </button>
+
+            <div id="social_dropdown_fb" class="dropdown_items dorp_fb" style="display: none">
+                <div class="card d-flex justify-content-center align-items-start"
                     style="border-radius: 10px;border: none">
                     <div class="row justify-content-center">
-                        <div class="col-6 p-1">
-                            <div class="card h-100 prodFilterCard"
-                                style="border-color: #1878f3; border-radius: 10px;white-space: nowrap;">
+                        <div class="col-12">
+                            <div class="card border-0 h-100">
                                 <a href="https://www.facebook.com/profile.php?id=61566743978973" target="_blank"
                                     style="text-decoration: none;">
-                                    <div class="p-2 qr-code">
+                                    <div class="qr-code">
                                         <img src="{{ asset('assets/images/home/facebook_qr_code.webp') }}"
                                             alt="Facebook QR" class="img-fluid">
                                     </div>
-                                    <div class="icon-facebook icon-text">
-                                        <i class="fa-brands fa-facebook-f"
-                                            style="color: #1878f3; padding: 3px 5px;"></i>
-                                        <span style="white-space: nowrap;">Follow Us</span>
-                                    </div>
                                 </a>
                             </div>
                         </div>
-                        <div class="col-6 p-1">
-                            <div class="card h-100 prodFilterCard"
-                                style="border-color: #cc2366; border-radius: 10px;white-space: nowrap;">
+                    </div>
+                </div>
+            </div>
+            <div id="social_dropdown_ig" class="dropdown_items dorp_ig" style="display: none">
+                <div class="card d-flex justify-content-center align-items-start"
+                    style="border-radius: 10px;border: none">
+                    <div class="row justify-content-center">
+                        <div class="col-12">
+                            <div class="card border-0 h-100">
                                 <a href="https://www.instagram.com/dealsmachi/" target="_blank"
                                     style="text-decoration: none;">
-                                    <div class="p-2 qr-code">
+                                    <div class="qr-code">
                                         <img src="{{ asset('assets/images/home/instagram_qr_code.webp') }}"
-                                            alt="Instagram QR" class="img-fluid">
-                                    </div>
-                                    <div class="icon-instagram icon-text">
-                                        <i class="fa-brands fa-instagram" style="color: #cc2366; padding: 3px 4px;"></i>
-                                        <span style="white-space: nowrap;">Follow Us</span>
+                                            alt="Facebook QR" class="img-fluid">
                                     </div>
                                 </a>
                             </div>
                         </div>
                     </div>
+                </div>
+            </div>
+            <div id="social_dropdown_yt" class="dropdown_items dorp_yt" style="display: none">
+                <div class="card d-flex justify-content-center align-items-start"
+                    style="border-radius: 10px;border: none">
                     <div class="row justify-content-center">
-                        <div class="col-6 p-1">
-                            <div class="card h-100 prodFilterCard"
-                                style="border-color: #FF0000; border-radius: 10px;  white-space: nowrap;">
+                        <div class="col-12">
+                            <div class="card border-0 h-100">
                                 <a href="https://www.youtube.com/channel/UCAyH2wQ2srJE8WqvII8JNrQ" target="_blank"
                                     style="text-decoration: none;">
-                                    <div class="p-2 qr-code">
+                                    <div class="qr-code">
                                         <img src="{{ asset('assets/images/home/youtube_qr_code.webp') }}"
-                                            alt="YouTube QR" class="img-fluid">
-                                    </div>
-                                    <div class="icon-youtube icon-text">
-                                        <i class="fa-brands fa-youtube" style="color: #FF0000;"></i>
-                                        <span>Subscribe</span>
-                                    </div>
-                                </a>
-                            </div>
-                        </div>
-                        <div class="col-6 p-1">
-                            <div class="card h-100 prodFilterCard"
-                                style="border-color: #25D366; border-radius: 10px;  white-space: nowrap;">
-                                <a href="https://chat.whatsapp.com/Ef23qGMU1d6EXYpRvomaLx" target="_blank"
-                                    style="text-decoration: none;">
-                                    <div class="p-2 qr-code">
-                                        <img src="{{ asset('assets/images/home/whatsapp_qr_code.webp') }}"
-                                            alt="WhatsApp QR" class="img-fluid">
-                                    </div>
-                                    <div class="icon-whatsapp icon-text">
-                                        <i class="fa-brands fa-whatsapp" style="color: #25D366; padding: 3px 4px;"></i>
-                                        <span>Join Us</span>
+                                            alt="Facebook QR" class="img-fluid">
                                     </div>
                                 </a>
                             </div>
                         </div>
                     </div>
-                    <div class="row justify-content-start">
-                        <div class="col-6 p-1">
-                            <div class="card h-100 prodFilterCard"
-                                style="border-color: #28a8e9; border-radius: 10px;  white-space: nowrap;">
-                                <a href="https://t.me/+UTD7rFen3K4zNDFl" target="_blank" style="text-decoration: none;">
-                                    <div class="p-2 qr-code">
-                                        <img src="{{ asset('assets/images/home/telegram_qr_code.webp') }}"
-                                            alt="Telegram QR" class="img-fluid">
+                </div>
+            </div>
+            <div id="social_dropdown_wa" class="dropdown_items dorp_wa" style="display: none">
+                <div class="card d-flex justify-content-center align-items-start"
+                    style="border-radius: 10px;border: none">
+                    <div class="row justify-content-center">
+                        <div class="col-12">
+                            <div class="card border-0 h-100">
+                                <a href="https://chat.whatsapp.com/Ef23qGMU1d6EXYpRvomaLx" target="_blank"
+                                    style="text-decoration: none;">
+                                    <div class="qr-code">
+                                        <img src="{{ asset('assets/images/home/whatsapp_qr_code.webp') }}"
+                                            alt="Facebook QR" class="img-fluid">
                                     </div>
-                                    <div class="icon-telegram icon-text">
-                                        <i class="fa-brands fa-telegram" style="color: #28a8e9;"></i>
-                                        <span>Follow Us</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="social_dropdown_tg" class="dropdown_items dorp_tg" style="display: none">
+                <div class="card d-flex justify-content-center align-items-start"
+                    style="border-radius: 10px;border: none">
+                    <div class="row justify-content-center">
+                        <div class="col-12">
+                            <div class="card border-0 h-100">
+                                <a href="https://t.me/+UTD7rFen3K4zNDFl" target="_blank" style="text-decoration: none;">
+                                    <div class="qr-code">
+                                        <img src="{{ asset('assets/images/home/telegram_qr_code.webp') }}"
+                                            alt="Facebook QR" class="img-fluid">
                                     </div>
                                 </a>
                             </div>
@@ -254,6 +262,7 @@ from Trucklah has changed the scene.',
                 </div>
             </div>
         </div>
+
 
 
         {{-- Breadcrumb navigate  --}}
@@ -371,16 +380,19 @@ from Trucklah has changed the scene.',
                     <span class="details" style="position:fixed; top:180px"></span>
                     <div>
                         <div class="fst_rw d-flex align-items-center">
-                            <h2 style="color: #000000" class="media_fonts_headings text-nowrap">
+                            <h2 class="d-flex text-start">
                                 {{ $product->name }}
+                            </h2>
+                            <p style="color: #000000" class="media_fonts_headings text-nowrap">
+
                                 <span>
                                     @if ($bookmarkedProducts->contains($product->id))
                                     <button type="button" class="bookmark-button remove-bookmark"
                                         data-deal-id="{{ $product->id }}"
                                         style="border: none; background: none; font-size:24px; padding: 20px 0 0 30px">
                                         <p style="height: fit-content; cursor: pointer;" class="p-1 px-2"
-                                            data-bs-toggle="tooltip" data-bs-placement="top" title="Bookmark">
-                                            <i class="fa-solid fa-bookmark bookmark-icon" style="color: #ff0060;"></i>
+                                            data-bs-toggle="tooltip" data-bs-placement="top" title="Favourite">
+                                            <i class="fa-solid fa-heart bookmark-icon" style="color: #ff0060;"></i>
                                         </p>
                                     </button>
                                     @else
@@ -388,13 +400,13 @@ from Trucklah has changed the scene.',
                                         data-deal-id="{{ $product->id }}"
                                         style="border: none; background: none; font-size:24px; padding: 20px 0 0 20px">
                                         <p style="height: fit-content; cursor: pointer;" class="p-1 px-2"
-                                            data-bs-toggle="tooltip" data-bs-placement="top" title="Bookmark">
-                                            <i class="fa-regular fa-bookmark bookmark-icon" style="color: #ff0060;"></i>
+                                            data-bs-toggle="tooltip" data-bs-placement="top" title="Favourite">
+                                            <i class="fa-regular fa-heart bookmark-icon" style="color: #ff0060;"></i>
                                         </p>
                                     </button>
                                     @endif
                                 </span>
-                            </h2>
+                            </p>
                             <div class="share px-2">
                                 <button type="button" id="share_btn" style="height: fit-content; cursor: pointer;"
                                     class="p-1  text-nowrap media_fonts_conent"
@@ -410,13 +422,24 @@ from Trucklah has changed the scene.',
                         </div>
                         <div class="rating mt-2">
                             <span>Rating :</span><span class="stars">
-                                <span>
-                                    <i class="fa-solid fa-star" style="color: #fdbf46;"></i>
-                                    <i class="fa-solid fa-star" style="color: #fdbf46;"></i>
-                                    <i class="fa-solid fa-star" style="color: #fdbf46;"></i>
-                                    <i class="fa-solid fa-star" style="color: #fdbf46;"></i>
-                                    <i class="fa-solid fa-star" style="color: #fdbf46;"></i>
-                                </span>
+                                @php
+                                $fullStars = floor($product->shop->shop_ratings);
+                                $hasHalfStar =
+                                $product->shop->shop_ratings - $fullStars >=
+                                0.5;
+                                $remaining =
+                                5 -
+                                ($hasHalfStar ? $fullStars + 1 : $fullStars);
+                                @endphp
+                                @for ($i = 0; $i < $fullStars; $i++) <i class="fa-solid fa-star"
+                                    style="color: #ffc200;"></i>
+                                    @endfor
+                                    @if ($hasHalfStar)
+                                    <i class="fa-solid fa-star-half-stroke" style="color: #ffc200;"></i>
+                                    @endif
+                                    @for ($i = 0; $i < $remaining; $i++) <i class="fa-regular fa-star"
+                                        style="color: #ffc200;"></i>
+                                        @endfor
                             </span>
                         </div>
 
@@ -1084,14 +1107,19 @@ from Trucklah has changed the scene.',
 </div>
 
 <script>
-function toggleDropdown() {
-    const socialDropdown = document.getElementById("social_dropdown");
+function toggleDropdown(socialId, buttonClass) {
+    const socialDropdown = document.getElementById(socialId);
     socialDropdown.style.display = socialDropdown.style.display === "none" ? "block" : "none";
 
     if (socialDropdown.style.display === "block") {
-        document.addEventListener("click", closeDropdownOnClickOutside);
-    } else {
-        document.removeEventListener("click", closeDropdownOnClickOutside);
+        document.addEventListener("click", function closeDropdown(event) {
+            const socialButton = document.querySelector(buttonClass);
+
+            if (!socialDropdown.contains(event.target) && !socialButton.contains(event.target)) {
+                socialDropdown.style.display = "none";
+                document.removeEventListener("click", closeDropdown);
+            }
+        });
     }
 }
 
