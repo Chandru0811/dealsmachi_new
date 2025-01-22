@@ -25,7 +25,7 @@
 </head>
 
 <body>
-    <section class="container-fluid">
+    <section class="container-fluid p-0">
         @if (session('status'))
             <div class="alert alert-success alert-dismissible fade show" role="alert"
                 style="position: absolute; top: 15px; right: 40px;">
@@ -45,14 +45,14 @@
             </div>
         @endif
         <div class="row m-0">
-            <div class="col-md-6 col-12 pt-3 login-text-container">
-                <div class="px-5">
-                    <h5 class="py-4">Hello,</h5>
-                    <h6 class="login-text">You are just a step away from an awesome purchase</h6>
-                    <h6 class="login-text">Register or Login to complete the process</h6>
+            <div class="col-md-6 col-12 pt-5 bg_login login-text-container text-center" style="background: #ffcbde">
+                <div class="px-5 pt-5">
+                    <h5 class="py-4" style="color: #CC004D">Login to your account</h5>
+                    <p class="login-text">You're just one step away from securing your awesome purchase!
+                        Sign up or log in now to complete your order effortlessly</p>
                 </div>
-                <div class="d-flex justify-content-center align-items-center" style="min-height: 300px">
-                    <img src="{{ asset('assets/images/home/email_logo.png') }}" alt="header_logo" class="img-fluid" />
+                <div class="d-flex justify-content-center align-items-center">
+                    <img src="{{ asset('assets/images/bg_intro.jpg') }}" alt="header_logo" class="img-fluid" />
                 </div>
             </div>
             <div class="col-md-6 col-12 d-flex justify-content-center align-items-center login-container">
@@ -61,28 +61,25 @@
                     <form id="loginForm" class="w-75" method="POST" action="{{ route('register') }}">
                         @csrf
                         <div class="mb-3 email-container">
-                            <label class="form-label">Name</label>
-                            <input type="text" class="form-control" id="name" name="name"
-                                value="{{ old('name') }}" />
+                            <input type="text" class="form-control" id="name" name="name" value=""
+                                placeholder="Name" />
                             @error('name')
                                 <span class="error">{{ $message }}</span>
                             @enderror
                         </div>
                         <div class="mb-3 email-container">
-                            <label class="form-label">Email Address</label>
-                            <input type="email" class="form-control" id="email" name="email"
-                                value="{{ old('email') }}" />
+                            <input type="email" class="form-control" id="email" name="email" value=""
+                                placeholder="Email / Phone Number" />
                             @error('email')
                                 <span class="error">{{ $message }}</span>
                             @enderror
                         </div>
                         <div class="mb-3 password-container">
-                            <div class="d-flex justify-content-between">
-                                <label class="form-label">Password</label>
-                            </div>
                             <div class="input-group">
-                                <input type="password" class="form-control" id="password" name="password" aria-label="password">
-                                <span class="input-group-text" id="togglePassword">
+                                <input type="password" class="form-control" id="password" name="password"
+                                    aria-label="password" placeholder="Password">
+                                <span class="input-group-text" id="togglePassword"
+                                    style="cursor: pointer; background:#fff">
                                     <i class="fa fa-eye" id="eyeIconPassword"></i>
                                 </span>
                             </div>
@@ -90,13 +87,13 @@
                                 <span class="error">{{ $message }}</span>
                             @enderror
                         </div>
-                        <div class="mb-4 password-container">
-                            <div class="d-flex justify-content-between">
-                                <label class="form-label">Confirm Password</label>
-                            </div>
+                        <div class="mb-3 password-container">
                             <div class="input-group">
-                                <input type="password" class="form-control" id="password_confirmation" name="password_confirmation" aria-label="password_confirmation">
-                                <span class="input-group-text" id="toggleConfirmPassword">
+                                <input type="password" class="form-control" id="password_confirmation"
+                                    name="password_confirmation" aria-label="password_confirmation"
+                                    placeholder="Confirm Password">
+                                <span class="input-group-text" id="toggleConfirmPassword"
+                                    style="cursor: pointer; background:#fff">
                                     <i class="fa fa-eye" id="eyeIconConfirm"></i>
                                 </span>
                             </div>
@@ -106,13 +103,13 @@
                         </div>
 
 
-                        <div class="mb-3 mt-5">
+                        <div class="mb-3">
                             <button type="submit" class="btn btn-light login-btn w-100"
-                                style="color: #ff0060">Register</button>
+                                style="color: #fff; background:#ff0060">Register</button>
                         </div>
                         <div class="d-flex justify-content-center align-items-center mb-3 line-divider-container">
                             <hr class="line-divider" />
-                            <span class="mx-2 line-divider-text">or</span>
+                            <span class="mx-2 line-divider-text" style="color: #A2A2A2">or</span>
                             <hr class="line-divider" />
                         </div>
                         <div class="mb-3 row">
@@ -136,8 +133,8 @@
                             </div>
                         </div>
                         <div class="text-center">
-                            <p class="mb-4 mt-1" style="color: #fff;">Already have an account? &nbsp; <a
-                                    href="{{ url('login') }}" style="color: #fff;">Login</a></p>
+                            <p class="mb-4 mt-1" style="font-size:12px;">Already have an account? &nbsp; <a
+                                    href="{{ url('login') }}" style="color: #FF0060;font-size:12px;">Login</a></p>
                         </div>
                     </form>
                 </div>
