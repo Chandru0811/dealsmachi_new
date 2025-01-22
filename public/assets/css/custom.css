@@ -275,7 +275,7 @@
 
 .categoryIcons {
     margin-top: 85px;
-} 
+}
 /* Category & Banner End  */
 
 /* App & PlayStore Start */
@@ -1353,7 +1353,6 @@ footer hr {
 } */
 
 @media (min-width: 992px) {
-
     /* Hide dropdown initially on large screens */
     .dropdown-menu {
         display: block !important;
@@ -1587,14 +1586,14 @@ footer hr {
 }
 
 .successMagnetButton {
-    background-color: #FF0000;
+    background-color: #ff0000;
     color: #fff;
     font-weight: 600;
     position: relative;
 }
 
 .successMagnetButton:hover {
-    background-color: #FF0000;
+    background-color: #ff0000;
     color: #fff !important;
 }
 
@@ -1716,12 +1715,14 @@ footer hr {
 }
 
 .shareInsta {
-    background: linear-gradient(45deg,
-            #f09433,
-            #e6683c,
-            #dc2743,
-            #cc2366,
-            #bc1888);
+    background: linear-gradient(
+        45deg,
+        #f09433,
+        #e6683c,
+        #dc2743,
+        #cc2366,
+        #bc1888
+    );
     border: none;
     color: #fff;
     border-radius: 5px;
@@ -1987,12 +1988,14 @@ footer hr {
     }
 
     .social-link-container .fa-instagram {
-        background: linear-gradient(45deg,
-                #f09433,
-                #e6683c,
-                #dc2743,
-                #cc2366,
-                #bc1888);
+        background: linear-gradient(
+            45deg,
+            #f09433,
+            #e6683c,
+            #dc2743,
+            #cc2366,
+            #bc1888
+        );
         padding: 8px 5px;
         width: 30px;
         height: 28px;
@@ -2087,12 +2090,14 @@ footer hr {
 }
 
 .social-link-container .fa-instagram {
-    background: linear-gradient(45deg,
-            #f09433,
-            #e6683c,
-            #dc2743,
-            #cc2366,
-            #bc1888);
+    background: linear-gradient(
+        45deg,
+        #f09433,
+        #e6683c,
+        #dc2743,
+        #cc2366,
+        #bc1888
+    );
     padding: 7px 5px;
     width: 30px;
     height: 28px;
@@ -2932,7 +2937,6 @@ footer hr {
     }
     .fst_rw {
         display: flex;
-        / flex-direction: column; /
         justify-content: space-between;
         text-align: start;
         align-items: center !important;
@@ -3036,8 +3040,8 @@ footer hr {
     border-color: #ff0060;
 }
 
-.card.card_style .form-check-input:checked~div,
-.card.card_style .form-check-input:checked+label {
+.card.card_style .form-check-input:checked ~ div,
+.card.card_style .form-check-input:checked + label {
     border-color: #ff0060;
     color: #ff0060;
 }
@@ -3593,7 +3597,6 @@ footer hr {
 }
 
 @media (max-width: 576px) {
-
     .total,
     .subtotal,
     .discount {
@@ -3605,7 +3608,7 @@ footer hr {
     }
 }
 
-.remove-btn{
+.remove-btn {
     border: 1px solid #ff0060 !important;
     background-color: white !important;
     color: #ff0060 !important;
@@ -3619,17 +3622,16 @@ footer hr {
     color: white !important;
 } */
 
-.remove-btn img{
+.remove-btn img {
     max-width: 15px;
     max-height: 15px;
 }
 
-.cancel-btn{
+.cancel-btn {
     border-radius: 4px;
     border: 1px solid #ff0060 !important;
     color: #ff0060 !important;
 }
-
 
 .success_alert {
     position: fixed;
