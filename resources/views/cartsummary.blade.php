@@ -29,8 +29,7 @@
 @php
 $selectedAddressId = session('selectedId');
 $default_address =
-$addresses->firstWhere('id', $selectedAddressId) ?? ($addresses->firstWhere('default', true) ?? null); // Add fallback
-to null
+$addresses->firstWhere('id', $selectedAddressId) ?? ($addresses->firstWhere('default', true) ?? null); 
 @endphp
 @php
 use Carbon\Carbon;
