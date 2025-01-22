@@ -179,7 +179,7 @@ $addresses->firstWhere('id', $selectedAddressId) ?? ($addresses->firstWhere('def
                                     <div class="col-3">
                                         @php
                                         $image = isset($cart->product->productMedia)
-                                        ? $product->productMedia
+                                        ? $cart->product->productMedia
                                         ->where('order', 1)
                                         ->where('type', 'image')
                                         ->first()
