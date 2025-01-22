@@ -19,6 +19,8 @@ class Address extends Model
         'unit',
         'type',
         'default',
-        'user_id'
+        'user_id',
+        'state',
+        'city'
     ];
 }

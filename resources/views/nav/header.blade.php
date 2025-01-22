@@ -99,7 +99,8 @@
                             <li class="nav-item mb-2">
                                 <div class="input-wrapper w-100">
                                     <input type="text" name="q" placeholder="Search..."
-                                        class="form-control mx-1 search-input"  value="{{ request()->input('q') }}" />
+                                        class="form-control address_input mx-1 search-input"
+                                        value="{{ request()->input('q') }}" />
                                     <i class="fa-solid fa-magnifying-glass icon-input" style="font-size: 20px"></i>
                                 </div>
                             </li>
@@ -114,7 +115,8 @@
                                 <li class="nav-item mb-2">
                                     <div class="input-wrapper">
                                         <input type="text" name="q" placeholder="Search..."
-                                            class="form-control me-2 search-input-large"  value="{{ request()->input('q') }}"/>
+                                            class="form-control address_input me-2 search-input-large"
+                                            value="{{ request()->input('q') }}" />
                                         <i class="fa-solid fa-magnifying-glass icon-input"
                                             style="font-size: 20px"></i>
                                     </div>
@@ -323,7 +325,9 @@
                                                     <strong>{{ $default_address->first_name ?? '' }}
                                                         {{ $default_address->last_name ?? '' }} (+91)
                                                         {{ $default_address->phone ?? '' }}</strong>&nbsp;&nbsp;<br>
-                                                    {{ $default_address->address ?? '' }} -
+                                                    {{ $default_address->address ?? '' }},
+                                                    {{ $default_address->city ?? '' }},
+                                                    {{ $default_address->state ?? '' }} -
                                                     {{ $default_address->postalcode ?? '' }}
                                                     <span>
                                                         @if ($default_address->default)
@@ -377,8 +381,9 @@
                                                         <span style="color: #c7c7c7;">&nbsp;+91
                                                             {{ $addr->phone }}</span>
                                                     </span><br>
-                                                    <span class="px-2"
-                                                        style="color: #c7c7c7">{{ $addr->address }}-{{ $addr->postalcode }}.</span>
+                                                    <span class="px-2" style="color: #c7c7c7">{{ $addr->address }},
+                                                        {{ $addr->city }},
+                                                        {{ $addr->state }}-{{ $addr->postalcode }}.</span>
                                                     <br>
                                                     @if ($addr->default)
                                                         <span class="badge badge_primary">Default</span>
@@ -474,61 +479,82 @@
                             <div class="row">
                                 <!-- First Name -->
                                 <div class="col-md-6 col-12 mb-3">
-                                    <label for="first_name" class="form-label">First Name <span
+                                    <label for="first_name" class="form-label address_lable">First Name <span
                                             class="text-danger">*</span></label>
-                                    <input type="text" class="form-control" name="first_name" id="first_name"
-                                        placeholder="Enter your first name" required />
+                                    <input type="text" class="form-control address_input" name="first_name"
+                                        id="first_name" placeholder="Enter your first name" required />
                                 </div>
 
                                 <!-- Last Name -->
                                 <div class="col-md-6 col-12 mb-3">
-                                    <label for="last_name" class="form-label">Last Name (Optional)</label>
-                                    <input type="text" class="form-control" name="last_name" id="last_name"
-                                        placeholder="Enter your last name" />
+                                    <label for="last_name" class="form-label address_lable">Last Name
+                                        (Optional)</label>
+                                    <input type="text" class="form-control address_input" name="last_name"
+                                        id="last_name" placeholder="Enter your last name" />
                                 </div>
 
                                 <!-- Phone -->
                                 <div class="col-md-6 col-12 mb-3">
-                                    <label for="phone" class="form-label">Phone Number <span
+                                    <label for="phone" class="form-label address_lable">Phone Number <span
                                             class="text-danger">*</span></label>
-                                    <input type="text" class="form-control" name="phone" id="phone"
-                                        placeholder="Enter your phone number" required />
+                                    <input type="text" class="form-control address_input" name="phone"
+                                        id="phone" placeholder="Enter your phone number" required />
                                 </div>
 
                                 <!-- Email -->
                                 <div class="col-md-6 col-12 mb-3">
-                                    <label for="email" class="form-label">Email <span
+                                    <label for="email" class="form-label address_lable">Email <span
                                             class="text-danger">*</span></label>
-                                    <input type="email" class="form-control" name="email" id="email"
-                                        placeholder="Enter your email" required />
-                                </div>
-
-                                <!-- Postal Code -->
-                                <div class="col-md-6 col-12 mb-3">
-                                    <label for="postalcode" class="form-label">Postal Code <span
-                                            class="text-danger">*</span></label>
-                                    <input type="text" class="form-control" name="postalcode" id="postalcode"
-                                        placeholder="Enter your Postal Code" required />
+                                    <input type="email" class="form-control address_input" name="email"
+                                        id="email" placeholder="Enter your email" required />
                                 </div>
 
                                 <!-- Address -->
                                 <div class="col-md-6 col-12 mb-3">
-                                    <label for="address" class="form-label">Address <span
+                                    <label for="address" class="form-label address_lable">Address <span
                                             class="text-danger">*</span></label>
-                                    <input type="text" class="form-control" name="address" id="address"
-                                        placeholder="Enter your Address" required />
+                                    <input type="text" class="form-control address_input" name="address"
+                                        id="address" placeholder="Enter your Address" required />
                                 </div>
+
+                                <!-- Phone -->
+                                <div class="col-md-6 col-12 mb-3">
+                                    <label for="state" class="form-label address_lable">State <span
+                                            class="text-danger">*</span></label>
+                                    <input type="text" class="form-control address_input" name="state"
+                                        id="state" placeholder="Enter your state" required />
+                                </div>
+
+                                <!-- Email -->
+                                <div class="col-md-6 col-12 mb-3">
+                                    <label for="city" class="form-label address_lable">City <span
+                                            class="text-danger">*</span></label>
+                                    <input type="text" class="form-control address_input" name="city"
+                                        id="city" placeholder="Enter your city" required />
+                                </div>
+
+                                <!-- Postal Code -->
+                                <div class="col-md-6 col-12 mb-3">
+                                    <label for="postalcode" class="form-label address_lable">Postal Code <span
+                                            class="text-danger">*</span></label>
+                                    <input type="text" class="form-control address_input" name="postalcode"
+                                        id="postalcode" placeholder="Enter your Postal Code" required />
+                                </div>
+
+
 
                                 <!-- Unit (Optional) -->
                                 <div class="col-md-6 col-12 mb-3">
-                                    <label for="unit" class="form-label">Unit Info (Optional)</label>
-                                    <input type="text" class="form-control" name="unit" id="unit"
-                                        placeholder="Enter your Unit info" />
+                                    <label for="unit" class="form-label address_lable">Unit Info
+                                        (Optional)</label>
+                                    <input type="text" class="form-control address_input" name="unit"
+                                        id="unit" placeholder="Enter your Unit info" />
                                 </div>
 
                                 <!-- Address Type -->
                                 <div class="col-md-6 col-12 mb-3">
-                                    <label class="form-label">Address Type <span class="text-danger">*</span></label>
+                                    <label class="form-label address_lable">Address Type <span
+                                            class="text-danger">*</span></label>
                                     <div class="d-flex gap-3">
                                         <div>
                                             <input type="radio" name="type" id="home_mode" value="home_mode"
@@ -578,17 +604,19 @@
                             @method('PUT')
                             <div class="row">
                                 <div class="col-md-6 col-12 mb-3">
-                                    <label for="name" class="form-label">Name <span
+                                    <label for="name" class="form-label address_lable">Name <span
                                             class="text-danger">*</span></label>
-                                    <input type="text" class="form-control" name="name" id="name"
-                                        placeholder="Enter your name" value="{{ $user->name ?? '' }}" required />
+                                    <input type="text" class="form-control address_input" name="name"
+                                        id="name" placeholder="Enter your name" value="{{ $user->name ?? '' }}"
+                                        required />
                                 </div>
 
                                 <div class="col-md-6 col-12 mb-3">
-                                    <label for="email" class="form-label">Email <span
+                                    <label for="email" class="form-label address_lable">Email <span
                                             class="text-danger">*</span></label>
-                                    <input type="email" class="form-control" name="email" id="email"
-                                        placeholder="Enter your email" value="{{ $user->email ?? '' }}" />
+                                    <input type="email" class="form-control address_input" name="email"
+                                        id="email" placeholder="Enter your email"
+                                        value="{{ $user->email ?? '' }}" />
                                 </div>
                             </div>
                             <div class="d-flex justify-content-end">
@@ -605,10 +633,10 @@
         <!-- New Address Modal -->
         <div class="modal fade" id="newAddressModal" tabindex="-1" aria-labelledby="newAddressModalLabel"
             aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="newAddressModalLabel">New Address</h5>
+                        <h5 class="modal-title" id="newAddressModalLabel">Add A New Address</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal"
                             aria-label="Close"></button>
                     </div>
@@ -619,61 +647,82 @@
                             <div class="row">
                                 <!-- First Name -->
                                 <div class="col-md-6 col-12 mb-3">
-                                    <label for="first_name" class="form-label">First Name <span
+                                    <label for="first_name" class="form-label address_lable">First Name <span
                                             class="text-danger">*</span></label>
-                                    <input type="text" class="form-control" name="first_name" id="first_name"
-                                        placeholder="Enter your first name" required />
+                                    <input type="text" class="form-control address_input" name="first_name"
+                                        id="first_name" placeholder="Enter your first name" required />
                                 </div>
 
                                 <!-- Last Name -->
                                 <div class="col-md-6 col-12 mb-3">
-                                    <label for="last_name" class="form-label">Last Name (Optional)</label>
-                                    <input type="text" class="form-control" name="last_name" id="last_name"
-                                        placeholder="Enter your last name" />
+                                    <label for="last_name" class="form-label  address_lable">Last Name
+                                        (Optional)</label>
+                                    <input type="text" class="form-control address_input" name="last_name"
+                                        id="last_name" placeholder="Enter your last name" />
                                 </div>
 
                                 <!-- Phone -->
                                 <div class="col-md-6 col-12 mb-3">
-                                    <label for="phone" class="form-label">Phone Number <span
+                                    <label for="phone" class="form-label address_lable">Phone Number <span
                                             class="text-danger">*</span></label>
-                                    <input type="text" class="form-control" name="phone" id="phone"
-                                        placeholder="Enter your phone number" required />
+                                    <input type="text" class="form-control address_input" name="phone"
+                                        id="phone" placeholder="Enter your phone number" required />
                                 </div>
 
                                 <!-- Email -->
                                 <div class="col-md-6 col-12 mb-3">
-                                    <label for="email" class="form-label">Email <span
+                                    <label for="email" class="form-label address_lable">Email <span
                                             class="text-danger">*</span></label>
-                                    <input type="email" class="form-control" name="email" id="email"
-                                        placeholder="Enter your email" required />
-                                </div>
-
-                                <!-- Postal Code -->
-                                <div class="col-md-6 col-12 mb-3">
-                                    <label for="postalcode" class="form-label">Postal Code <span
-                                            class="text-danger">*</span></label>
-                                    <input type="text" class="form-control" name="postalcode" id="postalcode"
-                                        placeholder="Enter your Postal Code" required />
+                                    <input type="email" class="form-control address_input" name="email"
+                                        id="email" placeholder="Enter your email" required />
                                 </div>
 
                                 <!-- Address -->
                                 <div class="col-md-6 col-12 mb-3">
-                                    <label for="address" class="form-label">Address <span
+                                    <label for="address" class="form-label address_lable">Address <span
                                             class="text-danger">*</span></label>
-                                    <input type="text" class="form-control" name="address" id="address"
-                                        placeholder="Enter your Address" required />
+                                    <input type="text" class="form-control address_input" name="address"
+                                        id="address" placeholder="Enter your Address" required />
                                 </div>
+
+                                <!-- Phone -->
+                                <div class="col-md-6 col-12 mb-3">
+                                    <label for="state" class="form-label address_lable">State <span
+                                            class="text-danger">*</span></label>
+                                    <input type="text" class="form-control address_input" name="state"
+                                        id="state" placeholder="Enter your state" required />
+                                </div>
+
+                                <!-- Email -->
+                                <div class="col-md-6 col-12 mb-3">
+                                    <label for="city" class="form-label address_lable">City <span
+                                            class="text-danger">*</span></label>
+                                    <input type="text" class="form-control address_input" name="city"
+                                        id="city" placeholder="Enter your city" required />
+                                </div>
+
+                                <!-- Postal Code -->
+                                <div class="col-md-6 col-12 mb-3">
+                                    <label for="postalcode" class="form-label address_lable">Postal Code <span
+                                            class="text-danger">*</span></label>
+                                    <input type="text" class="form-control address_input" name="postalcode"
+                                        id="postalcode" placeholder="Enter your Postal Code" required />
+                                </div>
+
+
 
                                 <!-- Unit (Optional) -->
                                 <div class="col-md-6 col-12 mb-3">
-                                    <label for="unit" class="form-label">Unit Info (Optional)</label>
-                                    <input type="text" class="form-control" name="unit" id="unit"
-                                        placeholder="Enter your Unit info" />
+                                    <label for="unit" class="form-label address_lable">Additional Info
+                                        (Optional)</label>
+                                    <input type="text" class="form-control address_input" name="unit"
+                                        id="unit" placeholder="Eg., Unit Info, Floor, etc." />
                                 </div>
 
                                 <!-- Address Type -->
                                 <div class="col-md-6 col-12 mb-3">
-                                    <label class="form-label">Address Type <span class="text-danger">*</span></label>
+                                    <label class="form-label address_lable">Address Type <span
+                                            class="text-danger">*</span></label>
                                     <div class="d-flex gap-3">
                                         <div>
                                             <input type="radio" name="type" id="home_mode" value="home_mode"
@@ -751,6 +800,8 @@
                         document.getElementById('address').value = selectedAddress.address;
                         document.getElementById('unit').value = selectedAddress.unit ?? '';
                         document.getElementById('address_id').value = selectedAddress.id ?? '';
+                        document.getElementById('state').value = selectedAddress.state ?? '';
+                        document.getElementById('city').value = selectedAddress.city ?? '';
 
                         // Set default checkbox
                         var defaultCheckbox = document.getElementById('default_address');

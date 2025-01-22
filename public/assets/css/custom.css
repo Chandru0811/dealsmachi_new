@@ -3672,3 +3672,12 @@ footer hr {
         display: none !important;
     }
 }
+
+.address_lable {
+    font-size: 14px;
+    font-weight: 400 !important;
+}
+
+.address_input {
+    background-color: #f9f9f9;
+}
