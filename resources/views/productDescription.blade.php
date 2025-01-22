@@ -384,7 +384,6 @@ from Trucklah has changed the scene.',
                                 {{ $product->name }}
                             </h2>
                             <p style="color: #000000" class="media_fonts_headings text-nowrap">
-
                                 <span>
                                     @if ($bookmarkedProducts->contains($product->id))
                                     <button type="button" class="bookmark-button remove-bookmark"
@@ -590,15 +589,15 @@ from Trucklah has changed the scene.',
                                             </div>
                                         </div>
                                         <div class="row mt-3 mb-3">
-                                            <div class="col-12"><button type="button"
-                                                    class="btn mb-2 sendEnqBtn text-nowrap"
+                                            <div class="col-12 gap-3 col-md-6 col-lg-12">
+                                                <button type="button" class="btn mb-2 sendEnqBtn text-nowrap"
                                                     onclick="window.location.href='tel:{{ $product->shop->mobile }}'">
                                                     <i class="fa-solid fa-phone fa-xs"></i>&nbsp;&nbsp;Call
-                                                </button>&nbsp;&nbsp;&nbsp;&nbsp;
+                                                </button>&nbsp;&nbsp;&nbsp;
                                                 <button type="button" class="btn mb-2 sendEnqBtn text-nowrap"
                                                     data-bs-toggle="modal" data-bs-target="#enquiryModal">
                                                     Send Enquiry
-                                                </button>&nbsp;&nbsp;&nbsp;&nbsp;
+                                                </button>&nbsp;&nbsp;&nbsp;
 
                                                 @if ($product->shop->mobile)
                                                 <button type="button" class="btn mb-2 sendEnqBtn text-nowrap"
