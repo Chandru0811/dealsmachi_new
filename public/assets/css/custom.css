@@ -698,7 +698,7 @@ footer hr {
 
 @media (min-width: 320px) and (max-width: 768px) {
     .header .userlogin-button {
-        font-size: 12px;
+        font-size: 10px;
     }
 
     .header .userlogin-button:hover {
@@ -952,7 +952,7 @@ footer hr {
     color: #fff !important;
 }
 
-@media screen and (max-width: 400px) and (min-width: 356px) {
+@media screen and (max-width: 400px) and (min-width: 367px) {
     .sendEnqBtn {
         color: #ff0060;
         background-color: #fff;
@@ -961,7 +961,7 @@ footer hr {
     }
 }
 
-@media screen and (max-width: 356px) and (min-width: 320px) {
+@media screen and (max-width: 367px) and (min-width: 320px) {
     .sendEnqBtn {
         color: #ff0060;
         background-color: #fff;
@@ -2819,11 +2819,58 @@ footer hr {
 }
 
 .review_btn {
-    padding: 10px 14px;
+    padding: 8px 14px;
     background-color: #fff;
     border-radius: 5px;
     border: 1px solid #22cb00;
     color: #22cb00;
+}
+.review_btn:hover {
+    padding: 8px 14px;
+    background-color: #22cb00;
+    border-radius: 5px;
+    border: 1px solid #22cb00;
+    color: #fff;
+}
+.review_submit {
+    padding: 8px 14px;
+    background-color: #22cb00;
+    border-radius: 5px;
+    border: 1px solid #22cb00;
+    color: #fff;
+}
+.review_submit:hover {
+    padding: 8px 14px;
+    background-color: #fff;
+    border-radius: 5px;
+    border: 1px solid #22cb00;
+    color: #22cb00;
+}
+
+.review_modal .modal-content {
+    border-radius: 2px;
+}
+
+.btn-close:focus {
+    outline: none;
+    box-shadow: none;
+}
+
+#starRating .star {
+    font-size: 2rem;
+    cursor: pointer;
+    color: #ccc;
+    transition: color 0.3s ease;
+}
+#starRating .star.selected,
+#starRating .star:hover,
+#starRating .star:hover ~ .star {
+    color: #ffc033;
+}
+
+.form-control:focus {
+    outline: none;
+    box-shadow: none;
 }
 
 .social_links {
@@ -3288,8 +3335,8 @@ footer hr {
 }
 
 .empty_cart_img {
-    height: 200px;
-    width: 200px;
+    height: 230px;
+    width: 300px;
 }
 
 .outline_primary_btn {
@@ -3680,4 +3727,17 @@ footer hr {
 
 .address_input {
     background-color: #f9f9f9;
+}
+.placeorder_btn:hover {
+    color: #fff;
+    padding: 8px 22px;
+    background: #00dd21;
+    font-size: 18px;
+}
+
+.placeorder_btn {
+    background-color: #01a119 !important;
+    color: #fff;
+    padding: 8px 22px;
+    font-size: 18px;
 }

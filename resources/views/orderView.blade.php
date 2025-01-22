@@ -3,13 +3,13 @@
 @section('content')
     <?php
     use Carbon\Carbon;
-
+    
     $currentDate = Carbon::now();
-
+    
     try {
         if (isset($order->items[0]->product->delivery_days, $order->created_at) && is_numeric($order->items[0]->product->delivery_days)) {
             $deliveryDays = (int) $order->items[0]->product->delivery_days;
-
+    
             $deliveryDate =
                 $deliveryDays > 0
                     ? Carbon::parse($order->created_at)
@@ -82,13 +82,23 @@
                             <button type="button" class="btn invoiceBtn" data-bs-toggle="tooltip" data-bs-placement="top"
                                 title="Download Invoice"><i class="fa-solid fa-file-invoice"></i></button>
                         </a> --}}
-                    @if (isset($order->items[0]->product->slug) && $order->items[0]->product->slug)
-                        <form action="{{ route('cart.add', ['slug' => $order->items[0]->product->slug]) }}" method="POST">
-                            @csrf
-                            <input type="hidden" name="saveoption" id="saveoption" value="buy now">
-                            <button type="submit" class="btn showmoreBtn">Order again</button>
-                        </form>
-                    @endif
+                    <div class="d-flex gap-2">
+                        @if (isset($order->items[0]->product->slug) && $order->items[0]->product->slug)
+                            <form action="{{ route('cart.add', ['slug' => $order->items[0]->product->slug]) }}"
+                                method="POST">
+                                @csrf
+                                <input type="hidden" name="saveoption" id="saveoption" value="buy now">
+                                <button type="submit" class="btn showmoreBtn">Order again</button>
+                            </form>
+                        @endif
+                        <div>
+                            <!-- Add Review Button -->
+                            <button type="button" class="review_btn media_fonts_conent" data-bs-toggle="modal"
+                                data-bs-target="#reviewModal">
+                                Add Review
+                            </button>
+                        </div>
+                    </div>
                 </div>
                 <div class="row">
                     {{-- Left Column: Order Item & Order Summary --}}
@@ -161,7 +171,8 @@
                                                         {{ $item->item_description }}
                                                     </p>
                                                 @endif
-                                                <p class="truncated-description">{{ $item->product->description ?? "No Description Found"  }}</p>
+                                                <p class="truncated-description">
+                                                    {{ $item->product->description ?? 'No Description Found' }}</p>
                                                 <p class="mb-0">
                                                     <del>₹{{ number_format($item->unit_price, 0) }}</del>
                                                     &nbsp;&nbsp;
@@ -354,7 +365,122 @@
             </div>
         </div>
     @endif
+
+
+    <!-- Review Modal -->
+    <div class="modal fade" id="reviewModal" tabindex="-1" aria-labelledby="reviewModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered review_modal">
+            <div class="modal-content">
+                <div class="d-flex justify-content-end pt-3 px-3">
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="text-center">
+                    <h3 class="m-0 p-0">Leave a review</h3>
+                </div>
+                <style>
+                    label.error {
+                        color: red;
+                        font-size: 0.9rem;
+                        margin-top: 5px;
+                    }
+                </style>
+
+                <form id="reviewForm">
+                    <div class="modal-body">
+                        <!-- Rating -->
+                        <div class="text-center">
+                            <p class="m-0 p-0">Click the stars to rate us <span class="text-danger">*</span></p>
+                            <div id="starRating" class="d-flex justify-content-center">
+                                <!-- Stars -->
+                                <span class="star" data-value="1">
+                                    <i class="fa-regular fa-star" style="font-size: 18px;"></i>&nbsp;
+                                </span>
+                                <span class="star" data-value="2">
+                                    <i class="fa-regular fa-star" style="font-size: 18px;"></i>&nbsp;
+                                </span>
+                                <span class="star" data-value="3">
+                                    <i class="fa-regular fa-star" style="font-size: 18px;"></i>&nbsp;
+                                </span>
+                                <span class="star" data-value="4">
+                                    <i class="fa-regular fa-star" style="font-size: 18px;"></i>&nbsp;
+                                </span>
+                                <span class="star" data-value="5">
+                                    <i class="fa-regular fa-star" style="font-size: 18px;"></i>&nbsp;
+                                </span>
+                            </div>
+                            <input type="hidden" id="starRatingInput" name="starRating" />
+                        </div>
+                        <!-- Title -->
+                        <div class="mb-3">
+                            <label for="reviewTitle" class="form-label">Title<span class="text-danger">*</span></label>
+                            <input type="text" class="form-control form-control-sm" id="reviewTitle"
+                                name="reviewTitle" required>
+                        </div>
+                        <!-- Description -->
+                        <div class="mb-3">
+                            <label for="reviewDescription" class="form-label">Review<span
+                                    class="text-danger">*</span></label>
+                            <textarea class="form-control form-control-sm" id="reviewDescription" name="reviewDescription" rows="3"
+                                required></textarea>
+                        </div>
+                        <button type="submit" class="btn review_submit w-100">Submit</button>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+
+
+
     <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const stars = document.querySelectorAll('#starRating .star');
+            const starRatingInput = document.getElementById('starRatingInput');
+            let selectedRating = 0;
+
+            stars.forEach((star) => {
+                // Click event for selecting a rating
+                star.addEventListener('click', function() {
+                    selectedRating = parseInt(this.dataset.value, 10); // Update selected rating
+                    starRatingInput.value = selectedRating; // Set the hidden input value
+                    updateStars(selectedRating);
+                });
+
+                // Mouseover event for previewing rating
+                star.addEventListener('mouseover', function() {
+                    const hoverValue = parseInt(this.dataset.value, 10);
+                    updateStars(hoverValue);
+                });
+
+                // Mouseout event to reset stars to the selected rating
+                star.addEventListener('mouseout', function() {
+                    updateStars(selectedRating);
+                });
+            });
+
+            // Function to update the stars
+            function updateStars(value) {
+                stars.forEach((s, index) => {
+                    const icon = s.querySelector('i');
+                    if (index < value) {
+                        icon.classList.remove('fa-regular');
+                        icon.classList.add('fa-solid');
+                        icon.style.color = '#fdbf46'; // Filled star color
+                    } else {
+                        icon.classList.remove('fa-solid');
+                        icon.classList.add('fa-regular');
+                        icon.style.color = '#ccc'; // Unfilled star color
+                    }
+                });
+            }
+
+            // Initialize stars to the default state (unselected)
+            updateStars(selectedRating);
+        });
+
+
+
         @if ($order)
             const orderItems = @json($order->items);
 
