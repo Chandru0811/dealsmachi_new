@@ -1,19 +1,30 @@
 @extends('layouts.master')
 
 @section('content')
-                <?php
-                use Carbon\Carbon;
+    <?php
+    use Carbon\Carbon;
 
-                $currentDate = Carbon::now();
+    $currentDate = Carbon::now();
 
-                $deliveryDays = is_numeric($order->items[0]->product->delivery_days)
-                    ? (int) $order->items[0]->product->delivery_days
-                    : 0;
+    try {
+        if (isset($order->items[0]->product->delivery_days, $order->created_at) && is_numeric($order->items[0]->product->delivery_days)) {
+            $deliveryDays = (int) $order->items[0]->product->delivery_days;
 
-                $deliveryDate = $deliveryDays > 0
-                    ? Carbon::parse($order->created_at)->addDays($deliveryDays)->format('d-m-Y')
+            $deliveryDate =
+                $deliveryDays > 0
+                    ? Carbon::parse($order->created_at)
+                        ->addDays($deliveryDays)
+                        ->format('d-m-Y')
                     : null;
-                ?>
+        } else {
+            $deliveryDays = 0;
+            $deliveryDate = null;
+        }
+    } catch (\Exception $e) {
+        $deliveryDays = 0;
+        $deliveryDate = null;
+    }
+    ?>
 
     @if (session('status'))
         <div class="alert alert-dismissible fade show" role="alert"
@@ -124,14 +135,15 @@
                                     <div class="row align-items-center mb-3">
                                         <div class="col-md-3">
                                             @php
-                                            $image =isset($item->product->productMedia)
-                                                ? $item->product->productMedia
-                                                ->where('order', 1)
-                                                ->where('type', 'image')
-                                                ->first() : null;
-                                        @endphp
+                                                $image = isset($item->product->productMedia)
+                                                    ? $item->product->productMedia
+                                                        ->where('order', 1)
+                                                        ->where('type', 'image')
+                                                        ->first()
+                                                    : null;
+                                            @endphp
                                             <img src="{{ $image ? asset($image->path) : asset('assets/images/home/noImage.webp') }}"
-                                                class="img-fluid" alt="{{ $item->product->name }}" />
+                                                class="img-fluid" alt="{{ $item->item_description }}" />
                                         </div>
                                         <div class="col">
                                             @if ($item->order_id)
@@ -149,7 +161,7 @@
                                                         {{ $item->item_description }}
                                                     </p>
                                                 @endif
-                                                <p class="truncated-description">{{ $item->product->description }}</p>
+                                                <p class="truncated-description">{{ $item->product->description ?? "No Description Found"  }}</p>
                                                 <p class="mb-0">
                                                     <del>₹{{ number_format($item->unit_price, 0) }}</del>
                                                     &nbsp;&nbsp;
@@ -186,7 +198,9 @@
                                             @endif
                                             @if ($item->deal_type === '1')
                                                 <div class="d-flex gap-4">
-                                                    <p>Delivery Date: {{ $deliveryDays > 0 ? $deliveryDate : 'No delivery date available' }}</p>
+                                                    <p>Delivery Date:
+                                                        {{ $deliveryDays > 0 ? $deliveryDate : 'No delivery date available' }}
+                                                    </p>
                                                 </div>
                                             @else
                                             @endif
@@ -212,8 +226,8 @@
                                             {{ $order->items->first()->shop->street }}
                                         @endif
                                         @if ($order->items->first()->shop->street2)
-                                        ,{{ $order->items->first()->shop->street2 }}
-                                    @endif
+                                            ,{{ $order->items->first()->shop->street2 }}
+                                        @endif
                                         @if ($order->items->first()->shop->city)
                                             , {{ $order->items->first()->shop->city }}
                                         @endif
@@ -262,7 +276,7 @@
                                     </span>
                                     <span id="subtotal"></span>
                                 </div>
-                                <div class="d-flex justify-content-between"  style="color: #00DD21;">
+                                <div class="d-flex justify-content-between" style="color: #00DD21;">
                                     <span>Discount
                                         @if ($item->quantity != 1)
                                             (x{{ $item->quantity }})
@@ -348,9 +362,12 @@
             let total = orderItems.reduce((sum, item) => sum + (parseFloat(item.discount) * item.quantity), 0);
             let discount = subtotal - total;
 
-            const formattedSubtotal = `₹{{ number_format($order->items->reduce(fn($sum, $item) => $sum + ($item['unit_price'] * $item['quantity']), 0), 0) }}`;
-            const formattedTotal = `₹{{ number_format($order->items->reduce(fn($sum, $item) => $sum + ($item['discount'] * $item['quantity']), 0), 0) }}`;
-            const formattedDiscount = `₹{{ number_format($order->items->reduce(fn($sum, $item) => $sum + ($item['unit_price'] * $item['quantity']), 0) - $order->items->reduce(fn($sum, $item) => $sum + ($item['discount'] * $item['quantity']), 0), 2) }}`;
+            const formattedSubtotal =
+                `₹{{ number_format($order->items->reduce(fn($sum, $item) => $sum + $item['unit_price'] * $item['quantity'], 0), 0) }}`;
+            const formattedTotal =
+                `₹{{ number_format($order->items->reduce(fn($sum, $item) => $sum + $item['discount'] * $item['quantity'], 0), 0) }}`;
+            const formattedDiscount =
+                `₹{{ number_format($order->items->reduce(fn($sum, $item) => $sum + $item['unit_price'] * $item['quantity'], 0) - $order->items->reduce(fn($sum, $item) => $sum + $item['discount'] * $item['quantity'], 0), 0) }}`;
 
             document.getElementById('subtotal').innerText = formattedSubtotal;
             document.getElementById('discount').innerText = formattedDiscount;
