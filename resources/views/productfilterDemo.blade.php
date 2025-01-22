@@ -411,7 +411,7 @@
                                     <div class="mt-3 d-flex align-items-center justify-content-between">
                                         <h5 class="card-title ps-3">Kids Wear</h5>
                                         <span class="badge mx-3 p-0 trending-bookmark-badge"><i
-                                                class="fa-regular fa-bookmark bookmark-icon"onclick="toggleBookmark(this, event)"></i>
+                                                class="fa-regular fa-heart bookmark-icon"onclick="toggleBookmark(this, event)"></i>
                                         </span>
                                     </div>
                                     <span class="px-3">
@@ -454,7 +454,7 @@
                                     <div class="mt-3 d-flex align-items-center justify-content-between">
                                         <h5 class="card-title  ps-3">Beauty Spa</h5>
                                         <span class="badge p-0 mx-3 trending-bookmark-badge"><i
-                                                class="fa-regular fa-bookmark bookmark-icon"onclick="toggleBookmark(this, event)"></i>
+                                                class="fa-regular fa-heart bookmark-icon"onclick="toggleBookmark(this, event)"></i>
                                         </span>
                                     </div>
                                     <span class="px-3">
@@ -498,7 +498,7 @@
                                     <div class="mt-3 d-flex align-items-center justify-content-between">
                                         <h5 class="card-title ps-3">Restaurants</h5>
                                         <span class="badge p-0 mx-3 trending-bookmark-badge"><i
-                                                class="fa-regular fa-bookmark bookmark-icon"onclick="toggleBookmark(this, event)"></i>
+                                                class="fa-regular fa-heart bookmark-icon"onclick="toggleBookmark(this, event)"></i>
                                         </span>
                                     </div>
                                     <span class="px-3">
@@ -542,7 +542,7 @@
                                     <div class="mt-3 d-flex align-items-center justify-content-between">
                                         <h5 class="card-title ps-3">Warehouse Logistic</h5>
                                         <span class="badge p-0 mx-3 trending-bookmark-badge"><i
-                                                class="fa-regular fa-bookmark bookmark-icon"onclick="toggleBookmark(this, event)"></i>
+                                                class="fa-regular fa-heart bookmark-icon"onclick="toggleBookmark(this, event)"></i>
                                         </span>
                                     </div>
                                     <span class="px-3">
@@ -586,7 +586,7 @@
                                     <div class="mt-3 d-flex align-items-center justify-content-between">
                                         <h5 class="card-title ps-3">House Moving</h5>
                                         <span class="badge p-0 mx-3 trending-bookmark-badge"><i
-                                                class="fa-regular fa-bookmark bookmark-icon"onclick="toggleBookmark(this, event)"></i>
+                                                class="fa-regular fa-heart bookmark-icon"onclick="toggleBookmark(this, event)"></i>
                                         </span>
                                     </div>
                                     <span class="px-3">
@@ -629,7 +629,7 @@
                                     <div class="mt-3 d-flex align-items-center justify-content-between">
                                         <h5 class="card-title ps-3">Items Moving</h5>
                                         <span class="badge p-0 mx-3 trending-bookmark-badge"><i
-                                                class="fa-regular fa-bookmark bookmark-icon"onclick="toggleBookmark(this, event)"></i>
+                                                class="fa-regular fa-heart bookmark-icon"onclick="toggleBookmark(this, event)"></i>
                                         </span>
                                     </div>
                                     <span class="px-3">
@@ -672,7 +672,7 @@
                                     <div class="mt-3 d-flex align-items-center justify-content-between">
                                         <h5 class="card-title ps-3">eCommerce Delivery</h5>
                                         <span class="badge p-0 mx-3 trending-bookmark-badge"><i
-                                                class="fa-regular fa-bookmark bookmark-icon"onclick="toggleBookmark(this, event)"></i>
+                                                class="fa-regular fa-heart bookmark-icon"onclick="toggleBookmark(this, event)"></i>
                                         </span>
                                     </div>
                                     <span class="px-3">
@@ -715,7 +715,7 @@
                                     <div class="mt-3 d-flex align-items-center justify-content-between">
                                         <h5 class="card-title ps-3">Beauty Spa</h5>
                                         <span class="badge p-0 mx-3 trending-bookmark-badge"><i
-                                                class="fa-regular fa-bookmark bookmark-icon"onclick="toggleBookmark(this, event)"></i>
+                                                class="fa-regular fa-heart bookmark-icon"onclick="toggleBookmark(this, event)"></i>
                                         </span>
                                     </div>
                                     <span class="px-3">
@@ -759,7 +759,7 @@
                                     <div class="mt-3 d-flex align-items-center justify-content-between">
                                         <h5 class="card-title ps-3">Kids Wear</h5>
                                         <span class="badge p-0 mx-3 trending-bookmark-badge"><i
-                                                class="fa-regular fa-bookmark bookmark-icon"onclick="toggleBookmark(this, event)"></i>
+                                                class="fa-regular fa-heart bookmark-icon"onclick="toggleBookmark(this, event)"></i>
                                         </span>
                                     </div>
                                     <span class="px-3">
@@ -802,7 +802,7 @@
                                     <div class="mt-3 d-flex align-items-center justify-content-between">
                                         <h5 class="card-title ps-3">Office Moving</h5>
                                         <span class="badge p-0 mx-3 trending-bookmark-badge"><i
-                                                class="fa-regular fa-bookmark bookmark-icon"onclick="toggleBookmark(this, event)"></i>
+                                                class="fa-regular fa-heart bookmark-icon"onclick="toggleBookmark(this, event)"></i>
                                         </span>
                                     </div>
                                     <span class="px-3">
@@ -846,7 +846,7 @@
                                     <div class="mt-3 d-flex align-items-center justify-content-between">
                                         <h5 class="card-title ps-3">Men's Wear</h5>
                                         <span class="badge p-0 mx-3 trending-bookmark-badge"><i
-                                                class="fa-regular fa-bookmark bookmark-icon"onclick="toggleBookmark(this, event)"></i>
+                                                class="fa-regular fa-heart bookmark-icon"onclick="toggleBookmark(this, event)"></i>
                                         </span>
                                     </div>
                                     <span class="px-3">
@@ -889,7 +889,7 @@
                                     <div class="mt-3 d-flex align-items-center justify-content-between">
                                         <h5 class="card-title ps-3">House Moving</h5>
                                         <span class="badge p-0 mx-3 trending-bookmark-badge"><i
-                                                class="fa-regular fa-bookmark bookmark-icon"onclick="toggleBookmark(this, event)"></i>
+                                                class="fa-regular fa-heart bookmark-icon"onclick="toggleBookmark(this, event)"></i>
                                         </span>
                                     </div>
                                     <span class="px-3">

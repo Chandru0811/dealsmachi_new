@@ -27,7 +27,7 @@
                     <button class="btn btn-button " style="border: none; position: relative;">
                         <a href="{{ url('/bookmarks') }}" class="text-decoration-none d-xl-none"
                             style="text-decoration: none;">
-                            <i class="fa-regular fa-bookmark fa-xl icon_size" style="color: #ff0060;"></i>
+                            <i class="fa-regular fa-heart fa-xl icon_size" style="color: #ff0060;"></i>
                         </a>
                         <span class="totalItemsCount total-count translate-middle d-xl-none"
                             style="position: absolute;top: 16px;right:5px">
@@ -98,7 +98,7 @@
                         <ul class="navbar-nav pt-2" id="default-search">
                             <li class="nav-item mb-2">
                                 <div class="input-wrapper w-100">
-                                    <input type="text" name="q" placeholder="Search..." 
+                                    <input type="text" name="q" placeholder="Search..."
                                         class="form-control mx-1 search-input"  value="{{ request()->input('q') }}" />
                                     <i class="fa-solid fa-magnifying-glass icon-input" style="font-size: 20px"></i>
                                 </div>
@@ -125,7 +125,7 @@
                     <button class="btn btn-button" style="border: none; position: relative;">
                         <a href="{{ url('/bookmarks') }}" class="text-decoration-none px-1 py-1 d-none d-xl-inline"
                             style="text-decoration: none; position: relative;">
-                            <i class="fa-regular fa-bookmark fa-xl icon_size" style="color: #ff0060;"></i>
+                            <i class="fa-regular fa-heart fa-xl icon_size" style="color: #ff0060;"></i>
                         </a>
                         <span class="totalItemsCount total-count translate-middle d-none d-xl-block"
                             style="position: absolute;top: 16px;right:5px">

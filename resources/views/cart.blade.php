@@ -38,11 +38,11 @@ use Carbon\Carbon;
         <!-- Check if carts or cart->items are empty -->
         @if ($carts->isEmpty() || $carts->every(fn($cart) => $cart->items->isEmpty()))
         <div class="col-12 text-center d-flex flex-column align-items-center justify-content-center mt-0">
-            <img src="{{ asset('assets/images/home/empty_cart.webp') }}" alt="Empty Cart"
+            <img src="{{ asset('assets/images/home/cart_empty.webp') }}" alt="Empty Cart"
                 class="img-fluid empty_cart_img">
-            <h2 style="color: #ff0060">Your Cart is empty</h2>
-            <h5 class="mt-2" style="color: #808080">Looks like you have not added anything to your cart. Go ahead
-                & explore top categories.</h5>
+            <h2 class="pt-5" style="color: #ff0060;font-size: 24px">Your Cart is currently empty</h2>
+            <p class="" style="color: #808080;font-size: 18px">Looks Like You Have Not Added Anything To </br>
+                Your Cart. Go Ahead & Explore Top Categories.</p>
             <a href="/" class="btn showmoreBtn mt-2">Shop More</a>
         </div>
         @else
@@ -85,8 +85,8 @@ use Carbon\Carbon;
                 </div>
             </div>
             <div class="col-md-8">
-                <h5>{{ $product->name }}</h5>
-                <h6 class="truncated-description">{{ $product->description }}</h6>
+                <h5 style="font-size: 20px;font-weight:500">{{ $product->name }}</h5>
+                <h6 class="truncated-description" style="font-size: 18px;font-weight:400">{{ $product->description }}</h6>
                 @if ($product->deal_type == 1)
                 <div class="rating my-2">
                     <span>Delivery Date :</span><span class="stars">
@@ -96,7 +96,22 @@ use Carbon\Carbon;
                     </span>
                 </div>
                 @endif
-                <p>Seller : {{ $product->shop->legal_name ?? '' }}</p>
+                <p style="color: #AAAAAA;font-size:16px;font-weight:300">Seller : {{ $product->shop->legal_name ?? '' }}</p>
+                <div class="d-flex">
+                    <div class="my-4">
+                        <img src="{{ asset('assets/images/home/delivery_icon.webp') }}" alt="icon" class="img-fluid" />
+                    </div> &nbsp;&nbsp;
+                    <div class="my-4">
+                        <h2 style="font-size: 18px; font-weight: 400;">
+                            Delivery by
+                            @if ($product->deal_type == 0)
+                                {{ $deliveryDays > 0 ? $deliveryDate : 'No delivery date available' }}
+                            @else
+                                No delivery date available
+                            @endif
+                        </h2>
+                    </div>
+                </div>
                 <div>
                     <span style="text-decoration: line-through; color:#c7c7c7">
                         ₹{{ number_format( $product->original_price, 0) }}
@@ -104,8 +119,8 @@ use Carbon\Carbon;
                     <span class="ms-1" style="font-size:22px;color:#ff0060">
                         ₹{{ number_format( $product->discounted_price, 0) }}
                     </span>
-                    <span class="ms-1" style="font-size:12px; color:#00DD21">
-                        {{ round($product->discount_percentage) }}% off
+                    <span class="ms-1" style="font-size:22px;font-weight:400; color:#28A745">
+                        {{ round($product->discount_percentage) }}% Off
                     </span>
                 </div>
             </div>
@@ -140,13 +155,13 @@ use Carbon\Carbon;
                 @else
                 <div class="d-flex align-items-center my-3">
                     <span class="me-2">Qty</span>
-                    <button class="btn rounded btn-sm decrease-btn" style="background: #c7c7c75b"
+                    <button class="btn rounded btn-sm decrease-btn" style="background: #fff;border-color: #EEEEEE;border-radius:4px"
                         data-cart-id="{{ $cart->id }}"
                         data-product-id="{{ $product->id }}">-</button>
                     <input type="text"
                         class="form-control form-control-sm mx-2 text-center quantity-input"
-                        style="width: 50px;" value="{{ $item->quantity }}" readonly>
-                    <button class="btn rounded btn-sm increase-btn" style="background: #c7c7c75b"
+                        style="width: 50px;background-color:#F9F9F9;border-radius:4px" value="{{ $item->quantity }}" readonly>
+                    <button class="btn rounded btn-sm increase-btn" style="background: #fff;border-color: #EEEEEE;border-radius:4px"
                         data-cart-id="{{ $cart->id }}"
                         data-product-id="{{ $product->id }}">+</button>
                 </div>
@@ -157,18 +172,26 @@ use Carbon\Carbon;
                     <form action="{{ route('savelater.add') }}" method="POST" onsubmit="showLoader(this)">
                         @csrf
                         <input type="hidden" name="product_id" value="{{ $product->id }}">
-                        <button type="submit" class="btn border btn-outline-secondary"
-                            style="padding: 14px 20px; border-top-right-radius: 0px; border-bottom-right-radius: 0px;">
-                            <span class="loader spinner-border spinner-border-sm me-2" style="display: none;"></span>
-                            Buy Later
-                        </button>
+                        <div class="d-flex align-items-center">
+                            <div>
+                                <img src="{{ asset('assets/images/home/solar_pin-list.webp') }}" alt="icon" class="img-fluid"
+                                    />
+                            </div>
+                            <div>
+                                <button type="submit" class="btn"
+                                    style="color: #ff0060;">
+                                    <span class="loader spinner-border spinner-border-sm" style="display: none;"></span>
+                                    Save For Later
+                                </button>
+                            </div>
+                        </div>
                     </form>
+
                     <form action="{{ route('cart.remove') }}" method="POST" onsubmit="showLoader(this)">
                         @csrf
                         <input type="hidden" name="cart_id" value="{{ $cart->id }}">
                         <input type="hidden" name="product_id" value="{{ $product->id }}">
-                        <button type="submit" class="btn border btn-outline-secondary"
-                            style="padding: 14px 20px; border-top-left-radius: 0px; border-bottom-left-radius: 0px;">
+                        <button type="submit" class="btn cancel-btn">
                             <span class="loader spinner-border spinner-border-sm me-2" style="display: none;"></span>
                             Remove
                         </button>
@@ -187,7 +210,7 @@ use Carbon\Carbon;
                     <p>Subtotal (x<span class="quantity-value">{{ $cart->quantity }}</span>)</p>
                     <p class="subtotal">₹{{ number_format($subtotal, 0) }}</p>
                 </div>
-                <div class="d-flex justify-content-between align-items-center"  style="color: #00DD21;">
+                <div class="d-flex justify-content-between align-items-center"  style="color: #28A745;">
                     <p>Discount (x<span class="quantity-value">{{ $cart->quantity }}</span>)</p>
                     <p class="discount">₹{{ number_format($total_discount, 0) }}</p>
                 </div>
@@ -211,7 +234,7 @@ use Carbon\Carbon;
                         ₹{{ number_format($subtotal - $total_discount, 0) }}
                     </span>
                     &nbsp;&nbsp;
-                    <span class="ms-1" style="font-size:12px; color:#00DD21; white-space: nowrap;">
+                    <span class="ms-1" style="font-size:12px; color:#28A745; white-space: nowrap;">
                         Dealsmachi Discount
                         &nbsp;<span class="discount">₹{{ number_format($total_discount, 0) }}</span>
                     </span>
@@ -230,7 +253,14 @@ use Carbon\Carbon;
     </div>
     <div class="container mt-5">
         <hr>
-        <h2 class="my-4">Saved Wishlist</h2>
+        <div class="d-flex">
+            <div class="my-4">
+                <i class="fa-solid fa-thumbtack" style="color: #ff0060"></i>
+            </div> &nbsp;&nbsp;
+            <div class="my-4" >
+                <h2 style="font-size: 24px">Saved For Later</h2>
+            </div>
+        </div>
         @if ($savedItems->isEmpty())
         <div class="text-center mb-4">
             <img src="{{ asset('assets/images/home/empty_savedItems.png') }}" alt="Empty Cart"
@@ -238,7 +268,6 @@ use Carbon\Carbon;
             <h4 style="color: #ff0060;">Your Saved Wishlists are awaiting your selection!</h4>
         </div>
         @else
-        <hr>
 
         @foreach ($savedItems as $savedItem)
         @php
@@ -266,8 +295,8 @@ use Carbon\Carbon;
                 </div>
             </div>
             <div class="col-md-5">
-                <h5>{{ $savedItem->deal->name }}</h5>
-                <h6 class="truncated-description">{{ $savedItem->deal->description }}</h6>
+                <h5 style="font-size: 20px;font-weight:500">{{ $savedItem->deal->name }}</h5>
+                <h6 class="truncated-description" style="font-size: 18px;font-weight:400">{{ $savedItem->deal->description }}</h6>
                 @if ($savedItem->deal->deal_type == 1)
                 <div class="rating my-2">
                     <span>Delivery Date :</span><span class="stars">
@@ -277,7 +306,9 @@ use Carbon\Carbon;
                     </span>
                 </div>
                 @endif
-                <p>Seller : {{ $savedItem->deal->shop->legal_name }}</p>
+                <p style="color: #AAAAAA;font-size:16px;font-weight:300">Seller : {{ $savedItem->deal->shop->legal_name }}</p>
+
+                <div></div>
                 <div>
                     <span style="text-decoration: line-through; color:#c7c7c7">
                         ₹{{ number_format($savedItem->deal->original_price, 0) }}
@@ -285,8 +316,8 @@ use Carbon\Carbon;
                     <span class="ms-1" style="font-size:22px;color:#ff0060">
                        ₹{{ number_format($savedItem->deal->discounted_price, 0) }}
                     </span>
-                    <span class="ms-1" style="font-size:12px; color:#00DD21">
-                        {{ round($savedItem->deal->discount_percentage) }}% off
+                    <span class="ms-1" style="font-size:22px;font-weight:400; color:#28A745">
+                        {{ round($savedItem->deal->discount_percentage) }}% Off
                     </span>
                 </div>
             </div>

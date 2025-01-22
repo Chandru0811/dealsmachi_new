@@ -21,7 +21,7 @@
                                                     @csrf
                                                     <button type="submit" class="bookmark-icon"
                                                         style="border: none; background: none;">
-                                                        <i class="fa-regular fa-bookmark" style="color: #ff0060;"></i>
+                                                        <i class="fa-regular fa-heart" style="color: #ff0060;"></i>
                                                     </button>
                                                 </form>
                                             @else
@@ -31,7 +31,7 @@
                                                     @method('DELETE')
                                                     <button type="submit" class="bookmark-icon"
                                                         style="border: none; background: none;">
-                                                        <i class="fa-solid fa-bookmark" style="color: #ff0060;"></i>
+                                                        <i class="fa-solid fa-heart" style="color: #ff0060;"></i>
                                                     </button>
                                                 </form>
                                             @endif

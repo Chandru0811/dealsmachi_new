@@ -54,8 +54,8 @@
                 <div class="modal-body p-0 text-center position-relative">
                     <div type="button" class="position-absolute top-0 end-0 m-3" data-bs-dismiss="modal"
                         aria-label="Close"><i class="fa-solid fa-circle-xmark"
-                            style="color: #fff; font-size: 20px"></i></div>
-                    <img src="{{ asset('assets/images/Demo.svg') }}" alt="lead-magnet" width="500" height="500"
+                            style="color: #000; font-size: 20px"></i></div>
+                    <img src="{{ asset('assets/images/Republic_Campaign.webp') }}" alt="Republic_Campaign" width="500" height="500"
                         class="img-fluid">
                 </div>
             </div>
