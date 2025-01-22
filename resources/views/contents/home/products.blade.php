@@ -18,12 +18,12 @@
                         <span class="badge trending-badge">LIMITED TIME</span>
                         @endif
                         @php
-                        $image = isset($savedItem->deal->productMedia)
-                            ? $savedItem->deal->productMedia
-                            ->where('order', 1)
-                            ->where('type', 'image')
-                            ->first() : null;
-                    @endphp
+                        $image = isset($product->productMedia)
+                        ? $product->productMedia
+                        ->where('order', 1)
+                        ->where('type', 'image')
+                        ->first() : null;
+                        @endphp
                         <img
                             src="{{ $image ? asset($image->path) : asset('assets/images/home/noImage.webp') }}"
                             class="img-fluid card-img-top1"
@@ -40,8 +40,8 @@
                                         data-deal-id="{{ $product->id }}"
                                         style="border: none; background: none;">
                                         <p style="height:fit-content;cursor:pointer" class="p-1 px-2"
-                                            data-bs-toggle="tooltip" data-bs-placement="top" title="Bookmark">
-                                            <i class="fa-solid fa-bookmark bookmark-icon"
+                                            data-bs-toggle="tooltip" data-bs-placement="top" title="Favourite">
+                                            <i class="fa-solid fa-heart bookmark-icon"
                                                 style="color: #ff0060;"></i>
                                         </p>
                                     </button>
@@ -50,8 +50,8 @@
                                         data-deal-id="{{ $product->id }}"
                                         style="border: none; background: none;">
                                         <p style="height:fit-content;cursor:pointer" class="p-1 px-2"
-                                            data-bs-toggle="tooltip" data-bs-placement="top" title="Bookmark">
-                                            <i class="fa-regular fa-bookmark bookmark-icon"
+                                            data-bs-toggle="tooltip" data-bs-placement="top" title="Favourite">
+                                            <i class="fa-regular fa-heart bookmark-icon"
                                                 style="color: #ff0060;"></i>
                                         </p>
                                     </button>
