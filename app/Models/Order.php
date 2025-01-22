@@ -25,8 +25,7 @@ class Order extends Model
         'status',
         'payment_type',
         'payment_status',
-        'delivery_address',
-        'address_id'
+        'delivery_address'
     ];
 
     public function items()
