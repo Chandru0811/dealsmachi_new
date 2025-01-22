@@ -120,29 +120,6 @@ class CheckoutController extends Controller
 
     public function createorder(Request $request)
     {
-        // dd($request->all());
-        // $validator = Validator::make($request->all(), [
-
-        //     'payment_type'      => 'required|string|max:50',
-        //     'address_id'        => 'required|integer',
-        //     'cart_id'           => 'required_without:product_id|integer',
-        //     'product_id'        => 'required_without:cart_id|integer'
-        // ], [
-        //     'payment_type.required'      => 'Payment Type is required.',
-        //     'payment_type.string'        => 'Payment Type must be a valid text.',
-        //     'payment_type.max'           => 'Payment Type may not exceed 50 characters.',
-        //     'address_id.required'        => 'Address ID is required.',
-        //     'address_id.integer'         => 'Address ID must be a valid number.',
-        //     'cart_id.required_without'   => 'Cart ID is required when Product ID is not provided.',
-        //     'cart_id.integer'            => 'Cart ID must be a valid number.',
-        //     'product_id.required_without' => 'Product ID is required when Cart ID is not provided.',
-        //     'product_id.integer'         => 'Product ID must be a valid number.',
-        // ]);
-
-        // if ($validator->fails()) {
-        //     return redirect()->back()->withErrors($validator)->withInput();
-        // }
-
         $user_id = Auth::check() ? Auth::id() : null;
         $cart_id = $request->input('cart_id');
         $product_ids = $request->input('product_ids');
@@ -179,6 +156,24 @@ class CheckoutController extends Controller
             $grandTotal = $total - $discount + $shipping + $packaging + $handling + $taxes;
             $shippingWeight = $cart->items->whereIn('product_id', $ids)->sum('shipping_weight');
 
+            $addressId = $request->input('address_id');
+            $address = Address::find($addressId);
+
+            if (!$address) {
+                return redirect()->route('home')->with('error', 'Address not found.');
+            }
+
+            $deliveryAddress = [
+                'first_name' => $address->first_name,
+                'last_name' => $address->last_name,
+                'email' => $address->email,
+                'phone' => $address->phone,
+                'postalcode' => $address->postalcode,
+                'address' => $address->address,
+                'city' => $address->city,
+                'state' => $address->state
+            ];
+
             // Create the order
             $order = Order::create([
                 'order_number'     => $orderNumber,
@@ -196,12 +191,12 @@ class CheckoutController extends Controller
                 'status'           => 1, // Created
                 'payment_type'     => $request->input('payment_type'),
                 'payment_status'   => 1,
-                'address'       => $request->address
+                'delivery_address' => json_encode($deliveryAddress)
             ]);
 
             // Create order items
             foreach ($cart->items->whereIn('product_id', $ids) as $item) {
-                $itemNumber = 'DM0-' . $order->id . 'V'. $item->product->shop_id. 'P' . $item->product_id;
+                $itemNumber = 'DM0-' . $order->id . 'V' . $item->product->shop_id . 'P' . $item->product_id;
 
                 OrderItems::create([
                     'order_id'          => $order->id,
@@ -265,6 +260,23 @@ class CheckoutController extends Controller
             $latestOrder = Order::orderBy('id', 'desc')->first();
             $customOrderId = $latestOrder ? intval(Str::after($latestOrder->id, '-')) + 1 : 1;
             $orderNumber = 'DEALSMACHI_O' . $customOrderId;
+            $addressId = $request->input('address_id');
+            $address = Address::find($addressId);
+
+            if (!$address) {
+                return redirect()->route('home')->with('error', 'Address not found.');
+            }
+
+            $deliveryAddress = [
+                'first_name' => $address->first_name,
+                'last_name' => $address->last_name,
+                'email' => $address->email,
+                'phone' => $address->phone,
+                'postalcode' => $address->postalcode,
+                'address' => $address->address,
+                'city' => $address->city,
+                'state' => $address->state
+            ];
 
             $order = Order::create([
                 'order_number'     => $orderNumber,
@@ -282,12 +294,15 @@ class CheckoutController extends Controller
                 'status'           => 1, //created
                 'payment_type'     => $request->input('payment_type'),
                 'payment_status'   => 1,
-                'address_id'       => $request->address_id
+                'delivery_address' => json_encode($deliveryAddress)
             ]);
 
             foreach ($cart->items as $item) {
+                $itemNumber = 'DM0-' . $order->id . 'V' . $item->product->shop_id . 'P' . $item->product_id;
+
                 OrderItems::create([
                     'order_id' => $order->id,
+                    'item_number'       => $itemNumber,
                     'product_id' => $item->product_id,
                     'seller_id' => $item->product->shop_id,
                     'item_description' => $item->item_description,
@@ -333,11 +348,8 @@ class CheckoutController extends Controller
                 'items.product' => function ($query) {
                     $query->select('id', 'name', 'description', 'original_price', 'discounted_price', 'discount_percentage')->with('productMedia');
                 },
-                'shop' => function ($query) {
-                    $query->select('id', 'name');
-                },
-                'customer' => function ($query) {
-                    $query->select('id', 'name');
+                'items.shop' => function ($query) {
+                    $query->select('id', 'name')->withTrashed();
                 }
             ])
             ->orderBy('created_at', 'desc')
@@ -352,15 +364,10 @@ class CheckoutController extends Controller
             'items' => function ($query) use ($product_id) {
                 $query->where('product_id', $product_id);
             },
-            'items.product' => function ($query) {
-                $query->where('active', true)
-                    ->whereNull('deleted_at')
-                    ->with('productMedia');
-            },
-           'items.shop' => function ($query) {
-                $query->select('id', 'name', 'email', 'mobile', 'description','street','street2','city','zip_code',);
-            },
-            'address'
+            'items.product.productMedia',
+            'items.shop' => function ($query) {
+                $query->select('id', 'name', 'email', 'mobile', 'description', 'street', 'street2', 'city', 'zip_code')->withTrashed();
+            }
         ])->find($id);
 
         // Check if the order exists and if the authenticated user is the customer

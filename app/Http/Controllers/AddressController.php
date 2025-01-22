@@ -146,6 +146,8 @@ class AddressController extends Controller
             'phone'      => $request->phone,
             'postalcode' => $request->postalcode,
             'address'    => $request->address,
+            'state'      => $request->state,
+            'city'       => $request->city,
             'type'       => $request->type,
             'unit'       => $request->unit,
             'default'    => $default,

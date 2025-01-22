@@ -309,7 +309,7 @@ $(document).ready(function () {
             $(element).removeClass("is-invalid");
         },
         submitHandler: function (form) {
-             form.submit();
+            form.submit();
         },
     });
 
@@ -339,6 +339,14 @@ $(document).ready(function () {
             address: {
                 required: true,
             },
+            state: {
+                required: true,
+                maxlength: 200,
+            },
+            city: {
+                required: true,
+                maxlength: 200,
+            },
             type: {
                 required: true,
             },
@@ -366,6 +374,14 @@ $(document).ready(function () {
             },
             address: {
                 required: "Please provide an address.",
+            },
+            state: {
+                required: "Please provide your State.",
+                maxlength: "State may not exceed 200 characters.",
+            },
+            city: {
+                required: "Please provide your City.",
+                maxlength: "City may not exceed 200 characters.",
             },
         },
         errorPlacement: function (error, element) {
@@ -409,6 +425,14 @@ $(document).ready(function () {
             address: {
                 required: true,
             },
+            state: {
+                required: true,
+                maxlength: 200,
+            },
+            city: {
+                required: true,
+                maxlength: 200,
+            },
             type: {
                 required: true,
             },
@@ -439,6 +463,14 @@ $(document).ready(function () {
             },
             type: {
                 required: "Please provide the address type.",
+            },
+            state: {
+                required: "Please provide your State.",
+                maxlength: "State may not exceed 200 characters.",
+            },
+            city: {
+                required: "Please provide your City.",
+                maxlength: "City may not exceed 200 characters.",
             },
         },
         errorPlacement: function (error, element) {
@@ -732,7 +764,7 @@ $(document).ready(function () {
                 function () {
                     const type =
                         registerConfirmPassword.getAttribute("type") ===
-                        "password"
+                            "password"
                             ? "text"
                             : "password";
                     registerConfirmPassword.setAttribute("type", type);
@@ -1063,13 +1095,13 @@ $(document).ready(function () {
                             .addClass("remove-bookmark");
                         button.html(`
                         <p style="height:fit-content;cursor:pointer" class="p-1 px-2">
-                            <i class="fa-solid fa-bookmark bookmark-icon" style="color: #ff0060;"></i>
+                            <i class="fa-solid fa-heart bookmark-icon" style="color: #ff0060;"></i>
                         </p>
                     `);
 
                         handleRemoveBookmark();
                     },
-                    error: function (xhr) {},
+                    error: function (xhr) { },
                 });
             });
     }
@@ -1096,7 +1128,7 @@ $(document).ready(function () {
                             .addClass("add-bookmark");
                         button.html(`
                         <p style="height:fit-content;cursor:pointer" class="p-1 px-2">
-                            <i class="fa-regular fa-bookmark bookmark-icon" style="color: #ff0060;"></i>
+                            <i class="fa-regular fa-heart bookmark-icon" style="color: #ff0060;"></i>
                         </p>
                     `);
 
@@ -1416,3 +1448,66 @@ function closePopup() {
     $("#successModal").modal("hide");
     $("#errorModal").modal("hide");
 }
+
+$(document).ready(function () {
+    // Set up star rating functionality
+    let selectedRating = 0;
+    const stars = $("#starRating .star");
+
+    stars.on("click", function () {
+        selectedRating = $(this).data("value");
+        $("#starRatingInput").val(selectedRating); // Update hidden input
+        stars.removeClass("selected");
+        stars.each(function (index) {
+            if (index < selectedRating) $(this).addClass("selected");
+        });
+    });
+
+    // jQuery validation
+    $("#reviewForm").validate({
+        rules: {
+            starRating: {
+                required: true,
+            },
+            reviewTitle: {
+                required: true,
+                minlength: 5,
+            },
+            reviewDescription: {
+                required: true,
+                minlength: 10,
+            },
+        },
+        messages: {
+            starRating: {
+                required: "Please select a star rating.",
+            },
+            reviewTitle: {
+                required: "Title is required.",
+                minlength: "Title must be at least 5 characters long.",
+            },
+            reviewDescription: {
+                required: "Review is required.",
+                minlength: "Review must be at least 10 characters long.",
+            },
+        },
+        errorPlacement: function (error, element) {
+            // Append the error message next to the form field
+            error.insertAfter(element);
+            console.error(error.text()); // Print error message to the console
+        },
+        submitHandler: function (form) {
+            console.log(form, "Form submitted successfully!");
+            form.submit(); // Submit form if validation passes
+        },
+    });
+
+    // Add custom validation for star rating
+    $.validator.addMethod(
+        "required",
+        function (value, element) {
+            return selectedRating > 0;
+        },
+        "Please select a star rating."
+    );
+});
