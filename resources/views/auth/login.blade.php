@@ -25,35 +25,36 @@
 </head>
 
 <body>
-    <section class="container-fluid">
+    <section class="container-fluid p-0">
         @if (session('status'))
-            <div class="alert alert-success alert-dismissible fade show" role="alert"
-                style="position: absolute; top: 15px; right: 40px;">
+            <div class="alert alert-success alert-dismissible fade show success_alert" role="alert">
                 {{ session('status') }}
-                <button type="button" class="btn-close btn-sm" data-bs-dismiss="alert" aria-label="Close"></button>
+                &nbsp;&nbsp;&nbsp;&nbsp; <div data-bs-dismiss="alert" aria-label="Close" class="p-0 m-0"><i
+                        class="fa-light fa-xmark" style="font-size: 24px; cursor: pointer;"></i></div>
             </div>
         @endif
         @if ($errors->any())
-            <div class="alert alert-danger alert-dismissible fade show" role="alert"
-                style="position: absolute; top: 15px; right: 40px;">
+            <div class="alert alert-danger alert-dismissible fade show error_alert d-flex justify-content-between"
+                role="alert">
                 <ul class="mb-0">
                     @foreach ($errors->all() as $error)
                         <li>{{ $error }}</li>
                     @endforeach
                 </ul>
-                <button type="button" class="btn-close btn-sm" data-bs-dismiss="alert" aria-label="Close"></button>
+                &nbsp;&nbsp;&nbsp;&nbsp; <span data-bs-dismiss="alert" aria-label="Close" class="p-0 m-0"><i
+                        class="fa-light fa-xmark" style="font-size: 24px; cursor: pointer;"></i></span>
             </div>
         @endif
 
         <div class="row m-0">
-            <div class="col-md-6 col-12 pt-5 login-text-container">
-                <div class="px-5">
-                    <h5 class="py-4">Hello,</h5>
-                    <h6 class="login-text">You are just a step away from an awesome purchase</h6>
-                    <h6 class="login-text">Register or Login to complete the process</h6>
+            <div class="col-md-6 col-12 pt-5 bg_login login-text-container text-center" style="background: #ffcbde">
+                <div class="px-5 pt-5">
+                    <h5 class="py-4" style="color: #CC004D">Login to your account</h5>
+                    <p class="login-text">You're just one step away from securing your awesome purchase!
+                        Sign up or log in now to complete your order effortlessly</p>
                 </div>
-                <div class="d-flex justify-content-center align-items-center" style="min-height: 280px">
-                    <img src="{{ asset('assets/images/home/email_logo.png') }}" alt="header_logo" class="img-fluid" />
+                <div class="d-flex justify-content-center align-items-center">
+                    <img src="{{ asset('assets/images/bg_intro.jpg') }}" alt="header_logo" class="img-fluid" />
                 </div>
             </div>
 
@@ -68,21 +69,18 @@
                     <form class="w-75" method="POST" action="{{ route('login') }}">
                         @csrf
                         <div class="mb-3 email-container">
-                            <label class="form-label">Email</label>
-                            <input type="email" class="form-control" id="email" name="email"
-                                value="{{ old('email') }}" />
+                            <input type="email" class="form-control" id="email" name="email" value=""
+                                placeholder="Email / Phone Number" />
                             @error('email')
                                 <span class="error">{{ $message }}</span>
                             @enderror
                         </div>
-                        <div class="mb-4 password-container">
-                            <div class="d-flex justify-content-between">
-                                <label class="form-label">Password</label>
-                            </div>
+                        <div class="mb-3 password-container">
                             <div class="input-group">
                                 <input type="password" class="form-control" id="password" name="password"
-                                    aria-label="password">
-                                <span class="input-group-text" id="togglePassword" style="cursor: pointer;">
+                                    aria-label="password" placeholder="Password">
+                                <span class="input-group-text" id="togglePassword"
+                                    style="cursor: pointer; background:#fff;">
                                     <i class="fa fa-eye" id="eyeIconPassword"></i>
                                 </span>
                             </div>
@@ -90,17 +88,20 @@
                                 <span class="error">{{ $message }}</span>
                             @enderror
                         </div>
-                        <div class="text-end">
-                            <a href="{{ url('forgot-password') }}" style="color: #fff;">
-                                <p class="mb-2" style="color: #fff;">Forgot Password ?</p>
-                            </a>
+                        <div class="mb-1">
+                            <button type="submit" class="btn btn-light login-btn w-100"
+                                style="color: #fff; background:#FF0060">Login</button>
                         </div>
-                        <div class="mb-3">
-                            <button type="submit" class="btn btn-light login-btn w-100" style="color: #ff0060">Submit</button>
+                        <div class="d-flex justify-content-between text-center">
+                            <a href="{{ url('forgot-password') }}" style="color: #FF0060;font-size:12px;">Forgot your
+                                password?</a>
+                            <p style="font-size:12px;">Don't have an account? <span>
+                                    <a href="register" style="color: #FF0060;font-size:12px;">Sign Up</a></span>
+                            </p>
                         </div>
                         <div class="d-flex justify-content-center align-items-center mb-3 line-divider-container">
                             <hr class="line-divider" />
-                            <span class="mx-2 line-divider-text">or</span>
+                            <span class="mx-2 line-divider-text" style="color: #A2A2A2">or</span>
                             <hr class="line-divider" />
                         </div>
                         <div class="mb-3 row">
@@ -109,7 +110,7 @@
                                     <button type="button" class="btn btn-light social-btn w-100">
                                         <img src="{{ asset('assets/images/home/google.webp') }}" class="img-fluid "
                                             alt="google_logo" width="22px">
-                                        &nbsp;&nbsp;<span style="font-size: small">Sign in with Google</span>
+                                        &nbsp;&nbsp;<span style="font-size: small">Login with Google</span>
                                     </button>
                                 </a>
                             </div>
@@ -118,7 +119,7 @@
                                     <button type="button" class="btn btn-light social-btn w-100 ">
                                         <img src="{{ asset('assets/images/home/facebook.webp') }}" class="img-fluid "
                                             alt="facebook_logo" width="22px">
-                                        &nbsp;&nbsp;<span style="font-size: small">Sign in with Facebook</span>
+                                        &nbsp;&nbsp;<span style="font-size: small">Login with Facebook</span>
                                     </button>
                                 </a>
                             </div>

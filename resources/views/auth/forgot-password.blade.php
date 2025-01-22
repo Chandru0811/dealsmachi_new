@@ -25,7 +25,7 @@
 </head>
 
 <body>
-    <section class="container-fluid">
+    <section class="container-fluid p-0">
         @if (session('status'))
             <div class="alert alert-success alert-dismissible fade show" role="alert"
                 style="position: absolute; top: 15px; right: 40px;">
@@ -45,14 +45,14 @@
             </div>
         @endif
         <div class="row m-0">
-            <div class="col-md-6 col-12 pt-5 login-text-container">
-                <div class="px-5">
-                    <h5 class="py-4">Hello,</h5>
-                    <h6 class="login-text">You are just a step away from an awesome purchase</h6>
-                    <h6 class="login-text">Register or Login to complete the process</h6>
+            <div class="col-md-6 col-12 pt-5 bg_login login-text-container text-center" style="background: #ffcbde">
+                <div class="px-5 pt-5">
+                    <h5 class="py-4" style="color: #CC004D">Login to your account</h5>
+                    <p class="login-text">You're just one step away from securing your awesome purchase!
+                        Sign up or log in now to complete your order effortlessly</p>
                 </div>
-                <div class="d-flex justify-content-center align-items-center" style="min-height: 300px">
-                    <img src="{{ asset('assets/images/home/email_logo.png') }}" alt="header_logo" class="img-fluid" />
+                <div class="d-flex justify-content-center align-items-center">
+                    <img src="{{ asset('assets/images/bg_intro.jpg') }}" alt="header_logo" class="img-fluid" />
                 </div>
             </div>
             <div class="col-md-6 col-12 d-flex justify-content-center align-items-center login-container">
@@ -61,19 +61,21 @@
                     <form id="loginForm" class="w-75" method="POST" action="{{ route('password.email') }}">
                         @csrf
                         <div class="mb-3 email-container">
-                            <label class="form-label">Email</label>
-                            <input type="email" class="form-control" id="email" name="email"
-                                value="{{ old('email') }}" />
+                            <input type="email" class="form-control" id="email" name="email" value=""
+                                placeholder="Email" />
                             @error('email')
                                 <span class="error">{{ $message }}</span>
                             @enderror
                         </div>
-                        <div class="mb-3 mt-5 text-center">
-                            <button type="submit" class="btn login-btn w-100">Reset Password</button>
+                        <div class="mb-3 text-center">
+                            <button type="submit"
+                                class="btn login-btn w-100"style="color: #fff; background:#FF0060">Reset
+                                Password</button>
                         </div>
                         <div class="text-end">
-                            <p style="color: #fff;">Go Back to <a href="{{ url('login') }}"
-                                    style="color: #fff;">Login</a></p>
+                            <p style="font-size: 12px">Go Back to <a href="{{ url('login') }}"
+                                    style="color: #FF0060;font-size:12px">Login</a>
+                            </p>
                         </div>
                     </form>
                 </div>
