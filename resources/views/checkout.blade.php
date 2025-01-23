@@ -300,7 +300,7 @@
                         </div>
                         {{-- <div class="d-flex justify-content-end align-items-center py-3"
                                     style="position:sticky; bottom:10px; background:#fff"> --}}
-                        <button type="submit" class="btn check_out_btn">
+                        <button type="submit" class="btn placeorder_btn">
                             Place Order
                         </button>
                         {{-- </div> --}}
