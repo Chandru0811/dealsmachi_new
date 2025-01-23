@@ -1449,68 +1449,59 @@ function closePopup() {
     $("#errorModal").modal("hide");
 }
 
-// $(document).ready(function () {
-//     // Set up star rating functionality
-//     let selectedRating = 0;
-//     const stars = $("#starRating .star");
+// review
+$(document).ready(function () {
+    let selectedRating = 0;
+    const stars = $("#reviewForm #starRating .star"); // Scoped to #reviewForm
 
-//     stars.on("click", function () {
-//         selectedRating = $(this).data("value");
-//         $("#starRatingInput").val(selectedRating); // Update hidden input
-//         stars.removeClass("selected");
-//         stars.each(function (index) {
-//             if (index < selectedRating) $(this).addClass("selected");
-//         });
-//     });
+    stars.on("click", function () {
+        selectedRating = $(this).data("value");
+        $("#reviewForm #starRatingInput").val(selectedRating); // Scoped to #reviewForm
+        stars.removeClass("selected");
+        stars.each(function (index) {
+            if (index < selectedRating) $(this).addClass("selected");
+        });
+    });
 
-//     // jQuery validation
-//     $("#reviewForm").validate({
-//         rules: {
-//             starRating: {
-//                 required: true,
-//             },
-//             reviewTitle: {
-//                 required: true,
-//                 minlength: 5,
-//             },
-//             reviewDescription: {
-//                 required: true,
-//                 minlength: 10,
-//             },
-//         },
-//         messages: {
-//             starRating: {
-//                 required: "Please select a star rating.",
-//             },
-//             reviewTitle: {
-//                 required: "Title is required.",
-//                 minlength: "Title must be at least 5 characters long.",
-//             },
-//             reviewDescription: {
-//                 required: "Review is required.",
-//                 minlength: "Review must be at least 10 characters long.",
-//             },
-//         },
-//         errorPlacement: function (error, element) {
-//             // Append the error message next to the form field
-//             error.insertAfter(element);
-//             console.error(error.text()); // Print error message to the console
-//         },
-//         submitHandler: function (form) {
-//             console.log(form, "Form submitted successfully!");
-//             form.submit(); // Submit form if validation passes
-//         },
-//     });
-
-//     // Add custom validation for star rating
-//     $.validator.addMethod(
-//         "required",
-//         function (value, element) {
-//             return selectedRating > 0;
-//         },
-//         "Please select a star rating."
-//     );
-// });
+    $("#reviewForm").validate({
+        rules: {
+            starRating: {
+                required: function () {
+                    return selectedRating > 0;
+                },
+            },
+            reviewTitle: {
+                required: true,
+                minlength: 5,
+            },
+            reviewDescription: {
+                required: true,
+                minlength: 10,
+            },
+        },
+        messages: {
+            starRating: {
+                required: "Please select a star rating.",
+            },
+            reviewTitle: {
+                required: "Title is required.",
+                minlength: "Title must be at least 5 characters long.",
+            },
+            reviewDescription: {
+                required: "Review is required.",
+                minlength: "Review must be at least 10 characters long.",
+            },
+        },
+        errorPlacement: function (error, element) {
+            error.insertAfter(element);
+            console.error(error.text());
+        },
+        submitHandler: function (form) {
+            console.log("Form submitted successfully!");
+            form.submit();
+        },
+    });
+});
 
 $(document).ready(function () {
     $.ajaxSetup({
@@ -1543,6 +1534,7 @@ $(document).ready(function () {
                     }
                 }
 
+                fetchCartDropdown();
                 showMessage(response.status || "Deal added to cart!", "success");
             },
             error: function (xhr) {
@@ -1552,19 +1544,53 @@ $(document).ready(function () {
         });
     });
 
-    function showMessage(message, type) {
-        var backgroundColor = type === "success" ? "#00e888" : "#ef4444";
-        var alertHtml = `
-            <div class="alert alert-dismissible fade show" role="alert"
-                style="position: fixed; top: 70px; right: 40px; z-index: 1050; color: #fff; background:${backgroundColor};">
-                ${message}
-                <button type="button" class="btn-close btn-sm" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>
-        `;
-        $('body').append(alertHtml);
-
-        setTimeout(function () {
-            $(".alert").alert("close");
-        }, 5000);
+    function fetchCartDropdown() {
+        $.ajax({
+            url: '/cart/dropdown',
+            type: "GET",
+            success: function (response) {
+                if (response.html) {
+                    $('.dropdown_cart').html(response.html);
+                }
+            },
+            error: function () {
+                showMessage("Failed to update cart dropdown!", "error");
+            }
+        });
     }
+
+    function showMessage(message, type) {
+        var textColor, icon;
+        
+        if (type === "success") {
+          textColor = "#16A34A";
+          icon = '<i class="fa-regular fa-cart-shopping" style="color: #16A34A"></i>';
+          var alertClass = 'toast-success';
+        } else {
+          textColor = "#EF4444";
+          icon = '<i class="fa-solid fa-triangle-exclamation" style="color: #EF4444"></i>';
+          var alertClass = 'toast-danger';
+        }
+      
+        var alertHtml = `
+          <div class="alert ${alertClass} alert-dismissible fade show" role="alert" style="position: fixed; top: 70px; right: 40px; z-index: 1050; color: ${textColor};">
+            <div class="toast-content">
+                <div class="toast-icon">
+                    ${icon}
+                </div>
+                <span class="toast-text">${message}</span>&nbsp;&nbsp;
+                <button class="toast-close-btn" data-bs-dismiss="alert" aria-label="Close">
+                    <i class="fa-solid fa-times" style="color: ${textColor}; font-size: 14px;"></i>
+                </button>
+            </div>
+          </div>
+        `;
+      
+        $('body').append(alertHtml);
+        setTimeout(function () {
+          $(".alert").alert("close");
+        }, 5000);
+      }
+
+    fetchCartDropdown();
 });

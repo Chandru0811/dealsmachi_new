@@ -55,6 +55,7 @@ Route::post('addtocart/{slug}', [CartController::class, 'addToCart'])->name('car
 Route::get('cart', [CartController::class, 'index'])->name('cart.index');
 Route::Post('cart/remove', [CartController::class, 'removeItem'])->name('cart.remove');
 Route::post('cart/update', [CartController::class, 'updateCart'])->name('cart.update');
+Route::get('cart/dropdown', [CartController::class, 'getCartDropdown'])->name('cart.dropdown');
 Route::post('saveforlater/add', [CartController::class, 'saveForLater'])->name('savelater.add');
 // Route::post('saveforlater/multiple', [CartController::class, 'multipleMoveToCart'])->name('savelater.multiple');
 Route::post('saveforlater/toCart', [CartController::class, 'moveToCart'])->name('movetocart');

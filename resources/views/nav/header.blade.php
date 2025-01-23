@@ -5,7 +5,6 @@
     @endphp
 
     <section class="header">
-
         <nav id="NavBar" class="navbar mainNav fixed-top navbar-expand-xl navbar-light"
             style="background-color: #fff !important">
             <div class="container d-flex align-items-center justify-content-between">
@@ -106,7 +105,6 @@
                             </li>
                         </ul>
                     </form>
-
                     <!-- Expanded View (Large Screens) -->
                     <div class="d-flex justify-content-between align-items-center">
                         <form action="{{ url('/search') }}" method="GET"
@@ -130,91 +128,24 @@
                             <i class="fa-regular fa-heart fa-xl icon_size" style="color: #ff0060;"></i>
                         </a>
                         <span class="totalItemsCount total-count translate-middle d-none d-xl-block"
-                            style="position: absolute;top: 16px;right:5px">
+                            style="position: absolute;top: 16px;">
                         </span>
                     </button>
-
                     <div class="dropdown d-none d-xl-inline">
                         <button class="btn btn-button ps-0" style="border: none; position: relative;" id="cartButton"
                             data-bs-toggle="dropdown" aria-expanded="false">
                             <i class="fa-regular fa-cart-shopping fa-xl icon_size" style="color: #ff0060;"></i>
-
                             <span id="cart-count"
                                 class="total-counts translate-middle d-xl-block"
                                 style="position: absolute; top: 16px; right: 5px; {{ isset($cartItemCount) && $cartItemCount > 0 ? '' : 'display: none !important;' }}">
                                 {{ $cartItemCount ?? 0 }}
                             </span>
                         </button>
-
                         <div class="dropdown_cart dropdown-menu shadow-lg" aria-labelledby="cartButton"
                             style="left: 0; transform: translate(-85%, 0);">
-                            <div class="child">
-                                <p class="text_size" style="color: #cbcbcb">Recently Added Products</p>
-
-                                @if ($carts->isEmpty() || $carts->every(fn($cart) => $cart->items->isEmpty()))
-                                <div class="text-center">
-                                    <img src="{{ asset('assets/images/home/empty_cart.webp') }}" alt="Empty Cart"
-                                        class="img-fluid" width="75">
-                                    <p class="text_size" style="color: #cbcbcb">Your cart is empty</p>
-                                </div>
-                                @else
-                                @php
-                                $itemsDisplayed = 0;
-                                @endphp
-                                @foreach ($carts as $cart)
-                                @foreach ($cart->items->take(6) as $item)
-                                <div class="">
-                                    <div class="d-flex">
-                                        @php
-                                        $image = $item->product->productMedia
-                                        ->where('order', 1)
-                                        ->where('type', 'image')
-                                        ->first();
-                                        @endphp
-                                        <img src="{{ $image ? asset($image->path) : asset('assets/images/home/noImage.webp') }}"
-                                            class="img-fluid dropdown_img"
-                                            alt="{{ $item->product->name }}" />
-                                        <div class="text-start">
-                                            <a href="{{ url(path: '/deal/' . $item->product->id) }}"
-                                                style="color: #000;"
-                                                onclick="clickCount('{{ $item->product->id }}')">
-                                                <p class="text-center px-1 text-wrap m-0 p-0"
-                                                    style="font-size: 12px;white-space: normal;">
-                                                    {{ $item->product->name }}
-                                                </p>
-                                            </a>
-                                            <p class="px-1 text_size" style="color: #ff0060">
-                                                ₹ {{ number_format($item->discount, 2) }}
-                                            </p>
-                                        </div>
-                                    </div>
-
-                                </div>
-                                @php
-                                $itemsDisplayed++;
-                                @endphp
-                                @endforeach
-                                @endforeach
-
-                                @if ($itemsDisplayed < $carts->sum(fn($cart) => $cart->items->count()))
-                                    <div class="text-end mb-2">
-                                        <a style="font-size: 13px" href="{{ route('cart.index') }}">View All</a>
-                                    </div>
-                                    @endif
-                                    @endif
-                                    <div class="dropdown_cart_view d-flex justify-content-end">
-                                        <a href="{{ route('cart.index') }}"
-                                            class="text_size text-decoration-none d-none d-xl-inline"
-                                            style="text-decoration: none;">View My Shopping Cart
-                                        </a>
-                                    </div>
-                            </div>
+                            @include('nav.cartdropdown')
                         </div>
                     </div>
-
-
-
-
                     @auth
                     <div class="dropdown d-none d-xl-inline">
                         <a href="#" class="text-decoration-none d-none d-xl-inline" role="button"

@@ -237,6 +237,33 @@ class CartController extends Controller
         return redirect()->back()->with('status', 'Deal Removed from Cart!');
     }
 
+    public function getCartDropdown()
+    {
+        $carts = Cart::whereNull('customer_id')
+            ->where('ip_address', request()->ip());
+
+        if (Auth::check()) {
+            $carts = $carts->orWhere('customer_id', Auth::id());
+        }
+
+        $carts = $carts->with(['items.product.productMedia'])->get();
+
+        $carts->each(function ($cart) {
+            $cart->items = $cart->items->filter(function ($item) {
+                return $item->product && $item->product->active == 1 && !$item->product->deleted_at;
+            });
+        });
+
+        $html = view('nav.cartdropdown', compact('carts'))->render();
+
+        $cartItemCount = $carts->sum(fn($cart) => $cart->items->sum('quantity'));
+
+        return response()->json([
+            'html' => $html,
+            'cartItemCount' => $cartItemCount,
+        ]);
+    }
+
     public function saveForLater(Request $request)
     {
         $customer_id = Auth::check() ? Auth::user()->id : null;
