@@ -28,7 +28,9 @@ class OrderItems extends Model
         'packaging',
         'handling',
         'taxes',
-        'shipping_weight'
+        'shipping_weight',
+        'viewed_by_admin',
+        'viewed_by_vendor'
     ];
 
     public function order()

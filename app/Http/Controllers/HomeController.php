@@ -19,6 +19,7 @@ use App\Models\DealViews;
 use App\Models\CouponCodeUsed;
 use App\Models\Dealenquire;
 use App\Models\DealShare;
+use App\Models\Review;
 use App\Models\User;
 use Stevebauman\Location\Facades\Location;
 use Illuminate\Support\Facades\Validator;
@@ -699,5 +700,41 @@ class HomeController extends Controller
         ]);
 
         return redirect()->back()->with(['status' => 'User Updated Successfully'], 200);
+    }
+
+    public function createReview(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'title' => 'required|string|max:255',
+            'body'  => 'required|string',
+            'rating' => 'required|integer|min:1|max:5',
+            'product_id' => 'required|exists:products,id',
+        ], [
+            'title.required' => 'Please provide a title for the review.',
+            'title.string'   => 'The title must be a valid string.',
+            'title.max'      => 'The title may not exceed 255 characters.',
+            'body.required'  => 'Please provide a body for the review.',
+            'body.string'    => 'The body must be a valid string.',
+            'rating.required' => 'Please provide a rating.',
+            'rating.integer' => 'The rating must be an integer.',
+            'rating.min' => 'The rating must be at least 1.',
+            'rating.max' => 'The rating may not be greater than 5.',
+            'product_id.required' => 'Please select a valid product.',
+            'product_id.exists' => 'The selected product does not exist.',
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator)->withInput();
+        }
+
+        Review::create([
+            'title' => $request->input('title'),
+            'body'  => $request->input('body'),
+            'rating' => $request->input('rating'),
+            'product_id' => $request->input('product_id'),
+            'user_id' => Auth::id(),
+        ]);
+
+        return redirect()->back()->with(['success' => 'Review has been successfully added.'], 200);
     }
 }

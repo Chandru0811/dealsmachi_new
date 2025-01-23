@@ -47,7 +47,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/order/{id}/{product_id}', [CheckoutController::class, 'showOrderByCustomerId'])->name('customer.orderById');
     Route::get('/order/invoice/{id}', [CheckoutController::class, 'orderInvoice'])->name('order.invoice');
     Route::put('/updateUser', [HomeController::class, 'updateUser'])->name('user.update');
+    Route::post('/review', [HomeController::class, 'createReview'])->name('review.create');
 });
+
 Route::get('get/cartitems', [CartController::class, 'getCartItem'])->name('cartitems.get');
 Route::post('addtocart/{slug}', [CartController::class, 'addToCart'])->name('cart.add');
 Route::get('cart', [CartController::class, 'index'])->name('cart.index');
