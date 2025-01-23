@@ -60,7 +60,7 @@ class CartController extends Controller
         $product = Product::where('slug', $slug)->first();
 
         if (!$product) {
-            return redirect()->back()->with('error', 'Deal not found!');
+            return response()->json(['error' => 'Deal not found!'], 404);
         }
 
         $customer_id = Auth::check() ? Auth::user()->id : null;
@@ -82,7 +82,7 @@ class CartController extends Controller
             if ($item_in_cart && $request->saveoption == "buy now") {
                 return redirect()->route('checkout.summary', $product->id);
             } elseif ($item_in_cart) {
-                return redirect()->back()->with('error', 'Deal already in cart!');
+                return response()->json(['error' => 'Deal already in cart!'], 400);
             }
         }
 
@@ -135,10 +135,15 @@ class CartController extends Controller
         $cart_item->shipping_weight = $request->shipping_weight;
         $cart_item->save();
 
+        $cartItemCount = CartItem::where('cart_id', $cart->id)->sum('quantity');
+
         if ($request->saveoption == "buy now") {
             return redirect()->route('checkout.summary', $product->id);
         } else {
-            return redirect()->back()->with('status', 'Deal Added to Cart!');
+            return response()->json([
+                'status' => 'Deal added to cart!',
+                'cartItemCount' => $cartItemCount
+            ]);
         }
     }
 

@@ -1449,65 +1449,122 @@ function closePopup() {
     $("#errorModal").modal("hide");
 }
 
-$(document).ready(function () {
-    // Set up star rating functionality
-    let selectedRating = 0;
-    const stars = $("#starRating .star");
+// $(document).ready(function () {
+//     // Set up star rating functionality
+//     let selectedRating = 0;
+//     const stars = $("#starRating .star");
 
-    stars.on("click", function () {
-        selectedRating = $(this).data("value");
-        $("#starRatingInput").val(selectedRating); // Update hidden input
-        stars.removeClass("selected");
-        stars.each(function (index) {
-            if (index < selectedRating) $(this).addClass("selected");
+//     stars.on("click", function () {
+//         selectedRating = $(this).data("value");
+//         $("#starRatingInput").val(selectedRating); // Update hidden input
+//         stars.removeClass("selected");
+//         stars.each(function (index) {
+//             if (index < selectedRating) $(this).addClass("selected");
+//         });
+//     });
+
+//     // jQuery validation
+//     $("#reviewForm").validate({
+//         rules: {
+//             starRating: {
+//                 required: true,
+//             },
+//             reviewTitle: {
+//                 required: true,
+//                 minlength: 5,
+//             },
+//             reviewDescription: {
+//                 required: true,
+//                 minlength: 10,
+//             },
+//         },
+//         messages: {
+//             starRating: {
+//                 required: "Please select a star rating.",
+//             },
+//             reviewTitle: {
+//                 required: "Title is required.",
+//                 minlength: "Title must be at least 5 characters long.",
+//             },
+//             reviewDescription: {
+//                 required: "Review is required.",
+//                 minlength: "Review must be at least 10 characters long.",
+//             },
+//         },
+//         errorPlacement: function (error, element) {
+//             // Append the error message next to the form field
+//             error.insertAfter(element);
+//             console.error(error.text()); // Print error message to the console
+//         },
+//         submitHandler: function (form) {
+//             console.log(form, "Form submitted successfully!");
+//             form.submit(); // Submit form if validation passes
+//         },
+//     });
+
+//     // Add custom validation for star rating
+//     $.validator.addMethod(
+//         "required",
+//         function (value, element) {
+//             return selectedRating > 0;
+//         },
+//         "Please select a star rating."
+//     );
+// });
+
+$(document).ready(function () {
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
+
+    $('.add-to-cart-btn').on('click', function (e) {
+        e.preventDefault();
+
+        let slug = $(this).data('slug');
+
+        $.ajax({
+            url: `/addtocart/${slug}`,
+            type: "POST",
+            data: {
+                quantity: 1,
+                saveoption: 'add to cart'
+            },
+            success: function (response) {
+                if (response.cartItemCount !== undefined) {
+                    const cartCountElement = $('#cart-count');
+
+                    if (response.cartItemCount > 0) {
+                        cartCountElement.text(response.cartItemCount);
+                        cartCountElement.css('display', 'inline');
+                    } else {
+                        cartCountElement.css('display', 'none');
+                    }
+                }
+
+                showMessage(response.status || "Deal added to cart!", "success");
+            },
+            error: function (xhr) {
+                const errorMessage = xhr.responseJSON?.error || "Something went wrong!";
+                showMessage(errorMessage, "error");
+            }
         });
     });
 
-    // jQuery validation
-    $("#reviewForm").validate({
-        rules: {
-            starRating: {
-                required: true,
-            },
-            reviewTitle: {
-                required: true,
-                minlength: 5,
-            },
-            reviewDescription: {
-                required: true,
-                minlength: 10,
-            },
-        },
-        messages: {
-            starRating: {
-                required: "Please select a star rating.",
-            },
-            reviewTitle: {
-                required: "Title is required.",
-                minlength: "Title must be at least 5 characters long.",
-            },
-            reviewDescription: {
-                required: "Review is required.",
-                minlength: "Review must be at least 10 characters long.",
-            },
-        },
-        errorPlacement: function (error, element) {
-            // Append the error message next to the form field
-            error.insertAfter(element);
-            console.error(error.text()); // Print error message to the console
-        },
-        submitHandler: function (form) {
-            console.log(form, "Form submitted successfully!");
-            form.submit(); // Submit form if validation passes
-        },
-    });
+    function showMessage(message, type) {
+        var backgroundColor = type === "success" ? "#00e888" : "#ef4444";
+        var alertHtml = `
+            <div class="alert alert-dismissible fade show" role="alert"
+                style="position: fixed; top: 70px; right: 40px; z-index: 1050; color: #fff; background:${backgroundColor};">
+                ${message}
+                <button type="button" class="btn-close btn-sm" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        `;
+        $('body').append(alertHtml);
 
-    // Add custom validation for star rating
-    $.validator.addMethod(
-        "required",
-        function (value, element) {
-            return selectedRating > 0;
-        },
-        "Please select a star rating."
-    );
+        setTimeout(function () {
+            $(".alert").alert("close");
+        }, 5000);
+    }
 });

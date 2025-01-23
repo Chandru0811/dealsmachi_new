@@ -1,7 +1,7 @@
     <!-- Header Start -->
     @php
-        $selectedAddressId = session('selectedId');
-        $default_address = $address->firstWhere('default', true) ?? null; // Add fallback to null
+    $selectedAddressId = session('selectedId');
+    $default_address = $address->firstWhere('default', true) ?? null; // Add fallback to null
     @endphp
 
     <section class="header">
@@ -68,23 +68,23 @@
                         </div>
                     </button>
                     @auth
-                        <a href="#" class="text-decoration-none d-xl-none" role="button" data-bs-toggle="dropdown"
-                            aria-expanded="false">
-                            <span class="d-xl-none" data-bs-toggle="offcanvas" data-bs-target="#offcanvasProfile"
-                                aria-controls="offcanvasProfile">
-                                <i class="fa-regular fa-circle-user fa-xl icon_size" style="color: #ff0060;"></i>
-                            </span>
-                        </a>
-                        <!-- Hidden logout form -->
-                        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                            @csrf
-                        </form>
+                    <a href="#" class="text-decoration-none d-xl-none" role="button" data-bs-toggle="dropdown"
+                        aria-expanded="false">
+                        <span class="d-xl-none" data-bs-toggle="offcanvas" data-bs-target="#offcanvasProfile"
+                            aria-controls="offcanvasProfile">
+                            <i class="fa-regular fa-circle-user fa-xl icon_size" style="color: #ff0060;"></i>
+                        </span>
+                    </a>
+                    <!-- Hidden logout form -->
+                    <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                        @csrf
+                    </form>
                     @else
-                        <a href="{{ url('login') }}" class="text-decoration-none d-xl-none">
-                            <span class="d-xl-none">
-                                <i class="fa-regular fa-circle-user fa-xl icon_size text-muted"></i>
-                            </span>
-                        </a>
+                    <a href="{{ url('login') }}" class="text-decoration-none d-xl-none">
+                        <span class="d-xl-none">
+                            <i class="fa-regular fa-circle-user fa-xl icon_size text-muted"></i>
+                        </span>
+                    </a>
                     @endauth
                     &nbsp;&nbsp;&nbsp;
                     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText"
@@ -138,72 +138,76 @@
                         <button class="btn btn-button ps-0" style="border: none; position: relative;" id="cartButton"
                             data-bs-toggle="dropdown" aria-expanded="false">
                             <i class="fa-regular fa-cart-shopping fa-xl icon_size" style="color: #ff0060;"></i>
-                            @if (isset($cartItemCount) && $cartItemCount !== 0)
-                                <span class="total-counts translate-middle d-none d-xl-block"
-                                    style="position: absolute; top: 16px; right: 5px;">
-                                    {{ $cartItemCount }}
-                                </span>
-                            @endif
 
+                            <span id="cart-count"
+                                class="total-counts translate-middle d-xl-block"
+                                style="position: absolute; top: 16px; right: 5px; {{ isset($cartItemCount) && $cartItemCount > 0 ? '' : 'display: none !important;' }}">
+                                {{ $cartItemCount ?? 0 }}
+                            </span>
                         </button>
+
                         <div class="dropdown_cart dropdown-menu shadow-lg" aria-labelledby="cartButton"
                             style="left: 0; transform: translate(-85%, 0);">
                             <div class="child">
                                 <p class="text_size" style="color: #cbcbcb">Recently Added Products</p>
 
                                 @if ($carts->isEmpty() || $carts->every(fn($cart) => $cart->items->isEmpty()))
-                                    <div class="text-center">
-                                        <img src="{{ asset('assets/images/home/empty_cart.webp') }}" alt="Empty Cart"
-                                            class="img-fluid" width="75">
-                                        <p class="text_size" style="color: #cbcbcb">Your cart is empty</p>
-                                    </div>
-                                @else
-                                    @php
-                                        $itemsDisplayed = 0;
-                                    @endphp
-                                    @foreach ($carts as $cart)
-                                        @foreach ($cart->items->take(6) as $item)
-                                            <div class="">
-                                                <div class="d-flex">
-                                                    @php
-                                                        $image = $item->product->productMedia
-                                                            ->where('order', 1)
-                                                            ->where('type', 'image')
-                                                            ->first();
-                                                    @endphp
-                                                    <img src="{{ $image ? asset($image->path) : asset('assets/images/home/noImage.webp') }}"
-                                                        class="img-fluid dropdown_img"
-                                                        alt="{{ $item->product->name }}" />
-                                                    <div class="text-start">
-                                                        <p class="text-center px-1 text-wrap m-0 p-0"
-                                                            style="font-size: 12px;white-space: normal;">
-                                                            {{ $item->product->name }}
-                                                        </p>
-                                                        <p class="px-1 text_size" style="color: #ff0060">
-                                                            ₹ {{ number_format($item->discount, 2) }}
-                                                        </p>
-                                                    </div>
-                                                </div>
-
-                                            </div>
-                                            @php
-                                                $itemsDisplayed++;
-                                            @endphp
-                                        @endforeach
-                                    @endforeach
-
-                                    @if ($itemsDisplayed < $carts->sum(fn($cart) => $cart->items->count()))
-                                        <div class="text-end mb-2">
-                                            <a style="font-size: 13px" href="{{ route('cart.index') }}">View All</a>
-                                        </div>
-                                    @endif
-                                @endif
-                                <div class="dropdown_cart_view d-flex justify-content-end">
-                                    <a href="{{ route('cart.index') }}"
-                                        class="text_size text-decoration-none d-none d-xl-inline"
-                                        style="text-decoration: none;">View My Shopping Cart
-                                    </a>
+                                <div class="text-center">
+                                    <img src="{{ asset('assets/images/home/empty_cart.webp') }}" alt="Empty Cart"
+                                        class="img-fluid" width="75">
+                                    <p class="text_size" style="color: #cbcbcb">Your cart is empty</p>
                                 </div>
+                                @else
+                                @php
+                                $itemsDisplayed = 0;
+                                @endphp
+                                @foreach ($carts as $cart)
+                                @foreach ($cart->items->take(6) as $item)
+                                <div class="">
+                                    <div class="d-flex">
+                                        @php
+                                        $image = $item->product->productMedia
+                                        ->where('order', 1)
+                                        ->where('type', 'image')
+                                        ->first();
+                                        @endphp
+                                        <img src="{{ $image ? asset($image->path) : asset('assets/images/home/noImage.webp') }}"
+                                            class="img-fluid dropdown_img"
+                                            alt="{{ $item->product->name }}" />
+                                        <div class="text-start">
+                                            <a href="{{ url(path: '/deal/' . $item->product->id) }}"
+                                                style="color: #000;"
+                                                onclick="clickCount('{{ $item->product->id }}')">
+                                                <p class="text-center px-1 text-wrap m-0 p-0"
+                                                    style="font-size: 12px;white-space: normal;">
+                                                    {{ $item->product->name }}
+                                                </p>
+                                            </a>
+                                            <p class="px-1 text_size" style="color: #ff0060">
+                                                ₹ {{ number_format($item->discount, 2) }}
+                                            </p>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                @php
+                                $itemsDisplayed++;
+                                @endphp
+                                @endforeach
+                                @endforeach
+
+                                @if ($itemsDisplayed < $carts->sum(fn($cart) => $cart->items->count()))
+                                    <div class="text-end mb-2">
+                                        <a style="font-size: 13px" href="{{ route('cart.index') }}">View All</a>
+                                    </div>
+                                    @endif
+                                    @endif
+                                    <div class="dropdown_cart_view d-flex justify-content-end">
+                                        <a href="{{ route('cart.index') }}"
+                                            class="text_size text-decoration-none d-none d-xl-inline"
+                                            style="text-decoration: none;">View My Shopping Cart
+                                        </a>
+                                    </div>
                             </div>
                         </div>
                     </div>
@@ -212,48 +216,48 @@
 
 
                     @auth
-                        <div class="dropdown d-none d-xl-inline">
-                            <a href="#" class="text-decoration-none d-none d-xl-inline" role="button"
-                                data-bs-toggle="dropdown" aria-expanded="false">
-                                <span class="d-none d-xl-block">
-                                    <i class="fa-regular fa-circle-user fa-xl icon_size" style="color: #ff0060;"></i>
-                                </span>
-                            </a>
-                            <div class="dropdown-menu user-dropdown_cart custom-dropdown shadow-lg border-0"
-                                style="left: 45%; top:35px; transform: translate(-85%, 0);">
-                                <div class="dropdown_child p-2">
-                                    <div class="d-flex justify-content-start align-items-start mb-2">
-                                        <a class="dropdown-item user_list" href="#" data-bs-toggle="modal"
-                                            data-bs-target="#profileModal">
-                                            <i class="user_list_icon fa-light fa-user"></i>
-                                            &nbsp;&nbsp;&nbsp;Profile
-                                        </a>
-                                    </div>
-                                    <div class="d-flex justify-content-start align-items-start mb-2">
-                                        <a class="dropdown-item user_list" href="{{ url('orders') }}"><i
-                                                class="user_list_icon fa-light fa-bags-shopping"></i>
-                                            &nbsp;&nbsp;Orders</a>
-                                    </div>
-                                    <div class="d-flex justify-content-start align-items-start mb-2">
-                                        <a class="dropdown-item user_list" href="{{ route('savelater.index') }}"><i
-                                                class="user_list_icon fa-light fa-basket-shopping"></i>
-                                            &nbsp;&nbsp;Buy later</a>
-                                    </div>
-                                    <div class="d-flex justify-content-start align-items-start mb-2">
-                                        <a class="dropdown-item user_list" href="{{ url('logout') }}"
-                                            onclick="event.preventDefault(); document.getElementById('logout-form').submit();"><i
-                                                class="user_list_icon fa-light fa-power-off"></i>
-                                            &nbsp;&nbsp;&nbsp;Log Out</a>
-                                    </div>
+                    <div class="dropdown d-none d-xl-inline">
+                        <a href="#" class="text-decoration-none d-none d-xl-inline" role="button"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                            <span class="d-none d-xl-block">
+                                <i class="fa-regular fa-circle-user fa-xl icon_size" style="color: #ff0060;"></i>
+                            </span>
+                        </a>
+                        <div class="dropdown-menu user-dropdown_cart custom-dropdown shadow-lg border-0"
+                            style="left: 45%; top:35px; transform: translate(-85%, 0);">
+                            <div class="dropdown_child p-2">
+                                <div class="d-flex justify-content-start align-items-start mb-2">
+                                    <a class="dropdown-item user_list" href="#" data-bs-toggle="modal"
+                                        data-bs-target="#profileModal">
+                                        <i class="user_list_icon fa-light fa-user"></i>
+                                        &nbsp;&nbsp;&nbsp;Profile
+                                    </a>
+                                </div>
+                                <div class="d-flex justify-content-start align-items-start mb-2">
+                                    <a class="dropdown-item user_list" href="{{ url('orders') }}"><i
+                                            class="user_list_icon fa-light fa-bags-shopping"></i>
+                                        &nbsp;&nbsp;Orders</a>
+                                </div>
+                                <div class="d-flex justify-content-start align-items-start mb-2">
+                                    <a class="dropdown-item user_list" href="{{ route('savelater.index') }}"><i
+                                            class="user_list_icon fa-light fa-basket-shopping"></i>
+                                        &nbsp;&nbsp;Buy later</a>
+                                </div>
+                                <div class="d-flex justify-content-start align-items-start mb-2">
+                                    <a class="dropdown-item user_list" href="{{ url('logout') }}"
+                                        onclick="event.preventDefault(); document.getElementById('logout-form').submit();"><i
+                                            class="user_list_icon fa-light fa-power-off"></i>
+                                        &nbsp;&nbsp;&nbsp;Log Out</a>
                                 </div>
                             </div>
                         </div>
+                    </div>
                     @else
-                        <a href="{{ url('login') }}" class="text-decoration-none d-none d-xl-inline">
-                            <span class="d-none d-xl-block">
-                                <i class="fa-regular fa-circle-user fa-xl icon_size text-muted"></i>
-                            </span>
-                        </a>
+                    <a href="{{ url('login') }}" class="text-decoration-none d-none d-xl-inline">
+                        <span class="d-none d-xl-block">
+                            <i class="fa-regular fa-circle-user fa-xl icon_size text-muted"></i>
+                        </span>
+                    </a>
                     @endauth
                     <span class="navbar-text d-none d-xl-inline align-items-center justify-content-end"
                         style="margin-left: 10px">
@@ -308,37 +312,37 @@
                                 <div class="d-flex justify-content-between align-items-center">
                                     <h6 class="fw-bold">Delivery Addresses</h6>
                                     @if ($default_address)
-                                        <span class="badge badge_infos py-1" data-bs-toggle="modal"
-                                            data-bs-target="#myAddressModal">Change</span>
+                                    <span class="badge badge_infos py-1" data-bs-toggle="modal"
+                                        data-bs-target="#myAddressModal">Change</span>
                                     @else
-                                        <button type="button" class="btn primary_new_btn" style="font-size: 12px"
-                                            data-bs-toggle="modal" data-bs-target="#newAddressModal">
-                                            <i class="fa-light fa-plus"></i> Add New Address
-                                        </button>
+                                    <button type="button" class="btn primary_new_btn" style="font-size: 12px"
+                                        data-bs-toggle="modal" data-bs-target="#newAddressModal">
+                                        <i class="fa-light fa-plus"></i> Add New Address
+                                    </button>
                                     @endif
                                 </div>
                                 <div class="mt-2">
                                     <form id="addressForm">
                                         <div>
                                             @if ($default_address)
-                                                <p>
-                                                    <strong>{{ $default_address->first_name ?? '' }}
-                                                        {{ $default_address->last_name ?? '' }} (+91)
-                                                        {{ $default_address->phone ?? '' }}</strong>&nbsp;&nbsp;<br>
-                                                    {{ $default_address->address ?? '' }},
-                                                    {{ $default_address->city ?? '' }},
-                                                    {{ $default_address->state ?? '' }} -
-                                                    {{ $default_address->postalcode ?? '' }}
-                                                    <span>
-                                                        @if ($default_address->default)
-                                                            <span
-                                                                class="badge badge_danger py-1">Default</span>&nbsp;&nbsp;
-                                                        @endif
-                                                    </span>
-                                                </p>
+                                            <p>
+                                                <strong>{{ $default_address->first_name ?? '' }}
+                                                    {{ $default_address->last_name ?? '' }} (+91)
+                                                    {{ $default_address->phone ?? '' }}</strong>&nbsp;&nbsp;<br>
+                                                {{ $default_address->address ?? '' }},
+                                                {{ $default_address->city ?? '' }},
+                                                {{ $default_address->state ?? '' }} -
+                                                {{ $default_address->postalcode ?? '' }}
+                                                <span>
+                                                    @if ($default_address->default)
+                                                    <span
+                                                        class="badge badge_danger py-1">Default</span>&nbsp;&nbsp;
+                                                    @endif
+                                                </span>
+                                            </p>
                                             @else
-                                                <p>Your address details are missing. Add one now to make checkout faster
-                                                    and easier!</p>
+                                            <p>Your address details are missing. Add one now to make checkout faster
+                                                and easier!</p>
                                             @endif
                                         </div>
                                     </form>
@@ -365,50 +369,50 @@
                         <div class="modal-body" style="min-height: 24rem">
                             <div>
                                 @foreach ($address as $addr)
-                                    <div class="row p-2">
-                                        <div class="col-10">
-                                            <div class="d-flex text-start">
-                                                <div class="px-1">
-                                                    <input type="radio" name="selected_id"
-                                                        id="selected_id_{{ $addr->id }}"
-                                                        value="{{ $addr->id }}"
-                                                        {{ $selectedAddressId == $addr->id ? 'checked' : ($default_address && $addr->id == $default_address->id && !$selectedAddressId ? 'checked' : '') }} />
+                                <div class="row p-2">
+                                    <div class="col-10">
+                                        <div class="d-flex text-start">
+                                            <div class="px-1">
+                                                <input type="radio" name="selected_id"
+                                                    id="selected_id_{{ $addr->id }}"
+                                                    value="{{ $addr->id }}"
+                                                    {{ $selectedAddressId == $addr->id ? 'checked' : ($default_address && $addr->id == $default_address->id && !$selectedAddressId ? 'checked' : '') }} />
 
-                                                </div>
-                                                <p class="text-turncate fs_common">
-                                                    <span class="px-2">
-                                                        {{ $addr->first_name }} {{ $addr->last_name ?? '' }} |
-                                                        <span style="color: #c7c7c7;">&nbsp;+91
-                                                            {{ $addr->phone }}</span>
-                                                    </span><br>
-                                                    <span class="px-2" style="color: #c7c7c7">{{ $addr->address }},
-                                                        {{ $addr->city }},
-                                                        {{ $addr->state }}-{{ $addr->postalcode }}.</span>
-                                                    <br>
-                                                    @if ($addr->default)
-                                                        <span class="badge badge_primary">Default</span>
-                                                    @endif
-                                                </p>
                                             </div>
+                                            <p class="text-turncate fs_common">
+                                                <span class="px-2">
+                                                    {{ $addr->first_name }} {{ $addr->last_name ?? '' }} |
+                                                    <span style="color: #c7c7c7;">&nbsp;+91
+                                                        {{ $addr->phone }}</span>
+                                                </span><br>
+                                                <span class="px-2" style="color: #c7c7c7">{{ $addr->address }},
+                                                    {{ $addr->city }},
+                                                    {{ $addr->state }}-{{ $addr->postalcode }}.</span>
+                                                <br>
+                                                @if ($addr->default)
+                                                <span class="badge badge_primary">Default</span>
+                                                @endif
+                                            </p>
                                         </div>
-                                        <div class="col-2">
-                                            <div class="d-flex align-items-center justify-content-end">
-                                                <div class="d-flex gap-3">
-                                                    <button type="button" class="badge_edit" data-bs-toggle="modal"
-                                                        data-bs-target="#editAddressModal">
-                                                        Edit
-                                                    </button>
-                                                    @if (!$addr->default)
-                                                        <button type="button" class="badge_del"
-                                                            data-bs-toggle="modal"
-                                                            data-bs-target="#deleteAddressModal">
-                                                            Delete
-                                                        </button>
-                                                    @endif
-                                                </div>
+                                    </div>
+                                    <div class="col-2">
+                                        <div class="d-flex align-items-center justify-content-end">
+                                            <div class="d-flex gap-3">
+                                                <button type="button" class="badge_edit" data-bs-toggle="modal"
+                                                    data-bs-target="#editAddressModal">
+                                                    Edit
+                                                </button>
+                                                @if (!$addr->default)
+                                                <button type="button" class="badge_del"
+                                                    data-bs-toggle="modal"
+                                                    data-bs-target="#deleteAddressModal">
+                                                    Delete
+                                                </button>
+                                                @endif
                                             </div>
                                         </div>
                                     </div>
+                                </div>
                                 @endforeach
                             </div>
                         </div>
@@ -448,12 +452,12 @@
                         <button type="button" class="btn outline_secondary_btn"
                             data-bs-dismiss="modal">Close</button>
                         @if (isset($addr))
-                            <form id="deleteAddressForm" method="POST"
-                                action="{{ route('address.destroy', $addr->id) }}">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="btn outline_primary_btn">Delete</button>
-                            </form>
+                        <form id="deleteAddressForm" method="POST"
+                            action="{{ route('address.destroy', $addr->id) }}">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="btn outline_primary_btn">Delete</button>
+                        </form>
                         @endif
                     </div>
                 </div>
@@ -739,7 +743,7 @@
 
                                 <div class="mb-3">
                                     @if (!$default_address || !$default_address->default)
-                                        <input type="hidden" name="default" value="1">
+                                    <input type="hidden" name="default" value="1">
                                     @endif
                                     <input type="checkbox"
                                         name="{{ !$default_address || !$default_address->default ? 'default_address' : 'default' }}"
@@ -827,6 +831,4 @@
             });
         </script>
     </section>
-
-
     <!-- Header End  -->

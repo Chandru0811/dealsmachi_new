@@ -103,15 +103,16 @@
                             <div class="ps-3 d-flex justify-content-between align-items-center pe-2">
                                 <div>
                                     <p>Regular Price</p>
+                                    @if ($product->deal_type == 2)
+                                    <p style="color: #22cb00">Standard Rates</p>
+                                    @else
                                     <p><s>₹{{ number_format($product->original_price, 0) }}</s></p>
+                                    @endif
                                 </div>
                                 <div>
-                                    <form action="{{ route('cart.add', ['slug' => $product->slug]) }}" method="POST">
-                                        @csrf
-                                        <button type="submit" class="btn card_cart">
-                                            Add to Cart
-                                        </button>&nbsp;&nbsp;
-                                    </form>
+                                    <button class="btn card_cart add-to-cart-btn" data-slug="{{ $product->slug }}">
+                                        Add to Cart
+                                    </button>&nbsp;&nbsp;
                                 </div>
                             </div>
                             <div class="card-divider"></div>
