@@ -11,17 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('addresses', function (Blueprint $table) {
+        Schema::create('reviews', function (Blueprint $table) {
             $table->id();
-            $table->string('first_name');
-            $table->string('last_name');
-            $table->string('phone');
-            $table->string('postalcode');
-            $table->string('address');
-            $table->string('state');
-            $table->string('city');
-            $table->string('type');
-            $table->boolean('default')->default(false);
+            $table->string('title');
+            $table->text('body');
+            $table->unsignedTinyInteger('rating');
+            $table->foreignId('product_id')->constrained()->onDelete('cascade');
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->timestamps();
         });
@@ -32,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('addresses');
+        Schema::dropIfExists('reviews');
     }
 };
