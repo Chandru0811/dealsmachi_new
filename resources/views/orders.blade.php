@@ -95,6 +95,10 @@
                                                     {{ \Carbon\Carbon::parse($order->created_at)->addDays(5)->format('d/m/Y') ?? 'N/A' }}
                                                 </p>
                                             @else
+                                            <div class="rating mt-3 mb-3">
+                                                <span style="color: #22cb00">Currently Services are free through
+                                                    DealsMachi</span>
+                                            </div>
                                             @endif
                                         </div>
                                         <p>

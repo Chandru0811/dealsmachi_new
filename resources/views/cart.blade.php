@@ -102,22 +102,29 @@
                                 @endif --}}
                                 <p style="color: #AAAAAA;font-size:14px;">Seller :
                                     {{ $product->shop->legal_name ?? '' }}</p>
-                                <div class="d-flex">
-                                    <div class="my-4">
-                                        <img src="{{ asset('assets/images/home/delivery_icon.webp') }}" alt="icon"
-                                            class="img-fluid" />
-                                    </div> &nbsp;&nbsp;
-                                    <div class="my-4">
-                                        <p style="font-size: 16px;">
-                                            Delivery Date :
-                                            @if ($product->deal_type == 0)
-                                                {{ $deliveryDays > 0 ? $deliveryDate : 'No delivery date available' }}
-                                            @else
-                                                No delivery date available
-                                            @endif
-                                        </p>
+                                @if ($product->deal_type == 2)
+                                    <div class="rating mt-3 mb-3">
+                                        <span style="color: #22cb00">Currently Services are free through
+                                            DealsMachi</span>
                                     </div>
-                                </div>
+                                @else
+                                    <div class="d-flex">
+                                        <div class="">
+                                            <img src="{{ asset('assets/images/home/delivery_icon.webp') }}" alt="icon"
+                                                class="img-fluid" />
+                                        </div> &nbsp;&nbsp;
+                                        <div class="">
+                                            <p style="font-size: 16px;">
+                                                Delivery Date :
+                                                @if ($product->deal_type == 0)
+                                                    {{ $deliveryDays > 0 ? $deliveryDate : 'No delivery date available' }}
+                                                @else
+                                                    No delivery date available
+                                                @endif
+                                            </p>
+                                        </div>
+                                    </div>
+                                @endif
                                 <div>
                                     <span style="font-size:15px;text-decoration: line-through; color:#c7c7c7">
                                         ₹{{ number_format($product->original_price, 0) }}
@@ -235,10 +242,10 @@
                                 <p class="discount">₹{{ number_format($total_discount, 0) }}</p>
                             </div>
                             <!-- <hr />
-                            <div class="d-flex justify-content-between pb-3">
-                                <span>Total (x<span class="quantity-value">{{ $cart->quantity }}</span>)</span>
-                                <span class="total">${{ number_format($subtotal - $total_discount, 0) }}</span>
-                            </div> -->
+                                <div class="d-flex justify-content-between pb-3">
+                                    <span>Total (x<span class="quantity-value">{{ $cart->quantity }}</span>)</span>
+                                    <span class="total">${{ number_format($subtotal - $total_discount, 0) }}</span>
+                                </div> -->
                         </div>
                     </div>
                     <div class="d-flex justify-content-between align-items-center py-3 mt-4"
@@ -315,7 +322,7 @@
                             </div>
                         </div>
                         <div class="col-md-5">
-                            <a href="{{ url(path: '/deal/' . $savedItem->deal->id ) }}" style="color: #000;"
+                            <a href="{{ url(path: '/deal/' . $savedItem->deal->id) }}" style="color: #000;"
                                 onclick="clickCount('{{ $savedItem->deal->id }}')">
                                 <p style="font-size: 18px;font-weight:500">
                                     {{ $savedItem->deal->name }}
@@ -330,6 +337,11 @@
                                             {{ $deliveryDays > 0 ? $deliveryDate : 'No delivery date available' }}
                                         </span>
                                     </span>
+                                </div>
+                            @else
+                                <div class="rating mt-3 mb-3">
+                                    <span style="color: #22cb00">Currently Services are free through
+                                        DealsMachi</span>
                                 </div>
                             @endif
                             <p style="color: #AAAAAA;font-size:14px;">Seller :
@@ -478,19 +490,34 @@
                 fieldContainer.appendChild(errorMessage);
             }
         });
-
         document.querySelectorAll('.decrease-btn, .increase-btn').forEach((btn) => {
             btn.addEventListener('click', function() {
                 const cartId = this.getAttribute('data-cart-id');
                 const productId = this.getAttribute('data-product-id');
                 const quantityInput = this.parentElement.querySelector('.quantity-input');
                 let quantity = parseInt(quantityInput.value);
-                if (this.classList.contains('decrease-btn') && quantity > 1) quantity -= 1;
-                else if (this.classList.contains('increase-btn')) quantity += 1;
+
+                if (this.classList.contains('decrease-btn') && quantity > 1) {
+                    quantity -= 1;
+                } else if (this.classList.contains('increase-btn') && quantity < 10) {
+                    quantity += 1;
+                }
                 quantityInput.value = quantity;
                 updateCart(cartId, productId, quantity);
             });
         });
+        // document.querySelectorAll('.decrease-btn, .increase-btn').forEach((btn) => {
+        //     btn.addEventListener('click', function() {
+        //         const cartId = this.getAttribute('data-cart-id');
+        //         const productId = this.getAttribute('data-product-id');
+        //         const quantityInput = this.parentElement.querySelector('.quantity-input');
+        //         let quantity = parseInt(quantityInput.value);
+        //         if (this.classList.contains('decrease-btn') && quantity > 1) quantity -= 1;
+        //         else if (this.classList.contains('increase-btn')) quantity += 1;
+        //         quantityInput.value = quantity;
+        //         updateCart(cartId, productId, quantity);
+        //     });
+        // });
 
         document.querySelectorAll('.service-date, .service-time').forEach((input) => {
             input.addEventListener('change', function() {

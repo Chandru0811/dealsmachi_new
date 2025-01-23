@@ -108,7 +108,7 @@ use Carbon\Carbon;
                             : null;
                             @endphp
                             @if ($product->deal_type == 1)
-                            <div class="rating my-2">   
+                            <div class="rating my-2">
                                     <img src="{{ asset('assets/images/home/delivery_icon.webp') }}" alt="icon"
                                         class="img-fluid" /> &nbsp;
                                 <span>Delivery Date :</span><span class="stars">
@@ -119,7 +119,7 @@ use Carbon\Carbon;
                             </div>
                             @endif
 
-                            <p>Seller : {{ $product->shop->email ?? '' }}</p>
+                            <p>Seller : {{ $product->shop->legal_name ?? '' }}</p>
                             <div>
                                 <span style="text-decoration: line-through; color:#c7c7c7">
                                     ₹{{ number_format($product->original_price, 0, '.', ',') }}
