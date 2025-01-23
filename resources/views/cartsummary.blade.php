@@ -29,7 +29,7 @@
 @php
 $selectedAddressId = session('selectedId');
 $default_address =
-$addresses->firstWhere('id', $selectedAddressId) ?? ($addresses->firstWhere('default', true) ?? null); 
+$addresses->firstWhere('id', $selectedAddressId) ?? ($addresses->firstWhere('default', true) ?? null);
 @endphp
 @php
 use Carbon\Carbon;
@@ -108,7 +108,9 @@ use Carbon\Carbon;
                             : null;
                             @endphp
                             @if ($product->deal_type == 1)
-                            <div class="rating my-2">
+                            <div class="rating my-2">   
+                                    <img src="{{ asset('assets/images/home/delivery_icon.webp') }}" alt="icon"
+                                        class="img-fluid" /> &nbsp;
                                 <span>Delivery Date :</span><span class="stars">
                                     <span>
                                         {{ $deliveryDays > 0 ? $deliveryDate : 'No delivery date available' }}
