@@ -116,13 +116,14 @@ class HomeController extends Controller
         $pagedescription = $product->description;
         $pageimage = $product->image_url1;
         $vedios = $product->additional_details;
-
+        $reviewData = $product->review;
+        // dd($reviewData);
         $shareButtons = \Share::page(
             $pageurl,
             $pagetitle
         )->facebook()->twitter()->linkedin()->whatsapp()->telegram();
 
-        return view('productDescription', compact('product', 'bookmarkedProducts', 'shareButtons', 'pageurl', 'pagetitle', 'pagedescription', 'pageimage', 'vedios'));
+        return view('productDescription', compact('product', 'bookmarkedProducts', 'shareButtons', 'pageurl', 'reviewData', 'pagetitle', 'pagedescription', 'pageimage', 'vedios'));
     }
 
     public function dealcategorybasedproducts($slug, Request $request)
@@ -727,14 +728,17 @@ class HomeController extends Controller
             return redirect()->back()->withErrors($validator)->withInput();
         }
 
-        Review::create([
-            'title' => $request->input('title'),
-            'body'  => $request->input('body'),
-            'rating' => $request->input('rating'),
-            'product_id' => $request->input('product_id'),
-            'user_id' => Auth::id(),
-        ]);
+        Review::updateOrCreate(
+            ['user_id' => Auth::id(), 'product_id' => $request->product_id],
+            [
+                'title' => $request->input('title'),
+                'body'  => $request->input('body'),
+                'rating' => $request->input('rating'),
+                'product_id' => $request->input('product_id'),
+                'user_id' => Auth::id(),
+            ]
+        );
 
-        return redirect()->back()->with(['success' => 'Review has been successfully added.'], 200);
+        return redirect()->back()->with(['status' => 'Review has been successfully added.'], 200);
     }
 }

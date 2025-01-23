@@ -2,15 +2,15 @@
 
 @section('content')
     <?php
-
+    
     use Carbon\Carbon;
-
+    
     $currentDate = Carbon::now();
-
+    
     try {
         if (isset($order->items[0]->product->delivery_days, $order->created_at) && is_numeric($order->items[0]->product->delivery_days)) {
             $deliveryDays = (int) $order->items[0]->product->delivery_days;
-
+    
             $deliveryDate =
                 $deliveryDays > 0
                     ? Carbon::parse($order->created_at)
@@ -192,6 +192,10 @@
 
                                                     </div>
                                                 @else
+                                                    <div class="rating mt-3 mb-3">
+                                                        <span style="color: #22cb00">Currently Services are free through
+                                                            DealsMachi</span>
+                                                    </div>
                                                 @endif
                                                 <p class="mb-0">
                                                     <del>₹{{ number_format($item->unit_price, 0) }}</del>
@@ -432,20 +436,20 @@
                                     <i class="fa-regular fa-star" style="font-size: 18px;"></i>&nbsp;
                                 </span>
                             </div>
-                            <input type="hidden" id="starRatingInput" name="starRating" />
+                            <input type="hidden" id="rating" name="rating" />
                         </div>
+                        <input type="hidden" name="product_id" id="product_id"
+                            value="{{ $order->items[0]->product_id }}">
                         <!-- Title -->
                         <div class="mb-3">
-                            <label for="reviewTitle" class="form-label">Title<span class="text-danger">*</span></label>
-                            <input type="text" class="form-control form-control-sm" id="reviewTitle"
-                                name="reviewTitle" required>
+                            <label for="title" class="form-label">Title<span class="text-danger">*</span></label>
+                            <input type="text" class="form-control form-control-sm" id="title" name="title"
+                                required>
                         </div>
                         <!-- Description -->
                         <div class="mb-3">
-                            <label for="reviewDescription" class="form-label">Review<span
-                                    class="text-danger">*</span></label>
-                            <textarea class="form-control form-control-sm" id="reviewDescription" name="reviewDescription" rows="3"
-                                required></textarea>
+                            <label for="body" class="form-label">Review<span class="text-danger">*</span></label>
+                            <textarea class="form-control form-control-sm" id="body" name="body" rows="3" required></textarea>
                         </div>
                         <button type="submit" class="btn review_submit w-100">Submit</button>
                     </div>
@@ -460,7 +464,7 @@
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const stars = document.querySelectorAll('#starRating .star');
-            const starRatingInput = document.getElementById('starRatingInput');
+            const starRatingInput = document.getElementById('rating');
             let selectedRating = 0;
 
             stars.forEach((star) => {

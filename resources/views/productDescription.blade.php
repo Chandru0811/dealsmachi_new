@@ -27,7 +27,7 @@
                 aria-label="Close"></button>
         </div>
     @endif
-    @php
+    {{-- @php
         $reviewData = [
             [
                 'productId' => '1',
@@ -135,7 +135,7 @@
                 ],
             ],
         ];
-    @endphp
+    @endphp --}}
 
 
 
@@ -718,7 +718,7 @@
                 <div class="review-section mt-4 px-2">
                     <div class="d-flex justify-content-between align-items-center mb-2">
                         <h5 class="media_fonts_headings">Reviews</h5>
-                        <button disabled type="button" class="review_btn media_fonts_conent">Add Review</button>
+                        {{-- <button disabled type="button" class="review_btn media_fonts_conent">Add Review</button> --}}
                     </div>
                     <div class="card_offers review_section p-3">
                         @php
@@ -728,15 +728,11 @@
                         @endphp
 
                         @foreach ($reviewData as $reviewSet)
-                            @if ($reviewSet['productId'] == $product->id)
-                                @foreach ($reviewSet['reviews'] as $review)
-                                    @php
-                                        $hasReviews = true;
-                                        $totalRating += $review['rating'];
-                                        $totalReviews++;
-                                    @endphp
-                                @endforeach
-                            @endif
+                            @php
+                                $hasReviews = true;
+                                $totalRating += $reviewSet->rating;
+                                $totalReviews++;
+                            @endphp
                         @endforeach
 
                         @if ($hasReviews)
@@ -770,67 +766,60 @@
                             <!-- Review Cards -->
                             <div class="review-cards mt-4">
                                 @foreach ($reviewData as $reviewSet)
-                                    @if ($reviewSet['productId'] == $product->id)
-                                        @foreach ($reviewSet['reviews'] as $index => $review)
-                                            <div class="review-card mb-4">
-                                                <hr>
-                                                <div class="p-2">
-                                                    <div class="row m-0">
-                                                        <!-- Review Content -->
-                                                        <div class="col-12">
-                                                            <div class="col-md-6">
-                                                                <div
-                                                                    class="row d-flex justify-content-between text-center">
-                                                                    <div class="col-md-6 col-12">
-                                                                        <h5 class="text-start">
-                                                                            {{ $review['reviewerName'] }}
-                                                                        </h5>
-                                                                    </div>
+                                    <div class="review-card mb-4">
+                                        <hr>
+                                        <div class="p-2">
+                                            <div class="row m-0">
+                                                <!-- Review Content -->
+                                                <div class="col-12">
+                                                    <div class="col-md-6">
+                                                        <div class="row d-flex justify-content-between text-center">
+                                                            <div class="col-md-6 col-12">
+                                                                <h5 class="text-start">
+                                                                    {{ $reviewSet->title }}
+                                                                </h5>
+                                                            </div>
 
-                                                                    <div class="col-md-6 col-12 d-flex">
-                                                                        <div>Rating : &nbsp; <span
-                                                                                style="color:#40d128;font-size:1.4rem; font-weight:400">{{ $review['rating'] }}</span>
-                                                                            &nbsp;</div>
-                                                                        <div class="rating mt-1">
-                                                                            @php
-                                                                                $fullStars = floor($review['rating']);
-                                                                                $hasHalfStar =
-                                                                                    $review['rating'] - $fullStars >=
-                                                                                    0.5;
-                                                                            @endphp
-                                                                            @for ($i = 1; $i <= 5; $i++)
-                                                                                @if ($i <= $fullStars)
-                                                                                    <i class="fa-solid fa-star"
-                                                                                        style="color: #fdbf46; font-size:12px"></i>
-                                                                                @elseif ($i == $fullStars + 1 && $hasHalfStar)
-                                                                                    <i class="fa-solid fa-star-half-stroke"
-                                                                                        style="color: #fdbf46; font-size:12px"></i>
-                                                                                @else
-                                                                                    <i class="fa-regular fa-star"
-                                                                                        style="color: #ccc; font-size:12px"></i>
-                                                                                @endif
-                                                                            @endfor
-                                                                        </div>
-                                                                    </div>
+                                                            <div class="col-md-6 col-12 d-flex">
+                                                                <div>Rating : &nbsp; <span
+                                                                        style="color:#40d128;font-size:1.4rem; font-weight:400">{{ $reviewSet->rating }}</span>
+                                                                    &nbsp;</div>
+                                                                <div class="rating mt-1">
+                                                                    @php
+                                                                        $fullStars = floor($reviewSet->rating);
+                                                                        $hasHalfStar =
+                                                                            $reviewSet->rating - $fullStars >= 0.5;
+                                                                    @endphp
+                                                                    @for ($i = 1; $i <= 5; $i++)
+                                                                        @if ($i <= $fullStars)
+                                                                            <i class="fa-solid fa-star"
+                                                                                style="color: #fdbf46; font-size:12px"></i>
+                                                                        @elseif ($i == $fullStars + 1 && $hasHalfStar)
+                                                                            <i class="fa-solid fa-star-half-stroke"
+                                                                                style="color: #fdbf46; font-size:12px"></i>
+                                                                        @else
+                                                                            <i class="fa-regular fa-star"
+                                                                                style="color: #ccc; font-size:12px"></i>
+                                                                        @endif
+                                                                    @endfor
                                                                 </div>
                                                             </div>
-                                                            <p class="review-text mt-3"
-                                                                style="font-size: small;color:#1d1d1d">
-                                                                {{ $review['review'] }}
-                                                            </p>
-                                                        </div>
-
-                                                        <div class="d-flex gap-5 text-center mt-4">
-                                                            <small class="reviewer-name" style="color: #c3c2c2;">
-                                                                {{ $review['reviewerName'] }}</small>
-                                                            <small class="review-date"
-                                                                style="color: #c3c2c2;">{{ $review['reviewDate'] }}</small>
                                                         </div>
                                                     </div>
+                                                    <p class="review-text mt-3" style="font-size: small;color:#1d1d1d">
+                                                        {{ $reviewSet->body }}
+                                                    </p>
+                                                </div>
+
+                                                <div class="d-flex gap-5 text-center mt-4">
+                                                    <small class="reviewer-name" style="color: #c3c2c2;">
+                                                        {{ $reviewSet->title ?? 'Test' }}</small>
+                                                    <small class="review-date"
+                                                        style="color: #c3c2c2;">{{ $reviewSet->created_at }}</small>
                                                 </div>
                                             </div>
-                                        @endforeach
-                                    @endif
+                                        </div>
+                                    </div>
                                 @endforeach
                             </div>
                         @else

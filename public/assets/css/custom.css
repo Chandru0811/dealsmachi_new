@@ -2684,7 +2684,7 @@ footer hr {
 
 @media screen and (max-width: 425px) {
     .add_cart_btns {
-        gap: 0px;
+        gap: 4px;
     }
 
     .add_cart_btns .cart_btn {
@@ -2968,7 +2968,7 @@ footer hr {
         text-transform: uppercase;
         position: fixed;
         right: 1px;
-        top: 10rem;
+        top: 25rem;
         transform-origin: right center;
         white-space: nowrap;
         z-index: 999;
@@ -3017,7 +3017,7 @@ footer hr {
         padding: 8px;
         margin: 0 4px;
         right: 38px !important;
-        top: 10.5rem !important;
+        top: 25.5rem !important;
         background-color: #f9f9f9;
         border: 1px solid #ccc;
         border-radius: 5px;
