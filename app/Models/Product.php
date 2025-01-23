@@ -64,6 +64,11 @@ class Product extends Model
         return $this->hasMany(Bookmark::class, 'deal_id');
     }
 
+    public function review()
+    {
+        return $this->hasMany(Review::class, 'product_id');
+    }
+
     public function products()
     {
         return $this->hasMany(Product::class);
