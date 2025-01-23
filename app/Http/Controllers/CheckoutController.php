@@ -366,7 +366,7 @@ class CheckoutController extends Controller
             },
             'items.product.productMedia',
             'items.shop' => function ($query) {
-                $query->select('id', 'name', 'email', 'mobile', 'description', 'street', 'street2', 'city', 'zip_code')->withTrashed();
+                $query->select('id', 'name', 'email', 'mobile', 'description', 'street', 'street2', 'city', 'zip_code', 'deleted_at')->withTrashed();
             }
         ])->find($id);
 
@@ -374,7 +374,7 @@ class CheckoutController extends Controller
         if (!$order || Auth::id() !== $order->customer_id) {
             return view('orderView', ['order' => null]);
         }
-
+        
         return view('orderView', compact('order'));
     }
 

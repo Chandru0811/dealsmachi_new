@@ -40,8 +40,8 @@
                 <div class="col-12 text-center d-flex flex-column align-items-center justify-content-center mt-0">
                     <img src="{{ asset('assets/images/home/cart_empty.webp') }}" alt="Empty Cart"
                         class="img-fluid empty_cart_img">
-                    <h2 class="pt-5" style="color: #ff0060;font-size: 24px">Your Cart is currently empty</h2>
-                    <p class="" style="color: #808080;font-size: 18px">Looks Like You Have Not Added Anything To </br>
+                    <p class="pt-5" style="color: #ff0060;font-size: 22px">Your Cart is Currently Empty</p>
+                    <p class="" style="color: #6C6C6C;font-size: 16px">Looks Like You Have Not Added Anything To </br>
                         Your Cart. Go Ahead & Explore Top Categories.</p>
                     <a href="/" class="btn showmoreBtn mt-2">Shop More</a>
                 </div>
@@ -83,10 +83,15 @@
                                 </div>
                             </div>
                             <div class="col-md-8">
-                                <h5 style="font-size: 20px;font-weight:500">{{ $product->name }}</h5>
-                                <h6 class="truncated-description" style="font-size: 18px;font-weight:400">
-                                    {{ $product->description }}</h6>
-                                @if ($product->deal_type == 1)
+                                <a href="{{ url(path: '/deal/' . $product->id) }}" style="color: #000;"
+                                    onclick="clickCount('{{ $product->id }}')">
+                                    <p style="font-size: 18px;">
+                                        {{ $product->name }}
+                                    </p>
+                                </a>
+                                <p class="truncated-description" style="font-size: 16px">
+                                    {{ $product->description }}</p>
+                                {{-- @if ($product->deal_type == 1)
                                     <div class="rating my-2">
                                         <span>Delivery Date :</span><span class="stars">
                                             <span>
@@ -94,8 +99,8 @@
                                             </span>
                                         </span>
                                     </div>
-                                @endif
-                                <p style="color: #AAAAAA;font-size:16px;font-weight:300">Seller :
+                                @endif --}}
+                                <p style="color: #AAAAAA;font-size:14px;">Seller :
                                     {{ $product->shop->legal_name ?? '' }}</p>
                                 <div class="d-flex">
                                     <div class="my-4">
@@ -103,24 +108,24 @@
                                             class="img-fluid" />
                                     </div> &nbsp;&nbsp;
                                     <div class="my-4">
-                                        <h2 style="font-size: 18px; font-weight: 400;">
-                                            Delivery by
+                                        <p style="font-size: 16px;">
+                                            Delivery Date :
                                             @if ($product->deal_type == 0)
                                                 {{ $deliveryDays > 0 ? $deliveryDate : 'No delivery date available' }}
                                             @else
                                                 No delivery date available
                                             @endif
-                                        </h2>
+                                        </p>
                                     </div>
                                 </div>
                                 <div>
-                                    <span style="text-decoration: line-through; color:#c7c7c7">
+                                    <span style="font-size:15px;text-decoration: line-through; color:#c7c7c7">
                                         ₹{{ number_format($product->original_price, 0) }}
                                     </span>
-                                    <span class="ms-1" style="font-size:22px;color:#ff0060">
+                                    <span class="ms-1" style="font-size:18px;font-weight:500;color:#ff0060">
                                         ₹{{ number_format($product->discounted_price, 0) }}
                                     </span>
-                                    <span class="ms-1" style="font-size:22px;font-weight:400; color:#28A745">
+                                    <span class="ms-1" style="font-size:18px;font-weight:500; color:#28A745">
                                         {{ round($product->discount_percentage) }}% Off
                                     </span>
                                 </div>
@@ -155,16 +160,13 @@
                                 @else
                                     <div class="d-flex align-items-center my-3">
                                         <span class="me-2">Qty</span>
-                                        <button class="btn rounded btn-sm decrease-btn"
-                                            style="background: #fff;border-color: #EEEEEE;border-radius:4px"
-                                            data-cart-id="{{ $cart->id }}"
+                                        <button class="btn rounded btn-sm decrease-btn" data-cart-id="{{ $cart->id }}"
                                             data-product-id="{{ $product->id }}">-</button>
                                         <input type="text"
                                             class="form-control form-control-sm mx-2 text-center quantity-input"
-                                            style="width: 50px;background-color:#F9F9F9;border-radius:4px"
+                                            style="width: 50px;background-color:#F9F9F9;border-radius:2px"
                                             value="{{ $item->quantity }}" readonly>
                                         <button class="btn rounded btn-sm increase-btn"
-                                            style="background: #fff;border-color: #EEEEEE;border-radius:4px"
                                             data-cart-id="{{ $cart->id }}"
                                             data-product-id="{{ $product->id }}">+</button>
                                     </div>
@@ -182,7 +184,8 @@
                                                     alt="icon" class="img-fluid" />
                                             </div>
                                             <div>
-                                                <button type="submit" class="btn" style="color: #ff0060;">
+                                                <button type="submit" class="btn save-for-later-btn"
+                                                    style="color: #ff0060;border: none">
                                                     <span class="loader spinner-border spinner-border-sm"
                                                         style="display: none;"></span>
                                                     Save For Later
@@ -216,24 +219,26 @@
                         </div>
                         <hr>
                     @endforeach
-                    <div class="card mb-4 shadow">
-                        <div class="card-header m-0 p-3" style="background: #fff">
-                            <p class="mb-0" style="font-size:24px;font-weight:400">Order Summary</p>
+                    <div class="card mb-4 order_summary_card p-3">
+                        <div class="card-header m-0 py-3" style="background: #fff">
+                            <p class="mb-0" style="font-size:20px;font-weight:400">Order Summary</p>
                         </div>
                         <div class="card-body m-0 p-4 order-summary">
                             <div class="d-flex justify-content-between align-items-center">
-                                <p>Subtotal (x<span class="quantity-value">{{ $cart->quantity }}</span>)</p>
+                                <p style="color: #AAAAAA;font-size:16px">Subtotal (x<span
+                                        class="quantity-value">{{ $cart->quantity }}</span>)</p>
                                 <p class="subtotal">₹{{ number_format($subtotal, 0) }}</p>
                             </div>
                             <div class="d-flex justify-content-between align-items-center" style="color: #28A745;">
-                                <p>Discount (x<span class="quantity-value">{{ $cart->quantity }}</span>)</p>
+                                <p style="font-size:16px">Discount (x<span
+                                        class="quantity-value">{{ $cart->quantity }}</span>)</p>
                                 <p class="discount">₹{{ number_format($total_discount, 0) }}</p>
                             </div>
                             <!-- <hr />
-                    <div class="d-flex justify-content-between pb-3">
-                        <span>Total (x<span class="quantity-value">{{ $cart->quantity }}</span>)</span>
-                        <span class="total">${{ number_format($subtotal - $total_discount, 0) }}</span>
-                    </div> -->
+                            <div class="d-flex justify-content-between pb-3">
+                                <span>Total (x<span class="quantity-value">{{ $cart->quantity }}</span>)</span>
+                                <span class="total">${{ number_format($subtotal - $total_discount, 0) }}</span>
+                            </div> -->
                         </div>
                     </div>
                     <div class="d-flex justify-content-between align-items-center py-3 mt-4"
@@ -269,11 +274,11 @@
         <div class="container mt-5">
             <hr>
             <div class="d-flex">
-                <div class="my-4">
-                    <i class="fa-solid fa-thumbtack" style="color: #ff0060"></i>
+                <div class="my-4"> <img src="{{ asset('assets/images/home/solar_pin-list.webp') }}" alt="icon"
+                        class="img-fluid" />
                 </div> &nbsp;&nbsp;
                 <div class="my-4">
-                    <h2 style="font-size: 24px">Saved For Later</h2>
+                    <p style="font-size:20px;font-weight:400">Saved For Later</p>
                 </div>
             </div>
             @if ($savedItems->isEmpty())
@@ -310,9 +315,14 @@
                             </div>
                         </div>
                         <div class="col-md-5">
-                            <h5 style="font-size: 20px;font-weight:500">{{ $savedItem->deal->name }}</h5>
-                            <h6 class="truncated-description" style="font-size: 18px;font-weight:400">
-                                {{ $savedItem->deal->description }}</h6>
+                            <a href="{{ url(path: '/deal/' . $savedItem->deal->id ) }}" style="color: #000;"
+                                onclick="clickCount('{{ $savedItem->deal->id }}')">
+                                <p style="font-size: 18px;font-weight:500">
+                                    {{ $savedItem->deal->name }}
+                                </p>
+                            </a>
+                            <p class="truncated-description" style="font-size: 16px">
+                                {{ $savedItem->deal->description }}</p>
                             @if ($savedItem->deal->deal_type == 1)
                                 <div class="rating my-2">
                                     <span>Delivery Date :</span><span class="stars">
@@ -322,44 +332,59 @@
                                     </span>
                                 </div>
                             @endif
-                            <p style="color: #AAAAAA;font-size:16px;font-weight:300">Seller :
+                            <p style="color: #AAAAAA;font-size:14px;">Seller :
                                 {{ $savedItem->deal->shop->legal_name }}</p>
 
                             <div></div>
                             <div>
-                                <span style="text-decoration: line-through; color:#c7c7c7">
+                                <span style="font-size:15px;text-decoration: line-through; color:#c7c7c7">
                                     ₹{{ number_format($savedItem->deal->original_price, 0) }}
                                 </span>
-                                <span class="ms-1" style="font-size:22px;color:#ff0060">
+                                <span class="ms-1" style="font-size:18px;font-weight:500;color:#ff0060">
                                     ₹{{ number_format($savedItem->deal->discounted_price, 0) }}
                                 </span>
-                                <span class="ms-1" style="font-size:22px;font-weight:400; color:#28A745">
+                                <span class="ms-1" style="font-size:18px;font-weight:500; color:#28A745">
                                     {{ round($savedItem->deal->discount_percentage) }}% Off
                                 </span>
                             </div>
                         </div>
                         <div class="col-md-4 d-flex flex-column justify-content-end align-items-end mb-3">
                             <div class="btn-group" role="group" aria-label="Basic example">
-                                <form action="{{ route('movetocart') }}" method="POST" onsubmit="showLoader(this)">
-                                    @csrf
-                                    <input type="hidden" name="product_id" value="{{ $savedItem->deal_id }}">
-                                    <button type="submit" class="btn border btn-outline-secondary"
-                                        style="padding: 14px 20px; border-top-right-radius: 0px; border-bottom-right-radius: 0px;">
-                                        <span class="loader spinner-border spinner-border-sm me-2"
-                                            style="display: none;"></span>
-                                        Move to Cart
-                                    </button>
-                                </form>
                                 <form action="{{ route('savelater.remove') }}" method="POST"
                                     onsubmit="showLoader(this)">
                                     @csrf
                                     <input type="hidden" name="product_id" value="{{ $savedItem->deal_id }}">
-                                    <button type="submit" class="btn border btn-outline-secondary"
-                                        style="padding: 14px 20px; border-top-left-radius: 0px; border-bottom-left-radius: 0px;">
-                                        <span class="loader spinner-border spinner-border-sm me-2"
-                                            style="display: none;"></span>
-                                        Remove
-                                    </button>
+                                    <div class="d-flex align-items-center">
+                                        <div>
+                                            <img src="{{ asset('assets/images/home/trash_Icons.webp') }}" alt="icon"
+                                                class="img-fluid" width="20" height="20" />
+                                        </div>
+                                        <div>
+                                            <button type="submit" class="btn remove-cart-btn"
+                                                style="color: #ff0060;border: none">
+                                                <span class="loader spinner-border spinner-border-sm"
+                                                    style="display: none"></span>
+                                                Remove
+                                            </button>
+                                        </div>
+                                    </div>
+                                </form>
+                                <form action="{{ route('movetocart') }}" method="POST" onsubmit="showLoader(this)">
+                                    @csrf
+                                    <input type="hidden" name="product_id" value="{{ $savedItem->deal_id }}">
+                                    <div class="d-flex align-items-center cancel-btn">
+                                        <div>
+                                            <img src="{{ asset('assets/images/home/delivery_icon.webp') }}"
+                                                alt="icon" class="img-fluid" />
+                                        </div>
+                                        <div>
+                                            <button type="submit" class="btn" style="color: #ff0060;border: none">
+                                                <span class="loader spinner-border spinner-border-sm me-2"
+                                                    style="display: none"></span>
+                                                Move to Cart
+                                            </button>
+                                        </div>
+                                    </div>
                                 </form>
                             </div>
                         </div>
@@ -410,7 +435,7 @@
                                     inputMinutes < currentMinutes)) {
                                 valid = false;
                                 displayError(serviceTimeField,
-                                'Service Time must be in the future');
+                                    'Service Time must be in the future');
                                 if (!firstInvalidField) firstInvalidField = serviceTimeField;
                             }
                         }
@@ -549,6 +574,5 @@
                 });
             });
         });
-
-   </script>
+    </script>
 @endsection

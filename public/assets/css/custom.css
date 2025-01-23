@@ -516,7 +516,7 @@ footer hr {
 .total-count {
     font-size: 8px;
     width: 25%;
-    border-radius: 50%;
+    border-radius: 100%;
     text-align: center;
     border: 1px solid #ff0060;
     background-color: #fff;
@@ -526,9 +526,9 @@ footer hr {
 
 @media screen and (max-width: 1199px) and (min-width: 320px) {
     .total-count {
-        font-size: 5px;
+        font-size: 8px;
         width: 25%;
-        border-radius: 50%;
+        border-radius: 100%;
         text-align: center;
         border: 1px solid #ff0060;
         background-color: #fff;
@@ -961,12 +961,15 @@ footer hr {
     }
 }
 
-@media screen and (max-width: 367px) and (min-width: 320px) {
+@media screen and (max-width: 992px) {
     .sendEnqBtn {
         color: #ff0060;
         background-color: #fff;
         border: 1px solid #ff0060;
-        font-size: 10px !important;
+        width: 100%;
+    }
+    sendEnquiry-des-btn {
+        display: block;
     }
 }
 
@@ -2977,7 +2980,7 @@ footer hr {
         text-align: center;
         border-radius: 5px;
         padding: 4px;
-        margin: -20px 105px !important;
+        margin: 10px 30px !important;
         transform: translateX(-50%);
         font-size: 10px;
         white-space: nowrap;
@@ -3233,9 +3236,16 @@ footer hr {
         width: 55px;
         height: 55px;
     }
+}
 
+@media screen and (max-width: 520px) {
     .arrow-button {
-        width: 55px;
+        background-color: #eaeaea;
+        width: 38px;
+        height: 22px;
+    }
+    .thumbnail img {
+        width: 40px;
     }
 }
 
@@ -3675,9 +3685,11 @@ footer hr {
 }
 
 .cancel-btn {
-    border-radius: 4px;
+    border-radius: 2px !important;
     border: 1px solid #ff0060 !important;
     color: #ff0060 !important;
+    font-size: 16px;
+    padding: 2px 5px;
 }
 
 .success_alert {
@@ -3729,15 +3741,196 @@ footer hr {
     background-color: #f9f9f9;
 }
 .placeorder_btn:hover {
-    color: #fff;
+    color: #fff !important;
     padding: 8px 22px;
-    background: #00dd21;
+    background-color: #01a119 !important;
     font-size: 18px;
 }
 
 .placeorder_btn {
-    background-color: #01a119 !important;
+    background-color: #00dd21 !important;
     color: #fff;
     padding: 8px 22px;
     font-size: 18px;
+}
+
+/* toast style  */
+.toast-success {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    max-width: 400px;
+    padding: 10px 20px;
+    border: 0.5px solid #a2dab7;
+    background-color: #f4fbf7;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    font-family: Arial, sans-serif;
+}
+
+.toast-content {
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+
+.toast-icon {
+    margin-right: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.toast-text {
+    color: #16a34a;
+    font-size: 16px;
+    font-weight: 300 !important;
+    flex: 1;
+}
+
+.toast-close-btn {
+    position: absolute;
+    padding: 3px;
+    top: 5px;
+    right: 5px;
+    background: transparent;
+    border: none;
+    color: #16a34a;
+    font-size: 18px;
+    cursor: pointer;
+}
+
+.toast-close-btn:hover {
+    color: #2c8f47;
+}
+
+.toast-danger {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    max-width: 400px;
+    padding: 10px 20px;
+    border: 0.5px solid #ff878b;
+    background-color: #fff6f6;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    font-family: Arial, sans-serif;
+}
+.toast-danger .toast-content {
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+
+.toast-danger .toast-icon {
+    margin-right: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.toast-danger .toast-text {
+    color: #ef4444;
+    font-size: 16px;
+    font-weight: 300 !important;
+    flex: 1;
+}
+
+.toast-danger .toast-close-btn {
+    position: absolute;
+    padding: 3px;
+    top: 5px;
+    right: 5px;
+    background: transparent;
+    border: none;
+    color: #ef4444;
+    font-size: 18px;
+    cursor: pointer;
+}
+
+.toast-danger .toast-close-btn:hover {
+    color: #2c8f47;
+}
+/* end toasts */
+
+@media screen and (max-width: 420px) {
+    .order-id1 {
+        font-size: 20px;
+    }
+}
+
+.save-for-later-btn {
+    text-decoration: none;
+    font-size: 16px;
+}
+
+.save-for-later-btn:hover {
+    text-decoration: underline;
+    text-decoration-color: #ff0060 !important;
+    font-size: 16px;
+}
+
+.decrease-btn {
+    background: #fff;
+    border-color: #eeeeee;
+    border-radius: 2px !important;
+    padding: 5px 10px;
+}
+
+.decrease-btn:hover {
+    background: #ff0060;
+    color: #000;
+    border-color: #eeeeee;
+    border-radius: 2px !important;
+    padding: 5px 10px;
+    border: 1px solid #ff0060 !important;
+}
+
+.increase-btn {
+    background: #fff;
+    border-color: #eeeeee;
+    padding: 5px 10px;
+    border-radius: 2px !important;
+}
+
+.increase-btn:hover {
+    background: #ff0060;
+    color: #000;
+    border-color: #eeeeee;
+    border-radius: 2px !important;
+    padding: 5px 10px;
+    border: 1px solid #ff0060 !important;
+}
+
+.order_summary_card {
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05) !important;
+}
+
+.remove-cart-btn {
+    text-decoration: none;
+    font-size: 16px;
+}
+
+.remove-cart-btn:hover {
+    text-decoration: underline;
+    text-decoration-color: #ff0060 !important;
+    font-size: 16px;
+}
+
+.your-cart::-webkit-scrollbar {
+    width: 3px !important;
+}
+
+.your-cart::-webkit-scrollbar-thumb {
+    background-color: #ff0060;
+    border-radius: 10px;
+}
+
+.your-cart::-webkit-scrollbar-track {
+    background-color: #f1f1f1;
+}
+
+.your-cart {
+    scrollbar-width: thin;
+    scrollbar-color: #ff0060 #f1f1f1;
 }

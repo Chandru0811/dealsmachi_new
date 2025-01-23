@@ -85,8 +85,7 @@ try {
             </a> --}}
             <div class="d-flex gap-2">
                 @if (isset($order->items[0]->product->slug) && $order->items[0]->product->slug)
-                <form action="{{ route('cart.add', ['slug' => $order->items[0]->product->slug]) }}"
-                    method="POST">
+                <form action="{{ route('cart.add', ['slug' => $order->items[0]->product->slug]) }}" method="POST">
                     @csrf
                     <input type="hidden" name="saveoption" id="saveoption" value="buy now">
                     <button type="submit" class="btn showmoreBtn">Order again</button>
@@ -138,7 +137,8 @@ try {
                                 <span>{{ \Carbon\Carbon::parse($order->created_at)->format('d/m/Y') }}</span></span>
                             &nbsp;&nbsp;
                             {{-- <span>Time :
-                                        <span>{{ \Carbon\Carbon::parse($order->created_at)->format('h:i A') }}</span></span> --}}
+                                        <span>{{ \Carbon\Carbon::parse($order->created_at)->format('h:i A') }}</span></span>
+                            --}}
                         </p>
                     </div>
                     <div class="card-body m-0 p-4">
@@ -159,16 +159,17 @@ try {
                             <div class="col">
                                 @if ($item->order_id)
                                 @if (isset($order->items[0]->product) &&
-                                !($order->items[0]->product->active == 0 || $order->items[0]->product->deleted_at != null))
-                                @if ($order->items[0]->shop == null)
-                                <a href="{{ url('/deal/' . $order->items[0]->product_id) }}"
-                                    style="color: #000;"
-                                    onclick="clickCount('{{ $order->items[0]->deal_id }}')">
-                                    <p style="font-size: 24px;">
-                                        {{ $item->item_description }}
-                                    </p>
-                                </a>
-                                @else
+                                !($order->items[0]->product->active == 0 || $order->items[0]->product->deleted_at !=
+                                null))
+                                 @if ($order->items[0]->shop->deleted_at == null)
+                                 <a href="{{ url(path: '/deal/' . $order->items[0]->product_id) }}"
+                                     style="color: #000;"
+                                     onclick="clickCount('{{ $order->items[0]->deal_id }}')">
+                                     <p style="font-size: 24px;">
+                                         {{ $item->item_description }}
+                                     </p>
+                                 </a>
+                             @else
                                 <p style="font-size: 24px; color: #000; text-decoration: none;">
                                     {{ $item->item_description }}
                                 </p>
@@ -181,14 +182,23 @@ try {
                                 <p class="truncated-description">
                                     {{ $item->product->description ?? 'No Description Found' }}
                                 </p>
+                                @if ($item->deal_type === '1')
+                                <div class="d-flex align-items-center">
+                                    <img src="{{ asset('assets/images/home/delivery_icon.webp') }}" alt="icon"
+                                        class="img-fluid" style="width:3%; height:3%;" />&nbsp;
+                                    Delivery Date:
+                                        {{ $deliveryDays > 0 ? $deliveryDate : 'No delivery date available' }}
+
+                                </div>
+                                @else
+                                @endif
                                 <p class="mb-0">
                                     <del>₹{{ number_format($item->unit_price, 0) }}</del>
                                     &nbsp;&nbsp;
                                     <span
                                         style="color:#ff0060; font-size:24px">₹{{ number_format($item->discount, 0) }}</span>
                                     &nbsp;&nbsp;
-                                    <span
-                                        class="badge_danger">{{ number_format($item->discount_percent, 0) }}%
+                                    <span class="badge_danger">{{ number_format($item->discount_percent, 0) }}%
                                         saved
                                     </span>
                                 </p>
@@ -214,14 +224,6 @@ try {
                                 <div class="d-flex gap-4">
                                     <p>Quantity: {{ $item->quantity ?? ' ' }}</p>
                                 </div>
-                                @endif
-                                @if ($item->deal_type === '1')
-                                <div class="d-flex gap-4">
-                                    <p>Delivery Date:
-                                        {{ $deliveryDays > 0 ? $deliveryDate : 'No delivery date available' }}
-                                    </p>
-                                </div>
-                                @else
                                 @endif
                                 @endforeach
                             </div>
@@ -269,8 +271,7 @@ try {
                                 class="{{ $order->payment_type === 'online_payment' ? 'badge_default' : 'badge_payment' }}">
                                 {{ ucfirst(str_replace('_', ' ', $order->payment_type ?? 'Pending')) }}
                             </span>&nbsp;
-                            <span
-                                class="badge_warning">{{ $order->payment_status === '1'
+                            <span class="badge_warning">{{ $order->payment_status === '1'
                                             ? 'Not Paid'
                                             : ($order->payment_status === '2'
                                                 ? 'Pending'
@@ -327,36 +328,45 @@ try {
         </div> --}}
         {{-- Contact Information --}}
         <div class="card mb-4">
-            <div class="card-header m-0 p-2" style="background: #ffecee">
-                <p class="mb-0">Contact Information</p>
-            </div>
-            <div class="card-body m-0 p-4">
-                <p>Name : {{ $order->customer->name ?? 'N/A' }}</p>
-                <p>Email : {{ $order->customer->email ?? 'N/A' }}</p>
-            </div>
-        </div>
+    <div class="card-header m-0 p-2" style="background: #ffecee">
+        <p class="mb-0">Contact Information</p>
+    </div>
+
+    <div class="card-body m-0 p-4">
+    <?php
+    $deliveryAddress = json_decode($order->delivery_address, true);
+    ?>
+    <p>Name : {{ ($deliveryAddress['first_name'] ?? '') . ' ' . ($deliveryAddress['last_name'] ?? '') }}</p>
+    <p>Email : {{ $deliveryAddress['email'] ?? '' }}</p>
+</div>
+</div>
+
         {{-- Shipping Address --}}
-        @php
-        $address = json_decode($order->delivery_address, true);
-        @endphp
+        <?php
+        $deliveryAddress = json_decode($order->delivery_address, true);
+        ?>
         <div class="card mb-4">
             <div class="card-header m-0 p-2" style="background: #ffecee">
                 <p class="mb-0">Address</p>
             </div>
             <div class="card-body m-0 p-4">
-                @if ($order->address)
-                <p>Name : {{ $order->address->first_name ?? '' }}
-                    {{ $order->address->last_name ?? '' }}
-                </p>
-                <p>Email : {{ $order->address->email ?? 'N/A' }}</p>
-                <p>Phone : {{ $order->address->phone ?? 'No phone number provided' }}</p>
-                <p>Address :
-                    {{ $order->address->address ?? '--' }},
-                    {{ $order->address->postalcode ?? '--' }}
-                </p>
-                @else
-                <p>No address provided</p>
-                @endif
+
+                <p>Phone : {{ $deliveryAddress['phone'] ?? '' }}</p>
+                <p>Address:
+    @if (!empty($deliveryAddress['address']))
+        {{ $deliveryAddress['address'] }}
+    @endif
+    @if (!empty($deliveryAddress['city']))
+        , {{ $deliveryAddress['city'] }}
+    @endif
+    @if (!empty($deliveryAddress['state']))
+        , {{ $deliveryAddress['state'] }}
+    @endif
+    @if (!empty($deliveryAddress['postalcode']))
+        , {{ $deliveryAddress['postalcode'] }}
+    @endif
+</p>
+
             </div>
         </div>
     </div>
@@ -386,11 +396,11 @@ try {
                 <h3 class="m-0 p-0">Leave a review</h3>
             </div>
             <style>
-                label.error {
-                    color: red;
-                    font-size: 0.9rem;
-                    margin-top: 5px;
-                }
+            label.error {
+                color: red;
+                font-size: 0.9rem;
+                margin-top: 5px;
+            }
             </style>
 
             <form id="reviewForm">
@@ -421,15 +431,15 @@ try {
                     <!-- Title -->
                     <div class="mb-3">
                         <label for="reviewTitle" class="form-label">Title<span class="text-danger">*</span></label>
-                        <input type="text" class="form-control form-control-sm" id="reviewTitle"
-                            name="reviewTitle" required>
+                        <input type="text" class="form-control form-control-sm" id="reviewTitle" name="reviewTitle"
+                            required>
                     </div>
                     <!-- Description -->
                     <div class="mb-3">
                         <label for="reviewDescription" class="form-label">Review<span
                                 class="text-danger">*</span></label>
-                        <textarea class="form-control form-control-sm" id="reviewDescription" name="reviewDescription" rows="3"
-                            required></textarea>
+                        <textarea class="form-control form-control-sm" id="reviewDescription" name="reviewDescription"
+                            rows="3" required></textarea>
                     </div>
                     <button type="submit" class="btn review_submit w-100">Submit</button>
                 </div>
@@ -442,71 +452,71 @@ try {
 
 
 <script>
-    document.addEventListener('DOMContentLoaded', () => {
-        const stars = document.querySelectorAll('#starRating .star');
-        const starRatingInput = document.getElementById('starRatingInput');
-        let selectedRating = 0;
+document.addEventListener('DOMContentLoaded', () => {
+    const stars = document.querySelectorAll('#starRating .star');
+    const starRatingInput = document.getElementById('starRatingInput');
+    let selectedRating = 0;
 
-        stars.forEach((star) => {
-            // Click event for selecting a rating
-            star.addEventListener('click', function() {
-                selectedRating = parseInt(this.dataset.value, 10); // Update selected rating
-                starRatingInput.value = selectedRating; // Set the hidden input value
-                updateStars(selectedRating);
-            });
-
-            // Mouseover event for previewing rating
-            star.addEventListener('mouseover', function() {
-                const hoverValue = parseInt(this.dataset.value, 10);
-                updateStars(hoverValue);
-            });
-
-            // Mouseout event to reset stars to the selected rating
-            star.addEventListener('mouseout', function() {
-                updateStars(selectedRating);
-            });
+    stars.forEach((star) => {
+        // Click event for selecting a rating
+        star.addEventListener('click', function() {
+            selectedRating = parseInt(this.dataset.value, 10); // Update selected rating
+            starRatingInput.value = selectedRating; // Set the hidden input value
+            updateStars(selectedRating);
         });
 
-        // Function to update the stars
-        function updateStars(value) {
-            stars.forEach((s, index) => {
-                const icon = s.querySelector('i');
-                if (index < value) {
-                    icon.classList.remove('fa-regular');
-                    icon.classList.add('fa-solid');
-                    icon.style.color = '#fdbf46'; // Filled star color
-                } else {
-                    icon.classList.remove('fa-solid');
-                    icon.classList.add('fa-regular');
-                    icon.style.color = '#ccc'; // Unfilled star color
-                }
-            });
-        }
+        // Mouseover event for previewing rating
+        star.addEventListener('mouseover', function() {
+            const hoverValue = parseInt(this.dataset.value, 10);
+            updateStars(hoverValue);
+        });
 
-        // Initialize stars to the default state (unselected)
-        updateStars(selectedRating);
+        // Mouseout event to reset stars to the selected rating
+        star.addEventListener('mouseout', function() {
+            updateStars(selectedRating);
+        });
     });
 
+    // Function to update the stars
+    function updateStars(value) {
+        stars.forEach((s, index) => {
+            const icon = s.querySelector('i');
+            if (index < value) {
+                icon.classList.remove('fa-regular');
+                icon.classList.add('fa-solid');
+                icon.style.color = '#fdbf46'; // Filled star color
+            } else {
+                icon.classList.remove('fa-solid');
+                icon.classList.add('fa-regular');
+                icon.style.color = '#ccc'; // Unfilled star color
+            }
+        });
+    }
+
+    // Initialize stars to the default state (unselected)
+    updateStars(selectedRating);
+});
 
 
-    @if($order)
-    const orderItems = @json($order -> items);
 
-    let subtotal = orderItems.reduce((sum, item) => sum + (parseFloat(item.unit_price) * item.quantity), 0);
-    let total = orderItems.reduce((sum, item) => sum + (parseFloat(item.discount) * item.quantity), 0);
-    let discount = subtotal - total;
+@if($order)
+const orderItems = @json($order -> items);
 
-    const formattedSubtotal =
-        `₹{{ number_format($order->items->reduce(fn($sum, $item) => $sum + $item['unit_price'] * $item['quantity'], 0), 0) }}`;
-    const formattedTotal =
-        `₹{{ number_format($order->items->reduce(fn($sum, $item) => $sum + $item['discount'] * $item['quantity'], 0), 0) }}`;
-    const formattedDiscount =
-        `₹{{ number_format($order->items->reduce(fn($sum, $item) => $sum + $item['unit_price'] * $item['quantity'], 0) - $order->items->reduce(fn($sum, $item) => $sum + $item['discount'] * $item['quantity'], 0), 0) }}`;
+let subtotal = orderItems.reduce((sum, item) => sum + (parseFloat(item.unit_price) * item.quantity), 0);
+let total = orderItems.reduce((sum, item) => sum + (parseFloat(item.discount) * item.quantity), 0);
+let discount = subtotal - total;
 
-    document.getElementById('subtotal').innerText = formattedSubtotal;
-    document.getElementById('discount').innerText = formattedDiscount;
-    document.getElementById('total').innerText = formattedTotal;
-    @endif
+const formattedSubtotal =
+    `₹{{ number_format($order->items->reduce(fn($sum, $item) => $sum + $item['unit_price'] * $item['quantity'], 0), 0) }}`;
+const formattedTotal =
+    `₹{{ number_format($order->items->reduce(fn($sum, $item) => $sum + $item['discount'] * $item['quantity'], 0), 0) }}`;
+const formattedDiscount =
+    `₹{{ number_format($order->items->reduce(fn($sum, $item) => $sum + $item['unit_price'] * $item['quantity'], 0) - $order->items->reduce(fn($sum, $item) => $sum + $item['discount'] * $item['quantity'], 0), 0) }}`;
+
+document.getElementById('subtotal').innerText = formattedSubtotal;
+document.getElementById('discount').innerText = formattedDiscount;
+document.getElementById('total').innerText = formattedTotal;
+@endif
 </script>
 
 @endsection

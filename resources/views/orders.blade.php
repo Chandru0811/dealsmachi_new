@@ -23,32 +23,35 @@
                         <div class="card orderCard p-3 mb-3">
                             <div class="d-flex justify-content-between align-items-center">
                                 <p>
-                                    Order Id: <span>{{ $order->order_number ?? 'N/A' }}</span>&nbsp;
-                                    <span
-                                        class="badge_payment">{{ $order->status === '1'
-                                            ? 'Created'
-                                            : ($order->status === '2'
-                                                ? 'Payment Error'
-                                                : ($order->status === '3'
-                                                    ? 'Confirmed'
-                                                    : ($order->status === '4'
-                                                        ? 'Awaiting Delivery'
-                                                        : ($order->status === '5'
-                                                            ? 'Delivered'
-                                                            : ($order->status === '6'
-                                                                ? 'Returned'
-                                                                : ($order->status === '7'
-                                                                    ? 'Cancelled'
-                                                                    : 'Unknown Status')))))) }}</span>&nbsp;
-                                    <span class="badge_warning">
-                                        {{ $item->deal_type == 1 ? 'Product' : ($item->deal_type == 2 ? 'Service' : '') }}
-                                    </span>
+                                    <span class="order-id1">Order Id: {{ $order->order_number ?? 'N/A' }},&nbsp;<span>
+                                            <span class="order-id2">Item Id :
+                                                {{ $item->item_number ?? 'N/A' }}</span>&nbsp;&nbsp;
+                                            <span
+                                                class="badge_payment">{{ $order->status === '1'
+                                                    ? 'Created'
+                                                    : ($order->status === '2'
+                                                        ? 'Payment Error'
+                                                        : ($order->status === '3'
+                                                            ? 'Confirmed'
+                                                            : ($order->status === '4'
+                                                                ? 'Awaiting Delivery'
+                                                                : ($order->status === '5'
+                                                                    ? 'Delivered'
+                                                                    : ($order->status === '6'
+                                                                        ? 'Returned'
+                                                                        : ($order->status === '7'
+                                                                            ? 'Cancelled'
+                                                                            : 'Unknown Status')))))) }}</span>&nbsp;
+                                            <span class="badge_warning">
+                                                {{ $item->deal_type == 1 ? 'Product' : ($item->deal_type == 2 ? 'Service' : '') }}
+                                            </span>
                                 </p>
-                                <div class="d-flex">
+                                <div class="d-flex order-date">
                                     <p>Date : <span>{{ \Carbon\Carbon::parse($order->created_at)->format('d/m/Y') }}</span>
                                     </p>
                                     &nbsp;&nbsp;
-                                    {{-- <p>Time : <span>{{ \Carbon\Carbon::parse($order->created_at)->format('h:i A') }}</span></p> --}}
+                                    {{-- <p>Time : <span>{{ \Carbon\Carbon::parse($order->created_at)->format('h:i A') }}</span></p>
+                    --}}
                                 </div>
                             </div>
                             <div class="d-flex justify-content-between align-items-start">
@@ -66,7 +69,13 @@
                                             class="img-fluid" alt="{{ $item->item_description }}" />
                                     </div>
                                     <div class="col-lg-9 col-md-9 col-12">
-                                        <p class="mb-1">
+                                        {{-- <a href="{{ url(path: '/deal/' . $item->product_id) }}" style="color: #000;"
+                                            onclick="clickCount('{{ $item->product_id }}')">
+                                            <p class="mb-1" style="font-size: 24px;">
+                                                {{ $item->item_description ?? 'No Name Available' }}
+                                            </p>
+                                        </a> --}}
+                                        <p class="mb-1" style="font-size: 24px;">
                                             {{ $item->item_description ?? 'No Name Available' }}
                                         </p>
                                         <p class="mb-1 truncated-description">
@@ -78,6 +87,10 @@
                                                 &nbsp;&nbsp;&nbsp;
                                             @endif
                                             @if ($item->deal_type === '1' || $item->deal_type === 'Product')
+                                                <div class="">
+                                                    <img src="{{ asset('assets/images/home/delivery_icon.webp') }}"
+                                                        alt="icon" class="img-fluid" />
+                                                </div> &nbsp;&nbsp;
                                                 <p class="mt-1 mb-0">Delivery Date:
                                                     {{ \Carbon\Carbon::parse($order->created_at)->addDays(5)->format('d/m/Y') ?? 'N/A' }}
                                                 </p>
