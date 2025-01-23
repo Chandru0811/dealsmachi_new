@@ -47,9 +47,19 @@ class CartController extends Controller
         $user_id = Auth::check() ? Auth::user()->id : null;
 
         if (!$user_id) {
-            $savedItems = SavedItem::where('ip_address', $request->ip())->with('deal.productMedia', 'deal.shop')->get();
+            $savedItems = SavedItem::where('ip_address', request()->ip())
+                ->whereHas('deal', function ($query) {
+                    $query->where('active', 1)->whereNull('deleted_at');
+                })
+                ->with('deal.productMedia', 'deal.shop')
+                ->get();
         } else {
-            $savedItems = SavedItem::where('user_id', $user_id)->with('deal.productMedia', 'deal.shop')->get();
+            $savedItems = SavedItem::where('user_id', $user_id)
+                ->whereHas('deal', function ($query) {
+                    $query->where('active', 1)->whereNull('deleted_at');
+                })
+                ->with('deal.productMedia', 'deal.shop')
+                ->get();
         }
 
         return view('cart', compact('carts', 'bookmarkedProducts', 'savedItems'));
@@ -444,6 +454,8 @@ class CartController extends Controller
                 ->with('deal.productMedia', 'deal.shop')
                 ->get();
         }
+
+        return view('savelater', compact('savedItems'));
     }
 
     public function removeFromSaveLater(Request $request)
