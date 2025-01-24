@@ -132,6 +132,9 @@
                                         <span style="color: #22cb00">Currently Services are free through
                                             DealsMachi</span>
                                     </div>
+                                    <span class="ms-1" style="font-size:18px;font-weight:500;color:#ff0060">
+                                        ₹{{ number_format($product->discounted_price, 0) }}
+                                    </span>
                                 @else
                                     <div class="d-flex">
                                         <div class="">
@@ -149,18 +152,19 @@
                                             </p>
                                         </div>
                                     </div>
+                                    <div>
+                                        <span style="font-size:15px;text-decoration: line-through; color:#c7c7c7">
+                                            ₹{{ number_format($product->original_price, 0) }}
+                                        </span>
+                                        <span class="ms-1" style="font-size:18px;font-weight:500;color:#ff0060">
+                                            ₹{{ number_format($product->discounted_price, 0) }}
+                                        </span>
+                                        <span class="ms-1" style="font-size:18px;font-weight:500; color:#28A745">
+                                            {{ round($product->discount_percentage) }}% Off
+                                        </span>
+                                    </div>
                                 @endif
-                                <div>
-                                    <span style="font-size:15px;text-decoration: line-through; color:#c7c7c7">
-                                        ₹{{ number_format($product->original_price, 0) }}
-                                    </span>
-                                    <span class="ms-1" style="font-size:18px;font-weight:500;color:#ff0060">
-                                        ₹{{ number_format($product->discounted_price, 0) }}
-                                    </span>
-                                    <span class="ms-1" style="font-size:18px;font-weight:500; color:#28A745">
-                                        {{ round($product->discount_percentage) }}% Off
-                                    </span>
-                                </div>
+
                             </div>
                         </div>
                         <div class="row d-flex align-items-center">
@@ -211,20 +215,21 @@
                                         onsubmit="showLoader(this)">
                                         @csrf
                                         <input type="hidden" name="product_id" value="{{ $product->id }}">
-                                        <div class="d-flex align-items-center">
-                                            <div>
-                                                <img src="{{ asset('assets/images/home/solar_pin-list.webp') }}"
-                                                    alt="icon" class="img-fluid" />
-                                            </div>
-                                            <div>
-                                                <button type="submit" class="btn save-for-later-btn"
-                                                    style="color: #ff0060;border: none">
+                                        <button type="submit" class="btn save-for-later-btn"
+                                            style="color: #ff0060;border: none">
+                                            <div class="d-flex align-items-center gap-2">
+                                                <div>
+                                                    <img src="{{ asset('assets/images/home/solar_pin-list.webp') }}"
+                                                        alt="icon" class="img-fluid" />
+                                                </div>
+                                                <div>
                                                     <span class="loader spinner-border spinner-border-sm"
                                                         style="display: none;"></span>
-                                                    Save For Later
-                                                </button>
+                                                    Buy For Later
+
+                                                </div>
                                             </div>
-                                        </div>
+                                        </button>
                                     </form>
                                     &nbsp;&nbsp;
                                     <form action="{{ route('cart.remove') }}" method="POST"
@@ -232,20 +237,20 @@
                                         @csrf
                                         <input type="hidden" name="cart_id" value="{{ $cart->id }}">
                                         <input type="hidden" name="product_id" value="{{ $product->id }}">
-                                        <div class="d-flex align-items-center cancel-btn">
-                                            <div>
-                                                <img src="{{ asset('assets/images/home/trash_Icons.webp') }}"
-                                                    alt="icon" class="img-fluid" />
-                                            </div>
-                                            <div>
-                                                <button type="submit" class="btn"
-                                                    style="color: #ff0060;border: none">
+                                        <button type="submit" class="btn cancel-btn"
+                                            style="color: #ff0060;border: none">
+                                            <div class="d-flex align-items-center gap-2">
+                                                <div>
+                                                    <img src="{{ asset('assets/images/home/trash_Icons.webp') }}"
+                                                        alt="icon" class="img-fluid" />
+                                                </div>
+                                                <div>
                                                     <span class="loader spinner-border spinner-border-sm me-2"
                                                         style="display: none"></span>
                                                     Remove
-                                                </button>
+                                                </div>
                                             </div>
-                                        </div>
+                                        </button>
                                     </form>
                                 </div>
                             </div>
@@ -268,10 +273,10 @@
                                 <p class="discount">₹{{ number_format($total_discount, 0) }}</p>
                             </div>
                             <!-- <hr />
-                                                <div class="d-flex justify-content-between pb-3">
-                                                    <span>Total (x<span class="quantity-value">{{ $cart->quantity }}</span>)</span>
-                                                    <span class="total">${{ number_format($subtotal - $total_discount, 0) }}</span>
-                                                </div> -->
+                                                            <div class="d-flex justify-content-between pb-3">
+                                                                <span>Total (x<span class="quantity-value">{{ $cart->quantity }}</span>)</span>
+                                                                <span class="total">${{ number_format($subtotal - $total_discount, 0) }}</span>
+                                                            </div> -->
                         </div>
                     </div>
                     <div class="d-flex justify-content-between align-items-center py-3 mt-4"
@@ -392,37 +397,38 @@
                                     onsubmit="showLoader(this)">
                                     @csrf
                                     <input type="hidden" name="product_id" value="{{ $savedItem->deal_id }}">
-                                    <div class="d-flex align-items-center">
-                                        <div>
-                                            <img src="{{ asset('assets/images/home/trash_Icons.webp') }}" alt="icon"
-                                                class="img-fluid" width="20" height="20" />
-                                        </div>
-                                        <div>
-                                            <button type="submit" class="btn remove-cart-btn"
-                                                style="color: #ff0060;border: none">
+                                    <button type="submit" class="btn remove-cart-btn"
+                                        style="color: #ff0060;border: none">
+                                        <div class="d-flex align-items-center gap-2">
+                                            <div>
+                                                <img src="{{ asset('assets/images/home/trash_Icons.webp') }}"
+                                                    alt="icon" class="img-fluid" />
+                                            </div>
+                                            <div>
                                                 <span class="loader spinner-border spinner-border-sm"
                                                     style="display: none"></span>
                                                 Remove
-                                            </button>
+                                            </div>
                                         </div>
-                                    </div>
+                                    </button>
                                 </form>
                                 <form action="{{ route('movetocart') }}" method="POST" onsubmit="showLoader(this)">
                                     @csrf
                                     <input type="hidden" name="product_id" value="{{ $savedItem->deal_id }}">
-                                    <div class="d-flex align-items-center cancel-btn">
-                                        <div>
-                                            <img src="{{ asset('assets/images/home/delivery_icon.webp') }}"
-                                                alt="icon" class="img-fluid" />
-                                        </div>
-                                        <div>
-                                            <button type="submit" class="btn" style="color: #ff0060;border: none">
+                                    <button type="submit" class="btn  cancel-btn" style="color: #ff0060;border: none">
+                                        <div class="d-flex align-items-center gap-2">
+                                            <div>
+                                                <img src="{{ asset('assets/images/home/delivery_icon.webp') }}"
+                                                    alt="icon" class="img-fluid" />
+                                            </div>
+                                            <div>
                                                 <span class="loader spinner-border spinner-border-sm me-2"
                                                     style="display: none"></span>
                                                 Move to Cart
-                                            </button>
+
+                                            </div>
                                         </div>
-                                    </div>
+                                    </button>
                                 </form>
                             </div>
                         </div>
@@ -590,7 +596,13 @@
         function showLoader(form) {
             const button = form.querySelector('button[type="submit"]');
             button.disabled = true;
+
+            // Add loader element
+            const loader = document.createElement('span');
+            loader.className = 'custom-loader';
+            button.appendChild(loader);
         }
+
         document.addEventListener('DOMContentLoaded', () => {
             const today = new Date();
             const currentDate = today.toISOString().split('T')[0]; // Format 'YYYY-MM-DD'

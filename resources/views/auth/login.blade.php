@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dealsmachi | Login </title>
+    <title>DealsMachi | Login </title>
     <link rel="canonical" href="https://dealsmachi.com/login" />
     <meta name="description" content="Dealsmachi Shop Smart, Save Big!" />
     <link rel="icon" href="{{ asset('assets/images/home/favicon.ico') }}" />
@@ -54,7 +54,7 @@
                         Sign up or log in now to complete your order effortlessly</p>
                 </div>
                 <div class="d-flex justify-content-center align-items-center">
-                    <img src="{{ asset('assets/images/bg_intro.jpg') }}" alt="header_logo" class="img-fluid" />
+                    <img src="{{ asset('assets/images/bg_intro.webp') }}" alt="header_logo" class="img-fluid" />
                 </div>
             </div>
 

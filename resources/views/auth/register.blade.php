@@ -52,7 +52,7 @@
                         Sign up or log in now to complete your order effortlessly</p>
                 </div>
                 <div class="d-flex justify-content-center align-items-center">
-                    <img src="{{ asset('assets/images/bg_intro.jpg') }}" alt="header_logo" class="img-fluid" />
+                    <img src="{{ asset('assets/images/bg_intro.webp') }}" alt="header_logo" class="img-fluid" />
                 </div>
             </div>
             <div class="col-md-6 col-12 d-flex justify-content-center align-items-center login-container">

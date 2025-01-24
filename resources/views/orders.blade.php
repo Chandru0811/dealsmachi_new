@@ -81,45 +81,54 @@
                                         <p class="mb-1 truncated-description">
                                             {{ $item->product->description ?? 'No Description Available' }}
                                         </p>
-                                        <div class="d-flex">
-                                            @if ($item->deal_type === '1' || $item->deal_type === 'Product')
-                                                <p class="mt-1 mb-0">Quantity : {{ $item->quantity }}</p>
-                                                &nbsp;&nbsp;&nbsp;
-                                            @endif
-                                            @if ($item->deal_type === '1' || $item->deal_type === 'Product')
-                                                <div class="">
-                                                    <img src="{{ asset('assets/images/home/delivery_icon.webp') }}"
-                                                        alt="icon" class="img-fluid" />
-                                                </div> &nbsp;&nbsp;
-                                                <p class="mt-1 mb-0">Delivery Date:
-                                                    {{ \Carbon\Carbon::parse($order->created_at)->addDays(5)->format('d/m/Y') ?? 'N/A' }}
+                                        @if ($item->deal_type === '1' || $item->deal_type === 'Product')
+                                            <div>
+                                                <div class="d-flex mt-3 mb-3">
+                                                    <p class="mt-1 mb-0">Quantity : {{ $item->quantity }}</p>
+                                                    &nbsp;&nbsp;&nbsp;<div class="">
+                                                        <img src="{{ asset('assets/images/home/delivery_icon.webp') }}"
+                                                            alt="icon" class="img-fluid" />
+                                                    </div> &nbsp;&nbsp;
+                                                    <p class="mt-1 mb-0">Delivery Date:
+                                                        {{ \Carbon\Carbon::parse($order->created_at)->addDays(5)->format('d/m/Y') ?? 'N/A' }}
+                                                    </p>
+                                                </div>
+                                                <p>
+                                                    <del>₹{{ number_format($item->unit_price * $item->quantity, 0) }}</del>
+                                                    &nbsp;
+                                                    <span style="color: #ff0060; font-size:24px">
+                                                        ₹{{ number_format($item->discount * $item->quantity, 0) }}
+                                                    </span> &nbsp;
+                                                    <span
+                                                        class="badge_payment">{{ number_format($item->discount_percent, 0) }}%
+                                                        saved</span>
                                                 </p>
-                                            @else
-                                            <div class="rating mt-3 mb-3">
-                                                <span style="color: #22cb00">Currently Services are free through
-                                                    DealsMachi</span>
                                             </div>
-                                            @endif
-                                        </div>
-                                        <p>
-                                            <del>₹{{ number_format($item->unit_price * $item->quantity, 0) }}</del> &nbsp;
-                                            <span style="color: #ff0060; font-size:24px">
-                                                ₹{{ number_format($item->discount * $item->quantity, 0) }}
-                                            </span> &nbsp;
-                                            <span class="badge_payment">{{ number_format($item->discount_percent, 0) }}%
-                                                saved</span>
-                                        </p>
-                                        <div class="d-flex justify-content-start align-items-center">
-                                            @if ($item->deal_type === '2' || $item->deal_type === 'Product')
-                                                <p class="mt-1 mb-0">Service Date : {{ $item->service_date }}</p>
-                                            @endif
-                                            &nbsp;&nbsp;
-                                            @if ($item->deal_type === '2' || $item->deal_type === 'Product')
-                                                <p class="mt-1 mb-0">Service Time :
-                                                    {{ $item->service_time ? \Carbon\Carbon::parse($item->service_time)->format('h:i A') : 'N/A' }}
+                                        @else
+                                            <div>
+                                                <div class="rating mt-3 mb-3">
+                                                    <span style="color: #22cb00">Currently Services are free through
+                                                        DealsMachi</span>
+                                                </div>
+                                                <p>
+                                                    <span style="color: #ff0060; font-size:24px">
+                                                        ₹{{ number_format($item->discount * $item->quantity, 0) }}
+                                                    </span> &nbsp;
                                                 </p>
-                                            @endif
-                                        </div>
+                                                <div class="d-flex justify-content-start align-items-center">
+                                                    @if ($item->deal_type === '2' || $item->deal_type === 'Product')
+                                                        <p class="mt-1 mb-0">Service Date : {{ $item->service_date }}</p>
+                                                    @endif
+                                                    &nbsp;&nbsp;
+                                                    @if ($item->deal_type === '2' || $item->deal_type === 'Product')
+                                                        <p class="mt-1 mb-0">Service Time :
+                                                            {{ $item->service_time ? \Carbon\Carbon::parse($item->service_time)->format('h:i A') : 'N/A' }}
+                                                        </p>
+                                                    @endif
+                                                </div>
+                                            </div>
+                                        @endif
+
                                     </div>
                                 </div>
                             </div>
