@@ -94,10 +94,12 @@
                         @endif
                         <div>
                             <!-- Add Review Button -->
-                            <button type="button" class="review_btn media_fonts_conent" data-bs-toggle="modal"
-                                data-bs-target="#reviewModal">
-                                Add Review
-                            </button>
+                            @if (!$orderReviewedByUser)
+                                <button type="button" class="review_btn media_fonts_conent" data-bs-toggle="modal"
+                                    data-bs-target="#reviewModal">
+                                    Add Review
+                                </button>
+                            @endif
                         </div>
                     </div>
                 </div>

@@ -54,7 +54,7 @@ class CheckoutController extends Controller
 
             if ($carts) {
                 $this->cleanUpCart($carts);
-                
+
                 $carts->load(['items' => function ($query) use ($id) {
                     $query->where('product_id', '!=', $id);
                 }, 'items.product.productMedia', 'items.product.shop']);
@@ -373,18 +373,31 @@ class CheckoutController extends Controller
                 $query->where('product_id', $product_id);
             },
             'items.product.productMedia',
+            'items.product.review', // Assuming multiple reviews for a product
             'items.shop' => function ($query) {
                 $query->select('id', 'name', 'email', 'mobile', 'description', 'street', 'street2', 'city', 'zip_code', 'deleted_at')->withTrashed();
             }
         ])->find($id);
 
-        // Check if the order exists and if the authenticated user is the customer
         if (!$order || Auth::id() !== $order->customer_id) {
             return view('orderView', ['order' => null]);
         }
-        
-        return view('orderView', compact('order'));
+
+        $orderReviewedByUser = false;
+
+        if ($order->items->count() > 0) {
+            foreach ($order->items as $item) {
+                $review = $item->product->review->firstWhere('user_id', Auth::id());
+
+                if ($review) {
+                    $orderReviewedByUser = true;
+                    break;
+                }
+            }
+        }
+        return view('orderView', compact('order', 'orderReviewedByUser'));
     }
+
 
     public function orderInvoice($id)
     {
