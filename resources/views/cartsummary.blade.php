@@ -143,19 +143,32 @@
                                                 </span>
                                             </span>
                                         </div>
+                                    @else
+                                        <div class="rating mt-3 mb-3">
+                                            <span style="color: #22cb00">Currently Services are free through
+                                                DealsMachi</span>
+                                        </div>
                                     @endif
 
                                     <p>Seller : {{ $product->shop->legal_name ?? '' }}</p>
+
                                     <div>
-                                        <span style="text-decoration: line-through; color:#c7c7c7">
-                                            ₹{{ number_format($product->original_price, 0, '.', ',') }}
-                                        </span>
-                                        <span class="ms-1" style="font-size:22px;color:#ff0060">
-                                            ₹{{ number_format($product->discounted_price, 0, '.', ',') }}
-                                        </span>
-                                        <span class="ms-1" style="font-size:12px; color:#00DD21">
-                                            {{ round($product->discount_percentage) }}% off
-                                        </span>&nbsp; &nbsp; &nbsp;
+                                        @if ($product->deal_type == 2)
+                                            <span class="ms-1" style="font-size:22px;color:#ff0060">
+                                                ₹{{ number_format($product->discounted_price, 0, '.', ',') }}
+                                            </span>
+                                        @else
+                                            <span style="text-decoration: line-through; color:#c7c7c7">
+                                                ₹{{ number_format($product->original_price, 0, '.', ',') }}
+                                            </span>
+                                            <span class="ms-1" style="font-size:22px;color:#ff0060">
+                                                ₹{{ number_format($product->discounted_price, 0, '.', ',') }}
+                                            </span>
+
+                                            <span class="ms-1" style="font-size:12px; color:#00DD21">
+                                                {{ round($product->discount_percentage) }}% off
+                                            </span>&nbsp; &nbsp; &nbsp;
+                                        @endif
                                         @if ($item->deal_type == 1)
                                             <span>Quantity : {{ $item->quantity ?? 1 }}</span>
                                         @else

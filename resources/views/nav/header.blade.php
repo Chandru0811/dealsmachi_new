@@ -24,7 +24,7 @@
                     </span>
                     &nbsp;&nbsp;&nbsp;
                     <button class="btn btn-button " style="border: none; position: relative;">
-                        <a href="{{ url('/bookmarks') }}" class="text-decoration-none d-xl-none"
+                        <a href="{{ url('/favourites') }}" class="text-decoration-none d-xl-none"
                             style="text-decoration: none;">
                             <i class="fa-regular fa-heart fa-xl icon_size" style="color: #ff0060;"></i>
                         </a>
@@ -123,7 +123,7 @@
                         </form>
                     </div>
                     <button class="btn btn-button" style="border: none; position: relative;">
-                        <a href="{{ url('/bookmarks') }}" class="text-decoration-none px-1 py-1 d-none d-xl-inline"
+                        <a href="{{ url('/favourites') }}" class="text-decoration-none px-1 py-1 d-none d-xl-inline"
                             style="text-decoration: none; position: relative;">
                             <i class="fa-regular fa-heart fa-xl icon_size" style="color: #ff0060;"></i>
                         </a>

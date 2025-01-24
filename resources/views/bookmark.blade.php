@@ -182,7 +182,7 @@
                     style="min-height: 60vh">
                     <img src="{{ asset('assets/images/home/empty_bookmark.webp') }}" alt="Empty Favourite"
                         class="img-fluid">
-                    <h2 class="mt-5 mb-3" style="color: #ff0060">Your bookmark is waiting to be filled with treasures!
+                    <h2 class="mt-5 mb-3" style="color: #ff0060">Your favourites is waiting to be filled with treasures!
                     </h2>
                 </div>
             @endif
