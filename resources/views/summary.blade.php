@@ -166,7 +166,7 @@
                             </span>
                         </div>
                     </div>
-                    <div class="col-12 d-flex flex-wrap align-items-center mt-2">
+                    <div class="col-12 d-flex justify-content-between  align-items-center mt-2">
                         @if ($product->deal_type === 2)
                             <div class="d-flex align-items-center">
                                 <div class="form-group">
@@ -425,7 +425,7 @@
                                             </span>
                                         </div>
                                     </div>
-                                    <div class="col-12 d-flex flex-wrap align-items-center mt-2">
+                                    <div class="col-12 d-flex justify-content-between align-items-center mt-2">
                                     ${product.deal_type === 2 ? `
                                                                                                     <div class="d-flex align-items-center">
                                                                                                       <div class="form-group">

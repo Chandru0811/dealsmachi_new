@@ -2,15 +2,15 @@
 
 @section('content')
     <?php
-    
+
     use Carbon\Carbon;
-    
+
     $currentDate = Carbon::now();
-    
+
     try {
         if (isset($order->items[0]->product->delivery_days, $order->created_at) && is_numeric($order->items[0]->product->delivery_days)) {
             $deliveryDays = (int) $order->items[0]->product->delivery_days;
-    
+
             $deliveryDate =
                 $deliveryDays > 0
                     ? Carbon::parse($order->created_at)
@@ -198,15 +198,22 @@
                                                     </div>
                                                 @endif
                                                 <p class="mb-0">
-                                                    <del>₹{{ number_format($item->unit_price, 0) }}</del>
-                                                    &nbsp;&nbsp;
-                                                    <span
-                                                        style="color:#ff0060; font-size:24px">₹{{ number_format($item->discount, 0) }}</span>
-                                                    &nbsp;&nbsp;
-                                                    <span
-                                                        class="badge_danger">{{ number_format($item->discount_percent, 0) }}%
-                                                        saved
-                                                    </span>
+                                                    @if ($item->deal_type == 2)
+                                                        <span
+                                                            style="color:#ff0060; font-size:24px">₹{{ number_format($item->discount, 0) }}</span>
+                                                        &nbsp;&nbsp;
+                                                        &nbsp;&nbsp;
+                                                    @else
+                                                        <del>₹{{ number_format($item->unit_price, 0) }}</del>
+                                                        &nbsp;&nbsp;
+                                                        <span
+                                                            style="color:#ff0060; font-size:24px">₹{{ number_format($item->discount, 0) }}</span>
+                                                        &nbsp;&nbsp;
+                                                        <span
+                                                            class="badge_danger">{{ number_format($item->discount_percent, 0) }}%
+                                                            saved
+                                                        </span>
+                                                    @endif
                                                 </p>
                                             @else
                                                 <div class="nodata">No Product Data Available!</div>
