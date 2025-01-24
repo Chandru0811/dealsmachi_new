@@ -10,7 +10,7 @@
                 </div>
                 <span class="toast-text"> {!! nl2br(e(session('status'))) !!}</span>&nbsp;&nbsp;
                 <button class="toast-close-btn"data-bs-dismiss="alert" aria-label="Close">
-                    <i class="fa-solid fa-times" style="color: #16A34A"></i>
+                    <i class="fa-thin fa-xmark" style="color: #16A34A"></i>
                 </button>
             </div>
         </div>
@@ -166,7 +166,7 @@
                                             </span>
 
                                             <span class="ms-1" style="font-size:12px; color:#00DD21">
-                                                {{ round($product->discount_percentage) }}% off
+                                                -{{ round($product->discount_percentage) }}% off
                                             </span>&nbsp; &nbsp; &nbsp;
                                         @endif
                                         @if ($item->deal_type == 1)
@@ -193,7 +193,7 @@
                             </div>
                             <div class="d-flex justify-content-between align-items-center" style="color: #00DD21;">
                                 <p>Discount (x{{ $carts->quantity }})</p>
-                                <p>₹{{ number_format($carts->discount, 0) }}</p>
+                                <p>-₹{{ number_format($carts->discount, 0) }}</p>
                             </div>
                             {{-- <hr />
                             <div class="d-flex justify-content-between pb-3">
@@ -216,7 +216,7 @@
                                 &nbsp;&nbsp;
                                 <span class="ms-1" style="font-size:12px; color:#00DD21;white-space: nowrap;">
                                     Dealsmachi Discount
-                                    &nbsp;<span class="discount">₹{{ number_format($carts->discount, 2) }}</span>
+                                    &nbsp;<span class="discount">-₹{{ number_format($carts->discount, 2) }}</span>
                                 </span>
                             </h4>
                         </div>

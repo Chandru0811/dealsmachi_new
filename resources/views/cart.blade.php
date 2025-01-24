@@ -10,7 +10,7 @@
                 </div>
                 <span class="toast-text"> {!! nl2br(e(session('status'))) !!}</span>&nbsp;&nbsp;
                 <button class="toast-close-btn"data-bs-dismiss="alert" aria-label="Close">
-                    <i class="fa-solid fa-times" style="color: #16A34A"></i>
+                    <i class="fa-thin fa-xmark" style="color: #16A34A"></i>
                 </button>
             </div>
         </div>
@@ -90,7 +90,7 @@
                         @php
                             $currentDate = Carbon::now();
 
-                            $deliveryDays = is_numeric($product->delivery_days) ? (int) $product->delivery_days : 0;
+                            $deliveryDays = is_numeric($item->product->delivery_days) ? (int) $item->product->delivery_days : 0;
 
                             $deliveryDate =
                                 $deliveryDays > 0 ? $currentDate->addDays($deliveryDays)->format('d-m-y') : null;
@@ -144,7 +144,7 @@
                                         <div class="">
                                             <p style="font-size: 16px;">
                                                 Delivery Date :
-                                                @if ($product->deal_type == 0)
+                                                @if ($product->deal_type == 1)
                                                     {{ $deliveryDays > 0 ? $deliveryDate : 'No delivery date available' }}
                                                 @else
                                                     No delivery date available
@@ -160,7 +160,7 @@
                                             ₹{{ number_format($product->discounted_price, 0) }}
                                         </span>
                                         <span class="ms-1" style="font-size:18px;font-weight:500; color:#28A745">
-                                            {{ round($product->discount_percentage) }}% Off
+                                           - {{ round($product->discount_percentage) }}% Off
                                         </span>
                                     </div>
                                 @endif
@@ -215,21 +215,18 @@
                                         onsubmit="showLoader(this)">
                                         @csrf
                                         <input type="hidden" name="product_id" value="{{ $product->id }}">
-                                        <button type="submit" class="btn save-for-later-btn"
-                                            style="color: #ff0060;border: none">
-                                            <div class="d-flex align-items-center gap-2">
+                                        <button type="submit" class="btn save-for-later-btn" style="color: #ff0060; border: none;">
+                                            <div class="d-inline-flex align-items-center gap-2">
                                                 <div>
-                                                    <img src="{{ asset('assets/images/home/solar_pin-list.webp') }}"
-                                                        alt="icon" class="img-fluid" />
+                                                    <img src="{{ asset('assets/images/home/solar_pin-list.webp') }}" alt="icon" class="img-fluid" />
                                                 </div>
-                                                <div>
-                                                    <span class="loader spinner-border spinner-border-sm"
-                                                        style="display: none;"></span>
-                                                    Buy For Later
-
+                                                <div class="d-inline-flex align-items-center gap-2">
+                                                    <span class="loader spinner-border spinner-border-sm" style="display: none;"></span>
+                                                    <span>Buy For Later</span>
                                                 </div>
                                             </div>
                                         </button>
+
                                     </form>
                                     &nbsp;&nbsp;
                                     <form action="{{ route('cart.remove') }}" method="POST"
@@ -239,12 +236,12 @@
                                         <input type="hidden" name="product_id" value="{{ $product->id }}">
                                         <button type="submit" class="btn cancel-btn"
                                             style="color: #ff0060;border: none">
-                                            <div class="d-flex align-items-center gap-2">
+                                            <div class="d-inline-flex align-items-center gap-2">
                                                 <div>
                                                     <img src="{{ asset('assets/images/home/trash_Icons.webp') }}"
                                                         alt="icon" class="img-fluid" />
                                                 </div>
-                                                <div>
+                                                <div class="d-inline-flex align-items-center gap-2">
                                                     <span class="loader spinner-border spinner-border-sm me-2"
                                                         style="display: none"></span>
                                                     Remove
@@ -270,7 +267,7 @@
                             <div class="d-flex justify-content-between align-items-center" style="color: #28A745;">
                                 <p style="font-size:16px">Discount (x<span
                                         class="quantity-value">{{ $cart->quantity }}</span>)</p>
-                                <p class="discount">₹{{ number_format($total_discount, 0) }}</p>
+                                <p class="discount">-₹{{ number_format($total_discount, 0) }}</p>
                             </div>
                             <!-- <hr />
                                                             <div class="d-flex justify-content-between pb-3">
@@ -294,7 +291,7 @@
                                 &nbsp;&nbsp;
                                 <span class="ms-1" style="font-size:12px; color:#28A745; white-space: nowrap;">
                                     Dealsmachi Discount
-                                    &nbsp;<span class="discount">₹{{ number_format($total_discount, 0) }}</span>
+                                    &nbsp;<span class="discount">-₹{{ number_format($total_discount, 0) }}</span>
                                 </span>
                             </h4>
                         </div>
@@ -316,7 +313,7 @@
                         class="img-fluid" />
                 </div> &nbsp;&nbsp;
                 <div class="my-4">
-                    <p style="font-size:20px;font-weight:400">Saved For Later</p>
+                    <p style="font-size:20px;font-weight:400">Buy For Later</p>
                 </div>
             </div>
             @if ($savedItems->isEmpty())
@@ -387,7 +384,7 @@
                                     ₹{{ number_format($savedItem->deal->discounted_price, 0) }}
                                 </span>
                                 <span class="ms-1" style="font-size:18px;font-weight:500; color:#28A745">
-                                    {{ round($savedItem->deal->discount_percentage) }}% Off
+                                   - {{ round($savedItem->deal->discount_percentage) }}% Off
                                 </span>
                             </div>
                         </div>
@@ -399,12 +396,12 @@
                                     <input type="hidden" name="product_id" value="{{ $savedItem->deal_id }}">
                                     <button type="submit" class="btn remove-cart-btn"
                                         style="color: #ff0060;border: none">
-                                        <div class="d-flex align-items-center gap-2">
+                                        <div class="d-inline-flex align-items-center gap-2-2">
                                             <div>
                                                 <img src="{{ asset('assets/images/home/trash_Icons.webp') }}"
                                                     alt="icon" class="img-fluid" />
                                             </div>
-                                            <div>
+                                            <div class="d-inline-flex align-items-center gap-2">
                                                 <span class="loader spinner-border spinner-border-sm"
                                                     style="display: none"></span>
                                                 Remove
@@ -416,12 +413,12 @@
                                     @csrf
                                     <input type="hidden" name="product_id" value="{{ $savedItem->deal_id }}">
                                     <button type="submit" class="btn  cancel-btn" style="color: #ff0060;border: none">
-                                        <div class="d-flex align-items-center gap-2">
+                                        <div class="d-inline-flex align-items-center gap-2">
                                             <div>
                                                 <img src="{{ asset('assets/images/home/delivery_icon.webp') }}"
                                                     alt="icon" class="img-fluid" />
                                             </div>
-                                            <div>
+                                            <div class="d-inline-flex align-items-center gap-2">
                                                 <span class="loader spinner-border spinner-border-sm me-2"
                                                     style="display: none"></span>
                                                 Move to Cart

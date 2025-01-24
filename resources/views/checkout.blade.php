@@ -12,7 +12,7 @@
                         </div>
                         <span class="toast-text"> {!! nl2br(e(session('status'))) !!}</span>&nbsp;&nbsp;
                         <button class="toast-close-btn"data-bs-dismiss="alert" aria-label="Close">
-                            <i class="fa-solid fa-times" style="color: #16A34A"></i>
+                            <i class="fa-thin fa-xmark" style="color: #16A34A"></i>
                         </button>
                     </div>
                 </div>
@@ -106,7 +106,7 @@
                                             <span class="ms-1" style="font-size:22px;color:#ff0060">
                                                 ₹{{ number_format($item->product->discounted_price * $item->quantity, 0) }}
                                             </span>
-                                            <span class="ms-1" style="font-size:12px; color:#00DD21">
+                                            <span class="ms-1" style="font-size:12px; color:#00DD21">-
                                                 ({{ number_format($item->product->discount_percentage, 0) }}%)
                                                 off
                                             </span>
@@ -172,8 +172,8 @@
                                         <span class="total ms-1"
                                             style="font-size:12px; color:#00DD21;white-space: nowrap;">
                                             Dealsmachi Discount
-                                            &nbsp;<span
-                                                class="discount">₹{{ number_format($cart->items->sum(fn($item) => ($item->product->original_price - $item->product->discounted_price) * $item->quantity), 2) }}</span>
+                                            &nbsp;-<span
+                                                class="discount">-₹{{ number_format($cart->items->sum(fn($item) => ($item->product->original_price - $item->product->discounted_price) * $item->quantity), 2) }}</span>
                                         </span>
                                     </h4>
                                 </div>
@@ -260,7 +260,7 @@
                                                 <span class="ms-1" style="font-size:22px;color:#ff0060">
                                                     ₹{{ number_format($item->product->discounted_price * $item->quantity, 0) }}
                                                 </span>
-                                                <span class="ms-1" style="font-size:12px; color:#00DD21">
+                                                <span class="ms-1" style="font-size:12px; color:#00DD21">-
                                                     ({{ number_format($item->product->discount_percentage, 0) }}%)
                                                     off
                                                 </span>
@@ -324,7 +324,7 @@
                                             style="font-size:12px; color:#00DD21;white-space: nowrap;">
                                             Dealsmachi Discount
                                             &nbsp;<span
-                                                class="discount">₹{{ number_format($cart->discount, 2) }}</span></span>
+                                                class="discount">-₹{{ number_format($cart->discount, 2) }}</span></span>
                                     </h4>
                                 </div>
                                 {{-- <div class="d-flex justify-content-end align-items-center py-3"
