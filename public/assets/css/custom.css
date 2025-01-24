@@ -2895,6 +2895,39 @@ footer hr {
     text-align: center;
     justify-content: center;
 }
+/* Show dropdown on hover */
+.social_links i:hover + .dropdown_items {
+    display: block;
+}
+
+.dropdown_items {
+    display: none;
+    position: fixed;
+    width: fit-content;
+    background-color: white;
+    padding: 10px;
+    right: 48px;
+    top: 14.5rem;
+    border-radius: 5px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    z-index: 999;
+}
+
+.dorp_fb {
+    border: 1px solid #1878f3;
+}
+.dorp_ig {
+    border: 1px solid #e4405f;
+}
+.dorp_yt {
+    border: 1px solid #ff0000;
+}
+.dorp_wa {
+    border: 1px solid #25d366;
+}
+.dorp_tg {
+    border: 1px solid #0088cc;
+}
 
 .fixex_icons {
     border: 0.4px solid;
@@ -2907,21 +2940,15 @@ footer hr {
 
 .fst_rw {
     display: flex;
-    /* justify-content: space-between; */
     text-align: center;
 }
 
-/* Style for the quantity UI */
 .quantity-ui {
     display: inline-flex;
-    /* Use inline-flex to make sure it's on the same line */
     align-items: center;
-    /* Vertically center align the buttons and quantity */
     gap: 10px;
-    /* Add some space between buttons and quantity */
 }
 
-/* Style for the buttons */
 .quantity_btn {
     width: 25px;
     border: 1px solid #ddd;
@@ -2937,7 +2964,6 @@ footer hr {
     background-color: #ddd;
 }
 
-/* Style for the quantity display */
 .quantity-display {
     font-size: 18px;
     padding: 0 10px;
@@ -3042,35 +3068,6 @@ footer hr {
 
 .dropdown:hover .dropdown-menu {
     display: block;
-}
-
-.dropdown_items {
-    display: none;
-    position: fixed;
-    width: fit-content;
-    background-color: white;
-    padding: 10px;
-    right: 48px;
-    top: 14.5rem;
-    border-radius: 5px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    z-index: 999;
-}
-
-.dorp_fb {
-    border: 1px solid #1878f3;
-}
-.dorp_ig {
-    border: 1px solid #e4405f;
-}
-.dorp_yt {
-    border: 1px solid #ff0000;
-}
-.dorp_wa {
-    border: 1px solid #25d366;
-}
-.dorp_tg {
-    border: 1px solid #0088cc;
 }
 
 #default_address:checked {
@@ -3509,7 +3506,7 @@ footer hr {
 
 .order-button:hover {
     padding: 8px 22px;
-    background-color: #01a119 !important;
+    background-color: #02f126 !important;
     font-size: 18px;
     color: #fff;
 }
@@ -3689,7 +3686,15 @@ footer hr {
     border: 1px solid #ff0060 !important;
     color: #ff0060 !important;
     font-size: 16px;
-    padding: 2px 5px;
+    padding: 6px 7px;
+}
+.cancel-btn:hover {
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3), 0 1px 3px rgba(0, 0, 0, 0.06);
+    border-radius: 2px !important;
+    border: 1px solid #ff0060 !important;
+    color: #ff0060 !important;
+    font-size: 16px;
+    padding: 6px 7px;
 }
 
 .success_alert {
@@ -3743,7 +3748,7 @@ footer hr {
 .placeorder_btn:hover {
     color: #fff !important;
     padding: 8px 22px;
-    background-color: #01a119 !important;
+    background-color: #02f126 !important;
     font-size: 18px;
 }
 
@@ -3754,12 +3759,37 @@ footer hr {
     font-size: 18px;
 }
 
+.custom-loader {
+    display: inline-block;
+    margin-left: 8px;
+    width: 16px;
+    height: 16px;
+    border: 2px solid #ff0060;
+    border-radius: 50%;
+    border-top-color: transparent;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+@media screen and (max-width: 450px) {
+    .price-section p {
+        margin: 0px 7px;
+    }
+}
+
 /* toast style  */
 .toast-success {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    max-width: 400px;
+    max-width: 420px;
     padding: 10px 20px;
     border: 0.5px solid #a2dab7;
     background-color: #f4fbf7;
@@ -3783,7 +3813,7 @@ footer hr {
 
 .toast-text {
     color: #16a34a;
-    font-size: 16px;
+    font-size: 14px;
     font-weight: 300 !important;
     flex: 1;
 }
@@ -3831,7 +3861,7 @@ footer hr {
 
 .toast-danger .toast-text {
     color: #ef4444;
-    font-size: 16px;
+    font-size: 14px;
     font-weight: 300 !important;
     flex: 1;
 }

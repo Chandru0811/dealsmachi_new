@@ -116,7 +116,8 @@ class HomeController extends Controller
         $pagedescription = $product->description;
         $pageimage = $product->image_url1;
         $vedios = $product->additional_details;
-        $reviewData = $product->review;
+        // $reviewData = $product->review;
+        $reviewData = $product->review()->with('user')->get();
         // dd($reviewData);
         $shareButtons = \Share::page(
             $pageurl,

@@ -611,23 +611,28 @@
                                     <button type="button" class="social_links">
                                         <i class="fixex_icons fa-brands fa-facebook-f"
                                             style="color:#fff; background: #1878f3;" aria-label="Facebook"
-                                            onclick="toggleDropdown('social_dropdown_fb', '.social_links')"></i>
+                                            onmouseover="showDropdown('social_dropdown_fb')"
+                                            onmouseout="hideDropdown('social_dropdown_fb')"></i>
 
                                         <i class="fixex_icons fa-brands fa-instagram"
                                             style="color:#fff; background: #e4405f;" aria-label="Instagram"
-                                            onclick="toggleDropdown('social_dropdown_ig', '.social_links')"></i>
+                                            onmouseover="showDropdown('social_dropdown_ig')"
+                                            onmouseout="hideDropdown('social_dropdown_ig')"></i>
 
                                         <i class="fixex_icons fa-brands fa-youtube"
                                             style="color:#fff; background: #FF0000;" aria-label="YouTube"
-                                            onclick="toggleDropdown('social_dropdown_yt', '.social_links')"></i>
+                                            onmouseover="showDropdown('social_dropdown_yt')"
+                                            onmouseout="hideDropdown('social_dropdown_yt')"></i>
 
                                         <i class="fixex_icons fa-brands fa-whatsapp"
                                             style="color:#fff; background: #25D366;" aria-label="WhatsApp"
-                                            onclick="toggleDropdown('social_dropdown_wa', '.social_links')"></i>
+                                            onmouseover="showDropdown('social_dropdown_wa')"
+                                            onmouseout="hideDropdown('social_dropdown_wa')"></i>
 
                                         <i class="fixex_icons fa-brands fa-telegram"
                                             style="color:#fff; background: #0088CC;" aria-label="Telegram"
-                                            onclick="toggleDropdown('social_dropdown_tg', '.social_links')"></i>
+                                            onmouseover="showDropdown('social_dropdown_tg')"
+                                            onmouseout="hideDropdown('social_dropdown_tg')"></i>
                                     </button>
 
                                     <div id="social_dropdown_fb" class="dropdown_items dorp_fb" style="display: none">
@@ -760,31 +765,34 @@
 
     <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
     <script>
-        function toggleDropdown(socialId, buttonClass) {
+        let hideTimeout;
+        let currentlyOpenDropdown = null;
+
+        function showDropdown(socialId) {
             const socialDropdown = document.getElementById(socialId);
-            socialDropdown.style.display = socialDropdown.style.display === "none" ? "block" : "none";
 
-            if (socialDropdown.style.display === "block") {
-                document.addEventListener("click", function closeDropdown(event) {
-                    const socialButton = document.querySelector(buttonClass);
-
-                    if (!socialDropdown.contains(event.target) && !socialButton.contains(event.target)) {
-                        socialDropdown.style.display = "none";
-                        document.removeEventListener("click", closeDropdown);
-                    }
-                });
+            if (currentlyOpenDropdown && currentlyOpenDropdown !== socialDropdown) {
+                currentlyOpenDropdown.style.display = "none";
             }
+
+            clearTimeout(hideTimeout);
+
+            socialDropdown.style.display = "block";
+
+            currentlyOpenDropdown = socialDropdown;
         }
 
-        function closeDropdownOnClickOutside(event) {
-            const socialDropdown = document.getElementById("social_dropdown");
-            const socialButton = document.querySelector(".social_links");
+        function hideDropdown(socialId) {
+            const socialDropdown = document.getElementById(socialId);
 
-            if (!socialDropdown.contains(event.target) && !socialButton.contains(event.target)) {
+            hideTimeout = setTimeout(() => {
                 socialDropdown.style.display = "none";
-                document.removeEventListener("click", closeDropdownOnClickOutside);
-            }
+                if (currentlyOpenDropdown === socialDropdown) {
+                    currentlyOpenDropdown = null;
+                }
+            }, 1000);
         }
+
 
 
         const clearUrl =

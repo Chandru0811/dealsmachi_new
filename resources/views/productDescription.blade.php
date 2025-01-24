@@ -172,19 +172,24 @@
             <div>
                 <button type="button" class="social_links">
                     <i class="fixex_icons fa-brands fa-facebook-f" style="color:#fff; background: #1878f3;"
-                        aria-label="Facebook" onclick="toggleDropdown('social_dropdown_fb', '.social_links')"></i>
+                        aria-label="Facebook" onmouseover="showDropdown('social_dropdown_fb')"
+                        onmouseout="hideDropdown('social_dropdown_fb')"></i>
 
                     <i class="fixex_icons fa-brands fa-instagram" style="color:#fff; background: #e4405f;"
-                        aria-label="Instagram" onclick="toggleDropdown('social_dropdown_ig', '.social_links')"></i>
+                        aria-label="Instagram" onmouseover="showDropdown('social_dropdown_ig')"
+                        onmouseout="hideDropdown('social_dropdown_ig')"></i>
 
                     <i class="fixex_icons fa-brands fa-youtube" style="color:#fff; background: #FF0000;"
-                        aria-label="YouTube" onclick="toggleDropdown('social_dropdown_yt', '.social_links')"></i>
+                        aria-label="YouTube" onmouseover="showDropdown('social_dropdown_yt')"
+                        onmouseout="hideDropdown('social_dropdown_yt')"></i>
 
                     <i class="fixex_icons fa-brands fa-whatsapp" style="color:#fff; background: #25D366;"
-                        aria-label="WhatsApp" onclick="toggleDropdown('social_dropdown_wa', '.social_links')"></i>
+                        aria-label="WhatsApp" onmouseover="showDropdown('social_dropdown_wa')"
+                        onmouseout="hideDropdown('social_dropdown_wa')"></i>
 
                     <i class="fixex_icons fa-brands fa-telegram" style="color:#fff; background: #0088CC;"
-                        aria-label="Telegram" onclick="toggleDropdown('social_dropdown_tg', '.social_links')"></i>
+                        aria-label="Telegram" onmouseover="showDropdown('social_dropdown_tg')"
+                        onmouseout="hideDropdown('social_dropdown_tg')"></i>
                 </button>
 
                 <div id="social_dropdown_fb" class="dropdown_items dorp_fb" style="display: none">
@@ -467,7 +472,7 @@
                                             class="current-price">₹{{ strpos($product->discounted_price, '.') !== false ? rtrim(rtrim(number_format($product->discounted_price, 2), '0'), '.') : $product->discounted_price }}</span>
                                     </h3>
                                     <span class="original-price"></span>
-                                    <span class="discount-price"></span> &nbsp;&nbsp;
+                                    <span class="discount-price"></span>
                                     @if (!empty($product->coupon_code))
                                         <p>
                                             <span id="mySpan" class="deal-badge"
@@ -498,7 +503,7 @@
                                     <span
                                         class="original-price">₹{{ strpos($product->discounted_price, '.') !== false ? rtrim(rtrim(number_format($product->original_price, 2), '0'), '.') : $product->original_price }}</span>
                                     <span class="discount-price">₹{{ number_format($product->discount_percentage, 2) }}%
-                                        off</span> &nbsp;&nbsp;
+                                        off</span>
                                     @if (!empty($product->coupon_code))
                                         <p>
                                             <span id="mySpan" class="deal-badge"
@@ -767,21 +772,27 @@
                             <!-- Rating Summary -->
                             <div class="rating-summary mb-4">
                                 <div class="d-flex align-items-center">
-                                    <h5>Total score :</h5> &nbsp;&nbsp;<h2 class="average-rating me-2"
-                                        style="color:#40d128">
+                                    <h5>Total score :</h5>
+                                    &nbsp;&nbsp;
+                                    <h2 class="average-rating me-2" style="color:#40d128">
                                         {{ $averageRating }}
-                                        <span><i class="fa-solid fa-star fa-lg"
-                                                style="color: #fdbf46; font-size:12px"></i></span>
-                                        <span><i class="fa-solid fa-star fa-lg"
-                                                style="color: #fdbf46; font-size:12px"></i></span>
-                                        <span><i class="fa-solid fa-star fa-lg"
-                                                style="color: #fdbf46; font-size:12px"></i></span>
-                                        <span><i class="fa-solid fa-star fa-lg"
-                                                style="color: #fdbf46; font-size:12px"></i></span>
-                                        <span><i class="fa-solid fa-star fa-lg"
-                                                style="color: #fdbf46; font-size:12px"></i></span>
+                                        @php
+                                            $fullStars = floor($averageRating);
+                                            $hasHalfStar = $averageRating - $fullStars >= 0.5;
+                                        @endphp
+                                        @for ($i = 1; $i <= $fullStars; $i++)
+                                            <i class="fa-solid fa-star fa-lg" style="color: #fdbf46; font-size:12px"></i>
+                                        @endfor
+                                        @if ($hasHalfStar)
+                                            <i class="fa-solid fa-star-half-stroke fa-lg"
+                                                style="color: #fdbf46; font-size:12px"></i>
+                                        @endif
+                                        @for ($i = $fullStars + ($hasHalfStar ? 1 : 0); $i < 5; $i++)
+                                            <i class="fa-regular fa-star fa-lg" style="color: #ccc; font-size:12px"></i>
+                                        @endfor
                                     </h2>
                                 </div>
+
                                 <p class="ms-2">No. of reviews : &nbsp;&nbsp;<span
                                         style="color: #c0b9b9;">{{ $totalReviews }}
                                         Reviews</span></p>
@@ -837,7 +848,7 @@
 
                                                 <div class="d-flex gap-5 text-center mt-4">
                                                     <small class="reviewer-name" style="color: #c3c2c2;">
-                                                        {{ $reviewSet->title ?? 'Test' }}</small>
+                                                        {{ $reviewSet->user->name ?? 'Test' }}</small>
                                                     <small class="review-date"
                                                         style="color: #c3c2c2;">{{ $reviewSet->created_at }}</small>
                                                 </div>
@@ -1165,31 +1176,34 @@
 
     </section>
     <script>
-        function toggleDropdown(socialId, buttonClass) {
+        let hideTimeout;
+        let currentlyOpenDropdown = null;
+
+        function showDropdown(socialId) {
             const socialDropdown = document.getElementById(socialId);
-            socialDropdown.style.display = socialDropdown.style.display === "none" ? "block" : "none";
 
-            if (socialDropdown.style.display === "block") {
-                document.addEventListener("click", function closeDropdown(event) {
-                    const socialButton = document.querySelector(buttonClass);
-
-                    if (!socialDropdown.contains(event.target) && !socialButton.contains(event.target)) {
-                        socialDropdown.style.display = "none";
-                        document.removeEventListener("click", closeDropdown);
-                    }
-                });
+            if (currentlyOpenDropdown && currentlyOpenDropdown !== socialDropdown) {
+                currentlyOpenDropdown.style.display = "none";
             }
+
+            clearTimeout(hideTimeout);
+
+            socialDropdown.style.display = "block";
+
+            currentlyOpenDropdown = socialDropdown;
         }
 
-        function closeDropdownOnClickOutside(event) {
-            const socialDropdown = document.getElementById("social_dropdown");
-            const socialButton = document.querySelector(".social_links");
+        function hideDropdown(socialId) {
+            const socialDropdown = document.getElementById(socialId);
 
-            if (!socialDropdown.contains(event.target) && !socialButton.contains(event.target)) {
+            hideTimeout = setTimeout(() => {
                 socialDropdown.style.display = "none";
-                document.removeEventListener("click", closeDropdownOnClickOutside);
-            }
+                if (currentlyOpenDropdown === socialDropdown) {
+                    currentlyOpenDropdown = null;
+                }
+            }, 1000);
         }
+
 
         function navigateToRoute() {
             window.location.href = '/summary';
