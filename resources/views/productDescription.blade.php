@@ -10,7 +10,7 @@
                 </div>
                 <span class="toast-text"> {!! nl2br(e(session('status'))) !!}</span>&nbsp;&nbsp;
                 <button class="toast-close-btn"data-bs-dismiss="alert" aria-label="Close">
-                    <i class="fa-solid fa-times" style="color: #16A34A"></i>
+                    <i class="fa-thin fa-xmark" style="color: #16A34A"></i>
                 </button>
             </div>
         </div>
@@ -466,10 +466,10 @@
                             </div>
 
                             @if ($product->deal_type == 2)
-                                <div class="price-section mt-4 d-flex">
+                                <div class="price-section mt-4 d-flex align-items-center">
                                     <h3>
                                         <span
-                                            class="current-price">₹{{ strpos($product->discounted_price, '.') !== false ? rtrim(rtrim(number_format($product->discounted_price, 2), '0'), '.') : $product->discounted_price }}</span>
+                                            class="current-price mt-2">₹{{ strpos($product->discounted_price, '.') !== false ? rtrim(rtrim(number_format($product->discounted_price, 2), '0'), '.') : $product->discounted_price }}</span>
                                     </h3>
                                     <span class="original-price"></span>
                                     <span class="discount-price"></span>
@@ -495,18 +495,18 @@
                                     <span style="color: #22cb00">Currently Services are free through DealsMachi</span>
                                 </div>
                             @else
-                                <div class="price-section mt-4 d-flex">
+                                <div class="price-section mt-4 d-flex align-items-center">
                                     <h3>
                                         <span
-                                            class="current-price">₹{{ strpos($product->discounted_price, '.') !== false ? rtrim(rtrim(number_format($product->discounted_price, 2), '0'), '.') : $product->discounted_price }}</span>
+                                            class="current-price mt-4">₹{{ strpos($product->discounted_price, '.') !== false ? rtrim(rtrim(number_format($product->discounted_price, 2), '0'), '.') : $product->discounted_price }}</span>
                                     </h3>
                                     <span
                                         class="original-price">₹{{ strpos($product->discounted_price, '.') !== false ? rtrim(rtrim(number_format($product->original_price, 2), '0'), '.') : $product->original_price }}</span>
-                                    <span class="discount-price">₹{{ number_format($product->discount_percentage, 2) }}%
+                                    <span class="discount-price">-₹{{ number_format($product->discount_percentage, 2) }}%
                                         off</span>
                                     @if (!empty($product->coupon_code))
-                                        <p>
-                                            <span id="mySpan" class="deal-badge"
+                                        <p class="d-flex justify-content-center">
+                                            <span id="mySpan" class="deal-badge mt-3"
                                                 style="cursor: pointer; position:relative;-"
                                                 onclick="copySpan(this, event)" data-bs-toggle="tooltip"
                                                 data-bs-placement="bottom" title="Click to Copy">
@@ -747,7 +747,6 @@
                 <div class="review-section mt-4 px-2">
                     <div class="d-flex justify-content-between align-items-center mb-2">
                         <h5 class="media_fonts_headings">Reviews</h5>
-                        {{-- <button disabled type="button" class="review_btn media_fonts_conent">Add Review</button> --}}
                     </div>
                     <div class="card_offers review_section p-3">
                         @php
@@ -774,7 +773,7 @@
                                 <div class="d-flex align-items-center">
                                     <h5>Total score :</h5>
                                     &nbsp;&nbsp;
-                                    <h2 class="average-rating me-2" style="color:#40d128">
+                                    <h2 class="average-rating me-2 d-flex align-items-center" style="color:#40d128">
                                         {{ $averageRating }}
                                         @php
                                             $fullStars = floor($averageRating);
@@ -800,12 +799,11 @@
 
                             <!-- Review Cards -->
                             <div class="review-cards mt-4">
-                                @foreach ($reviewData as $reviewSet)
-                                    <div class="review-card mb-4">
+                                @foreach ($reviewData as $index => $reviewSet)
+                                    <div class="review-card mb-4 {{ $index >= 3 ? 'd-none' : '' }}">
                                         <hr>
                                         <div class="p-2">
                                             <div class="row m-0">
-                                                <!-- Review Content -->
                                                 <div class="col-12">
                                                     <div class="col-md-6">
                                                         <div class="row d-flex justify-content-between text-center">
@@ -850,12 +848,17 @@
                                                     <small class="reviewer-name" style="color: #c3c2c2;">
                                                         {{ $reviewSet->user->name ?? 'Test' }}</small>
                                                     <small class="review-date"
-                                                        style="color: #c3c2c2;">{{ $reviewSet->created_at }}</small>
+                                                        style="color: #c3c2c2;">{{ $reviewSet->created_at->format('Y-m-d') }}</small>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 @endforeach
+                            </div>
+
+                            <!-- Show More Button -->
+                            <div class="text-end mt-4">
+                                <button id="showMoreLessBtn" class="btn border-0">Show More</button>
                             </div>
                         @else
                             <!-- Empty State -->
@@ -867,164 +870,185 @@
                     </div>
                 </div>
 
-            </div>
-
-
-            {{-- about and working hours modal  --}}
-            <div class="modal fade" id="aboutModal" tabindex="-1" aria-labelledby="aboutModalLabel"
-                aria-hidden="true">
-                <div class="modal-dialog modal-dialog-centered">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="aboutModalLabel">{{ $product->shop->name }}</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body">
-                            <!-- Add your content here -->
-                            <p class="quickInfo">{{ $product->shop->description }}</p>
+                {{-- about and working hours modal  --}}
+                <div class="modal fade" id="aboutModal" tabindex="-1" aria-labelledby="aboutModalLabel"
+                    aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="aboutModalLabel">{{ $product->shop->name }}</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <!-- Add your content here -->
+                                <p class="quickInfo">{{ $product->shop->description }}</p>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <!-- Add the modal for "Working Hours" -->
-            <div class="modal fade" id="workingHoursModal" tabindex="-1" aria-labelledby="workingHoursModalLabel"
-                aria-hidden="true">
-                <div class="modal-dialog modal-dialog-centered">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="workingHoursModalLabel">Timings</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                aria-label="Close"></button>
+                <!-- Add the modal for "Working Hours" -->
+                <div class="modal fade" id="workingHoursModal" tabindex="-1" aria-labelledby="workingHoursModalLabel"
+                    aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="workingHoursModalLabel">Timings</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body d-flex justify-content-around text-center">
+                                <div class="col-12">
+                                    <div class="row m-0">
+                                        <div class="col-4 pe-3 text-end">
+                                            <p class="quickInfo text-nowrap">Monday</p>
+                                        </div>
+                                        <div class="col-8 ps-5 text-start">
+                                            <p class="quickInfo text-nowrap">:&nbsp;&nbsp;&nbsp;
+                                                @if (
+                                                    !empty($product->shop->hour['daily_timing']['monday']['opening']) &&
+                                                        !empty($product->shop->hour['daily_timing']['monday']['closing']))
+                                                    {{ \Carbon\Carbon::createFromFormat('H:i', $product->shop->hour['daily_timing']['monday']['opening'])->format('h:i A') }}
+                                                    -
+                                                    {{ \Carbon\Carbon::createFromFormat('H:i', $product->shop->hour['daily_timing']['monday']['closing'])->format('h:i A') }}
+                                                @else
+                                                    Holiday
+                                                @endif
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div class="row m-0">
+                                        <div class="col-4 pe-3 text-end">
+                                            <p class="quickInfo text-nowrap">Tuesday</p>
+                                        </div>
+                                        <div class="col-8 ps-5 text-start">
+                                            <p class="quickInfo text-nowrap">:&nbsp;&nbsp;&nbsp;
+                                                @if (
+                                                    !empty($product->shop->hour['daily_timing']['tuesday']['opening']) &&
+                                                        !empty($product->shop->hour['daily_timing']['tuesday']['closing']))
+                                                    {{ \Carbon\Carbon::createFromFormat('H:i', $product->shop->hour['daily_timing']['tuesday']['opening'])->format('h:i A') }}
+                                                    -
+                                                    {{ \Carbon\Carbon::createFromFormat('H:i', $product->shop->hour['daily_timing']['tuesday']['closing'])->format('h:i A') }}
+                                                @else
+                                                    Holiday
+                                                @endif
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div class="row m-0">
+                                        <div class="col-4 pe-3 text-end">
+                                            <p class="quickInfo text-nowrap">Wednesday</p>
+                                        </div>
+                                        <div class="col-8 ps-5 text-start">
+                                            <p class="quickInfo text-nowrap">:&nbsp;&nbsp;&nbsp;
+                                                @if (
+                                                    !empty($product->shop->hour['daily_timing']['wednesday']['opening']) &&
+                                                        !empty($product->shop->hour['daily_timing']['wednesday']['closing']))
+                                                    {{ \Carbon\Carbon::createFromFormat('H:i', $product->shop->hour['daily_timing']['wednesday']['opening'])->format('h:i A') }}
+                                                    -
+                                                    {{ \Carbon\Carbon::createFromFormat('H:i', $product->shop->hour['daily_timing']['wednesday']['closing'])->format('h:i A') }}
+                                                @else
+                                                    Holiday
+                                                @endif
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div class="row m-0">
+                                        <div class="col-4 pe-3 text-end">
+                                            <p class="quickInfo text-nowrap">Thursday</p>
+                                        </div>
+                                        <div class="col-8 ps-5 text-start">
+                                            <p class="quickInfo text-nowrap">:&nbsp;&nbsp;&nbsp;
+                                                @if (
+                                                    !empty($product->shop->hour['daily_timing']['thursday']['opening']) &&
+                                                        !empty($product->shop->hour['daily_timing']['thursday']['closing']))
+                                                    {{ \Carbon\Carbon::createFromFormat('H:i', $product->shop->hour['daily_timing']['thursday']['opening'])->format('h:i A') }}
+                                                    -
+                                                    {{ \Carbon\Carbon::createFromFormat('H:i', $product->shop->hour['daily_timing']['thursday']['closing'])->format('h:i A') }}
+                                                @else
+                                                    Holiday
+                                                @endif
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div class="row m-0">
+                                        <div class="col-4 pe-3 text-end">
+                                            <p class="quickInfo text-nowrap">Friday</p>
+                                        </div>
+                                        <div class="col-8 ps-5 text-start">
+                                            <p class="quickInfo text-nowrap">:&nbsp;&nbsp;&nbsp;
+                                                @if (
+                                                    !empty($product->shop->hour['daily_timing']['friday']['opening']) &&
+                                                        !empty($product->shop->hour['daily_timing']['friday']['closing']))
+                                                    {{ \Carbon\Carbon::createFromFormat('H:i', $product->shop->hour['daily_timing']['friday']['opening'])->format('h:i A') }}
+                                                    -
+                                                    {{ \Carbon\Carbon::createFromFormat('H:i', $product->shop->hour['daily_timing']['friday']['closing'])->format('h:i A') }}
+                                                @else
+                                                    Holiday
+                                                @endif
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div class="row m-0">
+                                        <div class="col-4 pe-3 text-end">
+                                            <p class="quickInfo text-nowrap">Saturday</p>
+                                        </div>
+                                        <div class="col-8 ps-5 text-start">
+                                            <p class="quickInfo text-nowrap">:&nbsp;&nbsp;&nbsp;
+                                                @if (
+                                                    !empty($product->shop->hour['daily_timing']['saturday']['opening']) &&
+                                                        !empty($product->shop->hour['daily_timing']['saturday']['closing']))
+                                                    {{ \Carbon\Carbon::createFromFormat('H:i', $product->shop->hour['daily_timing']['saturday']['opening'])->format('h:i A') }}
+                                                    -
+                                                    {{ \Carbon\Carbon::createFromFormat('H:i', $product->shop->hour['daily_timing']['saturday']['closing'])->format('h:i A') }}
+                                                @else
+                                                    Holiday
+                                                @endif
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div class="row m-0">
+                                        <div class="col-4 pe-3 text-end">
+                                            <p class="quickInfo text-nowrap">Sunday</p>
+                                        </div>
+                                        <div class="col-8 ps-5 text-start">
+                                            <p class="quickInfo text-nowrap">:&nbsp;&nbsp;&nbsp;
+                                                @if (
+                                                    !empty($product->shop->hour['daily_timing']['sunday']['opening']) &&
+                                                        !empty($product->shop->hour['daily_timing']['sunday']['closing']))
+                                                    {{ \Carbon\Carbon::createFromFormat('H:i', $product->shop->hour['daily_timing']['sunday']['opening'])->format('h:i A') }}
+                                                    -
+                                                    {{ \Carbon\Carbon::createFromFormat('H:i', $product->shop->hour['daily_timing']['sunday']['closing'])->format('h:i A') }}
+                                                @else
+                                                    Holiday
+                                                @endif
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                        <div class="modal-body d-flex justify-content-around text-center">
-                            <div class="col-12">
-                                <div class="row m-0">
-                                    <div class="col-4 pe-3 text-end">
-                                        <p class="quickInfo text-nowrap">Monday</p>
-                                    </div>
-                                    <div class="col-8 ps-5 text-start">
-                                        <p class="quickInfo text-nowrap">:&nbsp;&nbsp;&nbsp;
-                                            @if (
-                                                !empty($product->shop->hour['daily_timing']['monday']['opening']) &&
-                                                    !empty($product->shop->hour['daily_timing']['monday']['closing']))
-                                                {{ \Carbon\Carbon::createFromFormat('H:i', $product->shop->hour['daily_timing']['monday']['opening'])->format('h:i A') }}
-                                                -
-                                                {{ \Carbon\Carbon::createFromFormat('H:i', $product->shop->hour['daily_timing']['monday']['closing'])->format('h:i A') }}
-                                            @else
-                                                Holiday
-                                            @endif
-                                        </p>
-                                    </div>
-                                </div>
-                                <div class="row m-0">
-                                    <div class="col-4 pe-3 text-end">
-                                        <p class="quickInfo text-nowrap">Tuesday</p>
-                                    </div>
-                                    <div class="col-8 ps-5 text-start">
-                                        <p class="quickInfo text-nowrap">:&nbsp;&nbsp;&nbsp;
-                                            @if (
-                                                !empty($product->shop->hour['daily_timing']['tuesday']['opening']) &&
-                                                    !empty($product->shop->hour['daily_timing']['tuesday']['closing']))
-                                                {{ \Carbon\Carbon::createFromFormat('H:i', $product->shop->hour['daily_timing']['tuesday']['opening'])->format('h:i A') }}
-                                                -
-                                                {{ \Carbon\Carbon::createFromFormat('H:i', $product->shop->hour['daily_timing']['tuesday']['closing'])->format('h:i A') }}
-                                            @else
-                                                Holiday
-                                            @endif
-                                        </p>
-                                    </div>
-                                </div>
-                                <div class="row m-0">
-                                    <div class="col-4 pe-3 text-end">
-                                        <p class="quickInfo text-nowrap">Wednesday</p>
-                                    </div>
-                                    <div class="col-8 ps-5 text-start">
-                                        <p class="quickInfo text-nowrap">:&nbsp;&nbsp;&nbsp;
-                                            @if (
-                                                !empty($product->shop->hour['daily_timing']['wednesday']['opening']) &&
-                                                    !empty($product->shop->hour['daily_timing']['wednesday']['closing']))
-                                                {{ \Carbon\Carbon::createFromFormat('H:i', $product->shop->hour['daily_timing']['wednesday']['opening'])->format('h:i A') }}
-                                                -
-                                                {{ \Carbon\Carbon::createFromFormat('H:i', $product->shop->hour['daily_timing']['wednesday']['closing'])->format('h:i A') }}
-                                            @else
-                                                Holiday
-                                            @endif
-                                        </p>
-                                    </div>
-                                </div>
-                                <div class="row m-0">
-                                    <div class="col-4 pe-3 text-end">
-                                        <p class="quickInfo text-nowrap">Thursday</p>
-                                    </div>
-                                    <div class="col-8 ps-5 text-start">
-                                        <p class="quickInfo text-nowrap">:&nbsp;&nbsp;&nbsp;
-                                            @if (
-                                                !empty($product->shop->hour['daily_timing']['thursday']['opening']) &&
-                                                    !empty($product->shop->hour['daily_timing']['thursday']['closing']))
-                                                {{ \Carbon\Carbon::createFromFormat('H:i', $product->shop->hour['daily_timing']['thursday']['opening'])->format('h:i A') }}
-                                                -
-                                                {{ \Carbon\Carbon::createFromFormat('H:i', $product->shop->hour['daily_timing']['thursday']['closing'])->format('h:i A') }}
-                                            @else
-                                                Holiday
-                                            @endif
-                                        </p>
-                                    </div>
-                                </div>
-                                <div class="row m-0">
-                                    <div class="col-4 pe-3 text-end">
-                                        <p class="quickInfo text-nowrap">Friday</p>
-                                    </div>
-                                    <div class="col-8 ps-5 text-start">
-                                        <p class="quickInfo text-nowrap">:&nbsp;&nbsp;&nbsp;
-                                            @if (
-                                                !empty($product->shop->hour['daily_timing']['friday']['opening']) &&
-                                                    !empty($product->shop->hour['daily_timing']['friday']['closing']))
-                                                {{ \Carbon\Carbon::createFromFormat('H:i', $product->shop->hour['daily_timing']['friday']['opening'])->format('h:i A') }}
-                                                -
-                                                {{ \Carbon\Carbon::createFromFormat('H:i', $product->shop->hour['daily_timing']['friday']['closing'])->format('h:i A') }}
-                                            @else
-                                                Holiday
-                                            @endif
-                                        </p>
-                                    </div>
-                                </div>
-                                <div class="row m-0">
-                                    <div class="col-4 pe-3 text-end">
-                                        <p class="quickInfo text-nowrap">Saturday</p>
-                                    </div>
-                                    <div class="col-8 ps-5 text-start">
-                                        <p class="quickInfo text-nowrap">:&nbsp;&nbsp;&nbsp;
-                                            @if (
-                                                !empty($product->shop->hour['daily_timing']['saturday']['opening']) &&
-                                                    !empty($product->shop->hour['daily_timing']['saturday']['closing']))
-                                                {{ \Carbon\Carbon::createFromFormat('H:i', $product->shop->hour['daily_timing']['saturday']['opening'])->format('h:i A') }}
-                                                -
-                                                {{ \Carbon\Carbon::createFromFormat('H:i', $product->shop->hour['daily_timing']['saturday']['closing'])->format('h:i A') }}
-                                            @else
-                                                Holiday
-                                            @endif
-                                        </p>
-                                    </div>
-                                </div>
-                                <div class="row m-0">
-                                    <div class="col-4 pe-3 text-end">
-                                        <p class="quickInfo text-nowrap">Sunday</p>
-                                    </div>
-                                    <div class="col-8 ps-5 text-start">
-                                        <p class="quickInfo text-nowrap">:&nbsp;&nbsp;&nbsp;
-                                            @if (
-                                                !empty($product->shop->hour['daily_timing']['sunday']['opening']) &&
-                                                    !empty($product->shop->hour['daily_timing']['sunday']['closing']))
-                                                {{ \Carbon\Carbon::createFromFormat('H:i', $product->shop->hour['daily_timing']['sunday']['opening'])->format('h:i A') }}
-                                                -
-                                                {{ \Carbon\Carbon::createFromFormat('H:i', $product->shop->hour['daily_timing']['sunday']['closing'])->format('h:i A') }}
-                                            @else
-                                                Holiday
-                                            @endif
-                                        </p>
-                                    </div>
+                    </div>
+                </div>
+
+                <!-- Modal -->
+                <div class="modal fade" id="videoModal" tabindex="-1" aria-labelledby="videoModalLabel"
+                    aria-hidden="true">
+                    <div class="modal-dialog modal-lg modal-dialog-centered">
+                        <div class="modal-content p-0 border-none">
+                            <button type="button"
+                                class="btn-close btn-close-sm position-absolute end-0 m-2 text-center d-flex align-items-center"
+                                data-bs-dismiss="modal" aria-label="Close"
+                                style="z-index: 1050; box-shadow: none; background:#fff !important;">
+                                <i class="fa-light fa-xmark" style="font-size: 22px;"></i>
+                            </button>
+                            <div class="modal-body p-0">
+                                <div class="ratio ratio-16x9">
+                                    <iframe id="videoFrame" src="" title="YouTube video player" frameborder="0"
+                                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                        allowfullscreen>
+                                    </iframe>
                                 </div>
                             </div>
                         </div>
@@ -1032,18 +1056,14 @@
                 </div>
             </div>
 
-
-
-            <!-- Modal -->
+            <!-- Video Modal -->
             <div class="modal fade" id="videoModal" tabindex="-1" aria-labelledby="videoModalLabel"
                 aria-hidden="true">
-                <div class="modal-dialog modal-lg modal-dialog-centered">
+                <div class="modal-dialog modal-lg">
                     <div class="modal-content p-0 border-none">
-                        <button type="button"
-                            class="btn-close btn-close-sm position-absolute end-0 m-2 text-center d-flex align-items-center"
+                        <button type="button" class="btn-close btn-close-sm position-absolute end-0 m-2"
                             data-bs-dismiss="modal" aria-label="Close"
-                            style="z-index: 1050; box-shadow: none; background:#fff !important;">
-                            <i class="fa-light fa-xmark" style="font-size: 22px;"></i>
+                            style="z-index: 1050; font-size: 12px; box-shadow: none;">
                         </button>
                         <div class="modal-body p-0">
                             <div class="ratio ratio-16x9">
@@ -1057,125 +1077,121 @@
                 </div>
             </div>
 
-
-        </div>
-
-
-        <!-- Video Modal -->
-        <div class="modal fade" id="videoModal" tabindex="-1" aria-labelledby="videoModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-lg">
-                <div class="modal-content p-0 border-none">
-                    <button type="button" class="btn-close btn-close-sm position-absolute end-0 m-2"
-                        data-bs-dismiss="modal" aria-label="Close"
-                        style="z-index: 1050; font-size: 12px; box-shadow: none;">
-                    </button>
-                    <div class="modal-body p-0">
-                        <div class="ratio ratio-16x9">
-                            <iframe id="videoFrame" src="" title="YouTube video player" frameborder="0"
-                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                                allowfullscreen>
-                            </iframe>
+            <!-- Send Enquiry Modal -->
+            <div class="modal fade" id="enquiryModal" tabindex="-1" aria-labelledby="enquiryModalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="enquiryModalLabel">Get the Best Price for <span
+                                    style="color:#ff0060;">”{{ $product->name }}”</span></h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <form id="enquiryFormModal" data-deal-id="{{ $product->id }}"
+                                onsubmit="event.preventDefault(); submitEnquiryForm(this);">
+                                <div>
+                                    <label class="form-label">Name*</label>
+                                    <input type="text" class="form-control" name="name" id="name" />
+                                </div>
+                                <div>
+                                    <label class="form-label mt-3">Phone Number*</label>
+                                    <input type="text" class="form-control" name="phone" id="phone" />
+                                </div>
+                                <div>
+                                    <label class="form-label mt-3">Email(Optional)</label>
+                                    <input type="email" class="form-control" name="email" id="email" />
+                                </div>
+                                <button type="submit" class="btn btn-danger mt-3 enquiryBtn">Send Enquiry</button>
+                            </form>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
 
-        <!-- Send Enquiry Modal -->
-        <div class="modal fade" id="enquiryModal" tabindex="-1" aria-labelledby="enquiryModalLabel"
-            aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="enquiryModalLabel">Get the Best Price for <span
-                                style="color:#ff0060;">”{{ $product->name }}”</span></h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <form id="enquiryFormModal" data-deal-id="{{ $product->id }}"
-                            onsubmit="event.preventDefault(); submitEnquiryForm(this);">
-                            <div>
-                                <label class="form-label">Name*</label>
-                                <input type="text" class="form-control" name="name" id="name" />
-                            </div>
-                            <div>
-                                <label class="form-label mt-3">Phone Number*</label>
-                                <input type="text" class="form-control" name="phone" id="phone" />
-                            </div>
-                            <div>
-                                <label class="form-label mt-3">Email(Optional)</label>
-                                <input type="email" class="form-control" name="email" id="email" />
-                            </div>
-                            <button type="submit" class="btn btn-danger mt-3 enquiryBtn">Send Enquiry</button>
-                        </form>
+            <!-- Error Modal -->
+            <div class="modal fade" id="errorModal" tabindex="-1" aria-labelledby="errorModalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content modalContent">
+                        <div class="modal-header d-flex align-items-center justify-content-between errorHeading shadow-none mb-2"
+                            style="background: #FF0000; color: white;">
+                            <h5 class="modal-title" id="errorModalLabel" style="font-size: 28px;">
+                                There was an error
+                            </h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body text-center pt-0">
+                            <!-- Error Icon -->
+                            <i class="fa-solid fa-circle-exclamation my-4"
+                                style="color: rgb(255, 80, 80); font-size: 70px;"></i>
+                            <p class="mb-0 errorMagnetSubHeading fw-bold pb-4">
+                                We are sorry!
+                            </p>
+                            <p class="mb-0 errorMagnetSubHeading text-muted fw-bold pb-2">
+                                You can reach us on
+                            </p>
+                            <p class="mb-0 errorMobile pb-4">+91 91501 50687</p>
+
+                            <!-- Contact Us Button -->
+                            <a href="/" class="btn successMagnetButton">
+                                <i class="fas fa-arrow m-0-left"></i> Back to Home
+                            </a>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
 
-        <!-- Error Modal -->
-        <div class="modal fade" id="errorModal" tabindex="-1" aria-labelledby="errorModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content modalContent">
-                    <div class="modal-header d-flex align-items-center justify-content-between errorHeading shadow-none mb-2"
-                        style="background: #FF0000; color: white;">
-                        <h5 class="modal-title" id="errorModalLabel" style="font-size: 28px;">
-                            There was an error
-                        </h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body text-center pt-0">
-                        <!-- Error Icon -->
-                        <i class="fa-solid fa-circle-exclamation my-4"
-                            style="color: rgb(255, 80, 80); font-size: 70px;"></i>
-                        <p class="mb-0 errorMagnetSubHeading fw-bold pb-4">
-                            We are sorry!
-                        </p>
-                        <p class="mb-0 errorMagnetSubHeading text-muted fw-bold pb-2">
-                            You can reach us on
-                        </p>
-                        <p class="mb-0 errorMobile pb-4">+91 91501 50687</p>
+            <!-- Success Modal -->
+            <div class="modal fade text-center" id="successModal" tabindex="-1" aria-labelledby="successModalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content modalContent">
+                        <div class="modal-header d-flex align-content-center justify-content-between"
+                            style="background: green; color: white;">
+                            <h5 class="modal-title" id="successModalLabel" style="font-size: 28px;">
+                                That's all required!
+                            </h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
+                                style="color: white;"></button>
+                        </div>
+                        <div class="modal-body pt-0">
+                            <!-- Success Icon -->
+                            <i class="fa-solid fa-circle-check my-5" style="color: #28a745; font-size: 80px;"></i>
+                            <p class="mb-0 SuccessMagnetSubHeading pb-4">
+                                We will get back to you soon!
+                            </p>
 
-                        <!-- Contact Us Button -->
-                        <a href="/" class="btn successMagnetButton">
-                            <i class="fas fa-arrow m-0-left"></i> Back to Home
-                        </a>
+                            <!-- Back to Home Button -->
+                            <a href="/">
+                                <button type="button" class="btn successMagnetButton">Back to Home</button>
+                            </a>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-
-        <!-- Success Modal -->
-        <div class="modal fade text-center" id="successModal" tabindex="-1" aria-labelledby="successModalLabel"
-            aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content modalContent">
-                    <div class="modal-header d-flex align-content-center justify-content-between"
-                        style="background: green; color: white;">
-                        <h5 class="modal-title" id="successModalLabel" style="font-size: 28px;">
-                            That's all required!
-                        </h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
-                            style="color: white;"></button>
-                    </div>
-                    <div class="modal-body pt-0">
-                        <!-- Success Icon -->
-                        <i class="fa-solid fa-circle-check my-5" style="color: #28a745; font-size: 80px;"></i>
-                        <p class="mb-0 SuccessMagnetSubHeading pb-4">
-                            We will get back to you soon!
-                        </p>
-
-                        <!-- Back to Home Button -->
-                        <a href="/">
-                            <button type="button" class="btn successMagnetButton">Back to Home</button>
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
 
     </section>
     <script>
+        document.getElementById('showMoreLessBtn').addEventListener('click', function() {
+            const hiddenReviews = document.querySelectorAll('.review-card.d-none');
+            const allReviews = document.querySelectorAll('.review-card');
+            const isShowMore = this.textContent === 'Show More';
+
+            if (isShowMore) {
+                hiddenReviews.forEach(review => review.classList.remove('d-none'));
+                this.textContent = 'Show Less';
+            } else {
+                allReviews.forEach((review, index) => {
+                    if (index >= 3) review.classList.add('d-none');
+                });
+                this.textContent = 'Show More';
+            }
+        });
+
+
         let hideTimeout;
         let currentlyOpenDropdown = null;
 
