@@ -10,7 +10,7 @@
                 </div>
                 <span class="toast-text"> {!! nl2br(e(session('status'))) !!}</span>&nbsp;&nbsp;
                 <button class="toast-close-btn"data-bs-dismiss="alert" aria-label="Close">
-                    <i class="fa-solid fa-times" style="color: #16A34A"></i>
+                    <i class="fa-thin fa-xmark" style="color: #16A34A"></i>
                 </button>
             </div>
         </div>
@@ -440,11 +440,11 @@
                             </div>
                         @endif
                         <div class="row">
-                            <div class="col-md-12 col-lg-10 col-12">
+                            <div class="col-md-12 col-lg-12 col-12">
                                 <div class="row pb-4">
                                     @foreach ($deals as $product)
                                         <div
-                                            class="col-md-4 col-lg-6 col-xl-4 col-12 mb-3 d-flex justify-content-center align-items-stretch">
+                                            class="col-md-4 col-lg-4 col-xxl-3 col-12 mb-3 d-flex justify-content-center align-items-stretch">
                                             <a href="{{ url('/deal/' . $product->id) }}" style="text-decoration: none;"
                                                 onclick="clickCount('{{ $product->id }}')">
                                                 <div class="card sub_topCard h-100 d-flex flex-column">
@@ -555,7 +555,7 @@
                                                                 <div>
                                                                     <p>Regular Price</p>
                                                                     @if ($product->deal_type == 2)
-                                                                        <p style="color: #22cb00">Standard Rates</p>
+                                                                        <p style="color: #22cb00abab">Standard Rates</p>
                                                                     @else
                                                                         <p><s>₹{{ number_format($product->original_price, 0) }}</s>
                                                                         </p>
@@ -605,7 +605,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-12 col-lg-1 col-12 mb-3">
+                            <div class="col-md-12 col-lg-12 col-12 mb-3 productFilter">
                                 {{-- social QR links  --}}
                                 <div>
                                     <button type="button" class="social_links">

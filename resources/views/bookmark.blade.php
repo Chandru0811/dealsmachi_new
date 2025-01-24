@@ -10,7 +10,7 @@
                 </div>
                 <span class="toast-text"> {!! nl2br(e(session('status'))) !!}</span>&nbsp;&nbsp;
                 <button class="toast-close-btn"data-bs-dismiss="alert" aria-label="Close">
-                    <i class="fa-solid fa-times" style="color: #16A34A"></i>
+                    <i class="fa-thin fa-xmark" style="color: #16A34A"></i>
                 </button>
             </div>
         </div>
@@ -151,7 +151,7 @@
                                                     <div>
                                                         <p>Regular Price</p>
                                                         @if ($deal->deal_type == 2)
-                                                            <p style="color: #22cb00">Standard Rates</p>
+                                                            <p style="color: #22cb00ab">Standard Rates</p>
                                                         @else
                                                             <p><s>₹{{ number_format($deal->original_price, 0) }}</s></p>
                                                         @endif
@@ -203,13 +203,22 @@
             });
 
             function updateBookmarkCount(count) {
+                console.log(count)
                 const countDisplay = $(".totalItemsCount");
                 if (count > 0) {
                     countDisplay.text(count);
                     $("#bookmarkCountDisplay").css("display", "inline");
+                    $(".totalItemsCount").css({
+                        visibility: "visible",
+                        display: "block",
+                    });
                 } else {
                     countDisplay.text("");
                     $("#bookmarkCountDisplay").css("display", "none");
+                    $(".totalItemsCount").css({
+                        visibility: "hidden",
+                        display: "none",
+                    });
                 }
             }
 

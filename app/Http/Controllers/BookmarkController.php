@@ -88,6 +88,8 @@ class BookmarkController extends Controller
                     ->whereNull('deleted_at');
             })->count();
 
+            // dd($bookmarkCount);
+
         return $bookmarkCount;
     }
 

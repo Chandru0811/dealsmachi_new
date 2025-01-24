@@ -79,7 +79,7 @@ class CartController extends Controller
         $cart_item->quantity = $qtt;
         $cart_item->unit_price = $product->original_price;
         $cart_item->delivery_date = $request->delivery_date;
-        $cart_item->coupon_code = $product->coupon_code;        
+        $cart_item->coupon_code = $product->coupon_code;
         $cart_item->discount = $product->discounted_price;
         $cart_item->discount_percent = $product->discount_percentage;
         $cart_item->seller_id = $product->shop_id;
@@ -121,7 +121,7 @@ class CartController extends Controller
         }
 
         $cart_item = CartItem::where('cart_id', $cart->id)->where('product_id', $request->product_id)->first();
-        
+
         if(!$cart_item)
         {
             return $this->error('Deal not found in cart!', [], 404);
@@ -201,7 +201,7 @@ class CartController extends Controller
     public function saveForLater(Request $request)
     {
         $customer_id = Auth::check() ? Auth::user()->id : null;
-        
+
         $cart = null;
 
         if ($customer_id) {
@@ -228,7 +228,7 @@ class CartController extends Controller
                 'ip_address' => $request->ip(),
                 'deal_id' => $cartItem->product_id,
             ]);
-                
+
             // Remove from Cart
             $cartItem->delete();
 
@@ -254,7 +254,7 @@ class CartController extends Controller
     public function moveToCart(Request $request)
     {
         $user_id = Auth::check() ? Auth::user()->id : null;
-        
+
         if(!$user_id)
         {
             $savedItem = SavedItem::where('ip_address', $request->ip())
@@ -269,7 +269,7 @@ class CartController extends Controller
 
             $cart = Cart::where('customer_id', auth('api')->id())->first();
         }
-        
+
             CartItem::create([
                 'cart_id' => $cart->id,
                 'item_description' => $savedItem->deal->name,
@@ -282,7 +282,7 @@ class CartController extends Controller
                 'product_id' => $savedItem->deal_id,
                 'deal_type' => $savedItem->deal->deal_type,
             ]);
-    
+
             $savedItem->delete();
 
             //update cart
@@ -354,5 +354,27 @@ class CartController extends Controller
                 'addresses'=>$addresses,
             ]);
         }
+    }
+
+    public function getCartItem(Request $request)
+    {
+        $product_ids = $request->input('product_ids');
+
+
+        if (is_string($product_ids)) {
+            $product_ids = json_decode($product_ids, true);
+        }
+        $products = Product::whereIn('id', $product_ids)->with('shop')->with('productMedia')->get();
+        $products = $products->map(function ($product) {
+            $image = $product->productMedia->isNotEmpty() ? $product->productMedia->first() : null;
+            $product->image = $image ? asset($image->path) : asset('assets/images/home/noImage.webp');
+            return $product;
+        });
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Cart Items Fetched Successfully!',
+            'data' => $products,
+        ]);
     }
 }

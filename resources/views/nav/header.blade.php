@@ -27,10 +27,11 @@
                         <a href="{{ url('/favourites') }}" class="text-decoration-none d-xl-none"
                             style="text-decoration: none;">
                             <i class="fa-regular fa-heart fa-xl icon_size" style="color: #ff0060;"></i>
-                        </a>
-                        <span class="totalItemsCount total-count translate-middle d-xl-none"
+                             <span class="totalItemsCount total-count translate-middle d-xl-none"
                             style="position: absolute;top: 16px;right:5px">
                         </span>
+                        </a>
+
                     </button>
                     <button class="btn btn-button ps-0" style="border: none; position: relative;">
                         <a href="{{ route('cart.index') }}" class="text-decoration-none d-xl-none"

@@ -51,6 +51,7 @@ Route::get('cart', [CartController::class, 'getCart']);
 Route::post('cart/remove', [CartController::class, 'removeItem']);
 Route::post('cart/update', [CartController::class, 'updateCart']);
 Route::get('cart/totalitems', [CartController::class, 'totalItems']);
+Route::get('get/cartitems', [CartController::class, 'getCartItem']);
 
 //saveforlater
 Route::post('saveforlater', [CartController::class, 'saveForLater']);

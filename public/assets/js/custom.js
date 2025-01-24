@@ -242,7 +242,7 @@ $(document).ready(function () {
         };
 
         var laravelRequest = $.ajax({
-            url: "https://dealsmachi.com/deals/count/enquire",
+            url: "http://127.0.0.1:8000/deals/count/enquire",
             type: "POST",
             headers: {
                 "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
@@ -764,7 +764,7 @@ $(document).ready(function () {
                 function () {
                     const type =
                         registerConfirmPassword.getAttribute("type") ===
-                            "password"
+                        "password"
                             ? "text"
                             : "password";
                     registerConfirmPassword.setAttribute("type", type);
@@ -942,21 +942,20 @@ function copySpan(element, event) {
     navigator.clipboard.writeText(couponCode);
 
     // Find the tooltip-text span
-    const tooltip = element.querySelector('.tooltip-text');
+    const tooltip = element.querySelector(".tooltip-text");
 
     if (tooltip) {
         // Show the tooltip
-        tooltip.style.visibility = 'visible';
-        tooltip.style.opacity = '1';
+        tooltip.style.visibility = "visible";
+        tooltip.style.opacity = "1";
 
         // Hide the tooltip after 2 seconds
         setTimeout(() => {
-            tooltip.style.visibility = 'hidden';
-            tooltip.style.opacity = '0';
+            tooltip.style.visibility = "hidden";
+            tooltip.style.opacity = "0";
         }, 2000); // Adjust timing as needed
     }
 }
-
 
 function copySpanText(element, event) {
     event.preventDefault();
@@ -975,7 +974,7 @@ function copySpanText(element, event) {
     var dealId = element.closest("a").getAttribute("href").split("/").pop();
 
     $.ajax({
-        url: "https://dealsmachi.com/deals/coupon/copied",
+        url: "http://127.0.0.1:8000/deals/coupon/copied",
         type: "POST",
         data: {
             _token: $('meta[name="csrf-token"]').attr("content"),
@@ -1007,7 +1006,7 @@ function copyLinkToClipboard(element, event, dealId) {
     document.body.removeChild(tempInput);
 
     $.ajax({
-        url: "https://dealsmachi.com/deals/count/share",
+        url: "http://127.0.0.1:8000/deals/count/share",
         type: "POST",
         data: {
             _token: $('meta[name="csrf-token"]').attr("content"),
@@ -1064,11 +1063,18 @@ $(document).ready(function () {
 
     // Function to update the bookmark count
     function updateBookmarkCount(count) {
+        console.log(count);
         $(".totalItemsCount").each(function () {
             if (count > 0) {
-                $(this).text(count).css("visibility", "visible");
+                $(this).text(count).css({
+                    visibility: "visible",
+                    display: "block",
+                });
             } else {
-                $(this).text("").css("visibility", "hidden");
+                $(this).text("").css({
+                    visibility: "hidden",
+                    display: "none",
+                });
             }
         });
     }
@@ -1082,7 +1088,7 @@ $(document).ready(function () {
                 let dealId = $(this).data("deal-id");
 
                 $.ajax({
-                    url: `https://dealsmachi.com/bookmark/${dealId}/add`,
+                    url: `http://127.0.0.1:8000/bookmark/${dealId}/add`,
                     method: "POST",
                     success: function (response) {
                         updateBookmarkCount(response.total_items);
@@ -1101,7 +1107,7 @@ $(document).ready(function () {
 
                         handleRemoveBookmark();
                     },
-                    error: function (xhr) { },
+                    error: function (xhr) {},
                 });
             });
     }
@@ -1115,7 +1121,7 @@ $(document).ready(function () {
                 let dealId = $(this).data("deal-id");
 
                 $.ajax({
-                    url: `https://dealsmachi.com/bookmark/${dealId}/remove`,
+                    url: `http://127.0.0.1:8000/bookmark/${dealId}/remove`,
                     method: "DELETE",
                     success: function (response) {
                         updateBookmarkCount(response.total_items);
@@ -1148,7 +1154,7 @@ $(document).ready(function () {
     // Initial Load of Bookmark Count
     function loadBookmarkCount() {
         $.ajax({
-            url: "https://dealsmachi.com/totalbookmark",
+            url: "http://127.0.0.1:8000/totalbookmark",
             method: "GET",
             success: function (response) {
                 updateBookmarkCount(response.total_items);
@@ -1194,7 +1200,7 @@ document
             var shareUrl = event.target.closest("a").href;
 
             $.ajax({
-                url: "https://dealsmachi.com/deals/count/share",
+                url: "http://127.0.0.1:8000/deals/count/share",
                 type: "POST",
                 data: {
                     _token: $('meta[name="csrf-token"]').attr("content"),
@@ -1216,7 +1222,7 @@ document
 
 function clickCount(dealId) {
     $.ajax({
-        url: "https://dealsmachi.com/deals/count/click",
+        url: "http://127.0.0.1:8000/deals/count/click",
         type: "POST",
         data: {
             _token: $('meta[name="csrf-token"]').attr("content"),
@@ -1233,7 +1239,7 @@ function clickCount(dealId) {
 
 function enquireCount(dealId) {
     $.ajax({
-        url: "https://dealsmachi.com/deals/count/enquire",
+        url: "http://127.0.0.1:8000/deals/count/enquire",
         type: "POST",
         data: {
             _token: $('meta[name="csrf-token"]').attr("content"),
@@ -1506,56 +1512,60 @@ $(document).ready(function () {
 $(document).ready(function () {
     $.ajaxSetup({
         headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        }
+            "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+        },
     });
 
-    $('.add-to-cart-btn').on('click', function (e) {
+    $(".add-to-cart-btn").on("click", function (e) {
         e.preventDefault();
 
-        let slug = $(this).data('slug');
+        let slug = $(this).data("slug");
 
         $.ajax({
             url: `/addtocart/${slug}`,
             type: "POST",
             data: {
                 quantity: 1,
-                saveoption: 'add to cart'
+                saveoption: "add to cart",
             },
             success: function (response) {
                 if (response.cartItemCount !== undefined) {
-                    const cartCountElement = $('#cart-count');
+                    const cartCountElement = $("#cart-count");
 
                     if (response.cartItemCount > 0) {
                         cartCountElement.text(response.cartItemCount);
-                        cartCountElement.css('display', 'inline');
+                        cartCountElement.css("display", "inline");
                     } else {
-                        cartCountElement.css('display', 'none');
+                        cartCountElement.css("display", "none");
                     }
                 }
 
                 fetchCartDropdown();
-                showMessage(response.status || "Deal added to cart!", "success");
+                showMessage(
+                    response.status || "Deal added to cart!",
+                    "success"
+                );
             },
             error: function (xhr) {
-                const errorMessage = xhr.responseJSON?.error || "Something went wrong!";
+                const errorMessage =
+                    xhr.responseJSON?.error || "Something went wrong!";
                 showMessage(errorMessage, "error");
-            }
+            },
         });
     });
 
     function fetchCartDropdown() {
         $.ajax({
-            url: '/cart/dropdown',
+            url: "/cart/dropdown",
             type: "GET",
             success: function (response) {
                 if (response.html) {
-                    $('.dropdown_cart').html(response.html);
+                    $(".dropdown_cart").html(response.html);
                 }
             },
             error: function () {
                 showMessage("Failed to update cart dropdown!", "error");
-            }
+            },
         });
     }
 
@@ -1564,12 +1574,14 @@ $(document).ready(function () {
 
         if (type === "success") {
             textColor = "#16A34A";
-            icon = '<i class="fa-regular fa-cart-shopping" style="color: #16A34A"></i>';
-            var alertClass = 'toast-success';
+            icon =
+                '<i class="fa-regular fa-cart-shopping" style="color: #16A34A"></i>';
+            var alertClass = "toast-success";
         } else {
             textColor = "#EF4444";
-            icon = '<i class="fa-solid fa-triangle-exclamation" style="color: #EF4444"></i>';
-            var alertClass = 'toast-danger';
+            icon =
+                '<i class="fa-solid fa-triangle-exclamation" style="color: #EF4444"></i>';
+            var alertClass = "toast-danger";
         }
 
         var alertHtml = `
@@ -1586,7 +1598,7 @@ $(document).ready(function () {
           </div>
         `;
 
-        $('body').append(alertHtml);
+        $("body").append(alertHtml);
         setTimeout(function () {
             $(".alert").alert("close");
         }, 5000);
