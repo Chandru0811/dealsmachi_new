@@ -1561,17 +1561,17 @@ $(document).ready(function () {
 
     function showMessage(message, type) {
         var textColor, icon;
-        
+
         if (type === "success") {
-          textColor = "#16A34A";
-          icon = '<i class="fa-regular fa-cart-shopping" style="color: #16A34A"></i>';
-          var alertClass = 'toast-success';
+            textColor = "#16A34A";
+            icon = '<i class="fa-regular fa-cart-shopping" style="color: #16A34A"></i>';
+            var alertClass = 'toast-success';
         } else {
-          textColor = "#EF4444";
-          icon = '<i class="fa-solid fa-triangle-exclamation" style="color: #EF4444"></i>';
-          var alertClass = 'toast-danger';
+            textColor = "#EF4444";
+            icon = '<i class="fa-solid fa-triangle-exclamation" style="color: #EF4444"></i>';
+            var alertClass = 'toast-danger';
         }
-      
+
         var alertHtml = `
           <div class="alert ${alertClass} alert-dismissible fade show" role="alert" style="position: fixed; top: 70px; right: 40px; z-index: 1050; color: ${textColor};">
             <div class="toast-content">
@@ -1585,12 +1585,12 @@ $(document).ready(function () {
             </div>
           </div>
         `;
-      
+
         $('body').append(alertHtml);
         setTimeout(function () {
-          $(".alert").alert("close");
+            $(".alert").alert("close");
         }, 5000);
-      }
+    }
 
     fetchCartDropdown();
 });

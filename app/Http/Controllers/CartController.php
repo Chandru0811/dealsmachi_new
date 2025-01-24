@@ -25,6 +25,11 @@ class CartController extends Controller
 
         $carts = $carts->get();
 
+        // Cleanup invalid items for each cart
+        $carts->each(function ($cart) {
+            $this->cleanUpCart($cart);
+        });
+
         $bookmarkedProducts = collect();
 
         if (Auth::check()) {
@@ -35,12 +40,7 @@ class CartController extends Controller
             $bookmarkedProducts = Bookmark::where('ip_address', $ipAddress)->pluck('deal_id');
         }
 
-        $carts->load(['items.product.shop', 'items.product.productMedia'])
-            ->each(function ($cart) {
-                $cart->items = $cart->items->filter(function ($item) {
-                    return $item->product && $item->product->active == 1 && !$item->product->deleted_at;
-                });
-            });
+        $carts->load(['items.product.shop', 'items.product.productMedia']);
 
         $savedItems = collect();
 
@@ -86,7 +86,22 @@ class CartController extends Controller
             $old_cart = Cart::where('ip_address', $request->ip())->first();
         }
 
-        // Check if the item is alrealy in the cart
+        $savedItem = null;
+        if ($customer_id) {
+            $savedItem = SavedItem::where('user_id', $customer_id)
+                ->where('deal_id', $product->id)
+                ->first();
+        } else {
+            $savedItem = SavedItem::where('ip_address', $request->ip())
+                ->where('deal_id', $product->id)
+                ->first();
+        }
+
+        if ($savedItem) {
+            $savedItem->delete();
+        }
+
+        // Check if the item is already in the cart
         if ($old_cart) {
             $item_in_cart = CartItem::where('cart_id', $old_cart->id)->where('product_id', $product->id)->first();
             if ($item_in_cart && $request->saveoption == "buy now") {
@@ -106,7 +121,6 @@ class CartController extends Controller
         }
 
         $grand_total = $product->discounted_price * $qtt + $request->shipping + $request->packaging + $request->handling + $request->taxes;
-
         $discount = ($product->original_price - $product->discounted_price) * $qtt;
 
         $cart = $old_cart ?? new Cart;
@@ -145,7 +159,7 @@ class CartController extends Controller
         $cart_item->shipping_weight = $request->shipping_weight;
         $cart_item->save();
 
-        $cartItemCount = CartItem::where('cart_id', $cart->id)->sum('quantity');
+        $cartItemCount = CartItem::where('cart_id', $cart->id)->count();
 
         if ($request->saveoption == "buy now") {
             return redirect()->route('checkout.summary', $product->id);
@@ -258,19 +272,15 @@ class CartController extends Controller
 
         $carts = $carts->with(['items.product.productMedia'])->get();
 
+        // Cleanup invalid items for each cart
         $carts->each(function ($cart) {
-            $cart->items = $cart->items->filter(function ($item) {
-                return $item->product && $item->product->active == 1 && !$item->product->deleted_at;
-            });
+            $this->cleanUpCart($cart);
         });
 
         $html = view('nav.cartdropdown', compact('carts'))->render();
 
-        $cartItemCount = $carts->sum(fn($cart) => $cart->items->sum('quantity'));
-
         return response()->json([
-            'html' => $html,
-            'cartItemCount' => $cartItemCount,
+            'html' => $html
         ]);
     }
 
@@ -379,62 +389,6 @@ class CartController extends Controller
         return redirect()->back()->with(['status' => 'Item moved to Cart'], 200);
     }
 
-    // public function multipleMoveToCart(Request $request)
-    // {
-    //     // dd($request->all());
-    //     $customer_id = Auth::id();
-    //     $deal_ids = $request->input('deal_ids', []);
-
-    //     if (empty($deal_ids)) {
-    //         return response()->json(['status' => 'error', 'message' => 'No items selected to move.'], 400);
-    //     }
-
-    //     $cart = Cart::firstOrCreate(
-    //         ['customer_id' => $customer_id, 'ip_address' => $request->ip()],
-    //         ['item_count' => 0, 'quantity' => 0, 'total' => 0, 'discount' => 0, 'grand_total' => 0]
-    //     );
-
-    //     foreach ($deal_ids as $deal_id) {
-    //         $savedItem = SavedItem::where('deal_id', $deal_id)
-    //             ->where(function ($query) use ($customer_id) {
-    //                 $query->where('user_id', $customer_id)
-    //                     ->orWhere('ip_address', request()->ip());
-    //             })
-    //             ->first();
-
-    //         if ($savedItem) {
-    //             $deal = $savedItem->deal;
-    //             // dd($deal);
-    //             CartItem::updateOrCreate(
-    //                 ['cart_id' => $cart->id, 'product_id' => $deal_id],
-    //                 [
-    //                     'item_description' => $deal->name,
-    //                     'seller_id' => $deal->shop_id,
-    //                     'deal_type' => $deal->deal_type,
-    //                     'quantity' => 1,
-    //                     'unit_price' => $deal->original_price,
-    //                     'discount' => $deal->discount,
-    //                     'delivery_date' => "2025-04-11",
-    //                     'coupon_code' => $deal->coupon_code,
-    //                     'discount' => $deal->discounted_price,
-    //                     'discount_percent' => $deal->discount_percent,
-    //                     'discount' => $deal->discounted_price,
-    //                     'discount' => $deal->discounted_price,
-    //                     'taxes' => 0
-    //                 ]
-    //             );
-
-    //             // Remove the item from the "Save for Later" list
-    //             $savedItem->delete();
-    //         }
-    //     }
-
-    //     // Update cart totals
-    //     $cart->updateCartTotals();
-
-    //     return response()->json(['status' => 'success', 'message' => 'Selected items have been moved to the cart.']);
-    // }
-
     public function getsaveforlater()
     {
         $user_id = Auth::check() ? Auth::user()->id : null;
@@ -511,5 +465,31 @@ class CartController extends Controller
             'message' => 'Cart Items Fetched Successfully!',
             'data' => $products,
         ]);
+    }
+
+    private function cleanUpCart($cart)
+    {
+        $itemsToRemove = $cart->items->filter(function ($item) {
+            return !$item->product || $item->product->active != 1 || $item->product->deleted_at != null;
+        });
+
+        if ($itemsToRemove->isNotEmpty()) {
+            foreach ($itemsToRemove as $item) {
+                $cart->item_count -= 1;
+                $cart->quantity -= $item->quantity;
+                $cart->total -= ($item->unit_price * $item->quantity);
+                $cart->discount -= (($item->unit_price - $item->discount) * $item->quantity);
+                $cart->shipping -= $item->shipping;
+                $cart->packaging -= $item->packaging;
+                $cart->handling -= $item->handling;
+                $cart->taxes -= $item->taxes;
+                $cart->grand_total -= (($item->discount * $item->quantity) + $item->shipping + $item->packaging + $item->handling + $item->taxes);
+                $cart->shipping_weight -= $item->shipping_weight;
+
+                $item->delete(); // Remove the item from the cart
+            }
+
+            $cart->save(); // Update the cart totals
+        }
     }
 }

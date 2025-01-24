@@ -21,7 +21,7 @@ Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('hotpick/{slug}', [HomeController::class, 'dealcategorybasedproducts'])->name('deals.categorybased');
 Route::get('categories/{slug}', [HomeController::class, 'subcategorybasedproducts'])->name('deals.subcategorybased');
 Route::get('deal/{id}', [HomeController::class, 'productdescription']);
-Route::get('bookmarks', [BookmarkController::class, 'index'])->name('bookmarks.index');
+Route::get('favourites', [BookmarkController::class, 'index'])->name('bookmarks.index');
 Route::post('bookmark/{deal_id}/add', [BookmarkController::class, 'add'])->name('bookmarks.add');
 Route::delete('bookmark/{deal_id}/remove', [BookmarkController::class, 'remove'])->name('bookmarks.remove');
 Route::get('totalbookmark', [BookmarkController::class, 'totalItems'])->name('bookmarks.totalItems');
@@ -35,8 +35,6 @@ Route::middleware('auth')->group(function () {
     Route::get('/checkoutSummary/{product_id}', [CheckoutController::class, 'checkoutsummary'])->name('checkout.summary');
     Route::get('/checkout/{cart_id}', [CheckoutController::class, 'cartcheckout'])->name('checkout.cart');
     Route::post('/directCheckout', [CheckoutController::class, 'directcheckout'])->name('checkout.direct');
-
-
     Route::get('/cartSummary/{cart_id}', [CartController::class, 'cartSummary'])->name('cart.address');
     Route::post('/checkout', [CheckoutController::class, 'createorder'])->name('checkout.checkout');
     Route::post('/createAddress', [AddressController::class, 'store'])->name('address.create');
@@ -49,7 +47,6 @@ Route::middleware('auth')->group(function () {
     Route::put('/updateUser', [HomeController::class, 'updateUser'])->name('user.update');
     Route::post('/review', [HomeController::class, 'createReview'])->name('review.create');
 });
-
 Route::get('get/cartitems', [CartController::class, 'getCartItem'])->name('cartitems.get');
 Route::post('addtocart/{slug}', [CartController::class, 'addToCart'])->name('cart.add');
 Route::get('cart', [CartController::class, 'index'])->name('cart.index');
@@ -71,8 +68,6 @@ Route::get('/terms_conditions', function () {
 Route::get('/contactus', function () {
     return view('contactus');
 });
-
-
 
 Route::get('auth/google', function () {
     return Socialite::driver('google')->redirect();
