@@ -15,10 +15,11 @@
     @foreach ($cart->items->take(6) as $item)
     <div class="d-flex">
         @php
-        $image = $item->product->productMedia
+        $image = isset($item->product->productMedia)
+        ? $item->product->productMedia
         ->where('order', 1)
         ->where('type', 'image')
-        ->first();
+        ->first() : null;
         @endphp
         <img src="{{ $image ? asset($image->path) : asset('assets/images/home/noImage.webp') }}"
             class="img-fluid dropdown_img" alt="{{ $item->product->name }}" />

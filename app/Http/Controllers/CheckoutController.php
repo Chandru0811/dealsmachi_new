@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\CartHelper;
 use App\Http\Controllers\Controller;
 use App\Models\Order;
 use App\Models\OrderItems;
@@ -23,6 +24,11 @@ use DB;
 
 class CheckoutController extends Controller
 {
+    private function cleanUpCart($cart)
+    {
+        CartHelper::cleanUpCart($cart);
+    }
+
     public function checkoutsummary($id, Request $request)
     {
         if (!Auth::check()) {
@@ -47,6 +53,8 @@ class CheckoutController extends Controller
             $carts = $carts->first();
 
             if ($carts) {
+                $this->cleanUpCart($carts);
+                
                 $carts->load(['items' => function ($query) use ($id) {
                     $query->where('product_id', '!=', $id);
                 }, 'items.product.productMedia', 'items.product.shop']);
