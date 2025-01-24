@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Helpers\CartHelper;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Pagination\Paginator;
 use App\Models\Cart;
@@ -39,10 +40,9 @@ class AppServiceProvider extends ServiceProvider
             $carts = $carts->with(['items.product.shop', 'items.product.productMedia'])
                 ->get();
 
+            // Cleanup invalid items for each cart
             $carts->each(function ($cart) {
-                $cart->items = $cart->items->filter(function ($item) {
-                    return $item->product && $item->product->active == 1 && !$item->product->deleted_at;
-                });
+                CartHelper::cleanUpCart($cart);
             });
 
             $address = Address::where('user_id', Auth::id())->get();
