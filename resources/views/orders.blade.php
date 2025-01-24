@@ -1,6 +1,9 @@
 @extends('layouts.master')
 
 @section('content')
+    @php
+        use Carbon\Carbon;
+    @endphp
     <div class="container categoryIcons p-3">
         <div class="d-flex justify-content-between mb-3">
             <h3 style="color: #ff0060">
@@ -82,6 +85,30 @@
                                             {{ $item->product->description ?? 'No Description Available' }}
                                         </p>
                                         @if ($item->deal_type === '1' || $item->deal_type === 'Product')
+                                            <?php
+
+                                            $currentDate = Carbon::now();
+
+                                            try {
+                                                if (isset($item->product->delivery_days, $order->created_at) && is_numeric($item->product->delivery_days)) {
+                                                    $deliveryDays = (int) $item->product->delivery_days;
+
+                                                    $deliveryDate =
+                                                        $deliveryDays > 0
+                                                            ? Carbon::parse($order->created_at)
+                                                                ->addDays($deliveryDays)
+                                                                ->format('d-m-Y')
+                                                            : null;
+                                                } else {
+                                                    $deliveryDays = 0;
+                                                    $deliveryDate = null;
+                                                }
+                                            } catch (\Exception $e) {
+                                                $deliveryDays = 0;
+                                                $deliveryDate = null;
+                                            }
+                                            ?>
+
                                             <div>
                                                 <div class="d-flex mt-3 mb-3">
                                                     <p class="mt-1 mb-0">Quantity : {{ $item->quantity }}</p>
@@ -90,7 +117,7 @@
                                                             alt="icon" class="img-fluid" />
                                                     </div> &nbsp;&nbsp;
                                                     <p class="mt-1 mb-0">Delivery Date:
-                                                        {{ \Carbon\Carbon::parse($order->created_at)->addDays(5)->format('d/m/Y') ?? 'N/A' }}
+                                                        {{ $deliveryDays > 0 ? $deliveryDate : 'No delivery date available' }}
                                                     </p>
                                                 </div>
                                                 <p>

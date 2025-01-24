@@ -55,9 +55,13 @@ class CheckoutController extends Controller
             if ($carts) {
                 $this->cleanUpCart($carts);
 
-                $carts->load(['items' => function ($query) use ($id) {
-                    $query->where('product_id', '!=', $id);
-                }, 'items.product.productMedia', 'items.product.shop']);
+                $carts->load([
+                    'items' => function ($query) use ($id) {
+                        $query->where('product_id', '!=', $id);
+                    },
+                    'items.product.productMedia',
+                    'items.product.shop'
+                ]);
             }
 
             $savedItem = SavedItem::whereNull('user_id')->where('ip_address', $request->ip());
@@ -88,9 +92,11 @@ class CheckoutController extends Controller
         $orderoption = "buy now";
         $cart = Cart::where('id', $cart_id)->with('items')->first();
         if ($cart) {
-            $cart->load(['items' => function ($query) use ($ids) {
-                $query->whereIn('product_id', $ids);
-            }]);
+            $cart->load([
+                'items' => function ($query) use ($ids) {
+                    $query->whereIn('product_id', $ids);
+                }
+            ]);
         }
 
         if (!Auth::check()) {
@@ -140,9 +146,11 @@ class CheckoutController extends Controller
                 return redirect()->route('home')->with('error', 'Cart not found.');
             }
 
-            $cart->load(['items' => function ($query) use ($ids) {
-                $query->whereIn('product_id', $ids);
-            }]);
+            $cart->load([
+                'items' => function ($query) use ($ids) {
+                    $query->whereIn('product_id', $ids);
+                }
+            ]);
 
             // Generate a custom order number
             $latestOrder = Order::orderBy('id', 'desc')->first();
@@ -184,48 +192,48 @@ class CheckoutController extends Controller
 
             // Create the order
             $order = Order::create([
-                'order_number'     => $orderNumber,
-                'customer_id'      => $user_id,
-                'item_count'       => $itemCount,
-                'quantity'         => $itemCount,
-                'total'            => $total,
-                'discount'         => $discount,
-                'shipping'         => $shipping,
-                'packaging'        => $packaging,
-                'handling'         => $handling,
-                'taxes'            => $taxes,
-                'grand_total'      => $grandTotal,
-                'shipping_weight'  => $shippingWeight,
-                'status'           => 1, // Created
-                'payment_type'     => $request->input('payment_type'),
-                'payment_status'   => 1,
+                'order_number' => $orderNumber,
+                'customer_id' => $user_id,
+                'item_count' => $itemCount,
+                'quantity' => $itemCount,
+                'total' => $total,
+                'discount' => $discount,
+                'shipping' => $shipping,
+                'packaging' => $packaging,
+                'handling' => $handling,
+                'taxes' => $taxes,
+                'grand_total' => $grandTotal,
+                'shipping_weight' => $shippingWeight,
+                'status' => 1, // Created
+                'payment_type' => $request->input('payment_type'),
+                'payment_status' => 1,
                 'delivery_address' => json_encode($deliveryAddress)
             ]);
 
             // Create order items
             foreach ($cart->items->whereIn('product_id', $ids) as $item) {
-                $itemNumber = 'DM0-' . $order->id . 'V' . $item->product->shop_id . 'P' . $item->product_id;
+                $itemNumber = 'DM0' . $order->id . '-V' . $item->product->shop_id . 'P' . $item->product_id;
 
                 OrderItems::create([
-                    'order_id'          => $order->id,
-                    'item_number'       => $itemNumber,
-                    'product_id'        => $item->product_id,
-                    'seller_id'         => $item->product->shop_id,
-                    'item_description'  => $item->item_description,
-                    'quantity'          => $item->quantity,
-                    'unit_price'        => $item->unit_price,
-                    'delivery_date'     => $item->delivery_date,
-                    'coupon_code'       => $item->coupon_code,
-                    'discount'          => $item->discount,
-                    'discount_percent'  => $item->discount_percent,
-                    'deal_type'         => $item->deal_type,
-                    'service_date'      => $item->service_date,
-                    'service_time'      => $item->service_time,
-                    'shipping'          => $item->shipping ?? 0,
-                    'packaging'         => $item->packaging ?? 0,
-                    'handling'          => $item->handling ?? 0,
-                    'taxes'             => $item->taxes ?? 0,
-                    'shipping_weight'   => $item->shipping_weight ?? 0,
+                    'order_id' => $order->id,
+                    'item_number' => $itemNumber,
+                    'product_id' => $item->product_id,
+                    'seller_id' => $item->product->shop_id,
+                    'item_description' => $item->item_description,
+                    'quantity' => $item->quantity,
+                    'unit_price' => $item->unit_price,
+                    'delivery_date' => $item->delivery_date,
+                    'coupon_code' => $item->coupon_code,
+                    'discount' => $item->discount,
+                    'discount_percent' => $item->discount_percent,
+                    'deal_type' => $item->deal_type,
+                    'service_date' => $item->service_date,
+                    'service_time' => $item->service_time,
+                    'shipping' => $item->shipping ?? 0,
+                    'packaging' => $item->packaging ?? 0,
+                    'handling' => $item->handling ?? 0,
+                    'taxes' => $item->taxes ?? 0,
+                    'shipping_weight' => $item->shipping_weight ?? 0,
                 ]);
             }
 
@@ -287,30 +295,30 @@ class CheckoutController extends Controller
             ];
 
             $order = Order::create([
-                'order_number'     => $orderNumber,
-                'customer_id'      => $user_id,
-                'item_count'       => $cart->item_count,
-                'quantity'         => $cart->quantity,
-                'total'            => $cart->total,
-                'discount'         => $cart->discount,
-                'shipping'         => $cart->shipping,
-                'packaging'        => $cart->packaging,
-                'handling'         => $cart->handling,
-                'taxes'            => $cart->taxes,
-                'grand_total'      => $cart->grand_total,
-                'shipping_weight'  => $cart->shipping_weight,
-                'status'           => 1, //created
-                'payment_type'     => $request->input('payment_type'),
-                'payment_status'   => 1,
+                'order_number' => $orderNumber,
+                'customer_id' => $user_id,
+                'item_count' => $cart->item_count,
+                'quantity' => $cart->quantity,
+                'total' => $cart->total,
+                'discount' => $cart->discount,
+                'shipping' => $cart->shipping,
+                'packaging' => $cart->packaging,
+                'handling' => $cart->handling,
+                'taxes' => $cart->taxes,
+                'grand_total' => $cart->grand_total,
+                'shipping_weight' => $cart->shipping_weight,
+                'status' => 1, //created
+                'payment_type' => $request->input('payment_type'),
+                'payment_status' => 1,
                 'delivery_address' => json_encode($deliveryAddress)
             ]);
 
             foreach ($cart->items as $item) {
-                $itemNumber = 'DM0-' . $order->id . 'V' . $item->product->shop_id . 'P' . $item->product_id;
+                $itemNumber = 'DM0' . $order->id . '-V' . $item->product->shop_id . 'P' . $item->product_id;
 
                 OrderItems::create([
                     'order_id' => $order->id,
-                    'item_number'       => $itemNumber,
+                    'item_number' => $itemNumber,
                     'product_id' => $item->product_id,
                     'seller_id' => $item->product->shop_id,
                     'item_description' => $item->item_description,
@@ -387,17 +395,20 @@ class CheckoutController extends Controller
 
         if ($order->items->count() > 0) {
             foreach ($order->items as $item) {
-                $review = $item->product->review->firstWhere('user_id', Auth::id());
+                // Check if product exists
+                if ($item->product && $item->product->review) {
+                    $review = $item->product->review->firstWhere('user_id', Auth::id());
 
-                if ($review) {
-                    $orderReviewedByUser = true;
-                    break;
+                    if ($review) {
+                        $orderReviewedByUser = true;
+                        break;
+                    }
                 }
             }
         }
+
         return view('orderView', compact('order', 'orderReviewedByUser'));
     }
-
 
     public function orderInvoice($id)
     {

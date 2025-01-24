@@ -28,7 +28,7 @@
                 {{ $item->product->name }}
             </p>
             <p class="px-1 text_size" style="color: #ff0060">
-                ₹ {{ number_format($item->discount, 2) }}
+                ₹ {{ number_format($item->discount, 0) }}
             </p>
         </div>
     </div>

@@ -47,7 +47,7 @@
         <div class="row m-0">
             <div class="col-md-6 col-12 pt-5 bg_login login-text-container text-center" style="background: #ffcbde">
                 <div class="px-5 pt-5">
-                    <h5 class="py-4" style="color: #CC004D">Login to your account</h5>
+                    <h5 class="py-4" style="color: #CC004D">Register to your account</h5>
                     <p class="login-text">You're just one step away from securing your awesome purchase!
                         Sign up or log in now to complete your order effortlessly</p>
                 </div>
@@ -69,7 +69,7 @@
                         </div>
                         <div class="mb-3 email-container">
                             <input type="email" class="form-control" id="email" name="email" value=""
-                                placeholder="Email / Phone Number" />
+                                placeholder="Email" />
                             @error('email')
                                 <span class="error">{{ $message }}</span>
                             @enderror
