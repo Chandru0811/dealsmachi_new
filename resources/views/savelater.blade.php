@@ -10,7 +10,7 @@
                 </div>
                 <span class="toast-text"> {!! nl2br(e(session('status'))) !!}</span>&nbsp;&nbsp;
                 <button class="toast-close-btn"data-bs-dismiss="alert" aria-label="Close">
-                    <i class="fa-solid fa-times" style="color: #16A34A"></i>
+                    <i class="fa-thin fa-xmark" style="color: #16A34A"></i>
                 </button>
             </div>
         </div>
@@ -53,7 +53,7 @@
     @endif
     <section>
         <div class="container" style="margin-top: 100px">
-            <h2 class="my-4">Saved Later</h2>
+            <h2 class="my-4">Buy Later</h2>
             @if ($savedItems->isEmpty())
                 <div class="text-center mb-4">
                     <img src="{{ asset('assets/images/home/empty_savedItems.png') }}" alt="Empty Cart"
@@ -91,7 +91,7 @@
                                     ₹{{ $savedItem->deal->discounted_price }}
                                 </span>
                                 <span class="ms-1" style="font-size:12px; color:#00DD21">
-                                    {{ round($savedItem->deal->discount_percentage) }}% off
+                                    -{{ round($savedItem->deal->discount_percentage) }}% off
                                 </span>
                             </div>
                         </div>

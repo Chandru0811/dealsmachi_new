@@ -11,7 +11,7 @@
                 </div>
                 <span class="toast-text"> {!! nl2br(e(session('status'))) !!}</span>&nbsp;&nbsp;
                 <button class="toast-close-btn"data-bs-dismiss="alert" aria-label="Close">
-                    <i class="fa-solid fa-times" style="color: #16A34A"></i>
+                    <i class="fa-thin fa-xmark" style="color: #16A34A"></i>
                 </button>
             </div>
         </div>
@@ -62,7 +62,7 @@
     <section>
         <div class="container" style="margin-top: 100px">
             <div class="row">
-                <div class="col-lg-8 col-md-8 col-12" style="height: 80vh; overflow: auto;">
+                <div class="col-lg-8 col-md-8 col-12 your-cart" style="height: 80vh; overflow: auto;">
                     <div class="card p-3 mb-3 Regular shadow" style="border: 1px solid #00000012">
                         <div class="d-flex align-items-center">
                             <h5 class="fw-bold mb-0">Delivery Addresses</h5> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -105,6 +105,13 @@
                     </div>
                     <div class="card p-3 mb-3" id="product_list">
                         @foreach ($products as $product)
+                        @php
+                                $currentDate = Carbon::now();
+
+                                $deliveryDays = is_numeric($product->delivery_days) ? (int) $product->delivery_days : 0;
+                                $deliveryDate =
+                                    $deliveryDays > 0 ? $currentDate->addDays($deliveryDays)->format('d-m-y') : null;
+                            @endphp
                             <div class="row px-4 pt-2" id="product_{{ $product->id }}">
                                 <div class="col-md-4 col-12 d-flex flex-column justify-content-center align-items-center">
                                     <div class="d-flex justify-content-center align-items-center">
@@ -142,7 +149,7 @@
                                             <div class="">
                                                 <p style="font-size: 16px;">
                                                     Delivery Date :
-                                                    @if ($product->deal_type == 0)
+                                                    @if ($product->deal_type == 1)
                                                         {{ $deliveryDays > 0 ? $deliveryDate : 'No delivery date available' }}
                                                 </p>
                                             @else
@@ -162,7 +169,7 @@
                                 ₹{{ number_format($product->discounted_price, 0, '.', ',') }}
                             </span>
                             <span class="ms-1" style="font-size:12px; color:#00DD21">
-                                {{ round($product->discount_percentage) }}% off
+                                -{{ round($product->discount_percentage) }}% off
                             </span>
                         </div>
                     </div>
@@ -338,7 +345,7 @@
                     &nbsp;&nbsp;
                     <span class="ms-1" style="font-size:12px; color:#00DD21;white-space: nowrap;" id="deal-discount">
                         Dealsmachi Discount
-                        &nbsp;<span
+                        &nbsp;-<span
                             class="discount">₹{{ number_format($product->original_price - $product->discounted_price, 0, '.', ',') }}</span>
                     </span>
                 </h4>
@@ -421,7 +428,7 @@
                                                 ₹${formatIndianNumber(product.discounted_price)}
                                             </span>
                                             <span class="ms-1" style="font-size:12px; color:#00DD21">
-                                                ${Math.round(product.discount_percentage)}% off
+                                                -${Math.round(product.discount_percentage)}% off
                                             </span>
                                         </div>
                                     </div>

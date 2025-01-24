@@ -58,7 +58,7 @@
                 <div class="d-flex justify-content-between">
                     <div class="d-flex align-items-center mb-4">
                         <h4 class="text-dark order_id">
-                            Order ID: <span>{{ $order->order_number }}</span>&nbsp;
+                            Order Item ID: <span>{{ $order->items[0]->item_number ?? 'N/A' }}</span>&nbsp;
                         </h4>
                         <span class="badge_warning">
                             {{ $order->payment_status === '1'
@@ -83,25 +83,34 @@
             <button type="button" class="btn invoiceBtn" data-bs-toggle="tooltip" data-bs-placement="top"
                 title="Download Invoice"><i class="fa-solid fa-file-invoice"></i></button>
             </a> --}}
-                    <div class="d-flex gap-2">
-                        @if (isset($order->items[0]->product->slug) && $order->items[0]->product->slug)
-                            <form action="{{ route('cart.add', ['slug' => $order->items[0]->product->slug]) }}"
-                                method="POST">
-                                @csrf
-                                <input type="hidden" name="saveoption" id="saveoption" value="buy now">
-                                <button type="submit" class="btn showmoreBtn">Order again</button>
-                            </form>
+                    @if (isset($order->items[0]->product) &&
+                            !($order->items[0]->product->active == 0 || $order->items[0]->product->deleted_at != null))
+                        @if ($order->items[0]->shop->deleted_at == null)
+                            <div class="d-flex gap-2">
+                                @if (isset($order->items[0]->product->slug) && $order->items[0]->product->slug)
+                                    <form action="{{ route('cart.add', ['slug' => $order->items[0]->product->slug]) }}"
+                                        method="POST">
+                                        @csrf
+                                        <input type="hidden" name="saveoption" id="saveoption" value="buy now">
+                                        <button type="submit" class="btn showmoreBtn">Order again</button>
+                                    </form>
+                                @endif
+                                <div>
+                                    <!-- Add Review Button -->
+                                    @if (!$orderReviewedByUser)
+                                        <button type="button" class="review_btn media_fonts_conent" data-bs-toggle="modal"
+                                            data-bs-target="#reviewModal">
+                                            Add Review
+                                        </button>
+                                    @endif
+                                </div>
+                            </div>
+                        @else
+                            <span></span>
                         @endif
-                        <div>
-                            <!-- Add Review Button -->
-                            @if (!$orderReviewedByUser)
-                                <button type="button" class="review_btn media_fonts_conent" data-bs-toggle="modal"
-                                    data-bs-target="#reviewModal">
-                                    Add Review
-                                </button>
-                            @endif
-                        </div>
-                    </div>
+                    @else
+                        <span></span>
+                    @endif
                 </div>
                 <div class="row">
                     {{-- Left Column: Order Item & Order Summary --}}
@@ -258,7 +267,27 @@
                                     <p>Description : {{ $order->items->first()->shop->description ?? 'N/A' }}</p>
                                     <p>
                                         Address:
-                                        @if ($order->items->first()->shop->street)
+                                        @php
+                                            $addressParts = [];
+
+                                            if ($order->items->first()->shop->street) {
+                                                $addressParts[] = $order->items->first()->shop->street;
+                                            }
+                                            if ($order->items->first()->shop->street2) {
+                                                $addressParts[] = $order->items->first()->shop->street2;
+                                            }
+                                            if ($order->items->first()->shop->city) {
+                                                $addressParts[] = $order->items->first()->shop->city;
+                                            }
+                                            if ($order->items->first()->shop->zip_code) {
+                                                $addressParts[] = $order->items->first()->shop->zip_code;
+                                            }
+                                        @endphp
+
+                                        @if (!empty($addressParts))
+                                            {{ implode(', ', $addressParts) }}
+                                        @endif
+                                        {{-- @if ($order->items->first()->shop->street)
                                             {{ $order->items->first()->shop->street }}
                                         @endif
                                         @if ($order->items->first()->shop->street2)
@@ -269,7 +298,7 @@
                                         @endif
                                         @if ($order->items->first()->shop->zip_code)
                                             , {{ $order->items->first()->shop->zip_code }}
-                                        @endif
+                                        @endif --}}
                                     </p>
                                 @else
                                     <p>No Shop Details Available</p>
@@ -426,7 +455,7 @@
                     <div class="modal-body">
                         <!-- Rating -->
                         <div class="text-center">
-                            <p class="m-0 p-0">Click the stars to rate us <span class="text-danger">*</span></p>
+                            <p class="m-0 p-0">Click the stars to rate deals <span class="text-danger">*</span></p>
                             <div id="starRating" class="d-flex justify-content-center">
                                 <!-- Stars -->
                                 <span class="star" data-value="1">
@@ -530,7 +559,7 @@
             const formattedTotal =
                 `₹{{ number_format($order->items->reduce(fn($sum, $item) => $sum + $item['discount'] * $item['quantity'], 0), 0) }}`;
             const formattedDiscount =
-                `₹{{ number_format($order->items->reduce(fn($sum, $item) => $sum + $item['unit_price'] * $item['quantity'], 0) - $order->items->reduce(fn($sum, $item) => $sum + $item['discount'] * $item['quantity'], 0), 0) }}`;
+                `-₹{{ number_format($order->items->reduce(fn($sum, $item) => $sum + $item['unit_price'] * $item['quantity'], 0) - $order->items->reduce(fn($sum, $item) => $sum + $item['discount'] * $item['quantity'], 0), 0) }}`;
 
             document.getElementById('subtotal').innerText = formattedSubtotal;
             document.getElementById('discount').innerText = formattedDiscount;

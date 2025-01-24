@@ -70,7 +70,7 @@
                         @csrf
                         <div class="mb-3 email-container">
                             <input type="email" class="form-control" id="email" name="email" value=""
-                                placeholder="Email / Phone Number" />
+                                placeholder="Email" />
                             @error('email')
                                 <span class="error">{{ $message }}</span>
                             @enderror
