@@ -113,8 +113,8 @@
                         </div>
                         <div class="mb-3 password-container">
                             <div class="input-group">
-                                <input type="password" class="form-control" id="confirmpassword" name="confirmpassword"
-                                    aria-label="confirmpassword" placeholder="Confirm Password">
+                                <input type="password" class="form-control" id="password_confirmation" name="password_confirmation"
+                                    aria-label="password_confirmation" placeholder="Confirm Password">
                                 <span class="input-group-text" id="toggleConfirmPassword"
                                     style="cursor: pointer; background:#fff;">
                                     <i class="fa fa-eye" id="eyeIconConfirmPassword"></i>
@@ -166,7 +166,7 @@
                 };
 
                 const password = document.getElementById("password").value;
-                const confirmPassword = document.getElementById("confirmpassword").value;
+                const confirmPassword = document.getElementById("password_confirmation").value;
 
 
                 if (!password) {
@@ -216,7 +216,7 @@
             });
 
         document
-            .getElementById("confirmpassword")
+            .getElementById("password_confirmation")
             .addEventListener("input", function() {
                 const password = document.getElementById("password").value;
                 const confirmPassword = this.value;
@@ -237,7 +237,7 @@
             const togglePassword = document.getElementById('togglePassword');
             const passwordInput = document.getElementById('password');
             const toggleConfirmPassword = document.getElementById('toggleConfirmPassword');
-            const confirmPasswordInput = document.getElementById('confirmpassword');
+            const confirmPasswordInput = document.getElementById('password_confirmation');
 
             // Toggle password visibility
             togglePassword.addEventListener('click', () => {

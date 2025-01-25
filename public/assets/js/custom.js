@@ -629,80 +629,89 @@ $(document).ready(function () {
 
 
 // Validation for Register Page
-document.getElementById("registerForm").addEventListener("submit", function (event) {
-    let formIsValid = true;
+$(document).ready(function () {
+    // Form submit validation
+    $("#registerForm").on("submit", function (event) {
+        let formIsValid = true;
 
-    const toggleError = (id, message = "") => {
-        const errorElement = document.getElementById(id);
-        if (message) {
-            errorElement.style.display = "block";
-            errorElement.innerText = message;
+        const toggleError = (id, message = "") => {
+            const errorElement = $("#" + id);
+            if (message) {
+                errorElement.css("display", "block").text(message);
+            } else {
+                errorElement.css("display", "none").text("");
+            }
+        };
+
+        // Get form values
+        const name = $("#name").val().trim();
+        const email = $("#email").val().trim();
+        const password = $("#password").val();
+        const confirmPassword = $("#password_confirmation").val();
+
+        // Validate Name
+        if (!name) {
+            toggleError("nameError", "Name is required");
+            formIsValid = false;
         } else {
-            errorElement.style.display = "none";
-            errorElement.innerText = "";
+            toggleError("nameError");
         }
-    };
 
-    // Get form values
-    const name = document.getElementById("name").value.trim();
-    const email = document.getElementById("email").value.trim();
-    const password = document.getElementById("password").value;
-    const confirmPassword = document.getElementById("confirmpassword").value;
+        // Validate Email
+        const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+        if (!email || !emailRegex.test(email)) {
+            toggleError("emailError", "Enter Valid email is required");
+            formIsValid = false;
+        } else {
+            toggleError("emailError");
+        }
 
-    // Validate Name
-    if (!name) {
-        toggleError("nameError", "Name is required");
-        formIsValid = false;
-    } else {
-        toggleError("nameError");
-    }
+        // Validate Password
+        if (!password) {
+            toggleError("passwordError", "Password is required.");
+            formIsValid = false;
+        } else if (password.length < 8) {
+            toggleError("passwordError", "Password must be at least 8 characters long.");
+            formIsValid = false;
+        } else {
+            toggleError("passwordError");
+        }
 
-    // Validate Email
-    const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
-    if (!email || !emailRegex.test(email)) {
-        toggleError("emailError", "Enter Valid email is required");
-        formIsValid = false;
-    } else {
-        toggleError("emailError");
-    }
+        // Validate Confirm Password
+        if (!confirmPassword) {
+            toggleError("confirmpasswordError", "Confirm Password is required");
+            toggleError("passwordMatchError");
+            formIsValid = false;
+        } else {
+            toggleError("confirmpasswordError");
+        }
 
-    // Validate Password
-    if (!password) {
-        toggleError("passwordError", "Password is required.");
-        formIsValid = false;
-    } else if (password.length < 8) {
-        toggleError("passwordError", "Password must be at least 8 characters long.");
-        formIsValid = false;
-    } else {
-        toggleError("passwordError");
-    }
+        if (password && confirmPassword && password !== confirmPassword) {
+            toggleError("passwordMatchError", "Passwords do not match");
+            formIsValid = false;
+        } else {
+            toggleError("passwordMatchError");
+        }
 
-    // Validate Confirm Password
-    if (!confirmPassword) {
-        toggleError("confirmpasswordError", "Confirm Password is required");
-        toggleError("passwordMatchError");
-        formIsValid = false;
-    } else {
-        toggleError("confirmpasswordError");
-    }
-
-    if (password && confirmPassword && password !== confirmPassword) {
-        toggleError("passwordMatchError", "Passwords do not match");
-        formIsValid = false;
-    } else {
-        toggleError("passwordMatchError");
-    }
-
-    if (!formIsValid) {
-        event.preventDefault();
-    }
-});
-
-const fields = ["name", "email", "password", "confirmpassword"];
-fields.forEach((field) => {
-    document.getElementById(field).addEventListener("input", function () {
-        validateField(field);
+        if (!formIsValid) {
+            event.preventDefault();
+        }
     });
+
+    // Field input validation
+    const fields = ["name", "email", "password", "confirmpassword"];
+    fields.forEach((field) => {
+        $("#" + field).on("input", function () {
+            validateField(field);
+        });
+    });
+
+    // Function to validate each field (optional)
+    function validateField(field) {
+        // You can add field-specific validation logic here if needed
+        // For now, we can clear the error when input is detected
+        toggleError(field + "Error");
+    }
 });
 
 function validateField(field) {
@@ -717,7 +726,7 @@ function validateField(field) {
             toggleError("emailError", emailRegex.test(value) ? "" : "Valid email is required");
             break;
         case "password":
-            const confirmPassword = document.getElementById("confirmpassword").value;
+            const confirmPassword = document.getElementById("password_confirmation").value;
             if (value.length < 8 || value.length > 16) {
                 toggleError("passwordError", "Password must be between 8 and 16 characters");
             } else {
@@ -1327,7 +1336,7 @@ $(document).ready(function () {
             },
             title: {
                 required: "Title is required.",
-                maxlength: "Title must be at least 5 characters long.",
+                maxlength: "Title must be at least 255 characters long.",
             },
             body: {
                 required: "Review is required.",
