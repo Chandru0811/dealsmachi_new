@@ -1423,11 +1423,11 @@ footer hr {
 }
 
 .password-container .form-label {
-    color: #fff !important;
+    color: #ff0060 !important;
 }
 
 .email-container .form-label {
-    color: #fff !important;
+    color: #ff0060 !important;
 }
 
 .line-divider-container {
@@ -3997,6 +3997,12 @@ footer hr {
     top: 20%;
     left: 50%;
     transform: translate(-50%, -50%);
-    z-index: 9999;
+    z-index: 999;
     font-size: 1rem;
 }
+
+.show-More-btn {
+    text-decoration: underline;
+    color: #ff0060;
+    cursor: pointer;
+  }

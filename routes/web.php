@@ -17,6 +17,10 @@ Route::fallback(function () {
     return redirect()->route('home');
 });
 
+Route::get('/reset', function () {
+    return view('auth/reset-password');
+});
+
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('hotpick/{slug}', [HomeController::class, 'dealcategorybasedproducts'])->name('deals.categorybased');
 Route::get('categories/{slug}', [HomeController::class, 'subcategorybasedproducts'])->name('deals.subcategorybased');

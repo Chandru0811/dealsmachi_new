@@ -150,7 +150,7 @@
                 const scrollPosition = window.innerHeight + window.scrollY;
                 const bodyHeight = document.documentElement.scrollHeight;
 
-                if (scrollPosition >= bodyHeight - 200) {
+                if (scrollPosition >= bodyHeight - 500) {
                     loadMoreProducts();
                 }
             }
