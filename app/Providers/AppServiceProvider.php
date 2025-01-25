@@ -30,8 +30,7 @@ class AppServiceProvider extends ServiceProvider
         View::composer('nav.header', function ($view) {
             $user = Auth::user();
 
-            $carts = Cart::whereNull('customer_id')
-                ->where('ip_address', request()->ip());
+            $carts = Cart::where('ip_address', request()->ip());
 
             if (Auth::check()) {
                 $carts = $carts->orWhere('customer_id', Auth::id());
