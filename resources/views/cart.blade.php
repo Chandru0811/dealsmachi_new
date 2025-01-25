@@ -90,7 +90,9 @@
                         @php
                             $currentDate = Carbon::now();
 
-                            $deliveryDays = is_numeric($item->product->delivery_days) ? (int) $item->product->delivery_days : 0;
+                            $deliveryDays = is_numeric($item->product->delivery_days)
+                                ? (int) $item->product->delivery_days
+                                : 0;
 
                             $deliveryDate =
                                 $deliveryDays > 0 ? $currentDate->addDays($deliveryDays)->format('d-m-y') : null;
@@ -160,7 +162,7 @@
                                             ₹{{ number_format($product->discounted_price, 0) }}
                                         </span>
                                         <span class="ms-1" style="font-size:18px;font-weight:500; color:#28A745">
-                                           - {{ round($product->discount_percentage) }}% Off
+                                            - {{ round($product->discount_percentage) }}% Off
                                         </span>
                                     </div>
                                 @endif
@@ -215,13 +217,16 @@
                                         onsubmit="showLoader(this)">
                                         @csrf
                                         <input type="hidden" name="product_id" value="{{ $product->id }}">
-                                        <button type="submit" class="btn save-for-later-btn" style="color: #ff0060; border: none;">
+                                        <button type="submit" class="btn save-for-later-btn"
+                                            style="color: #ff0060; border: none;">
                                             <div class="d-inline-flex align-items-center gap-2">
                                                 <div>
-                                                    <img src="{{ asset('assets/images/home/solar_pin-list.webp') }}" alt="icon" class="img-fluid" />
+                                                    <img src="{{ asset('assets/images/home/solar_pin-list.webp') }}"
+                                                        alt="icon" class="img-fluid" />
                                                 </div>
                                                 <div class="d-inline-flex align-items-center gap-2">
-                                                    <span class="loader spinner-border spinner-border-sm" style="display: none;"></span>
+                                                    <span class="loader spinner-border spinner-border-sm"
+                                                        style="display: none;"></span>
                                                     <span>Buy For Later</span>
                                                 </div>
                                             </div>
@@ -270,10 +275,10 @@
                                 <p class="discount">-₹{{ number_format($total_discount, 0) }}</p>
                             </div>
                             <!-- <hr />
-                                                            <div class="d-flex justify-content-between pb-3">
-                                                                <span>Total (x<span class="quantity-value">{{ $cart->quantity }}</span>)</span>
-                                                                <span class="total">${{ number_format($subtotal - $total_discount, 0) }}</span>
-                                                            </div> -->
+                                                                <div class="d-flex justify-content-between pb-3">
+                                                                    <span>Total (x<span class="quantity-value">{{ $cart->quantity }}</span>)</span>
+                                                                    <span class="total">${{ number_format($subtotal - $total_discount, 0) }}</span>
+                                                                </div> -->
                         </div>
                     </div>
                     <div class="d-flex justify-content-between align-items-center py-3 mt-4"
@@ -384,7 +389,7 @@
                                     ₹{{ number_format($savedItem->deal->discounted_price, 0) }}
                                 </span>
                                 <span class="ms-1" style="font-size:18px;font-weight:500; color:#28A745">
-                                   - {{ round($savedItem->deal->discount_percentage) }}% Off
+                                    - {{ round($savedItem->deal->discount_percentage) }}% Off
                                 </span>
                             </div>
                         </div>
@@ -569,17 +574,32 @@
                 .then((response) => response.json())
                 .then((data) => {
                     if (data.status === 'success') {
+                        const indianCurrencyFormatter = new Intl.NumberFormat('en-IN', {
+                            style: 'currency',
+                            currency: 'INR',
+                            minimumFractionDigits: 0,
+                            maximumFractionDigits: 0,
+                        });
+
                         document.querySelectorAll('.quantity-value').forEach((element) => {
                             element.textContent = data.updatedCart.quantity;
                         });
+
                         document.querySelectorAll('.subtotal').forEach((element) => {
-                            element.textContent = `₹${data.updatedCart.subtotal.toFixed(0)}`;
+                            element.textContent = indianCurrencyFormatter.format(data.updatedCart.subtotal);
                         });
+
                         document.querySelectorAll('.discount').forEach((element) => {
-                            element.textContent = `₹${data.updatedCart.discount.toFixed(0)}`;
-                        });
+                                let discountValue = data.updatedCart.discount;
+                                if (discountValue < 0) {
+                                    element.textContent = `- ${indianCurrencyFormatter.format(Math.abs(discountValue))}`;
+                                } else {
+                                    element.textContent = indianCurrencyFormatter.format(discountValue);
+                                }
+                            });
+
                         document.querySelectorAll('.total').forEach((element) => {
-                            element.textContent = `₹${data.updatedCart.grand_total.toFixed(0)}`;
+                            element.textContent = indianCurrencyFormatter.format(data.updatedCart.grand_total);
                         });
                     } else {
                         alert(data.message);

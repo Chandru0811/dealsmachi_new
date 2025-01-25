@@ -362,7 +362,7 @@ class CheckoutController extends Controller
         $orders = Order::where('customer_id', $customerId)
             ->with([
                 'items.product' => function ($query) {
-                    $query->select('id', 'name', 'description', 'original_price', 'discounted_price', 'discount_percentage')->with('productMedia');
+                    $query->select('id', 'name', 'description', 'original_price', 'discounted_price', 'discount_percentage', 'delivery_days')->with('productMedia');
                 },
                 'items.shop' => function ($query) {
                     $query->select('id', 'name')->withTrashed();

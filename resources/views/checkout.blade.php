@@ -216,7 +216,7 @@
                 </div>
             @endif
             <div class="container" style="margin-top: 100px;">
-                <h2 class="text-center">Checkout</h2>
+                {{-- <h2 class="text-center">Checkout</h2> --}}
                 <form id="checkoutForm" action="{{ route('checkout.checkout') }}" method="POST">
                     @csrf
                     <!-- Hidden Fields -->

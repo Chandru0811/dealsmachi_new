@@ -2307,7 +2307,7 @@ footer hr {
     border-radius: 2px;
     border: 1px solid #e8e9ea;
     position: sticky;
-    top: 95px;
+    top: 82px;
     z-index: 1000;
     width: 100%;
 }
@@ -3991,7 +3991,6 @@ footer hr {
         font-size: 12px;
     }
 }
-
 
 .loading-text {
     position: relative;
