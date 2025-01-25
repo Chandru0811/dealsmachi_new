@@ -855,7 +855,6 @@
                                     </div>
                                 @endforeach
                             </div>
-
                             <!-- Show More Button -->
                             <div class="text-end mt-4">
                                 <button id="showMoreLessBtn" class="btn border-0">Show More</button>
@@ -1175,21 +1174,63 @@
 
     </section>
     <script>
-        document.getElementById('showMoreLessBtn').addEventListener('click', function() {
-            const hiddenReviews = document.querySelectorAll('.review-card.d-none');
-            const allReviews = document.querySelectorAll('.review-card');
-            const isShowMore = this.textContent === 'Show More';
+        // $(document).ready(function() {
+        //     const $showMoreLessBtn = $('#showMoreLessBtn');
+        //     const $reviewCards = $('.review-card');
 
-            if (isShowMore) {
-                hiddenReviews.forEach(review => review.classList.remove('d-none'));
-                this.textContent = 'Show Less';
-            } else {
-                allReviews.forEach((review, index) => {
-                    if (index >= 3) review.classList.add('d-none');
-                });
-                this.textContent = 'Show More';
+        //     if ($reviewCards.length > 3) {
+        //         $showMoreLessBtn.show();
+
+        //         $showMoreLessBtn.on('click', function() {
+        //             const isShowMore = $(this).text() === 'Show More';
+
+        //             if (isShowMore) {
+        //                 $('.review-card.d-none').removeClass('d-none');
+        //                 $(this).text('Show Less');
+        //             } else {
+        //                 $reviewCards.each(function(index) {
+        //                     if (index >= 3) $(this).addClass(
+        //                     'd-none');
+        //                 });
+        //                 $(this).text('Show More');
+        //             }
+        //         });
+        //     } else {
+        //         $showMoreLessBtn.hide();
+        //     }
+        // });
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const showMoreLessBtn = document.getElementById('showMoreLessBtn');
+            const reviewCards = document.querySelectorAll('.review-card');
+
+            if (showMoreLessBtn) {
+                if (reviewCards.length > 3) {
+                    showMoreLessBtn.style.display = 'block';
+
+                    showMoreLessBtn.addEventListener('click', function() {
+                        const isShowMore = this.textContent === 'Show More';
+
+                        if (isShowMore) {
+                            document.querySelectorAll('.review-card.d-none').forEach(function(review) {
+                                review.classList.remove('d-none');
+                            });
+                            this.textContent = 'Show Less';
+                        } else {
+                            reviewCards.forEach(function(review, index) {
+                                if (index >= 3) {
+                                    review.classList.add('d-none');
+                                }
+                            });
+                            this.textContent = 'Show More';
+                        }
+                    });
+                } else {
+                    showMoreLessBtn.style.display = 'none';
+                }
             }
         });
+
 
 
         let hideTimeout;
@@ -1197,6 +1238,7 @@
 
         function showDropdown(socialId) {
             const socialDropdown = document.getElementById(socialId);
+            console.log(currentlyOpenDropdown)
 
             if (currentlyOpenDropdown && currentlyOpenDropdown !== socialDropdown) {
                 currentlyOpenDropdown.style.display = "none";
@@ -1331,5 +1373,36 @@
             iframe.src = '';
         });
     </script>
+    {{-- @push('script')
+        <script>
+            $(document).ready(function() {
+                const showMoreLessBtn = $('#showMoreLessBtn');
+                const reviewCards = $('.review-card');
 
+                if (showMoreLessBtn.length) {
+                    if (reviewCards.length > 3) {
+                        showMoreLessBtn.show();
+
+                        showMoreLessBtn.on('click', function() {
+                            const isShowMore = $(this).text() === 'Show More';
+
+                            if (isShowMore) {
+                                $('.review-card.d-none').removeClass('d-none');
+                                $(this).text('Show Less');
+                            } else {
+                                reviewCards.each(function(index) {
+                                    if (index >= 3) {
+                                        $(this).addClass('d-none');
+                                    }
+                                });
+                                $(this).text('Show More');
+                            }
+                        });
+                    } else {
+                        showMoreLessBtn.hide();
+                    }
+                }
+            });
+        </script>
+    @endpush --}}
 @endsection

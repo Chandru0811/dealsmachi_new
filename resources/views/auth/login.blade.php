@@ -95,7 +95,7 @@
                         <div class="d-flex justify-content-between text-center">
                             <a href="{{ url('forgot-password') }}" style="color: #FF0060;font-size:12px;">Forgot your
                                 password?</a>
-                            <p style="font-size:12px;">Don't have an account? <span>
+                            <p style="font-size:12px;color: #FF0060">Don't have an account? <span>
                                     <a href="register" style="color: #FF0060;font-size:12px;">Sign Up</a></span>
                             </p>
                         </div>
@@ -125,8 +125,8 @@
                             </div>
                         </div>
                         <div class="text-center">
-                            <p class="mb-0" style="color: #fff;">Don't have an account? &nbsp; <a
-                                    href="{{ url('register') }}" style="color: #fff;">Register</a></p>
+                            <p class="mb-0" style="color: #FF0060;">Don't have an account? &nbsp; <a
+                                    href="{{ url('register') }}" style="color: #FF0060">Register</a></p>
                         </div>
                     </form>
                 </div>

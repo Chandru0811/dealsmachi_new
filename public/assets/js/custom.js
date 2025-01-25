@@ -242,7 +242,7 @@ $(document).ready(function () {
         };
 
         var laravelRequest = $.ajax({
-            url: "http://127.0.0.1:8000/deals/count/enquire",
+            url: "https://dealsmachi.com/deals/count/enquire",
             type: "POST",
             headers: {
                 "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
@@ -974,7 +974,7 @@ function copySpanText(element, event) {
     var dealId = element.closest("a").getAttribute("href").split("/").pop();
 
     $.ajax({
-        url: "http://127.0.0.1:8000/deals/coupon/copied",
+        url: "https://dealsmachi.com/deals/coupon/copied",
         type: "POST",
         data: {
             _token: $('meta[name="csrf-token"]').attr("content"),
@@ -1006,7 +1006,7 @@ function copyLinkToClipboard(element, event, dealId) {
     document.body.removeChild(tempInput);
 
     $.ajax({
-        url: "http://127.0.0.1:8000/deals/count/share",
+        url: "https://dealsmachi.com/deals/count/share",
         type: "POST",
         data: {
             _token: $('meta[name="csrf-token"]').attr("content"),
@@ -1088,7 +1088,7 @@ $(document).ready(function () {
                 let dealId = $(this).data("deal-id");
 
                 $.ajax({
-                    url: `http://127.0.0.1:8000/bookmark/${dealId}/add`,
+                    url: `https://dealsmachi.com/bookmark/${dealId}/add`,
                     method: "POST",
                     success: function (response) {
                         updateBookmarkCount(response.total_items);
@@ -1121,7 +1121,7 @@ $(document).ready(function () {
                 let dealId = $(this).data("deal-id");
 
                 $.ajax({
-                    url: `http://127.0.0.1:8000/bookmark/${dealId}/remove`,
+                    url: `https://dealsmachi.com/bookmark/${dealId}/remove`,
                     method: "DELETE",
                     success: function (response) {
                         updateBookmarkCount(response.total_items);
@@ -1154,7 +1154,7 @@ $(document).ready(function () {
     // Initial Load of Bookmark Count
     function loadBookmarkCount() {
         $.ajax({
-            url: "http://127.0.0.1:8000/totalbookmark",
+            url: "https://dealsmachi.com/totalbookmark",
             method: "GET",
             success: function (response) {
                 updateBookmarkCount(response.total_items);
@@ -1200,7 +1200,7 @@ document
             var shareUrl = event.target.closest("a").href;
 
             $.ajax({
-                url: "http://127.0.0.1:8000/deals/count/share",
+                url: "https://dealsmachi.com/deals/count/share",
                 type: "POST",
                 data: {
                     _token: $('meta[name="csrf-token"]').attr("content"),
@@ -1222,7 +1222,7 @@ document
 
 function clickCount(dealId) {
     $.ajax({
-        url: "http://127.0.0.1:8000/deals/count/click",
+        url: "https://dealsmachi.com/deals/count/click",
         type: "POST",
         data: {
             _token: $('meta[name="csrf-token"]').attr("content"),
@@ -1239,7 +1239,7 @@ function clickCount(dealId) {
 
 function enquireCount(dealId) {
     $.ajax({
-        url: "http://127.0.0.1:8000/deals/count/enquire",
+        url: "https://dealsmachi.com/deals/count/enquire",
         type: "POST",
         data: {
             _token: $('meta[name="csrf-token"]').attr("content"),
@@ -1458,54 +1458,68 @@ function closePopup() {
 // review
 $(document).ready(function () {
     let selectedRating = 0;
-    const stars = $("#reviewForm #starRating .star"); // Scoped to #reviewForm
+    const stars = $("#reviewForm #starRating .star");
+    const ratingInput = $("#rating");
+    const ratingError = $("#ratingError");
 
     stars.on("click", function () {
         selectedRating = $(this).data("value");
-        $("#reviewForm #starRatingInput").val(selectedRating); // Scoped to #reviewForm
+        ratingInput.val(selectedRating);
         stars.removeClass("selected");
         stars.each(function (index) {
             if (index < selectedRating) $(this).addClass("selected");
         });
+        if (selectedRating > 0) {
+            ratingError.hide();
+        }
     });
 
     $("#reviewForm").validate({
         rules: {
-            starRating: {
-                required: function () {
-                    return selectedRating > 0;
-                },
+            rating: {
+                required: true,
             },
-            reviewTitle: {
+            title: {
                 required: true,
                 minlength: 5,
             },
-            reviewDescription: {
+            body: {
                 required: true,
                 minlength: 10,
             },
         },
         messages: {
-            starRating: {
+            rating: {
                 required: "Please select a star rating.",
             },
-            reviewTitle: {
+            title: {
                 required: "Title is required.",
                 minlength: "Title must be at least 5 characters long.",
             },
-            reviewDescription: {
+            body: {
                 required: "Review is required.",
                 minlength: "Review must be at least 10 characters long.",
             },
         },
         errorPlacement: function (error, element) {
-            error.insertAfter(element);
-            console.error(error.text());
+            if (element.attr("name") === "rating") {
+                ratingError.text(error.text()).show();
+            } else {
+                error.insertAfter(element);
+            }
         },
         submitHandler: function (form) {
             console.log("Form submitted successfully!");
             form.submit();
         },
+    });
+
+    // Prevent default form submission and trigger validation manually
+    $("#reviewForm").on("submit", function (e) {
+        if (!selectedRating) {
+            e.preventDefault(); // Prevent submission if no rating is selected
+            ratingError.text("Please select a star rating.").show();
+        }
     });
 });
 

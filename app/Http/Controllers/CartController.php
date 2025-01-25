@@ -332,7 +332,7 @@ class CartController extends Controller
             $cart->shipping_weight = $cart->shipping_weight - $cartItem->shipping_weight;
             $cart->save();
 
-            return redirect()->back()->with(['status' => 'Item moved to Save for Later'], 200);
+            return redirect()->back()->with(['status' => 'Item moved to Buy for Later'], 200);
         }
 
         return redirect()->back()->with(['status' => 'Item not found in cart'], 401);
@@ -433,7 +433,7 @@ class CartController extends Controller
 
         $savedItem->delete();
 
-        return redirect()->back()->with(['status' => 'Item removed from Save for Later'], 200);
+        return redirect()->back()->with(['status' => 'Item removed from Buy for Later'], 200);
     }
 
     public function cartSummary($cart_id, Request $request)
