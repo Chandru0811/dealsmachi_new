@@ -10,7 +10,7 @@
                 </div>
                 <span class="toast-text"> {!! nl2br(e(session('status'))) !!}</span>&nbsp;&nbsp;
                 <button class="toast-close-btn"data-bs-dismiss="alert" aria-label="Close">
-                    <i class="fa-solid fa-times" style="color: #16A34A"></i>
+                    <i class="fa-thin fa-xmark" style="color: #16A34A"></i>
                 </button>
             </div>
         </div>
@@ -58,13 +58,26 @@
         @include('contents.home.slider')
     </section>
 
+
+
     <!--  Category & Banner End  -->
 
-    <!-- Product Card Start -->
-    <section>
-        @include('contents.home.hotpicks')
-        @include('contents.home.products')
-    </section>
+    <div class="products-container">
+        <div id="products-wrapper">
+            <section>
+                @include('contents.home.hotpicks')
+                <div class="container">
+                    <h5 class="pt-0 pb-2">Products</h5>
+                </div>
+                @include('contents.home.products')
+            </section>
+        </div>
+
+        <!-- Loading spinner -->
+        <div class="loading-spinner loading-text d-none text-center" style="width: fit-content">
+            <span style="color: #ff0060">Loading...</span>
+        </div>
+    </div>
     <!-- Product Card End -->
 
     <!-- App & PlayStore Start  -->
@@ -89,27 +102,72 @@
 
 
 
-
-    <!-- Permission Denied Modal -->
-    {{-- <div class="modal fade" id="permissionDeniedModal" tabindex="-1" aria-labelledby="permissionDeniedModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="permissionDeniedModalLabel">Enable Location Services for Nearby Deals</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <p style="color: #ff0060">Don't miss out on amazing deals near you! <br>
-                        Please enable location services to uncover them.</p>
-                </div>
-            </div>
-        </div>
-    </div> --}}
 @endsection
 
 @section('scripts')
     <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            let loading = false;
+            let currentPage = 1;
+            let hasMoreProducts = true;
+            const loadingSpinner = document.querySelector('.loading-spinner');
+
+            function loadMoreProducts() {
+                if (loading || !hasMoreProducts) return;
+
+                loading = true;
+                currentPage++;
+                loadingSpinner.classList.remove('d-none');
+
+                setTimeout(() => {
+                    fetch(`/?page=${currentPage}`, {
+                            headers: {
+                                'X-Requested-With': 'XMLHttpRequest'
+                            }
+                        })
+                        .then(response => response.text())
+                        .then(html => {
+                            if (html.trim().length > 0) {
+                                document.getElementById('products-wrapper').insertAdjacentHTML(
+                                    'beforeend', html);
+                            } else {
+                                hasMoreProducts = false;
+                                // alert('All products have been loaded.');
+                            }
+                            loadingSpinner.classList.add('d-none');
+                            loading = false;
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                            loadingSpinner.classList.add('d-none');
+                            loading = false;
+                        });
+                }, 400);
+            }
+
+
+            function handleScroll() {
+                const scrollPosition = window.innerHeight + window.scrollY;
+                const bodyHeight = document.documentElement.scrollHeight;
+
+                if (scrollPosition >= bodyHeight - 200) {
+                    loadMoreProducts();
+                }
+            }
+
+            let timeout;
+            window.addEventListener('scroll', function() {
+                if (timeout) {
+                    window.cancelAnimationFrame(timeout);
+                }
+                timeout = window.requestAnimationFrame(function() {
+                    handleScroll();
+                });
+            });
+        });
+
+
+
         $(document).ready(function() {
 
             window.onload = getLocation;

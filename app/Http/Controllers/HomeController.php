@@ -35,8 +35,8 @@ class HomeController extends Controller
         $products = Product::where('active', 1)
             ->with(['productMedia', 'shop:id,country,city,shop_ratings'])
             ->orderBy('created_at', 'desc')
-            ->get();
-        // dd($products);
+            ->paginate(8);
+        // dd($products->toArray());
         $treandingdeals = DealViews::whereDate('viewed_at', Carbon::today())->get();
         $populardeals = DealViews::select('deal_id', DB::raw('count(*) as total_views'))->groupBy('deal_id')->limit(5)->orderBy('total_views', 'desc')->having('total_views', '>', 10)->get();
         $earlybirddeals = Product::where('active', 1)->whereDate('start_date', now())->get();
@@ -51,6 +51,25 @@ class HomeController extends Controller
         } else {
             $ipAddress = $request->ip();
             $bookmarkedProducts = Bookmark::where('ip_address', $ipAddress)->pluck('deal_id');
+        }
+
+        if ($request->ajax()) {
+            if ($products->isEmpty()) {
+                return response('', 204);
+            }
+
+            return view(
+                'contents.home.products',
+                compact(
+                    'products',
+                    'treandingdeals',
+                    'populardeals',
+                    'earlybirddeals',
+                    'lastchancedeals',
+                    'limitedtimedeals',
+                    'bookmarkedProducts'
+                )
+            )->render();
         }
 
         return view('home', compact('categoryGroups', 'hotpicks', 'products', 'bookmarkedProducts', 'treandingdeals', 'populardeals', 'earlybirddeals', 'lastchancedeals', 'limitedtimedeals'));
