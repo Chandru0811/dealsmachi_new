@@ -17,6 +17,7 @@ use App\Http\Controllers\Api\AppController;
 use App\Http\Controllers\Api\Vendor\DashboardController;
 use App\Http\Controllers\Api\CartController;
 use App\Http\Controllers\Api\CheckoutController;
+use App\Http\Controllers\HomeController;
 
 Route::post('login', [AuthController::class, 'login']);
 Route::post('register', [AuthController::class, 'register']);
@@ -174,6 +175,7 @@ Route::middleware('auth:api')->group(function () {
         Route::post('/checkout', [CheckoutController::class, 'createorder']);
         Route::get('/orders', [CheckoutController::class, 'getAllOrdersByCustomer']);
         Route::get('/order/{id}/{product_id}', [CheckoutController::class, 'showOrderByCustomerId']);
+        Route::put('/updateUser', [AppController::class, 'updateUser']);
 
         Route::get('/address', [AddressController::class, 'index']);
         Route::post('/address', [AddressController::class, 'store']);

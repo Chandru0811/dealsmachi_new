@@ -923,4 +923,30 @@ class AppController extends Controller
 
         return response()->json(['message' => 'Your password has been changed!']);
     }
+
+    public function updateUser(Request $request)
+    {
+        $userId = Auth::id();
+
+        $user = User::find($userId);
+
+        if (!$user) {
+            return $this->error('User Not Found.', ['error' => 'User Not Found'], 404);
+        }
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:users,email,' . $userId,
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 422);
+        }
+
+        $user->update([
+            'name' => $request->name,
+            'email' => $request->email,
+        ]);
+
+        return $this->success('User Updated Successfully', $user);
+    }
 }
