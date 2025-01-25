@@ -437,8 +437,11 @@
                                     @if (!empty($deliveryAddress['postalcode']))
                                         , {{ $deliveryAddress['postalcode'] }}
                                     @endif
-                                </p>
+                                    @if (!empty($deliveryAddress['unit']))
+                                        - {{ $deliveryAddress['unit'] }}
+                                    @endif
 
+                                </p>
                             </div>
                         </div>
                     </div>
@@ -481,7 +484,7 @@
                         <!-- Rating -->
                         <div class="text-center">
                             <p class="m-0 p-0">Click the stars to rate deals <span class="text-danger">*</span></p>
-                            <div id="starRating" class="d-flex justify-content-center">
+                            <div id="starRating" class="d-flex justify-content-center" required>
                                 <!-- Stars -->
                                 <span class="star" data-value="1">
                                     <i class="fa-regular fa-star" style="font-size: 18px;"></i>&nbsp;
@@ -499,11 +502,11 @@
                                     <i class="fa-regular fa-star" style="font-size: 18px;"></i>&nbsp;
                                 </span>
                             </div>
-                            <input type="hidden" id="rating" name="rating" required />
-                            <div id="ratingError" class="text-danger" style="display: none;">Please select a star rating.
+                            <input type="text" style="visibility: hidden" id="rating" name="rating" required />
+                            <div id="ratingError" class="error" style="display: none;" required>Please select a star rating.
                             </div>
                         </div>
-                        <input type="hidden" name="product_id" id="product_id"
+                        <input type="hidden"  name="product_id" id="product_id"
                             value="{{ $order->items[0]->product_id }}">
                         <!-- Title -->
                         <div class="mb-3">

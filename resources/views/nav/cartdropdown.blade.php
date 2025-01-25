@@ -24,8 +24,8 @@
         <img src="{{ $image ? asset($image->path) : asset('assets/images/home/noImage.webp') }}"
             class="img-fluid dropdown_img" alt="{{ $item->product->name }}" />
         <div class="text-start">
-            <p class="text-center px-1 text-wrap m-0 p-0" style="font-size: 12px; white-space: normal;">
-                {{ $item->product->name }}
+            <p class="text-start px-1 text-wrap m-0 p-0" style="font-size: 12px; white-space: normal;">
+                 {{ \Illuminate\Support\Str::limit($item->product->name, 20) }}
             </p>
             <p class="px-1 text_size" style="color: #ff0060">
                 ₹ {{ number_format($item->discount, 0) }}

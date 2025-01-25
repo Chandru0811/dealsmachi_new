@@ -121,7 +121,7 @@
                     </td>
                     <td align="right" style="vertical-align: middle;">
                         <p style="font-size: 12px; color: #333; margin: 0;">
-                            Connect with <a href="https://dealsmachi.com/" target="_blank" style="color: #ff0060; text-decoration: none;">dealsmachi</a> India
+                            Connect with <a href="https://dealsmachi.com/" target="_blank" style="color: #ff0060; text-decoration: none;">DealsMachi</a> India
                         </p>
                     </td>
                 </tr>

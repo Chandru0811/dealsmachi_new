@@ -95,7 +95,7 @@
                                 : 0;
 
                             $deliveryDate =
-                                $deliveryDays > 0 ? $currentDate->addDays($deliveryDays)->format('d-m-y') : null;
+                                $deliveryDays > 0 ? $currentDate->addDays($deliveryDays)->format('d-m-Y') : null;
                         @endphp
                         <div class="row p-4">
                             <div class="col-md-4 mb-3">
@@ -275,10 +275,10 @@
                                 <p class="discount">-₹{{ number_format($total_discount, 0) }}</p>
                             </div>
                             <!-- <hr />
-                                                                <div class="d-flex justify-content-between pb-3">
-                                                                    <span>Total (x<span class="quantity-value">{{ $cart->quantity }}</span>)</span>
-                                                                    <span class="total">${{ number_format($subtotal - $total_discount, 0) }}</span>
-                                                                </div> -->
+                                                                        <div class="d-flex justify-content-between pb-3">
+                                                                            <span>Total (x<span class="quantity-value">{{ $cart->quantity }}</span>)</span>
+                                                                            <span class="total">${{ number_format($subtotal - $total_discount, 0) }}</span>
+                                                                        </div> -->
                         </div>
                     </div>
                     <div class="d-flex justify-content-between align-items-center py-3 mt-4"
@@ -295,7 +295,7 @@
                                 </span>
                                 &nbsp;&nbsp;
                                 <span class="ms-1" style="font-size:12px; color:#28A745; white-space: nowrap;">
-                                    Dealsmachi Discount
+                                    DealsMachi Discount
                                     &nbsp;<span class="discount">-₹{{ number_format($total_discount, 0) }}</span>
                                 </span>
                             </h4>
@@ -333,11 +333,11 @@
                         $currentDate = Carbon::now();
 
                         $deliveryDays = is_numeric($savedItem->deal->delivery_days)
-                            ? (int) $savedItem->deal->delivery_days
-                            : 0;
+    ? (int) $savedItem->deal->delivery_days
+    : 0;
 
-                        $deliveryDate =
-                            $deliveryDays > 0 ? $currentDate->addDays($deliveryDays)->format('d-m-y') : null;
+$deliveryDate =
+    $deliveryDays > 0 ? $currentDate->addDays($deliveryDays)->format('d-m-Y') : null;
                     @endphp
                     <div class="row p-4">
                         <div class="col-md-3 d-flex flex-column justify-content-center align-items-center">
@@ -590,14 +590,14 @@
                         });
 
                         document.querySelectorAll('.discount').forEach((element) => {
-                                let discountValue = data.updatedCart.discount;
-                                if (discountValue < 0) {
-                                    element.textContent = `- ${indianCurrencyFormatter.format(Math.abs(discountValue))}`;
-                                } else {
-                                    element.textContent = indianCurrencyFormatter.format(discountValue);
-                                }
-                            });
-
+                            let discountValue = data.updatedCart.discount;
+                            if (discountValue < 0) {
+                                element.textContent =
+                                    `- ${indianCurrencyFormatter.format(Math.abs(discountValue))}`;
+                            } else {
+                                element.textContent = `- ${indianCurrencyFormatter.format(discountValue)}`;
+                            }
+                        });
                         document.querySelectorAll('.total').forEach((element) => {
                             element.textContent = indianCurrencyFormatter.format(data.updatedCart.grand_total);
                         });

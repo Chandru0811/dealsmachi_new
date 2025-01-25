@@ -153,7 +153,7 @@
         <div class="message">
             <p>Hello {{ $user->name }}</p>
             <p class="bottomLine">We are delighted to announce that your Deal <a href=""
-                    target="_blank">{{ $product->name }}</a> is Approved Successfully in Dealsmachi.</p>
+                    target="_blank">{{ $product->name }}</a> is Approved Successfully in DealsMachi.</p>
         </div>
 
         <!-- Content -->
@@ -169,7 +169,7 @@
                 <p class="sub-heading">Coupon Code : <span>{{ $product->coupon_code }}</span></p>
                 <p class="sold-details">Sold by <span style="color: #1a0dab;">{{ $user->legal_name }}</span> and
                     Fulfilled by <a href="https://dealsmachi.com/" target="_blank"
-                        style="color: #ff0060; text-decoration: none;">Dealsmachi</a></p>
+                        style="color: #ff0060; text-decoration: none;">DealsMachi</a></p>
             </div>
 
             <div class="cta-button">
@@ -189,7 +189,7 @@
                     </td>
                     <td align="right" style="vertical-align: middle;">
                         <p style="font-size: 12px; color: #333; margin: 0;">
-                            Connect with <a href="https://dealsmachi.com/" target="_blank" style="color: #ff0060; text-decoration: none;">Dealsmachi</a> India
+                            Connect with <a href="https://dealsmachi.com/" target="_blank" style="color: #ff0060; text-decoration: none;">DealsMachi</a> India
                         </p>
                     </td>
                 </tr>

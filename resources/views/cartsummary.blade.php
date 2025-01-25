@@ -125,13 +125,13 @@
                                         $currentDate = Carbon::now();
 
                                         $deliveryDays = is_numeric($product->delivery_days)
-                                            ? (int) $product->delivery_days
-                                            : 0;
+    ? (int) $product->delivery_days
+    : 0;
 
-                                        $deliveryDate =
-                                            $deliveryDays > 0
-                                                ? $currentDate->addDays($deliveryDays)->format('d-m-y')
-                                                : null;
+$deliveryDate =
+    $deliveryDays > 0
+        ? $currentDate->addDays($deliveryDays)->format('d-m-Y')
+        : null;
                                     @endphp
                                     @if ($product->deal_type == 1)
                                         <div class="rating my-2">
@@ -215,7 +215,7 @@
                                     ₹{{ number_format($carts->grand_total, 0) }} </span>
                                 &nbsp;&nbsp;
                                 <span class="ms-1" style="font-size:12px; color:#00DD21;white-space: nowrap;">
-                                    Dealsmachi Discount
+                                    DealsMachi Discount
                                     &nbsp;<span class="discount">-₹{{ number_format($carts->discount, 0) }}</span>
                                 </span>
                             </h4>

@@ -109,8 +109,10 @@
                                 $currentDate = Carbon::now();
 
                                 $deliveryDays = is_numeric($product->delivery_days) ? (int) $product->delivery_days : 0;
+
                                 $deliveryDate =
-                                    $deliveryDays > 0 ? $currentDate->addDays($deliveryDays)->format('d-m-y') : null;
+                                    $deliveryDays > 0 ? $currentDate->addDays($deliveryDays)->format('d-m-Y') : null;
+
                             @endphp
                             <div class="row px-4 pt-2" id="product_{{ $product->id }}">
                                 <div class="col-md-4 col-12 d-flex flex-column justify-content-center align-items-center">
@@ -262,19 +264,20 @@
                                             </p>
                                         </div>
                                     </div>
+
                                 </div>
                             @endforeach
+                            <!-- Add Button -->
+                            <div class="d-flex justify-content-end">
+                                <button class="btn btn-orange my-2" id="get_cartItems">Add Selected Items</button>
+                            </div>
                         @else
-                            <div class="text-center" id="no_items">
+                            <div class="text-center mb-3" id="no_items">
                                 <p class="text-muted">No items found in the cart.</p>
                             </div>
                         @endif
                     </div>
 
-                    <!-- Add Button -->
-                    <div class="d-flex justify-content-end">
-                        <button class="btn btn-orange my-2" id="get_cartItems">Add Selected Items</button>
-                    </div>
                     <!-- saved items -->
                     <p>Saved Items</p>
                     @if ($savedItem->count() > 0)
@@ -344,7 +347,7 @@
                     </span>
                     &nbsp;&nbsp;
                     <span class="ms-1" style="font-size:12px; color:#00DD21;white-space: nowrap;" id="deal-discount">
-                        Dealsmachi Discount
+                        DealsMachi Discount
                         &nbsp;-<span
                             class="discount">₹{{ number_format($product->original_price - $product->discounted_price, 0, '.', ',') }}</span>
                     </span>
@@ -453,32 +456,32 @@
 
                                     <div class="col-12 d-flex justify-content-between align-items-center mt-2">
                                     ${product.deal_type === 2 ? `
-                                                                                                                                    <div class="d-flex align-items-center">
-                                                                                                                                      <div class="form-group">
-                                                                                                                                        <label for="service_date_{{ $product->id }}" class="form-label">Service
-                                                                                                                                            Date</label>
-                                                                                                                                        <input type="date" id="service_date_{{ $product->id }}"
-                                                                                                                                            name="service_date" class="form-control form-control-sm service-date"
-                                                                                                                                            value="" min="{{ date('Y-m-d') }}" required>
-                                                                                                                                        <span class="error-message" id="error_date_{{ $product->id }}"
-                                                                                                                                            style="color:red; font-size: 12px;"></span>
-                                                                                                                                    </div>
-                                                                                                                                        <div class="form-group ms-2">
-                                                                                                                                            <label for="service_time_${product.id}" class="form-label">Service Time</label>
-                                                                                                                                            <input type="time" id="service_time_${product.id}" name="service_time"
-                                                                                                                                                class="form-control form-control-sm service-time" value="" required>
-                                                                                                                                            <span class="error-message" id="error_time_${product.id}" style="color:red; font-size: 12px;"></span>
-                                                                                                                                        </div>
-                                                                                                                                    </div>
-                                                                                                                                ` : `
-                                                                                                                                    <div class="d-flex align-items-center my-3">
-                                                                                                                                        <span class="me-2">Qty</span>
-                                                                                                                                        <button class="btn rounded btn-sm decrease-btn" style="background: #c7c7c75b" data-product-id="${product.id}">-</button>
-                                                                                                                                        <input type="text" id="quantityInput_${product.id}" value="1"
-                                                                                                                                            class="form-control form-control-sm mx-2 text-center quantity-input" style="width: 50px;" readonly>
-                                                                                                                                        <button class="btn rounded btn-sm increase-btn" style="background: #c7c7c75b" data-product-id="${product.id}">+</button>
-                                                                                                                                    </div>
-                                                                                                                                `}
+                                                                                                                                                <div class="d-flex align-items-center">
+                                                                                                                                                  <div class="form-group">
+                                                                                                                                                    <label for="service_date_{{ $product->id }}" class="form-label">Service
+                                                                                                                                                        Date</label>
+                                                                                                                                                    <input type="date" id="service_date_{{ $product->id }}"
+                                                                                                                                                        name="service_date" class="form-control form-control-sm service-date"
+                                                                                                                                                        value="" min="{{ date('Y-m-d') }}" required>
+                                                                                                                                                    <span class="error-message" id="error_date_{{ $product->id }}"
+                                                                                                                                                        style="color:red; font-size: 12px;"></span>
+                                                                                                                                                </div>
+                                                                                                                                                    <div class="form-group ms-2">
+                                                                                                                                                        <label for="service_time_${product.id}" class="form-label">Service Time</label>
+                                                                                                                                                        <input type="time" id="service_time_${product.id}" name="service_time"
+                                                                                                                                                            class="form-control form-control-sm service-time" value="" required>
+                                                                                                                                                        <span class="error-message" id="error_time_${product.id}" style="color:red; font-size: 12px;"></span>
+                                                                                                                                                    </div>
+                                                                                                                                                </div>
+                                                                                                                                            ` : `
+                                                                                                                                                <div class="d-flex align-items-center my-3">
+                                                                                                                                                    <span class="me-2">Qty</span>
+                                                                                                                                                    <button class="btn rounded btn-sm decrease-btn" style="background: #c7c7c75b" data-product-id="${product.id}">-</button>
+                                                                                                                                                    <input type="text" id="quantityInput_${product.id}" value="1"
+                                                                                                                                                        class="form-control form-control-sm mx-2 text-center quantity-input" style="width: 50px;" readonly>
+                                                                                                                                                    <button class="btn rounded btn-sm increase-btn" style="background: #c7c7c75b" data-product-id="${product.id}">+</button>
+                                                                                                                                                </div>
+                                                                                                                                            `}
                                     <span class="px-2">
                                         <button class="btn btn-sm btn-danger rounded remove-btn"
                                             style="background: #ff0060; color:#fff;

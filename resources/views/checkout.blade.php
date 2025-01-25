@@ -171,9 +171,9 @@
                                         &nbsp;&nbsp;
                                         <span class="total ms-1"
                                             style="font-size:12px; color:#00DD21;white-space: nowrap;">
-                                            Dealsmachi Discount
+                                            DealsMachi Discount
                                             &nbsp;-<span
-                                                class="discount">-₹{{ number_format($cart->items->sum(fn($item) => ($item->product->original_price - $item->product->discounted_price) * $item->quantity), 0) }}</span>
+                                                class="discount">₹{{ number_format($cart->items->sum(fn($item) => ($item->product->original_price - $item->product->discounted_price) * $item->quantity), 0) }}</span>
                                         </span>
                                     </h4>
                                 </div>
@@ -322,9 +322,9 @@
                                             ₹{{ number_format($cart->grand_total, 0) }}
                                         </span> &nbsp;&nbsp; <span class="ms-1"
                                             style="font-size:12px; color:#00DD21;white-space: nowrap;">
-                                            Dealsmachi Discount
+                                            DealsMachi Discount
                                             &nbsp;<span
-                                                class="discount">-₹{{ number_format($cart->discount, 0) }}</span></span>
+                                                class="discount">₹{{ number_format($cart->discount, 0) }}</span></span>
                                     </h4>
                                 </div>
                                 {{-- <div class="d-flex justify-content-end align-items-center py-3"

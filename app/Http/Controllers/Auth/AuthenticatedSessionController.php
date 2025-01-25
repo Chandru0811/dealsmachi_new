@@ -37,7 +37,7 @@ class AuthenticatedSessionController extends Controller
             ->where('ip_address', $ip_address)
             ->update(['user_id' => $user->id]);
 
-        $message = "Welcome {$user->name}, You have successfully logged in. \nGrab the latest Dealsmachi offers now!";
+        $message = "Welcome {$user->name}, You have successfully logged in. \nGrab the latest DealsMachi offers now!";
 
         return redirect()->intended(route('home', [], false))
                  ->with('status', $message);

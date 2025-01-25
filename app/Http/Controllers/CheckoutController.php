@@ -187,7 +187,8 @@ class CheckoutController extends Controller
                 'postalcode' => $address->postalcode,
                 'address' => $address->address,
                 'city' => $address->city,
-                'state' => $address->state
+                'state' => $address->state,
+                'unit'  => $address->unit
             ];
 
             // Create the order
@@ -291,7 +292,8 @@ class CheckoutController extends Controller
                 'postalcode' => $address->postalcode,
                 'address' => $address->address,
                 'city' => $address->city,
-                'state' => $address->state
+                'state' => $address->state,
+                'unit'  => $address->unit
             ];
 
             $order = Order::create([
@@ -406,6 +408,7 @@ class CheckoutController extends Controller
                 }
             }
         }
+        // dd($order);
 
         return view('orderView', compact('order', 'orderReviewedByUser'));
     }

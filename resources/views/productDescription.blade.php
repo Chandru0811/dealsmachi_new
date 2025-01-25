@@ -856,8 +856,8 @@
                                 @endforeach
                             </div>
                             <!-- Show More Button -->
-                            <div class="text-end mt-4">
-                                <button id="showMoreLessBtn" class="btn border-0">Show More</button>
+                            <div class="text-start mt-4">
+                                <span id="showMoreLessBtn" class="show-More-btn border-0">Show More</span>
                             </div>
                         @else
                             <!-- Empty State -->

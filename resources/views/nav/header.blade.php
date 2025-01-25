@@ -484,7 +484,7 @@
                                     <label for="unit" class="form-label address_lable">Unit Info
                                         (Optional)</label>
                                     <input type="text" class="form-control address_input" name="unit"
-                                        id="unit" placeholder="Enter your Unit info" />
+                                        id="unit" placeholder="Landmark" />
                                 </div>
 
                                 <!-- Address Type -->
@@ -652,7 +652,7 @@
                                     <label for="unit" class="form-label address_lable">Additional Info
                                         (Optional)</label>
                                     <input type="text" class="form-control address_input" name="unit"
-                                        id="unit" placeholder="Eg., Unit Info, Floor, etc." />
+                                        id="unit" placeholder="Landmark" />
                                 </div>
 
                                 <!-- Address Type -->
