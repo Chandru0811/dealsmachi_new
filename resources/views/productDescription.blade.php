@@ -668,7 +668,7 @@
                                                         </button>
                                                     @else
                                                         <button type="button" class="btn mb-2 sendEnqBtn" disabled
-                                                            onclick="window.open('https://wa.me/65{{ $product->shop->mobile }}?text=Hello! I visited your website.', '_blank')">
+                                                            onclick="window.open('https://wa.me/91{{ $product->shop->mobile }}?text=Hello! I visited your website.', '_blank')">
                                                             <i class="fa-brands fa-whatsapp"></i>&nbsp;&nbsp;Enquiry
                                                         </button>
                                                     @endif
