@@ -66,14 +66,11 @@
                         </div>
                     @endif
                     <h3 class="login-title text-center mb-4">Login/Register</h3>
-                    <form class="w-75" method="POST" action="{{ route('login') }}">
+                    <form id="loginForm" class="w-75" method="POST" action="{{ route('login') }}">
                         @csrf
                         <div class="mb-3 email-container">
-                            <input type="email" class="form-control" id="email" name="email" value=""
-                                placeholder="Email" />
-                            @error('email')
-                                <span class="error">{{ $message }}</span>
-                            @enderror
+                            <input type="email" class="form-control" id="email" name="email" value="" placeholder="Email" />
+                            <span class="error text-danger" id="emailError" style="display: none; font-size: 12px;"></span>
                         </div>
                         <div class="mb-3 password-container">
                             <div class="input-group">
@@ -84,10 +81,9 @@
                                     <i class="fa fa-eye" id="eyeIconPassword"></i>
                                 </span>
                             </div>
-                            @error('password')
-                                <span class="error">{{ $message }}</span>
-                            @enderror
+                            <span class="error text-danger" id="passwordError" style="display: none; font-size: 12px;"></span>
                         </div>
+
                         <div class="mb-1">
                             <button type="submit" class="btn btn-light login-btn w-100"
                                 style="color: #fff; background:#FF0060">Login</button>

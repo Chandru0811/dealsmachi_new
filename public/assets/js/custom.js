@@ -546,67 +546,91 @@ $(document).ready(function () {
 
 // Validation for Login Page
 $(document).ready(function () {
-    $("#loginForm").validate({
-        rules: {
-            email: {
-                required: true,
-                email: true,
-            },
-            password: {
-                required: true,
-                minlength: 8,
-                maxlength: 16,
-            },
-            password_confirmation: {
-                required: true,
-                equalTo: "#password",
-                minlength: 8,
-                maxlength: 16,
-            },
-        },
-        messages: {
-            email: {
-                required: "Email is required",
-                email: "Invalid email address",
-            },
-            password: {
-                required: "Password is required",
-                minlength: "Password must be at least 8 characters long",
-                maxlength: "Password must not exceed 16 characters",
-            },
-            password_confirmation: {
-                required: "Confirm Password is required",
-                equalTo: "Passwords do not match",
-                minlength: "Password must be at least 8 characters long",
-                maxlength: "Password must not exceed 16 characters",
-            },
-        },
-        errorPlacement: function (error, element) {
-            error.addClass("text-danger mt-1");
-            error.insertAfter(element);
+    $("#loginForm").on("submit", function (e) {
+        e.preventDefault();
 
-            if (element.attr("name") === "password") {
-                adjustIconPosition(element);
-            }
-        },
-        highlight: function (element) {
-            $(element).addClass("is-invalid");
-            if ($(element).attr("name") === "password") {
-                $("#toggleLoginPassword").addClass("is-invalid");
-                adjustIconPosition($(element));
-            }
-        },
-        unhighlight: function (element) {
-            $(element).removeClass("is-invalid");
-            if ($(element).attr("name") === "password") {
-                $("#toggleLoginPassword").removeClass("is-invalid");
-                adjustIconPosition($(element));
-            }
-        },
-        submitHandler: function (form) {
-            alert("Form is valid! Submitting...");
-            form.submit();
-        },
+        $("#emailError").hide();
+        $("#passwordError").hide();
+
+        const email = $("#email").val().trim();
+        const password = $("#password").val().trim();
+
+        // Email validation
+        const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        let isValid = true;
+
+        if (email === "") {
+            $("#emailError").text("Email field is required.").show();
+            isValid = false;
+        } else if (!emailPattern.test(email)) {
+            $("#emailError").text("Please enter a valid email address.").show();
+            isValid = false;
+        }
+
+        // Password validation
+        if (password === "") {
+            $("#passwordError").text("Password field is required.").show();
+            isValid = false;
+        } else if (password.length < 8 || password.length > 16) {
+            $("#passwordError").text("Password must be between 8 and 16 characters.").show();
+            isValid = false;
+        }
+
+        if (isValid) {
+            this.submit();
+        }
+    });
+
+    $("#registerForm").on("submit", function (e) {
+        e.preventDefault();
+
+        $("#nameError").hide();
+        $("#passwordError").hide();
+
+        const name = $("#name").val().trim();
+        const email = $("#email").val().trim();
+        const password = $("#password").val().trim();
+
+        // Email validation
+        const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        let isValid = true;
+
+        if (name === "") {
+            $("#nameError").text("Name field is required.").show();
+            isValid = false;
+        } else if (!emailPattern.test(email)) {
+            $("#emailError").text("Please enter a valid email address.").show();
+            isValid = false;
+        }
+
+        if (name === "") {
+            $("#emailError").text("Email field is required.").show();
+            isValid = false;
+        } else if (!emailPattern.test(email)) {
+            $("#emailError").text("Please enter a valid email address.").show();
+            isValid = false;
+        }
+
+        // Password validation
+        if (password === "") {
+            $("#passwordError").text("Password field is required.").show();
+            isValid = false;
+        } else if (password.length < 8 || password.length > 16) {
+            $("#passwordError").text("Password must be between 8 and 16 characters.").show();
+            isValid = false;
+        }
+
+        if (confirmpassword === "") {
+            $("#confirmpasswordError").text("Password field is required.").show();
+            isValid = false;
+        } else if (confirmpassword.length < 8 || confirmpassword.length > 16) {
+            $("#confirmpasswordError").text("Password must be between 8 and 16 characters.").show();
+            isValid = false;
+        }
+
+        if (isValid) {
+            this.submit();
+        }
     });
 
     function adjustIconPosition(passwordField) {
@@ -621,6 +645,7 @@ $(document).ready(function () {
             icon.css("top", "71%");
         }
     }
+
 
     // Password visibility toggle
     $(document).ready(function () {
@@ -641,7 +666,6 @@ $(document).ready(function () {
         }
     });
 });
-
 // Validation for Register Page
 $(document).ready(function () {
     $("#registerForm").validate({
