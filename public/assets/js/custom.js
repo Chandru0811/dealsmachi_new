@@ -328,13 +328,13 @@ $(document).ready(function () {
             phone: {
                 required: true,
                 digits: true,
-                maxlength: 10, // Exactly 8 digits as per backend
+                maxlength: 10,
             },
             postalcode: {
                 required: true,
                 digits: true,
                 minlength: 6,
-                maxlength: 6, // Exactly 6 digits as per backend
+                maxlength: 6,
             },
             address: {
                 required: true,
@@ -546,69 +546,53 @@ $(document).ready(function () {
 
 // Validation for Login Page
 $(document).ready(function () {
-    $("#loginForm").validate({
-        rules: {
-            email: {
-                required: true,
-                email: true,
-            },
-            password: {
-                required: true,
-                minlength: 8,
-                maxlength: 16,
-            },
-            password_confirmation: {
-                required: true,
-                equalTo: "#password",
-                minlength: 8,
-                maxlength: 16,
-            },
-        },
-        messages: {
-            email: {
-                required: "Email is required",
-                email: "Invalid email address",
-            },
-            password: {
-                required: "Password is required",
-                minlength: "Password must be at least 8 characters long",
-                maxlength: "Password must not exceed 16 characters",
-            },
-            password_confirmation: {
-                required: "Confirm Password is required",
-                equalTo: "Passwords do not match",
-                minlength: "Password must be at least 8 characters long",
-                maxlength: "Password must not exceed 16 characters",
-            },
-        },
-        errorPlacement: function (error, element) {
-            error.addClass("text-danger mt-1");
-            error.insertAfter(element);
+    $("#loginForm").on("submit", function (e) {
+        e.preventDefault();
 
-            if (element.attr("name") === "password") {
-                adjustIconPosition(element);
-            }
-        },
-        highlight: function (element) {
-            $(element).addClass("is-invalid");
-            if ($(element).attr("name") === "password") {
-                $("#toggleLoginPassword").addClass("is-invalid");
-                adjustIconPosition($(element));
-            }
-        },
-        unhighlight: function (element) {
-            $(element).removeClass("is-invalid");
-            if ($(element).attr("name") === "password") {
-                $("#toggleLoginPassword").removeClass("is-invalid");
-                adjustIconPosition($(element));
-            }
-        },
-        submitHandler: function (form) {
-            alert("Form is valid! Submitting...");
-            form.submit();
-        },
+        $("#emailError").hide();
+        $("#passwordError").hide();
+
+        const email = $("#email").val().trim();
+        const password = $("#password").val().trim();
+
+        // Email validation
+        const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        let isValid = true;
+
+        if (email === "") {
+            $("#emailError").text("Email field is required.").show();
+            isValid = false;
+        } else if (!emailPattern.test(email)) {
+            $("#emailError").text("Please enter a valid email address.").show();
+            isValid = false;
+        }
+
+        // Password validation
+        if (!password) {
+            toggleError("passwordError", "Password is required.");
+            formIsValid = false;
+        } else if (password.length < 8) {
+            toggleError("passwordError", "Password must be at least 8 characters long.");
+            formIsValid = false;
+        } else {
+            toggleError("passwordError");
+        }
+
+        if (isValid) {
+            this.submit();
+        }
     });
 
+    // Clear error messages when user interacts with input fields
+    $("#email").on("input", function () {
+        $("#emailError").hide();
+    });
+
+    $("#password").on("input", function () {
+        $("#passwordError").hide();
+    });
+
+    // Password visibility toggle
     function adjustIconPosition(passwordField) {
         const icon = $("#toggleLoginPassword");
         const errorElement = passwordField.next(".text-danger");
@@ -621,6 +605,7 @@ $(document).ready(function () {
             icon.css("top", "71%");
         }
     }
+
 
     // Password visibility toggle
     $(document).ready(function () {
@@ -642,297 +627,145 @@ $(document).ready(function () {
     });
 });
 
+
 // Validation for Register Page
-$(document).ready(function () {
-    $("#registerForm").validate({
-        rules: {
-            name: {
-                required: true,
-            },
-            email: {
-                required: true,
-                email: true,
-            },
-            password: {
-                required: true,
-                minlength: 8,
-            },
-            confirm_password: {
-                required: true,
-                equalTo: "#password",
-            },
-        },
-        messages: {
-            name: {
-                required: "Name is required",
-            },
-            email: {
-                required: "Email is required",
-                email: "Invalid email address",
-            },
-            password: {
-                required: "Password is required",
-                minlength: "Password must be at least 8 characters long",
-            },
-            confirm_password: {
-                required: "Confirm Password is required",
-                equalTo: "Passwords do not match",
-            },
-        },
-        errorPlacement: function (error, element) {
-            error.addClass("text-danger mt-1");
-            error.insertAfter(element);
+document.getElementById("registerForm").addEventListener("submit", function (event) {
+    let formIsValid = true;
 
-            if (
-                element.attr("name") === "password" ||
-                element.attr("name") === "confirm_password"
-            ) {
-                adjustRegisterIconPosition(element);
-            }
-        },
-        highlight: function (element) {
-            $(element).addClass("is-invalid");
-            if (
-                $(element).attr("name") === "password" ||
-                $(element).attr("name") === "confirm_password"
-            ) {
-                adjustRegisterIconPosition($(element));
-            }
-        },
-        unhighlight: function (element) {
-            $(element).removeClass("is-invalid");
-            if (
-                $(element).attr("name") === "password" ||
-                $(element).attr("name") === "confirm_password"
-            ) {
-                adjustRegisterIconPosition($(element));
-            }
-        },
-        submitHandler: function (form) {
-            alert("Registration form is valid! Submitting...");
-            form.submit();
-        },
-    });
-
-    function adjustRegisterIconPosition(passwordField) {
-        const icon =
-            passwordField.attr("name") === "password"
-                ? $("#toggleRegisterPassword")
-                : $("#toggleRegisterConfirmPassword");
-        const errorElement = passwordField.next(".text-danger");
-
-        if (errorElement.length) {
-            icon.css("right", `${passwordField.outerHeight() - 5}px`);
-            icon.css("top", `${passwordField.outerHeight() + 13}px`);
+    const toggleError = (id, message = "") => {
+        const errorElement = document.getElementById(id);
+        if (message) {
+            errorElement.style.display = "block";
+            errorElement.innerText = message;
         } else {
-            icon.css("right", "10px");
-            icon.css("top", "71%");
+            errorElement.style.display = "none";
+            errorElement.innerText = "";
         }
+    };
+
+    // Get form values
+    const name = document.getElementById("name").value.trim();
+    const email = document.getElementById("email").value.trim();
+    const password = document.getElementById("password").value;
+    const confirmPassword = document.getElementById("confirmpassword").value;
+
+    // Validate Name
+    if (!name) {
+        toggleError("nameError", "Name is required");
+        formIsValid = false;
+    } else {
+        toggleError("nameError");
     }
 
-    // Password visibility toggle for register form
-    $(document).ready(function () {
-        const toggleRegisterPassword = document.querySelector(
-            "#toggleRegisterPassword"
-        );
-        const registerPassword = document.querySelector("#password");
-
-        if (toggleRegisterPassword && registerPassword) {
-            toggleRegisterPassword.addEventListener("click", function () {
-                const type =
-                    registerPassword.getAttribute("type") === "password"
-                        ? "text"
-                        : "password";
-                registerPassword.setAttribute("type", type);
-                this.classList.toggle("fa-eye-slash");
-                this.classList.toggle("fa-eye");
-            });
-        }
-    });
-
-    $(document).ready(function () {
-        const toggleRegisterConfirmPassword = document.querySelector(
-            "#toggleRegisterConfirmPassword"
-        );
-        const registerConfirmPassword =
-            document.querySelector("#confirm_password");
-
-        // Check if both elements exist
-        if (toggleRegisterConfirmPassword && registerConfirmPassword) {
-            toggleRegisterConfirmPassword.addEventListener(
-                "click",
-                function () {
-                    const type =
-                        registerConfirmPassword.getAttribute("type") ===
-                        "password"
-                            ? "text"
-                            : "password";
-                    registerConfirmPassword.setAttribute("type", type);
-                    this.classList.toggle("fa-eye-slash");
-                    this.classList.toggle("fa-eye");
-                }
-            );
-        }
-    });
-});
-
-// Validation for Forgot Password Page
-$(document).ready(function () {
-    $("#forgotForm").validate({
-        rules: {
-            email: {
-                required: true,
-                email: true,
-            },
-        },
-        messages: {
-            email: {
-                required: "Email is required",
-                email: "Invalid email address",
-            },
-        },
-        errorPlacement: function (error, element) {
-            error.addClass("text-danger mt-1");
-            error.insertAfter(element);
-        },
-        highlight: function (element) {
-            $(element).addClass("is-invalid");
-        },
-        unhighlight: function (element) {
-            $(element).removeClass("is-invalid");
-        },
-        submitHandler: function (form) {
-            alert("Reset Password request is valid! Submitting...");
-            form.submit();
-        },
-    });
-});
-
-// Validation for Reset Password Page
-$(document).ready(function () {
-    $("#resetForm").validate({
-        rules: {
-            email: {
-                required: true,
-                email: true,
-            },
-            new_password: {
-                required: true,
-                minlength: 8,
-            },
-            confirm_new_password: {
-                required: true,
-                equalTo: "#new_password",
-            },
-        },
-        messages: {
-            email: {
-                required: "Email is required",
-                email: "Invalid email address",
-            },
-            new_password: {
-                required: "Password is required",
-                minlength: "Password must be at least 8 characters long",
-            },
-            confirm_new_password: {
-                required: "Confirm Password is required",
-                equalTo: "Passwords do not match",
-            },
-        },
-        errorPlacement: function (error, element) {
-            error.addClass("text-danger mt-1");
-            error.insertAfter(element);
-
-            if (
-                element.attr("name") === "new_password" ||
-                element.attr("name") === "confirm_new_password"
-            ) {
-                adjustResetIconPosition(element);
-            }
-        },
-        highlight: function (element) {
-            $(element).addClass("is-invalid");
-            if (
-                $(element).attr("name") === "new_password" ||
-                $(element).attr("name") === "confirm_new_password"
-            ) {
-                adjustResetIconPosition($(element));
-            }
-        },
-        unhighlight: function (element) {
-            $(element).removeClass("is-invalid");
-            if (
-                $(element).attr("name") === "new_password" ||
-                $(element).attr("name") === "confirm_new_password"
-            ) {
-                adjustResetIconPosition($(element));
-            }
-        },
-        submitHandler: function (form) {
-            alert("Reset Password form is valid! Submitting...");
-            form.submit();
-        },
-    });
-
-    function adjustResetIconPosition(passwordField) {
-        const icon =
-            passwordField.attr("name") === "new_password"
-                ? $("#toggleResetPassword")
-                : $("#toggleResetConfirmPassword");
-        const errorElement = passwordField.next(".text-danger");
-
-        if (errorElement.length) {
-            icon.css("right", `${passwordField.outerHeight() - 5}px`);
-            icon.css("top", `${passwordField.outerHeight() + 13}px`);
-        } else {
-            icon.css("right", "10px");
-            icon.css("top", "71%");
-        }
+    // Validate Email
+    const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+    if (!email || !emailRegex.test(email)) {
+        toggleError("emailError", "Enter Valid email is required");
+        formIsValid = false;
+    } else {
+        toggleError("emailError");
     }
 
-    // Password visibility toggle for reset password form
-    $(document).ready(function () {
-        const toggleResetPassword = document.querySelector(
-            "#toggleResetPassword"
-        );
-        const resetPassword = document.querySelector("#new_password");
+    // Validate Password
+    if (!password) {
+        toggleError("passwordError", "Password is required.");
+        formIsValid = false;
+    } else if (password.length < 8) {
+        toggleError("passwordError", "Password must be at least 8 characters long.");
+        formIsValid = false;
+    } else {
+        toggleError("passwordError");
+    }
 
-        // Check if both elements exist
-        if (toggleResetPassword && resetPassword) {
-            toggleResetPassword.addEventListener("click", function () {
-                const type =
-                    resetPassword.getAttribute("type") === "password"
-                        ? "text"
-                        : "password";
-                resetPassword.setAttribute("type", type);
-                this.classList.toggle("fa-eye-slash");
-                this.classList.toggle("fa-eye");
-            });
-        }
-    });
+    // Validate Confirm Password
+    if (!confirmPassword) {
+        toggleError("confirmpasswordError", "Confirm Password is required");
+        toggleError("passwordMatchError");
+        formIsValid = false;
+    } else {
+        toggleError("confirmpasswordError");
+    }
 
-    $(document).ready(function () {
-        const toggleResetConfirmPassword = document.querySelector(
-            "#toggleResetConfirmPassword"
-        );
-        const resetConfirmPassword = document.querySelector(
-            "#confirm_new_password"
-        );
+    if (password && confirmPassword && password !== confirmPassword) {
+        toggleError("passwordMatchError", "Passwords do not match");
+        formIsValid = false;
+    } else {
+        toggleError("passwordMatchError");
+    }
 
-        // Check if both elements exist
-        if (toggleResetConfirmPassword && resetConfirmPassword) {
-            toggleResetConfirmPassword.addEventListener("click", function () {
-                const type =
-                    resetConfirmPassword.getAttribute("type") === "password"
-                        ? "text"
-                        : "password";
-                resetConfirmPassword.setAttribute("type", type);
-                this.classList.toggle("fa-eye-slash");
-                this.classList.toggle("fa-eye");
-            });
-        }
+    if (!formIsValid) {
+        event.preventDefault();
+    }
+});
+
+const fields = ["name", "email", "password", "confirmpassword"];
+fields.forEach((field) => {
+    document.getElementById(field).addEventListener("input", function () {
+        validateField(field);
     });
 });
+
+function validateField(field) {
+    const value = document.getElementById(field).value.trim();
+
+    switch (field) {
+        case "name":
+            toggleError("nameError", value ? "" : "Name is required");
+            break;
+        case "email":
+            const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+            toggleError("emailError", emailRegex.test(value) ? "" : "Valid email is required");
+            break;
+        case "password":
+            const confirmPassword = document.getElementById("confirmpassword").value;
+            if (value.length < 8 || value.length > 16) {
+                toggleError("passwordError", "Password must be between 8 and 16 characters");
+            } else {
+                toggleError("passwordError");
+            }
+
+            if (confirmPassword && value !== confirmPassword) {
+                toggleError("passwordMatchError", "Passwords do not match");
+            } else {
+                toggleError("passwordMatchError");
+            }
+            break;
+        case "confirmpassword":
+            const password = document.getElementById("password").value;
+            toggleError("confirmpasswordError");
+            if (password === value) {
+                toggleError("passwordMatchError");
+            } else if (value) {
+                toggleError("passwordMatchError", "Passwords do not match");
+            }
+            break;
+    }
+}
+
+// Utility function for showing/hiding errors
+function toggleError(id, message = "") {
+    const errorElement = document.getElementById(id);
+    if (message) {
+        errorElement.style.display = "block";
+        errorElement.innerText = message;
+    } else {
+        errorElement.style.display = "none";
+        errorElement.innerText = "";
+    }
+}
+
+// Utility function for showing/hiding errors
+function toggleError(id, message = "") {
+    const errorElement = document.getElementById(id);
+    if (message) {
+        errorElement.style.display = "block";
+        errorElement.innerText = message;
+    } else {
+        errorElement.style.display = "none";
+        errorElement.innerText = "";
+    }
+}
+
 
 function copySpan(element, event) {
     // Find the coupon code text (excluding tooltip text)
@@ -1481,11 +1314,11 @@ $(document).ready(function () {
             },
             title: {
                 required: true,
-                minlength: 5,
+                maxlength: 255,
             },
             body: {
                 required: true,
-                minlength: 10,
+                // minlength: 10,
             },
         },
         messages: {
@@ -1494,11 +1327,11 @@ $(document).ready(function () {
             },
             title: {
                 required: "Title is required.",
-                minlength: "Title must be at least 5 characters long.",
+                maxlength: "Title must be at least 5 characters long.",
             },
             body: {
                 required: "Review is required.",
-                minlength: "Review must be at least 10 characters long.",
+                // minlength: "Review must be at least 10 characters long.",
             },
         },
         errorPlacement: function (error, element) {
@@ -1514,10 +1347,9 @@ $(document).ready(function () {
         },
     });
 
-    // Prevent default form submission and trigger validation manually
     $("#reviewForm").on("submit", function (e) {
         if (!selectedRating) {
-            e.preventDefault(); // Prevent submission if no rating is selected
+            e.preventDefault();
             ratingError.text("Please select a star rating.").show();
         }
     });
