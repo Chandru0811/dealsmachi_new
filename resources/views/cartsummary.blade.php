@@ -216,7 +216,7 @@
                                 &nbsp;&nbsp;
                                 <span class="ms-1" style="font-size:12px; color:#00DD21;white-space: nowrap;">
                                     Dealsmachi Discount
-                                    &nbsp;<span class="discount">-₹{{ number_format($carts->discount, 2) }}</span>
+                                    &nbsp;<span class="discount">-₹{{ number_format($carts->discount, 0) }}</span>
                                 </span>
                             </h4>
                         </div>

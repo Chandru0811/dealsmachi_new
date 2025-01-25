@@ -1,5 +1,4 @@
 <div class="container">
-    <h5 class="pt-0 pb-2">Products</h5>
     <div class="row pb-4">
         @foreach ($products as $product)
             <div class="col-md-4 col-lg-3 col-12 mb-3 d-flex align-items-stretch justify-content-center">
@@ -108,7 +107,7 @@
                                         @endif
                                     </div>
                                     <div>
-                                        <button class="btn card_cart add-to-cart-btn" data-slug="{{ $product->slug }}">
+                                        <button class="btn card_cart" data-slug="{{ $product->slug }}">
                                             Add to Cart
                                         </button>&nbsp;&nbsp;
                                     </div>
