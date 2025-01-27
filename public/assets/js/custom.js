@@ -242,7 +242,7 @@ $(document).ready(function () {
         };
 
         var laravelRequest = $.ajax({
-            url: "http://127.0.0.1:8000/deals/count/enquire",
+            url: "https://dealsmachi.com/deals/count/enquire",
             type: "POST",
             headers: {
                 "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
@@ -416,9 +416,9 @@ $(document).ready(function () {
                                 <div class="col-10">
                                     <div class="d-flex text-start">
                                         <div class="px-1">
-                                            <input type="radio" name="selected_id" 
-                                        id="selected_id_${response.address.id}" 
-                                        value="${response.address.id}" 
+                                            <input type="radio" name="selected_id"
+                                        id="selected_id_${response.address.id}"
+                                        value="${response.address.id}"
                                         ${response.address.default ? 'checked' : ''} />
                                         </div>
                                         <p class="text-turncate fs_common">
@@ -442,9 +442,9 @@ $(document).ready(function () {
                                                 Edit
                                             </button>
                                             ${!response.address.default ? `
-                                                <button type="button" class="badge_del" 
-                                                    data-bs-toggle="modal" 
-                                                    data-bs-target="#deleteAddressModal" 
+                                                <button type="button" class="badge_del"
+                                                    data-bs-toggle="modal"
+                                                    data-bs-target="#deleteAddressModal"
                                                     data-address-id="${response.address.id}">
                                                     Delete
                                                 </button>` : ''}
@@ -598,9 +598,9 @@ $(document).ready(function () {
                                 <div class="col-10">
                                     <div class="d-flex text-start">
                                         <div class="px-1">
-                                            <input type="radio" name="selected_id" 
-                                                id="selected_id_${response.address.id}" 
-                                                value="${response.address.id}" 
+                                            <input type="radio" name="selected_id"
+                                                id="selected_id_${response.address.id}"
+                                                value="${response.address.id}"
                                                 ${response.address.default ? 'checked' : ''} />
                                         </div>
                                         <p class="text-turncate fs_common">
@@ -624,9 +624,9 @@ $(document).ready(function () {
                                                 Edit
                                             </button>
                                             ${!response.address.default ? `
-                                                <button type="button" class="badge_del" 
-                                                    data-bs-toggle="modal" 
-                                                    data-bs-target="#deleteAddressModal" 
+                                                <button type="button" class="badge_del"
+                                                    data-bs-toggle="modal"
+                                                    data-bs-target="#deleteAddressModal"
                                                     data-address-id="${response.address.id}">
                                                     Delete
                                                 </button>` : ''}
@@ -1066,7 +1066,7 @@ function copySpanText(element, event) {
     var dealId = element.closest("a").getAttribute("href").split("/").pop();
 
     $.ajax({
-        url: "http://127.0.0.1:8000/deals/coupon/copied",
+        url: "https://dealsmachi.com/deals/coupon/copied",
         type: "POST",
         data: {
             _token: $('meta[name="csrf-token"]').attr("content"),
@@ -1098,7 +1098,7 @@ function copyLinkToClipboard(element, event, dealId) {
     document.body.removeChild(tempInput);
 
     $.ajax({
-        url: "http://127.0.0.1:8000/deals/count/share",
+        url: "https://dealsmachi.com/deals/count/share",
         type: "POST",
         data: {
             _token: $('meta[name="csrf-token"]').attr("content"),
@@ -1180,7 +1180,7 @@ $(document).ready(function () {
                 let dealId = $(this).data("deal-id");
 
                 $.ajax({
-                    url: `http://127.0.0.1:8000/bookmark/${dealId}/add`,
+                    url: `https://dealsmachi.com/bookmark/${dealId}/add`,
                     method: "POST",
                     success: function (response) {
                         updateBookmarkCount(response.total_items);
@@ -1213,7 +1213,7 @@ $(document).ready(function () {
                 let dealId = $(this).data("deal-id");
 
                 $.ajax({
-                    url: `http://127.0.0.1:8000/bookmark/${dealId}/remove`,
+                    url: `https://dealsmachi.com/bookmark/${dealId}/remove`,
                     method: "DELETE",
                     success: function (response) {
                         updateBookmarkCount(response.total_items);
@@ -1246,7 +1246,7 @@ $(document).ready(function () {
     // Initial Load of Bookmark Count
     function loadBookmarkCount() {
         $.ajax({
-            url: "http://127.0.0.1:8000/totalbookmark",
+            url: "https://dealsmachi.com/totalbookmark",
             method: "GET",
             success: function (response) {
                 updateBookmarkCount(response.total_items);
@@ -1292,7 +1292,7 @@ document
             var shareUrl = event.target.closest("a").href;
 
             $.ajax({
-                url: "http://127.0.0.1:8000/deals/count/share",
+                url: "https://dealsmachi.com/deals/count/share",
                 type: "POST",
                 data: {
                     _token: $('meta[name="csrf-token"]').attr("content"),
@@ -1314,7 +1314,7 @@ document
 
 function clickCount(dealId) {
     $.ajax({
-        url: "http://127.0.0.1:8000/deals/count/click",
+        url: "https://dealsmachi.com/deals/count/click",
         type: "POST",
         data: {
             _token: $('meta[name="csrf-token"]').attr("content"),
@@ -1331,7 +1331,7 @@ function clickCount(dealId) {
 
 function enquireCount(dealId) {
     $.ajax({
-        url: "http://127.0.0.1:8000/deals/count/enquire",
+        url: "https://dealsmachi.com/deals/count/enquire",
         type: "POST",
         data: {
             _token: $('meta[name="csrf-token"]').attr("content"),
