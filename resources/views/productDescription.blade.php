@@ -773,21 +773,21 @@
                                 <div class="d-flex align-items-center">
                                     <h5>Total score :</h5>
                                     &nbsp;&nbsp;
-                                    <h2 class="average-rating me-2 d-flex align-items-center" style="color:#40d128">
+                                    <h2 class="average-rating me-2 d-flex align-items-center" style="color:#40d128;">
                                         {{ $averageRating }}
                                         @php
                                             $fullStars = floor($averageRating);
                                             $hasHalfStar = $averageRating - $fullStars >= 0.5;
                                         @endphp
                                         @for ($i = 1; $i <= $fullStars; $i++)
-                                            <i class="fa-solid fa-star fa-lg" style="color: #fdbf46; font-size:12px"></i>
+                                            <i class="fa-solid fa-star fa-lg" style="color: #fdbf46; font-size:12px; margin-left: 5px;"></i>
                                         @endfor
                                         @if ($hasHalfStar)
                                             <i class="fa-solid fa-star-half-stroke fa-lg"
-                                                style="color: #fdbf46; font-size:12px"></i>
+                                                style="color: #fdbf46; font-size:12px; margin-left: 5px;"></i>
                                         @endif
                                         @for ($i = $fullStars + ($hasHalfStar ? 1 : 0); $i < 5; $i++)
-                                            <i class="fa-regular fa-star fa-lg" style="color: #ccc; font-size:12px"></i>
+                                            <i class="fa-regular fa-star fa-lg" style="color: #ccc; font-size:12px; margin-left: 5px;"></i>
                                         @endfor
                                     </h2>
                                 </div>

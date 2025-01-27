@@ -27,55 +27,55 @@
 <body>
     <section class="container-fluid p-0">
         @if (session('status'))
-        <div class="alert alert-dismissible fade show toast-success" role="alert"
-            style="position: fixed; top: 70px; right: 40px; z-index: 1050;">
-            <div class="toast-content">
-                <div class="toast-icon">
-                    <i class="fa-solid fa-check-circle" style="color: #16A34A"></i>
+            <div class="alert alert-dismissible fade show toast-success" role="alert"
+                style="position: fixed; top: 70px; right: 40px; z-index: 1050;">
+                <div class="toast-content">
+                    <div class="toast-icon">
+                        <i class="fa-solid fa-check-circle" style="color: #16A34A"></i>
+                    </div>
+                    <span class="toast-text"> {!! nl2br(e(session('status'))) !!}</span>&nbsp;&nbsp;
+                    <button class="toast-close-btn"data-bs-dismiss="alert" aria-label="Close">
+                        <i class="fa-thin fa-xmark" style="color: #16A34A"></i>
+                    </button>
                 </div>
-                <span class="toast-text"> {!! nl2br(e(session('status'))) !!}</span>&nbsp;&nbsp;
-                <button class="toast-close-btn"data-bs-dismiss="alert" aria-label="Close">
-                    <i class="fa-thin fa-xmark" style="color: #16A34A"></i>
-                </button>
             </div>
-        </div>
-    @endif
-    @if ($errors->any())
-        <div class="alert  alert-dismissible fade show toast-danger" role="alert"
-            style="position: fixed; top: 70px; right: 40px; z-index: 1050;">
-            <div class="toast-content">
-                <div class="toast-icon">
-                    <i class="fa-solid fa-check-circle" style="color: #EF4444"></i>
+        @endif
+        @if ($errors->any())
+            <div class="alert  alert-dismissible fade show toast-danger" role="alert"
+                style="position: fixed; top: 70px; right: 40px; z-index: 1050;">
+                <div class="toast-content">
+                    <div class="toast-icon">
+                        <i class="fa-solid fa-check-circle" style="color: #EF4444"></i>
+                    </div>
+                    <span class="toast-text">
+                        <ul class="mb-0">
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </span>&nbsp;&nbsp;
+                    <button class="toast-close-btn"data-bs-dismiss="alert" aria-label="Close">
+                        <i class="fa-solid fa-xmark" style="color: #EF4444"></i>
+                    </button>
                 </div>
-                <span class="toast-text">
-                    <ul class="mb-0">
-                        @foreach ($errors->all() as $error)
-                            <li>{{ $error }}</li>
-                        @endforeach
-                    </ul>
-                </span>&nbsp;&nbsp;
-                <button class="toast-close-btn"data-bs-dismiss="alert" aria-label="Close">
-                    <i class="fa-solid fa-xmark" style="color: #EF4444"></i>
-                </button>
             </div>
-        </div>
-    @endif
-    @if (session('error'))
-        <div class="alert  alert-dismissible fade show toast-danger" role="alert"
-            style="position: fixed; top: 70px; right: 40px; z-index: 1050;">
-            <div class="toast-content">
-                <div class="toast-icon">
-                    <i class="fa-solid fa-check-circle" style="color: #EF4444"></i>
+        @endif
+        @if (session('error'))
+            <div class="alert  alert-dismissible fade show toast-danger" role="alert"
+                style="position: fixed; top: 70px; right: 40px; z-index: 1050;">
+                <div class="toast-content">
+                    <div class="toast-icon">
+                        <i class="fa-solid fa-check-circle" style="color: #EF4444"></i>
+                    </div>
+                    <span class="toast-text">
+                        {{ session('error') }}
+                    </span>&nbsp;&nbsp;
+                    <button class="toast-close-btn"data-bs-dismiss="alert" aria-label="Close">
+                        <i class="fa-solid fa-xmark" style="color: #EF4444"></i>
+                    </button>
                 </div>
-                <span class="toast-text">
-                    {{ session('error') }}
-                </span>&nbsp;&nbsp;
-                <button class="toast-close-btn"data-bs-dismiss="alert" aria-label="Close">
-                    <i class="fa-solid fa-xmark" style="color: #EF4444"></i>
-                </button>
             </div>
-        </div>
-    @endif
+        @endif
         <div class="row m-0">
             <div class="col-md-6 col-12 pt-5 bg_login login-text-container text-center" style="background: #ffcbde">
                 <div class="px-5 pt-5">
@@ -145,7 +145,15 @@
                 }
 
                 if (isValid) {
-                    this.submit();
+                    const submitButton = $("button[type='submit']");
+                    submitButton.prop('disabled', true);
+
+                    // const loader = $('<span class="custom-loader"></span>');
+                    // submitButton.append(loader);
+
+                    setTimeout(() => {
+                        this.submit();
+                    });
                 }
             });
         });
