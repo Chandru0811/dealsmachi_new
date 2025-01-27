@@ -147,7 +147,7 @@ class CheckoutController extends Controller
             // Create order for the cart items
             $latestOrder = Order::orderBy('id', 'desc')->first();
             $customOrderId = $latestOrder ? intval(Str::after($latestOrder->id, '-')) + 1 : 1;
-            $orderNumber = 'DEALSLAH_O' . $customOrderId;
+            $orderNumber = 'DEALSMACHI_O' . $customOrderId;
 
             $itemCount = $cart->items->whereIn('product_id', $ids)->sum('quantity');
             $total = $cart->items->whereIn('product_id', $ids)->sum('total');
@@ -179,8 +179,11 @@ class CheckoutController extends Controller
             ]);
 
             foreach ($cart->items->whereIn('product_id', $ids) as $item) {
+                $itemNumber = 'DM0' . $order->id . '-V' . $item->product->shop_id . 'P' . $item->product_id;
+
                 OrderItems::create([
                     'order_id' => $order->id,
+                    'item_number' => $itemNumber,
                     'product_id' => $item->product_id,
                     'seller_id' => $item->product->shop_id,
                     'item_description' => $item->item_description,
@@ -218,7 +221,7 @@ class CheckoutController extends Controller
             // Create order for the cart items
             $latestOrder = Order::orderBy('id', 'desc')->first();
             $customOrderId = $latestOrder ? intval(Str::after($latestOrder->id, '-')) + 1 : 1;
-            $orderNumber = 'DEALSLAH_O' . $customOrderId;
+            $orderNumber = 'DEALSMACHI_O' . $customOrderId;
 
             $order = Order::create([
                 'order_number'     => $orderNumber,
@@ -240,8 +243,11 @@ class CheckoutController extends Controller
             ]);
 
             foreach ($cart->items as $item) {
+                $itemNumber = 'DM0' . $order->id . '-V' . $item->product->shop_id . 'P' . $item->product_id;
+
                 OrderItems::create([
                     'order_id' => $order->id,
+                    'item_number' => $itemNumber,
                     'product_id' => $item->product_id,
                     'seller_id' => $item->product->shop_id,
                     'item_description' => $item->item_description,
