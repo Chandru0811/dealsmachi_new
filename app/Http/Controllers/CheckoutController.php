@@ -110,10 +110,10 @@ class CheckoutController extends Controller
         }
     }
 
-    public function cartcheckout($cart_id, Request $request)
+    public function cartcheckout(Request $request)
     {
         $address_id = $request->address_id;
-
+        $cart_id = $request->input('cart_id');
         $address = Address::where('id', $address_id)->first();
         // dd($address);
         $cart = Cart::where('id', $cart_id)->with('items')->first();

@@ -27,9 +27,9 @@
                         <a href="{{ url('/favourites') }}" class="text-decoration-none d-xl-none"
                             style="text-decoration: none;">
                             <i class="fa-regular fa-heart fa-xl icon_size" style="color: #ff0060;"></i>
-                             <span class="totalItemsCount total-count translate-middle d-xl-none"
-                            style="position: absolute;top: 16px;right:5px">
-                        </span>
+                            <span class="totalItemsCount total-count translate-middle d-xl-none"
+                                style="position: absolute;top: 16px;right:5px">
+                            </span>
                         </a>
 
                     </button>
@@ -239,9 +239,8 @@
                                 <p><strong>Phone :</strong>
                                     {{ $default_address && $default_address->phone ? '(+91) ' . $default_address->phone : '--' }}
                                 </p>
-
                                 <hr />
-                                <div class="d-flex justify-content-between align-items-center">
+                                <div class="d-flex justify-content-between align-items-center defaultAddress">
                                     <h6 class="fw-bold">Delivery Addresses</h6>
                                     @if ($default_address)
                                     <span class="badge badge_infos py-1" data-bs-toggle="modal"
@@ -254,30 +253,28 @@
                                     @endif
                                 </div>
                                 <div class="mt-2">
-                                    <form id="addressForm">
-                                        <div>
-                                            @if ($default_address)
-                                            <p>
-                                                <strong>{{ $default_address->first_name ?? '' }}
-                                                    {{ $default_address->last_name ?? '' }} (+91)
-                                                    {{ $default_address->phone ?? '' }}</strong>&nbsp;&nbsp;<br>
-                                                {{ $default_address->address ?? '' }},
-                                                {{ $default_address->city ?? '' }},
-                                                {{ $default_address->state ?? '' }} -
-                                                {{ $default_address->postalcode ?? '' }}
-                                                <span>
-                                                    @if ($default_address->default)
-                                                    <span
-                                                        class="badge badge_danger py-1">Default</span>&nbsp;&nbsp;
-                                                    @endif
-                                                </span>
-                                            </p>
-                                            @else
-                                            <p>Your address details are missing. Add one now to make checkout faster
-                                                and easier!</p>
-                                            @endif
-                                        </div>
-                                    </form>
+                                    <div>
+                                        @if ($default_address)
+                                        <p>
+                                            <strong>{{ $default_address->first_name ?? '' }}
+                                                {{ $default_address->last_name ?? '' }} (+91)
+                                                {{ $default_address->phone ?? '' }}</strong>&nbsp;&nbsp;<br>
+                                            {{ $default_address->address ?? '' }},
+                                            {{ $default_address->city ?? '' }},
+                                            {{ $default_address->state ?? '' }} -
+                                            {{ $default_address->postalcode ?? '' }}
+                                            <span>
+                                                @if ($default_address->default)
+                                                <span
+                                                    class="badge badge_danger py-1">Default</span>&nbsp;&nbsp;
+                                                @endif
+                                            </span>
+                                        </p>
+                                        @else
+                                        <p>Your address details are missing. Add one now to make checkout faster
+                                            and easier!</p>
+                                        @endif
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -286,7 +283,7 @@
             </div>
         </div>
 
-        {{-- my address modal  --}}
+        <!-- My Address Modal -->
         <div class="modal fade" id="myAddressModal" tabindex="-1" aria-labelledby="myAddressModalLabel"
             aria-hidden="true">
             <form id="addressForm" action="{{ route('address.change') }}" method="POST">
@@ -299,7 +296,7 @@
                                 aria-label="Close"></button>
                         </div>
                         <div class="modal-body" style="min-height: 24rem">
-                            <div>
+                            <div class="allAddress">
                                 @foreach ($address as $addr)
                                 <div class="row p-2">
                                     <div class="col-10">
@@ -329,7 +326,7 @@
                                     </div>
                                     <div class="col-2">
                                         <div class="d-flex align-items-center justify-content-end">
-                                            <div class="d-flex gap-3">
+                                            <div class="d-flex gap-3 delBadge">
                                                 <button type="button" class="badge_edit" data-bs-toggle="modal"
                                                     data-bs-target="#editAddressModal">
                                                     Edit
@@ -337,7 +334,7 @@
                                                 @if (!$addr->default)
                                                 <button type="button" class="badge_del"
                                                     data-bs-toggle="modal"
-                                                    data-bs-target="#deleteAddressModal">
+                                                    data-bs-target="#deleteAddressModal" data-address-id="{{ $addr->id }}">
                                                     Delete
                                                 </button>
                                                 @endif
@@ -378,19 +375,9 @@
                     <div class="modal-body">
                         <p>Are you sure you want to delete this address?</p>
                     </div>
-
-
                     <div class="modal-footer d-flex justify-content-end">
-                        <button type="button" class="btn outline_secondary_btn"
-                            data-bs-dismiss="modal">Close</button>
-                        @if (isset($addr))
-                        <form id="deleteAddressForm" method="POST"
-                            action="{{ route('address.destroy', $addr->id) }}">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" class="btn outline_primary_btn">Delete</button>
-                        </form>
-                        @endif
+                        <button type="button" class="btn outline_secondary_btn" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn outline_primary_btn" id="confirmDeleteBtn">Delete</button>
                     </div>
                 </div>
             </div>
@@ -701,8 +688,7 @@
                 </div>
             </div>
         </div>
-
-
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <script>
             document.getElementById('cartButton').addEventListener('click', function(event) {
                 const dropdownMenu = document.querySelector('.dropdown_cart');
@@ -711,10 +697,53 @@
                 }
             });
 
-            document.getElementById('confirmAddressBtn').addEventListener('click', function() {
-                var selectedAddressId = document.querySelector('input[name="address"]:checked');
-                if (selectedAddressId) {
-                    sessionStorage.setItem('selectedAddressId', selectedAddressId.value);
+            $(document).ready(function() {
+                $('#confirmAddressBtn').on('click', function(e) {
+                    e.preventDefault();
+
+                    let selectedId = $('input[name="selected_id"]:checked').val();
+
+                    if (!selectedId) {
+                        alert('Please select an address.');
+                        return;
+                    }
+
+                    $.ajax({
+                        url: "{{ route('address.change') }}",
+                        method: "POST",
+                        data: {
+                            _token: "{{ csrf_token() }}",
+                            selected_id: selectedId
+                        },
+                        success: function(response) {
+                            if (response.success) {
+                                $('#myAddressModal').modal('hide');
+
+                                updateSelectedAddress(response.selectedAddress);
+                            } else {
+                                alert(response.message || 'An error occurred.');
+                            }
+                        },
+                        error: function(xhr) {
+                            alert(xhr.responseJSON.message || 'An error occurred.');
+                        }
+                    });
+                });
+
+                function updateSelectedAddress(address) {
+                    if (address) {
+                        const addressHtml = `
+                            <strong>${address.first_name} ${address.last_name ?? ''} (+65) ${address.phone}</strong><br>
+                            ${address.address} - ${address.postalcode}
+                            ${address.default ? '<span class="badge badge_danger py-1">Default</span>' : ''}
+                        `;
+                        $('#addressID').val(address.id);
+
+                        $('.selected-address').html(addressHtml);
+
+                        const changeBtnHtml = `<span class="badge badge_infos py-1" data-bs-toggle="modal" data-bs-target="#myAddressModal">Change</span>`;
+                        $('.change-address-btn').html(changeBtnHtml);
+                    }
                 }
             });
 

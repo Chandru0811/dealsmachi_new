@@ -3,14 +3,11 @@
 use App\Http\Controllers\AddressController;
 use App\Http\Controllers\BookmarkController;
 use App\Http\Controllers\CheckoutController;
-use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use Laravel\Socialite\Facades\Socialite;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Str;
-use Illuminate\Support\Facades\Hash;
 use App\Http\Controllers\CartController;
 
 Route::fallback(function () {
@@ -37,7 +34,7 @@ Route::post('deals/count/share', [HomeController::class, 'dealshare']);
 Route::post('deals/count/enquire', [HomeController::class, 'dealenquire']);
 Route::middleware('auth')->group(function () {
     Route::get('/checkoutSummary/{product_id}', [CheckoutController::class, 'checkoutsummary'])->name('checkout.summary');
-    Route::get('/checkout/{cart_id}', [CheckoutController::class, 'cartcheckout'])->name('checkout.cart');
+    Route::post('/cartCheckout', [CheckoutController::class, 'cartcheckout'])->name('checkout.cart');
     Route::post('/directCheckout', [CheckoutController::class, 'directcheckout'])->name('checkout.direct');
     Route::get('/cartSummary/{cart_id}', [CartController::class, 'cartSummary'])->name('cart.address');
     Route::post('/checkout', [CheckoutController::class, 'createorder'])->name('checkout.checkout');
@@ -62,7 +59,6 @@ Route::post('saveforlater/add', [CartController::class, 'saveForLater'])->name('
 Route::post('saveforlater/toCart', [CartController::class, 'moveToCart'])->name('movetocart');
 Route::post('saveforlater/remove', [CartController::class, 'removeFromSaveLater'])->name('savelater.remove');
 Route::get('saveforlater/all', [CartController::class, 'getsaveforlater'])->name('savelater.index');
-
 Route::get('/privacyPolicy', function () {
     return view('privacyPolicy');
 });
@@ -72,7 +68,6 @@ Route::get('/terms_conditions', function () {
 Route::get('/contactus', function () {
     return view('contactus');
 });
-
 Route::get('auth/google', function () {
     return Socialite::driver('google')->redirect();
 })->name('google.login');
@@ -99,7 +94,6 @@ Route::get('auth/google/callback', function () {
 
     return redirect('/');
 });
-
 // Route::get('/dashboard', function () {
 //     return view('dashboard');
 // })->middleware(['auth', 'verified'])->name('dashboard');
@@ -109,5 +103,4 @@ Route::get('auth/google/callback', function () {
 //     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
 //     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 // });
-
 require __DIR__ . '/auth.php';
