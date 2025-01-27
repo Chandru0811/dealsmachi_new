@@ -34,7 +34,7 @@
             </div>
             <div>
                 <h2>1. Introduction</h2>
-                <p>This Privacy Policy describes how dealsMachi.com ("DealsMachi", "we", "us", or "our") collects, uses,
+                <p>This Privacy Policy describes how dealsmachi.com ("DealsMachi", "we", "us", or "our") collects, uses,
                     and discloses your personal information when you use our website (dealsmachi.com).</p>
             </div>
             <div>

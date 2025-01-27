@@ -28,8 +28,8 @@
     <section class="home-section">
         @include('nav.header')
         <div class="container home-content" style="margin-top: 100px">
-            <h1>Terms and Conditions for dealsMachi.com</h1>
-            <p class="fw-bold">Welcome to dealsMachi.com!</p>
+            <h1>Terms and Conditions for dealsmachi.com</h1>
+            <p class="fw-bold">Welcome to dealsmachi.com!</p>
             <p>These Terms and Conditions ("Terms") govern your access to and use of the dealsmachi.com website (the
                 "Website") and its services (the "Services") offered by [DealsMachi] ("we," "us," or "our"). By
                 accessing or using the Website or Services, you agree to be bound by these Terms. If you disagree with

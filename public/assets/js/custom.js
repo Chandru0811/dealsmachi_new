@@ -242,7 +242,7 @@ $(document).ready(function () {
         };
 
         var laravelRequest = $.ajax({
-            url: "https://dealsmachi.com/deals/count/enquire",
+            url: "http://127.0.0.1:8000/deals/count/enquire",
             type: "POST",
             headers: {
                 "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
@@ -328,6 +328,7 @@ $(document).ready(function () {
             phone: {
                 required: true,
                 digits: true,
+                minlength: 10,
                 maxlength: 10,
             },
             postalcode: {
@@ -364,6 +365,7 @@ $(document).ready(function () {
             phone: {
                 required: "Please provide a phone number.",
                 digits: "Phone number must be exactly 10 digits.",
+                minlength: "Phone number must be exactly 10 digits.",
                 maxlength: "Phone number must be exactly 10 digits.",
             },
             postalcode: {
@@ -660,7 +662,7 @@ $(document).ready(function () {
         // Validate Email
         const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
         if (!email || !emailRegex.test(email)) {
-            toggleError("emailError", "Enter Valid email is required");
+            toggleError("emailError", "Enter a valid email address.");
             formIsValid = false;
         } else {
             toggleError("emailError");
@@ -680,17 +682,13 @@ $(document).ready(function () {
         // Validate Confirm Password
         if (!confirmPassword) {
             toggleError("confirmpasswordError", "Confirm Password is required");
-            toggleError("passwordMatchError");
             formIsValid = false;
-        } else {
-            toggleError("confirmpasswordError");
-        }
-
-        if (password && confirmPassword && password !== confirmPassword) {
+        } else if (password && confirmPassword && password !== confirmPassword) {
             toggleError("passwordMatchError", "Passwords do not match");
             formIsValid = false;
         } else {
             toggleError("passwordMatchError");
+            toggleError("confirmpasswordError");
         }
 
         if (!formIsValid) {
@@ -699,20 +697,29 @@ $(document).ready(function () {
     });
 
     // Field input validation
-    const fields = ["name", "email", "password", "confirmpassword"];
-    fields.forEach((field) => {
-        $("#" + field).on("input", function () {
-            validateField(field);
-        });
+    $("#name, #email, #password").on("input", function () {
+        validateField($(this).attr("id"));
+    });
+
+    $("#password_confirmation").on("input", function () {
+        const confirmPassword = $(this).val();
+        if (confirmPassword) {
+            toggleError("confirmpasswordError"); // Clear "required" error if value exists
+        }
+        const password = $("#password").val();
+        if (password !== confirmPassword) {
+            toggleError("passwordMatchError", "Passwords do not match");
+        } else {
+            toggleError("passwordMatchError");
+        }
     });
 
     // Function to validate each field (optional)
     function validateField(field) {
-        // You can add field-specific validation logic here if needed
-        // For now, we can clear the error when input is detected
         toggleError(field + "Error");
     }
 });
+
 
 function validateField(field) {
     const value = document.getElementById(field).value.trim();
@@ -816,7 +823,7 @@ function copySpanText(element, event) {
     var dealId = element.closest("a").getAttribute("href").split("/").pop();
 
     $.ajax({
-        url: "https://dealsmachi.com/deals/coupon/copied",
+        url: "http://127.0.0.1:8000/deals/coupon/copied",
         type: "POST",
         data: {
             _token: $('meta[name="csrf-token"]').attr("content"),
@@ -848,7 +855,7 @@ function copyLinkToClipboard(element, event, dealId) {
     document.body.removeChild(tempInput);
 
     $.ajax({
-        url: "https://dealsmachi.com/deals/count/share",
+        url: "http://127.0.0.1:8000/deals/count/share",
         type: "POST",
         data: {
             _token: $('meta[name="csrf-token"]').attr("content"),
@@ -930,7 +937,7 @@ $(document).ready(function () {
                 let dealId = $(this).data("deal-id");
 
                 $.ajax({
-                    url: `https://dealsmachi.com/bookmark/${dealId}/add`,
+                    url: `http://127.0.0.1:8000/bookmark/${dealId}/add`,
                     method: "POST",
                     success: function (response) {
                         updateBookmarkCount(response.total_items);
@@ -963,7 +970,7 @@ $(document).ready(function () {
                 let dealId = $(this).data("deal-id");
 
                 $.ajax({
-                    url: `https://dealsmachi.com/bookmark/${dealId}/remove`,
+                    url: `http://127.0.0.1:8000/bookmark/${dealId}/remove`,
                     method: "DELETE",
                     success: function (response) {
                         updateBookmarkCount(response.total_items);
@@ -996,7 +1003,7 @@ $(document).ready(function () {
     // Initial Load of Bookmark Count
     function loadBookmarkCount() {
         $.ajax({
-            url: "https://dealsmachi.com/totalbookmark",
+            url: "http://127.0.0.1:8000/totalbookmark",
             method: "GET",
             success: function (response) {
                 updateBookmarkCount(response.total_items);
@@ -1042,7 +1049,7 @@ document
             var shareUrl = event.target.closest("a").href;
 
             $.ajax({
-                url: "https://dealsmachi.com/deals/count/share",
+                url: "http://127.0.0.1:8000/deals/count/share",
                 type: "POST",
                 data: {
                     _token: $('meta[name="csrf-token"]').attr("content"),
@@ -1064,7 +1071,7 @@ document
 
 function clickCount(dealId) {
     $.ajax({
-        url: "https://dealsmachi.com/deals/count/click",
+        url: "http://127.0.0.1:8000/deals/count/click",
         type: "POST",
         data: {
             _token: $('meta[name="csrf-token"]').attr("content"),
@@ -1081,7 +1088,7 @@ function clickCount(dealId) {
 
 function enquireCount(dealId) {
     $.ajax({
-        url: "https://dealsmachi.com/deals/count/enquire",
+        url: "http://127.0.0.1:8000/deals/count/enquire",
         type: "POST",
         data: {
             _token: $('meta[name="csrf-token"]').attr("content"),

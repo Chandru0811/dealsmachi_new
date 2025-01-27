@@ -224,7 +224,7 @@
                                                     <img src="{{ asset('assets/images/home/solar_pin-list.webp') }}"
                                                         alt="icon" class="img-fluid" />
                                                 </div>
-                                                <div class="d-inline-flex align-items-center gap-2">
+                                                <div class="d-inline-flex align-items-center gap-2 buy-for-later-btn">
                                                     <span class="loader spinner-border spinner-border-sm"
                                                         style="display: none;"></span>
                                                     <span>Buy For Later</span>
