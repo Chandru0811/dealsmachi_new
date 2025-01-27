@@ -304,8 +304,9 @@ class ShopController extends Controller
             return $this->error('Order Item Not Found.', ['error' => 'Order Item Not Found']);
         }
 
-        $orderItem->viewed_by_vendor = 0;
-        $orderItem->save();
+        OrderItems::where('order_id', $order_id)
+        ->where('product_id', $product_id)
+        ->update(['viewed_by_vendor' => 0]);
 
         return $this->success('Order Item Retrieved Successfully', $orderItem);
     }

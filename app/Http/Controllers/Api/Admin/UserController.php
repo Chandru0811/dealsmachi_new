@@ -63,7 +63,9 @@ class UserController extends Controller
         if (!$orderItem) {
             return $this->error('Order Item Not Found.', ['error' => 'Order Item Not Found']);
         }
-        $orderItem->update(['viewed_by_admin' => 0]);
+        OrderItems::where('order_id', $order_id)
+        ->where('product_id', $product_id)
+        ->update(['viewed_by_admin' => 0]);
 
         return $this->success('Order Item Retrieved Successfully', $orderItem);
     }
