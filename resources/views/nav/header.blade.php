@@ -634,7 +634,7 @@
                                     <label for="unit" class="form-label address_lable">Additional Info
                                         (Optional)</label>
                                     <input type="text" class="form-control address_input" name="unit"
-                                        id="unit" placeholder="Landmark" maxlength="255" />
+                                        id="unit" placeholder="Landmark" />
                                 </div>
 
                                 <!-- Address Type -->
