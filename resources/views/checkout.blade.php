@@ -97,7 +97,11 @@
                                 @foreach ($cart->items as $item)
                                     <div class="d-flex justify-content-between">
                                         <div>
-                                            <p>{{ $item->product->name }} x{{ $item->quantity }}</p>
+                                            @if ($item->deal_type == 1)
+                                            <p>{{ $item->product->name }}<span class="text-muted"> (x{{ $item->quantity }})</span></p>
+                                            @else
+                                            <p>{{ $item->product->name }}<span class="text-muted"> (Service) </span></p>
+                                            @endif
                                         </div>
                                         <div>
                                             <span style="text-decoration: line-through; color:#c7c7c7">
@@ -251,7 +255,11 @@
                                     @foreach ($cart->items as $item)
                                         <div class="d-flex justify-content-between">
                                             <div>
-                                                <p>{{ $item->product->name }} x{{ $item->quantity }}</p>
+                                                @if ($item->deal_type == 1)
+                                                <p>{{ $item->product->name }} <span class="text-muted">(x{{ $item->quantity }})</span></p>
+                                                @else
+                                                <p>{{ $item->product->name }} <span class="text-muted">(Service) </span></p>
+                                                @endif
                                             </div>
                                             <div>
                                                 <span style="text-decoration: line-through; color:#c7c7c7">
