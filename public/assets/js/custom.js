@@ -399,6 +399,8 @@ $(document).ready(function () {
             },
             submitHandler: function (form) {
                 var formData = new FormData(form);
+                var isDefault = $('#defaultAddressCheckbox').prop('checked') ? 1 : 0;
+                formData.append('default', isDefault);
 
                 $.ajax({
                     url: $(form).attr('action'),
@@ -411,6 +413,7 @@ $(document).ready(function () {
                             $('#newAddressModal').modal('hide');
                             $('#addressNewForm')[0].reset();
                             var finddiv = $('#myAddressModal').find('.allAddress');
+
                             finddiv.append(`
                             <div class="row p-2">
                                 <div class="col-10">
@@ -419,7 +422,7 @@ $(document).ready(function () {
                                             <input type="radio" name="selected_id"
                                         id="selected_id_${response.address.id}"
                                         value="${response.address.id}"
-                                        ${response.address.default ? 'checked' : ''} />
+                                        ${response.address.default === '1' ? 'checked' : ''} />
                                         </div>
                                         <p class="text-turncate fs_common">
                                             <span class="px-2">
@@ -430,7 +433,7 @@ $(document).ready(function () {
                                             <span class="px-2"
                                                 style="color: #c7c7c7">${response.address.address}, ${response.address.city}, ${response.address.state} - ${response.address.postalcode}.</span>
                                             <br>
-                                            ${response.address.default ? '<span class="badge badge_primary">Default</span>' : ''}
+                                            ${response.address.default === '1' ? '<span class="badge badge_primary">Default</span>' : ''}
                                         </p>
                                     </div>
                                 </div>
@@ -438,10 +441,10 @@ $(document).ready(function () {
                                     <div class="d-flex align-items-center justify-content-end">
                                         <div class="d-flex gap-3">
                                             <button type="button" class="badge_edit" data-bs-toggle="modal"
-                                                data-bs-target="#editAddressModal">
+                                                data-address-id="${address.id}" data-bs-target="#editAddressModal">
                                                 Edit
                                             </button>
-                                            ${!response.address.default ? `
+                                            ${response.address.default === '0' ? `
                                                 <button type="button" class="badge_del"
                                                     data-bs-toggle="modal"
                                                     data-bs-target="#deleteAddressModal"
@@ -453,7 +456,10 @@ $(document).ready(function () {
                                 </div>
                             </div>
                             `);
-                            if (response.address.default) {
+                            if (response.address.default === '1' && $('.defaultAddress .badge_infos').length === 0) {
+                                $('.modal-body p strong:contains("Phone :")').parent().html(`
+                                    <strong>Phone :</strong> (+91) ${response.address.phone || '--'}
+                                `);
                                 var profileAddress = `
                                     <p>
                                         <strong>${response.address.first_name} ${response.address.last_name} (+91)
@@ -569,6 +575,8 @@ $(document).ready(function () {
             },
             submitHandler: function (form) {
                 var formData = new FormData(form);
+                var isDefault = $('#default_address').prop('checked') ? 1 : 0;
+                formData.append('default', isDefault);
 
                 $.ajax({
                     url: $(form).attr('action'),
@@ -601,7 +609,7 @@ $(document).ready(function () {
                                             <input type="radio" name="selected_id"
                                                 id="selected_id_${response.address.id}"
                                                 value="${response.address.id}"
-                                                ${response.address.default ? 'checked' : ''} />
+                                                ${response.address.default === '1' ? 'checked' : ''} />
                                         </div>
                                         <p class="text-turncate fs_common">
                                             <span class="px-2">
@@ -612,7 +620,7 @@ $(document).ready(function () {
                                             <span class="px-2"
                                                 style="color: #c7c7c7">${response.address.address}, ${response.address.city}, ${response.address.state} - ${response.address.postalcode}.</span>
                                             <br>
-                                            ${response.address.default ? '<span class="badge badge_primary">Default</span>' : ''}
+                                            ${response.address.default === '1' ? '<span class="badge badge_primary">Default</span>' : ''}
                                         </p>
                                     </div>
                                 </div>
@@ -620,10 +628,10 @@ $(document).ready(function () {
                                     <div class="d-flex align-items-center justify-content-end">
                                         <div class="d-flex gap-3">
                                             <button type="button" class="badge_edit" data-bs-toggle="modal"
-                                                data-bs-target="#editAddressModal">
+                                                data-address-id="${address.id}" data-bs-target="#editAddressModal">
                                                 Edit
                                             </button>
-                                            ${!response.address.default ? `
+                                            ${response.address.default === '0' ? `
                                                 <button type="button" class="badge_del"
                                                     data-bs-toggle="modal"
                                                     data-bs-target="#deleteAddressModal"
@@ -636,7 +644,10 @@ $(document).ready(function () {
                             </div>
                         `);
 
-                            if (response.address.default) {
+                            if (response.address.default === '1') {
+                                $('.modal-body p strong:contains("Phone :")').parent().html(`
+                                    <strong>Phone :</strong> (+91) ${response.address.phone || '--'}
+                                `);
                                 $('.modal-body .mt-2 div').html(`
                                 <p>
                                     <strong>${response.address.first_name} ${response.address.last_name} (+91)
@@ -660,6 +671,53 @@ $(document).ready(function () {
                 });
             },
         });
+
+        $(document).on("click", ".badge_edit", function () {
+            const addressId = $(this).closest(".row").find("input[type='radio']").val();
+
+            $.ajax({
+                url: `/getAddress/${addressId}`, // Adjust the route as necessary
+                type: "GET",
+                success: function (address) {
+                    populateAddressModal(address);
+                },
+                error: function () {
+                    showMessage("Failed to fetch address details. Please try again.", "error");
+                },
+            });
+        });
+
+        function populateAddressModal(address) {
+            // Populate form fields
+            $("#first_name").val(address.first_name);
+            $("#last_name").val(address.last_name);
+            $("#phone").val(address.phone);
+            $("#email").val(address.email);
+            $("#postalcode").val(address.postalcode);
+            $("#address").val(address.address);
+            $("#unit").val(address.unit ?? "");
+            $("#address_id").val(address.id ?? "");
+            $("#state").val(address.state ?? "");
+            $("#city").val(address.city ?? "");
+
+            // Set Address Type
+            if (address.type === "home_mode") {
+                $("#home_mode").prop("checked", true);
+            } else if (address.type === "work_mode") {
+                $("#work_mode").prop("checked", true);
+            }
+
+            // Set default checkbox
+            const defaultCheckbox = $("#default_address");
+            if (address.default === 1) {
+                defaultCheckbox.prop("checked", true);
+                defaultCheckbox.prop("disabled", true);
+            } else {
+                defaultCheckbox.prop("checked", false);
+                defaultCheckbox.prop("disabled", false);
+            }
+        }
+
 
         // Delete Address Functionality
         $(document).ready(function () {
@@ -703,7 +761,7 @@ $(document).ready(function () {
             if (type === "success") {
                 textColor = "#16A34A";
                 icon =
-                    '<i class="fa-regular fa-cart-shopping" style="color: #16A34A"></i>';
+                    '<i class="fa-solid fa-check-circle" style="color: #16A34A"></i>';
                 var alertClass = "toast-success";
             } else {
                 textColor = "#EF4444";

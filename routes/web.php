@@ -38,6 +38,8 @@ Route::middleware('auth')->group(function () {
     Route::post('/directCheckout', [CheckoutController::class, 'directcheckout'])->name('checkout.direct');
     Route::get('/cartSummary/{cart_id}', [CartController::class, 'cartSummary'])->name('cart.address');
     Route::post('/checkout', [CheckoutController::class, 'createorder'])->name('checkout.checkout');
+    Route::get('/addresses', [AddressController::class, 'index'])->name('address.index');
+    Route::get('/getAddress/{id}', [AddressController::class, 'show'])->name('address.view');
     Route::post('/createAddress', [AddressController::class, 'store'])->name('address.create');
     Route::put('/updateAddress', [AddressController::class, 'update'])->name('address.update');
     Route::delete('/address/{id}', [AddressController::class, 'destroy'])->name('address.destroy');

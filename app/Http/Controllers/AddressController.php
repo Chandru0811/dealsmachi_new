@@ -11,10 +11,20 @@ use Illuminate\Support\Facades\Auth;
 class AddressController extends Controller
 {
 
-    public function index($user_id)
+    public function index()
     {
-        $addresses = Address::where('user_id', $user_id)->get();
-        return view('addresses.index', compact('addresses'));
+        // Get the authenticated user
+        $user = Auth::user();
+
+        if ($user) {
+            // Assuming the address is stored in a 'user_addresses' table and related to the user
+            $addresses = Address::where('user_id', $user->id)->get();
+
+            // Return the addresses as a JSON response
+            return response()->json($addresses);
+        }
+
+        return response()->json([]);
     }
 
 
@@ -64,8 +74,6 @@ class AddressController extends Controller
         $addressData = $request->all();
         $addressData['user_id'] = Auth::id();
 
-        $addressData['default'] = $request->has('default') ? 1 : 0;
-
         $address = Address::create($addressData);
 
         return response()->json([
@@ -78,11 +86,17 @@ class AddressController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show($id)
     {
-        $address = Address::findOrFail($id);
-        return view('addresses.show', compact('address'));
+        $address = Address::find($id);
+
+        if (!$address) {
+            return response()->json(['error' => 'Address not found'], 404);
+        }
+
+        return response()->json($address);
     }
+
 
     /**
      * Show the form for editing the specified resource.

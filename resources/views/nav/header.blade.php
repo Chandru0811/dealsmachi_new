@@ -247,7 +247,7 @@
                                         data-bs-target="#myAddressModal">Change</span>
                                     @else
                                     <button type="button" class="btn primary_new_btn" style="font-size: 12px"
-                                        data-bs-toggle="modal" data-bs-target="#newAddressModal">
+                                        data-bs-toggle="modal" data-bs-target="#newAddressModal" onclick="checkAddressAndOpenModal()">
                                         <i class="fa-light fa-plus"></i> Add New Address
                                     </button>
                                     @endif
@@ -328,7 +328,7 @@
                                         <div class="d-flex align-items-center justify-content-end">
                                             <div class="d-flex gap-3 delBadge">
                                                 <button type="button" class="badge_edit" data-bs-toggle="modal"
-                                                    data-bs-target="#editAddressModal">
+                                                    data-address-id="{{ $addr->id }}" data-bs-target="#editAddressModal">
                                                     Edit
                                                 </button>
                                                 @if (!$addr->default)
@@ -347,7 +347,7 @@
                         </div>
                         <div class="modal-footer d-flex justify-content-between">
                             <button type="button" class="btn primary_new_btn" style="font-size: 12px"
-                                data-bs-toggle="modal" data-bs-target="#newAddressModal">
+                                data-bs-toggle="modal" data-bs-target="#newAddressModal" onclick="checkAddressAndOpenModal()">
                                 <i class="fa-light fa-plus"></i> Add New Address
                             </button>
                             <div>
@@ -464,8 +464,6 @@
                                         id="postalcode" placeholder="Enter your Postal Code" required />
                                 </div>
 
-
-
                                 <!-- Unit (Optional) -->
                                 <div class="col-md-6 col-12 mb-3">
                                     <label for="unit" class="form-label address_lable">Unit Info
@@ -492,10 +490,9 @@
                                     </div>
                                 </div>
 
-                                <div class="mb-3">
-                                    <input type="hidden" name="default_hidden" id="default_hidden" value="0">
-                                    <input type="checkbox" name="default" id="default_address" value="1">
-                                    <label for="default_address">Set as Default Address</label>
+                                <div class="mb-3 address">
+                                    <input type="checkbox" name="default" class="default_address" id="default_address">
+                                    <label class="form-check-label" for="default_address">Set as Default Address</label>
                                 </div>
                             </div>
 
@@ -632,8 +629,6 @@
                                         id="postalcode" placeholder="Enter your Postal Code" required />
                                 </div>
 
-
-
                                 <!-- Unit (Optional) -->
                                 <div class="col-md-6 col-12 mb-3">
                                     <label for="unit" class="form-label address_lable">Additional Info
@@ -660,18 +655,9 @@
                                     </div>
                                 </div>
 
-                                <div class="mb-3">
-                                    @if (!$default_address || !$default_address->default)
-                                    <input type="hidden" name="default" value="1">
-                                    @endif
-                                    <input type="checkbox"
-                                        name="{{ !$default_address || !$default_address->default ? 'default_address' : 'default' }}"
-                                        id="{{ !$default_address || !$default_address->default ? 'default_address' : 'default' }}"
-                                        value="1" @if (!$default_address || !$default_address->default) checked disabled @endif>
-                                    <label
-                                        for="{{ !$default_address || !$default_address->default ? 'default_address' : 'optional_address' }}">
-                                        Set as Default Address
-                                    </label>
+                                <div class="mb-3 address">
+                                    <input type="checkbox" name="default" class="default_address" id="defaultAddressCheckbox">
+                                    <label class="form-check-label" for="defaultAddressCheckbox">Set as Default Address</label>
                                 </div>
 
                             </div>
@@ -747,49 +733,22 @@
                 }
             });
 
-            document.querySelectorAll('.badge_edit').forEach(function(button) {
-                button.addEventListener('click', function() {
-                    var addressId = this.closest('.row').querySelector('input[type="radio"]').value;
-                    var addressData =
-                        @json($address); // Make sure the $address data is passed to JS
-
-                    var selectedAddress = addressData.find(address => address.id == addressId);
-
-                    if (selectedAddress) {
-                        // Populate the form fields with the selected address data
-                        document.getElementById('first_name').value = selectedAddress.first_name;
-                        document.getElementById('last_name').value = selectedAddress.last_name;
-                        document.getElementById('phone').value = selectedAddress.phone;
-                        document.getElementById('email').value = selectedAddress.email;
-                        document.getElementById('postalcode').value = selectedAddress.postalcode;
-                        document.getElementById('address').value = selectedAddress.address;
-                        document.getElementById('unit').value = selectedAddress.unit ?? '';
-                        document.getElementById('address_id').value = selectedAddress.id ?? '';
-                        document.getElementById('state').value = selectedAddress.state ?? '';
-                        document.getElementById('city').value = selectedAddress.city ?? '';
-
-                        // Set default checkbox
-                        var defaultCheckbox = document.getElementById('default_address');
-                        defaultCheckbox.checked = selectedAddress.default;
-
-                        // Disable the checkbox if the address is already default
-                        if (selectedAddress.default) {
-                            defaultCheckbox.disabled = true;
-                            document.getElementById('default_hidden').value = 1;
-
+            // Function to check if user has address data and open modal
+            function checkAddressAndOpenModal() {
+                fetch('/addresses')
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.length === 0) {
+                            $('#defaultAddressCheckbox').prop('checked', true);
+                            $('#defaultAddressCheckbox').prop('disabled', true);
                         } else {
-                            defaultCheckbox.disabled = false;
+                            $('#defaultAddressCheckbox').prop('checked', false);
+                            $('#defaultAddressCheckbox').prop('disabled', false);
                         }
-
-                        // Set Address Type Radio Button
-                        if (selectedAddress.type === 'home_mode') {
-                            document.getElementById('home_mode').checked = true;
-                        } else if (selectedAddress.type === 'work_mode') {
-                            document.getElementById('work_mode').checked = true;
-                        }
-                    }
-                });
-            });
+                        $('#newAddressModal').modal('show');
+                    })
+                    .catch(error => console.error('Error fetching address:', error));
+            }
         </script>
     </section>
     <!-- Header End  -->

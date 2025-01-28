@@ -21,6 +21,7 @@
 .dropdown-toggle::after {
     display: none;
 }
+
 @media screen and (max-width: 320px) {
     .categoryIcons {
         margin-top: 100px;
@@ -104,6 +105,7 @@
         max-width: 85px;
         padding-left: 0 !important;
     }
+
     .navbar-toggler .button {
         max-width: 100px;
     }
@@ -118,6 +120,7 @@
         max-width: 130px;
         padding-left: 0 !important;
     }
+
     .navbar-toggler .button {
         max-width: 130px;
     }
@@ -276,6 +279,7 @@
 .categoryIcons {
     margin-top: 85px;
 }
+
 /* Category & Banner End  */
 
 /* App & PlayStore Start */
@@ -287,6 +291,7 @@
     color: #fff;
     font-size: small;
 }
+
 /* App & PlayStore End */
 
 /* Product Card Start  */
@@ -424,6 +429,7 @@
     .productViewStar {
         font-size: 14px;
     }
+
     .productViewStar span {
         font-size: 8px;
     }
@@ -436,6 +442,7 @@
     overflow: hidden;
     text-overflow: ellipsis;
 }
+
 /* Product Card End  */
 
 /* Footer Start  */
@@ -471,12 +478,14 @@ footer hr {
     .footer {
         text-align: center;
     }
+
     .termsfooter {
         display: flex;
         flex-wrap: wrap;
         align-items: center;
     }
 }
+
 @media screen and (max-width: 992px) and (min-width: 767px) {
     .dealslah-text p {
         font-size: 1.5rem !important;
@@ -486,6 +495,7 @@ footer hr {
         font-size: 16px !important;
     }
 }
+
 /* Footer End  */
 
 /* Header Start */
@@ -513,6 +523,7 @@ footer hr {
         margin-left: 8%;
     }
 }
+
 .total-count {
     font-size: 8px;
     width: 25%;
@@ -968,6 +979,7 @@ footer hr {
         border: 1px solid #ff0060;
         width: 100%;
     }
+
     sendEnquiry-des-btn {
         display: block;
     }
@@ -1356,6 +1368,7 @@ footer hr {
 } */
 
 @media (min-width: 992px) {
+
     /* Hide dropdown initially on large screens */
     .dropdown-menu {
         display: block !important;
@@ -1462,6 +1475,7 @@ footer hr {
 .fa-eye:before {
     color: #aaaaaa;
 }
+
 .fa-eye-slash:before {
     color: #aaaaaa;
 }
@@ -1718,14 +1732,12 @@ footer hr {
 }
 
 .shareInsta {
-    background: linear-gradient(
-        45deg,
-        #f09433,
-        #e6683c,
-        #dc2743,
-        #cc2366,
-        #bc1888
-    );
+    background: linear-gradient(45deg,
+            #f09433,
+            #e6683c,
+            #dc2743,
+            #cc2366,
+            #bc1888);
     border: none;
     color: #fff;
     border-radius: 5px;
@@ -1991,14 +2003,12 @@ footer hr {
     }
 
     .social-link-container .fa-instagram {
-        background: linear-gradient(
-            45deg,
-            #f09433,
-            #e6683c,
-            #dc2743,
-            #cc2366,
-            #bc1888
-        );
+        background: linear-gradient(45deg,
+                #f09433,
+                #e6683c,
+                #dc2743,
+                #cc2366,
+                #bc1888);
         padding: 8px 5px;
         width: 30px;
         height: 28px;
@@ -2093,14 +2103,12 @@ footer hr {
 }
 
 .social-link-container .fa-instagram {
-    background: linear-gradient(
-        45deg,
-        #f09433,
-        #e6683c,
-        #dc2743,
-        #cc2366,
-        #bc1888
-    );
+    background: linear-gradient(45deg,
+            #f09433,
+            #e6683c,
+            #dc2743,
+            #cc2366,
+            #bc1888);
     padding: 7px 5px;
     width: 30px;
     height: 28px;
@@ -2499,6 +2507,7 @@ footer hr {
     color: #ff0060 !important;
     border-radius: 4px;
 }
+
 .badge_warning {
     color: #ffac4d;
     background: #fff5eb;
@@ -2828,6 +2837,7 @@ footer hr {
     border: 1px solid #22cb00;
     color: #22cb00;
 }
+
 .review_btn:hover {
     padding: 8px 14px;
     background-color: #22cb00;
@@ -2835,6 +2845,7 @@ footer hr {
     border: 1px solid #22cb00;
     color: #fff;
 }
+
 .review_submit {
     padding: 8px 14px;
     background-color: #22cb00;
@@ -2842,6 +2853,7 @@ footer hr {
     border: 1px solid #22cb00;
     color: #fff;
 }
+
 .review_submit:hover {
     padding: 8px 14px;
     background-color: #fff;
@@ -2865,9 +2877,10 @@ footer hr {
     color: #ccc;
     transition: color 0.3s ease;
 }
+
 #starRating .star.selected,
 #starRating .star:hover,
-#starRating .star:hover ~ .star {
+#starRating .star:hover~.star {
     color: #ffc033;
 }
 
@@ -2895,8 +2908,9 @@ footer hr {
     text-align: center;
     justify-content: center;
 }
+
 /* Show dropdown on hover */
-.social_links i:hover + .dropdown_items {
+.social_links i:hover+.dropdown_items {
     display: block;
 }
 
@@ -2916,15 +2930,19 @@ footer hr {
 .dorp_fb {
     border: 1px solid #1878f3;
 }
+
 .dorp_ig {
     border: 1px solid #e4405f;
 }
+
 .dorp_yt {
     border: 1px solid #ff0000;
 }
+
 .dorp_wa {
     border: 1px solid #25d366;
 }
+
 .dorp_tg {
     border: 1px solid #0088cc;
 }
@@ -2999,6 +3017,7 @@ footer hr {
         white-space: nowrap;
         z-index: 999;
     }
+
     .tooltip-text {
         visibility: hidden;
         background-color: #000000bf;
@@ -3011,12 +3030,14 @@ footer hr {
         font-size: 10px;
         white-space: nowrap;
     }
+
     .fst_rw {
         display: flex;
         justify-content: space-between;
         text-align: start;
         align-items: center !important;
     }
+
     .review_btn {
         padding: 4px 7px;
         background-color: #fff;
@@ -3024,6 +3045,7 @@ footer hr {
         border: 1px solid #22cb00;
         color: #22cb00;
     }
+
     #share_btn {
         padding: 6px 14px;
         background-color: #fff;
@@ -3034,6 +3056,7 @@ footer hr {
         width: 75px;
         height: 30px !important;
     }
+
     .dropdown_items {
         display: none;
         position: fixed;
@@ -3074,6 +3097,10 @@ footer hr {
     accent-color: #ff0060;
 }
 
+.default_address:checked {
+    accent-color: #ff0060;
+}
+
 .card.card_style {
     width: fit-content !important;
     border: 1px solid #ddd;
@@ -3087,8 +3114,8 @@ footer hr {
     border-color: #ff0060;
 }
 
-.card.card_style .form-check-input:checked ~ div,
-.card.card_style .form-check-input:checked + label {
+.card.card_style .form-check-input:checked~div,
+.card.card_style .form-check-input:checked+label {
     border-color: #ff0060;
     color: #ff0060;
 }
@@ -3106,6 +3133,7 @@ footer hr {
     padding: 0 8px;
     cursor: pointer;
 }
+
 .badge_info_new {
     color: #22cb00;
     background: #fff;
@@ -3241,6 +3269,7 @@ footer hr {
         width: 38px;
         height: 22px;
     }
+
     .thumbnail img {
         width: 40px;
     }
@@ -3441,12 +3470,11 @@ footer hr {
     border-radius: 4px !important;
 }
 
-.primary_new_btn:hover {
-    background: #22cb00;
-    color: #fff;
-    border: 1px solid #22cb00;
-    padding: 2px 8px;
-    border-radius: 4px !important;
+.primary_new_btn:hover,
+.primary_new_btn.active {
+    background: #22cb00 !important;
+    color: #fff !important;
+    border: 1px solid #22cb00 !important;
 }
 
 .fs_common {
@@ -3583,6 +3611,7 @@ footer hr {
     color: #ff0060 !important;
     font-size: 10px !important;
 }
+
 .card_cart:hover,
 .card_cart.active {
     background-color: #ff0060 !important;
@@ -3651,6 +3680,7 @@ footer hr {
 }
 
 @media (max-width: 576px) {
+
     .total,
     .subtotal,
     .discount {
@@ -3689,6 +3719,7 @@ footer hr {
     font-size: 16px;
     padding: 6px 7px;
 }
+
 .cancel-btn:hover {
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3), 0 1px 3px rgba(0, 0, 0, 0.06);
     border-radius: 2px !important;
@@ -3732,6 +3763,7 @@ footer hr {
     border: 1px solid #ef4444;
     border-radius: 4px;
 }
+
 @media screen and (max-width: 768px) {
     .drift-zoom-pane {
         display: none !important;
@@ -3746,6 +3778,7 @@ footer hr {
 .address_input {
     background-color: #f9f9f9;
 }
+
 .placeorder_btn:hover {
     color: #fff !important;
     padding: 8px 22px;
@@ -3775,10 +3808,12 @@ footer hr {
     from {
         transform: rotate(0deg);
     }
+
     to {
         transform: rotate(360deg);
     }
 }
+
 @media screen and (max-width: 450px) {
     .price-section p {
         margin: 0px 7px;
@@ -3847,6 +3882,7 @@ footer hr {
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     font-family: Arial, sans-serif;
 }
+
 .toast-danger .toast-content {
     display: flex;
     align-items: center;
@@ -3882,6 +3918,7 @@ footer hr {
 .toast-danger .toast-close-btn:hover {
     color: #2c8f47;
 }
+
 /* end toasts */
 
 @media screen and (max-width: 420px) {
@@ -3973,6 +4010,7 @@ footer hr {
 .productFilter .social_links {
     top: 45%;
 }
+
 .productFilter .dropdown_items {
     top: 45%;
 }
@@ -3981,6 +4019,7 @@ footer hr {
     .productFilter .social_links {
         top: 60%;
     }
+
     .productFilter .dropdown_items {
         top: 60%;
     }
@@ -4005,4 +4044,4 @@ footer hr {
     text-decoration: underline;
     color: #ff0060;
     cursor: pointer;
-  }
+}
