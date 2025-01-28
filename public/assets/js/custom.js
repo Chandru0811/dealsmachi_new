@@ -399,20 +399,23 @@ $(document).ready(function () {
             },
             submitHandler: function (form) {
                 var formData = new FormData(form);
-                var isDefault = $('#defaultAddressCheckbox').prop('checked') ? 1 : 0;
-                formData.append('default', isDefault);
+                var isDefault = $("#defaultAddressCheckbox").prop("checked")
+                    ? 1
+                    : 0;
+                formData.append("default", isDefault);
 
                 $.ajax({
-                    url: $(form).attr('action'),
-                    type: 'POST',
+                    url: $(form).attr("action"),
+                    type: "POST",
                     data: formData,
                     processData: false,
                     contentType: false,
                     success: function (response) {
                         if (response.success) {
-                            $('#newAddressModal').modal('hide');
-                            $('#addressNewForm')[0].reset();
-                            var finddiv = $('#myAddressModal').find('.allAddress');
+                            $("#newAddressModal").modal("hide");
+                            $("#addressNewForm")[0].reset();
+                            var finddiv =
+                                $("#myAddressModal").find(".allAddress");
 
                             finddiv.append(`
                             <div class="row p-2">
@@ -422,18 +425,36 @@ $(document).ready(function () {
                                             <input type="radio" name="selected_id"
                                         id="selected_id_${response.address.id}"
                                         value="${response.address.id}"
-                                        ${response.address.default === '1' ? 'checked' : ''} />
+                                        ${
+                                            response.address.default === "1"
+                                                ? "checked"
+                                                : ""
+                                        } />
                                         </div>
                                         <p class="text-turncate fs_common">
                                             <span class="px-2">
-                                                ${response.address.first_name} ${response.address.last_name} |
+                                                ${
+                                                    response.address.first_name
+                                                } ${
+                                response.address.last_name
+                            } |
                                                 <span style="color: #c7c7c7;">&nbsp;+91
-                                                    ${response.address.phone}</span>
+                                                    ${
+                                                        response.address.phone
+                                                    }</span>
                                             </span><br>
                                             <span class="px-2"
-                                                style="color: #c7c7c7">${response.address.address}, ${response.address.city}, ${response.address.state} - ${response.address.postalcode}.</span>
+                                                style="color: #c7c7c7">${
+                                                    response.address.address
+                                                }, ${response.address.city}, ${
+                                response.address.state
+                            } - ${response.address.postalcode}.</span>
                                             <br>
-                                            ${response.address.default === '1' ? '<span class="badge badge_primary">Default</span>' : ''}
+                                            ${
+                                                response.address.default === "1"
+                                                    ? '<span class="badge badge_primary">Default</span>'
+                                                    : ""
+                                            }
                                         </p>
                                     </div>
                                 </div>
@@ -441,24 +462,37 @@ $(document).ready(function () {
                                     <div class="d-flex align-items-center justify-content-end">
                                         <div class="d-flex gap-3">
                                             <button type="button" class="badge_edit" data-bs-toggle="modal"
-                                                data-address-id="${address.id}" data-bs-target="#editAddressModal">
+                                                data-address-id="${
+                                                    address.id
+                                                }" data-bs-target="#editAddressModal">
                                                 Edit
                                             </button>
-                                            ${response.address.default === '0' ? `
+                                            ${
+                                                response.address.default === "0"
+                                                    ? `
                                                 <button type="button" class="badge_del"
                                                     data-bs-toggle="modal"
                                                     data-bs-target="#deleteAddressModal"
                                                     data-address-id="${response.address.id}">
                                                     Delete
-                                                </button>` : ''}
+                                                </button>`
+                                                    : ""
+                                            }
                                         </div>
                                     </div>
                                 </div>
                             </div>
                             `);
-                            if (response.address.default === '1' && $('.defaultAddress .badge_infos').length === 0) {
-                                $('.modal-body p strong:contains("Phone :")').parent().html(`
-                                    <strong>Phone :</strong> (+91) ${response.address.phone || '--'}
+                            if (
+                                response.address.default === "1" &&
+                                $(".defaultAddress .badge_infos").length === 0
+                            ) {
+                                $(
+                                    '.modal-body p strong:contains("Phone :")'
+                                ).parent().html(`
+                                    <strong>Phone :</strong> (+91) ${
+                                        response.address.phone || "--"
+                                    }
                                 `);
                                 var profileAddress = `
                                     <p>
@@ -470,21 +504,24 @@ $(document).ready(function () {
                                         </span>
                                     </p>
                                 `;
-                                $('.modal-body .mt-2 div').html(profileAddress);
-                                $('.defaultAddress .primary_new_btn').hide();
-                                $('.defaultAddress').append(`
+                                $(".modal-body .mt-2 div").html(profileAddress);
+                                $(".defaultAddress .primary_new_btn").hide();
+                                $(".defaultAddress").append(`
                                     <span class="badge badge_infos py-1" data-bs-toggle="modal" data-bs-target="#myAddressModal">Change</span>
                                 `);
                             }
-                            $('#myAddressModal').modal('show');
-                            showMessage(response.message, 'success');
+                            $("#myAddressModal").modal("show");
+                            showMessage(response.message, "success");
                         } else {
-                            showMessage(response.message, 'error');
+                            showMessage(response.message, "error");
                         }
                     },
                     error: function (xhr, status, error) {
-                        showMessage('There was an issue with the request. Please try again.', 'error');
-                    }
+                        showMessage(
+                            "There was an issue with the request. Please try again.",
+                            "error"
+                        );
+                    },
                 });
             },
         });
@@ -575,52 +612,81 @@ $(document).ready(function () {
             },
             submitHandler: function (form) {
                 var formData = new FormData(form);
-                var isDefault = $('#default_address').prop('checked') ? 1 : 0;
-                formData.append('default', isDefault);
+                var isDefault = $("#default_address").prop("checked") ? 1 : 0;
+                formData.append("default", isDefault);
 
                 $.ajax({
-                    url: $(form).attr('action'),
-                    type: 'POST',
+                    url: $(form).attr("action"),
+                    type: "POST",
                     data: formData,
                     processData: false,
                     contentType: false,
                     success: function (response) {
                         if (response.success) {
-                            $('#editAddressModal').modal('hide');
-                            $('#addressEditForm')[0].reset();
+                            $("#editAddressModal").modal("hide");
+                            $("#addressEditForm")[0].reset();
 
-                            var oldDefaultDiv = $('.allAddress').find('.badge_primary').closest('.row');
-                            oldDefaultDiv.find('.badge_primary').remove();
-                            var oldAddressId = oldDefaultDiv.find('input[type=radio]').val();
-                            oldDefaultDiv.find('.delBadge').append(`
+                            var oldDefaultDiv = $(".allAddress")
+                                .find(".badge_primary")
+                                .closest(".row");
+                            oldDefaultDiv.find(".badge_primary").remove();
+                            var oldAddressId = oldDefaultDiv
+                                .find("input[type=radio]")
+                                .val();
+                            oldDefaultDiv.find(".delBadge").append(`
                             <button type="button" class="badge_del"data-bs-toggle="modal"
                                 data-bs-target="#deleteAddressModal" data-address-id="${oldAddressId}">
                                 Delete
                             </button>
                         `);
 
-                            var finddiv = $('#myAddressModal').find('.allAddress');
-                            finddiv.find(`#selected_id_${response.address.id}`).closest('.row').remove();
+                            var finddiv =
+                                $("#myAddressModal").find(".allAddress");
+                            finddiv
+                                .find(`#selected_id_${response.address.id}`)
+                                .closest(".row")
+                                .remove();
                             finddiv.append(`
                             <div class="row p-2">
                                 <div class="col-10">
                                     <div class="d-flex text-start">
                                         <div class="px-1">
                                             <input type="radio" name="selected_id"
-                                                id="selected_id_${response.address.id}"
+                                                id="selected_id_${
+                                                    response.address.id
+                                                }"
                                                 value="${response.address.id}"
-                                                ${response.address.default === '1' ? 'checked' : ''} />
+                                                ${
+                                                    response.address.default ===
+                                                    "1"
+                                                        ? "checked"
+                                                        : ""
+                                                } />
                                         </div>
                                         <p class="text-turncate fs_common">
                                             <span class="px-2">
-                                                ${response.address.first_name} ${response.address.last_name} |
+                                                ${
+                                                    response.address.first_name
+                                                } ${
+                                response.address.last_name
+                            } |
                                                 <span style="color: #c7c7c7;">&nbsp;+91
-                                                    ${response.address.phone}</span>
+                                                    ${
+                                                        response.address.phone
+                                                    }</span>
                                             </span><br>
                                             <span class="px-2"
-                                                style="color: #c7c7c7">${response.address.address}, ${response.address.city}, ${response.address.state} - ${response.address.postalcode}.</span>
+                                                style="color: #c7c7c7">${
+                                                    response.address.address
+                                                }, ${response.address.city}, ${
+                                response.address.state
+                            } - ${response.address.postalcode}.</span>
                                             <br>
-                                            ${response.address.default === '1' ? '<span class="badge badge_primary">Default</span>' : ''}
+                                            ${
+                                                response.address.default === "1"
+                                                    ? '<span class="badge badge_primary">Default</span>'
+                                                    : ""
+                                            }
                                         </p>
                                     </div>
                                 </div>
@@ -628,27 +694,37 @@ $(document).ready(function () {
                                     <div class="d-flex align-items-center justify-content-end">
                                         <div class="d-flex gap-3">
                                             <button type="button" class="badge_edit" data-bs-toggle="modal"
-                                                data-address-id="${address.id}" data-bs-target="#editAddressModal">
+                                                data-address-id="${
+                                                    address.id
+                                                }" data-bs-target="#editAddressModal">
                                                 Edit
                                             </button>
-                                            ${response.address.default === '0' ? `
+                                            ${
+                                                response.address.default === "0"
+                                                    ? `
                                                 <button type="button" class="badge_del"
                                                     data-bs-toggle="modal"
                                                     data-bs-target="#deleteAddressModal"
                                                     data-address-id="${response.address.id}">
                                                     Delete
-                                                </button>` : ''}
+                                                </button>`
+                                                    : ""
+                                            }
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         `);
 
-                            if (response.address.default === '1') {
-                                $('.modal-body p strong:contains("Phone :")').parent().html(`
-                                    <strong>Phone :</strong> (+91) ${response.address.phone || '--'}
+                            if (response.address.default === "1") {
+                                $(
+                                    '.modal-body p strong:contains("Phone :")'
+                                ).parent().html(`
+                                    <strong>Phone :</strong> (+91) ${
+                                        response.address.phone || "--"
+                                    }
                                 `);
-                                $('.modal-body .mt-2 div').html(`
+                                $(".modal-body .mt-2 div").html(`
                                 <p>
                                     <strong>${response.address.first_name} ${response.address.last_name} (+91)
                                         ${response.address.phone}</strong>&nbsp;&nbsp;<br>
@@ -659,21 +735,27 @@ $(document).ready(function () {
                                 </p>
                             `);
                             }
-                            $('#myAddressModal').modal('show');
-                            showMessage(response.message, 'success');
+                            $("#myAddressModal").modal("show");
+                            showMessage(response.message, "success");
                         } else {
-                            showMessage(response.message, 'error');
+                            showMessage(response.message, "error");
                         }
                     },
                     error: function () {
-                        showMessage('There was an issue with the request. Please try again.', 'error');
-                    }
+                        showMessage(
+                            "There was an issue with the request. Please try again.",
+                            "error"
+                        );
+                    },
                 });
             },
         });
 
         $(document).on("click", ".badge_edit", function () {
-            const addressId = $(this).closest(".row").find("input[type='radio']").val();
+            const addressId = $(this)
+                .closest(".row")
+                .find("input[type='radio']")
+                .val();
 
             $.ajax({
                 url: `/getAddress/${addressId}`, // Adjust the route as necessary
@@ -682,7 +764,10 @@ $(document).ready(function () {
                     populateAddressModal(address);
                 },
                 error: function () {
-                    showMessage("Failed to fetch address details. Please try again.", "error");
+                    showMessage(
+                        "Failed to fetch address details. Please try again.",
+                        "error"
+                    );
                 },
             });
         });
@@ -718,39 +803,43 @@ $(document).ready(function () {
             }
         }
 
-
         // Delete Address Functionality
         $(document).ready(function () {
             var addressIdToDelete = null;
 
-            $(document).on('click', '.badge_del', function () {
-                addressIdToDelete = $(this).data('address-id');
-                $('#deleteAddressModal').modal('show');
+            $(document).on("click", ".badge_del", function () {
+                addressIdToDelete = $(this).data("address-id");
+                $("#deleteAddressModal").modal("show");
             });
 
-            $('#confirmDeleteBtn').click(function () {
+            $("#confirmDeleteBtn").click(function () {
                 if (!addressIdToDelete) return;
 
                 $.ajax({
                     url: `/address/${addressIdToDelete}`,
-                    type: 'DELETE',
+                    type: "DELETE",
                     data: {
-                        _token: $('meta[name="csrf-token"]').attr('content'),
+                        _token: $('meta[name="csrf-token"]').attr("content"),
                     },
                     success: function (response) {
                         if (response.success) {
-                            $('#deleteAddressModal').modal('hide');
-                            $(`#selected_id_${addressIdToDelete}`).closest('.row').remove();
-                            $('#myAddressModal').modal('show');
-                            showMessage(response.message, 'success');
+                            $("#deleteAddressModal").modal("hide");
+                            $(`#selected_id_${addressIdToDelete}`)
+                                .closest(".row")
+                                .remove();
+                            $("#myAddressModal").modal("show");
+                            showMessage(response.message, "success");
                             addressIdToDelete = null;
                         } else {
-                            showMessage(response.message, 'error');
+                            showMessage(response.message, "error");
                         }
                     },
                     error: function (xhr, status, error) {
-                        showMessage('There was an issue with the request. Please try again.', 'error');
-                    }
+                        showMessage(
+                            "There was an issue with the request. Please try again.",
+                            "error"
+                        );
+                    },
                 });
             });
         });
@@ -875,7 +964,10 @@ $(document).ready(function () {
             toggleError("passwordError", "Password is required.");
             formIsValid = false;
         } else if (password.length < 8) {
-            toggleError("passwordError", "Password must be at least 8 characters long.");
+            toggleError(
+                "passwordError",
+                "Password must be at least 8 characters long."
+            );
             formIsValid = false;
         } else {
             toggleError("passwordError");
@@ -909,7 +1001,6 @@ $(document).ready(function () {
         }
     }
 
-
     // Password visibility toggle
     $(document).ready(function () {
         const toggleLoginPassword = document.querySelector(
@@ -929,7 +1020,6 @@ $(document).ready(function () {
         }
     });
 });
-
 
 // Validation for Register Page
 $(document).ready(function () {
@@ -974,7 +1064,10 @@ $(document).ready(function () {
             toggleError("passwordError", "Password is required.");
             formIsValid = false;
         } else if (password.length < 8) {
-            toggleError("passwordError", "Password must be at least 8 characters long.");
+            toggleError(
+                "passwordError",
+                "Password must be at least 8 characters long."
+            );
             formIsValid = false;
         } else {
             toggleError("passwordError");
@@ -984,7 +1077,11 @@ $(document).ready(function () {
         if (!confirmPassword) {
             toggleError("confirmpasswordError", "Confirm Password is required");
             formIsValid = false;
-        } else if (password && confirmPassword && password !== confirmPassword) {
+        } else if (
+            password &&
+            confirmPassword &&
+            password !== confirmPassword
+        ) {
             toggleError("passwordMatchError", "Passwords do not match");
             formIsValid = false;
         } else {
@@ -1021,7 +1118,6 @@ $(document).ready(function () {
     }
 });
 
-
 function validateField(field) {
     const value = document.getElementById(field).value.trim();
 
@@ -1030,13 +1126,22 @@ function validateField(field) {
             toggleError("nameError", value ? "" : "Name is required");
             break;
         case "email":
-            const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
-            toggleError("emailError", emailRegex.test(value) ? "" : "Valid email is required");
+            const emailRegex =
+                /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+            toggleError(
+                "emailError",
+                emailRegex.test(value) ? "" : "Valid email is required"
+            );
             break;
         case "password":
-            const confirmPassword = document.getElementById("password_confirmation").value;
+            const confirmPassword = document.getElementById(
+                "password_confirmation"
+            ).value;
             if (value.length < 8 || value.length > 16) {
-                toggleError("passwordError", "Password must be between 8 and 16 characters");
+                toggleError(
+                    "passwordError",
+                    "Password must be between 8 and 16 characters"
+                );
             } else {
                 toggleError("passwordError");
             }
@@ -1082,7 +1187,6 @@ function toggleError(id, message = "") {
         errorElement.innerText = "";
     }
 }
-
 
 function copySpan(element, event) {
     // Find the coupon code text (excluding tooltip text)
@@ -1202,130 +1306,6 @@ function toggleNumber(event) {
         link.href = `tel:${fullNumber}`;
     }
 }
-
-$(document).ready(function () {
-    // Setup CSRF token for AJAX
-    $.ajaxSetup({
-        headers: {
-            "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
-        },
-    });
-
-    // Function to update the bookmark count
-    function updateBookmarkCount(count) {
-        console.log(count);
-        $(".totalItemsCount").each(function () {
-            if (count > 0) {
-                $(this).text(count).css({
-                    visibility: "visible",
-                    display: "block",
-                });
-            } else {
-                $(this).text("").css({
-                    visibility: "hidden",
-                    display: "none",
-                });
-            }
-        });
-    }
-
-    // Add Bookmark
-    function handleAddBookmark() {
-        $(".add-bookmark")
-            .off("click")
-            .on("click", function (e) {
-                e.preventDefault();
-                let dealId = $(this).data("deal-id");
-
-                $.ajax({
-                    url: `https://dealsmachi.com/bookmark/${dealId}/add`,
-                    method: "POST",
-                    success: function (response) {
-                        updateBookmarkCount(response.total_items);
-
-                        let button = $(
-                            `.add-bookmark[data-deal-id="${dealId}"]`
-                        );
-                        button
-                            .removeClass("add-bookmark")
-                            .addClass("remove-bookmark");
-                        button.html(`
-                        <p style="height:fit-content;cursor:pointer" class="p-1 px-2">
-                            <i class="fa-solid fa-heart bookmark-icon" style="color: #ff0060;"></i>
-                        </p>
-                    `);
-
-                        handleRemoveBookmark();
-                    },
-                    error: function (xhr) { },
-                });
-            });
-    }
-
-    // Remove Bookmark
-    function handleRemoveBookmark() {
-        $(".remove-bookmark")
-            .off("click")
-            .on("click", function (e) {
-                e.preventDefault();
-                let dealId = $(this).data("deal-id");
-
-                $.ajax({
-                    url: `https://dealsmachi.com/bookmark/${dealId}/remove`,
-                    method: "DELETE",
-                    success: function (response) {
-                        updateBookmarkCount(response.total_items);
-
-                        let button = $(
-                            `.remove-bookmark[data-deal-id="${dealId}"]`
-                        );
-                        button
-                            .removeClass("remove-bookmark")
-                            .addClass("add-bookmark");
-                        button.html(`
-                        <p style="height:fit-content;cursor:pointer" class="p-1 px-2">
-                            <i class="fa-regular fa-heart bookmark-icon" style="color: #ff0060;"></i>
-                        </p>
-                    `);
-
-                        handleAddBookmark(); // Re-bind the add bookmark handler
-                    },
-                    error: function (xhr) {
-                        // Handle error (optional)
-                    },
-                });
-            });
-    }
-
-    // Initialize the event handlers
-    handleAddBookmark();
-    handleRemoveBookmark();
-
-    // Initial Load of Bookmark Count
-    function loadBookmarkCount() {
-        $.ajax({
-            url: "https://dealsmachi.com/totalbookmark",
-            method: "GET",
-            success: function (response) {
-                updateBookmarkCount(response.total_items);
-            },
-            error: function (xhr) {
-                console.error("Failed to load bookmark count.");
-            },
-        });
-    }
-
-    loadBookmarkCount();
-
-    // Disable or remove tooltip from bookmark buttons
-    // Option 1: Disable the tooltip functionality
-    $(".bookmark-button").tooltip("disable");
-
-    // Option 2: Remove the tooltip attribute entirely
-    $('.bookmark-button [data-bs-toggle="tooltip"]').removeAttr(
-        "data-bs-toggle"
-    );
-});
 
 // Link Shared Capture the current page URL dynamically
 const currentUrl = encodeURIComponent(window.location.href);
@@ -1673,241 +1653,169 @@ $(document).ready(function () {
 });
 
 $(document).ready(function () {
+    // Setup CSRF token for AJAX
     $.ajaxSetup({
         headers: {
             "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
         },
     });
 
-    $(".add-to-cart-btn").on("click", function (e) {
-        e.preventDefault();
-
-        let slug = $(this).data("slug");
-
-        $.ajax({
-            url: `/addtocart/${slug}`,
-            type: "POST",
-            data: {
-                quantity: 1,
-                saveoption: "add to cart",
-            },
-            success: function (response) {
-                if (response.cartItemCount !== undefined) {
-                    const cartCountElement = $("#cart-count");
-
-                    if (response.cartItemCount > 0) {
-                        cartCountElement.text(response.cartItemCount);
-                        cartCountElement.css("display", "inline");
-                    } else {
-                        cartCountElement.css("display", "none");
-                    }
-                }
-
-                fetchCartDropdown();
-                showMessage(
-                    response.status || "Deal added to cart!",
-                    "success"
-                );
-            },
-            error: function (xhr) {
-                const errorMessage =
-                    xhr.responseJSON?.error || "Something went wrong!";
-                showMessage(errorMessage, "error");
-            },
-        });
-    });
-
-    $(document).on("click", ".save-for-later-btn", function (e) {
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+    // Function to update the bookmark count
+    function updateBookmarkCount(count) {
+        console.log(count);
+        $(".totalItemsCount").each(function () {
+            if (count > 0) {
+                $(this).text(count).css({
+                    visibility: "visible",
+                    display: "block",
+                });
+            } else {
+                $(this).text("").css({
+                    visibility: "hidden",
+                    display: "none",
+                });
             }
         });
-        e.preventDefault();
-        const productId = $(this).data("product-id");
+    }
+
+    // Initialize the event handlers
+    handleAddBookmark();
+    handleRemoveBookmark();
+
+    // Initial Load of Bookmark Count
+    function loadBookmarkCount() {
         $.ajax({
-            url: "/saveforlater/add",
-            type: "POST",
-            data: { product_id: productId },
+            url: "https://dealsmachi.com/totalbookmark",
+            method: "GET",
             success: function (response) {
-                if (response.cartItemCount !== undefined) {
-                    const cartCountElement = $("#cart-count");
-                    if (response.cartItemCount > 0) {
-                        cartCountElement.text(response.cartItemCount);
-                        cartCountElement.css("display", "inline");
-                    } else {
-                        cartCountElement.css("display", "none");
-                    }
-                }
-                fetchCart();
-                fetchCartDropdown();
-                showMessage(response.status || "Item moved to Buy for Later!", "success");
+                updateBookmarkCount(response.total_items);
             },
             error: function (xhr) {
-                const errorMessage = xhr.responseJSON?.error || "Failed to move item to Buy for Later!";
-                showMessage(errorMessage, "error");
-            },
-        });
-    });
-
-    $(document).on("click", ".cart-remove", function (e) {
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            }
-        });
-        e.preventDefault();
-        const productId = $(this).data("product-id");
-        const cartId = $(this).data("cart-id");
-
-        $.ajax({
-            url: "/cart/remove",
-            type: "POST",
-            data: { product_id: productId , cart_id: cartId },
-            success: function (response) {
-                if (response.cartItemCount !== undefined) {
-                    const cartCountElement = $("#cart-count");
-                    if (response.cartItemCount > 0) {
-                        cartCountElement.text(response.cartItemCount);
-                        cartCountElement.css("display", "inline");
-                    } else {
-                        cartCountElement.css("display", "none");
-                    }
-                }
-                fetchCart();
-                fetchCartDropdown();
-                showMessage(response.status || "Cart Item is Remove", "success");
-            },
-            error: function (xhr) {
-                const errorMessage = xhr.responseJSON?.error || "Failed to Cart Item Remove!";
-                showMessage(errorMessage, "error");
-            },
-        });
-    });
-
-    $(document).on("click", ".moveToCart", function (e) {
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            }
-        });
-        e.preventDefault();
-        const productId = $(this).data("product-id");
-        $.ajax({
-            url: "/saveforlater/toCart",
-            type: "POST",
-            data: { product_id: productId },
-            success: function (response) {
-
-                if (response.cartItemCount !== undefined) {
-                    const cartCountElement = $("#cart-count");
-                    if (response.cartItemCount > 0) {
-                        cartCountElement.text(response.cartItemCount);
-                        cartCountElement.css("display", "inline");
-                    } else {
-                        cartCountElement.css("display", "none");
-                    }
-                }
-
-                fetchCart();
-                savelaterfetchCart();
-                fetchCartDropdown();
-
-                showMessage(response.status || "Item moved to Save for Later!", "success");
-            },
-            error: function (xhr) {
-                const errorMessage = xhr.responseJSON?.error || "Failed to move item to Save for Later!";
-                showMessage(errorMessage, "error");
-            },
-        });
-    });
-
-    $(document).on("click", ".removeSaveLater", function (e) {
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            }
-        });
-        e.preventDefault();
-        const productId = $(this).data("product-id");
-
-        $.ajax({
-            url: "/saveforlater/remove",
-            type: "POST",
-            data: { product_id: productId },
-            success: function (response) {
-                fetchCart();
-                savelaterfetchCart();
-                showMessage(response.status || "Save for Later Item Removed!", "success");
-            },
-            error: function (xhr) {
-                const errorMessage = xhr.responseJSON?.error || "Failed to move on Save for Later!";
-                showMessage(errorMessage, "error");
-            },
-        });
-    });
-
-    function fetchCart() {
-        $.ajax({
-            url: "/cart",
-            type: "GET",
-            success: function (response) {
-                if (response.html) {
-                    $(".cartIndex").html(response.html);
-                }
-            },
-            error: function () {
-                showMessage("Failed to update cart!", "error");
+                console.error("Failed to load bookmark count.");
             },
         });
     }
 
-    function savelaterfetchCart() {
-        $.ajax({
-            url: "/saveforlater/all",
-            type: "GET",
-            success: function (response) {
-                if (response.html) {
-                    $(".savelaterIndex").html(response.html);
-                }
-            },
-            error: function () {
-                showMessage("Failed to update cart!", "error");
-            },
+    loadBookmarkCount();
+
+    // Disable or remove tooltip from bookmark buttons
+    // Option 1: Disable the tooltip functionality
+    $(".bookmark-button").tooltip("disable");
+
+    // Option 2: Remove the tooltip attribute entirely
+    $('.bookmark-button [data-bs-toggle="tooltip"]').removeAttr(
+        "data-bs-toggle"
+    );
+});
+
+// Add Bookmark
+function handleAddBookmark() {
+    $(".add-bookmark")
+        .off("click")
+        .on("click", function (e) {
+            e.preventDefault();
+            let dealId = $(this).data("deal-id");
+
+            $.ajax({
+                url: `https://dealsmachi.com/bookmark/${dealId}/add`,
+                method: "POST",
+                success: function (response) {
+                    // console.log(response);
+                    updateBookmarkCount(response.total_items);
+
+                    let button = $(`.add-bookmark[data-deal-id="${dealId}"]`);
+                    button
+                        .removeClass("add-bookmark")
+                        .addClass("remove-bookmark");
+                    button.html(`
+                        <p style="height:fit-content;cursor:pointer" class="p-1 px-2">
+                            <i class="fa-solid fa-heart bookmark-icon" style="color: #ff0060;"></i>
+                        </p>
+                    `);
+
+                    handleRemoveBookmark();
+                },
+                error: function (xhr) {},
+            });
         });
+}
+
+// Remove Bookmark
+function handleRemoveBookmark() {
+    $(".remove-bookmark")
+        .off("click")
+        .on("click", function (e) {
+            e.preventDefault();
+            let dealId = $(this).data("deal-id");
+
+            $.ajax({
+                url: `https://dealsmachi.com/bookmark/${dealId}/remove`,
+                method: "DELETE",
+                success: function (response) {
+                    updateBookmarkCount(response.total_items);
+
+                    let button = $(
+                        `.remove-bookmark[data-deal-id="${dealId}"]`
+                    );
+                    button
+                        .removeClass("remove-bookmark")
+                        .addClass("add-bookmark");
+                    button.html(`
+                        <p style="height:fit-content;cursor:pointer" class="p-1 px-2">
+                            <i class="fa-regular fa-heart bookmark-icon" style="color: #ff0060;"></i>
+                        </p>
+                    `);
+
+                    handleAddBookmark(); // Re-bind the add bookmark handler
+                },
+                error: function (xhr) {
+                    // Handle error (optional)
+                },
+            });
+        });
+}
+
+$(document).ready(function () {
+    $.ajaxSetup({
+        headers: {
+            "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+        },
+    });
+    initializeEventListeners();
+    fetchCartDropdown();
+});
+
+function fetchCartDropdown() {
+    $.ajax({
+        url: "/cart/dropdown",
+        type: "GET",
+        success: function (response) {
+            if (response.html) {
+                $(".dropdown_cart").html(response.html);
+            }
+        },
+        error: function () {
+            showMessage("Failed to update cart dropdown!", "error");
+        },
+    });
+}
+
+function showMessage(message, type) {
+    var textColor, icon;
+
+    if (type === "success") {
+        textColor = "#16A34A";
+        icon =
+            '<i class="fa-regular fa-cart-shopping" style="color: #16A34A"></i>';
+        var alertClass = "toast-success";
+    } else {
+        textColor = "#EF4444";
+        icon =
+            '<i class="fa-solid fa-triangle-exclamation" style="color: #EF4444"></i>';
+        var alertClass = "toast-danger";
     }
 
-    function fetchCartDropdown() {
-        $.ajax({
-            url: "/cart/dropdown",
-            type: "GET",
-            success: function (response) {
-                if (response.html) {
-                    $(".dropdown_cart").html(response.html);
-                }
-            },
-            error: function () {
-                showMessage("Failed to update cart dropdown!", "error");
-            },
-        });
-    }
-
-    function showMessage(message, type) {
-        var textColor, icon;
-
-        if (type === "success") {
-            textColor = "#16A34A";
-            icon =
-                '<i class="fa-regular fa-cart-shopping" style="color: #16A34A"></i>';
-            var alertClass = "toast-success";
-        } else {
-            textColor = "#EF4444";
-            icon =
-                '<i class="fa-solid fa-triangle-exclamation" style="color: #EF4444"></i>';
-            var alertClass = "toast-danger";
-        }
-
-        var alertHtml = `
+    var alertHtml = `
           <div class="alert ${alertClass} alert-dismissible fade show" role="alert" style="position: fixed; top: 70px; right: 40px; z-index: 1050; color: ${textColor};">
             <div class="toast-content">
                 <div class="toast-icon">
@@ -1921,11 +1829,226 @@ $(document).ready(function () {
           </div>
         `;
 
-        $("body").append(alertHtml);
-        setTimeout(function () {
-            $(".alert").alert("close");
-        }, 5000);
+    $("body").append(alertHtml);
+    setTimeout(function () {
+        $(".alert").alert("close");
+    }, 5000);
+}
+
+function initializeEventListeners() {
+    $(".add-to-cart-btn")
+        .off("click")
+        .on("click", function (e) {
+            e.preventDefault();
+
+            let slug = $(this).data("slug");
+
+            $.ajax({
+                url: `/addtocart/${slug}`,
+                type: "POST",
+                data: {
+                    quantity: 1,
+                    saveoption: "add to cart",
+                },
+                success: function (response) {
+                    if (response.cartItemCount !== undefined) {
+                        const cartCountElement = $("#cart-count");
+
+                        if (response.cartItemCount > 0) {
+                            cartCountElement.text(response.cartItemCount);
+                            cartCountElement.css("display", "inline");
+                        } else {
+                            cartCountElement.css("display", "none");
+                        }
+                    }
+
+                    $(document).on("click", ".moveToCart", function (e) {
+                        $.ajaxSetup({
+                            headers: {
+                                "X-CSRF-TOKEN": $(
+                                    'meta[name="csrf-token"]'
+                                ).attr("content"),
+                            },
+                        });
+                        e.preventDefault();
+                        const productId = $(this).data("product-id");
+                        $.ajax({
+                            url: "/saveforlater/toCart",
+                            type: "POST",
+                            data: { product_id: productId },
+                            success: function (response) {
+                                if (response.cartItemCount !== undefined) {
+                                    const cartCountElement = $("#cart-count");
+                                    if (response.cartItemCount > 0) {
+                                        cartCountElement.text(
+                                            response.cartItemCount
+                                        );
+                                        cartCountElement.css(
+                                            "display",
+                                            "inline"
+                                        );
+                                    } else {
+                                        cartCountElement.css("display", "none");
+                                    }
+                                }
+
+                                fetchCart();
+                                savelaterfetchCart();
+                                fetchCartDropdown();
+
+                                showMessage(
+                                    response.status ||
+                                        "Item moved to Save for Later!",
+                                    "success"
+                                );
+                            },
+                            error: function (xhr) {
+                                const errorMessage =
+                                    xhr.responseJSON?.error ||
+                                    "Failed to move item to Save for Later!";
+                                showMessage(errorMessage, "error");
+                            },
+                        });
+                    });
+
+                    $(document).on("click", ".removeSaveLater", function (e) {
+                        $.ajaxSetup({
+                            headers: {
+                                "X-CSRF-TOKEN": $(
+                                    'meta[name="csrf-token"]'
+                                ).attr("content"),
+                            },
+                        });
+                        e.preventDefault();
+                        const productId = $(this).data("product-id");
+
+                        $.ajax({
+                            url: "/saveforlater/remove",
+                            type: "POST",
+                            data: { product_id: productId },
+                            success: function (response) {
+                                fetchCart();
+                                savelaterfetchCart();
+                                showMessage(
+                                    response.status ||
+                                        "Save for Later Item Removed!",
+                                    "success"
+                                );
+                            },
+                            error: function (xhr) {
+                                const errorMessage =
+                                    xhr.responseJSON?.error ||
+                                    "Failed to move on Save for Later!";
+                                showMessage(errorMessage, "error");
+                            },
+                        });
+                    });
+
+                    function fetchCart() {
+                        $.ajax({
+                            url: "/cart",
+                            type: "GET",
+                            success: function (response) {
+                                if (response.html) {
+                                    $(".cartIndex").html(response.html);
+                                }
+                            },
+                            error: function () {
+                                showMessage("Failed to update cart!", "error");
+                            },
+                        });
+                    }
+
+                    function savelaterfetchCart() {
+                        $.ajax({
+                            url: "/saveforlater/all",
+                            type: "GET",
+                            success: function (response) {
+                                if (response.html) {
+                                    $(".savelaterIndex").html(response.html);
+                                }
+                            },
+                            error: function () {
+                                showMessage("Failed to update cart!", "error");
+                            },
+                        });
+                    }
+
+                    fetchCartDropdown();
+                    showMessage(
+                        response.status || "Deal added to cart!",
+                        "success"
+                    );
+                },
+                error: function (xhr) {
+                    const errorMessage =
+                        xhr.responseJSON?.error || "Something went wrong!";
+                    showMessage(errorMessage, "error");
+                },
+            });
+        });
+}
+
+document.addEventListener("DOMContentLoaded", function () {
+    let loading = false;
+    let currentPage = 1;
+    let hasMoreProducts = true;
+    const loadingSpinner = document.querySelector(".loading-spinner");
+
+    function loadMoreProducts() {
+        if (loading || !hasMoreProducts) return;
+
+        loading = true;
+        currentPage++;
+        loadingSpinner.classList.remove("d-none");
+
+        setTimeout(() => {
+            fetch(`/?page=${currentPage}`, {
+                headers: {
+                    "X-Requested-With": "XMLHttpRequest",
+                },
+            })
+                .then((response) => response.text())
+                .then((html) => {
+                    if (html.trim().length > 0) {
+                        document
+                            .getElementById("products-wrapper")
+                            .insertAdjacentHTML("beforeend", html);
+
+                        // Reinitialize event listeners
+                        initializeEventListeners();
+                        handleAddBookmark();
+                        handleRemoveBookmark();
+                    } else {
+                        hasMoreProducts = false;
+                    }
+                    loadingSpinner.classList.add("d-none");
+                    loading = false;
+                })
+                .catch((error) => {
+                    console.error("Error:", error);
+                    loadingSpinner.classList.add("d-none");
+                    loading = false;
+                });
+        }, 400);
     }
 
-    fetchCartDropdown();
+    function handleScroll() {
+        const scrollPosition = window.innerHeight + window.scrollY;
+        const bodyHeight = document.documentElement.scrollHeight;
+
+        if (scrollPosition >= bodyHeight - 500) {
+            loadMoreProducts();
+        }
+    }
+
+    let timeout;
+    window.addEventListener("scroll", function () {
+        if (timeout) {
+            window.cancelAnimationFrame(timeout);
+        }
+        timeout = window.requestAnimationFrame(function () {
+            handleScroll();
+        });
+    });
 });
