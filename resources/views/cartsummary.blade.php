@@ -69,13 +69,13 @@ use Carbon\Carbon;
                 <div class="card p-3 mb-3">
                     <div class="d-flex align-items-center">
                         <h5 class="fw-bold mb-0">Delivery Addresses</h5> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        <span class="change-address-btn">
+                        <span class="change-address-btn defaultAddress">
                             @if ($default_address)
                             <span class="badge badge_infos py-1" data-bs-toggle="modal"
                                 data-bs-target="#myAddressModal">Change</span>
                             @else
                             <button type="button" class="btn primary_new_btn" style="font-size: 12px"
-                                data-bs-toggle="modal" data-bs-target="#newAddressModal">
+                                data-bs-toggle="modal" data-bs-target="#newAddressModal" onclick="checkAddressAndOpenModal()">
                                 <i class="fa-light fa-plus"></i> Add New Address
                             </button>
                             @endif
@@ -236,7 +236,7 @@ use Carbon\Carbon;
                     </form>
                     @else
                     <a href="#" class="btn check_out_btn" data-bs-toggle="modal"
-                        data-bs-target="#newAddressModal">
+                        data-bs-target="#newAddressModal" onclick="checkAddressAndOpenModal()">
                         Checkout
                     </a>
                     @endif

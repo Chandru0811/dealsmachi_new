@@ -253,7 +253,7 @@
                                     @endif
                                 </div>
                                 <div class="mt-2">
-                                    <div>
+                                    <div class="selected-address">
                                         @if ($default_address)
                                         <p>
                                             <strong>{{ $default_address->first_name ?? '' }}
@@ -326,7 +326,7 @@
                                     </div>
                                     <div class="col-2">
                                         <div class="d-flex align-items-center justify-content-end">
-                                            <div class="d-flex gap-3 delBadge">
+                                            <div class="d-flex gap-2 delBadge">
                                                 <button type="button" class="badge_edit" data-bs-toggle="modal"
                                                     data-address-id="{{ $addr->id }}" data-bs-target="#editAddressModal">
                                                     Edit
@@ -350,7 +350,7 @@
                                 data-bs-toggle="modal" data-bs-target="#newAddressModal" onclick="checkAddressAndOpenModal()">
                                 <i class="fa-light fa-plus"></i> Add New Address
                             </button>
-                            <div>
+                            <div class="d-flex justify-content-end gap-2">
                                 <button type="button" class="btn outline_secondary_btn"
                                     data-bs-dismiss="modal">Close</button>
                                 <button type="submit" class="btn outline_primary_btn"
@@ -634,7 +634,7 @@
                                     <label for="unit" class="form-label address_lable">Additional Info
                                         (Optional)</label>
                                     <input type="text" class="form-control address_input" name="unit"
-                                        id="unit" placeholder="Landmark" />
+                                        id="unit" placeholder="Landmark" maxlength="255" />
                                 </div>
 
                                 <!-- Address Type -->
@@ -719,7 +719,7 @@
                 function updateSelectedAddress(address) {
                     if (address) {
                         const addressHtml = `
-                            <strong>${address.first_name} ${address.last_name ?? ''} (+65) ${address.phone}</strong><br>
+                            <strong>${address.first_name} ${address.last_name ?? ''} (+91) ${address.phone}</strong><br>
                             ${address.address} - ${address.postalcode}
                             ${address.default ? '<span class="badge badge_danger py-1">Default</span>' : ''}
                         `;
