@@ -66,7 +66,7 @@ class CartController extends Controller
         }
 
         if ($request->ajax()) {
-            return response()->json(['html' => view('cart', compact('carts', 'bookmarkedProducts', 'savedItems'))->render()]);
+            return response()->json(['html' => view('cart', compact('cart', 'bookmarkedProducts', 'savedItems'))->render()]);
         }
         return view('cart', compact('cart', 'bookmarkedProducts', 'savedItems'));
     }
