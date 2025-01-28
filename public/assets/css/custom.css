@@ -2686,7 +2686,7 @@ footer hr {
 .add_cart_btns {
     display: flex;
     justify-content: center;
-    /* align-items: center; */
+    align-items: center;
     text-align: center;
     gap: 20px;
 }
@@ -2694,6 +2694,9 @@ footer hr {
 @media screen and (max-width: 425px) {
     .add_cart_btns {
         gap: 4px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
     }
 
     .add_cart_btns .cart_btn {
@@ -3710,6 +3713,33 @@ footer hr {
 .remove-btn img {
     max-width: 15px;
     max-height: 15px;
+}
+
+@media screen and (max-width: 424px) {
+    .remove-btn {
+        border: 1px solid #ff0060 !important;
+        background-color: white !important;
+        color: #ff0060 !important;
+        padding: 4px 15px;
+        border-radius: 5px !important;
+    }
+    
+    .remove-btn:hover {
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3), 0 1px 3px rgba(0, 0, 0, 0.06);
+        border: 1px solid #ff0060 !important;
+        color: #ff0060 !important;
+        padding: 4px 15px;
+    }
+    
+    .remove-btn img {
+       display: none !important;
+    }
+}
+@media screen and (max-width: 424px) {
+.card-content{
+display: flex;
+align-items: center !important;
+}
 }
 
 .cancel-btn {
