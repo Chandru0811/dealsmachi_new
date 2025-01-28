@@ -54,15 +54,15 @@
     @php
         use Carbon\Carbon;
     @endphp
-    <section>
+    <section class="cartIndex">
         <div class="container" style="margin-top: 100px">
             @php
                 $subtotal = 0;
                 $total_discount = 0;
             @endphp
             <!-- Check if carts or cart->items are empty -->
-            @if ($carts->isEmpty() || $carts->every(fn($cart) => $cart->items->isEmpty()))
-                <div class="col-12 text-center d-flex flex-column align-items-center justify-content-center mt-0">
+            @if (!$cart || $cart->items->isEmpty())
+                            <div class="col-12 text-center d-flex flex-column align-items-center justify-content-center mt-0">
                     <img src="{{ asset('assets/images/home/cart_empty.webp') }}" alt="Empty Cart"
                         class="img-fluid empty_cart_img">
                     <p class="pt-5" style="color: #ff0060;font-size: 22px">Your Cart is Currently Empty</p>
@@ -71,7 +71,7 @@
                     <a href="/" class="btn showmoreBtn mt-2">Shop More</a>
                 </div>
             @else
-                @foreach ($carts as $cart)
+            @if($cart)
                     <div class="d-flex justify-content-between mb-3">
                         <h5>Your Cart <span style="color: #ff0060"> ({{ $cart->items->count() }})</span></h5>
                         <a href="/" class="text-decoration-none">
@@ -213,47 +213,36 @@
                             </div>
                             <div class="col-md-6 d-flex justify-content-md-end">
                                 <div class="btn-group" role="group" aria-label="Basic example">
-                                    <form action="{{ route('savelater.add') }}" method="POST"
-                                        onsubmit="showLoader(this)">
-                                        @csrf
-                                        <input type="hidden" name="product_id" value="{{ $product->id }}">
-                                        <button type="submit" class="btn save-for-later-btn"
-                                            style="color: #ff0060; border: none;">
-                                            <div class="d-inline-flex align-items-center gap-2">
-                                                <div>
-                                                    <img src="{{ asset('assets/images/home/solar_pin-list.webp') }}"
-                                                        alt="icon" class="img-fluid" />
-                                                </div>
-                                                <div class="d-inline-flex align-items-center gap-2 buy-for-later-btn">
-                                                    <span class="loader spinner-border spinner-border-sm"
-                                                        style="display: none;"></span>
-                                                    <span>Buy For Later</span>
-                                                </div>
+                                    <button type="submit" class="btn save-for-later-btn"
+                                        style="color: #ff0060; border: none;" data-product-id="{{ $product->id }}">
+                                        <div class="d-inline-flex align-items-center gap-2">
+                                            <div>
+                                                <img src="{{ asset('assets/images/home/solar_pin-list.webp') }}"
+                                                    alt="icon" class="img-fluid" />
                                             </div>
-                                        </button>
-
-                                    </form>
+                                            <div class="d-inline-flex align-items-center gap-2 buy-for-later-btn">
+                                                <span class="loader spinner-border spinner-border-sm"
+                                                    style="display: none;"></span>
+                                                <span>Buy For Later</span>
+                                            </div>
+                                        </div>
+                                    </button>
                                     &nbsp;&nbsp;
-                                    <form action="{{ route('cart.remove') }}" method="POST"
-                                        onsubmit="showLoader(this)">
-                                        @csrf
-                                        <input type="hidden" name="cart_id" value="{{ $cart->id }}">
-                                        <input type="hidden" name="product_id" value="{{ $product->id }}">
-                                        <button type="submit" class="btn cancel-btn"
-                                            style="color: #ff0060;border: none">
-                                            <div class="d-inline-flex align-items-center gap-2">
-                                                <div>
-                                                    <img src="{{ asset('assets/images/home/trash_Icons.webp') }}"
-                                                        alt="icon" class="img-fluid" />
-                                                </div>
-                                                <div class="d-inline-flex align-items-center gap-2">
-                                                    <span class="loader spinner-border spinner-border-sm me-2"
-                                                        style="display: none"></span>
-                                                    Remove
-                                                </div>
+                                    <button type="submit" class="btn cancel-btn cart-remove"
+                                        style="color: #ff0060;border: none" data-product-id="{{ $product->id }}"
+                                        data-cart-id="{{ $cart->id }}">
+                                        <div class="d-inline-flex align-items-center gap-2">
+                                            <div>
+                                                <img src="{{ asset('assets/images/home/trash_Icons.webp') }}"
+                                                    alt="icon" class="img-fluid" />
                                             </div>
-                                        </button>
-                                    </form>
+                                            <div class="d-inline-flex align-items-center gap-2">
+                                                <span class="loader spinner-border spinner-border-sm me-2"
+                                                    style="display: none"></span>
+                                                Remove
+                                            </div>
+                                        </div>
+                                    </button>
                                 </div>
                             </div>
                         </div>
@@ -275,10 +264,10 @@
                                 <p class="discount">-₹{{ number_format($total_discount, 0) }}</p>
                             </div>
                             <!-- <hr />
-                                                                        <div class="d-flex justify-content-between pb-3">
-                                                                            <span>Total (x<span class="quantity-value">{{ $cart->quantity }}</span>)</span>
-                                                                            <span class="total">${{ number_format($subtotal - $total_discount, 0) }}</span>
-                                                                        </div> -->
+                                                                                <div class="d-flex justify-content-between pb-3">
+                                                                                    <span>Total (x<span class="quantity-value">{{ $cart->quantity }}</span>)</span>
+                                                                                    <span class="total">${{ number_format($subtotal - $total_discount, 0) }}</span>
+                                                                                </div> -->
                         </div>
                     </div>
                     <div class="d-flex justify-content-between align-items-center py-3 mt-4"
@@ -308,7 +297,7 @@
                             </a>
                         </div>
                     </div>
-                @endforeach
+                @endif
             @endif
         </div>
         <div class="container mt-5">
@@ -333,11 +322,11 @@
                         $currentDate = Carbon::now();
 
                         $deliveryDays = is_numeric($savedItem->deal->delivery_days)
-    ? (int) $savedItem->deal->delivery_days
-    : 0;
+                            ? (int) $savedItem->deal->delivery_days
+                            : 0;
 
-$deliveryDate =
-    $deliveryDays > 0 ? $currentDate->addDays($deliveryDays)->format('d-m-Y') : null;
+                        $deliveryDate =
+                            $deliveryDays > 0 ? $currentDate->addDays($deliveryDays)->format('d-m-Y') : null;
                     @endphp
                     <div class="row p-4">
                         <div class="col-md-3 d-flex flex-column justify-content-center align-items-center">
@@ -395,12 +384,10 @@ $deliveryDate =
                         </div>
                         <div class="col-md-4 d-flex flex-column justify-content-end align-items-end mb-3">
                             <div class="btn-group" role="group" aria-label="Basic example">
-                                <form action="{{ route('savelater.remove') }}" method="POST"
-                                    onsubmit="showLoader(this)">
-                                    @csrf
-                                    <input type="hidden" name="product_id" value="{{ $savedItem->deal_id }}">
-                                    <button type="submit" class="btn remove-cart-btn"
-                                        style="color: #ff0060;border: none">
+                                    <button type="submit" class="btn remove-cart-btn removeSaveLater"
+                                        style="color: #ff0060;border: none"
+                                        data-product-id="{{ $savedItem->deal->id }}"
+                                         >
                                         <div class="d-inline-flex align-items-center gap-2-2">
                                             <div>
                                                 <img src="{{ asset('assets/images/home/trash_Icons.webp') }}"
@@ -413,25 +400,23 @@ $deliveryDate =
                                             </div>
                                         </div>
                                     </button>
-                                </form>
-                                <form action="{{ route('movetocart') }}" method="POST" onsubmit="showLoader(this)">
-                                    @csrf
-                                    <input type="hidden" name="product_id" value="{{ $savedItem->deal_id }}">
-                                    <button type="submit" class="btn  cancel-btn" style="color: #ff0060;border: none">
-                                        <div class="d-inline-flex align-items-center gap-2">
-                                            <div>
-                                                <img src="{{ asset('assets/images/home/delivery_icon.webp') }}"
-                                                    alt="icon" class="img-fluid" />
-                                            </div>
-                                            <div class="d-inline-flex align-items-center gap-2">
-                                                <span class="loader spinner-border spinner-border-sm me-2"
-                                                    style="display: none"></span>
-                                                Move to Cart
-
-                                            </div>
+                                <button type="submit" class="btn  cancel-btn moveToCart"
+                                    style="color: #ff0060;border: none"
+                                     data-product-id="{{ $savedItem->deal->id }}"
+                                     >
+                                    <div class="d-inline-flex align-items-center gap-2">
+                                        <div>
+                                            <img src="{{ asset('assets/images/home/delivery_icon.webp') }}"
+                                                alt="icon" class="img-fluid" />
                                         </div>
-                                    </button>
-                                </form>
+                                        <div class="d-inline-flex align-items-center gap-2">
+                                            <span class="loader spinner-border spinner-border-sm me-2"
+                                                style="display: none"></span>
+                                            Move to Cart
+
+                                        </div>
+                                    </div>
+                                </button>
                             </div>
                         </div>
                         <hr class="mt-3">

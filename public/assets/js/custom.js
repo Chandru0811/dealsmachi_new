@@ -1717,6 +1717,166 @@ $(document).ready(function () {
         });
     });
 
+    $(document).on("click", ".save-for-later-btn", function (e) {
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+        e.preventDefault();
+        const productId = $(this).data("product-id");
+        $.ajax({
+            url: "/saveforlater/add",
+            type: "POST",
+            data: { product_id: productId },
+            success: function (response) {
+                if (response.cartItemCount !== undefined) {
+                    const cartCountElement = $("#cart-count");
+                    if (response.cartItemCount > 0) {
+                        cartCountElement.text(response.cartItemCount);
+                        cartCountElement.css("display", "inline");
+                    } else {
+                        cartCountElement.css("display", "none");
+                    }
+                }
+                fetchCart();
+                fetchCartDropdown();
+                showMessage(response.status || "Item moved to Buy for Later!", "success");
+            },
+            error: function (xhr) {
+                const errorMessage = xhr.responseJSON?.error || "Failed to move item to Buy for Later!";
+                showMessage(errorMessage, "error");
+            },
+        });
+    });
+
+    $(document).on("click", ".cart-remove", function (e) {
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+        e.preventDefault();
+        const productId = $(this).data("product-id");
+        const cartId = $(this).data("cart-id");
+
+        $.ajax({
+            url: "/cart/remove",
+            type: "POST",
+            data: { product_id: productId , cart_id: cartId },
+            success: function (response) {
+                if (response.cartItemCount !== undefined) {
+                    const cartCountElement = $("#cart-count");
+                    if (response.cartItemCount > 0) {
+                        cartCountElement.text(response.cartItemCount);
+                        cartCountElement.css("display", "inline");
+                    } else {
+                        cartCountElement.css("display", "none");
+                    }
+                }
+                fetchCart();
+                fetchCartDropdown();
+                showMessage(response.status || "Cart Item is Remove", "success");
+            },
+            error: function (xhr) {
+                const errorMessage = xhr.responseJSON?.error || "Failed to Cart Item Remove!";
+                showMessage(errorMessage, "error");
+            },
+        });
+    });
+
+    $(document).on("click", ".moveToCart", function (e) {
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+        e.preventDefault();
+        const productId = $(this).data("product-id");
+        $.ajax({
+            url: "/saveforlater/toCart",
+            type: "POST",
+            data: { product_id: productId },
+            success: function (response) {
+
+                if (response.cartItemCount !== undefined) {
+                    const cartCountElement = $("#cart-count");
+                    if (response.cartItemCount > 0) {
+                        cartCountElement.text(response.cartItemCount);
+                        cartCountElement.css("display", "inline");
+                    } else {
+                        cartCountElement.css("display", "none");
+                    }
+                }
+
+                fetchCart();
+                savelaterfetchCart();
+                fetchCartDropdown();
+
+                showMessage(response.status || "Item moved to Save for Later!", "success");
+            },
+            error: function (xhr) {
+                const errorMessage = xhr.responseJSON?.error || "Failed to move item to Save for Later!";
+                showMessage(errorMessage, "error");
+            },
+        });
+    });
+
+    $(document).on("click", ".removeSaveLater", function (e) {
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+        e.preventDefault();
+        const productId = $(this).data("product-id");
+
+        $.ajax({
+            url: "/saveforlater/remove",
+            type: "POST",
+            data: { product_id: productId },
+            success: function (response) {
+                fetchCart();
+                savelaterfetchCart();
+                showMessage(response.status || "Save for Later Item Removed!", "success");
+            },
+            error: function (xhr) {
+                const errorMessage = xhr.responseJSON?.error || "Failed to move on Save for Later!";
+                showMessage(errorMessage, "error");
+            },
+        });
+    });
+
+    function fetchCart() {
+        $.ajax({
+            url: "/cart",
+            type: "GET",
+            success: function (response) {
+                if (response.html) {
+                    $(".cartIndex").html(response.html);
+                }
+            },
+            error: function () {
+                showMessage("Failed to update cart!", "error");
+            },
+        });
+    }
+
+    function savelaterfetchCart() {
+        $.ajax({
+            url: "/saveforlater/all",
+            type: "GET",
+            success: function (response) {
+                if (response.html) {
+                    $(".savelaterIndex").html(response.html);
+                }
+            },
+            error: function () {
+                showMessage("Failed to update cart!", "error");
+            },
+        });
+    }
+
     function fetchCartDropdown() {
         $.ajax({
             url: "/cart/dropdown",
