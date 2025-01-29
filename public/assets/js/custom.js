@@ -824,7 +824,7 @@ $(document).ready(function () {
                     },
                 });
             },
-        });
+        });             
 
         $(document).on("click", ".badge_edit", function () {
             const addressId = $(this)
