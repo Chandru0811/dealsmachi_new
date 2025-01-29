@@ -43,6 +43,8 @@ class AuthController extends Controller
 
         if ($user && Auth::attempt($credentials)) {
             $token = $user->createToken('Personal Access Token')->accessToken;
+            $referreralCode = 'DMR500' . $user->id;
+            $success['referrer_code'] = $referreralCode;
             $success['token'] = $token;
             $success['userDetails'] =  $user;
 
@@ -60,6 +62,7 @@ class AuthController extends Controller
 
     public function register(Request $request)
     {
+        // dd($request->all());
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
             'email' => [
@@ -90,12 +93,12 @@ class AuthController extends Controller
 
         Auth::login($user);
 
-        $refferralCode = 'DMR500' . $user->id;
+        $referrerCode = 'DMR500' . $user->id;
 
         $token = $user->createToken('Personal Access Token')->accessToken;
         $success['token'] = $token;
         $success['userDetails'] =  $user;
-        $success['referral_code'] = $refferralCode;
+        $success['referrer_code'] = $referrerCode;
 
         return $this->success('Registered Successfully!', $success);
     }
