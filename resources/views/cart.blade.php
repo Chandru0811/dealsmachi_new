@@ -62,7 +62,7 @@
             @endphp
             <!-- Check if carts or cart->items are empty -->
             @if (!$cart || $cart->items->isEmpty())
-                            <div class="col-12 text-center d-flex flex-column align-items-center justify-content-center mt-0">
+                <div class="col-12 text-center d-flex flex-column align-items-center justify-content-center mt-0">
                     <img src="{{ asset('assets/images/home/cart_empty.webp') }}" alt="Empty Cart"
                         class="img-fluid empty_cart_img">
                     <p class="pt-5" style="color: #ff0060;font-size: 22px">Your Cart is Currently Empty</p>
@@ -71,7 +71,7 @@
                     <a href="/" class="btn showmoreBtn mt-2">Shop More</a>
                 </div>
             @else
-            @if($cart)
+                @if ($cart)
                     <div class="d-flex justify-content-between mb-3">
                         <h5>Your Cart <span style="color: #ff0060"> ({{ $cart->items->count() }})</span></h5>
                         <a href="/" class="text-decoration-none">
@@ -140,7 +140,7 @@
                                 @else
                                     <div class="d-flex">
                                         <div class="">
-                                            <img src="{{ asset('assets/images/home/delivery_icon.webp') }}" alt="icon"
+                                            <img src="{{ asset('assets/images/home/icon_delivery.svg') }}" alt="icon"
                                                 class="img-fluid" />
                                         </div> &nbsp;&nbsp;
                                         <div class="">
@@ -154,7 +154,7 @@
                                             </p>
                                         </div>
                                     </div>
-                                    <div>
+                                    <div style="ms-0">
                                         <span style="font-size:15px;text-decoration: line-through; color:#c7c7c7">
                                             ₹{{ number_format($product->original_price, 0) }}
                                         </span>
@@ -172,7 +172,7 @@
                         <div class="row d-flex align-items-center">
                             <div class="col-md-6">
                                 @if ($product->deal_type === 2)
-                                    <div class="d-flex align-items-start my-3">
+                                    <div class="d-flex align-items-start my-1 mb-3" style="padding-left:24px">
                                         {{-- <div class="d-flex flex-column me-3" style="width: 30%;">
                         <label for="service_date" class="form-label">Service Date</label>
                         <input type="date" id="service_date" name="service_date"
@@ -180,13 +180,13 @@
                             value="{{ $item->service_date }}" data-cart-id="{{ $cart->id }}"
                             data-product-id="{{ $product->id }}" min="{{ date('Y-m-d') }}">
                     </div> --}}
-                                        <div class="d-flex flex-column me-3" style="width: 30%;">
+                                        <div class="d-flex flex-column ms-0" style="width: 30%">
                                             <label for="service_date" class="form-label">Service Date</label>
                                             <input type="date" id="service_date" name="service_date"
                                                 class="form-control form-control-sm service-date"
                                                 data-cart-id="{{ $cart->id }}" data-product-id="{{ $product->id }}">
                                         </div>
-
+                                        &nbsp;&nbsp;
                                         <div class="d-flex flex-column" style="width: 30%;">
                                             <label for="service_time" class="form-label">Service Time</label>
                                             <input type="time" id="service_time" name="service_time"
@@ -196,8 +196,8 @@
                                         </div>
                                     </div>
                                 @else
-                                    <div class="d-flex align-items-center my-3">
-                                        <span class="me-2">Qty</span>
+                                    <div class="d-flex align-items-center my-1 mb-3" style="padding-left: 24px;">
+                                        <span>Qty</span> &nbsp;&nbsp;
                                         <button class="btn rounded btn-sm decrease-btn"
                                             data-cart-id="{{ $cart->id }}"
                                             data-product-id="{{ $product->id }}">-</button>
@@ -211,13 +211,13 @@
                                     </div>
                                 @endif
                             </div>
-                            <div class="col-md-6 d-flex justify-content-md-end">
+                            <div class="col-md-6 d-flex justify-content-md-end" style="padding-left: 24px">
                                 <div class="btn-group" role="group" aria-label="Basic example">
                                     <button type="submit" class="btn save-for-later-btn"
                                         style="color: #ff0060; border: none;" data-product-id="{{ $product->id }}">
-                                        <div class="d-inline-flex align-items-center gap-2">
+                                        <div class="d-inline-flex align-items-center gap-2 buy_later">
                                             <div>
-                                                <img src="{{ asset('assets/images/home/solar_pin-list.webp') }}"
+                                                <img src="{{ asset('assets/images/home/icon_save_later.svg') }}"
                                                     alt="icon" class="img-fluid" />
                                             </div>
                                             <div class="d-inline-flex align-items-center gap-2 buy-for-later-btn">
@@ -233,7 +233,7 @@
                                         data-cart-id="{{ $cart->id }}">
                                         <div class="d-inline-flex align-items-center gap-2">
                                             <div>
-                                                <img src="{{ asset('assets/images/home/trash_Icons.webp') }}"
+                                                <img src="{{ asset('assets/images/home/icon_delete.svg') }}"
                                                     alt="icon" class="img-fluid" />
                                             </div>
                                             <div class="d-inline-flex align-items-center gap-2">
@@ -264,10 +264,10 @@
                                 <p class="discount">-₹{{ number_format($total_discount, 0) }}</p>
                             </div>
                             <!-- <hr />
-                                                                                <div class="d-flex justify-content-between pb-3">
-                                                                                    <span>Total (x<span class="quantity-value">{{ $cart->quantity }}</span>)</span>
-                                                                                    <span class="total">${{ number_format($subtotal - $total_discount, 0) }}</span>
-                                                                                </div> -->
+                                                                                    <div class="d-flex justify-content-between pb-3">
+                                                                                        <span>Total (x<span class="quantity-value">{{ $cart->quantity }}</span>)</span>
+                                                                                        <span class="total">${{ number_format($subtotal - $total_discount, 0) }}</span>
+                                                                                    </div> -->
                         </div>
                     </div>
                     <div class="d-flex justify-content-between align-items-center py-3 mt-4"
@@ -303,7 +303,7 @@
         <div class="container mt-5">
             <hr>
             <div class="d-flex">
-                <div class="my-4"> <img src="{{ asset('assets/images/home/solar_pin-list.webp') }}" alt="icon"
+                <div class="my-4"> <img src="{{ asset('assets/images/home/icon_save_later.svg') }}" alt="icon"
                         class="img-fluid" />
                 </div> &nbsp;&nbsp;
                 <div class="my-4">
@@ -370,7 +370,7 @@
                                 {{ $savedItem->deal->shop->legal_name }}</p>
 
                             <div></div>
-                            <div>
+                            <div class="ms-0">
                                 <span style="font-size:15px;text-decoration: line-through; color:#c7c7c7">
                                     ₹{{ number_format($savedItem->deal->original_price, 0) }}
                                 </span>
@@ -384,29 +384,25 @@
                         </div>
                         <div class="col-md-4 d-flex flex-column justify-content-end align-items-end mb-3">
                             <div class="btn-group" role="group" aria-label="Basic example">
-                                    <button type="submit" class="btn remove-cart-btn removeSaveLater"
-                                        style="color: #ff0060;border: none"
-                                        data-product-id="{{ $savedItem->deal->id }}"
-                                         >
-                                        <div class="d-inline-flex align-items-center gap-2-2">
-                                            <div>
-                                                <img src="{{ asset('assets/images/home/trash_Icons.webp') }}"
-                                                    alt="icon" class="img-fluid" />
-                                            </div>
-                                            <div class="d-inline-flex align-items-center gap-2">
-                                                <span class="loader spinner-border spinner-border-sm"
-                                                    style="display: none"></span>
-                                                Remove
-                                            </div>
+                                <button type="submit" class="btn remove-cart-btn removeSaveLater"
+                                    style="color: #ff0060;border: none" data-product-id="{{ $savedItem->deal->id }}">
+                                    <div class="d-inline-flex align-items-center gap-2-2">
+                                        <div>
+                                            <img src="{{ asset('assets/images/home/icon_delete.svg') }}" alt="icon"
+                                                class="img-fluid" />
                                         </div>
-                                    </button>
+                                        <div class="d-inline-flex align-items-center gap-2">
+                                            <span class="loader spinner-border spinner-border-sm"
+                                                style="display: none"></span>
+                                            Remove
+                                        </div>
+                                    </div>
+                                </button>
                                 <button type="submit" class="btn  cancel-btn moveToCart"
-                                    style="color: #ff0060;border: none"
-                                     data-product-id="{{ $savedItem->deal->id }}"
-                                     >
+                                    style="color: #ff0060;border: none" data-product-id="{{ $savedItem->deal->id }}">
                                     <div class="d-inline-flex align-items-center gap-2">
                                         <div>
-                                            <img src="{{ asset('assets/images/home/delivery_icon.webp') }}"
+                                            <img src="{{ asset('assets/images/home/icon_delivery.svg') }}"
                                                 alt="icon" class="img-fluid" />
                                         </div>
                                         <div class="d-inline-flex align-items-center gap-2">

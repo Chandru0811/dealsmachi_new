@@ -11,12 +11,7 @@
         if (isset($order->items[0]->product->delivery_days, $order->created_at) && is_numeric($order->items[0]->product->delivery_days)) {
             $deliveryDays = (int) $order->items[0]->product->delivery_days;
 
-            $deliveryDate =
-                $deliveryDays > 0
-                    ? Carbon::parse($order->created_at)
-                        ->addDays($deliveryDays)
-                        ->format('d-m-Y')
-                    : null;
+            $deliveryDate = $deliveryDays > 0 ? Carbon::parse($order->created_at)->addDays($deliveryDays)->format('d-m-Y') : null;
         } else {
             $deliveryDays = 0;
             $deliveryDate = null;
@@ -27,116 +22,121 @@
     }
     ?>
 
-@if (session('status'))
-<div class="alert alert-dismissible fade show toast-success" role="alert"
-    style="position: fixed; top: 70px; right: 40px; z-index: 1050;">
-    <div class="toast-content">
-        <div class="toast-icon">
-            <i class="fa-solid fa-check-circle" style="color: #16A34A"></i>
+    @if (session('status'))
+        <div class="alert alert-dismissible fade show toast-success" role="alert"
+            style="position: fixed; top: 70px; right: 40px; z-index: 1050;">
+            <div class="toast-content">
+                <div class="toast-icon">
+                    <i class="fa-solid fa-check-circle" style="color: #16A34A"></i>
+                </div>
+                <span class="toast-text"> {!! nl2br(e(session('status'))) !!}</span>&nbsp;&nbsp;
+                <button class="toast-close-btn"data-bs-dismiss="alert" aria-label="Close">
+                    <i class="fa-solid fa-times" style="color: #16A34A"></i>
+                </button>
+            </div>
         </div>
-        <span class="toast-text"> {!! nl2br(e(session('status'))) !!}</span>&nbsp;&nbsp;
-        <button class="toast-close-btn"data-bs-dismiss="alert" aria-label="Close">
-            <i class="fa-solid fa-times" style="color: #16A34A"></i>
-        </button>
-    </div>
-</div>
-@endif
-@if ($errors->any())
-<div class="alert  alert-dismissible fade show toast-danger" role="alert"
-    style="position: fixed; top: 70px; right: 40px; z-index: 1050;">
-    <div class="toast-content">
-        <div class="toast-icon">
-            <i class="fa-solid fa-check-circle" style="color: #EF4444"></i>
+    @endif
+    @if ($errors->any())
+        <div class="alert  alert-dismissible fade show toast-danger" role="alert"
+            style="position: fixed; top: 70px; right: 40px; z-index: 1050;">
+            <div class="toast-content">
+                <div class="toast-icon">
+                    <i class="fa-solid fa-check-circle" style="color: #EF4444"></i>
+                </div>
+                <span class="toast-text">
+                    <ul class="mb-0">
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </span>&nbsp;&nbsp;
+                <button class="toast-close-btn"data-bs-dismiss="alert" aria-label="Close">
+                    <i class="fa-solid fa-xmark" style="color: #EF4444"></i>
+                </button>
+            </div>
         </div>
-        <span class="toast-text">
-            <ul class="mb-0">
-                @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
-        </span>&nbsp;&nbsp;
-        <button class="toast-close-btn"data-bs-dismiss="alert" aria-label="Close">
-            <i class="fa-solid fa-xmark" style="color: #EF4444"></i>
-        </button>
-    </div>
-</div>
-@endif
-@if (session('error'))
-<div class="alert  alert-dismissible fade show toast-danger" role="alert"
-    style="position: fixed; top: 70px; right: 40px; z-index: 1050;">
-    <div class="toast-content">
-        <div class="toast-icon">
-            <i class="fa-solid fa-check-circle" style="color: #EF4444"></i>
+    @endif
+    @if (session('error'))
+        <div class="alert  alert-dismissible fade show toast-danger" role="alert"
+            style="position: fixed; top: 70px; right: 40px; z-index: 1050;">
+            <div class="toast-content">
+                <div class="toast-icon">
+                    <i class="fa-solid fa-check-circle" style="color: #EF4444"></i>
+                </div>
+                <span class="toast-text">
+                    {{ session('error') }}
+                </span>&nbsp;&nbsp;
+                <button class="toast-close-btn"data-bs-dismiss="alert" aria-label="Close">
+                    <i class="fa-solid fa-xmark" style="color: #EF4444"></i>
+                </button>
+            </div>
         </div>
-        <span class="toast-text">
-            {{ session('error') }}
-        </span>&nbsp;&nbsp;
-        <button class="toast-close-btn"data-bs-dismiss="alert" aria-label="Close">
-            <i class="fa-solid fa-xmark" style="color: #EF4444"></i>
-        </button>
-    </div>
-</div>
-@endif
+    @endif
     @if ($order)
         <div class="container categoryIcons p-3">
             <div>
-                <div class="d-flex justify-content-between">
-                    <div class="d-flex align-items-center mb-4">
-                        <h4 class="text-dark order_id">
-                            Order Item ID: <span>{{ $order->items[0]->item_number ?? 'N/A' }}</span>&nbsp;
-                        </h4>
-                        <span class="badge_warning">
-                            {{ $order->payment_status === '1'
-                                ? 'Not Paid'
-                                : ($order->payment_status === '2'
-                                    ? 'Pending'
-                                    : ($order->payment_status === '3'
-                                        ? 'Paid'
-                                        : ($order->payment_status === '4'
-                                            ? 'Refund Initiated'
-                                            : ($order->payment_status === '5'
-                                                ? 'Refunded'
-                                                : ($order->payment_status === '6'
-                                                    ? 'Refund Error'
-                                                    : 'Unknown Status'))))) }}
-                        </span>
-                        <span class="{{ $order->order_type === 'service' ? 'badge_default' : 'badge_payment' }}">
-                            {{ $order->items[0]->deal_type == 1 ? 'Product' : ($order->items[0]->deal_type == 2 ? 'Service' : '') }}
-                        </span>
-                    </div>
-                    {{-- <a href="{{ route('order.invoice', $order->id) }}" class="text-decoration-none pe-2">
+                <div class="container">
+                    <div class="row justify-content-between align-items-center mb-2">
+                        <div class="col-12 col-md-auto d-flex align-items-center mb-3 mb-md-0 flex-wrap">
+                            <h4 class="text-dark order_id mb-0 me-2">
+                                Order Item ID: <span>{{ $order->items[0]->item_number ?? 'N/A' }}</span>
+                            </h4>
+                            <span class="badge_warning me-2">
+                                {{ $order->payment_status === '1'
+                                    ? 'Not Paid'
+                                    : ($order->payment_status === '2'
+                                        ? 'Pending'
+                                        : ($order->payment_status === '3'
+                                            ? 'Paid'
+                                            : ($order->payment_status === '4'
+                                                ? 'Refund Initiated'
+                                                : ($order->payment_status === '5'
+                                                    ? 'Refunded'
+                                                    : ($order->payment_status === '6'
+                                                        ? 'Refund Error'
+                                                        : 'Unknown Status'))))) }}
+                            </span>
+                            <span class="{{ $order->order_type === 'service' ? 'badge_default' : 'badge_payment' }}">
+                                {{ $order->items[0]->deal_type == 1 ? 'Product' : ($order->items[0]->deal_type == 2 ? 'Service' : '') }}
+                            </span>
+                        </div>
+                        {{-- <a href="{{ route('order.invoice', $order->id) }}" class="text-decoration-none pe-2">
             <button type="button" class="btn invoiceBtn" data-bs-toggle="tooltip" data-bs-placement="top"
                 title="Download Invoice"><i class="fa-solid fa-file-invoice"></i></button>
             </a> --}}
-                    @if (isset($order->items[0]->product) &&
-                            !($order->items[0]->product->active == 0 || $order->items[0]->product->deleted_at != null))
-                        @if ($order->items[0]->shop->deleted_at == null)
-                            <div class="d-flex gap-2">
-                                @if (isset($order->items[0]->product->slug) && $order->items[0]->product->slug)
-                                    <form action="{{ route('cart.add', ['slug' => $order->items[0]->product->slug]) }}"
-                                        method="POST">
-                                        @csrf
-                                        <input type="hidden" name="saveoption" id="saveoption" value="buy now">
-                                        <button type="submit" class="btn showmoreBtn">Order again</button>
-                                    </form>
-                                @endif
-                                <div>
-                                    <!-- Add Review Button -->
-                                    @if (!$orderReviewedByUser)
-                                        <button type="button" class="review_btn media_fonts_conent" data-bs-toggle="modal"
-                                            data-bs-target="#reviewModal">
-                                            Add Review
-                                        </button>
+                        @if (isset($order->items[0]->product) &&
+                                !($order->items[0]->product->active == 0 || $order->items[0]->product->deleted_at != null))
+                            @if ($order->items[0]->shop->deleted_at == null)
+                                <div class="col-12 col-md-auto d-flex flex-wrap gap-2">
+                                    @if (isset($order->items[0]->product->slug) && $order->items[0]->product->slug)
+                                        <form action="{{ route('cart.add', ['slug' => $order->items[0]->product->slug]) }}"
+                                            method="POST">
+                                            @csrf
+                                            <input type="hidden" name="saveoption" id="saveoption" value="buy now">
+                                            <button type="submit" class="btn showmoreBtn">Order again</button>
+                                        </form>
                                     @endif
+                                    <div>
+                                        <!-- Add Review Button -->
+                                        @if (!$orderReviewedByUser)
+                                            <button type="button" class="btn review_btn media_fonts_conent"
+                                                data-bs-toggle="modal" data-bs-target="#reviewModal">
+                                                Add Review
+                                            </button>
+                                        @endif
+                                    </div>
                                 </div>
-                            </div>
-                        @else
-                            <span></span>
+                            @endif
                         @endif
-                    @else
-                        <span></span>
-                    @endif
+                    </div>
+                    {{-- @else
+                    <span></span>
+                @endif
+            @else
+                <span></span>
+            @endif --}}
                 </div>
+
                 <div class="row">
                     {{-- Left Column: Order Item & Order Summary --}}
                     <div class="col-md-8">
@@ -220,7 +220,7 @@
                                                 </p>
                                                 @if ($item->deal_type === '1')
                                                     <div class="d-flex align-items-center">
-                                                        <img src="{{ asset('assets/images/home/delivery_icon.webp') }}"
+                                                        <img src="{{ asset('assets/images/home/icon_delivery.svg') }}"
                                                             alt="icon" class="img-fluid"
                                                             style="width:3%; height:3%;" />&nbsp;
                                                         Delivery Date:
@@ -503,10 +503,11 @@
                                 </span>
                             </div>
                             <input type="text" style="visibility: hidden" id="rating" name="rating" required />
-                            <div id="ratingError" class="error" style="display: none;" required>Please select a star rating.
+                            <div id="ratingError" class="error" style="display: none;" required>Please select a star
+                                rating.
                             </div>
                         </div>
-                        <input type="hidden"  name="product_id" id="product_id"
+                        <input type="hidden" name="product_id" id="product_id"
                             value="{{ $order->items[0]->product_id }}">
                         <!-- Title -->
                         <div class="mb-3">

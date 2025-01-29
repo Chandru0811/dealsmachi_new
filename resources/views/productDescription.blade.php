@@ -375,7 +375,7 @@
                                         src="{{ $firstImage ? asset($firstImage->path) : asset('assets/images/home/noImage.webp') }}" />
                                 </div>
                             </div>
-                            <div class="col-md-2 col-3"></div>
+                            <div class="col-md-2 col-3  d-none d-md-block"></div>
                             <div class="col-md-10 col-9 mt-3">
                                 <div class="add_cart_btns">
                                     <button class="btn cart_btn media_fonts_conent text-nowrap add-to-cart-btn"
@@ -405,7 +405,7 @@
                         <span class="details" style="position:fixed; top:180px"></span>
                         <div>
                             <div class="fst_rw d-flex align-items-center">
-                                <h2 class="d-flex text-start">
+                                <h2 class="d-flex text-start mb-0">
                                     {{ $product->name }}
                                 </h2>
                                 <p style="color: #000000" class="media_fonts_headings text-nowrap">
@@ -414,7 +414,7 @@
                                             <button type="button" class="bookmark-button remove-bookmark"
                                                 data-deal-id="{{ $product->id }}"
                                                 style="border: none; background: none; font-size:24px; padding: 20px 0 0 30px">
-                                                <p style="height: fit-content; cursor: pointer;" class="p-1 px-2"
+                                                <p style="height: fit-content; cursor: pointer;" class="p-1 px-2 mb-0"
                                                     data-bs-toggle="tooltip" data-bs-placement="top" title="Favourite">
                                                     <i class="fa-solid fa-heart bookmark-icon"
                                                         style="color: #ff0060;"></i>
@@ -424,7 +424,7 @@
                                             <button type="button" class="bookmark-button add-bookmark"
                                                 data-deal-id="{{ $product->id }}"
                                                 style="border: none; background: none; font-size:24px; padding: 20px 0 0 20px">
-                                                <p style="height: fit-content; cursor: pointer;" class="p-1 px-2"
+                                                <p style="height: fit-content; cursor: pointer;" class="p-1 px-2 mb-0"
                                                     data-bs-toggle="tooltip" data-bs-placement="top" title="Favourite">
                                                     <i class="fa-regular fa-heart bookmark-icon"
                                                         style="color: #ff0060;"></i>
@@ -590,94 +590,98 @@
                                 </div>
                             </div>
 
-                            {{-- seller Info  --}}
-                            <div class="seller-information mt-4">
-                                <h5 class="media_fonts_headings">Seller Information :</h5>
-                                <div class="card_offers">
-                                    <div class="d-flex justify-content-end align-items-end text-center my-2">
-                                        <a href="#" class="modal_links" data-bs-toggle="modal"
-                                            data-bs-target="#aboutModal">
-                                            <span>About</span>
-                                        </a>&nbsp;&nbsp;
-                                        <a href="#" class="modal_links" data-bs-toggle="modal"
-                                            data-bs-target="#workingHoursModal">
-                                            <span>Working Hours</span>
-                                        </a>
-                                    </div>
-                                    <div class="row m-0 p-3 space_ctrl">
-                                        <div class="col-12 space_ctrl">
-                                            <div class="row m-0 pb-3">
-                                                <div class="col-md-12 col-lg-6 col-12 space_ctrl">
-                                                    <div class="row m-0">
-                                                        <div class="col-2 pe-0">
-                                                            <i class="fa-solid fa-location-dot fa-lg"
-                                                                style="color: #ff0060;"></i>
-                                                        </div>
-                                                        @if ($product->shop->address)
-                                                            <div class="col-10 ps-2"
-                                                                style="font-size: 12px; color: #5C5C5C;">
-                                                                <a href="{{ $product->shop->map_url }}"
-                                                                    class="text-muted" target="_blank"
-                                                                    style="text-decoration: none;">
-                                                                    <p>{{ $product->shop->address }}<p>
-                                                                </a>
-                                                            </div>
-                                                        @else
-                                                            No Address Found
-                                                        @endif
-                                                    </div>
-                                                </div>
-                                                <div class="md-6 col-lg-6 col-12 space_ctrl">
-                                                    @if ($product->shop->mobile)
-                                                        <div class="row m-0">
-                                                            <div class="col-2 pe-0">
-                                                                <i class="fa-solid fa-phone fa-lg"
-                                                                    style="color: #ff0060;"></i>
-                                                            </div>
-                                                            <div class="col-10 ps-2"
-                                                                style="font-size: 18px; color: #5C5C5C;">
-                                                                <a href="{{ $product->shop->mobile }}"
-                                                                    class="text-decoration-none text-black"
-                                                                    data-full-number="{{ $product->shop->mobile }}"
-                                                                    data-masked-number="{{ substr($product->shop->mobile, 0, 4) . str_repeat('x', strlen($product->shop->mobile) - 4) }}"
-                                                                    onclick="toggleNumber(event)">
-                                                                    {{ substr($product->shop->mobile, 0, 4) . str_repeat('x', strlen($product->shop->mobile) - 4) }}
-                                                                </a>
-                                                            </div>
-                                                        </div>
-                                                    @else
-                                                    @endif
-                                                </div>
-                                            </div>
-                                            <div class="row mt-3 mb-3">
-                                                <div class="col-12 gap-3 sendEnquiry-des-btn">
-                                                    <button type="button" class="btn mb-2 sendEnqBtn text-nowrap"
-                                                        onclick="window.location.href='tel:{{ $product->shop->mobile }}'">
-                                                        <i class="fa-solid fa-phone fa-xs"></i>&nbsp;&nbsp;Call
-                                                    </button>&nbsp;&nbsp;&nbsp;
-                                                    <button type="button" class="btn mb-2 sendEnqBtn text-nowrap"
-                                                        data-bs-toggle="modal" data-bs-target="#enquiryModal">
-                                                        Send Enquiry
-                                                    </button>&nbsp;&nbsp;&nbsp;
-
-                                                    @if ($product->shop->mobile)
-                                                        <button type="button" class="btn mb-2 sendEnqBtn text-nowrap"
-                                                            onclick="sendEnquiry('{{ $product->id }}', '{{ $product->shop->mobile }}', '{{ $product->name }}', '{{ $product->description }}')">
-                                                            <i class="fa-brands fa-whatsapp"></i>&nbsp;&nbsp;Whatsapp
-                                                            Enquiry
-                                                        </button>
-                                                    @else
-                                                        <button type="button" class="btn mb-2 sendEnqBtn" disabled
-                                                            onclick="window.open('https://wa.me/91{{ $product->shop->mobile }}?text=Hello! I visited your website.', '_blank')">
-                                                            <i class="fa-brands fa-whatsapp"></i>&nbsp;&nbsp;Enquiry
-                                                        </button>
-                                                    @endif
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
+ {{-- seller Info  --}}
+ <div class="seller-information mt-4">
+    <h5 class="media_fonts_headings">Seller Information :</h5>
+    <div class="card_offers p-3">
+        <div class="d-flex justify-content-between align-items-center my-2 mb-3">
+            {{-- <a href="#" class="modal_links" data-bs-toggle="modal"
+                data-bs-target="#aboutModal">
+                <span>About</span>
+            </a>&nbsp;&nbsp; --}}
+            <h5 class="modal-title">{{ $product->shop->name }}</h5>
+            <a href="#" class="modal_links" data-bs-toggle="modal"
+                data-bs-target="#workingHoursModal">
+                <span>Working Hours</span>
+            </a>
+        </div>
+        <p class="quickInfo">{{ $product->shop->description }}</p>
+        {{-- <div class="row m-0 py-3 space_ctrl">
+            <h5 class="modal-title">{{ $product->shop->name }}</h5>
+            <p class="quickInfo">{{ $product->shop->description }}</p>
+            <div class="col-12 space_ctrl">
+                <div class="row m-0 pb-3">
+                    <div class="col-md-12 col-lg-6 col-12 space_ctrl">
+                        <div class="row m-0">
+                            <div class="col-2 pe-0">
+                                <i class="fa-solid fa-location-dot fa-lg"
+                                    style="color: #ff0060;"></i>
+                            </div>
+                            @if ($product->shop->address)
+                                <div class="col-10 ps-2"
+                                    style="font-size: 12px; color: #5C5C5C;">
+                                    <a href="{{ $product->shop->map_url }}"
+                                        class="text-muted" target="_blank"
+                                        style="text-decoration: none;">
+                                        <p>{{ $product->shop->address }}<p>
+                                    </a>
+                                </div>
+                            @else
+                                No Address Found
+                            @endif
+                        </div>
+                    </div>
+                    <div class="md-6 col-lg-6 col-12 space_ctrl">
+                        @if ($product->shop->mobile)
+                            <div class="row m-0">
+                                <div class="col-2 pe-0">
+                                    <i class="fa-solid fa-phone fa-lg"
+                                        style="color: #ff0060;"></i>
+                                </div>
+                                <div class="col-10 ps-2"
+                                    style="font-size: 18px; color: #5C5C5C;">
+                                    <a href="{{ $product->shop->mobile }}"
+                                        class="text-decoration-none text-black"
+                                        data-full-number="{{ $product->shop->mobile }}"
+                                        data-masked-number="{{ substr($product->shop->mobile, 0, 4) . str_repeat('x', strlen($product->shop->mobile) - 4) }}"
+                                        onclick="toggleNumber(event)">
+                                        {{ substr($product->shop->mobile, 0, 4) . str_repeat('x', strlen($product->shop->mobile) - 4) }}
+                                    </a>
                                 </div>
                             </div>
+                        @else
+                        @endif
+                    </div>
+                </div>
+                <div class="row mt-3 mb-3">
+                    <div class="col-12 gap-3 sendEnquiry-des-btn">
+                        <button type="button" class="btn mb-2 sendEnqBtn text-nowrap"
+                            onclick="window.location.href='tel:{{ $product->shop->mobile }}'">
+                            <i class="fa-solid fa-phone fa-xs"></i>&nbsp;&nbsp;Call
+                        </button>&nbsp;&nbsp;&nbsp;
+                        <button type="button" class="btn mb-2 sendEnqBtn text-nowrap"
+                            data-bs-toggle="modal" data-bs-target="#enquiryModal">
+                            Send Enquiry
+                        </button>&nbsp;&nbsp;&nbsp;
+
+                        @if ($product->shop->mobile)
+                            <button type="button" class="btn mb-2 sendEnqBtn text-nowrap"
+                                onclick="sendEnquiry('{{ $product->id }}', '{{ $product->shop->mobile }}', '{{ $product->name }}', '{{ $product->description }}')">
+                                <i class="fa-brands fa-whatsapp"></i>&nbsp;&nbsp;Whatsapp
+                                Enquiry
+                            </button>
+                        @else
+                            <button type="button" class="btn mb-2 sendEnqBtn" disabled
+                                onclick="window.open('https://wa.me/91{{ $product->shop->mobile }}?text=Hello! I visited your website.', '_blank')">
+                                <i class="fa-brands fa-whatsapp"></i>&nbsp;&nbsp;Enquiry
+                            </button>
+                        @endif
+                    </div>
+                </div>
+            </div>
+        </div>--}}
+    </div>
+</div>
 
                             {{-- specification  --}}
                             @if (!empty($product->specifications))

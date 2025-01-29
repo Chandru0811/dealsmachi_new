@@ -54,7 +54,7 @@
 
      {{-- social QR links  --}}
      <div>
-        <button type="button" class="social_links">
+        <button type="button" class="filter_social_links">
             <i class="fixex_icons fa-brands fa-facebook-f"
                 style="color:#fff; background: #1878f3;" aria-label="Facebook"
                 onmouseover="showDropdown('social_dropdown_fb')"
@@ -81,7 +81,7 @@
                 onmouseout="hideDropdown('social_dropdown_tg')"></i>
         </button>
 
-        <div id="social_dropdown_fb" class="dropdown_items dorp_fb" style="display: none">
+        <div id="social_dropdown_fb" class="filter_dropdown_items dorp_fb" style="display: none">
             <div class="card d-flex justify-content-center align-items-start"
                 style="border-radius: 10px;border: none">
                 <div class="row justify-content-center">
@@ -99,7 +99,7 @@
                 </div>
             </div>
         </div>
-        <div id="social_dropdown_ig" class="dropdown_items dorp_ig" style="display: none">
+        <div id="social_dropdown_ig" class="filter_dropdown_items dorp_ig" style="display: none">
             <div class="card d-flex justify-content-center align-items-start"
                 style="border-radius: 10px;border: none">
                 <div class="row justify-content-center">
@@ -117,7 +117,7 @@
                 </div>
             </div>
         </div>
-        <div id="social_dropdown_yt" class="dropdown_items dorp_yt" style="display: none">
+        <div id="social_dropdown_yt" class="filter_dropdown_items dorp_yt" style="display: none">
             <div class="card d-flex justify-content-center align-items-start"
                 style="border-radius: 10px;border: none">
                 <div class="row justify-content-center">
@@ -135,7 +135,7 @@
                 </div>
             </div>
         </div>
-        <div id="social_dropdown_wa" class="dropdown_items dorp_wa" style="display: none">
+        <div id="social_dropdown_wa" class="filter_dropdown_items dorp_wa" style="display: none">
             <div class="card d-flex justify-content-center align-items-start"
                 style="border-radius: 10px;border: none">
                 <div class="row justify-content-center">
@@ -153,7 +153,7 @@
                 </div>
             </div>
         </div>
-        <div id="social_dropdown_tg" class="dropdown_items dorp_tg" style="display: none">
+        <div id="social_dropdown_tg" class="filter_dropdown_items dorp_tg" style="display: none">
             <div class="card d-flex justify-content-center align-items-start"
                 style="border-radius: 10px;border: none">
                 <div class="row justify-content-center">
