@@ -188,6 +188,44 @@ Route::middleware('auth:api')->group(function () {
     Route::middleware('role:4')->prefix('referrer')->group(function () {
 
     });
+
+    //referrer and vendor
+    Route::middleware('role:5')->prefix('referrer-vendor')->group(function () {
+        Route::get('dashboard', [DashboardController::class, 'index']);
+        Route::post('dashboard', [DashboardController::class, 'graphdata']);
+
+        // Shops
+        Route::post('shopregistration', [AuthController::class, 'shopregistration']);
+        Route::get('shop/details/{id}', [ShopController::class, 'showshopdetails']);
+        Route::get('shop/location/{id}', [ShopController::class, 'showshoplocation']);
+        Route::get('shop/payment/{id}', [ShopController::class, 'showshoppayment']);
+        Route::put('shop/{id}/update/details', [ShopController::class, 'updateshopdetails']);
+        Route::put('shop/{id}/update/location', [ShopController::class, 'updateshoplocation']);
+        Route::put('shop/{id}/update/payment', [ShopController::class, 'updateshoppayment']);
+        Route::get('shop/hour/{shop_id}', [ShopController::class, 'showhour']);
+        Route::get('shop/policy/{shop_id}', [ShopController::class, 'showpolicy']);
+        Route::post('shop/policy/update', [ShopController::class, 'updateorcreatepolicy']);
+        Route::post('shop/hour/update', [ShopController::class, 'updateorcreatehour']);
+        Route::get('shop/status/{id}', [ShopController::class, 'status']);
+
+        // Product
+        Route::get('product/{shop_id}', [ProductController::class, 'index']);
+        Route::post('product', [ProductController::class, 'store']);
+        Route::post('product/restore/{id}', [ProductController::class, 'restore']);
+        Route::get('product/{id}/get', [ProductController::class, 'show']);
+        Route::put('product/{id}/update', [ProductController::class, 'update']);
+        Route::delete('product/{id}/delete', [ProductController::class, 'destroy']);
+        Route::delete('product/media/{id}/delete', [ProductController::class, 'destroyProductMedia']);
+
+        // Category Group and Categories
+        Route::get('categorygroups', [ProductController::class, 'getAllCategoryGroups']);
+        Route::get('categories/categorygroups/{id}', [ProductController::class, 'getAllCategoriesByCategoryGroupId']);
+        Route::post('categories/create', [ProductController::class, 'categoriesCreate']);
+
+        // Order
+        Route::get('orders/{shop_id}', [ShopController::class, 'getAllOrdersByShop']);
+        Route::get('order/{order_id}/{product_id}', [ShopController::class, 'showOrderById']);
+    });
 });
 
 // //Announcements
