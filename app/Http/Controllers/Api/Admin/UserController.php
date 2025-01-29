@@ -69,4 +69,29 @@ class UserController extends Controller
 
         return $this->success('Order Item Retrieved Successfully', $orderItem);
     }
+
+    public function getAllReferrersAndReferrerVendors()
+    {
+        $users = User::whereIn('type', ['referrer', 'referrer-vendor'])
+            ->orderBy('created_at', 'desc')
+            ->get(['id', 'name', 'type']);
+
+        return $this->success('Referrers and Referrer Vendors retrieved successfully.', $users);
+    }
+
+    public function getReferralsByUserId($userId)
+    {
+        $referralCode = 'DMR500' . $userId;
+
+        $referrals = User::where('referral_code', $referralCode)
+            ->orderBy('created_at', 'desc')
+            ->get(['id', 'name', 'referral_code', 'shop_id']);
+
+        if ($referrals->isEmpty()) {
+            return $this->error('No referrals found for this user.', [], 404);
+        }
+
+        return $this->success('Referral list retrieved successfully.', $referrals);
+    }
+
 }

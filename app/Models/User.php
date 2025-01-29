@@ -22,6 +22,8 @@ class User extends Authenticatable
         'email',
         'password',
         'role',
+        'referral_code',
+        'type',
         'google_id'
     ];
 
