@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::table('users', function (Blueprint $table) {
             $table->string('referral_code')->nullable()->after('email')->unique();
-            $table->string('referred_by')->nullable()->after('referral_code');
+            $table->string('type')->nullable()->after('referral_code');
         });
     }
 

@@ -85,7 +85,7 @@ class AuthController extends Controller
             'password' => bcrypt($request->password),
             'role' => $request->role,
             'referral_code' => $request->referral_code,
-            'referred_by' => $request->referred_by
+            'type' => $request->type
         ]);
 
         Auth::login($user);
