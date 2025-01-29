@@ -46,7 +46,7 @@ class AuthController extends Controller
             $success['token'] = $token;
             $success['userDetails'] =  $user;
 
-            if ($user->role == 3 || $user->role == 4) {
+            if ($user->role == 3) {
                 $message = "Welcome {$user->name}, You have successfully logged in. Grab the latest Dealslah offers now!";
             } else {
                 $message = 'LoggedIn Successfully!';
