@@ -62,7 +62,7 @@ Route::post('saveforlater/toCart', [CartController::class, 'moveToCart'])->name(
 Route::post('saveforlater/remove', [CartController::class, 'removeFromSaveLater'])->name('savelater.remove');
 Route::get('saveforlater/all', [CartController::class, 'getsaveforlater'])->name('savelater.index');
 Route::get('/privacyPolicy', function () {
-    return view('privacyPolicy');
+    return view('privacypolicy');
 });
 Route::get('/terms_conditions', function () {
     return view('termsandconditions');
@@ -106,3 +106,4 @@ Route::get('auth/google/callback', function () {
 //     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 // });
 require __DIR__ . '/auth.php';
+
