@@ -183,6 +183,11 @@ Route::middleware('auth:api')->group(function () {
         Route::put('/address/update/{id}', [AddressController::class, 'update']);
         Route::delete('/address/{id}', [AddressController::class, 'destroy']);
     });
+
+    //referrer
+    Route::middleware('role:4')->prefix('referrer')->group(function () {
+
+    });
 });
 
 // //Announcements

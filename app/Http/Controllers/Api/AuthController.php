@@ -46,7 +46,7 @@ class AuthController extends Controller
             $success['token'] = $token;
             $success['userDetails'] =  $user;
 
-            if ($user->role == 3) {
+            if ($user->role == 3 || $user->role == 4) {
                 $message = "Welcome {$user->name}, You have successfully logged in. Grab the latest Dealslah offers now!";
             } else {
                 $message = 'LoggedIn Successfully!';
@@ -83,14 +83,19 @@ class AuthController extends Controller
             'name' => $request->name,
             'email' => $request->email,
             'password' => bcrypt($request->password),
-            'role' => $request->role
+            'role' => $request->role,
+            'referral_code' => $request->referral_code,
+            'referred_by' => $request->referred_by
         ]);
 
         Auth::login($user);
 
+        $refferralCode = 'DMR500' . $user->id;
+
         $token = $user->createToken('Personal Access Token')->accessToken;
         $success['token'] = $token;
         $success['userDetails'] =  $user;
+        $success['referral_code'] = $refferralCode;
 
         return $this->success('Registered Successfully!', $success);
     }
