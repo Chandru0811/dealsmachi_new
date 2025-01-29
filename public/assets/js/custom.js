@@ -322,6 +322,9 @@ $(document).ready(function () {
                     required: true,
                     maxlength: 200,
                 },
+                last_name: {
+                    maxlength: 200,
+                },
                 email: {
                     required: true,
                     email: true,
@@ -341,6 +344,7 @@ $(document).ready(function () {
                 },
                 address: {
                     required: true,
+                    maxlength: 200,
                 },
                 state: {
                     required: true,
@@ -362,6 +366,9 @@ $(document).ready(function () {
                     required: "Please provide your first name.",
                     maxlength: "First name may not exceed 200 characters.",
                 },
+                last_name: {
+                    maxlength: "Last name may not exceed 200 characters.",
+                },
                 email: {
                     required: "Please provide an email address.",
                     email: "Please provide a valid email address.",
@@ -381,6 +388,7 @@ $(document).ready(function () {
                 },
                 address: {
                     required: "Please provide an address.",
+                    maxlength: "Address may not exceed 200 characters.",
                 },
                 state: {
                     required: "Please provide your State.",
@@ -391,7 +399,7 @@ $(document).ready(function () {
                     maxlength: "City may not exceed 200 characters.",
                 },
                 unit: {
-                    maxlength: "Additional Info may not exceed 255 characters.",
+                    maxlength: "Additional Info may not exceed 200 characters.",
                 },
             },
             errorPlacement: function (error, element) {
@@ -419,242 +427,26 @@ $(document).ready(function () {
                         if (response.success) {
                             $('#newAddressModal').modal('hide');
                             $('#addressNewForm')[0].reset();
-
+                            
+                            if (response.address.default === '1') {
+                                $('#addressID').val(response.address.id);
+                            } 
+                
                             if (response.address.default === '1') {
                                 var previousDefault = $('.allAddress .badge_primary').closest('.row');
                                 if (previousDefault.length > 0) {
                                     previousDefault.find('.badge_primary').remove();
                                     var oldAddressId = previousDefault.find('input[type=radio]').val();
                                     previousDefault.find('.delBadge').append(`
-                                        <button type="button" class="badge_del"data-bs-toggle="modal"
+                                        <button type="button" class="badge_del" data-bs-toggle="modal"
                                             data-bs-target="#deleteAddressModal" data-address-id="${oldAddressId}">
                                             Delete
                                         </button>
                                     `);
                                 }
                             }
-
+                
                             var finddiv = $('#myAddressModal').find('.allAddress');
-                            finddiv.append(`
-                            <div class="row p-2">
-                                <div class="col-10">
-                                    <div class="d-flex text-start">
-                                        <div class="px-1">
-                                            <input type="radio" name="selected_id"
-                                                id="selected_id_${response.address.id}"
-                                                value="${response.address.id}"
-                                                ${response.address.default === '1' ? 'checked' : ''} />
-                                        </div>
-                                        <p class="text-turncate fs_common">
-                                            <span class="px-2">
-                                                ${response.address.first_name} ${response.address.last_name} |
-                                                <span style="color: #c7c7c7;">&nbsp;+91
-                                                    ${response.address.phone}</span>
-                                            </span><br>
-                                            <span class="px-2"
-                                                style="color: #c7c7c7">${response.address.address}, ${response.address.city}, ${response.address.state} - ${response.address.postalcode}.</span>
-                                            <br>
-                                            ${response.address.default === '1' ? '<span class="badge badge_primary">Default</span>' : ''}
-                                        </p>
-                                    </div>
-                                </div>
-                                <div class="col-2">
-                                    <div class="d-flex align-items-center justify-content-end">
-                                        <div class="d-flex gap-2 delBadge">
-                                            <button type="button" class="badge_edit" data-bs-toggle="modal"
-                                                data-address-id="${address.id}" data-bs-target="#editAddressModal">
-                                                Edit
-                                            </button>
-                                            ${response.address.default === '0' ? `
-                                                <button type="button" class="badge_del"
-                                                    data-bs-toggle="modal"
-                                                    data-bs-target="#deleteAddressModal"
-                                                    data-address-id="${response.address.id}">
-                                                    Delete
-                                                </button>` : ''}
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            `);
-                            if (response.address.default === '1') {
-                                $('.modal-body p strong:contains("Phone :")').parent().html(`
-                                    <strong>Phone :</strong> (+91) ${response.address.phone || '--'}
-                                `);
-                                var profileAddress = `
-                                    <p>
-                                        <strong>${response.address.first_name} ${response.address.last_name} (+91)
-                                            ${response.address.phone}</strong>&nbsp;&nbsp;<br>
-                                        ${response.address.address}, ${response.address.city}, ${response.address.state} - ${response.address.postalcode}
-                                        <span>
-                                            <span class="badge badge_danger py-1">Default</span>&nbsp;&nbsp;
-                                        </span>
-                                    </p>
-                                `;
-                                $('.selected-address').html(profileAddress);
-                                $('.defaultAddress .primary_new_btn').hide();
-                                if ($('.defaultAddress .badge_infos').length === 0) {
-                                    $('.defaultAddress').append(`
-                                        <span class="badge badge_infos py-1" data-bs-toggle="modal" data-bs-target="#myAddressModal">Change</span>
-                                    `);
-                                }
-                            }
-                            $('#myAddressModal').modal('show');
-                            showMessage(response.message, 'success');
-                        } else {
-                            showMessage(response.message, 'error');
-                        }
-                    },
-                    error: function (xhr, status, error) {
-                        showMessage('There was an issue with the request. Please try again.', 'error');
-                    }
-                });
-            },
-        });
-
-        $('#newAddressModal').on('hidden.bs.modal', function () {
-            $('#addressNewForm')[0].reset();
-            $('#addressNewForm').find('.is-invalid').removeClass('is-invalid');
-            $('#addressNewForm').find('label.error').remove();
-        });
-
-        $('#editAddressModal').on('hidden.bs.modal', function () {
-            $('#addressEditForm')[0].reset();
-            $('#addressEditForm').find('.is-invalid').removeClass('is-invalid');
-            $('#addressEditForm').find('label.error').remove();
-        });
-
-        $('.btn-close').on('click', function () {
-            $('#addressNewForm')[0].reset();
-            $('#addressNewForm').find('.is-invalid').removeClass('is-invalid');
-            $('#addressNewForm').find('label.error').remove();
-            $('#addressEditForm')[0].reset();
-            $('#addressEditForm').find('.is-invalid').removeClass('is-invalid');
-            $('#addressEditForm').find('label.error').remove();
-        });
-
-        // Validation for New Address Form
-        $("#addressEditForm").validate({
-            rules: {
-                first_name: {
-                    required: true,
-                    maxlength: 200,
-                },
-                email: {
-                    required: true,
-                    email: true,
-                    maxlength: 200,
-                },
-                phone: {
-                    required: true,
-                    digits: true,
-                    maxlength: 10,
-                },
-                postalcode: {
-                    required: true,
-                    digits: true,
-                    minlength: 6,
-                    maxlength: 6,
-                },
-                address: {
-                    required: true,
-                },
-                state: {
-                    required: true,
-                    maxlength: 200,
-                },
-                city: {
-                    required: true,
-                    maxlength: 200,
-                },
-                type: {
-                    required: true,
-                },
-                unit: {
-                    maxlength: 255,
-                },
-            },
-            messages: {
-                first_name: {
-                    required: "Please provide your first name.",
-                    maxlength: "First name may not exceed 200 characters.",
-                },
-                email: {
-                    required: "Please provide an email address.",
-                    email: "Please provide a valid email address.",
-                    maxlength: "Email may not exceed 200 characters.",
-                },
-                phone: {
-                    required: "Please provide a phone number.",
-                    digits: "Phone number must be exactly 8 digits.",
-                    maxlength: "Phone number must be exactly 10 digits.",
-                },
-                postalcode: {
-                    required: "Please provide a postal code.",
-                    digits: "Postal code must be exactly 6 digits.",
-                    minlength: "Postal code must be exactly 6 digits.",
-                    maxlength: "Postal code must be exactly 6 digits.",
-                },
-                address: {
-                    required: "Please provide an address.",
-                },
-                type: {
-                    required: "Please provide the address type.",
-                },
-                state: {
-                    required: "Please provide your State.",
-                    maxlength: "State may not exceed 200 characters.",
-                },
-                city: {
-                    required: "Please provide your City.",
-                    maxlength: "City may not exceed 200 characters.",
-                },
-                unit: {
-                    maxlength: "Additional Info may not exceed 255 characters.",
-                },
-            },
-            errorPlacement: function (error, element) {
-                error.addClass("text-danger mt-1");
-                error.insertAfter(element);
-            },
-            highlight: function (element) {
-                $(element).addClass("is-invalid");
-            },
-            unhighlight: function (element) {
-                $(element).removeClass("is-invalid");
-            },
-            submitHandler: function (form) {
-                var formData = new FormData(form);
-                var isDefault = $('#default_address').prop('checked') ? 1 : 0;
-                formData.append('default', isDefault);
-
-                $.ajax({
-                    url: $(form).attr('action'),
-                    type: 'POST',
-                    data: formData,
-                    processData: false,
-                    contentType: false,
-                    success: function (response) {
-                        if (response.success) {
-                            $('#editAddressModal').modal('hide');
-                            $('#addressEditForm')[0].reset();
-
-                            if (response.address.default === '1') {
-                                var previousDefault = $('.allAddress .badge_primary').closest('.row');
-                                if (previousDefault.length > 0) {
-                                    previousDefault.find('.badge_primary').remove();
-                                    var oldAddressId = previousDefault.find('input[type=radio]').val();
-                                    previousDefault.find('.delBadge').append(`
-                                        <button type="button" class="badge_del"data-bs-toggle="modal"
-                                            data-bs-target="#deleteAddressModal" data-address-id="${oldAddressId}">
-                                            Delete
-                                        </button>
-                                    `);
-                                }
-                            }
-
-                            var finddiv = $('#myAddressModal').find('.allAddress');
-                            finddiv.find(`#selected_id_${response.address.id}`).closest('.row').remove();
                             finddiv.append(`
                                 <div class="row p-2">
                                     <div class="col-10">
@@ -680,9 +472,273 @@ $(document).ready(function () {
                                     </div>
                                     <div class="col-2">
                                         <div class="d-flex align-items-center justify-content-end">
+                                            <div class="d-flex gap-2 delBadge">
+                                                <button type="button" class="badge_edit" data-bs-toggle="modal"
+                                                    data-address-id="${response.address.id}" data-bs-target="#editAddressModal">
+                                                    Edit
+                                                </button>
+                                                ${response.address.default === '0' ? `
+                                                    <button type="button" class="badge_del"
+                                                        data-bs-toggle="modal"
+                                                        data-bs-target="#deleteAddressModal"
+                                                        data-address-id="${response.address.id}">
+                                                        Delete
+                                                    </button>` : ''}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            `);
+                            if (response.address.default === '1') {
+                                $('.modal-body p strong:contains("Phone :")').parent().html(`
+                                    <strong>Phone :</strong> (+91) ${response.address.phone || '--'}
+                                `);
+                                var profileAddress = `
+                                    <p>
+                                        <strong>${response.address.first_name} ${response.address.last_name} (+91)
+                                            ${response.address.phone}</strong>&nbsp;&nbsp;<br>
+                                        ${response.address.address}, ${response.address.city}, ${response.address.state} - ${response.address.postalcode}
+                                        <span>
+                                            <span class="badge badge_danger py-1">Default</span>&nbsp;&nbsp;
+                                        </span>
+                                    </p>
+                                `;
+                                $('.selected-address').html(profileAddress);
+                                $('.defaultAddress .primary_new_btn').hide();
+                                if ($('.defaultAddress .badge_infos').length === 0) {
+                                    $('.defaultAddress').append(`
+                                        <span class="badge badge_infos py-1" data-bs-toggle="modal" data-bs-target="#myAddressModal">Change</span>
+                                    `);
+                                }
+                            }
+                            $('#myAddressModal').modal('show');
+
+                            if ($('#cartCheckoutForm').length === 0) {
+                                var cartId = $('#moveCartToCheckout').data('cart-id');
+                                if ($('#moveCartToCheckout').length) {
+                                    $('#moveCartToCheckout').hide();
+                                    $('#moveCartToCheckout').after(`
+                                        <form action="/cartCheckout" method="POST" id="cartCheckoutForm">
+                                            <input type="hidden" name="_token" value="${$('meta[name="csrf-token"]').attr('content')}">
+                                            <input type="hidden" name="cart_id"  value="${cartId}">
+                                            <input type="hidden" name="address_id" id="addressID" value="${response.address.id}">
+                                            <button type="submit" class="btn check_out_btn">
+                                                Checkout
+                                            </button>
+                                        </form>
+                                    `);
+                                }
+                            }
+
+                            if ($('#summaryCheckoutForm').length === 0) {
+                                var cartId = $('#moveToCheckout').data('cart-id');
+                                var productsId = $('#moveToCheckout').data('products-id');
+                                if ($('#moveToCheckout').length) {
+                                    $('#moveToCheckout').hide();
+                                    $('#moveToCheckout').after(`
+                                        <form action="/cartCheckout" method="POST" id="summaryCheckoutForm">
+                                            <input type="hidden" name="_token" value="${$('meta[name="csrf-token"]').attr('content')}">
+                                            <input type="hidden" id="all_products_to_buy" name="all_products_to_buy" value="${productsId}">
+                                            <input type="hidden" name="cart_id"  value="${cartId}">
+                                            <input type="hidden" name="address_id" id="addressID" value="${response.address.id}">
+                                            <button type="submit" class="btn check_out_btn">
+                                                Checkout
+                                            </button>
+                                        </form>
+                                    `);
+                                }
+                            }
+                    
+                            showMessage(response.message, 'success');
+                        } else {
+                            showMessage(response.message, 'error');
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        showMessage('There was an issue with the request. Please try again.', 'error');
+                    }
+                });
+            },
+        });
+
+        $('#newAddressModal').on('hidden.bs.modal', function () {
+            $('#addressNewForm')[0].reset();
+            $('#addressNewForm').find('.is-invalid').removeClass('is-invalid');
+            $('#addressNewForm').find('label.error').remove();
+        });
+
+        $('#editAddressModal').on('hidden.bs.modal', function () {
+            $('#addressEditForm')[0].reset();
+            $('#addressEditForm').find('.is-invalid').removeClass('is-invalid');
+            $('#addressEditForm').find('label.error').remove();
+        });
+        
+        $('.btn-close').on('click', function () {
+            $('#addressNewForm')[0].reset();
+            $('#addressNewForm').find('.is-invalid').removeClass('is-invalid');
+            $('#addressNewForm').find('label.error').remove();
+            $('#addressEditForm')[0].reset();
+            $('#addressEditForm').find('.is-invalid').removeClass('is-invalid');
+            $('#addressEditForm').find('label.error').remove();
+        });
+
+        // Validation for New Address Form
+        $("#addressEditForm").validate({
+            rules: {
+                first_name: {
+                    required: true,
+                    maxlength: 200,
+                },
+                last_name: {
+                    maxlength: 200,
+                },
+                email: {
+                    required: true,
+                    email: true,
+                    maxlength: 200,
+                },
+                phone: {
+                    required: true,
+                    digits: true,
+                    maxlength: 10,
+                },
+                postalcode: {
+                    required: true,
+                    digits: true,
+                    minlength: 6,
+                    maxlength: 6,
+                },
+                address: {
+                    required: true,
+                    maxlength: 200,
+                },
+                state: {
+                    required: true,
+                    maxlength: 200,
+                },
+                city: {
+                    required: true,
+                    maxlength: 200,
+                },
+                type: {
+                    required: true,
+                },
+                unit: {
+                    maxlength: 200,
+                },
+            },
+            messages: {
+                first_name: {
+                    required: "Please provide your first name.",
+                    maxlength: "First name may not exceed 200 characters.",
+                },
+                last_name: {
+                    maxlength: "Last name may not exceed 200 characters.",
+                },
+                email: {
+                    required: "Please provide an email address.",
+                    email: "Please provide a valid email address.",
+                    maxlength: "Email may not exceed 200 characters.",
+                },
+                phone: {
+                    required: "Please provide a phone number.",
+                    digits: "Phone number must be exactly 8 digits.",
+                    maxlength: "Phone number must be exactly 10 digits.",
+                },
+                postalcode: {
+                    required: "Please provide a postal code.",
+                    digits: "Postal code must be exactly 6 digits.",
+                    minlength: "Postal code must be exactly 6 digits.",
+                    maxlength: "Postal code must be exactly 6 digits.",
+                },
+                address: {
+                    required: "Please provide an address.",
+                    maxlength: "Address may not exceed 200 characters.",
+                },
+                type: {
+                    required: "Please provide the address type.",
+                },
+                state: {
+                    required: "Please provide your State.",
+                    maxlength: "State may not exceed 200 characters.",
+                },
+                city: {
+                    required: "Please provide your City.",
+                    maxlength: "City may not exceed 200 characters.",
+                },
+                unit: {
+                    maxlength: "Additional Info may not exceed 200 characters.",
+                },
+            },
+            errorPlacement: function (error, element) {
+                error.addClass("text-danger mt-1");
+                error.insertAfter(element);
+            },
+            highlight: function (element) {
+                $(element).addClass("is-invalid");
+            },
+            unhighlight: function (element) {
+                $(element).removeClass("is-invalid");
+            },
+            submitHandler: function (form) {
+                var formData = new FormData(form);
+                var isDefault = $('#default_address').prop('checked') ? 1 : 0;
+                formData.append('default', isDefault);
+            
+                $.ajax({
+                    url: $(form).attr('action'),
+                    type: 'POST',
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: function (response) {
+                        if (response.success) {
+                            $('#editAddressModal').modal('hide');
+                            $('#addressEditForm')[0].reset();
+            
+                            if (response.address.default === '1') {
+                                var previousDefault = $('.allAddress .badge_primary').closest('.row');
+                                if (previousDefault.length > 0) {
+                                    previousDefault.find('.badge_primary').remove();
+                                    var oldAddressId = previousDefault.find('input[type=radio]').val();
+                                    previousDefault.find('.delBadge').append(`
+                                        <button type="button" class="badge_del" data-bs-toggle="modal"
+                                            data-bs-target="#deleteAddressModal" data-address-id="${oldAddressId}">
+                                            Delete
+                                        </button>
+                                    `);
+                                }
+                            }
+            
+                            var finddiv = $('#myAddressModal').find('.allAddress');
+                            finddiv.find(`#selected_id_${response.address.id}`).closest('.row').remove();
+                            finddiv.append(`
+                                <div class="row p-2">
+                                    <div class="col-10">
+                                        <div class="d-flex text-start">
+                                            <div class="px-1">
+                                                <input type="radio" name="selected_id"
+                                                    id="selected_id_${response.address.id}"
+                                                    value="${response.address.id}"
+                                                    ${response.address.default === '1' ? 'checked' : ''} />
+                                            </div>
+                                            <p class="text-turncate fs_common">
+                                                <span class="px-2">
+                                                    ${response.address.first_name} ${response.address.last_name} |
+                                                    <span style="color: #c7c7c7;">&nbsp;+91 ${response.address.phone}</span>
+                                                </span><br>
+                                                <span class="px-2"
+                                                    style="color: #c7c7c7">${response.address.address}, ${response.address.city}, ${response.address.state} - ${response.address.postalcode}.</span>
+                                                <br>
+                                                ${response.address.default === '1' ? '<span class="badge badge_primary">Default</span>' : ''}
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div class="col-2">
+                                        <div class="d-flex align-items-center justify-content-end">
                                             <div class="d-flex gap-2">
                                                 <button type="button" class="badge_edit" data-bs-toggle="modal"
-                                                    data-address-id="${address.id}" data-bs-target="#editAddressModal">
+                                                    data-address-id="${response.address.id}" data-bs-target="#editAddressModal">
                                                     Edit
                                                 </button>
                                                 <button type="button" class="badge_del"
@@ -697,22 +753,24 @@ $(document).ready(function () {
                                     </div>
                                 </div>
                             `);
-
+            
                             if (response.address.default === '1') {
                                 $('.modal-body p strong:contains("Phone :")').parent().html(`
                                     <strong>Phone :</strong> (+91) ${response.address.phone || '--'}
                                 `);
                                 $('.selected-address').html(`
-                                <p>
-                                    <strong>${response.address.first_name} ${response.address.last_name} (+91)
-                                        ${response.address.phone}</strong>&nbsp;&nbsp;<br>
-                                    ${response.address.address}, ${response.address.city}, ${response.address.state} - ${response.address.postalcode}
-                                    <span>
-                                        <span class="badge badge_danger py-1">Default</span>&nbsp;&nbsp;
-                                    </span>
-                                </p>
-                            `);
+                                    <p>
+                                        <strong>${response.address.first_name} ${response.address.last_name} (+91)
+                                            ${response.address.phone}</strong>&nbsp;&nbsp;<br>
+                                        ${response.address.address}, ${response.address.city}, ${response.address.state} - ${response.address.postalcode}
+                                        <span>
+                                            <span class="badge badge_danger py-1">Default</span>&nbsp;&nbsp;
+                                        </span>
+                                    </p>
+                                `);
                             }
+            
+                            // Show the updated address modal
                             $('#myAddressModal').modal('show');
                             showMessage(response.message, 'success');
                         } else {
@@ -772,18 +830,17 @@ $(document).ready(function () {
             }
         }
 
-        // Delete Address Functionality
         $(document).ready(function () {
             var addressIdToDelete = null;
-
+        
             $(document).on('click', '.badge_del', function () {
                 addressIdToDelete = $(this).data('address-id');
                 $('#deleteAddressModal').modal('show');
             });
-
+        
             $('#confirmDeleteBtn').click(function () {
                 if (!addressIdToDelete) return;
-
+        
                 $.ajax({
                     url: `/address/${addressIdToDelete}`,
                     type: 'DELETE',
@@ -797,6 +854,9 @@ $(document).ready(function () {
                             $('#myAddressModal').modal('show');
                             showMessage(response.message, 'success');
                             addressIdToDelete = null;
+        
+                            // Check if the deleted address was the selected address and update
+                            updateSelectedAddressAfterDelete();
                         } else {
                             showMessage(response.message, 'error');
                         }
@@ -806,56 +866,73 @@ $(document).ready(function () {
                     }
                 });
             });
-        });
-
-        $('#confirmAddressBtn').on('click', function(e) {
-            e.preventDefault();
-
-            let selectedId = $('input[name="selected_id"]:checked').val();
-
-            if (!selectedId) {
-                alert('Please select an address.');
-                return;
-            }
-
-            $.ajax({
-                url: "/selectaddress",
-                method: "POST",
-                data: {
-                    _token: $('meta[name="csrf-token"]').attr('content'),
-                    selected_id: selectedId
-                },
-                success: function(response) {
-                    if (response.success) {
-                        $('#myAddressModal').modal('hide');
-
-                        updateSelectedAddress(response.selectedAddress);
-                    } else {
-                        alert(response.message || 'An error occurred.');
+        
+            $('#confirmAddressBtn').on('click', function(e) {
+                e.preventDefault();
+        
+                let selectedId = $('input[name="selected_id"]:checked').val();
+        
+                $('#addressErrorMessage').remove();
+        
+                if (!selectedId) {
+                    $('#myAddressModal .modal-body').prepend('<div id="addressErrorMessage" class="text-danger">Please select an address.</div>');
+                    return;
+                }
+        
+                $.ajax({
+                    url: "/selectaddress",
+                    method: "POST",
+                    data: {
+                        _token: $('meta[name="csrf-token"]').attr('content'),
+                        selected_id: selectedId
+                    },
+                    success: function(response) {
+                        if (response.success) {
+                            $('#myAddressModal').modal('hide');
+                            updateSelectedAddress(response.selectedAddress);
+                        } else {
+                            alert(response.message || 'An error occurred.');
+                        }
+                    },
+                    error: function(xhr) {
+                        alert(xhr.responseJSON.message || 'An error occurred.');
                     }
-                },
-                error: function(xhr) {
-                    alert(xhr.responseJSON.message || 'An error occurred.');
+                });
+            });
+        
+            $('input[name="selected_id"]').on('change', function() {
+                if ($('input[name="selected_id"]:checked').val()) {
+                    $('#addressErrorMessage').remove();
                 }
             });
-        });
-
-        function updateSelectedAddress(address) {
-            if (address) {
-                const addressHtml = `
-                    <strong>${address.first_name} ${address.last_name ?? ''} (+91) ${address.phone}</strong><br>
-                    ${address.address} - ${address.postalcode}
-                    ${address.default ? '<span class="badge badge_danger py-1">Default</span>' : ''}
-                `;
-                $('#addressID').val(address.id);
-
-                $('.selected-address').html(addressHtml);
-
-                const changeBtnHtml = `<span class="badge badge_infos py-1" data-bs-toggle="modal" data-bs-target="#myAddressModal">Change</span>`;
-                $('.change-address-btn').html(changeBtnHtml);
+            
+        
+            function updateSelectedAddress(address) {
+                if (address) {
+                    const addressHtml = `
+                        <strong>${address.first_name} ${address.last_name ?? ''} (+91) ${address.phone}</strong><br>
+                        ${address.address} - ${address.postalcode}
+                        ${address.default ? '<span class="badge badge_danger py-1">Default</span>' : ''}
+                    `;
+                    $('#addressID').val(address.id);
+                    $('.selected-address').html(addressHtml);
+        
+                    const changeBtnHtml = `<span class="badge badge_infos py-1" data-bs-toggle="modal" data-bs-target="#myAddressModal">Change</span>`;
+                    $('.change-address-btn').html(changeBtnHtml);
+                }
             }
-        }
-
+        
+            function updateSelectedAddressAfterDelete() {
+                $.get('/addresses', function (addresses) {
+                    const defaultAddress = addresses.find(address => address.default === 1);
+        
+                    if (defaultAddress) {
+                        updateSelectedAddress(defaultAddress);
+                    }
+                });
+            }
+        });
+        
         function showMessage(message, type) {
             var textColor, icon;
 
@@ -888,7 +965,7 @@ $(document).ready(function () {
             $("body").append(alertHtml);
             setTimeout(function () {
                 $(".alert").alert("close");
-            }, 5000);
+            }, 1000);
         }
     });
 });

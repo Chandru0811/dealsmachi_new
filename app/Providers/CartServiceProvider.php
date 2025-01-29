@@ -37,18 +37,14 @@ class CartServiceProvider extends ServiceProvider
                 $cart = Cart::where('ip_address', request()->ip())->first();
             }
 
-            
-
             if ($cart) {
                 $cartItemCount = $cart->items()
-                                      ->whereHas('product', function ($query) {
-                                          $query->where('active', 1)
-                                                ->whereNull('deleted_at');
-                                      })
-                                      ->count();
+                    ->whereHas('product', function ($query) {
+                        $query->where('active', 1)
+                            ->whereNull('deleted_at');
+                    })
+                    ->count();
             }
-
-            
 
             $view->with('cartItemCount', $cartItemCount);
         });

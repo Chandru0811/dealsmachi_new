@@ -37,12 +37,12 @@ class AppServiceProvider extends ServiceProvider
             }
 
             $carts = $carts->with(['items.product.shop', 'items.product.productMedia'])
-                ->get();
+                ->first();
 
             // Cleanup invalid items for each cart
-            $carts->each(function ($cart) {
-                CartHelper::cleanUpCart($cart);
-            });
+            if ($carts) {
+                CartHelper::cleanUpCart($carts);
+            }
 
             $address = Address::where('user_id', Auth::id())->get();
 

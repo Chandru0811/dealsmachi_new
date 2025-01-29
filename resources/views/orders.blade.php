@@ -113,7 +113,7 @@
                                                 <div class="d-flex mt-3 mb-3">
                                                     <p class="mt-1 mb-0">Quantity : {{ $item->quantity }}</p>
                                                     &nbsp;&nbsp;&nbsp;<div class="">
-                                                        <img src="{{ asset('assets/images/home/delivery_icon.webp') }}"
+                                                        <img src="{{ asset('assets/images/home/icon_delivery.svg') }}"
                                                             alt="icon" class="img-fluid" />
                                                     </div> &nbsp;&nbsp;
                                                     <p class="mt-1 mb-0">Delivery Date:

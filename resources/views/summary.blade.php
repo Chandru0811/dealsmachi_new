@@ -424,7 +424,7 @@
                 </form>
             @else
                 <a href="#" onclick="checkAddressAndOpenModal()" class="btn check_out_btn" data-bs-toggle="modal"
-                    data-bs-target="#newAddressModal">
+                    data-bs-target="#newAddressModal" data-cart-id="{{ $carts->id }}" data-products-id="{{ json_encode($products->pluck('id')) }}" id="moveToCheckout">
                     Checkout
                 </a>
             @endif

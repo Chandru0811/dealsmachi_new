@@ -283,12 +283,12 @@ class CartController extends Controller
             $carts = $carts->orWhere('customer_id', Auth::id());
         }
 
-        $carts = $carts->with(['items.product.productMedia'])->get();
+        $carts = $carts->with(['items.product.productMedia'])->first();
 
         // Cleanup invalid items for each cart
-        $carts->each(function ($cart) {
-            $this->cleanUpCart($cart);
-        });
+        if ($carts) {
+            $this->cleanUpCart($carts);
+        }
 
         $html = view('nav.cartdropdown', compact('carts'))->render();
 

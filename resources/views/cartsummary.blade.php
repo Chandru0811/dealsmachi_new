@@ -137,7 +137,7 @@ use Carbon\Carbon;
                             @endphp
                             @if ($product->deal_type == 1)
                             <div class="rating my-2">
-                                <img src="{{ asset('assets/images/home/delivery_icon.webp') }}" alt="icon"
+                                <img src="{{ asset('assets/images/home/icon_delivery.svg') }}" alt="icon"
                                     class="img-fluid" /> &nbsp;
                                 <span>Delivery Date :</span><span class="stars">
                                     <span>
@@ -235,8 +235,8 @@ use Carbon\Carbon;
                         </button>
                     </form>
                     @else
-                    <a href="#" class="btn check_out_btn" data-bs-toggle="modal"
-                        data-bs-target="#newAddressModal" onclick="checkAddressAndOpenModal()">
+                    <a href="#" class="btn check_out_btn" data-bs-toggle="modal" id="moveCartToCheckout"
+                        data-bs-target="#newAddressModal" data-cart-id="{{ $carts->id }}" onclick="checkAddressAndOpenModal()">
                         Checkout
                     </a>
                     @endif
