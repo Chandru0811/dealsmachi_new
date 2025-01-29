@@ -668,7 +668,7 @@
                                                         </button>
                                                     @else
                                                         <button type="button" class="btn mb-2 sendEnqBtn" disabled
-                                                            onclick="window.open('https://wa.me/65{{ $product->shop->mobile }}?text=Hello! I visited your website.', '_blank')">
+                                                            onclick="window.open('https://wa.me/91{{ $product->shop->mobile }}?text=Hello! I visited your website.', '_blank')">
                                                             <i class="fa-brands fa-whatsapp"></i>&nbsp;&nbsp;Enquiry
                                                         </button>
                                                     @endif
@@ -773,21 +773,21 @@
                                 <div class="d-flex align-items-center">
                                     <h5>Total score :</h5>
                                     &nbsp;&nbsp;
-                                    <h2 class="average-rating me-2 d-flex align-items-center" style="color:#40d128">
+                                    <h2 class="average-rating me-2 d-flex align-items-center" style="color:#40d128;">
                                         {{ $averageRating }}
                                         @php
                                             $fullStars = floor($averageRating);
                                             $hasHalfStar = $averageRating - $fullStars >= 0.5;
                                         @endphp
                                         @for ($i = 1; $i <= $fullStars; $i++)
-                                            <i class="fa-solid fa-star fa-lg" style="color: #fdbf46; font-size:12px"></i>
+                                            <i class="fa-solid fa-star fa-lg" style="color: #fdbf46; font-size:12px; margin-left: 5px;"></i>
                                         @endfor
                                         @if ($hasHalfStar)
                                             <i class="fa-solid fa-star-half-stroke fa-lg"
-                                                style="color: #fdbf46; font-size:12px"></i>
+                                                style="color: #fdbf46; font-size:12px; margin-left: 5px;"></i>
                                         @endif
                                         @for ($i = $fullStars + ($hasHalfStar ? 1 : 0); $i < 5; $i++)
-                                            <i class="fa-regular fa-star fa-lg" style="color: #ccc; font-size:12px"></i>
+                                            <i class="fa-regular fa-star fa-lg" style="color: #ccc; font-size:12px; margin-left: 5px;"></i>
                                         @endfor
                                     </h2>
                                 </div>
@@ -856,8 +856,8 @@
                                 @endforeach
                             </div>
                             <!-- Show More Button -->
-                            <div class="text-end mt-4">
-                                <button id="showMoreLessBtn" class="btn border-0">Show More</button>
+                            <div class="text-start mt-4">
+                                <span id="showMoreLessBtn" class="show-More-btn border-0">Show More</span>
                             </div>
                         @else
                             <!-- Empty State -->

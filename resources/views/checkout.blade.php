@@ -97,7 +97,11 @@
                                 @foreach ($cart->items as $item)
                                     <div class="d-flex justify-content-between">
                                         <div>
-                                            <p>{{ $item->product->name }} x{{ $item->quantity }}</p>
+                                            @if ($item->deal_type == 1)
+                                            <p>{{ $item->product->name }}<span class="text-muted"> (x{{ $item->quantity }})</span></p>
+                                            @else
+                                            <p>{{ $item->product->name }}<span class="text-muted"> (Service) </span></p>
+                                            @endif
                                         </div>
                                         <div>
                                             <span style="text-decoration: line-through; color:#c7c7c7">
@@ -171,7 +175,7 @@
                                         &nbsp;&nbsp;
                                         <span class="total ms-1"
                                             style="font-size:12px; color:#00DD21;white-space: nowrap;">
-                                            Dealsmachi Discount
+                                            DealsMachi Discount
                                             &nbsp;-<span
                                                 class="discount">-₹{{ number_format($cart->items->sum(fn($item) => ($item->product->original_price - $item->product->discounted_price) * $item->quantity), 0) }}</span>
                                         </span>
@@ -216,7 +220,7 @@
                 </div>
             @endif
             <div class="container" style="margin-top: 100px;">
-                <h2 class="text-center">Checkout</h2>
+                {{-- <h2 class="text-center">Checkout</h2> --}}
                 <form id="checkoutForm" action="{{ route('checkout.checkout') }}" method="POST">
                     @csrf
                     <!-- Hidden Fields -->
@@ -251,7 +255,11 @@
                                     @foreach ($cart->items as $item)
                                         <div class="d-flex justify-content-between">
                                             <div>
-                                                <p>{{ $item->product->name }} x{{ $item->quantity }}</p>
+                                                @if ($item->deal_type == 1)
+                                                <p>{{ $item->product->name }} <span class="text-muted">(x{{ $item->quantity }})</span></p>
+                                                @else
+                                                <p>{{ $item->product->name }} <span class="text-muted">(Service) </span></p>
+                                                @endif
                                             </div>
                                             <div>
                                                 <span style="text-decoration: line-through; color:#c7c7c7">
@@ -322,7 +330,7 @@
                                             ₹{{ number_format($cart->grand_total, 0) }}
                                         </span> &nbsp;&nbsp; <span class="ms-1"
                                             style="font-size:12px; color:#00DD21;white-space: nowrap;">
-                                            Dealsmachi Discount
+                                            DealsMachi Discount
                                             &nbsp;<span
                                                 class="discount">-₹{{ number_format($cart->discount, 0) }}</span></span>
                                     </h4>

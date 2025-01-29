@@ -102,7 +102,7 @@ class CheckoutController extends Controller
         $address_id = $request->address_id;
 
         $address = Address::where('id', $address_id)->first();
-        
+
         $cart = Cart::where('id', $cart_id)->with('items')->first();
         if (!$cart) {
             return $this->error('Cart not found.', [], 400);
@@ -114,7 +114,7 @@ class CheckoutController extends Controller
             $user = Auth::user();
             $order = Order::where('customer_id', $user->id)->orderBy('id', 'desc')->first();
             $orderoption = 'cart';
-            
+
             return $this->success('Cart Checkout Data Retrieved Successfully!', [
                 'cart' => $cart,
                 'user' => $user,
@@ -147,7 +147,7 @@ class CheckoutController extends Controller
             // Create order for the cart items
             $latestOrder = Order::orderBy('id', 'desc')->first();
             $customOrderId = $latestOrder ? intval(Str::after($latestOrder->id, '-')) + 1 : 1;
-            $orderNumber = 'DEALSLAH_O' . $customOrderId;
+            $orderNumber = 'DEALSMACHI_O' . $customOrderId;
 
             $itemCount = $cart->items->whereIn('product_id', $ids)->sum('quantity');
             $total = $cart->items->whereIn('product_id', $ids)->sum('total');
@@ -179,8 +179,11 @@ class CheckoutController extends Controller
             ]);
 
             foreach ($cart->items->whereIn('product_id', $ids) as $item) {
+                $itemNumber = 'DM0' . $order->id . '-V' . $item->product->shop_id . 'P' . $item->product_id;
+
                 OrderItems::create([
                     'order_id' => $order->id,
+                    'item_number' => $itemNumber,
                     'product_id' => $item->product_id,
                     'seller_id' => $item->product->shop_id,
                     'item_description' => $item->item_description,
@@ -218,7 +221,7 @@ class CheckoutController extends Controller
             // Create order for the cart items
             $latestOrder = Order::orderBy('id', 'desc')->first();
             $customOrderId = $latestOrder ? intval(Str::after($latestOrder->id, '-')) + 1 : 1;
-            $orderNumber = 'DEALSLAH_O' . $customOrderId;
+            $orderNumber = 'DEALSMACHI_O' . $customOrderId;
 
             $order = Order::create([
                 'order_number'     => $orderNumber,
@@ -240,8 +243,11 @@ class CheckoutController extends Controller
             ]);
 
             foreach ($cart->items as $item) {
+                $itemNumber = 'DM0' . $order->id . '-V' . $item->product->shop_id . 'P' . $item->product_id;
+
                 OrderItems::create([
                     'order_id' => $order->id,
+                    'item_number' => $itemNumber,
                     'product_id' => $item->product_id,
                     'seller_id' => $item->product->shop_id,
                     'item_description' => $item->item_description,
@@ -285,18 +291,16 @@ class CheckoutController extends Controller
         $orders = Order::where('customer_id', $customerId)
             ->with([
                 'items.product' => function ($query) {
-                    $query->select('id', 'name', 'description', 'original_price', 'discounted_price', 'discount_percentage')->with('productMedia');
+                    $query->select('id', 'name', 'description', 'original_price', 'discounted_price', 'discount_percentage', 'delivery_days')->with('productMedia');
                 },
-                'shop' => function ($query) {
-                    $query->select('id', 'name');
-                },
-                'customer' => function ($query) {
-                    $query->select('id', 'name');
+                'items.shop' => function ($query) {
+                    $query->select('id', 'name')->withTrashed();
                 }
             ])
+            ->orderBy('created_at', 'desc')
             ->get();
 
-            return $this->success('Orders Retrieved Successfully!', $orders);
+        return $this->success('Orders Retrieved Successfully!', $orders);
     }
 
     public function showOrderByCustomerId($id, $product_id)
@@ -306,15 +310,15 @@ class CheckoutController extends Controller
                 $query->where('product_id', $product_id);
             },
             'items.product.productMedia',
-            'items.shop',
-            'customer',
-            'address'
+            'items.shop' => function ($query) {
+                $query->select('id', 'name', 'email', 'mobile', 'description', 'street', 'street2', 'city', 'zip_code', 'deleted_at')->withTrashed();
+            }
         ])->find($id);
 
         if (!$order || Auth::id() !== $order->customer_id) {
-            return view('orderView', ['order' => null]);
+            return $this->error('Invalid request.', [], 400);
         }
-        
+
         return $this->success('Order Retrieved Successfully!', $order);
     }
 }

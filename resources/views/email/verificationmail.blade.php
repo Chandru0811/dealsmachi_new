@@ -106,7 +106,7 @@
 
         <!-- Content -->
         <div class="content">
-            <h1>Welcome to dealsmachi!</h1>
+            <h1>Welcome to DealsMachi!</h1>
             <p>Thank you for registering with us. To complete your registration, please verify your email address by clicking the button below.</p>
 
             <div class="cta-button">

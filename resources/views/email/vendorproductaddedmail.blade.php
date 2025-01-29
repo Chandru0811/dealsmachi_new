@@ -153,7 +153,7 @@
         <div class="message">
             <p>Hello {{ $user->name }}</p>
             <p class="bottomLine">We are delighted to announce that your Deal <a href="#"
-                    target="_blank">{{ $product->name }}</a> is addedd Successfully in dealsmachi.</p>
+                    target="_blank">{{ $product->name }}</a> is addedd Successfully in DealsMachi.</p>
         </div>
 
         <!-- Content -->

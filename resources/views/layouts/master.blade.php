@@ -11,11 +11,11 @@
         <link rel="canonical" href="https://dealsmachi.com/" />
         <link rel="icon" href="{{ asset('assets/images/home/favicon.ico') }}" />
 
-        <meta property="og:title" content="{{ $pagetitle ?? 'Dealsmachi – Deals that matter in India' }}" />
+        <meta property="og:title" content="{{ $pagetitle ?? 'DealsMachi – Deals that matter in India' }}" />
         <meta property="og:description"
-            content="{{ $pagedescription ?? 'Shop Big, Earn Big Save Big, Dealsmachi – Deals that matters in India' }}" />
+            content="{{ $pagedescription ?? 'Shop Big, Earn Big Save Big, DealsMachi – Deals that matters in India' }}" />
         <meta property="og:url" content="{{ $pageurl ?? 'https://dealsmachi.com' }}" />
-        <meta property="og:site_name" content="Dealsmachi" />
+        <meta property="og:site_name" content="DealsMachi" />
         <meta property="og:image" content="{{ asset($pageimage ?? 'assets/images/social/Dealslah_og.png') }}" />
         @php
             // Provide a fallback for $pageimage in case it's not set
@@ -33,9 +33,9 @@ $imageType = isset($pageimage) ? pathinfo($pageimage, PATHINFO_EXTENSION) : 'png
 
          <!-- Twitter Meta Tags -->
          <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content="{{ $pagetitle ?? 'Dealsmachi - Deals that Matter in India !' }}" />
-        <meta name="twitter:description" content="{{ $pagedescription ?? 'Shop Big, Earn Big Save Big, Dealsmachi – Deals that matters in India' }}" />
-        <meta name="twitter:site" content="@dealsmachi" />
+        <meta name="twitter:title" content="{{ $pagetitle ?? 'DealsMachi - Deals that Matter in India !' }}" />
+        <meta name="twitter:description" content="{{ $pagedescription ?? 'Shop Big, Earn Big Save Big, DealsMachi – Deals that matters in India' }}" />
+        <meta name="twitter:site" content="@dealsMachi" />
         <meta name="twitter:image" content="{{ asset($pageimage ?? 'assets/images/social/Dealslah_twitter.png') }}" />
         <meta name="twitter:image:alt" content="Get the best deals and discounts in India" />
 

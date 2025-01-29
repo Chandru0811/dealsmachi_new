@@ -10,7 +10,7 @@
                     <i class="fa-solid fa-check-circle" style="color: #16A34A"></i>
                 </div>
                 <span class="toast-text"> {!! nl2br(e(session('status'))) !!}</span>&nbsp;&nbsp;
-                <button class="toast-close-btn"data-bs-dismiss="alert" aria-label="Close">
+                <button class="toast-close-btn" data-bs-dismiss="alert" aria-label="Close">
                     <i class="fa-thin fa-xmark" style="color: #16A34A"></i>
                 </button>
             </div>
@@ -30,7 +30,7 @@
                         @endforeach
                     </ul>
                 </span>&nbsp;&nbsp;
-                <button class="toast-close-btn"data-bs-dismiss="alert" aria-label="Close">
+                <button class="toast-close-btn" data-bs-dismiss="alert" aria-label="Close">
                     <i class="fa-solid fa-xmark" style="color: #EF4444"></i>
                 </button>
             </div>
@@ -46,7 +46,7 @@
                 <span class="toast-text">
                     {{ session('error') }}
                 </span>&nbsp;&nbsp;
-                <button class="toast-close-btn"data-bs-dismiss="alert" aria-label="Close">
+                <button class="toast-close-btn" data-bs-dismiss="alert" aria-label="Close">
                     <i class="fa-solid fa-xmark" style="color: #EF4444"></i>
                 </button>
             </div>
@@ -66,18 +66,21 @@
                     <div class="card p-3 mb-3 Regular shadow" style="border: 1px solid #00000012">
                         <div class="d-flex align-items-center">
                             <h5 class="fw-bold mb-0">Delivery Addresses</h5> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                            @if ($default_address)
-                                <span class="badge badge_infos py-1" data-bs-toggle="modal"
-                                    data-bs-target="#myAddressModal">Change</span>
-                            @else
-                                <button type="button" class="btn primary_new_btn" style="font-size: 12px"
-                                    data-bs-toggle="modal" data-bs-target="#newAddressModal">
-                                    <i class="fa-light fa-plus"></i> Add New Address
-                                </button>
-                            @endif
+                            <span class="change-address-btn defaultAddress">
+                                @if ($default_address)
+                                    <span class="badge badge_infos py-1" data-bs-toggle="modal"
+                                        data-bs-target="#myAddressModal">Change</span>
+                                @else
+                                    <button type="button" class="btn primary_new_btn" style="font-size: 12px"
+                                        data-bs-toggle="modal" data-bs-target="#newAddressModal"
+                                        onclick="checkAddressAndOpenModal()">
+                                        <i class="fa-light fa-plus"></i> Add New Address
+                                    </button>
+                                @endif
+                            </span>
                         </div>
                         <div class="row mt-3">
-                            <div class="col-12">
+                            <div class="col-12 selected-address">
                                 @if ($default_address)
                                     <p style="font-weight: 500; font-size: 16px; color: #6C6C6C">
                                         {{ $default_address->first_name ?? '' }}
@@ -109,11 +112,14 @@
                                 $currentDate = Carbon::now();
 
                                 $deliveryDays = is_numeric($product->delivery_days) ? (int) $product->delivery_days : 0;
+
                                 $deliveryDate =
-                                    $deliveryDays > 0 ? $currentDate->addDays($deliveryDays)->format('d-m-y') : null;
+                                    $deliveryDays > 0 ? $currentDate->addDays($deliveryDays)->format('d-m-Y') : null;
+
                             @endphp
                             <div class="row px-4 pt-2" id="product_{{ $product->id }}">
-                                <div class="col-md-4 col-12 d-flex flex-column justify-content-center align-items-center">
+                                <div
+                                    class="col-md-4 col-12 d-flex flex-column justify-content-center align-items-center mb-4">
                                     <div class="d-flex justify-content-center align-items-center">
                                         @php
                                             $image = isset($product->productMedia)
@@ -196,7 +202,7 @@
                                 </div>
                             </div>
                         @else
-                            <div class="d-flex align-items-center my-3">
+                            <div class="d-flex align-items-center my-1">
                                 <span class="me-2">Qty</span>
                                 <button class="btn rounded btn-sm decrease-btn"
                                     style="background: #fffff; border:1px solid #0000001f; border-radius-10px"
@@ -216,21 +222,70 @@
                                     class="img-fluid" /> Remove</button>
                         </span>
                     </div>
+                    <hr class="mt-3">
                 </div>
-                <hr class="mt-3">
                 @endforeach
             </div>
         </div>
-        <div class="col-lg-4 col-md-4 col-12 your-cart" style="height: 80vh; overflow: auto;">
+        <div class="col-lg-4 col-md-4 col-12 your-cart" id="yourCart" style="height: 80vh; overflow: auto;">
             <div class="container mb-4">
                 <div class="p-3">
-                    <!-- Card 1 -->
                     <!-- cart items -->
-                    <div id="cart_items">
+                    {{-- <div id="cart_items">
                         <p class="mb-0"><img src="{{ asset('assets/images/home/solar_pin-list.webp') }}"
                                 alt="icon" class="img-fluid" />&nbsp;You have these items in your cart </p>
                         @if ($carts->items->count() > 0)
-                            @foreach ($carts->items as $cart)
+                        @foreach ($carts->items as $cart)
+                        <div class="row d-flex align-items-center mb-3 mt-2"
+                            id="cart_item_{{ $cart->product->id }}">
+                            <div class="col-1">
+                                <input type="checkbox" class="cartItem_check" value="{{ $cart->product->id }}"
+                                    class="me-1" />
+                            </div>
+                            <div class="col-3">
+                                @php
+                                $image = isset($cart->product->productMedia)
+                                ? $cart->product->productMedia
+                                ->where('order', 1)
+                                ->where('type', 'image')
+                                ->first()
+                                : null;
+                                @endphp
+                                <img src="{{ $image ? asset($image->path) : asset('assets/images/home/noImage.webp') }}"
+                                    class="img-fluid card_img_cont" alt="{{ $cart->product->name }}" />
+                            </div>
+                            <div class="col-8">
+                                <div class="d-flex flex-column justify-content-start">
+                                    <a href="{{ url(path: '/deal/' . $cart->product->id) }}" style="color: #000;"
+                                        onclick="clickCount('{{ $cart->product->id }}')">
+                                        <h5 class="mb-1 fs_common text-truncate" style="max-width: 100%;">
+                                            {{ $cart->product->name }}
+                                        </h5>
+                                    </a>
+                                    <p class="mb-0 text-muted fs_common text-truncate" style="max-width: 100%;">
+                                        {{ $cart->product->description }}
+                                    </p>
+                                </div>
+                            </div>
+
+                        </div>
+                        @endforeach
+                        <!-- Add Button -->
+                        <div class="d-flex justify-content-end">
+                            <button class="btn btn-orange my-2" id="get_cartItems">Add Selected Items</button>
+                        </div>
+                        @else
+                        <div class="text-center mb-3" id="no_items">
+                            <p class="text-muted">No items found in the cart.</p>
+                        </div>
+                        @endif
+                    </div> --}}
+
+                    <p class="mb-0"><img src="{{ asset('assets/images/home/solar_pin-list.webp') }}" alt="icon"
+                            class="img-fluid" />&nbsp;You have these items in your cart </p>
+                    @if ($carts->items->count() > 0)
+                        @foreach ($carts->items as $cart)
+                            <div id="cart_items">
                                 <div class="row d-flex align-items-center mb-3 mt-2"
                                     id="cart_item_{{ $cart->product->id }}">
                                     <div class="col-1">
@@ -262,19 +317,21 @@
                                             </p>
                                         </div>
                                     </div>
-                                </div>
-                            @endforeach
-                        @else
-                            <div class="text-center" id="no_items">
-                                <p class="text-muted">No items found in the cart.</p>
-                            </div>
-                        @endif
-                    </div>
 
-                    <!-- Add Button -->
-                    <div class="d-flex justify-content-end">
-                        <button class="btn btn-orange my-2" id="get_cartItems">Add Selected Items</button>
-                    </div>
+                                </div>
+                            </div>
+                        @endforeach
+
+                        <!-- Add Button -->
+                        <div class="d-flex justify-content-end">
+                            <button class="btn btn-orange my-2" id="get_cartItems">Add Selected Items</button>
+                        </div>
+                    @else
+                        <div class="text-center mb-3" id="no_items">
+                            <p class="text-muted">No items found in the cart.</p>
+                        </div>
+                    @endif
+
                     <!-- saved items -->
                     <p>Saved Items</p>
                     @if ($savedItem->count() > 0)
@@ -313,10 +370,14 @@
                                         method="POST">
                                         @csrf
                                         <input type="hidden" name="product_id" value="{{ $list->deal->id }}">
-                                        <button type="submit" style="width: 150px;font-size: 14px;" class="btn py-0">
+                                        {{-- <button type="submit" style="width: 150px;font-size: 14px;" class="btn py-0">
                                             <u>Move to Cart</u>
-                                        </button>
+                                        </button> --}}
                                     </form>
+                                    {{-- <button type="submit" data-product-id="{{ $list->deal->id }}"
+                                        style="width: 150px;font-size: 14px;border:none" class=" py-0 moveToCart">
+                                        <u>Move to Cart</u>
+                                    </button> --}}
                                 </div>
                             </div>
                         @endforeach
@@ -344,7 +405,7 @@
                     </span>
                     &nbsp;&nbsp;
                     <span class="ms-1" style="font-size:12px; color:#00DD21;white-space: nowrap;" id="deal-discount">
-                        Dealsmachi Discount
+                        DealsMachi Discount
                         &nbsp;-<span
                             class="discount">₹{{ number_format($product->original_price - $product->discounted_price, 0, '.', ',') }}</span>
                     </span>
@@ -355,14 +416,15 @@
                     @csrf
                     <input type="hidden" id="all_products_to_buy" name="all_products_to_buy"
                         value="{{ json_encode($products->pluck('id')) }}">
-                    <input type="hidden" name="address_id" value="{{ $default_address->id }}">
+                    <input type="hidden" name="address_id" id="addressID" value="{{ $default_address->id }}">
                     <input type="hidden" name="cart_id" value="{{ $carts->id }}">
                     <button type="submit" class="btn check_out_btn" id="submitBtn">
                         Checkout
                     </button>
                 </form>
             @else
-                <a href="#" class="btn check_out_btn" data-bs-toggle="modal" data-bs-target="#newAddressModal">
+                <a href="#" onclick="checkAddressAndOpenModal()" class="btn check_out_btn" data-bs-toggle="modal"
+                    data-bs-target="#newAddressModal">
                     Checkout
                 </a>
             @endif
@@ -414,7 +476,7 @@
                             if ($(`#product_${product.id}`).length === 0) {
                                 $('#product_list').append(`
                                 <div class="row px-4 pt-2" id="product_${product.id}">
-                                    <div class="col-md-4 col-12 d-flex flex-column justify-content-center align-items-center">
+                                    <div class="col-md-4 col-12 d-flex flex-column justify-content-center align-items-center mb-4">
                                         <img src="${product.image}" style="max-width: 100%; max-height: 100%;" alt="${product.name}" />
                                     </div>
                                     <div class="col-md-8 col-12">
@@ -436,63 +498,49 @@
                                                 <img src="{{ asset('assets/images/home/delivery_icon.webp') }}"
                                                     alt="icon" class="img-fluid" />
                                             </div> &nbsp;&nbsp;
-                                         <p style="font-size: 16px;">
-                                               Delivery Date: ${product.delivery_days && product.delivery_days > 0
-    ? (() => {
-        const currentDate = new Date();
-        console.log("Current Date is ", currentDate);
-        console.log("Delivery Days is ", product.delivery_days);
-
-        const currentDateCopy = new Date(currentDate);
-        console.log("Current Date Copy: ", currentDateCopy);
-
-        const calculatedDate = new Date(currentDate.getTime());
-        calculatedDate.setDate(currentDate.getDate() + product.delivery_days);
-
-        console.log("Calculated Date is ", calculatedDate);
-
-        const day = String(calculatedDate.getDate()).padStart(2, '0');
-        const month = String(calculatedDate.getMonth() + 1).padStart(2, '0');
-        const year = String(calculatedDate.getFullYear()).slice(-2); // Get the last 2 digits of the year
-        return `${day}-${month}-${year}`; // Return formatted date
-    })()
-    : 'Not Present'}
-
-
-
-
-                                                </p>
-                                                </div>
+                                     <p style="font-size: 16px;">
+                                        Delivery Date:
+                                        ${product.delivery_days && product.delivery_days > 0
+                                        ? (() => {
+                                            const currentDate = new Date();
+                                            currentDate.setTime(currentDate.getTime() + (product.delivery_days * 24 * 60 * 60 * 1000));
+                                            console.log(product.delivery_days * 24 * 60 * 60 * 1000)
+                                            const formattedDate = currentDate.toLocaleDateString('en-GB');
+                                            return formattedDate;
+                                        })()
+                                        : 'Not Present'}
+                                         </p>
+                                      </div>
                                     </div>
 
                                     <div class="col-12 d-flex justify-content-between align-items-center mt-2">
                                     ${product.deal_type === 2 ? `
-                                                                                                                                <div class="d-flex align-items-center">
-                                                                                                                                  <div class="form-group">
-                                                                                                                                    <label for="service_date_{{ $product->id }}" class="form-label">Service
-                                                                                                                                        Date</label>
-                                                                                                                                    <input type="date" id="service_date_{{ $product->id }}"
-                                                                                                                                        name="service_date" class="form-control form-control-sm service-date"
-                                                                                                                                        value="" min="{{ date('Y-m-d') }}" required>
-                                                                                                                                    <span class="error-message" id="error_date_{{ $product->id }}"
-                                                                                                                                        style="color:red; font-size: 12px;"></span>
-                                                                                                                                </div>
-                                                                                                                                    <div class="form-group ms-2">
-                                                                                                                                        <label for="service_time_${product.id}" class="form-label">Service Time</label>
-                                                                                                                                        <input type="time" id="service_time_${product.id}" name="service_time"
-                                                                                                                                            class="form-control form-control-sm service-time" value="" required>
-                                                                                                                                        <span class="error-message" id="error_time_${product.id}" style="color:red; font-size: 12px;"></span>
-                                                                                                                                    </div>
-                                                                                                                                </div>
-                                                                                                                            ` : `
-                                                                                                                                <div class="d-flex align-items-center my-3">
-                                                                                                                                    <span class="me-2">Qty</span>
-                                                                                                                                    <button class="btn rounded btn-sm decrease-btn" style="background: #c7c7c75b" data-product-id="${product.id}">-</button>
-                                                                                                                                    <input type="text" id="quantityInput_${product.id}" value="1"
-                                                                                                                                        class="form-control form-control-sm mx-2 text-center quantity-input" style="width: 50px;" readonly>
-                                                                                                                                    <button class="btn rounded btn-sm increase-btn" style="background: #c7c7c75b" data-product-id="${product.id}">+</button>
-                                                                                                                                </div>
-                                                                                                                            `}
+                                                                                                                                                                            <div class="d-flex align-items-center">
+                                                                                                                                                                              <div class="form-group">
+                                                                                                                                                                                <label for="service_date_{{ $product->id }}" class="form-label">Service
+                                                                                                                                                                                    Date</label>
+                                                                                                                                                                                <input type="date" id="service_date_{{ $product->id }}"
+                                                                                                                                                                                    name="service_date" class="form-control form-control-sm service-date"
+                                                                                                                                                                                    value="" min="{{ date('Y-m-d') }}" required>
+                                                                                                                                                                                <span class="error-message" id="error_date_{{ $product->id }}"
+                                                                                                                                                                                    style="color:red; font-size: 12px;"></span>
+                                                                                                                                                                            </div>
+                                                                                                                                                                                <div class="form-group ms-2">
+                                                                                                                                                                                    <label for="service_time_${product.id}" class="form-label">Service Time</label>
+                                                                                                                                                                                    <input type="time" id="service_time_${product.id}" name="service_time"
+                                                                                                                                                                                        class="form-control form-control-sm service-time" value="" required>
+                                                                                                                                                                                    <span class="error-message" id="error_time_${product.id}" style="color:red; font-size: 12px;"></span>
+                                                                                                                                                                                </div>
+                                                                                                                                                                            </div>
+                                                                                                                                                                        ` : `
+                                                                                                                                                                            <div class="d-flex align-items-center my-1">
+                                                                                                                                                                                <span class="me-2">Qty</span>
+                                                                                                                                                                                <button class="btn rounded btn-sm decrease-btn" style="background: #c7c7c75b" data-product-id="${product.id}">-</button>
+                                                                                                                                                                                <input type="text" id="quantityInput_${product.id}" value="1"
+                                                                                                                                                                                    class="form-control form-control-sm mx-2 text-center quantity-input" style="width: 50px;" readonly>
+                                                                                                                                                                                <button class="btn rounded btn-sm increase-btn" style="background: #c7c7c75b" data-product-id="${product.id}">+</button>
+                                                                                                                                                                            </div>
+                                                                                                                                                                        `}
                                     <span class="px-2">
                                         <button class="btn btn-sm btn-danger rounded remove-btn"
                                             style="background: #ff0060; color:#fff;
@@ -505,10 +553,13 @@
                             `);
 
                                 $('#cart_item_' + product.id).remove();
-                                if ($('#cart_items').children().length === 0) {
-                                    $('#cart_items').append(`<div class="text-center" id="no_items">
-                                    <p class="text-muted">No items found in the cart.</p>
-                                </div>`);
+                                const cartLength = $('#cart_items').children(
+                                    '.cart-item').length;
+
+                                if (cartLength === 0) {
+                                    $('#cart_items').html(
+                                        '<div class="text-center" id="no_items"><p class="text-muted">No items found in the cart.</p></div>'
+                                    );
                                     $('#get_cartItems').hide();
                                 }
 
@@ -776,7 +827,6 @@
                         if (response.data && response.data.length > 0) {
                             const product = response.data[
                                 0]; // Assuming one product is returned
-
                             // Append the product to the cart items
                             $('#cart_items').append(`
                         <div class="row d-flex align-items-center mb-3" id="cart_item_${product.id}">
@@ -798,6 +848,7 @@
                             // Update the total count if needed
                             if ($('#cart_items').children().length > 0) {
                                 $('#get_cartItems').show();
+                                $('#no_items').hide();
                             }
                         }
                     },
@@ -806,6 +857,7 @@
                     }
                 });
             });
+
 
             // Initial function calls
             attachQuantityListeners();

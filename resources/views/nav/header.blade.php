@@ -27,9 +27,9 @@
                         <a href="{{ url('/favourites') }}" class="text-decoration-none d-xl-none"
                             style="text-decoration: none;">
                             <i class="fa-regular fa-heart fa-xl icon_size" style="color: #ff0060;"></i>
-                             <span class="totalItemsCount total-count translate-middle d-xl-none"
-                            style="position: absolute;top: 16px;right:5px">
-                        </span>
+                            <span class="totalItemsCount total-count translate-middle d-xl-none"
+                                style="position: absolute;top: 16px;right:5px">
+                            </span>
                         </a>
 
                     </button>
@@ -239,45 +239,42 @@
                                 <p><strong>Phone :</strong>
                                     {{ $default_address && $default_address->phone ? '(+91) ' . $default_address->phone : '--' }}
                                 </p>
-
                                 <hr />
-                                <div class="d-flex justify-content-between align-items-center">
+                                <div class="d-flex justify-content-between align-items-center defaultAddress">
                                     <h6 class="fw-bold">Delivery Addresses</h6>
                                     @if ($default_address)
                                     <span class="badge badge_infos py-1" data-bs-toggle="modal"
                                         data-bs-target="#myAddressModal">Change</span>
                                     @else
                                     <button type="button" class="btn primary_new_btn" style="font-size: 12px"
-                                        data-bs-toggle="modal" data-bs-target="#newAddressModal">
+                                        data-bs-toggle="modal" data-bs-target="#newAddressModal" onclick="checkAddressAndOpenModal()">
                                         <i class="fa-light fa-plus"></i> Add New Address
                                     </button>
                                     @endif
                                 </div>
                                 <div class="mt-2">
-                                    <form id="addressForm">
-                                        <div>
-                                            @if ($default_address)
-                                            <p>
-                                                <strong>{{ $default_address->first_name ?? '' }}
-                                                    {{ $default_address->last_name ?? '' }} (+91)
-                                                    {{ $default_address->phone ?? '' }}</strong>&nbsp;&nbsp;<br>
-                                                {{ $default_address->address ?? '' }},
-                                                {{ $default_address->city ?? '' }},
-                                                {{ $default_address->state ?? '' }} -
-                                                {{ $default_address->postalcode ?? '' }}
-                                                <span>
-                                                    @if ($default_address->default)
-                                                    <span
-                                                        class="badge badge_danger py-1">Default</span>&nbsp;&nbsp;
-                                                    @endif
-                                                </span>
-                                            </p>
-                                            @else
-                                            <p>Your address details are missing. Add one now to make checkout faster
-                                                and easier!</p>
-                                            @endif
-                                        </div>
-                                    </form>
+                                    <div class="selected-address">
+                                        @if ($default_address)
+                                        <p>
+                                            <strong>{{ $default_address->first_name ?? '' }}
+                                                {{ $default_address->last_name ?? '' }} (+91)
+                                                {{ $default_address->phone ?? '' }}</strong>&nbsp;&nbsp;<br>
+                                            {{ $default_address->address ?? '' }},
+                                            {{ $default_address->city ?? '' }},
+                                            {{ $default_address->state ?? '' }} -
+                                            {{ $default_address->postalcode ?? '' }}
+                                            <span>
+                                                @if ($default_address->default)
+                                                <span
+                                                    class="badge badge_danger py-1">Default</span>&nbsp;&nbsp;
+                                                @endif
+                                            </span>
+                                        </p>
+                                        @else
+                                        <p>Your address details are missing. Add one now to make checkout faster
+                                            and easier!</p>
+                                        @endif
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -286,7 +283,7 @@
             </div>
         </div>
 
-        {{-- my address modal  --}}
+        <!-- My Address Modal -->
         <div class="modal fade" id="myAddressModal" tabindex="-1" aria-labelledby="myAddressModalLabel"
             aria-hidden="true">
             <form id="addressForm" action="{{ route('address.change') }}" method="POST">
@@ -299,7 +296,7 @@
                                 aria-label="Close"></button>
                         </div>
                         <div class="modal-body" style="min-height: 24rem">
-                            <div>
+                            <div class="allAddress">
                                 @foreach ($address as $addr)
                                 <div class="row p-2">
                                     <div class="col-10">
@@ -329,15 +326,15 @@
                                     </div>
                                     <div class="col-2">
                                         <div class="d-flex align-items-center justify-content-end">
-                                            <div class="d-flex gap-3">
+                                            <div class="d-flex gap-2 delBadge">
                                                 <button type="button" class="badge_edit" data-bs-toggle="modal"
-                                                    data-bs-target="#editAddressModal">
+                                                    data-address-id="{{ $addr->id }}" data-bs-target="#editAddressModal">
                                                     Edit
                                                 </button>
                                                 @if (!$addr->default)
                                                 <button type="button" class="badge_del"
                                                     data-bs-toggle="modal"
-                                                    data-bs-target="#deleteAddressModal">
+                                                    data-bs-target="#deleteAddressModal" data-address-id="{{ $addr->id }}">
                                                     Delete
                                                 </button>
                                                 @endif
@@ -350,10 +347,10 @@
                         </div>
                         <div class="modal-footer d-flex justify-content-between">
                             <button type="button" class="btn primary_new_btn" style="font-size: 12px"
-                                data-bs-toggle="modal" data-bs-target="#newAddressModal">
+                                data-bs-toggle="modal" data-bs-target="#newAddressModal" onclick="checkAddressAndOpenModal()">
                                 <i class="fa-light fa-plus"></i> Add New Address
                             </button>
-                            <div>
+                            <div class="d-flex justify-content-end gap-2">
                                 <button type="button" class="btn outline_secondary_btn"
                                     data-bs-dismiss="modal">Close</button>
                                 <button type="submit" class="btn outline_primary_btn"
@@ -378,19 +375,9 @@
                     <div class="modal-body">
                         <p>Are you sure you want to delete this address?</p>
                     </div>
-
-
                     <div class="modal-footer d-flex justify-content-end">
-                        <button type="button" class="btn outline_secondary_btn"
-                            data-bs-dismiss="modal">Close</button>
-                        @if (isset($addr))
-                        <form id="deleteAddressForm" method="POST"
-                            action="{{ route('address.destroy', $addr->id) }}">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" class="btn outline_primary_btn">Delete</button>
-                        </form>
-                        @endif
+                        <button type="button" class="btn outline_secondary_btn" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn outline_primary_btn" id="confirmDeleteBtn">Delete</button>
                     </div>
                 </div>
             </div>
@@ -477,14 +464,12 @@
                                         id="postalcode" placeholder="Enter your Postal Code" required />
                                 </div>
 
-
-
                                 <!-- Unit (Optional) -->
                                 <div class="col-md-6 col-12 mb-3">
                                     <label for="unit" class="form-label address_lable">Unit Info
                                         (Optional)</label>
                                     <input type="text" class="form-control address_input" name="unit"
-                                        id="unit" placeholder="Enter your Unit info" />
+                                        id="unit" placeholder="Landmark" />
                                 </div>
 
                                 <!-- Address Type -->
@@ -505,10 +490,9 @@
                                     </div>
                                 </div>
 
-                                <div class="mb-3">
-                                    <input type="hidden" name="default_hidden" id="default_hidden" value="0">
-                                    <input type="checkbox" name="default" id="default_address" value="1">
-                                    <label for="default_address">Set as Default Address</label>
+                                <div class="mb-3 address">
+                                    <input type="checkbox" name="default" class="default_address" id="default_address">
+                                    <label class="form-check-label" for="default_address">Set as Default Address</label>
                                 </div>
                             </div>
 
@@ -572,7 +556,7 @@
             <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="newAddressModalLabel">Add A New Address</h5>
+                        <h5 class="modal-title" id="newAddressModalLabel">Add New Address</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal"
                             aria-label="Close"></button>
                     </div>
@@ -645,14 +629,12 @@
                                         id="postalcode" placeholder="Enter your Postal Code" required />
                                 </div>
 
-
-
                                 <!-- Unit (Optional) -->
                                 <div class="col-md-6 col-12 mb-3">
                                     <label for="unit" class="form-label address_lable">Additional Info
                                         (Optional)</label>
                                     <input type="text" class="form-control address_input" name="unit"
-                                        id="unit" placeholder="Eg., Unit Info, Floor, etc." />
+                                        id="unit" placeholder="Landmark" />
                                 </div>
 
                                 <!-- Address Type -->
@@ -673,18 +655,9 @@
                                     </div>
                                 </div>
 
-                                <div class="mb-3">
-                                    @if (!$default_address || !$default_address->default)
-                                    <input type="hidden" name="default" value="1">
-                                    @endif
-                                    <input type="checkbox"
-                                        name="{{ !$default_address || !$default_address->default ? 'default_address' : 'default' }}"
-                                        id="{{ !$default_address || !$default_address->default ? 'default_address' : 'default' }}"
-                                        value="1" @if (!$default_address || !$default_address->default) checked disabled @endif>
-                                    <label
-                                        for="{{ !$default_address || !$default_address->default ? 'default_address' : 'optional_address' }}">
-                                        Set as Default Address
-                                    </label>
+                                <div class="mb-3 address">
+                                    <input type="checkbox" name="default" class="default_address" id="defaultAddressCheckbox">
+                                    <label class="form-check-label" for="defaultAddressCheckbox">Set as Default Address</label>
                                 </div>
 
                             </div>
@@ -701,8 +674,7 @@
                 </div>
             </div>
         </div>
-
-
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <script>
             document.getElementById('cartButton').addEventListener('click', function(event) {
                 const dropdownMenu = document.querySelector('.dropdown_cart');
@@ -711,56 +683,72 @@
                 }
             });
 
-            document.getElementById('confirmAddressBtn').addEventListener('click', function() {
-                var selectedAddressId = document.querySelector('input[name="address"]:checked');
-                if (selectedAddressId) {
-                    sessionStorage.setItem('selectedAddressId', selectedAddressId.value);
+            $(document).ready(function() {
+                $('#confirmAddressBtn').on('click', function(e) {
+                    e.preventDefault();
+
+                    let selectedId = $('input[name="selected_id"]:checked').val();
+
+                    if (!selectedId) {
+                        alert('Please select an address.');
+                        return;
+                    }
+
+                    $.ajax({
+                        url: "{{ route('address.change') }}",
+                        method: "POST",
+                        data: {
+                            _token: "{{ csrf_token() }}",
+                            selected_id: selectedId
+                        },
+                        success: function(response) {
+                            if (response.success) {
+                                $('#myAddressModal').modal('hide');
+
+                                updateSelectedAddress(response.selectedAddress);
+                            } else {
+                                alert(response.message || 'An error occurred.');
+                            }
+                        },
+                        error: function(xhr) {
+                            alert(xhr.responseJSON.message || 'An error occurred.');
+                        }
+                    });
+                });
+
+                function updateSelectedAddress(address) {
+                    if (address) {
+                        const addressHtml = `
+                            <strong>${address.first_name} ${address.last_name ?? ''} (+91) ${address.phone}</strong><br>
+                            ${address.address} - ${address.postalcode}
+                            ${address.default ? '<span class="badge badge_danger py-1">Default</span>' : ''}
+                        `;
+                        $('#addressID').val(address.id);
+
+                        $('.selected-address').html(addressHtml);
+
+                        const changeBtnHtml = `<span class="badge badge_infos py-1" data-bs-toggle="modal" data-bs-target="#myAddressModal">Change</span>`;
+                        $('.change-address-btn').html(changeBtnHtml);
+                    }
                 }
             });
 
-            document.querySelectorAll('.badge_edit').forEach(function(button) {
-                button.addEventListener('click', function() {
-                    var addressId = this.closest('.row').querySelector('input[type="radio"]').value;
-                    var addressData =
-                        @json($address); // Make sure the $address data is passed to JS
-
-                    var selectedAddress = addressData.find(address => address.id == addressId);
-
-                    if (selectedAddress) {
-                        // Populate the form fields with the selected address data
-                        document.getElementById('first_name').value = selectedAddress.first_name;
-                        document.getElementById('last_name').value = selectedAddress.last_name;
-                        document.getElementById('phone').value = selectedAddress.phone;
-                        document.getElementById('email').value = selectedAddress.email;
-                        document.getElementById('postalcode').value = selectedAddress.postalcode;
-                        document.getElementById('address').value = selectedAddress.address;
-                        document.getElementById('unit').value = selectedAddress.unit ?? '';
-                        document.getElementById('address_id').value = selectedAddress.id ?? '';
-                        document.getElementById('state').value = selectedAddress.state ?? '';
-                        document.getElementById('city').value = selectedAddress.city ?? '';
-
-                        // Set default checkbox
-                        var defaultCheckbox = document.getElementById('default_address');
-                        defaultCheckbox.checked = selectedAddress.default;
-
-                        // Disable the checkbox if the address is already default
-                        if (selectedAddress.default) {
-                            defaultCheckbox.disabled = true;
-                            document.getElementById('default_hidden').value = 1;
-
+            // Function to check if user has address data and open modal
+            function checkAddressAndOpenModal() {
+                fetch('/addresses')
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.length === 0) {
+                            $('#defaultAddressCheckbox').prop('checked', true);
+                            $('#defaultAddressCheckbox').prop('disabled', true);
                         } else {
-                            defaultCheckbox.disabled = false;
+                            $('#defaultAddressCheckbox').prop('checked', false);
+                            $('#defaultAddressCheckbox').prop('disabled', false);
                         }
-
-                        // Set Address Type Radio Button
-                        if (selectedAddress.type === 'home_mode') {
-                            document.getElementById('home_mode').checked = true;
-                        } else if (selectedAddress.type === 'work_mode') {
-                            document.getElementById('work_mode').checked = true;
-                        }
-                    }
-                });
-            });
+                        $('#newAddressModal').modal('show');
+                    })
+                    .catch(error => console.error('Error fetching address:', error));
+            }
         </script>
     </section>
     <!-- Header End  -->

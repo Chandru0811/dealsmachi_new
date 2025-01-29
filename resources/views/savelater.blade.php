@@ -51,7 +51,7 @@
             </div>
         </div>
     @endif
-    <section>
+    <section class="savelaterIndex">
         <div class="container" style="margin-top: 100px">
             <h2 class="my-4">Buy Later</h2>
             @if ($savedItems->isEmpty())
@@ -60,7 +60,8 @@
                         class="img-fluid mb-2" style="width: 300px;" />
                     <h4 style="color: #ff0060;">Your Saved Wishlists are awaiting your selection!</h4>
                 </div>
-            @else
+                @else
+                <!-- Display saved items -->
                 <hr>
                 @foreach ($savedItems as $savedItem)
                     <div class="row p-4">
@@ -97,22 +98,15 @@
                         </div>
                         <div class="col-md-3 d-flex flex-column justify-content-end align-items-end mb-3">
                             <div class="btn-group" role="group" aria-label="Basic example">
-                                <form action="{{ route('movetocart') }}" method="POST">
-                                    @csrf
-                                    <input type="hidden" name="product_id" value="{{ $savedItem->deal_id }}">
-                                    <button type="submit" class="btn border btn-outline-secondary"
-                                        style="padding: 14px 20px; border-top-right-radius: 0px; border-bottom-right-radius: 0px;">
-                                        Move to Cart
-                                    </button>
-                                </form>
-                                <form action="{{ route('savelater.remove') }}" method="POST">
-                                    @csrf
-                                    <input type="hidden" name="product_id" value="{{ $savedItem->deal_id }}">
-                                    <button type="submit" class="btn border btn-outline-secondary"
-                                        style="padding: 14px 20px; border-top-left-radius: 0px; border-bottom-left-radius: 0px;">
-                                        Remove
-                                    </button>
-                                </form>
+                                <button type="button" class="btn border btn-outline-secondary moveToCart"
+                                    data-product-id="{{ $savedItem->deal->id }}"
+                                    style="padding: 14px 20px; border-top-right-radius: 0px; border-bottom-right-radius: 0px;">
+                                    Move to Cart
+                                </button>
+                                <button type="button" class="btn border btn-outline-secondary removeSaveLater" data-product-id="{{ $savedItem->deal->id }}"
+                                    style="padding: 14px 20px; border-top-left-radius: 0px; border-bottom-left-radius: 0px;">
+                                    Remove
+                                </button>
                             </div>
                         </div>
                         <hr class="mt-3">

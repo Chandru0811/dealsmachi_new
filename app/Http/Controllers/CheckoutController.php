@@ -110,10 +110,10 @@ class CheckoutController extends Controller
         }
     }
 
-    public function cartcheckout($cart_id, Request $request)
+    public function cartcheckout(Request $request)
     {
         $address_id = $request->address_id;
-
+        $cart_id = $request->input('cart_id');
         $address = Address::where('id', $address_id)->first();
         // dd($address);
         $cart = Cart::where('id', $cart_id)->with('items')->first();
@@ -187,7 +187,8 @@ class CheckoutController extends Controller
                 'postalcode' => $address->postalcode,
                 'address' => $address->address,
                 'city' => $address->city,
-                'state' => $address->state
+                'state' => $address->state,
+                'unit'  => $address->unit
             ];
 
             // Create the order
@@ -291,7 +292,8 @@ class CheckoutController extends Controller
                 'postalcode' => $address->postalcode,
                 'address' => $address->address,
                 'city' => $address->city,
-                'state' => $address->state
+                'state' => $address->state,
+                'unit'  => $address->unit
             ];
 
             $order = Order::create([
@@ -362,7 +364,7 @@ class CheckoutController extends Controller
         $orders = Order::where('customer_id', $customerId)
             ->with([
                 'items.product' => function ($query) {
-                    $query->select('id', 'name', 'description', 'original_price', 'discounted_price', 'discount_percentage')->with('productMedia');
+                    $query->select('id', 'name', 'description', 'original_price', 'discounted_price', 'discount_percentage', 'delivery_days')->with('productMedia');
                 },
                 'items.shop' => function ($query) {
                     $query->select('id', 'name')->withTrashed();
@@ -406,6 +408,7 @@ class CheckoutController extends Controller
                 }
             }
         }
+        // dd($order);
 
         return view('orderView', compact('order', 'orderReviewedByUser'));
     }

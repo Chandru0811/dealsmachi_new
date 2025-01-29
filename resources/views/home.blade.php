@@ -106,65 +106,170 @@
 
 @section('scripts')
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            let loading = false;
-            let currentPage = 1;
-            let hasMoreProducts = true;
-            const loadingSpinner = document.querySelector('.loading-spinner');
+        // document.addEventListener('DOMContentLoaded', function() {
+        //     let loading = false;
+        //     let currentPage = 1;
+        //     let hasMoreProducts = true;
+        //     const loadingSpinner = document.querySelector('.loading-spinner');
 
-            function loadMoreProducts() {
-                if (loading || !hasMoreProducts) return;
+        //     function loadMoreProducts() {
+        //         if (loading || !hasMoreProducts) return;
 
-                loading = true;
-                currentPage++;
-                loadingSpinner.classList.remove('d-none');
+        //         loading = true;
+        //         currentPage++;
+        //         loadingSpinner.classList.remove('d-none');
 
-                setTimeout(() => {
-                    fetch(`/?page=${currentPage}`, {
-                            headers: {
-                                'X-Requested-With': 'XMLHttpRequest'
-                            }
-                        })
-                        .then(response => response.text())
-                        .then(html => {
-                            if (html.trim().length > 0) {
-                                document.getElementById('products-wrapper').insertAdjacentHTML(
-                                    'beforeend', html);
-                            } else {
-                                hasMoreProducts = false;
-                                // alert('All products have been loaded.');
-                            }
-                            loadingSpinner.classList.add('d-none');
-                            loading = false;
-                        })
-                        .catch(error => {
-                            console.error('Error:', error);
-                            loadingSpinner.classList.add('d-none');
-                            loading = false;
-                        });
-                }, 400);
-            }
+        //         setTimeout(() => {
+        //             fetch(`/?page=${currentPage}`, {
+        //                     headers: {
+        //                         'X-Requested-With': 'XMLHttpRequest'
+        //                     }
+        //                 })
+        //                 .then(response => response.text())
+        //                 .then(html => {
+        //                     if (html.trim().length > 0) {
+        //                         document.getElementById('products-wrapper').insertAdjacentHTML(
+        //                             'beforeend', html);
 
+        //                         // Reinitialize event listeners
+        //                         initializeEventListeners();
+        //                     } else {
+        //                         hasMoreProducts = false;
+        //                     }
+        //                     loadingSpinner.classList.add('d-none');
+        //                     loading = false;
+        //                 })
+        //                 .catch(error => {
+        //                     console.error('Error:', error);
+        //                     loadingSpinner.classList.add('d-none');
+        //                     loading = false;
+        //                 });
+        //         }, 400);
+        //     }
 
-            function handleScroll() {
-                const scrollPosition = window.innerHeight + window.scrollY;
-                const bodyHeight = document.documentElement.scrollHeight;
+        //     function handleScroll() {
+        //         const scrollPosition = window.innerHeight + window.scrollY;
+        //         const bodyHeight = document.documentElement.scrollHeight;
 
-                if (scrollPosition >= bodyHeight - 200) {
-                    loadMoreProducts();
-                }
-            }
+        //         if (scrollPosition >= bodyHeight - 500) {
+        //             loadMoreProducts();
+        //         }
+        //     }
 
-            let timeout;
-            window.addEventListener('scroll', function() {
-                if (timeout) {
-                    window.cancelAnimationFrame(timeout);
-                }
-                timeout = window.requestAnimationFrame(function() {
-                    handleScroll();
-                });
-            });
-        });
+        //     let timeout;
+        //     window.addEventListener('scroll', function() {
+        //         if (timeout) {
+        //             window.cancelAnimationFrame(timeout);
+        //         }
+        //         timeout = window.requestAnimationFrame(function() {
+        //             handleScroll();
+        //         });
+        //     });
+        // });
+
+        // function initializeEventListeners() {
+        //     // Add to Cart
+        //     $(".add-to-cart-btn").on("click", function(e) {
+        //         e.preventDefault();
+        //         let slug = $(this).data("slug");
+
+        //         $.ajax({
+        //             url: `/addtocart/${slug}`,
+        //             type: "POST",
+        //             data: {
+        //                 quantity: 1,
+        //                 saveoption: "add to cart",
+        //             },
+        //             success: function(response) {
+        //                 if (response.cartItemCount !== undefined) {
+        //                     const cartCountElement = $("#cart-count");
+
+        //                     if (response.cartItemCount > 0) {
+        //                         cartCountElement.text(response.cartItemCount);
+        //                         cartCountElement.css("display", "inline");
+        //                     } else {
+        //                         cartCountElement.css("display", "none");
+        //                     }
+        //                 }
+
+        //                 fetchCartDropdown
+        //                     (); // Assuming this function updates the cart dropdown
+        //                 showMessage(
+        //                     response.status || "Deal added to cart!",
+        //                     "success"
+        //                 );
+        //             },
+        //             error: function(xhr) {
+        //                 const errorMessage =
+        //                     xhr.responseJSON?.error || "Something went wrong!";
+        //                 showMessage(errorMessage, "error");
+        //             },
+        //         });
+        //     });
+
+        //     // Add Bookmark
+        //     $(".add-bookmark").on("click", function(e) {
+        //         e.preventDefault();
+        //         let dealId = $(this).data("deal-id");
+
+        //         $.ajax({
+        //             url: `https://dealsmachi.com/bookmark/${dealId}/add`,
+        //             method: "POST",
+        //             success: function(response) {
+        //                 updateBookmarkCount(response.total_items);
+
+        //                 let button = $(
+        //                     `.add-bookmark[data-deal-id="${dealId}"]`
+        //                 );
+        //                 button
+        //                     .removeClass("add-bookmark")
+        //                     .addClass("remove-bookmark");
+        //                 button.html(`
+    //                 <p style="height:fit-content;cursor:pointer" class="p-1 px-2">
+    //                     <i class="fa-solid fa-heart bookmark-icon" style="color: #ff0060;"></i>
+    //                 </p>
+    //             `);
+
+        //                 handleRemoveBookmark();
+        //             },
+        //             error: function(xhr) {},
+        //         });
+        //     });
+
+        //     // Remove Bookmark
+        //     $(".remove-bookmark").on("click", function(e) {
+        //         e.preventDefault();
+        //         let dealId = $(this).data("deal-id");
+
+        //         $.ajax({
+        //             url: `https://dealsmachi.com/bookmark/${dealId}/remove`,
+        //             method: "DELETE",
+        //             success: function(response) {
+        //                 updateBookmarkCount(response.total_items);
+
+        //                 let button = $(
+        //                     `.remove-bookmark[data-deal-id="${dealId}"]`
+        //                 );
+        //                 button
+        //                     .removeClass("remove-bookmark")
+        //                     .addClass("add-bookmark");
+        //                 button.html(`
+    //                 <p style="height:fit-content;cursor:pointer" class="p-1 px-2">
+    //                     <i class="fa-regular fa-heart bookmark-icon" style="color: #ff0060;"></i>
+    //                 </p>
+    //             `);
+
+        //                 handleAddBookmark(); // Re-bind the add bookmark handler
+        //             },
+        //             error: function(xhr) {
+        //                 // Handle error (optional)
+        //             },
+        //         });
+        //     });
+        // }
+
+        // // Initial call to bind event listeners on page load
+        // initializeEventListeners();
 
 
 

@@ -158,7 +158,7 @@
                                                     </div>
                                                     <div>
                                                         <button class="btn card_cart add-to-cart-btn"
-                                                            data-slug="{{ $deal->slug }}">
+                                                            data-slug="{{ $deal->slug }}" onclick="event.stopPropagation();">
                                                             Add to Cart
                                                         </button>&nbsp;&nbsp;
                                                     </div>

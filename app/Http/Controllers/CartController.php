@@ -24,12 +24,12 @@ class CartController extends Controller
             $carts = $carts->orWhere('customer_id', Auth::guard()->user()->id);
         }
 
-        $carts = $carts->get();
+        $cart = $carts->first();
 
-        // Cleanup invalid items for each cart
-        $carts->each(function ($cart) {
+        // Cleanup invalid items for the cart
+        if ($cart) {
             $this->cleanUpCart($cart);
-        });
+        }
 
         $bookmarkedProducts = collect();
 
@@ -41,7 +41,9 @@ class CartController extends Controller
             $bookmarkedProducts = Bookmark::where('ip_address', $ipAddress)->pluck('deal_id');
         }
 
-        $carts->load(['items.product.shop', 'items.product.productMedia']);
+        if ($cart) {
+            $cart->load(['items.product.shop', 'items.product.productMedia']);
+        }
 
         $savedItems = collect();
 
@@ -63,7 +65,10 @@ class CartController extends Controller
                 ->get();
         }
 
-        return view('cart', compact('carts', 'bookmarkedProducts', 'savedItems'));
+        if ($request->ajax()) {
+            return response()->json(['html' => view('cart', compact('cart', 'bookmarkedProducts', 'savedItems'))->render()]);
+        }
+        return view('cart', compact('cart', 'bookmarkedProducts', 'savedItems'));
     }
 
     public function addToCart(Request $request, $slug)
@@ -240,8 +245,11 @@ class CartController extends Controller
         $cart = Cart::find($request->cart_id);
 
         if (!$cart) {
-            return redirect()->back()->with('error', 'Cart not found!');
+            return response()->json([
+                'error' => 'Cart not found!',
+            ], 401);
         }
+
 
         $cart_item = CartItem::where('cart_id', $cart->id)->where('product_id', $request->product_id)->first();
 
@@ -259,7 +267,11 @@ class CartController extends Controller
 
         $cart_item->delete();
 
-        return redirect()->back()->with('status', 'Deal Removed from Cart!');
+        return response()->json([
+            'status' => 'Deal Removed from Cart!',
+            'cartItemCount' => $cart->item_count,
+        ]);
+
     }
 
     public function getCartDropdown()
@@ -332,10 +344,15 @@ class CartController extends Controller
             $cart->shipping_weight = $cart->shipping_weight - $cartItem->shipping_weight;
             $cart->save();
 
-            return redirect()->back()->with(['status' => 'Item moved to Buy for Later'], 200);
+            return response()->json([
+                'status' => 'Item moved to Buy for Later',
+                'cartItemCount' => $cart->item_count,
+            ]);
         }
 
-        return redirect()->back()->with(['status' => 'Item not found in cart'], 401);
+        return response()->json([
+            'error' => 'Item not found in cart',
+        ], 401);
     }
 
     public function moveToCart(Request $request)
@@ -356,7 +373,10 @@ class CartController extends Controller
             $cart = Cart::where('customer_id', $user_id)->first();
         }
         if (!$cart) {
-            return redirect()->back()->with(['status' => 'No cart found'], 404);
+            return response()->json([
+                'error' => 'No cart found',
+            ], 404);
+
         }
 
         CartItem::create([
@@ -387,10 +407,11 @@ class CartController extends Controller
         $cart->shipping_weight = $cart->shipping_weight + 0;
         $cart->save();
 
-        return redirect()->back()->with(['status' => 'Item moved to Cart'], 200);
+        return response()->json([
+            'status' => 'Item moved to Cart',
+        ]);
     }
-
-    public function getsaveforlater()
+    public function getsaveforlater(Request $request)
     {
         $user_id = Auth::check() ? Auth::user()->id : null;
 
@@ -408,6 +429,9 @@ class CartController extends Controller
                 })
                 ->with('deal.productMedia', 'deal.shop')
                 ->get();
+        }
+        if ($request->ajax()) {
+            return response()->json(['html' => view('savelater', compact('savedItems'))->render()]);
         }
 
         return view('savelater', compact('savedItems'));
@@ -428,12 +452,16 @@ class CartController extends Controller
         }
 
         if (!$savedItem) {
-            return redirect()->back()->with(['status' => 'Item not found in Save for Later'], 404);
+            return response()->json([
+                'error' => 'Item not found in Save for Later',
+            ], 404);
         }
 
         $savedItem->delete();
 
-        return redirect()->back()->with(['status' => 'Item removed from Buy for Later'], 200);
+        return response()->json([
+            'status' => 'Item removed from Buy for Later',
+        ]);
     }
 
     public function cartSummary($cart_id, Request $request)

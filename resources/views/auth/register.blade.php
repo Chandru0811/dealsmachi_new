@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Deaslmachi | Register </title>
     <link rel="canonical" href="https://dealsmachi.com/register" />
-    <meta name="description" content="Dealsmachi Shop Smart, Save Big!" />
+    <meta name="description" content="DealsMachi Shop Smart, Save Big!" />
     <link rel="icon" href="{{ asset('assets/images/home/favicon.ico') }}" />
 
     <!-- Vendor CSS Files -->
@@ -27,23 +27,55 @@
 <body>
     <section class="container-fluid p-0">
         @if (session('status'))
-            <div class="alert alert-success alert-dismissible fade show" role="alert"
-                style="position: absolute; top: 15px; right: 40px;">
-                {{ session('status') }}
-                <button type="button" class="btn-close btn-sm" data-bs-dismiss="alert" aria-label="Close"></button>
+        <div class="alert alert-dismissible fade show toast-success" role="alert"
+            style="position: fixed; top: 70px; right: 40px; z-index: 1050;">
+            <div class="toast-content">
+                <div class="toast-icon">
+                    <i class="fa-solid fa-check-circle" style="color: #16A34A"></i>
+                </div>
+                <span class="toast-text"> {!! nl2br(e(session('status'))) !!}</span>&nbsp;&nbsp;
+                <button class="toast-close-btn"data-bs-dismiss="alert" aria-label="Close">
+                    <i class="fa-thin fa-xmark" style="color: #16A34A"></i>
+                </button>
             </div>
-        @endif
-        @if ($errors->any())
-            <div class="alert alert-danger alert-dismissible fade show" role="alert"
-                style="position: absolute; top: 15px; right: 40px;">
-                <ul class="mb-0">
-                    @foreach ($errors->all() as $error)
-                        <li>{{ $error }}</li>
-                    @endforeach
-                </ul>
-                <button type="button" class="btn-close btn-sm" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    @endif
+    @if ($errors->any())
+        <div class="alert  alert-dismissible fade show toast-danger" role="alert"
+            style="position: fixed; top: 70px; right: 40px; z-index: 1050;">
+            <div class="toast-content">
+                <div class="toast-icon">
+                    <i class="fa-solid fa-check-circle" style="color: #EF4444"></i>
+                </div>
+                <span class="toast-text">
+                    <ul class="mb-0">
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </span>&nbsp;&nbsp;
+                <button class="toast-close-btn"data-bs-dismiss="alert" aria-label="Close">
+                    <i class="fa-solid fa-xmark" style="color: #EF4444"></i>
+                </button>
             </div>
-        @endif
+        </div>
+    @endif
+    @if (session('error'))
+        <div class="alert  alert-dismissible fade show toast-danger" role="alert"
+            style="position: fixed; top: 70px; right: 40px; z-index: 1050;">
+            <div class="toast-content">
+                <div class="toast-icon">
+                    <i class="fa-solid fa-check-circle" style="color: #EF4444"></i>
+                </div>
+                <span class="toast-text">
+                    {{ session('error') }}
+                </span>&nbsp;&nbsp;
+                <button class="toast-close-btn"data-bs-dismiss="alert" aria-label="Close">
+                    <i class="fa-solid fa-xmark" style="color: #EF4444"></i>
+                </button>
+            </div>
+        </div>
+    @endif
         <div class="row m-0">
             <div class="col-md-6 col-12 pt-5 bg_login login-text-container text-center" style="background: #ffcbde">
                 <div class="px-5 pt-5">
@@ -58,50 +90,49 @@
             <div class="col-md-6 col-12 d-flex justify-content-center align-items-center login-container">
                 <div class="d-flex flex-column justify-content-center align-items-center w-100">
                     <h3 class="login-title text-center mb-4">Register</h3>
-                    <form id="loginForm" class="w-75" method="POST" action="{{ route('register') }}">
+                    <form id="registerForm" class="w-75" method="POST" action="{{ route('register') }}">
                         @csrf
                         <div class="mb-3 email-container">
                             <input type="text" class="form-control" id="name" name="name" value=""
                                 placeholder="Name" />
-                            @error('name')
-                                <span class="error">{{ $message }}</span>
-                            @enderror
+                            <span class="error text-danger" id="nameError"
+                                style="display: none; font-size: 12px;"></span>
                         </div>
                         <div class="mb-3 email-container">
                             <input type="email" class="form-control" id="email" name="email" value=""
                                 placeholder="Email" />
-                            @error('email')
-                                <span class="error">{{ $message }}</span>
-                            @enderror
+                            <span class="error text-danger" id="emailError"
+                                style="display: none; font-size: 12px;"></span>
                         </div>
                         <div class="mb-3 password-container">
                             <div class="input-group">
                                 <input type="password" class="form-control" id="password" name="password"
                                     aria-label="password" placeholder="Password">
                                 <span class="input-group-text" id="togglePassword"
-                                    style="cursor: pointer; background:#fff">
+                                    style="cursor: pointer; background:#fff;">
                                     <i class="fa fa-eye" id="eyeIconPassword"></i>
                                 </span>
                             </div>
-                            @error('password')
-                                <span class="error">{{ $message }}</span>
-                            @enderror
-                        </div>
-                        <div class="mb-3 password-container">
-                            <div class="input-group">
-                                <input type="password" class="form-control" id="password_confirmation"
-                                    name="password_confirmation" aria-label="password_confirmation"
-                                    placeholder="Confirm Password">
-                                <span class="input-group-text" id="toggleConfirmPassword"
-                                    style="cursor: pointer; background:#fff">
-                                    <i class="fa fa-eye" id="eyeIconConfirm"></i>
-                                </span>
-                            </div>
-                            @error('password_confirmation')
-                                <span class="error">{{ $message }}</span>
-                            @enderror
+                            <span class="error text-danger" id="passwordError"
+                                style="display: none; font-size: 12px;"></span>
                         </div>
 
+                        <div class="mb-3 password-container">
+                            <div class="input-group">
+                                <input type="password" class="form-control" id="password_confirmation" name="password_confirmation"
+                                    aria-label="password_confirmation" placeholder="Confirm Password">
+                                <span class="input-group-text" id="toggleConfirmPassword"
+                                    style="cursor: pointer; background:#fff;">
+                                    <i class="fa fa-eye" id="eyeIconConfirmPassword"></i>
+                                </span>
+                            </div>
+                            <span class="error text-danger" id="confirmpasswordError"
+                                style="display: none; font-size: 12px;"></span>
+                            <div id="passwordMatchError" class="error text-danger"
+                                style="display: none; font-size: 12px;">
+                                Passwords do not match
+                            </div>
+                        </div>
 
                         <div class="mb-3">
                             <button type="submit" class="btn btn-light login-btn w-100"
@@ -116,7 +147,7 @@
                             <div class="col-6">
                                 <a href="/sociallogin/google/customer" style="text-decoration: none">
                                     <button type="button" class="btn btn-light social-btn w-100">
-                                        <img src="{{ asset('assets/images/home/google.webp') }}" class="img-fluid "
+                                        <img src="{{ asset('assets/images/home/google.webp') }}" class="img-fluid"
                                             alt="google_logo" width="22px">
                                         &nbsp;&nbsp;<span style="font-size: small">Sign in with Google</span>
                                     </button>
@@ -124,8 +155,8 @@
                             </div>
                             <div class="col-6">
                                 <a href="/sociallogin/facebook/customer">
-                                    <button type="button" class="btn btn-light social-btn w-100 ">
-                                        <img src="{{ asset('assets/images/home/facebook.webp') }}" class="img-fluid "
+                                    <button type="button" class="btn btn-light social-btn w-100">
+                                        <img src="{{ asset('assets/images/home/facebook.webp') }}" class="img-fluid"
                                             alt="facebook_logo" width="22px">
                                         &nbsp;&nbsp;<span style="font-size: small">Sign in with Facebook</span>
                                     </button>

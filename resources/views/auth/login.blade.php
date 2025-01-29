@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DealsMachi | Login </title>
     <link rel="canonical" href="https://dealsmachi.com/login" />
-    <meta name="description" content="Dealsmachi Shop Smart, Save Big!" />
+    <meta name="description" content="DealsMachi Shop Smart, Save Big!" />
     <link rel="icon" href="{{ asset('assets/images/home/favicon.ico') }}" />
 
     <!-- Vendor CSS Files -->
@@ -27,24 +27,55 @@
 <body>
     <section class="container-fluid p-0">
         @if (session('status'))
-            <div class="alert alert-success alert-dismissible fade show success_alert" role="alert">
-                {{ session('status') }}
-                &nbsp;&nbsp;&nbsp;&nbsp; <div data-bs-dismiss="alert" aria-label="Close" class="p-0 m-0"><i
-                        class="fa-light fa-xmark" style="font-size: 24px; cursor: pointer;"></i></div>
+        <div class="alert alert-dismissible fade show toast-success" role="alert"
+            style="position: fixed; top: 70px; right: 40px; z-index: 1050;">
+            <div class="toast-content">
+                <div class="toast-icon">
+                    <i class="fa-solid fa-check-circle" style="color: #16A34A"></i>
+                </div>
+                <span class="toast-text"> {!! nl2br(e(session('status'))) !!}</span>&nbsp;&nbsp;
+                <button class="toast-close-btn"data-bs-dismiss="alert" aria-label="Close">
+                    <i class="fa-thin fa-xmark" style="color: #16A34A"></i>
+                </button>
             </div>
-        @endif
-        @if ($errors->any())
-            <div class="alert alert-danger alert-dismissible fade show error_alert d-flex justify-content-between"
-                role="alert">
-                <ul class="mb-0">
-                    @foreach ($errors->all() as $error)
-                        <li>{{ $error }}</li>
-                    @endforeach
-                </ul>
-                &nbsp;&nbsp;&nbsp;&nbsp; <span data-bs-dismiss="alert" aria-label="Close" class="p-0 m-0"><i
-                        class="fa-light fa-xmark" style="font-size: 24px; cursor: pointer;"></i></span>
+        </div>
+    @endif
+    @if ($errors->any())
+        <div class="alert  alert-dismissible fade show toast-danger" role="alert"
+            style="position: fixed; top: 70px; right: 40px; z-index: 1050;">
+            <div class="toast-content">
+                <div class="toast-icon">
+                    <i class="fa-solid fa-check-circle" style="color: #EF4444"></i>
+                </div>
+                <span class="toast-text">
+                    <ul class="mb-0">
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </span>&nbsp;&nbsp;
+                <button class="toast-close-btn"data-bs-dismiss="alert" aria-label="Close">
+                    <i class="fa-solid fa-xmark" style="color: #EF4444"></i>
+                </button>
             </div>
-        @endif
+        </div>
+    @endif
+    @if (session('error'))
+        <div class="alert  alert-dismissible fade show toast-danger" role="alert"
+            style="position: fixed; top: 70px; right: 40px; z-index: 1050;">
+            <div class="toast-content">
+                <div class="toast-icon">
+                    <i class="fa-solid fa-check-circle" style="color: #EF4444"></i>
+                </div>
+                <span class="toast-text">
+                    {{ session('error') }}
+                </span>&nbsp;&nbsp;
+                <button class="toast-close-btn"data-bs-dismiss="alert" aria-label="Close">
+                    <i class="fa-solid fa-xmark" style="color: #EF4444"></i>
+                </button>
+            </div>
+        </div>
+    @endif
 
         <div class="row m-0">
             <div class="col-md-6 col-12 pt-5 bg_login login-text-container text-center" style="background: #ffcbde">
@@ -66,14 +97,11 @@
                         </div>
                     @endif
                     <h3 class="login-title text-center mb-4">Login/Register</h3>
-                    <form class="w-75" method="POST" action="{{ route('login') }}">
+                    <form id="loginForm" class="w-75" method="POST" action="{{ route('login') }}">
                         @csrf
                         <div class="mb-3 email-container">
-                            <input type="email" class="form-control" id="email" name="email" value=""
-                                placeholder="Email" />
-                            @error('email')
-                                <span class="error">{{ $message }}</span>
-                            @enderror
+                            <input type="email" class="form-control" id="email" name="email" value="" placeholder="Email" />
+                            <span class="error text-danger" id="emailError" style="display: none; font-size: 12px;"></span>
                         </div>
                         <div class="mb-3 password-container">
                             <div class="input-group">
@@ -84,10 +112,9 @@
                                     <i class="fa fa-eye" id="eyeIconPassword"></i>
                                 </span>
                             </div>
-                            @error('password')
-                                <span class="error">{{ $message }}</span>
-                            @enderror
+                            <span class="error text-danger" id="passwordError" style="display: none; font-size: 12px;"></span>
                         </div>
+
                         <div class="mb-1">
                             <button type="submit" class="btn btn-light login-btn w-100"
                                 style="color: #fff; background:#FF0060">Login</button>
@@ -95,7 +122,7 @@
                         <div class="d-flex justify-content-between text-center">
                             <a href="{{ url('forgot-password') }}" style="color: #FF0060;font-size:12px;">Forgot your
                                 password?</a>
-                            <p style="font-size:12px;color: #FF0060">Don't have an account? <span>
+                            <p style="font-size:12px;">Don't have an account? <span>
                                     <a href="register" style="color: #FF0060;font-size:12px;">Sign Up</a></span>
                             </p>
                         </div>
@@ -125,7 +152,7 @@
                             </div>
                         </div>
                         <div class="text-center">
-                            <p class="mb-0" style="color: #FF0060;">Don't have an account? &nbsp; <a
+                            <p class="mb-0">Don't have an account? &nbsp; <a
                                     href="{{ url('register') }}" style="color: #FF0060">Register</a></p>
                         </div>
                     </form>

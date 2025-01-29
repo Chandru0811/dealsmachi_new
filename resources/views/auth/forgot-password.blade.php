@@ -4,9 +4,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dealsmachi | Forgot Password </title>
+    <title>DealsMachi | Forgot Password </title>
     <link rel="canonical" href="https://dealsmachi.com/forgot-password" />
-    <meta name="description" content="Dealsmachi Shop Smart, Save Big!" />
+    <meta name="description" content="DealsMachi Shop Smart, Save Big!" />
     <link rel="icon" href="{{ asset('assets/images/home/favicon.ico') }}" />
 
     <!-- Vendor CSS Files -->
@@ -27,21 +27,53 @@
 <body>
     <section class="container-fluid p-0">
         @if (session('status'))
-            <div class="alert alert-success alert-dismissible fade show" role="alert"
-                style="position: absolute; top: 15px; right: 40px;">
-                {{ session('status') }}
-                <button type="button" class="btn-close btn-sm" data-bs-dismiss="alert" aria-label="Close"></button>
+            <div class="alert alert-dismissible fade show toast-success" role="alert"
+                style="position: fixed; top: 70px; right: 40px; z-index: 1050;">
+                <div class="toast-content">
+                    <div class="toast-icon">
+                        <i class="fa-solid fa-check-circle" style="color: #16A34A"></i>
+                    </div>
+                    <span class="toast-text"> {!! nl2br(e(session('status'))) !!}</span>&nbsp;&nbsp;
+                    <button class="toast-close-btn"data-bs-dismiss="alert" aria-label="Close">
+                        <i class="fa-thin fa-xmark" style="color: #16A34A"></i>
+                    </button>
+                </div>
             </div>
         @endif
         @if ($errors->any())
-            <div class="alert alert-danger alert-dismissible fade show" role="alert"
-                style="position: absolute; top: 15px; right: 40px;">
-                <ul class="mb-0">
-                    @foreach ($errors->all() as $error)
-                        <li>{{ $error }}</li>
-                    @endforeach
-                </ul>
-                <button type="button" class="btn-close btn-sm" data-bs-dismiss="alert" aria-label="Close"></button>
+            <div class="alert  alert-dismissible fade show toast-danger" role="alert"
+                style="position: fixed; top: 70px; right: 40px; z-index: 1050;">
+                <div class="toast-content">
+                    <div class="toast-icon">
+                        <i class="fa-solid fa-check-circle" style="color: #EF4444"></i>
+                    </div>
+                    <span class="toast-text">
+                        <ul class="mb-0">
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </span>&nbsp;&nbsp;
+                    <button class="toast-close-btn"data-bs-dismiss="alert" aria-label="Close">
+                        <i class="fa-solid fa-xmark" style="color: #EF4444"></i>
+                    </button>
+                </div>
+            </div>
+        @endif
+        @if (session('error'))
+            <div class="alert  alert-dismissible fade show toast-danger" role="alert"
+                style="position: fixed; top: 70px; right: 40px; z-index: 1050;">
+                <div class="toast-content">
+                    <div class="toast-icon">
+                        <i class="fa-solid fa-check-circle" style="color: #EF4444"></i>
+                    </div>
+                    <span class="toast-text">
+                        {{ session('error') }}
+                    </span>&nbsp;&nbsp;
+                    <button class="toast-close-btn"data-bs-dismiss="alert" aria-label="Close">
+                        <i class="fa-solid fa-xmark" style="color: #EF4444"></i>
+                    </button>
+                </div>
             </div>
         @endif
         <div class="row m-0">
@@ -58,26 +90,24 @@
             <div class="col-md-6 col-12 d-flex justify-content-center align-items-center login-container">
                 <div class="d-flex flex-column justify-content-center align-items-center w-100">
                     <h3 class="login-title text-center mb-4">Forgot Password</h3>
-                    <form id="loginForm" class="w-75" method="POST" action="{{ route('password.email') }}">
+                    <form id="forgotpasswordForm" class="w-75" method="POST" action="{{ route('password.email') }}">
                         @csrf
                         <div class="mb-3 email-container">
                             <input type="email" class="form-control" id="email" name="email" value=""
                                 placeholder="Email" />
-                            @error('email')
-                                <span class="error">{{ $message }}</span>
-                            @enderror
+                            <span class="error text-danger" id="emailError"
+                                style="display: none; font-size: 12px;"></span>
                         </div>
                         <div class="mb-3 text-center">
-                            <button type="submit"
-                                class="btn login-btn w-100"style="color: #fff; background:#FF0060;">Reset
-                                Password</button>
+                            <button type="submit" class="btn login-btn w-100"
+                                style="color: #fff; background:#FF0060;">Reset Password</button>
                         </div>
                         <div class="text-end">
                             <p style="font-size: 12px">Go Back to <a href="{{ url('login') }}"
-                                    style="color: #FF0060;font-size:12px">Login</a>
-                            </p>
+                                    style="color: #FF0060;font-size:12px">Login</a></p>
                         </div>
                     </form>
+
                 </div>
             </div>
         </div>
@@ -93,6 +123,41 @@
 
     <!-- Custom JS -->
     <script src="{{ asset('assets/js/custom.js') }}"></script>
+    <script>
+        $(document).ready(function() {
+            $("#forgotpasswordForm").on("submit", function(e) {
+                e.preventDefault();
+
+                $("#emailError").hide();
+
+                // Get the email value and validate it
+                const email = $("#email").val().trim();
+                const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                let isValid = true;
+
+                // Validate the email field
+                if (email === "") {
+                    $("#emailError").text("Email field is required.").show();
+                    isValid = false;
+                } else if (!emailPattern.test(email)) {
+                    $("#emailError").text("Please enter a valid email address.").show();
+                    isValid = false;
+                }
+
+                if (isValid) {
+                    const submitButton = $("button[type='submit']");
+                    submitButton.prop('disabled', true);
+
+                    // const loader = $('<span class="custom-loader"></span>');
+                    // submitButton.append(loader);
+
+                    setTimeout(() => {
+                        this.submit();
+                    });
+                }
+            });
+        });
+    </script>
 </body>
 
 </html>

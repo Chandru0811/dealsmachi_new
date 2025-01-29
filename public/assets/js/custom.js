@@ -313,179 +313,514 @@ $(document).ready(function () {
         },
     });
 
-    // Validation for New Address Form
-    $("#addressNewForm").validate({
-        rules: {
-            first_name: {
-                required: true,
-                maxlength: 200,
+    //Address Modal
+    $(document).ready(function () {
+        // Validation for New Address Form
+        $("#addressNewForm").validate({
+            rules: {
+                first_name: {
+                    required: true,
+                    maxlength: 200,
+                },
+                email: {
+                    required: true,
+                    email: true,
+                    maxlength: 200,
+                },
+                phone: {
+                    required: true,
+                    digits: true,
+                    minlength: 10,
+                    maxlength: 10,
+                },
+                postalcode: {
+                    required: true,
+                    digits: true,
+                    minlength: 6,
+                    maxlength: 6,
+                },
+                address: {
+                    required: true,
+                },
+                state: {
+                    required: true,
+                    maxlength: 200,
+                },
+                city: {
+                    required: true,
+                    maxlength: 200,
+                },
+                type: {
+                    required: true,
+                },
+                unit: {
+                    maxlength: 255,
+                },
             },
-            email: {
-                required: true,
-                email: true,
-                maxlength: 200,
+            messages: {
+                first_name: {
+                    required: "Please provide your first name.",
+                    maxlength: "First name may not exceed 200 characters.",
+                },
+                email: {
+                    required: "Please provide an email address.",
+                    email: "Please provide a valid email address.",
+                    maxlength: "Email may not exceed 200 characters.",
+                },
+                phone: {
+                    required: "Please provide a phone number.",
+                    digits: "Phone number must be exactly 10 digits.",
+                    minlength: "Phone number must be exactly 10 digits.",
+                    maxlength: "Phone number must be exactly 10 digits.",
+                },
+                postalcode: {
+                    required: "Please provide a postal code.",
+                    digits: "Postal code must be exactly 6 digits.",
+                    minlength: "Postal code must be exactly 6 digits.",
+                    maxlength: "Postal code must be exactly 6 digits.",
+                },
+                address: {
+                    required: "Please provide an address.",
+                },
+                state: {
+                    required: "Please provide your State.",
+                    maxlength: "State may not exceed 200 characters.",
+                },
+                city: {
+                    required: "Please provide your City.",
+                    maxlength: "City may not exceed 200 characters.",
+                },
+                unit: {
+                    maxlength: "Additional Info may not exceed 255 characters.",
+                },
             },
-            phone: {
-                required: true,
-                digits: true,
-                maxlength: 10, // Exactly 8 digits as per backend
+            errorPlacement: function (error, element) {
+                error.addClass("text-danger mt-1");
+                error.insertAfter(element);
             },
-            postalcode: {
-                required: true,
-                digits: true,
-                minlength: 6,
-                maxlength: 6, // Exactly 6 digits as per backend
+            highlight: function (element) {
+                $(element).addClass("is-invalid");
             },
-            address: {
-                required: true,
+            unhighlight: function (element) {
+                $(element).removeClass("is-invalid");
             },
-            state: {
-                required: true,
-                maxlength: 200,
-            },
-            city: {
-                required: true,
-                maxlength: 200,
-            },
-            type: {
-                required: true,
-            },
-        },
-        messages: {
-            first_name: {
-                required: "Please provide your first name.",
-                maxlength: "First name may not exceed 200 characters.",
-            },
-            email: {
-                required: "Please provide an email address.",
-                email: "Please provide a valid email address.",
-                maxlength: "Email may not exceed 200 characters.",
-            },
-            phone: {
-                required: "Please provide a phone number.",
-                digits: "Phone number must be exactly 10 digits.",
-                maxlength: "Phone number must be exactly 10 digits.",
-            },
-            postalcode: {
-                required: "Please provide a postal code.",
-                digits: "Postal code must be exactly 6 digits.",
-                minlength: "Postal code must be exactly 6 digits.",
-                maxlength: "Postal code must be exactly 6 digits.",
-            },
-            address: {
-                required: "Please provide an address.",
-            },
-            state: {
-                required: "Please provide your State.",
-                maxlength: "State may not exceed 200 characters.",
-            },
-            city: {
-                required: "Please provide your City.",
-                maxlength: "City may not exceed 200 characters.",
-            },
-        },
-        errorPlacement: function (error, element) {
-            error.addClass("text-danger mt-1");
-            error.insertAfter(element);
-        },
-        highlight: function (element) {
-            $(element).addClass("is-invalid");
-        },
-        unhighlight: function (element) {
-            $(element).removeClass("is-invalid");
-        },
-        submitHandler: function (form) {
-            form.submit();
-        },
-    });
+            submitHandler: function (form) {
+                var formData = new FormData(form);
+                var isDefault = $('#defaultAddressCheckbox').prop('checked') ? 1 : 0;
+                formData.append('default', isDefault);
 
-    // Validation for New Address Form
-    $("#addressEditForm").validate({
-        rules: {
-            first_name: {
-                required: true,
-                maxlength: 200,
+                $.ajax({
+                    url: $(form).attr('action'),
+                    type: 'POST',
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: function (response) {
+                        if (response.success) {
+                            $('#newAddressModal').modal('hide');
+                            $('#addressNewForm')[0].reset();
+
+                            $('.allAddress').find('.badge_primary').remove();
+                            $('.allAddress').find('.badge_del').each(function () {
+                                const oldAddressId = $(this).data('address-id');
+                                if (oldAddressId) {
+                                    $(this).html(`
+                                        <button type="button" class="badge_del_btn" data-bs-toggle="modal"
+                                            data-bs-target="#deleteAddressModal" data-address-id="${oldAddressId}">
+                                            Delete
+                                        </button>
+                                    `).show(); // Ensure it's visible
+                                }
+                            });
+
+                            var finddiv = $('#myAddressModal').find('.allAddress');
+
+                            finddiv.append(`
+                            <div class="row p-2">
+                                <div class="col-10">
+                                    <div class="d-flex text-start">
+                                        <div class="px-1">
+                                            <input type="radio" name="selected_id"
+                                        id="selected_id_${response.address.id}"
+                                        value="${response.address.id}"
+                                        ${response.address.default === '1' ? 'checked' : ''} />
+                                        </div>
+                                        <p class="text-turncate fs_common">
+                                            <span class="px-2">
+                                                ${response.address.first_name} ${response.address.last_name} |
+                                                <span style="color: #c7c7c7;">&nbsp;+91
+                                                    ${response.address.phone}</span>
+                                            </span><br>
+                                            <span class="px-2"
+                                                style="color: #c7c7c7">${response.address.address}, ${response.address.city}, ${response.address.state} - ${response.address.postalcode}.</span>
+                                            <br>
+                                            ${response.address.default === '1' ? '<span class="badge badge_primary">Default</span>' : ''}
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="col-2">
+                                    <div class="d-flex align-items-center justify-content-end">
+                                        <div class="d-flex gap-2">
+                                            <button type="button" class="badge_edit" data-bs-toggle="modal"
+                                                data-address-id="${address.id}" data-bs-target="#editAddressModal">
+                                                Edit
+                                            </button>
+                                            ${response.address.default === '0' ? `
+                                                <button type="button" class="badge_del"
+                                                    data-bs-toggle="modal"
+                                                    data-bs-target="#deleteAddressModal"
+                                                    data-address-id="${response.address.id}">
+                                                    Delete
+                                                </button>` : ''}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            `);
+                            if (response.address.default === '1') {
+                                $('.modal-body p strong:contains("Phone :")').parent().html(`
+                                    <strong>Phone :</strong> (+91) ${response.address.phone || '--'}
+                                `);
+                                var profileAddress = `
+                                    <p>
+                                        <strong>${response.address.first_name} ${response.address.last_name} (+91)
+                                            ${response.address.phone}</strong>&nbsp;&nbsp;<br>
+                                        ${response.address.address}, ${response.address.city}, ${response.address.state} - ${response.address.postalcode}
+                                        <span>
+                                            <span class="badge badge_danger py-1">Default</span>&nbsp;&nbsp;
+                                        </span>
+                                    </p>
+                                `;
+                                $('.selected-address').html(profileAddress);
+                                $('.defaultAddress .primary_new_btn').hide();
+                                if ($('.defaultAddress .badge_infos').length === 0) {
+                                    $('.defaultAddress').append(`
+                                        <span class="badge badge_infos py-1" data-bs-toggle="modal" data-bs-target="#myAddressModal">Change</span>
+                                    `);
+                                }
+                            }
+                            $('#myAddressModal').modal('show');
+                            showMessage(response.message, 'success');
+                        } else {
+                            showMessage(response.message, 'error');
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        showMessage('There was an issue with the request. Please try again.', 'error');
+                    }
+                });
             },
-            email: {
-                required: true,
-                email: true,
-                maxlength: 200,
+        });
+
+        // Optionally reset form when clicking close button
+        $('#newAddressModal').on('hidden.bs.modal', function () {
+            $('#addressNewForm')[0].reset();
+        });
+
+        // Optionally reset form when clicking close button
+        $('.btn-close').on('click', function () {
+            $('#addressNewForm')[0].reset();
+        });
+
+        // Validation for New Address Form
+        $("#addressEditForm").validate({
+            rules: {
+                first_name: {
+                    required: true,
+                    maxlength: 200,
+                },
+                email: {
+                    required: true,
+                    email: true,
+                    maxlength: 200,
+                },
+                phone: {
+                    required: true,
+                    digits: true,
+                    maxlength: 10,
+                },
+                postalcode: {
+                    required: true,
+                    digits: true,
+                    minlength: 6,
+                    maxlength: 6,
+                },
+                address: {
+                    required: true,
+                },
+                state: {
+                    required: true,
+                    maxlength: 200,
+                },
+                city: {
+                    required: true,
+                    maxlength: 200,
+                },
+                type: {
+                    required: true,
+                },
             },
-            phone: {
-                required: true,
-                digits: true,
-                maxlength: 10,
+            messages: {
+                first_name: {
+                    required: "Please provide your first name.",
+                    maxlength: "First name may not exceed 200 characters.",
+                },
+                email: {
+                    required: "Please provide an email address.",
+                    email: "Please provide a valid email address.",
+                    maxlength: "Email may not exceed 200 characters.",
+                },
+                phone: {
+                    required: "Please provide a phone number.",
+                    digits: "Phone number must be exactly 8 digits.",
+                    maxlength: "Phone number must be exactly 10 digits.",
+                },
+                postalcode: {
+                    required: "Please provide a postal code.",
+                    digits: "Postal code must be exactly 6 digits.",
+                    minlength: "Postal code must be exactly 6 digits.",
+                    maxlength: "Postal code must be exactly 6 digits.",
+                },
+                address: {
+                    required: "Please provide an address.",
+                },
+                type: {
+                    required: "Please provide the address type.",
+                },
+                state: {
+                    required: "Please provide your State.",
+                    maxlength: "State may not exceed 200 characters.",
+                },
+                city: {
+                    required: "Please provide your City.",
+                    maxlength: "City may not exceed 200 characters.",
+                },
             },
-            postalcode: {
-                required: true,
-                digits: true,
-                minlength: 6,
-                maxlength: 6,
+            errorPlacement: function (error, element) {
+                error.addClass("text-danger mt-1");
+                error.insertAfter(element);
             },
-            address: {
-                required: true,
+            highlight: function (element) {
+                $(element).addClass("is-invalid");
             },
-            state: {
-                required: true,
-                maxlength: 200,
+            unhighlight: function (element) {
+                $(element).removeClass("is-invalid");
             },
-            city: {
-                required: true,
-                maxlength: 200,
+            submitHandler: function (form) {
+                var formData = new FormData(form);
+                var isDefault = $('#default_address').prop('checked') ? 1 : 0;
+                formData.append('default', isDefault);
+
+                $.ajax({
+                    url: $(form).attr('action'),
+                    type: 'POST',
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: function (response) {
+                        if (response.success) {
+                            $('#editAddressModal').modal('hide');
+                            $('#addressEditForm')[0].reset();
+
+                            var oldDefaultDiv = $('.allAddress').find('.badge_primary').closest('.row');
+                            oldDefaultDiv.find('.badge_primary').remove();
+                            var oldAddressId = oldDefaultDiv.find('input[type=radio]').val();
+                            oldDefaultDiv.find('.delBadge').append(`
+                            <button type="button" class="badge_del"data-bs-toggle="modal"
+                                data-bs-target="#deleteAddressModal" data-address-id="${oldAddressId}">
+                                Delete
+                            </button>
+                        `);
+
+                            var finddiv = $('#myAddressModal').find('.allAddress');
+                            finddiv.find(`#selected_id_${response.address.id}`).closest('.row').remove();
+                            finddiv.append(`
+                            <div class="row p-2">
+                                <div class="col-10">
+                                    <div class="d-flex text-start">
+                                        <div class="px-1">
+                                            <input type="radio" name="selected_id"
+                                                id="selected_id_${response.address.id}"
+                                                value="${response.address.id}"
+                                                ${response.address.default === '1' ? 'checked' : ''} />
+                                        </div>
+                                        <p class="text-turncate fs_common">
+                                            <span class="px-2">
+                                                ${response.address.first_name} ${response.address.last_name} |
+                                                <span style="color: #c7c7c7;">&nbsp;+91
+                                                    ${response.address.phone}</span>
+                                            </span><br>
+                                            <span class="px-2"
+                                                style="color: #c7c7c7">${response.address.address}, ${response.address.city}, ${response.address.state} - ${response.address.postalcode}.</span>
+                                            <br>
+                                            ${response.address.default === '1' ? '<span class="badge badge_primary">Default</span>' : ''}
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="col-2">
+                                    <div class="d-flex align-items-center justify-content-end">
+                                        <div class="d-flex gap-2">
+                                            <button type="button" class="badge_edit" data-bs-toggle="modal"
+                                                data-address-id="${address.id}" data-bs-target="#editAddressModal">
+                                                Edit
+                                            </button>
+                                            ${response.address.default === '0' ? `
+                                                <button type="button" class="badge_del"
+                                                    data-bs-toggle="modal"
+                                                    data-bs-target="#deleteAddressModal"
+                                                    data-address-id="${response.address.id}">
+                                                    Delete
+                                                </button>` : ''}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        `);
+
+                            if (response.address.default === '1') {
+                                $('.modal-body p strong:contains("Phone :")').parent().html(`
+                                    <strong>Phone :</strong> (+91) ${response.address.phone || '--'}
+                                `);
+                                $('.modal-body .mt-2 div').html(`
+                                <p>
+                                    <strong>${response.address.first_name} ${response.address.last_name} (+91)
+                                        ${response.address.phone}</strong>&nbsp;&nbsp;<br>
+                                    ${response.address.address}, ${response.address.city}, ${response.address.state} - ${response.address.postalcode}
+                                    <span>
+                                        <span class="badge badge_danger py-1">Default</span>&nbsp;&nbsp;
+                                    </span>
+                                </p>
+                            `);
+                            }
+                            $('#myAddressModal').modal('show');
+                            showMessage(response.message, 'success');
+                        } else {
+                            showMessage(response.message, 'error');
+                        }
+                    },
+                    error: function () {
+                        showMessage('There was an issue with the request. Please try again.', 'error');
+                    }
+                });
             },
-            type: {
-                required: true,
-            },
-        },
-        messages: {
-            first_name: {
-                required: "Please provide your first name.",
-                maxlength: "First name may not exceed 200 characters.",
-            },
-            email: {
-                required: "Please provide an email address.",
-                email: "Please provide a valid email address.",
-                maxlength: "Email may not exceed 200 characters.",
-            },
-            phone: {
-                required: "Please provide a phone number.",
-                digits: "Phone number must be exactly 8 digits.",
-                maxlength: "Phone number must be exactly 10 digits.",
-            },
-            postalcode: {
-                required: "Please provide a postal code.",
-                digits: "Postal code must be exactly 6 digits.",
-                minlength: "Postal code must be exactly 6 digits.",
-                maxlength: "Postal code must be exactly 6 digits.",
-            },
-            address: {
-                required: "Please provide an address.",
-            },
-            type: {
-                required: "Please provide the address type.",
-            },
-            state: {
-                required: "Please provide your State.",
-                maxlength: "State may not exceed 200 characters.",
-            },
-            city: {
-                required: "Please provide your City.",
-                maxlength: "City may not exceed 200 characters.",
-            },
-        },
-        errorPlacement: function (error, element) {
-            error.addClass("text-danger mt-1");
-            error.insertAfter(element);
-        },
-        highlight: function (element) {
-            $(element).addClass("is-invalid");
-        },
-        unhighlight: function (element) {
-            $(element).removeClass("is-invalid");
-        },
-        submitHandler: function (form) {
-            form.submit();
-        },
+        });
+
+        $(document).on("click", ".badge_edit", function () {
+            const addressId = $(this).closest(".row").find("input[type='radio']").val();
+
+            $.ajax({
+                url: `/getAddress/${addressId}`, // Adjust the route as necessary
+                type: "GET",
+                success: function (address) {
+                    populateAddressModal(address);
+                },
+                error: function () {
+                    showMessage("Failed to fetch address details. Please try again.", "error");
+                },
+            });
+        });
+
+        function populateAddressModal(address) {
+            // Populate form fields
+            $("#first_name").val(address.first_name);
+            $("#last_name").val(address.last_name);
+            $("#phone").val(address.phone);
+            $("#email").val(address.email);
+            $("#postalcode").val(address.postalcode);
+            $("#address").val(address.address);
+            $("#unit").val(address.unit ?? "");
+            $("#address_id").val(address.id ?? "");
+            $("#state").val(address.state ?? "");
+            $("#city").val(address.city ?? "");
+
+            // Set Address Type
+            if (address.type === "home_mode") {
+                $("#home_mode").prop("checked", true);
+            } else if (address.type === "work_mode") {
+                $("#work_mode").prop("checked", true);
+            }
+
+            // Set default checkbox
+            const defaultCheckbox = $("#default_address");
+            if (address.default === 1) {
+                defaultCheckbox.prop("checked", true);
+                defaultCheckbox.prop("disabled", true);
+            } else {
+                defaultCheckbox.prop("checked", false);
+                defaultCheckbox.prop("disabled", false);
+            }
+        }
+
+        // Delete Address Functionality
+        $(document).ready(function () {
+            var addressIdToDelete = null;
+
+            $(document).on('click', '.badge_del', function () {
+                addressIdToDelete = $(this).data('address-id');
+                $('#deleteAddressModal').modal('show');
+            });
+
+            $('#confirmDeleteBtn').click(function () {
+                if (!addressIdToDelete) return;
+
+                $.ajax({
+                    url: `/address/${addressIdToDelete}`,
+                    type: 'DELETE',
+                    data: {
+                        _token: $('meta[name="csrf-token"]').attr('content'),
+                    },
+                    success: function (response) {
+                        if (response.success) {
+                            $('#deleteAddressModal').modal('hide');
+                            $(`#selected_id_${addressIdToDelete}`).closest('.row').remove();
+                            $('#myAddressModal').modal('show');
+                            showMessage(response.message, 'success');
+                            addressIdToDelete = null;
+                        } else {
+                            showMessage(response.message, 'error');
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        showMessage('There was an issue with the request. Please try again.', 'error');
+                    }
+                });
+            });
+        });
+
+        function showMessage(message, type) {
+            var textColor, icon;
+
+            if (type === "success") {
+                textColor = "#16A34A";
+                icon =
+                    '<i class="fa-solid fa-check-circle" style="color: #16A34A"></i>';
+                var alertClass = "toast-success";
+            } else {
+                textColor = "#EF4444";
+                icon =
+                    '<i class="fa-solid fa-triangle-exclamation" style="color: #EF4444"></i>';
+                var alertClass = "toast-danger";
+            }
+
+            var alertHtml = `
+              <div class="alert ${alertClass} alert-dismissible fade show" role="alert" style="position: fixed; top: 70px; right: 40px; z-index: 1050; color: ${textColor};">
+                <div class="toast-content">
+                    <div class="toast-icon">
+                        ${icon}
+                    </div>
+                    <span class="toast-text">${message}</span>&nbsp;&nbsp;
+                    <button class="toast-close-btn" data-bs-dismiss="alert" aria-label="Close">
+                        <i class="fa-solid fa-times" style="color: ${textColor}; font-size: 14px;"></i>
+                    </button>
+                </div>
+              </div>
+            `;
+
+            $("body").append(alertHtml);
+            setTimeout(function () {
+                $(".alert").alert("close");
+            }, 5000);
+        }
     });
 });
 
@@ -546,69 +881,56 @@ $(document).ready(function () {
 
 // Validation for Login Page
 $(document).ready(function () {
-    $("#loginForm").validate({
-        rules: {
-            email: {
-                required: true,
-                email: true,
-            },
-            password: {
-                required: true,
-                minlength: 8,
-                maxlength: 16,
-            },
-            password_confirmation: {
-                required: true,
-                equalTo: "#password",
-                minlength: 8,
-                maxlength: 16,
-            },
-        },
-        messages: {
-            email: {
-                required: "Email is required",
-                email: "Invalid email address",
-            },
-            password: {
-                required: "Password is required",
-                minlength: "Password must be at least 8 characters long",
-                maxlength: "Password must not exceed 16 characters",
-            },
-            password_confirmation: {
-                required: "Confirm Password is required",
-                equalTo: "Passwords do not match",
-                minlength: "Password must be at least 8 characters long",
-                maxlength: "Password must not exceed 16 characters",
-            },
-        },
-        errorPlacement: function (error, element) {
-            error.addClass("text-danger mt-1");
-            error.insertAfter(element);
+    $("#loginForm").on("submit", function (e) {
+        e.preventDefault();
 
-            if (element.attr("name") === "password") {
-                adjustIconPosition(element);
-            }
-        },
-        highlight: function (element) {
-            $(element).addClass("is-invalid");
-            if ($(element).attr("name") === "password") {
-                $("#toggleLoginPassword").addClass("is-invalid");
-                adjustIconPosition($(element));
-            }
-        },
-        unhighlight: function (element) {
-            $(element).removeClass("is-invalid");
-            if ($(element).attr("name") === "password") {
-                $("#toggleLoginPassword").removeClass("is-invalid");
-                adjustIconPosition($(element));
-            }
-        },
-        submitHandler: function (form) {
-            alert("Form is valid! Submitting...");
-            form.submit();
-        },
+        $("#emailError").hide();
+        $("#passwordError").hide();
+
+        const email = $("#email").val().trim();
+        const password = $("#password").val().trim();
+
+        // Email validation
+        const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        let isValid = true;
+
+        if (email === "") {
+            $("#emailError").text("Email field is required.").show();
+            isValid = false;
+        } else if (!emailPattern.test(email)) {
+            $("#emailError").text("Please enter a valid email address.").show();
+            isValid = false;
+        }
+
+        // Password validation
+        if (!password) {
+            toggleError("passwordError", "Password is required.");
+            formIsValid = false;
+        } else if (password.length < 8) {
+            toggleError(
+                "passwordError",
+                "Password must be at least 8 characters long."
+            );
+            formIsValid = false;
+        } else {
+            toggleError("passwordError");
+        }
+
+        if (isValid) {
+            this.submit();
+        }
     });
 
+    // Clear error messages when user interacts with input fields
+    $("#email").on("input", function () {
+        $("#emailError").hide();
+    });
+
+    $("#password").on("input", function () {
+        $("#passwordError").hide();
+    });
+
+    // Password visibility toggle
     function adjustIconPosition(passwordField) {
         const icon = $("#toggleLoginPassword");
         const errorElement = passwordField.next(".text-danger");
@@ -644,295 +966,170 @@ $(document).ready(function () {
 
 // Validation for Register Page
 $(document).ready(function () {
-    $("#registerForm").validate({
-        rules: {
-            name: {
-                required: true,
-            },
-            email: {
-                required: true,
-                email: true,
-            },
-            password: {
-                required: true,
-                minlength: 8,
-            },
-            confirm_password: {
-                required: true,
-                equalTo: "#password",
-            },
-        },
-        messages: {
-            name: {
-                required: "Name is required",
-            },
-            email: {
-                required: "Email is required",
-                email: "Invalid email address",
-            },
-            password: {
-                required: "Password is required",
-                minlength: "Password must be at least 8 characters long",
-            },
-            confirm_password: {
-                required: "Confirm Password is required",
-                equalTo: "Passwords do not match",
-            },
-        },
-        errorPlacement: function (error, element) {
-            error.addClass("text-danger mt-1");
-            error.insertAfter(element);
+    // Form submit validation
+    $("#registerForm").on("submit", function (event) {
+        let formIsValid = true;
 
-            if (
-                element.attr("name") === "password" ||
-                element.attr("name") === "confirm_password"
-            ) {
-                adjustRegisterIconPosition(element);
+        const toggleError = (id, message = "") => {
+            const errorElement = $("#" + id);
+            if (message) {
+                errorElement.css("display", "block").text(message);
+            } else {
+                errorElement.css("display", "none").text("");
             }
-        },
-        highlight: function (element) {
-            $(element).addClass("is-invalid");
-            if (
-                $(element).attr("name") === "password" ||
-                $(element).attr("name") === "confirm_password"
-            ) {
-                adjustRegisterIconPosition($(element));
-            }
-        },
-        unhighlight: function (element) {
-            $(element).removeClass("is-invalid");
-            if (
-                $(element).attr("name") === "password" ||
-                $(element).attr("name") === "confirm_password"
-            ) {
-                adjustRegisterIconPosition($(element));
-            }
-        },
-        submitHandler: function (form) {
-            alert("Registration form is valid! Submitting...");
-            form.submit();
-        },
-    });
+        };
 
-    function adjustRegisterIconPosition(passwordField) {
-        const icon =
-            passwordField.attr("name") === "password"
-                ? $("#toggleRegisterPassword")
-                : $("#toggleRegisterConfirmPassword");
-        const errorElement = passwordField.next(".text-danger");
+        // Get form values
+        const name = $("#name").val().trim();
+        const email = $("#email").val().trim();
+        const password = $("#password").val();
+        const confirmPassword = $("#password_confirmation").val();
 
-        if (errorElement.length) {
-            icon.css("right", `${passwordField.outerHeight() - 5}px`);
-            icon.css("top", `${passwordField.outerHeight() + 13}px`);
+        // Validate Name
+        if (!name) {
+            toggleError("nameError", "Name is required");
+            formIsValid = false;
         } else {
-            icon.css("right", "10px");
-            icon.css("top", "71%");
+            toggleError("nameError");
         }
-    }
 
-    // Password visibility toggle for register form
-    $(document).ready(function () {
-        const toggleRegisterPassword = document.querySelector(
-            "#toggleRegisterPassword"
-        );
-        const registerPassword = document.querySelector("#password");
-
-        if (toggleRegisterPassword && registerPassword) {
-            toggleRegisterPassword.addEventListener("click", function () {
-                const type =
-                    registerPassword.getAttribute("type") === "password"
-                        ? "text"
-                        : "password";
-                registerPassword.setAttribute("type", type);
-                this.classList.toggle("fa-eye-slash");
-                this.classList.toggle("fa-eye");
-            });
+        // Validate Email
+        const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+        if (!email || !emailRegex.test(email)) {
+            toggleError("emailError", "Enter a valid email address.");
+            formIsValid = false;
+        } else {
+            toggleError("emailError");
         }
-    });
 
-    $(document).ready(function () {
-        const toggleRegisterConfirmPassword = document.querySelector(
-            "#toggleRegisterConfirmPassword"
-        );
-        const registerConfirmPassword =
-            document.querySelector("#confirm_password");
-
-        // Check if both elements exist
-        if (toggleRegisterConfirmPassword && registerConfirmPassword) {
-            toggleRegisterConfirmPassword.addEventListener(
-                "click",
-                function () {
-                    const type =
-                        registerConfirmPassword.getAttribute("type") ===
-                        "password"
-                            ? "text"
-                            : "password";
-                    registerConfirmPassword.setAttribute("type", type);
-                    this.classList.toggle("fa-eye-slash");
-                    this.classList.toggle("fa-eye");
-                }
+        // Validate Password
+        if (!password) {
+            toggleError("passwordError", "Password is required.");
+            formIsValid = false;
+        } else if (password.length < 8) {
+            toggleError(
+                "passwordError",
+                "Password must be at least 8 characters long."
             );
-        }
-    });
-});
-
-// Validation for Forgot Password Page
-$(document).ready(function () {
-    $("#forgotForm").validate({
-        rules: {
-            email: {
-                required: true,
-                email: true,
-            },
-        },
-        messages: {
-            email: {
-                required: "Email is required",
-                email: "Invalid email address",
-            },
-        },
-        errorPlacement: function (error, element) {
-            error.addClass("text-danger mt-1");
-            error.insertAfter(element);
-        },
-        highlight: function (element) {
-            $(element).addClass("is-invalid");
-        },
-        unhighlight: function (element) {
-            $(element).removeClass("is-invalid");
-        },
-        submitHandler: function (form) {
-            alert("Reset Password request is valid! Submitting...");
-            form.submit();
-        },
-    });
-});
-
-// Validation for Reset Password Page
-$(document).ready(function () {
-    $("#resetForm").validate({
-        rules: {
-            email: {
-                required: true,
-                email: true,
-            },
-            new_password: {
-                required: true,
-                minlength: 8,
-            },
-            confirm_new_password: {
-                required: true,
-                equalTo: "#new_password",
-            },
-        },
-        messages: {
-            email: {
-                required: "Email is required",
-                email: "Invalid email address",
-            },
-            new_password: {
-                required: "Password is required",
-                minlength: "Password must be at least 8 characters long",
-            },
-            confirm_new_password: {
-                required: "Confirm Password is required",
-                equalTo: "Passwords do not match",
-            },
-        },
-        errorPlacement: function (error, element) {
-            error.addClass("text-danger mt-1");
-            error.insertAfter(element);
-
-            if (
-                element.attr("name") === "new_password" ||
-                element.attr("name") === "confirm_new_password"
-            ) {
-                adjustResetIconPosition(element);
-            }
-        },
-        highlight: function (element) {
-            $(element).addClass("is-invalid");
-            if (
-                $(element).attr("name") === "new_password" ||
-                $(element).attr("name") === "confirm_new_password"
-            ) {
-                adjustResetIconPosition($(element));
-            }
-        },
-        unhighlight: function (element) {
-            $(element).removeClass("is-invalid");
-            if (
-                $(element).attr("name") === "new_password" ||
-                $(element).attr("name") === "confirm_new_password"
-            ) {
-                adjustResetIconPosition($(element));
-            }
-        },
-        submitHandler: function (form) {
-            alert("Reset Password form is valid! Submitting...");
-            form.submit();
-        },
-    });
-
-    function adjustResetIconPosition(passwordField) {
-        const icon =
-            passwordField.attr("name") === "new_password"
-                ? $("#toggleResetPassword")
-                : $("#toggleResetConfirmPassword");
-        const errorElement = passwordField.next(".text-danger");
-
-        if (errorElement.length) {
-            icon.css("right", `${passwordField.outerHeight() - 5}px`);
-            icon.css("top", `${passwordField.outerHeight() + 13}px`);
+            formIsValid = false;
         } else {
-            icon.css("right", "10px");
-            icon.css("top", "71%");
+            toggleError("passwordError");
         }
+
+        // Validate Confirm Password
+        if (!confirmPassword) {
+            toggleError("confirmpasswordError", "Confirm Password is required");
+            formIsValid = false;
+        } else if (
+            password &&
+            confirmPassword &&
+            password !== confirmPassword
+        ) {
+            toggleError("passwordMatchError", "Passwords do not match");
+            formIsValid = false;
+        } else {
+            toggleError("passwordMatchError");
+            toggleError("confirmpasswordError");
+        }
+
+        if (!formIsValid) {
+            event.preventDefault();
+        }
+    });
+
+    // Field input validation
+    $("#name, #email, #password").on("input", function () {
+        validateField($(this).attr("id"));
+    });
+
+    $("#password_confirmation").on("input", function () {
+        const confirmPassword = $(this).val();
+        if (confirmPassword) {
+            toggleError("confirmpasswordError"); // Clear "required" error if value exists
+        }
+        const password = $("#password").val();
+        if (password !== confirmPassword) {
+            toggleError("passwordMatchError", "Passwords do not match");
+        } else {
+            toggleError("passwordMatchError");
+        }
+    });
+
+    // Function to validate each field (optional)
+    function validateField(field) {
+        toggleError(field + "Error");
     }
-
-    // Password visibility toggle for reset password form
-    $(document).ready(function () {
-        const toggleResetPassword = document.querySelector(
-            "#toggleResetPassword"
-        );
-        const resetPassword = document.querySelector("#new_password");
-
-        // Check if both elements exist
-        if (toggleResetPassword && resetPassword) {
-            toggleResetPassword.addEventListener("click", function () {
-                const type =
-                    resetPassword.getAttribute("type") === "password"
-                        ? "text"
-                        : "password";
-                resetPassword.setAttribute("type", type);
-                this.classList.toggle("fa-eye-slash");
-                this.classList.toggle("fa-eye");
-            });
-        }
-    });
-
-    $(document).ready(function () {
-        const toggleResetConfirmPassword = document.querySelector(
-            "#toggleResetConfirmPassword"
-        );
-        const resetConfirmPassword = document.querySelector(
-            "#confirm_new_password"
-        );
-
-        // Check if both elements exist
-        if (toggleResetConfirmPassword && resetConfirmPassword) {
-            toggleResetConfirmPassword.addEventListener("click", function () {
-                const type =
-                    resetConfirmPassword.getAttribute("type") === "password"
-                        ? "text"
-                        : "password";
-                resetConfirmPassword.setAttribute("type", type);
-                this.classList.toggle("fa-eye-slash");
-                this.classList.toggle("fa-eye");
-            });
-        }
-    });
 });
+
+function validateField(field) {
+    const value = document.getElementById(field).value.trim();
+
+    switch (field) {
+        case "name":
+            toggleError("nameError", value ? "" : "Name is required");
+            break;
+        case "email":
+            const emailRegex =
+                /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+            toggleError(
+                "emailError",
+                emailRegex.test(value) ? "" : "Valid email is required"
+            );
+            break;
+        case "password":
+            const confirmPassword = document.getElementById(
+                "password_confirmation"
+            ).value;
+            if (value.length < 8 || value.length > 16) {
+                toggleError(
+                    "passwordError",
+                    "Password must be between 8 and 16 characters"
+                );
+            } else {
+                toggleError("passwordError");
+            }
+
+            if (confirmPassword && value !== confirmPassword) {
+                toggleError("passwordMatchError", "Passwords do not match");
+            } else {
+                toggleError("passwordMatchError");
+            }
+            break;
+        case "confirmpassword":
+            const password = document.getElementById("password").value;
+            toggleError("confirmpasswordError");
+            if (password === value) {
+                toggleError("passwordMatchError");
+            } else if (value) {
+                toggleError("passwordMatchError", "Passwords do not match");
+            }
+            break;
+    }
+}
+
+// Utility function for showing/hiding errors
+function toggleError(id, message = "") {
+    const errorElement = document.getElementById(id);
+    if (message) {
+        errorElement.style.display = "block";
+        errorElement.innerText = message;
+    } else {
+        errorElement.style.display = "none";
+        errorElement.innerText = "";
+    }
+}
+
+// Utility function for showing/hiding errors
+function toggleError(id, message = "") {
+    const errorElement = document.getElementById(id);
+    if (message) {
+        errorElement.style.display = "block";
+        errorElement.innerText = message;
+    } else {
+        errorElement.style.display = "none";
+        errorElement.innerText = "";
+    }
+}
 
 function copySpan(element, event) {
     // Find the coupon code text (excluding tooltip text)
@@ -1052,130 +1249,6 @@ function toggleNumber(event) {
         link.href = `tel:${fullNumber}`;
     }
 }
-
-$(document).ready(function () {
-    // Setup CSRF token for AJAX
-    $.ajaxSetup({
-        headers: {
-            "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
-        },
-    });
-
-    // Function to update the bookmark count
-    function updateBookmarkCount(count) {
-        console.log(count);
-        $(".totalItemsCount").each(function () {
-            if (count > 0) {
-                $(this).text(count).css({
-                    visibility: "visible",
-                    display: "block",
-                });
-            } else {
-                $(this).text("").css({
-                    visibility: "hidden",
-                    display: "none",
-                });
-            }
-        });
-    }
-
-    // Add Bookmark
-    function handleAddBookmark() {
-        $(".add-bookmark")
-            .off("click")
-            .on("click", function (e) {
-                e.preventDefault();
-                let dealId = $(this).data("deal-id");
-
-                $.ajax({
-                    url: `https://dealsmachi.com/bookmark/${dealId}/add`,
-                    method: "POST",
-                    success: function (response) {
-                        updateBookmarkCount(response.total_items);
-
-                        let button = $(
-                            `.add-bookmark[data-deal-id="${dealId}"]`
-                        );
-                        button
-                            .removeClass("add-bookmark")
-                            .addClass("remove-bookmark");
-                        button.html(`
-                        <p style="height:fit-content;cursor:pointer" class="p-1 px-2">
-                            <i class="fa-solid fa-heart bookmark-icon" style="color: #ff0060;"></i>
-                        </p>
-                    `);
-
-                        handleRemoveBookmark();
-                    },
-                    error: function (xhr) {},
-                });
-            });
-    }
-
-    // Remove Bookmark
-    function handleRemoveBookmark() {
-        $(".remove-bookmark")
-            .off("click")
-            .on("click", function (e) {
-                e.preventDefault();
-                let dealId = $(this).data("deal-id");
-
-                $.ajax({
-                    url: `https://dealsmachi.com/bookmark/${dealId}/remove`,
-                    method: "DELETE",
-                    success: function (response) {
-                        updateBookmarkCount(response.total_items);
-
-                        let button = $(
-                            `.remove-bookmark[data-deal-id="${dealId}"]`
-                        );
-                        button
-                            .removeClass("remove-bookmark")
-                            .addClass("add-bookmark");
-                        button.html(`
-                        <p style="height:fit-content;cursor:pointer" class="p-1 px-2">
-                            <i class="fa-regular fa-heart bookmark-icon" style="color: #ff0060;"></i>
-                        </p>
-                    `);
-
-                        handleAddBookmark(); // Re-bind the add bookmark handler
-                    },
-                    error: function (xhr) {
-                        // Handle error (optional)
-                    },
-                });
-            });
-    }
-
-    // Initialize the event handlers
-    handleAddBookmark();
-    handleRemoveBookmark();
-
-    // Initial Load of Bookmark Count
-    function loadBookmarkCount() {
-        $.ajax({
-            url: "https://dealsmachi.com/totalbookmark",
-            method: "GET",
-            success: function (response) {
-                updateBookmarkCount(response.total_items);
-            },
-            error: function (xhr) {
-                console.error("Failed to load bookmark count.");
-            },
-        });
-    }
-
-    loadBookmarkCount();
-
-    // Disable or remove tooltip from bookmark buttons
-    // Option 1: Disable the tooltip functionality
-    $(".bookmark-button").tooltip("disable");
-
-    // Option 2: Remove the tooltip attribute entirely
-    $('.bookmark-button [data-bs-toggle="tooltip"]').removeAttr(
-        "data-bs-toggle"
-    );
-});
 
 // Link Shared Capture the current page URL dynamically
 const currentUrl = encodeURIComponent(window.location.href);
@@ -1481,11 +1554,11 @@ $(document).ready(function () {
             },
             title: {
                 required: true,
-                minlength: 5,
+                maxlength: 255,
             },
             body: {
                 required: true,
-                minlength: 10,
+                // minlength: 10,
             },
         },
         messages: {
@@ -1494,11 +1567,11 @@ $(document).ready(function () {
             },
             title: {
                 required: "Title is required.",
-                minlength: "Title must be at least 5 characters long.",
+                maxlength: "Title must be at least 255 characters long.",
             },
             body: {
                 required: "Review is required.",
-                minlength: "Review must be at least 10 characters long.",
+                // minlength: "Review must be at least 10 characters long.",
             },
         },
         errorPlacement: function (error, element) {
@@ -1514,14 +1587,136 @@ $(document).ready(function () {
         },
     });
 
-    // Prevent default form submission and trigger validation manually
     $("#reviewForm").on("submit", function (e) {
         if (!selectedRating) {
-            e.preventDefault(); // Prevent submission if no rating is selected
+            e.preventDefault();
             ratingError.text("Please select a star rating.").show();
         }
     });
 });
+
+$(document).ready(function () {
+    // Setup CSRF token for AJAX
+    $.ajaxSetup({
+        headers: {
+            "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+        },
+    });
+
+    // Function to update the bookmark count
+    function updateBookmarkCount(count) {
+        console.log(count);
+        $(".totalItemsCount").each(function () {
+            if (count > 0) {
+                $(this).text(count).css({
+                    visibility: "visible",
+                    display: "block",
+                });
+            } else {
+                $(this).text("").css({
+                    visibility: "hidden",
+                    display: "none",
+                });
+            }
+        });
+    }
+
+    // Initialize the event handlers
+    handleAddBookmark();
+    handleRemoveBookmark();
+
+    // Initial Load of Bookmark Count
+    function loadBookmarkCount() {
+        $.ajax({
+            url: "https://dealsmachi.com/totalbookmark",
+            method: "GET",
+            success: function (response) {
+                updateBookmarkCount(response.total_items);
+            },
+            error: function (xhr) {
+                console.error("Failed to load bookmark count.");
+            },
+        });
+    }
+
+    loadBookmarkCount();
+
+    // Disable or remove tooltip from bookmark buttons
+    // Option 1: Disable the tooltip functionality
+    $(".bookmark-button").tooltip("disable");
+
+    // Option 2: Remove the tooltip attribute entirely
+    $('.bookmark-button [data-bs-toggle="tooltip"]').removeAttr(
+        "data-bs-toggle"
+    );
+});
+
+// Add Bookmark
+function handleAddBookmark() {
+    $(".add-bookmark")
+        .off("click")
+        .on("click", function (e) {
+            e.preventDefault();
+            let dealId = $(this).data("deal-id");
+
+            $.ajax({
+                url: `https://dealsmachi.com/bookmark/${dealId}/add`,
+                method: "POST",
+                success: function (response) {
+                    // console.log(response);
+                    updateBookmarkCount(response.total_items);
+
+                    let button = $(`.add-bookmark[data-deal-id="${dealId}"]`);
+                    button
+                        .removeClass("add-bookmark")
+                        .addClass("remove-bookmark");
+                    button.html(`
+                        <p style="height:fit-content;cursor:pointer" class="p-1 px-2">
+                            <i class="fa-solid fa-heart bookmark-icon" style="color: #ff0060;"></i>
+                        </p>
+                    `);
+
+                    handleRemoveBookmark();
+                },
+                error: function (xhr) { },
+            });
+        });
+}
+
+// Remove Bookmark
+function handleRemoveBookmark() {
+    $(".remove-bookmark")
+        .off("click")
+        .on("click", function (e) {
+            e.preventDefault();
+            let dealId = $(this).data("deal-id");
+
+            $.ajax({
+                url: `https://dealsmachi.com/bookmark/${dealId}/remove`,
+                method: "DELETE",
+                success: function (response) {
+                    updateBookmarkCount(response.total_items);
+
+                    let button = $(
+                        `.remove-bookmark[data-deal-id="${dealId}"]`
+                    );
+                    button
+                        .removeClass("remove-bookmark")
+                        .addClass("add-bookmark");
+                    button.html(`
+                        <p style="height:fit-content;cursor:pointer" class="p-1 px-2">
+                            <i class="fa-regular fa-heart bookmark-icon" style="color: #ff0060;"></i>
+                        </p>
+                    `);
+
+                    handleAddBookmark(); // Re-bind the add bookmark handler
+                },
+                error: function (xhr) {
+                    // Handle error (optional)
+                },
+            });
+        });
+}
 
 $(document).ready(function () {
     $.ajaxSetup({
@@ -1529,76 +1724,41 @@ $(document).ready(function () {
             "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
         },
     });
+    initializeEventListeners();
+    fetchCartDropdown();
+});
 
-    $(".add-to-cart-btn").on("click", function (e) {
-        e.preventDefault();
-
-        let slug = $(this).data("slug");
-
-        $.ajax({
-            url: `/addtocart/${slug}`,
-            type: "POST",
-            data: {
-                quantity: 1,
-                saveoption: "add to cart",
-            },
-            success: function (response) {
-                if (response.cartItemCount !== undefined) {
-                    const cartCountElement = $("#cart-count");
-
-                    if (response.cartItemCount > 0) {
-                        cartCountElement.text(response.cartItemCount);
-                        cartCountElement.css("display", "inline");
-                    } else {
-                        cartCountElement.css("display", "none");
-                    }
-                }
-
-                fetchCartDropdown();
-                showMessage(
-                    response.status || "Deal added to cart!",
-                    "success"
-                );
-            },
-            error: function (xhr) {
-                const errorMessage =
-                    xhr.responseJSON?.error || "Something went wrong!";
-                showMessage(errorMessage, "error");
-            },
-        });
+function fetchCartDropdown() {
+    $.ajax({
+        url: "/cart/dropdown",
+        type: "GET",
+        success: function (response) {
+            if (response.html) {
+                $(".dropdown_cart").html(response.html);
+            }
+        },
+        error: function () {
+            showMessage("Failed to update cart dropdown!", "error");
+        },
     });
+}
 
-    function fetchCartDropdown() {
-        $.ajax({
-            url: "/cart/dropdown",
-            type: "GET",
-            success: function (response) {
-                if (response.html) {
-                    $(".dropdown_cart").html(response.html);
-                }
-            },
-            error: function () {
-                showMessage("Failed to update cart dropdown!", "error");
-            },
-        });
+function showMessage(message, type) {
+    var textColor, icon;
+
+    if (type === "success") {
+        textColor = "#16A34A";
+        icon =
+            '<i class="fa-regular fa-cart-shopping" style="color: #16A34A"></i>';
+        var alertClass = "toast-success";
+    } else {
+        textColor = "#EF4444";
+        icon =
+            '<i class="fa-solid fa-triangle-exclamation" style="color: #EF4444"></i>';
+        var alertClass = "toast-danger";
     }
 
-    function showMessage(message, type) {
-        var textColor, icon;
-
-        if (type === "success") {
-            textColor = "#16A34A";
-            icon =
-                '<i class="fa-regular fa-cart-shopping" style="color: #16A34A"></i>';
-            var alertClass = "toast-success";
-        } else {
-            textColor = "#EF4444";
-            icon =
-                '<i class="fa-solid fa-triangle-exclamation" style="color: #EF4444"></i>';
-            var alertClass = "toast-danger";
-        }
-
-        var alertHtml = `
+    var alertHtml = `
           <div class="alert ${alertClass} alert-dismissible fade show" role="alert" style="position: fixed; top: 70px; right: 40px; z-index: 1050; color: ${textColor};">
             <div class="toast-content">
                 <div class="toast-icon">
@@ -1612,11 +1772,226 @@ $(document).ready(function () {
           </div>
         `;
 
-        $("body").append(alertHtml);
-        setTimeout(function () {
-            $(".alert").alert("close");
-        }, 5000);
+    $("body").append(alertHtml);
+    setTimeout(function () {
+        $(".alert").alert("close");
+    }, 5000);
+}
+
+function initializeEventListeners() {
+    $(".add-to-cart-btn")
+        .off("click")
+        .on("click", function (e) {
+            e.preventDefault();
+
+            let slug = $(this).data("slug");
+
+            $.ajax({
+                url: `/addtocart/${slug}`,
+                type: "POST",
+                data: {
+                    quantity: 1,
+                    saveoption: "add to cart",
+                },
+                success: function (response) {
+                    if (response.cartItemCount !== undefined) {
+                        const cartCountElement = $("#cart-count");
+
+                        if (response.cartItemCount > 0) {
+                            cartCountElement.text(response.cartItemCount);
+                            cartCountElement.css("display", "inline");
+                        } else {
+                            cartCountElement.css("display", "none");
+                        }
+                    }
+
+                    $(document).on("click", ".moveToCart", function (e) {
+                        $.ajaxSetup({
+                            headers: {
+                                "X-CSRF-TOKEN": $(
+                                    'meta[name="csrf-token"]'
+                                ).attr("content"),
+                            },
+                        });
+                        e.preventDefault();
+                        const productId = $(this).data("product-id");
+                        $.ajax({
+                            url: "/saveforlater/toCart",
+                            type: "POST",
+                            data: { product_id: productId },
+                            success: function (response) {
+                                if (response.cartItemCount !== undefined) {
+                                    const cartCountElement = $("#cart-count");
+                                    if (response.cartItemCount > 0) {
+                                        cartCountElement.text(
+                                            response.cartItemCount
+                                        );
+                                        cartCountElement.css(
+                                            "display",
+                                            "inline"
+                                        );
+                                    } else {
+                                        cartCountElement.css("display", "none");
+                                    }
+                                }
+
+                                fetchCart();
+                                savelaterfetchCart();
+                                fetchCartDropdown();
+
+                                showMessage(
+                                    response.status ||
+                                    "Item moved to Save for Later!",
+                                    "success"
+                                );
+                            },
+                            error: function (xhr) {
+                                const errorMessage =
+                                    xhr.responseJSON?.error ||
+                                    "Failed to move item to Save for Later!";
+                                showMessage(errorMessage, "error");
+                            },
+                        });
+                    });
+
+                    $(document).on("click", ".removeSaveLater", function (e) {
+                        $.ajaxSetup({
+                            headers: {
+                                "X-CSRF-TOKEN": $(
+                                    'meta[name="csrf-token"]'
+                                ).attr("content"),
+                            },
+                        });
+                        e.preventDefault();
+                        const productId = $(this).data("product-id");
+
+                        $.ajax({
+                            url: "/saveforlater/remove",
+                            type: "POST",
+                            data: { product_id: productId },
+                            success: function (response) {
+                                fetchCart();
+                                savelaterfetchCart();
+                                showMessage(
+                                    response.status ||
+                                    "Save for Later Item Removed!",
+                                    "success"
+                                );
+                            },
+                            error: function (xhr) {
+                                const errorMessage =
+                                    xhr.responseJSON?.error ||
+                                    "Failed to move on Save for Later!";
+                                showMessage(errorMessage, "error");
+                            },
+                        });
+                    });
+
+                    function fetchCart() {
+                        $.ajax({
+                            url: "/cart",
+                            type: "GET",
+                            success: function (response) {
+                                if (response.html) {
+                                    $(".cartIndex").html(response.html);
+                                }
+                            },
+                            error: function () {
+                                showMessage("Failed to update cart!", "error");
+                            },
+                        });
+                    }
+
+                    function savelaterfetchCart() {
+                        $.ajax({
+                            url: "/saveforlater/all",
+                            type: "GET",
+                            success: function (response) {
+                                if (response.html) {
+                                    $(".savelaterIndex").html(response.html);
+                                }
+                            },
+                            error: function () {
+                                showMessage("Failed to update cart!", "error");
+                            },
+                        });
+                    }
+
+                    fetchCartDropdown();
+                    showMessage(
+                        response.status || "Deal added to cart!",
+                        "success"
+                    );
+                },
+                error: function (xhr) {
+                    const errorMessage =
+                        xhr.responseJSON?.error || "Something went wrong!";
+                    showMessage(errorMessage, "error");
+                },
+            });
+        });
+}
+
+document.addEventListener("DOMContentLoaded", function () {
+    let loading = false;
+    let currentPage = 1;
+    let hasMoreProducts = true;
+    const loadingSpinner = document.querySelector(".loading-spinner");
+
+    function loadMoreProducts() {
+        if (loading || !hasMoreProducts) return;
+
+        loading = true;
+        currentPage++;
+        loadingSpinner.classList.remove("d-none");
+
+        setTimeout(() => {
+            fetch(`/?page=${currentPage}`, {
+                headers: {
+                    "X-Requested-With": "XMLHttpRequest",
+                },
+            })
+                .then((response) => response.text())
+                .then((html) => {
+                    if (html.trim().length > 0) {
+                        document
+                            .getElementById("products-wrapper")
+                            .insertAdjacentHTML("beforeend", html);
+
+                        // Reinitialize event listeners
+                        initializeEventListeners();
+                        handleAddBookmark();
+                        handleRemoveBookmark();
+                    } else {
+                        hasMoreProducts = false;
+                    }
+                    loadingSpinner.classList.add("d-none");
+                    loading = false;
+                })
+                .catch((error) => {
+                    console.error("Error:", error);
+                    loadingSpinner.classList.add("d-none");
+                    loading = false;
+                });
+        }, 400);
     }
 
-    fetchCartDropdown();
+    function handleScroll() {
+        const scrollPosition = window.innerHeight + window.scrollY;
+        const bodyHeight = document.documentElement.scrollHeight;
+
+        if (scrollPosition >= bodyHeight - 500) {
+            loadMoreProducts();
+        }
+    }
+
+    let timeout;
+    window.addEventListener("scroll", function () {
+        if (timeout) {
+            window.cancelAnimationFrame(timeout);
+        }
+        timeout = window.requestAnimationFrame(function () {
+            handleScroll();
+        });
+    });
 });

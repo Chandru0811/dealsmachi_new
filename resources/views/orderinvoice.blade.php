@@ -215,7 +215,7 @@
         </div>
         <div class="footer">
             <h6>Thank you for shopping with <span style="color: #ff0060;">DealsMachi</span>! For assistance, contact us at info@dealsmachi.com.</h6>
-            <p>2024 © Copyright Dealsmachi. All Rights Reserved.</p>
+            <p>2024 © Copyright DealsMachi. All Rights Reserved.</p>
         </div>
     </div>
 </body>
@@ -226,7 +226,7 @@
 function indian_number_format($number) {
     // Round to two decimal places
     $number = round($number, 2);
-    
+
     $number_parts = explode('.', $number);
     $integer_part = $number_parts[0];
     $decimal_part = isset($number_parts[1]) ? '.' . str_pad($number_parts[1], 2, '0') : '';
