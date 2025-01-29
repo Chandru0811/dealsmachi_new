@@ -674,11 +674,62 @@
                 </div>
             </div>
         </div>
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <script>
             document.getElementById('cartButton').addEventListener('click', function(event) {
                 const dropdownMenu = document.querySelector('.dropdown_cart');
                 if (!dropdownMenu.classList.contains('show')) {
                     window.location.href = "{{ route('cart.index') }}";
+                }
+            });
+
+            $(document).ready(function() {
+                $('#confirmAddressBtn').on('click', function(e) {
+                    e.preventDefault();
+
+                    let selectedId = $('input[name="selected_id"]:checked').val();
+
+                    if (!selectedId) {
+                        alert('Please select an address.');
+                        return;
+                    }
+
+                    $.ajax({
+                        url: "{{ route('address.change') }}",
+                        method: "POST",
+                        data: {
+                            _token: "{{ csrf_token() }}",
+                            selected_id: selectedId
+                        },
+                        success: function(response) {
+                            if (response.success) {
+                                $('#myAddressModal').modal('hide');
+
+                                updateSelectedAddress(response.selectedAddress);
+                            } else {
+                                alert(response.message || 'An error occurred.');
+                            }
+                        },
+                        error: function(xhr) {
+                            alert(xhr.responseJSON.message || 'An error occurred.');
+                        }
+                    });
+                });
+
+                function updateSelectedAddress(address) {
+                    if (address) {
+                        const addressHtml = `
+                            <strong>${address.first_name} ${address.last_name ?? ''} (+91) ${address.phone}</strong><br>
+                            ${address.address} - ${address.postalcode}
+                            ${address.default ? '<span class="badge badge_danger py-1">Default</span>' : ''}
+                        `;
+                        $('#addressID').val(address.id);
+
+                        $('.selected-address').html(addressHtml);
+
+                        const changeBtnHtml = `<span class="badge badge_infos py-1" data-bs-toggle="modal" data-bs-target="#myAddressModal">Change</span>`;
+                        $('.change-address-btn').html(changeBtnHtml);
+                    }
                 }
             });
 
