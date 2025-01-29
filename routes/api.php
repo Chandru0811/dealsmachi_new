@@ -126,6 +126,11 @@ Route::middleware('auth:api')->group(function () {
         // Order
         Route::get('orders', [UserController::class, 'getAllOrders']);
         Route::get('order/{order_id}/{product_id}', [UserController::class, 'getOrderById']);
+
+        // Refferer list
+        Route::get('referrers-and-vendors', [UserController::class, 'getAllReferrersAndReferrerVendors']);
+        Route::get('referrals/{userId}', [UserController::class, 'getReferralsByUserId']);
+
     });
 
     //Vendor
