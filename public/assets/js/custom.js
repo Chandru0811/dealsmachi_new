@@ -724,7 +724,7 @@ $(document).ready(function () {
                     }
                 });
             },
-        });
+        });             
 
         $(document).on("click", ".badge_edit", function () {
             const addressId = $(this).closest(".row").find("input[type='radio']").val();
@@ -808,55 +808,53 @@ $(document).ready(function () {
             });
         });
 
-        $(document).ready(function() {
-            $('#confirmAddressBtn').on('click', function(e) {
-                e.preventDefault();
+        $('#confirmAddressBtn').on('click', function(e) {
+            e.preventDefault();
 
-                let selectedId = $('input[name="selected_id"]:checked').val();
+            let selectedId = $('input[name="selected_id"]:checked').val();
 
-                if (!selectedId) {
-                    alert('Please select an address.');
-                    return;
-                }
-
-                $.ajax({
-                    url: "{{ route('address.change') }}",
-                    method: "POST",
-                    data: {
-                        _token: "{{ csrf_token() }}",
-                        selected_id: selectedId
-                    },
-                    success: function(response) {
-                        if (response.success) {
-                            $('#myAddressModal').modal('hide');
-
-                            updateSelectedAddress(response.selectedAddress);
-                        } else {
-                            alert(response.message || 'An error occurred.');
-                        }
-                    },
-                    error: function(xhr) {
-                        alert(xhr.responseJSON.message || 'An error occurred.');
-                    }
-                });
-            });
-
-            function updateSelectedAddress(address) {
-                if (address) {
-                    const addressHtml = `
-                        <strong>${address.first_name} ${address.last_name ?? ''} (+91) ${address.phone}</strong><br>
-                        ${address.address} - ${address.postalcode}
-                        ${address.default ? '<span class="badge badge_danger py-1">Default</span>' : ''}
-                    `;
-                    $('#addressID').val(address.id);
-
-                    $('.selected-address').html(addressHtml);
-
-                    const changeBtnHtml = `<span class="badge badge_infos py-1" data-bs-toggle="modal" data-bs-target="#myAddressModal">Change</span>`;
-                    $('.change-address-btn').html(changeBtnHtml);
-                }
+            if (!selectedId) {
+                alert('Please select an address.');
+                return;
             }
+
+            $.ajax({
+                url: "/selectaddress",
+                method: "POST",
+                data: {
+                    _token: $('meta[name="csrf-token"]').attr('content'),
+                    selected_id: selectedId
+                },
+                success: function(response) {
+                    if (response.success) {
+                        $('#myAddressModal').modal('hide');
+
+                        updateSelectedAddress(response.selectedAddress);
+                    } else {
+                        alert(response.message || 'An error occurred.');
+                    }
+                },
+                error: function(xhr) {
+                    alert(xhr.responseJSON.message || 'An error occurred.');
+                }
+            });
         });
+
+        function updateSelectedAddress(address) {
+            if (address) {
+                const addressHtml = `
+                    <strong>${address.first_name} ${address.last_name ?? ''} (+91) ${address.phone}</strong><br>
+                    ${address.address} - ${address.postalcode}
+                    ${address.default ? '<span class="badge badge_danger py-1">Default</span>' : ''}
+                `;
+                $('#addressID').val(address.id);
+
+                $('.selected-address').html(addressHtml);
+
+                const changeBtnHtml = `<span class="badge badge_infos py-1" data-bs-toggle="modal" data-bs-target="#myAddressModal">Change</span>`;
+                $('.change-address-btn').html(changeBtnHtml);
+            }
+        }
 
         function showMessage(message, type) {
             var textColor, icon;
@@ -1674,27 +1672,10 @@ $(document).ready(function () {
         },
     });
 
-    // Function to update the bookmark count
-    function updateBookmarkCount(count) {
-        console.log(count);
-        $(".totalItemsCount").each(function () {
-            if (count > 0) {
-                $(this).text(count).css({
-                    visibility: "visible",
-                    display: "block",
-                });
-            } else {
-                $(this).text("").css({
-                    visibility: "hidden",
-                    display: "none",
-                });
-            }
-        });
-    }
-
     // Initialize the event handlers
     handleAddBookmark();
     handleRemoveBookmark();
+    updateBookmarkCount();
 
     // Initial Load of Bookmark Count
     function loadBookmarkCount() {
@@ -1721,6 +1702,24 @@ $(document).ready(function () {
         "data-bs-toggle"
     );
 });
+
+// Function to update the bookmark count
+function updateBookmarkCount(count) {
+    console.log(count);
+    $(".totalItemsCount").each(function () {
+        if (count > 0) {
+            $(this).text(count).css({
+                visibility: "visible",
+                display: "block",
+            });
+        } else {
+            $(this).text("").css({
+                visibility: "hidden",
+                display: "none",
+            });
+        }
+    });
+}
 
 // Add Bookmark
 function handleAddBookmark() {
@@ -1749,7 +1748,7 @@ function handleAddBookmark() {
 
                     handleRemoveBookmark();
                 },
-                error: function (xhr) { },
+                error: function (xhr) {},
             });
         });
 }
@@ -1797,6 +1796,8 @@ $(document).ready(function () {
     });
     initializeEventListeners();
     fetchCartDropdown();
+    handleAddBookmark();
+    handleRemoveBookmark();
 });
 
 function fetchCartDropdown() {
@@ -1850,7 +1851,9 @@ function showMessage(message, type) {
 }
 // Loading initializeEventListeners Data
 function initializeEventListeners() {
-    $(".add-to-cart-btn").off("click").on("click", function (e) {
+    $(".add-to-cart-btn")
+        .off("click")
+        .on("click", function (e) {
             e.preventDefault();
 
             let slug = $(this).data("slug");
@@ -1910,7 +1913,7 @@ function initializeEventListeners() {
 
                                 showMessage(
                                     response.status ||
-                                    "Item moved to Save for Later!",
+                                        "Item moved to Save for Later!",
                                     "success"
                                 );
                             },
@@ -1943,7 +1946,7 @@ function initializeEventListeners() {
                                 savelaterfetchCart();
                                 showMessage(
                                     response.status ||
-                                    "Save for Later Item Removed!",
+                                        "Save for Later Item Removed!",
                                     "success"
                                 );
                             },
@@ -2077,8 +2080,8 @@ $(document).ready(function () {
     $(document).on("click", ".save-for-later-btn", function (e) {
         $.ajaxSetup({
             headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            }
+                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+            },
         });
         e.preventDefault();
         const productId = $(this).data("product-id");
@@ -2098,10 +2101,15 @@ $(document).ready(function () {
                 }
                 fetchCart();
                 fetchCartDropdown();
-                showMessage(response.status || "Item moved to Buy for Later!", "success");
+                showMessage(
+                    response.status || "Item moved to Buy for Later!",
+                    "success"
+                );
             },
             error: function (xhr) {
-                const errorMessage = xhr.responseJSON?.error || "Failed to move item to Buy for Later!";
+                const errorMessage =
+                    xhr.responseJSON?.error ||
+                    "Failed to move item to Buy for Later!";
                 showMessage(errorMessage, "error");
             },
         });
@@ -2110,8 +2118,8 @@ $(document).ready(function () {
     $(document).on("click", ".cart-remove", function (e) {
         $.ajaxSetup({
             headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            }
+                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+            },
         });
         e.preventDefault();
         const productId = $(this).data("product-id");
@@ -2120,7 +2128,7 @@ $(document).ready(function () {
         $.ajax({
             url: "/cart/remove",
             type: "POST",
-            data: { product_id: productId , cart_id: cartId },
+            data: { product_id: productId, cart_id: cartId },
             success: function (response) {
                 if (response.cartItemCount !== undefined) {
                     const cartCountElement = $("#cart-count");
@@ -2133,10 +2141,15 @@ $(document).ready(function () {
                 }
                 fetchCart();
                 fetchCartDropdown();
-                showMessage(response.status || "Item moved to Buy for Later!", "success");
+                showMessage(
+                    response.status || "Item moved to Buy for Later!",
+                    "success"
+                );
             },
             error: function (xhr) {
-                const errorMessage = xhr.responseJSON?.error || "Failed to move item to Buy for Later!";
+                const errorMessage =
+                    xhr.responseJSON?.error ||
+                    "Failed to move item to Buy for Later!";
                 showMessage(errorMessage, "error");
             },
         });
@@ -2145,8 +2158,8 @@ $(document).ready(function () {
     $(document).on("click", ".moveToCart", function (e) {
         $.ajaxSetup({
             headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            }
+                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+            },
         });
         e.preventDefault();
         const productId = $(this).data("product-id");
@@ -2160,10 +2173,16 @@ $(document).ready(function () {
                 fetchCart();
                 savelaterfetchCart();
                 fetchCartDropdown();
-                showMessage(response.status || "Item moved to cart!", "success");
+                showMessage(
+                    response.status || "Item moved to cart!",
+                    "success"
+                );
             },
             error: function (xhr) {
-                showMessage(xhr.responseJSON?.error || "Failed to move item to cart!", "error");
+                showMessage(
+                    xhr.responseJSON?.error || "Failed to move item to cart!",
+                    "error"
+                );
             },
         });
     });
@@ -2171,8 +2190,8 @@ $(document).ready(function () {
     $(document).on("click", ".removeSaveLater", function (e) {
         $.ajaxSetup({
             headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            }
+                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+            },
         });
         e.preventDefault();
         const productId = $(this).data("product-id");
@@ -2184,10 +2203,17 @@ $(document).ready(function () {
             success: function (response) {
                 fetchCart();
                 savelaterfetchCart();
-                showMessage(response.status || "Save for Later Item Removed!", "success");
+                showMessage(
+                    response.status || "Save for Later Item Removed!",
+                    "success"
+                );
             },
             error: function (xhr) {
-                showMessage(xhr.responseJSON?.error || "Failed to remove item from Save for Later!", "error");
+                showMessage(
+                    xhr.responseJSON?.error ||
+                        "Failed to remove item from Save for Later!",
+                    "error"
+                );
             },
         });
     });
@@ -2217,7 +2243,10 @@ $(document).ready(function () {
                 }
             },
             error: function () {
-                showMessage("Failed to update Save for Later section!", "error");
+                showMessage(
+                    "Failed to update Save for Later section!",
+                    "error"
+                );
             },
         });
     }
@@ -2250,9 +2279,10 @@ $(document).ready(function () {
 
     function showMessage(message, type) {
         var textColor = type === "success" ? "#16A34A" : "#EF4444";
-        var icon = type === "success"
-            ? '<i class="fa-regular fa-cart-shopping" style="color: #16A34A"></i>'
-            : '<i class="fa-solid fa-triangle-exclamation" style="color: #EF4444"></i>';
+        var icon =
+            type === "success"
+                ? '<i class="fa-regular fa-cart-shopping" style="color: #16A34A"></i>'
+                : '<i class="fa-solid fa-triangle-exclamation" style="color: #EF4444"></i>';
         var alertClass = type === "success" ? "toast-success" : "toast-danger";
 
         var alertHtml = `
@@ -2275,9 +2305,3 @@ $(document).ready(function () {
 
     fetchCartDropdown();
 });
-
-
-
-
-
-

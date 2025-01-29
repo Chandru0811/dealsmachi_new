@@ -306,7 +306,6 @@
                                                     id="selected_id_{{ $addr->id }}"
                                                     value="{{ $addr->id }}"
                                                     {{ $selectedAddressId == $addr->id ? 'checked' : ($default_address && $addr->id == $default_address->id && !$selectedAddressId ? 'checked' : '') }} />
-
                                             </div>
                                             <p class="text-turncate fs_common">
                                                 <span class="px-2">
