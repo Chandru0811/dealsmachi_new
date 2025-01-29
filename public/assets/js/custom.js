@@ -1777,11 +1777,9 @@ function showMessage(message, type) {
         $(".alert").alert("close");
     }, 5000);
 }
-
+// Loading initializeEventListeners Data
 function initializeEventListeners() {
-    $(".add-to-cart-btn")
-        .off("click")
-        .on("click", function (e) {
+    $(".add-to-cart-btn").off("click").on("click", function (e) {
             e.preventDefault();
 
             let slug = $(this).data("slug");
@@ -1931,7 +1929,7 @@ function initializeEventListeners() {
             });
         });
 }
-
+// Loading Data
 document.addEventListener("DOMContentLoaded", function () {
     let loading = false;
     let currentPage = 1;
@@ -1995,3 +1993,220 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     });
 });
+
+// Move to Cart Function
+$(document).ready(function () {
+    $.ajaxSetup({
+        headers: {
+            "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+        },
+    });
+    initializeEventListeners();
+
+    $(document).on("click", ".save-for-later-btn", function (e) {
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+        e.preventDefault();
+        const productId = $(this).data("product-id");
+        $.ajax({
+            url: "/saveforlater/add",
+            type: "POST",
+            data: { product_id: productId },
+            success: function (response) {
+                if (response.cartItemCount !== undefined) {
+                    const cartCountElement = $("#cart-count");
+                    if (response.cartItemCount > 0) {
+                        cartCountElement.text(response.cartItemCount);
+                        cartCountElement.css("display", "inline");
+                    } else {
+                        cartCountElement.css("display", "none");
+                    }
+                }
+                fetchCart();
+                fetchCartDropdown();
+                showMessage(response.status || "Item moved to Buy for Later!", "success");
+            },
+            error: function (xhr) {
+                const errorMessage = xhr.responseJSON?.error || "Failed to move item to Buy for Later!";
+                showMessage(errorMessage, "error");
+            },
+        });
+    });
+
+    $(document).on("click", ".cart-remove", function (e) {
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+        e.preventDefault();
+        const productId = $(this).data("product-id");
+        const cartId = $(this).data("cart-id");
+
+        $.ajax({
+            url: "/cart/remove",
+            type: "POST",
+            data: { product_id: productId , cart_id: cartId },
+            success: function (response) {
+                if (response.cartItemCount !== undefined) {
+                    const cartCountElement = $("#cart-count");
+                    if (response.cartItemCount > 0) {
+                        cartCountElement.text(response.cartItemCount);
+                        cartCountElement.css("display", "inline");
+                    } else {
+                        cartCountElement.css("display", "none");
+                    }
+                }
+                fetchCart();
+                fetchCartDropdown();
+                showMessage(response.status || "Item moved to Buy for Later!", "success");
+            },
+            error: function (xhr) {
+                const errorMessage = xhr.responseJSON?.error || "Failed to move item to Buy for Later!";
+                showMessage(errorMessage, "error");
+            },
+        });
+    });
+
+    $(document).on("click", ".moveToCart", function (e) {
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+        e.preventDefault();
+        const productId = $(this).data("product-id");
+
+        $.ajax({
+            url: "/saveforlater/toCart",
+            type: "POST",
+            data: { product_id: productId },
+            success: function (response) {
+                updateCartCount(response.cartItemCount);
+                fetchCart();
+                savelaterfetchCart();
+                fetchCartDropdown();
+                showMessage(response.status || "Item moved to cart!", "success");
+            },
+            error: function (xhr) {
+                showMessage(xhr.responseJSON?.error || "Failed to move item to cart!", "error");
+            },
+        });
+    });
+
+    $(document).on("click", ".removeSaveLater", function (e) {
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+        e.preventDefault();
+        const productId = $(this).data("product-id");
+
+        $.ajax({
+            url: "/saveforlater/remove",
+            type: "POST",
+            data: { product_id: productId },
+            success: function (response) {
+                fetchCart();
+                savelaterfetchCart();
+                showMessage(response.status || "Save for Later Item Removed!", "success");
+            },
+            error: function (xhr) {
+                showMessage(xhr.responseJSON?.error || "Failed to remove item from Save for Later!", "error");
+            },
+        });
+    });
+
+    function fetchCart() {
+        $.ajax({
+            url: "/cart",
+            type: "GET",
+            success: function (response) {
+                if (response.html) {
+                    $(".cartIndex").html(response.html);
+                }
+            },
+            error: function () {
+                showMessage("Failed to update cart!", "error");
+            },
+        });
+    }
+
+    function savelaterfetchCart() {
+        $.ajax({
+            url: "/saveforlater/all",
+            type: "GET",
+            success: function (response) {
+                if (response.html) {
+                    $(".savelaterIndex").html(response.html);
+                }
+            },
+            error: function () {
+                showMessage("Failed to update Save for Later section!", "error");
+            },
+        });
+    }
+
+    function fetchCartDropdown() {
+        $.ajax({
+            url: "/cart/dropdown",
+            type: "GET",
+            success: function (response) {
+                if (response.html) {
+                    $(".dropdown_cart").html(response.html);
+                }
+            },
+            error: function () {
+                showMessage("Failed to update cart dropdown!", "error");
+            },
+        });
+    }
+
+    function updateCartCount(count) {
+        const cartCountElement = $("#cart-count");
+        if (count !== undefined) {
+            if (count > 0) {
+                cartCountElement.text(count).css("display", "inline");
+            } else {
+                cartCountElement.css("display", "none");
+            }
+        }
+    }
+
+    function showMessage(message, type) {
+        var textColor = type === "success" ? "#16A34A" : "#EF4444";
+        var icon = type === "success"
+            ? '<i class="fa-regular fa-cart-shopping" style="color: #16A34A"></i>'
+            : '<i class="fa-solid fa-triangle-exclamation" style="color: #EF4444"></i>';
+        var alertClass = type === "success" ? "toast-success" : "toast-danger";
+
+        var alertHtml = `
+          <div class="alert ${alertClass} alert-dismissible fade show" role="alert" style="position: fixed; top: 70px; right: 40px; z-index: 1050; color: ${textColor};">
+            <div class="toast-content">
+                <div class="toast-icon">${icon}</div>
+                <span class="toast-text">${message}</span>&nbsp;&nbsp;
+                <button class="toast-close-btn" data-bs-dismiss="alert" aria-label="Close">
+                    <i class="fa-solid fa-times" style="color: ${textColor}; font-size: 14px;"></i>
+                </button>
+            </div>
+          </div>
+        `;
+
+        $("body").append(alertHtml);
+        setTimeout(function () {
+            $(".alert").alert("close");
+        }, 5000);
+    }
+
+    fetchCartDropdown();
+});
+
+
+
+
+
+
