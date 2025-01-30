@@ -12,6 +12,7 @@ use App\Http\Controllers\Api\Admin\ShopController as AdminShopController;
 use App\Http\Controllers\Api\Admin\SliderController;
 use App\Http\Controllers\Api\Vendor\ProductController;
 use App\Http\Controllers\Api\Admin\ApprovalController;
+use App\Http\Controllers\Api\Admin\ReferrerDetailController;
 use App\Http\Controllers\Api\Admin\UserController;
 use App\Http\Controllers\Api\AppController;
 use App\Http\Controllers\Api\Vendor\DashboardController;
@@ -131,6 +132,12 @@ Route::middleware('auth:api')->group(function () {
         Route::get('referrers-and-vendors', [UserController::class, 'getAllReferrersAndReferrerVendors']);
         Route::get('referrals/{userId}', [UserController::class, 'getReferralsByUserId']);
 
+        // Referrer Detail
+        Route::get('referrer', [ReferrerDetailController::class, 'index']);
+        Route::post('referrer', [ReferrerDetailController::class, 'store']);
+        Route::get('referrer/{id}', [ReferrerDetailController::class, 'show']);
+        Route::put('referrer/update/{id}', [ReferrerDetailController::class, 'update']);
+        Route::delete('referrer/{id}', [ReferrerDetailController::class, 'delete']);
     });
 
     //Vendor
