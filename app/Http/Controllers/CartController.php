@@ -233,7 +233,7 @@ class CartController extends Controller
                 'subtotal' => $cart->total,
                 'discount' => $cart->discount,
                 'grand_total' => $cart->grand_total,
-            ],
+            ]
         ]);
     }
 
@@ -246,7 +246,6 @@ class CartController extends Controller
                 'error' => 'Cart not found!',
             ], 401);
         }
-
 
         $cart_item = CartItem::where('cart_id', $cart->id)->where('product_id', $request->product_id)->first();
 
@@ -267,6 +266,12 @@ class CartController extends Controller
         return response()->json([
             'status' => 'Deal Removed from Cart!',
             'cartItemCount' => $cart->item_count,
+            'updatedCart' => [
+                'quantity' => $cart->quantity,
+                'subtotal' => $cart->total,
+                'discount' => $cart->discount,
+                'grand_total' => $cart->grand_total
+            ]
         ]);
     }
 
@@ -347,12 +352,11 @@ class CartController extends Controller
                 'cartItemCount' => $cart->item_count,
                 'deal' => $deal,
                 'updatedCart' => [
-                    'item_count' => $cart->item_count,
                     'quantity' => $cart->quantity,
                     'subtotal' => $cart->total,
                     'discount' => $cart->discount,
-                    'grand_total' => $cart->grand_total,
-                ],
+                    'grand_total' => $cart->grand_total
+                ]
             ]);
         }
 
@@ -416,6 +420,7 @@ class CartController extends Controller
             'status' => 'Item moved to Cart',
         ]);
     }
+
     public function getsaveforlater(Request $request)
     {
         $user_id = Auth::check() ? Auth::user()->id : null;

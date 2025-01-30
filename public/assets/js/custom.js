@@ -2278,23 +2278,22 @@ $(document).ready(function () {
                     $(".discount").text("₹" + response.updatedCart.discount.toLocaleString());
                     $(".total").text("₹" + response.updatedCart.grand_total.toLocaleString());
                     $(".quantity-value").text(response.updatedCart.quantity);
-        
-                    // If item count is 0, show "Your cart is empty"
-                    if (response.updatedCart.item_count === 0) {
-                        $(".cart-items-container").after(`
-                             <div class="col-12 text-center d-flex flex-column align-items-center justify-content-center mt-0">
-                                 <img src="assets/images/home/cart_empty.webp" alt="Empty Cart"
-                                     class="img-fluid empty_cart_img">
-                                 <p class="pt-5" style="color: #ff0060;font-size: 22px">Your Cart is Currently Empty</p>
-                                 <p class="" style="color: #6C6C6C;font-size: 16px">Looks Like You Have Not Added Anything To </br>
-                                     Your Cart. Go Ahead & Explore Top Categories.</p>
-                                 <a href="/" class="btn showmoreBtn mt-2">Shop More</a>
-                             </div>
-                        `);
-                        $(".cart-items-container").hide();
-                    } else {
-                        $(".item_count").text(response.updatedCart.item_count);
-                    }
+                }
+
+                if (response.cartItemCount === 0) {
+                    $(".cart-items-container").after(`
+                         <div class="col-12 text-center d-flex flex-column align-items-center justify-content-center mt-0">
+                             <img src="assets/images/home/cart_empty.webp" alt="Empty Cart"
+                                 class="img-fluid empty_cart_img">
+                             <p class="pt-5" style="color: #ff0060;font-size: 22px">Your Cart is Currently Empty</p>
+                             <p class="" style="color: #6C6C6C;font-size: 16px">Looks Like You Have Not Added Anything To </br>
+                                 Your Cart. Go Ahead & Explore Top Categories.</p>
+                             <a href="/" class="btn showmoreBtn mt-2">Shop More</a>
+                         </div>
+                    `);
+                    $(".cart-items-container").hide();
+                } else {
+                    $(".item_count").text(response.cartItemCount);
                 }
 
                 if (response.deal) {
@@ -2418,7 +2417,32 @@ $(document).ready(function () {
                         cartCountElement.css("display", "none");
                     }
                 }
-                fetchCart();
+
+                $(`.cart-item[data-product-id="${productId}"]`).remove();
+
+                if (response.updatedCart) {
+                    $(".subtotal").text("₹" + response.updatedCart.subtotal.toLocaleString());
+                    $(".discount").text("₹" + response.updatedCart.discount.toLocaleString());
+                    $(".total").text("₹" + response.updatedCart.grand_total.toLocaleString());
+                    $(".quantity-value").text(response.updatedCart.quantity);
+                }
+
+                if (response.cartItemCount === 0) {
+                    $(".cart-items-container").after(`
+                         <div class="col-12 text-center d-flex flex-column align-items-center justify-content-center mt-0">
+                             <img src="assets/images/home/cart_empty.webp" alt="Empty Cart"
+                                 class="img-fluid empty_cart_img">
+                             <p class="pt-5" style="color: #ff0060;font-size: 22px">Your Cart is Currently Empty</p>
+                             <p class="" style="color: #6C6C6C;font-size: 16px">Looks Like You Have Not Added Anything To </br>
+                                 Your Cart. Go Ahead & Explore Top Categories.</p>
+                             <a href="/" class="btn showmoreBtn mt-2">Shop More</a>
+                         </div>
+                    `);
+                    $(".cart-items-container").hide();
+                } else {
+                    $(".item_count").text(response.cartItemCount);
+                }
+
                 fetchCartDropdown();
                 showMessage(
                     response.status || "Item moved to Buy for Later!",
