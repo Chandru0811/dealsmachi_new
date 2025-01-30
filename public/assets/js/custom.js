@@ -1999,55 +1999,6 @@ function initializeEventListeners() {
                         }
                     }
 
-                    $(document).on("click", ".moveToCart", function (e) {
-                        $.ajaxSetup({
-                            headers: {
-                                "X-CSRF-TOKEN": $(
-                                    'meta[name="csrf-token"]'
-                                ).attr("content"),
-                            },
-                        });
-                        e.preventDefault();
-                        const productId = $(this).data("product-id");
-                        $.ajax({
-                            url: "/saveforlater/toCart",
-                            type: "POST",
-                            data: { product_id: productId },
-                            success: function (response) {
-                                if (response.cartItemCount !== undefined) {
-                                    const cartCountElement = $("#cart-count");
-                                    if (response.cartItemCount > 0) {
-                                        cartCountElement.text(
-                                            response.cartItemCount
-                                        );
-                                        cartCountElement.css(
-                                            "display",
-                                            "inline"
-                                        );
-                                    } else {
-                                        cartCountElement.css("display", "none");
-                                    }
-                                }
-
-                                fetchCart();
-                                savelaterfetchCart();
-                                fetchCartDropdown();
-
-                                showMessage(
-                                    response.status ||
-                                    "Item moved to Save for Later!",
-                                    "success"
-                                );
-                            },
-                            error: function (xhr) {
-                                const errorMessage =
-                                    xhr.responseJSON?.error ||
-                                    "Failed to move item to Save for Later!";
-                                showMessage(errorMessage, "error");
-                            },
-                        });
-                    });
-
                     fetchCartDropdown();
                     showMessage(
                         response.status || "Deal added to cart!",
@@ -2187,7 +2138,7 @@ $(document).ready(function () {
                 }
 
                 if (response.deal) {
-                    $(".empty-saved-items-message").hide();
+                    $(".empty-savedItems").hide();
 
                     const imagePath = response.deal.product_media.length > 0
                         ? response.deal.product_media.find(media => media.order === 1 && media.type === 'image')?.path
@@ -2383,7 +2334,7 @@ $(document).ready(function () {
     $(document).on("click", ".removeSaveLater", function (e) {
         e.preventDefault();
         const productId = $(this).data("product-id");
-
+    
         $.ajax({
             url: "/saveforlater/remove",
             type: "POST",
@@ -2393,26 +2344,16 @@ $(document).ready(function () {
             },
             success: function (response) {
                 $(`.saved-item[data-product-id="${productId}"]`).remove();
-
-                const savedItemCount = $(".saved-items").children(".saved-item").length;
-
-                console.log("Remaining saved items count: ", savedItemCount);
-
-                if (savedItemCount === 0) {
-                    if ($('.empty-saved-items-message').length === 0) {
-                        $('.saved-items').after(`
-                            <div class="text-center mb-4 empty-saved-items-message" style="display: block;">
-                                <img src="https://dealsmachi.com/assets/images/home/empty_savedItems.png" alt="Empty Cart" class="img-fluid mb-2" style="width: 300px;" />
+                    
+                if ($(".saved-item").length === 0) {
+                    $(".saved-items").hide();
+                    $(".empty-savedItems").show();
+                    $(".saved-items").after(`
+                        <div class="text-center mb-4 empty-savedItems">
+                                <img src='/assets/images/home/empty_savedItems.png' alt="Empty Cart" class="img-fluid mb-2" style="width: 300px;" />
                                 <h4 style="color: #ff0060;">Your Saved Wishlists are awaiting your selection!</h4>
                             </div>
                         `);
-                    }
-
-                    $(".saved-items").hide();
-                    $(".empty-saved-items-message").show();
-                } else {
-                    $(".empty-saved-items-message").hide();
-                    $(".saved-items").show();
                 }
 
                 showMessage(response.status || "Save for Later Item Removed!", "success");
@@ -2447,25 +2388,14 @@ $(document).ready(function () {
                 
                 $(`.saved-item[data-product-id="${productId}"]`).remove();
 
-                const savedItemCount = $(".saved-items").children(".saved-item").length;
-
-                console.log("Remaining saved items count: ", savedItemCount);
-
-                if (savedItemCount === 0) {
-                    if ($('.empty-saved-items-message').length === 0) {
-                        $('.saved-items').after(`
-                            <div class="text-center mb-4 empty-saved-items-message" style="display: block;">
-                                <img src="https://dealsmachi.com/assets/images/home/empty_savedItems.png" alt="Empty Cart" class="img-fluid mb-2" style="width: 300px;" />
+                if ($(".saved-item").length === 0) {
+                    $(".saved-items").hide();
+                    $(".saved-items").after(`
+                        <div class="text-center mb-4 empty-savedItems">
+                                <img src='/assets/images/home/empty_savedItems.png' alt="Empty Cart" class="img-fluid mb-2" style="width: 300px;" />
                                 <h4 style="color: #ff0060;">Your Saved Wishlists are awaiting your selection!</h4>
                             </div>
                         `);
-                    }
-
-                    $(".saved-items").hide();
-                    $(".empty-saved-items-message").show();
-                } else {
-                    $(".empty-saved-items-message").hide();
-                    $(".saved-items").show();
                 }
 
                 fetchCartDropdown();

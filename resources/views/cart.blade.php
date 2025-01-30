@@ -297,7 +297,7 @@ use Carbon\Carbon;
         </div>
         <div class="saved-item-container">
             @if ($savedItems->isEmpty())
-            <div class="text-center mb-4 empty-saved-items-message">
+            <div class="text-center mb-4 empty-savedItems">
                 <img src="{{ asset('assets/images/home/empty_savedItems.png') }}" alt="Empty Cart"
                     class="img-fluid mb-2" style="width: 300px;" />
                 <h4 style="color: #ff0060;">Your Saved Wishlists are awaiting your selection!</h4>

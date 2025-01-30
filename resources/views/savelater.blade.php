@@ -52,10 +52,10 @@
 </div>
 @endif
 <section>
-    <div class="container saved-item-container" style="margin-top: 100px">
+    <div class="container" style="margin-top: 100px">
         <h2 class="my-4">Buy Later</h2>
         @if ($savedItems->isEmpty())
-        <div class="text-center mb-4 empty-saved-items-message">
+        <div class="text-center mb-4">
             <img src="{{ asset('assets/images/home/empty_savedItems.png') }}" alt="Empty Cart"
                 class="img-fluid mb-2" style="width: 300px;" />
             <h4 style="color: #ff0060;">Your Saved Wishlists are awaiting your selection!</h4>
@@ -63,7 +63,7 @@
         @else
         <!-- Display saved items -->
         <div class="saved-items">
-        <hr>
+            <hr>
             @foreach ($savedItems as $savedItem)
             <div class="saved-item" data-product-id="{{ $savedItem->deal->id }}">
                 <div class="row p-4">
