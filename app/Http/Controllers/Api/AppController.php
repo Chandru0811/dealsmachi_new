@@ -30,6 +30,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Hash;
 use App\Mail\OrderCreated;
+use App\Models\Review;
 
 class AppController extends Controller
 {
@@ -161,9 +162,10 @@ class AppController extends Controller
             $ipAddress = $request->ip();
             $isBookmarked = Bookmark::where('ip_address', $ipAddress)->where('deal_id', $id)->exists();
         }
-
+        $reviewData = $deal->review()->with('user')->orderBy('created_at', 'desc')->get();
         $dealData = $deal->toArray();
         $dealData['is_bookmarked'] = $isBookmarked;
+        $dealData['reviews'] = $reviewData;
 
         return $this->success('Deal Retrieved Successfully!', $dealData);
     }
@@ -948,5 +950,71 @@ class AppController extends Controller
         ]);
 
         return $this->success('User Updated Successfully', $user);
+    }
+
+    public function getUser()
+    {
+        $userId = Auth::id();
+
+        $user = User::find($userId);
+
+        if (!$user) {
+            return $this->error('User Not Found.', ['error' => 'User Not Found'], 404);
+        }
+
+        return $this->success('User Retrived Successfully', $user);
+    }
+
+    public function softDeleteUser()
+    {
+        $userId = Auth::id();
+        $user = User::find($userId);
+
+        if (!$user) {
+            return $this->error('User Not Found.', ['error' => 'User Not Found'], 404);
+        }
+
+        $user->delete();
+
+        return $this->ok('User Deleted Successfully.');
+    }
+
+    public function createReview(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'title' => 'required|string|max:255',
+            'body'  => 'required|string',
+            'rating' => 'required|integer|min:1|max:5',
+            'product_id' => 'required|exists:products,id',
+        ], [
+            'title.required' => 'Please provide a title for the review.',
+            'title.string'   => 'The title must be a valid string.',
+            'title.max'      => 'The title may not exceed 255 characters.',
+            'body.required'  => 'Please provide a body for the review.',
+            'body.string'    => 'The body must be a valid string.',
+            'rating.required' => 'Please provide a rating.',
+            'rating.integer' => 'The rating must be an integer.',
+            'rating.min' => 'The rating must be at least 1.',
+            'rating.max' => 'The rating may not be greater than 5.',
+            'product_id.required' => 'Please select a valid product.',
+            'product_id.exists' => 'The selected product does not exist.',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 422);
+        }
+
+       $review =  Review::updateOrCreate(
+            ['user_id' => Auth::id(), 'product_id' => $request->product_id],
+            [
+                'title' => $request->input('title'),
+                'body'  => $request->input('body'),
+                'rating' => $request->input('rating'),
+                'product_id' => $request->input('product_id'),
+                'user_id' => Auth::id(),
+            ]
+        );
+
+        return $this->success('Review has been successfully added.',  $review);
     }
 }

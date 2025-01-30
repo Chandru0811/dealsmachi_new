@@ -176,6 +176,9 @@ Route::middleware('auth:api')->group(function () {
         // Order
         Route::get('orders/{shop_id}', [ShopController::class, 'getAllOrdersByShop']);
         Route::get('order/{order_id}/{product_id}', [ShopController::class, 'showOrderById']);
+
+        // All Referral Vendor
+        Route::get('referrals/{userId}', [ShopController::class, 'getReferralsByUserId']);
     });
 
     //Customer
@@ -188,12 +191,15 @@ Route::middleware('auth:api')->group(function () {
         Route::get('/orders', [CheckoutController::class, 'getAllOrdersByCustomer']);
         Route::get('/order/{id}/{product_id}', [CheckoutController::class, 'showOrderByCustomerId']);
         Route::put('/updateUser', [AppController::class, 'updateUser']);
+        Route::get('/getUser', [AppController::class, 'getUser']);
+        Route::delete('/deleteUser', [AppController::class, 'softDeleteUser']);
 
         Route::get('/address', [AddressController::class, 'index']);
         Route::post('/address', [AddressController::class, 'store']);
         Route::get('/address/{id}', [AddressController::class, 'show']);
         Route::put('/address/update/{id}', [AddressController::class, 'update']);
         Route::delete('/address/{id}', [AddressController::class, 'destroy']);
+        Route::post('/review', [AppController::class, 'createReview']);
     });
 });
 

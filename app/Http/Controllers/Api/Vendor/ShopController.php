@@ -8,6 +8,7 @@ use App\Models\OrderItems;
 use App\Models\Shop;
 use App\Models\ShopHour;
 use App\Models\ShopPolicy;
+use App\Models\User;
 use Illuminate\Http\Request;
 use App\Traits\ApiResponses;
 use Illuminate\Support\Facades\Validator;
@@ -309,5 +310,20 @@ class ShopController extends Controller
         ->update(['viewed_by_vendor' => 0]);
 
         return $this->success('Order Item Retrieved Successfully', $orderItem);
+    }
+
+    public function getReferralsByUserId($userId)
+    {
+        $referralCode = 'DMR500' . $userId;
+
+        $referrals = User::where('referral_code', $referralCode)
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        if ($referrals->isEmpty()) {
+            return $this->success('Referral list retrieved successfully.', []);
+        }
+
+        return $this->success('Referral list retrieved successfully.', $referrals);
     }
 }

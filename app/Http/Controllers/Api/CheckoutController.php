@@ -310,6 +310,7 @@ class CheckoutController extends Controller
                 $query->where('product_id', $product_id);
             },
             'items.product.productMedia',
+            'items.product.review',
             'items.shop' => function ($query) {
                 $query->select('id', 'name', 'email', 'mobile', 'description', 'street', 'street2', 'city', 'zip_code', 'deleted_at')->withTrashed();
             }
@@ -318,6 +319,22 @@ class CheckoutController extends Controller
         if (!$order || Auth::id() !== $order->customer_id) {
             return $this->error('Invalid request.', [], 400);
         }
+
+        $orderReviewedByUser = false;
+
+        if ($order->items->count() > 0) {
+            foreach ($order->items as $item) {
+                if ($item->product && $item->product->review) {
+                    $review = $item->product->review->firstWhere('user_id', Auth::id());
+
+                    if ($review) {
+                        $orderReviewedByUser = true;
+                        break;
+                    }
+                }
+            }
+        }
+        $order['reviewed'] = $orderReviewedByUser;
 
         return $this->success('Order Retrieved Successfully!', $order);
     }
