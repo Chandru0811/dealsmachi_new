@@ -65,9 +65,6 @@ class CartController extends Controller
                 ->get();
         }
 
-        if ($request->ajax()) {
-            return response()->json(['html' => view('cart', compact('cart', 'bookmarkedProducts', 'savedItems'))->render()]);
-        }
         return view('cart', compact('cart', 'bookmarkedProducts', 'savedItems'));
     }
 
@@ -271,7 +268,6 @@ class CartController extends Controller
             'status' => 'Deal Removed from Cart!',
             'cartItemCount' => $cart->item_count,
         ]);
-
     }
 
     public function getCartDropdown()
@@ -328,6 +324,8 @@ class CartController extends Controller
                 'deal_id' => $cartItem->product_id,
             ]);
 
+            $deal = Product::with(['productMedia', 'shop'])->find($cartItem->product_id);
+
             // Remove from Cart
             $cartItem->delete();
 
@@ -347,6 +345,14 @@ class CartController extends Controller
             return response()->json([
                 'status' => 'Item moved to Buy for Later',
                 'cartItemCount' => $cart->item_count,
+                'deal' => $deal,
+                'updatedCart' => [
+                    'item_count' => $cart->item_count,
+                    'quantity' => $cart->quantity,
+                    'subtotal' => $cart->total,
+                    'discount' => $cart->discount,
+                    'grand_total' => $cart->grand_total,
+                ],
             ]);
         }
 
@@ -376,7 +382,6 @@ class CartController extends Controller
             return response()->json([
                 'error' => 'No cart found',
             ], 404);
-
         }
 
         CartItem::create([

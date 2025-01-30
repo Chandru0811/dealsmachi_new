@@ -33,7 +33,7 @@ class HomeController extends Controller
         $categoryGroups = CategoryGroup::where('active', 1)->with('categories')->take(10)->get();
         $hotpicks = DealCategory::where('active', 1)->get();
         $products = Product::where('active', 1)
-            ->with(['productMedia', 'shop:id,country,city,shop_ratings', 'review' ])
+            ->with(['productMedia', 'shop:id,country,city,shop_ratings' ])
             ->orderBy('created_at', 'desc')
             ->paginate(8);
         // dd($products);
@@ -150,7 +150,7 @@ class HomeController extends Controller
     {
         $shortBy = $request->input('short_by');
         if ($shortBy) {
-            return redirect()->route('dealcategorybasedproducts', ['slug' => $shortBy] + $request->except('short_by'));
+            return redirect()->route('deals.categorybased', ['slug' => $shortBy] + $request->except('short_by'));
         }
 
         $perPage = $request->input('per_page', 10);

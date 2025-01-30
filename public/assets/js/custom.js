@@ -462,47 +462,23 @@ $(document).ready(function () {
                                         <div class="d-flex text-start">
                                             <div class="px-1">
                                                 <input type="radio" name="selected_id"
-                                                    id="selected_id_${
-                                                        response.address.id
-                                                    }"
-                                                    value="${
-                                                        response.address.id
-                                                    }"
-                                                    ${
-                                                        response.address
-                                                            .default === "1"
-                                                            ? "checked"
-                                                            : ""
-                                                    } />
+                                                    id="selected_id_${response.address.id}"
+                                                    value="${response.address.id}"
+                                                    ${response.address.default === "1" ? "checked" : "" } />
                                             </div>
                                             <p class="text-turncate fs_common">
                                                 <span class="px-2">
-                                                    ${
-                                                        response.address
-                                                            .first_name
-                                                    } ${
-                                response.address.last_name
-                            } |
+                                                    ${response.address.first_name} ${response.address.last_name} |
                                                     <span style="color: #c7c7c7;">&nbsp;+91
-                                                        ${
-                                                            response.address
-                                                                .phone
-                                                        }</span>
+                                                        ${response.address.phone}
+                                                    </span>
                                                 </span><br>
-                                                <span class="px-2"
-                                                    style="color: #c7c7c7">${
-                                                        response.address.address
-                                                    }, ${
-                                response.address.city
-                            }, ${response.address.state} - ${
-                                response.address.postalcode
-                            }.</span>
+                                                <span class="px-2" style="color: #c7c7c7">
+                                                    ${response.address.address}, ${response.address.city}, ${response.address.state} - ${response.address.postalcode}.
+                                                </span>
                                                 <br>
-                                                ${
-                                                    response.address.default ===
-                                                    "1"
-                                                        ? '<span class="badge badge_primary">Default</span>'
-                                                        : ""
+                                                ${response.address.default === "1" ? 
+                                                    '<span class="badge badge_primary">Default</span>' : ""
                                                 }
                                             </p>
                                         </div>
@@ -511,22 +487,16 @@ $(document).ready(function () {
                                         <div class="d-flex align-items-center justify-content-end">
                                             <div class="d-flex gap-2 delBadge">
                                                 <button type="button" class="badge_edit" data-bs-toggle="modal"
-                                                    data-address-id="${
-                                                        response.address.id
-                                                    }" data-bs-target="#editAddressModal">
+                                                    data-address-id="${response.address.id}" data-bs-target="#editAddressModal">
                                                     Edit
                                                 </button>
-                                                ${
-                                                    response.address.default ===
-                                                    "0"
-                                                        ? `
+                                                ${response.address.default === "0" ? `
                                                     <button type="button" class="badge_del"
                                                         data-bs-toggle="modal"
                                                         data-bs-target="#deleteAddressModal"
                                                         data-address-id="${response.address.id}">
                                                         Delete
-                                                    </button>`
-                                                        : ""
+                                                    </button>` : ""
                                                 }
                                             </div>
                                         </div>
@@ -534,12 +504,8 @@ $(document).ready(function () {
                                 </div>
                             `);
                             if (response.address.default === "1") {
-                                $(
-                                    '.modal-body p strong:contains("Phone :")'
-                                ).parent().html(`
-                                    <strong>Phone :</strong> (+91) ${
-                                        response.address.phone || "--"
-                                    }
+                                $('.modal-body p strong:contains("Phone :")').parent().html(`
+                                    <strong>Phone :</strong> (+91) ${response.address.phone || "--"}
                                 `);
                                 var profileAddress = `
                                     <p>
@@ -553,10 +519,7 @@ $(document).ready(function () {
                                 `;
                                 $(".selected-address").html(profileAddress);
                                 $(".defaultAddress .primary_new_btn").hide();
-                                if (
-                                    $(".defaultAddress .badge_infos").length ===
-                                    0
-                                ) {
+                                if ($(".defaultAddress .badge_infos").length === 0) {
                                     $(".defaultAddress").append(`
                                         <span class="badge badge_infos py-1" data-bs-toggle="modal" data-bs-target="#myAddressModal">Change</span>
                                     `);
@@ -572,13 +535,9 @@ $(document).ready(function () {
                                     $("#moveCartToCheckout").hide();
                                     $("#moveCartToCheckout").after(`
                                         <form action="/cartCheckout" method="POST" id="cartCheckoutForm">
-                                            <input type="hidden" name="_token" value="${$(
-                                                'meta[name="csrf-token"]'
-                                            ).attr("content")}">
+                                            <input type="hidden" name="_token" value="${$('meta[name="csrf-token"]').attr("content")}">
                                             <input type="hidden" name="cart_id"  value="${cartId}">
-                                            <input type="hidden" name="address_id" id="addressID" value="${
-                                                response.address.id
-                                            }">
+                                            <input type="hidden" name="address_id" id="addressID" value="${response.address.id}">
                                             <button type="submit" class="btn check_out_btn">
                                                 Checkout
                                             </button>
@@ -595,9 +554,7 @@ $(document).ready(function () {
                                 if ($("#moveToCheckout").length) {
                                     $("#moveToCheckout").hide();
                                     $("#checkoutForm").append(`
-                                       <button type="submit" class="btn check_out_btn" id="submitBtn">
-                                            Checkout
-                                       </button>
+                                         $(".summary_checkout_button").css(="display","block");
                                     `);
                                 }
                             }
@@ -784,45 +741,21 @@ $(document).ready(function () {
                                         <div class="d-flex text-start">
                                             <div class="px-1">
                                                 <input type="radio" name="selected_id"
-                                                    id="selected_id_${
-                                                        response.address.id
-                                                    }"
-                                                    value="${
-                                                        response.address.id
-                                                    }"
-                                                    ${
-                                                        response.address
-                                                            .default === "1"
-                                                            ? "checked"
-                                                            : ""
-                                                    } />
+                                                    id="selected_id_${response.address.id}"
+                                                    value="${response.address.id}"
+                                                    ${response.address.default === "1" ? "checked" : "" } />
                                             </div>
                                             <p class="text-turncate fs_common">
                                                 <span class="px-2">
-                                                    ${
-                                                        response.address
-                                                            .first_name
-                                                    } ${
-                                response.address.last_name
-                            } |
-                                                    <span style="color: #c7c7c7;">&nbsp;+91 ${
-                                                        response.address.phone
-                                                    }</span>
+                                                    ${response.address.first_name} ${response.address.last_name} |
+                                                    <span style="color: #c7c7c7;">&nbsp;+91 ${response.address.phone}</span>
                                                 </span><br>
                                                 <span class="px-2"
-                                                    style="color: #c7c7c7">${
-                                                        response.address.address
-                                                    }, ${
-                                response.address.city
-                            }, ${response.address.state} - ${
-                                response.address.postalcode
-                            }.</span>
+                                                    style="color: #c7c7c7">${response.address.address}, ${response.address.city}, ${response.address.state} - ${response.address.postalcode}.
+                                                </span>
                                                 <br>
-                                                ${
-                                                    response.address.default ===
-                                                    "1"
-                                                        ? '<span class="badge badge_primary">Default</span>'
-                                                        : ""
+                                                ${response.address.default === "1" ? 
+                                                    '<span class="badge badge_primary">Default</span>' : ""
                                                 }
                                             </p>
                                         </div>
@@ -831,22 +764,16 @@ $(document).ready(function () {
                                         <div class="d-flex align-items-center justify-content-end">
                                             <div class="d-flex gap-2 delBadge">
                                                 <button type="button" class="badge_edit" data-bs-toggle="modal"
-                                                    data-address-id="${
-                                                        response.address.id
-                                                    }" data-bs-target="#editAddressModal">
+                                                    data-address-id="${response.address.id}" data-bs-target="#editAddressModal">
                                                     Edit
                                                 </button>
-                                                ${
-                                                    response.address.default ===
-                                                    "0"
-                                                        ? `
+                                                ${response.address.default === "0" ? `
                                                     <button type="button" class="badge_del"
                                                         data-bs-toggle="modal"
                                                         data-bs-target="#deleteAddressModal"
                                                         data-address-id="${response.address.id}">
                                                         Delete
-                                                    </button>`
-                                                        : ""
+                                                    </button>` : ""
                                                 }
                                             </div>
                                         </div>
@@ -855,12 +782,8 @@ $(document).ready(function () {
                             `);
 
                             if (response.address.default === "1") {
-                                $(
-                                    '.modal-body p strong:contains("Phone :")'
-                                ).parent().html(`
-                                    <strong>Phone :</strong> (+91) ${
-                                        response.address.phone || "--"
-                                    }
+                                $('.modal-body p strong:contains("Phone :")').parent().html(`
+                                    <strong>Phone :</strong> (+91) ${response.address.phone || "--"}
                                 `);
                                 $(".selected-address").html(`
                                     <p>
@@ -1064,14 +987,10 @@ $(document).ready(function () {
             function updateSelectedAddress(address) {
                 if (address) {
                     const addressHtml = `
-                            <strong>${address.first_name} ${
-                        address.last_name ?? ""
-                    } (+91) ${address.phone}</strong><br>
-                            ${address.address} - ${address.postalcode}
-                            ${
-                                address.default
-                                    ? '<span class="badge badge_danger py-1">Default</span>'
-                                    : ""
+                            <strong>${address.first_name} ${address.last_name ?? ""} (+91) ${address.phone}</strong><br>
+                            ${address.address}, ${address.city}, ${address.state} - ${address.postalcode}
+                            ${address.default ? 
+                                '<span class="badge badge_danger py-1">Default</span>' : ""
                             }
                         `;
                     $("#addressID").val(address.id);
@@ -1225,7 +1144,18 @@ $(document).ready(function () {
         }
 
         if (isValid) {
-            this.submit();
+            const submitButton = $("button[type='submit']");
+            submitButton.prop("disabled", true);
+
+            // Add a loader inside the button
+            submitButton.html(
+                `<span class="spinner-border spinner-border-sm me-2"></span> Logging in...`
+            );
+
+            // Simulate a delay (optional)
+            setTimeout(() => {
+                this.submit();
+            }, 2000);
         }
     });
 
@@ -1987,7 +1917,7 @@ function handleAddBookmark() {
 
                     handleRemoveBookmark();
                 },
-                error: function (xhr) {},
+                error: function (xhr) { },
             });
         });
 }
@@ -2152,7 +2082,7 @@ function initializeEventListeners() {
 
                                 showMessage(
                                     response.status ||
-                                        "Item moved to Save for Later!",
+                                    "Item moved to Save for Later!",
                                     "success"
                                 );
                             },
@@ -2185,7 +2115,7 @@ function initializeEventListeners() {
                                 savelaterfetchCart();
                                 showMessage(
                                     response.status ||
-                                        "Save for Later Item Removed!",
+                                    "Save for Later Item Removed!",
                                     "success"
                                 );
                             },
@@ -2317,13 +2247,15 @@ $(document).ready(function () {
     initializeEventListeners();
 
     $(document).on("click", ".save-for-later-btn", function (e) {
+        e.preventDefault();
         $.ajaxSetup({
             headers: {
                 "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
             },
         });
-        e.preventDefault();
+
         const productId = $(this).data("product-id");
+
         $.ajax({
             url: "/saveforlater/add",
             type: "POST",
@@ -2338,17 +2270,125 @@ $(document).ready(function () {
                         cartCountElement.css("display", "none");
                     }
                 }
-                fetchCart();
+
+                $(`.cart-item[data-product-id="${productId}"]`).remove();
+
+                if (response.updatedCart) {
+                    $(".subtotal").text("₹" + response.updatedCart.subtotal.toLocaleString());
+                    $(".discount").text("₹" + response.updatedCart.discount.toLocaleString());
+                    $(".total").text("₹" + response.updatedCart.grand_total.toLocaleString());
+                    $(".quantity-value").text(response.updatedCart.quantity);
+        
+                    // If item count is 0, show "Your cart is empty"
+                    if (response.updatedCart.item_count === 0) {
+                        $(".cart-items-container").after(`
+                             <div class="col-12 text-center d-flex flex-column align-items-center justify-content-center mt-0 cart-empty-message">
+                                 <img src="assets/images/home/cart_empty.webp" alt="Empty Cart"
+                                     class="img-fluid empty_cart_img">
+                                 <p class="pt-5" style="color: #ff0060;font-size: 22px">Your Cart is Currently Empty</p>
+                                 <p class="" style="color: #6C6C6C;font-size: 16px">Looks Like You Have Not Added Anything To </br>
+                                     Your Cart. Go Ahead & Explore Top Categories.</p>
+                                 <a href="/" class="btn showmoreBtn mt-2">Shop More</a>
+                             </div>
+                        `);
+                        $(".cart-items-container").hide();
+                    } else {
+                        $(".item_count").text(response.updatedCart.item_count);
+                    }
+                }
+
+                if (response.deal) {
+                    $(".empty-saved-items-message").hide();
+
+                    const imagePath = response.deal.product_media.length > 0
+                        ? response.deal.product_media.find(media => media.order === 1 && media.type === 'image')?.path
+                        : 'assets/images/home/noImage.webp';
+
+                    const deliveryDate = response.deal.deal_type === 1
+                        ? (response.deliveryDays > 0 ? response.deliveryDate : 'No delivery date available')
+                        : '<span style="color: #22cb00">Currently Services are free through DealsMachi</span>';
+
+                    const discountPercentage = Math.round(response.deal.discount_percentage);
+
+                    const savedItemHtml = `
+                        <div class="saved-item" data-product-id="${response.deal.id}">
+                            <div class="row p-4">
+                                <div class="col-md-3 d-flex flex-column justify-content-center align-items-center">
+                                    <div class="d-flex justify-content-center align-items-center">
+                                        <img src="${imagePath}" style="max-width: 100%; max-height: 100%;" 
+                                            alt="${response.deal.name}" />
+                                    </div>
+                                </div>
+                                <div class="col-md-5">
+                                    <a href="/deal/${response.deal.id}" style="color: #000;" 
+                                        onclick="clickCount('${response.deal.id}')">
+                                        <p style="font-size: 18px;font-weight:500">${response.deal.name}</p>
+                                    </a>
+                                    <p class="truncated-description" style="font-size: 16px">${response.deal.description}</p>
+                                    ${response.deal.deal_type === 1 ? `
+                                        <div class="rating my-2">
+                                            <span>Delivery Date :</span><span class="stars">
+                                                <span>${deliveryDate}</span>
+                                            </span>
+                                        </div>
+                                    ` : `
+                                        <div class="rating mt-3 mb-3">
+                                            <span style="color: #22cb00">Currently Services are free through DealsMachi</span>
+                                        </div>
+                                    `}
+                                    <p style="color: #AAAAAA;font-size:14px;">Seller : ${response.deal.shop.legal_name}</p>
+                                    <div class="ms-0">
+                                        <span style="font-size:15px;text-decoration: line-through; color:#c7c7c7">
+                                            ₹${response.deal.original_price.toLocaleString()}
+                                        </span>
+                                        <span class="ms-1" style="font-size:18px;font-weight:500;color:#ff0060">
+                                            ₹${response.deal.discounted_price.toLocaleString()}
+                                        </span>
+                                        <span class="ms-1" style="font-size:18px;font-weight:500; color:#28A745">
+                                            - ${discountPercentage}% Off
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 d-flex flex-column justify-content-end align-items-end mb-3">
+                                    <div class="btn-group" role="group">
+                                        <button type="button" class="btn remove-cart-btn removeSaveLater" 
+                                            style="color: #ff0060;border: none" data-product-id="${response.deal.id}">
+                                            <div class="d-inline-flex align-items-center gap-2-2">
+                                                <div>
+                                                    <img src="assets/images/home/icon_delete.svg" alt="icon" class="img-fluid" />
+                                                </div>
+                                                <div class="d-inline-flex align-items-center gap-2">
+                                                    <span class="loader spinner-border spinner-border-sm" style="display: none"></span>
+                                                    Remove
+                                                </div>
+                                            </div>
+                                        </button>
+                                        <button type="button" class="btn cancel-btn moveToCart" 
+                                            style="color: #ff0060;border: none" data-product-id="${response.deal.id}">
+                                            <div class="d-inline-flex align-items-center gap-2">
+                                                <div>
+                                                    <img src="assets/images/home/icon_delivery.svg" alt="icon" class="img-fluid" />
+                                                </div>
+                                                <div class="d-inline-flex align-items-center gap-2">
+                                                    <span class="loader spinner-border spinner-border-sm me-2" style="display: none"></span>
+                                                    Move to Cart
+                                                </div>
+                                            </div>
+                                        </button>
+                                    </div>
+                                </div>
+                                <hr class="mt-3">
+                            </div>
+                        </div>`;
+
+                    $(".saved-item-container").append(savedItemHtml);
+                }
+
                 fetchCartDropdown();
-                showMessage(
-                    response.status || "Item moved to Buy for Later!",
-                    "success"
-                );
+                showMessage(response.status || "Item moved to Buy for Later!", "success");
             },
             error: function (xhr) {
-                const errorMessage =
-                    xhr.responseJSON?.error ||
-                    "Failed to move item to Buy for Later!";
+                const errorMessage = xhr.responseJSON?.error || "Failed to move item to Buy for Later!";
                 showMessage(errorMessage, "error");
             },
         });
@@ -2427,11 +2467,6 @@ $(document).ready(function () {
     });
 
     $(document).on("click", ".removeSaveLater", function (e) {
-        $.ajaxSetup({
-            headers: {
-                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
-            },
-        });
         e.preventDefault();
         const productId = $(this).data("product-id");
 
@@ -2439,56 +2474,40 @@ $(document).ready(function () {
             url: "/saveforlater/remove",
             type: "POST",
             data: { product_id: productId },
+            headers: {
+                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+            },
             success: function (response) {
-                fetchCart();
-                savelaterfetchCart();
-                showMessage(
-                    response.status || "Save for Later Item Removed!",
-                    "success"
-                );
+                $(`.saved-item[data-product-id="${productId}"]`).remove();
+
+                const savedItemCount = $(".saved-items").children(".saved-item").length;
+
+                console.log("Remaining saved items count: ", savedItemCount);
+
+                if (savedItemCount === 0) {
+                    if ($('.empty-saved-items-message').length === 0) {
+                        $('.saved-items').after(`
+                            <div class="text-center mb-4 empty-saved-items-message" style="display: block;">
+                                <img src="assets/images/home/empty_savedItems.png" alt="Empty Cart" class="img-fluid mb-2" style="width: 300px;" />
+                                <h4 style="color: #ff0060;">Your Saved Wishlists are awaiting your selection!</h4>
+                            </div>
+                        `);
+                    }
+
+                    $(".saved-items").hide();
+                    $(".empty-saved-items-message").show();
+                } else {
+                    $(".empty-saved-items-message").hide();
+                    $(".saved-items").show();
+                }
+
+                showMessage(response.status || "Save for Later Item Removed!", "success");
             },
             error: function (xhr) {
-                showMessage(
-                    xhr.responseJSON?.error ||
-                        "Failed to remove item from Save for Later!",
-                    "error"
-                );
+                showMessage(xhr.responseJSON?.error || "Failed to remove item from Save for Later!", "error");
             },
         });
     });
-
-    function fetchCart() {
-        $.ajax({
-            url: "/cart",
-            type: "GET",
-            success: function (response) {
-                if (response.html) {
-                    $(".cartIndex").html(response.html);
-                }
-            },
-            error: function () {
-                showMessage("Failed to update cart!", "error");
-            },
-        });
-    }
-
-    function savelaterfetchCart() {
-        $.ajax({
-            url: "/saveforlater/all",
-            type: "GET",
-            success: function (response) {
-                if (response.html) {
-                    $(".savelaterIndex").html(response.html);
-                }
-            },
-            error: function () {
-                showMessage(
-                    "Failed to update Save for Later section!",
-                    "error"
-                );
-            },
-        });
-    }
 
     function fetchCartDropdown() {
         $.ajax({
@@ -2503,17 +2522,6 @@ $(document).ready(function () {
                 showMessage("Failed to update cart dropdown!", "error");
             },
         });
-    }
-
-    function updateCartCount(count) {
-        const cartCountElement = $("#cart-count");
-        if (count !== undefined) {
-            if (count > 0) {
-                cartCountElement.text(count).css("display", "inline");
-            } else {
-                cartCountElement.css("display", "none");
-            }
-        }
     }
 
     function showMessage(message, type) {
