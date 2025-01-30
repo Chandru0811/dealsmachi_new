@@ -482,7 +482,10 @@
                                         <img src="${product.image}" style="max-width: 100%; max-height: 100%;" alt="${product.name}" />
                                     </div>
                                     <div class="col-md-8 col-12">
+                                        <a href="{{ url(path: '/deal/' . $product->id) }}" style="color: #000;"
+                                        onclick="clickCount('{{ $product->id }}')">
                                         <h5>${product.name}</h5>
+                                        </a>
                                         <h6 class="truncated-description">${product.description}</h6>
                                         <div class="mb-3">
                                             <span class="original-price" style="text-decoration: line-through; color:#c7c7c7">
