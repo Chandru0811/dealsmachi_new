@@ -74,7 +74,7 @@ use Carbon\Carbon;
         <div class="cart-items-container">
             @if ($cart)
             <div class="d-flex justify-content-between mb-3">
-                <h5>Your Cart (<span class="item_count" style="color: #ff0060">{{ $cart->items->count() }}</span>)</h5>
+                <h5>Your Cart <span style="color: #ff0060">(<span class="item_count">{{ $cart->items->count() }}</span>)</span></h5>
                 <a href="/" class="text-decoration-none">
                     <button type="button" class="btn showmoreBtn">
                         Shop more
