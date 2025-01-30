@@ -500,6 +500,7 @@
                                         <span
                                             class="current-price mt-4">₹{{ strpos($product->discounted_price, '.') !== false ? rtrim(rtrim(number_format($product->discounted_price, 2), '0'), '.') : $product->discounted_price }}</span>
                                     </h3>
+                                    &nbsp;&nbsp;
                                     <span
                                         class="original-price">₹{{ strpos($product->discounted_price, '.') !== false ? rtrim(rtrim(number_format($product->original_price, 2), '0'), '.') : $product->original_price }}</span>
                                     <span class="discount-price">-₹{{ number_format($product->discount_percentage, 2) }}%
@@ -562,6 +563,10 @@
                                 @endif
                             </div>
 
+                            <div>
+                                <span> Seller Name: {{ $product->shop->name }}</span>
+                            </div>
+
                             {{-- description  --}}
                             <div class="description-section mt-4">
                                 @if ($product->deal_type == 1)
@@ -591,14 +596,14 @@
                             </div>
 
  {{-- seller Info  --}}
- <div class="seller-information mt-4">
+ {{-- <div class="seller-information mt-4">
     <h5 class="media_fonts_headings">Seller Information :</h5>
     <div class="card_offers p-3">
         <div class="d-flex justify-content-between align-items-center my-2 mb-3">
-            {{-- <a href="#" class="modal_links" data-bs-toggle="modal"
+            <a href="#" class="modal_links" data-bs-toggle="modal"
                 data-bs-target="#aboutModal">
                 <span>About</span>
-            </a>&nbsp;&nbsp; --}}
+            </a>&nbsp;&nbsp;
             <h5 class="modal-title">{{ $product->shop->name }}</h5>
             <a href="#" class="modal_links" data-bs-toggle="modal"
                 data-bs-target="#workingHoursModal">
@@ -606,7 +611,7 @@
             </a>
         </div>
         <p class="quickInfo">{{ $product->shop->description }}</p>
-        {{-- <div class="row m-0 py-3 space_ctrl">
+        <div class="row m-0 py-3 space_ctrl">
             <h5 class="modal-title">{{ $product->shop->name }}</h5>
             <p class="quickInfo">{{ $product->shop->description }}</p>
             <div class="col-12 space_ctrl">
@@ -679,9 +684,9 @@
                     </div>
                 </div>
             </div>
-        </div>--}}
+        </div>
     </div>
-</div>
+</div> --}}
 
                             {{-- specification  --}}
                             @if (!empty($product->specifications))

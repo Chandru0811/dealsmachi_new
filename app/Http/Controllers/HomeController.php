@@ -33,10 +33,10 @@ class HomeController extends Controller
         $categoryGroups = CategoryGroup::where('active', 1)->with('categories')->take(10)->get();
         $hotpicks = DealCategory::where('active', 1)->get();
         $products = Product::where('active', 1)
-            ->with(['productMedia', 'shop:id,country,city,shop_ratings'])
+            ->with(['productMedia', 'shop:id,country,city,shop_ratings' ])
             ->orderBy('created_at', 'desc')
             ->paginate(8);
-        // dd($products->toArray());
+        // dd($products);
         $treandingdeals = DealViews::whereDate('viewed_at', Carbon::today())->get();
         $populardeals = DealViews::select('deal_id', DB::raw('count(*) as total_views'))->groupBy('deal_id')->limit(5)->orderBy('total_views', 'desc')->having('total_views', '>', 10)->get();
         $earlybirddeals = Product::where('active', 1)->whereDate('start_date', now())->get();
@@ -150,7 +150,7 @@ class HomeController extends Controller
     {
         $shortBy = $request->input('short_by');
         if ($shortBy) {
-            return redirect()->route('dealcategorybasedproducts', ['slug' => $shortBy] + $request->except('short_by'));
+            return redirect()->route('deals.categorybased', ['slug' => $shortBy] + $request->except('short_by'));
         }
 
         $perPage = $request->input('per_page', 10);

@@ -233,6 +233,9 @@
                                                             DealsMachi</span>
                                                     </div>
                                                 @endif
+                                                <div>
+                                                    <span> Seller Name: {{ $item->shop->name }}</span>
+                                                </div>
                                                 <p class="mb-0">
                                                     @if ($item->deal_type == 2)
                                                         <span
@@ -280,7 +283,7 @@
                             </div>
                         </div>
                         {{-- Shop Details --}}
-                        <div class="card mb-4">
+                        {{-- <div class="card mb-4">
                             <div class="card-header m-0 p-2 d-flex gap-2 align-items-center" style="background: #ffecee">
                                 <p class="mb-0">Shop Details</p>
                             </div>
@@ -324,12 +327,12 @@
                                         @if ($order->items->first()->shop->zip_code)
                                             , {{ $order->items->first()->shop->zip_code }}
                                         @endif --}}
-                                    </p>
+                                    {{-- </p>
                                 @else
                                     <p>No Shop Details Available</p>
                                 @endif
                             </div>
-                        </div>
+                        </div> --}}
                         {{-- Order Summary --}}
                         <div class="card mb-4">
                             <div class="card-header m-0 p-2 d-flex justify-content-between align-items-center"

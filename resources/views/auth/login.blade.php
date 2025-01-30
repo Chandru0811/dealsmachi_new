@@ -78,7 +78,7 @@
     @endif
 
         <div class="row m-0">
-            <div class="col-md-6 col-12 pt-5 bg_login login-text-container text-center" style="background: #ffcbde">
+            <div class="col-md-6 col-12 pt-5 bg_login login-text-container text-center order-2 order-md-1" style="background: #ffcbde">
                 <div class="px-5 pt-5">
                     <h5 class="py-4" style="color: #CC004D">Login to your account</h5>
                     <p class="login-text">You're just one step away from securing your awesome purchase!
@@ -89,7 +89,7 @@
                 </div>
             </div>
 
-            <div class="col-md-6 col-12 d-flex justify-content-center align-items-center login-container">
+            <div class="col-md-6 col-12 d-flex justify-content-center align-items-center login-container order-1 order-md-2">
                 <div class="d-flex flex-column justify-content-center align-items-center w-100">
                     @if ($errors->has('msg'))
                         <div class="alert alert-danger">
@@ -132,7 +132,7 @@
                             <hr class="line-divider" />
                         </div>
                         <div class="mb-3 row">
-                            <div class="col-6">
+                            <div class="col-12 col-md-6 mb-2 mb-md-0">
                                 <a href="/sociallogin/google/customer" style="text-decoration: none">
                                     <button type="button" class="btn btn-light social-btn w-100">
                                         <img src="{{ asset('assets/images/home/google.webp') }}" class="img-fluid "
@@ -141,7 +141,7 @@
                                     </button>
                                 </a>
                             </div>
-                            <div class="col-6">
+                            <div class="col-12 col-md-6">
                                 <a href="/sociallogin/facebook/customer">
                                     <button type="button" class="btn btn-light social-btn w-100 ">
                                         <img src="{{ asset('assets/images/home/facebook.webp') }}" class="img-fluid "
