@@ -24,53 +24,6 @@ $(document).ready(function () {
     });
 });
 
-// $(document).ready(function () {
-//     $("#moveToCartForm").on("submit", function (e) {
-//         e.preventDefault(); // Prevent the default form submission
-
-//         // Collect selected deal IDs
-//         let selectedDeals = [];
-//         $("input[name='deal_ids[]']:checked").each(function () {
-//             selectedDeals.push($(this).val());
-//         });
-
-//         // Show a warning if no items are selected
-//         if (selectedDeals.length === 0) {
-//             $("#moveToCartResponse").html(
-//                 '<div class="alert alert-warning">Please select at least one item to move to the cart.</div>'
-//             );
-//             return;
-//         }
-
-//       $.ajax({
-//           url: "/saveforlater/multiple",
-//           type: "POST",
-//           data: {
-//               _token: $('meta[name="csrf-token"]').attr("content"), // Fetch the CSRF token from the meta tag
-//               deal_ids: selectedDeals, // Array of selected deal IDs
-//           },
-//           success: function (response) {
-//               if (response.status === "success") {
-//                   $("#moveToCartResponse").html(
-//                       '<div class="alert alert-success">' +
-//                           response.message +
-//                           "</div>"
-//                   );
-//               }
-//           },
-//           error: function (xhr) {
-//               let errorMessage =
-//                   xhr.responseJSON?.message ||
-//                   "Something went wrong. Please try again.";
-//               $("#moveToCartResponse").html(
-//                   '<div class="alert alert-danger">' + errorMessage + "</div>"
-//               );
-//           },
-//       });
-
-//     });
-// });
-
 $(document).ready(function () {
     // Validation for Main Form
     $(".social-button .fab.fa-twitter")
@@ -2095,69 +2048,6 @@ function initializeEventListeners() {
                         });
                     });
 
-                    $(document).on("click", ".removeSaveLater", function (e) {
-                        $.ajaxSetup({
-                            headers: {
-                                "X-CSRF-TOKEN": $(
-                                    'meta[name="csrf-token"]'
-                                ).attr("content"),
-                            },
-                        });
-                        e.preventDefault();
-                        const productId = $(this).data("product-id");
-
-                        $.ajax({
-                            url: "/saveforlater/remove",
-                            type: "POST",
-                            data: { product_id: productId },
-                            success: function (response) {
-                                fetchCart();
-                                savelaterfetchCart();
-                                showMessage(
-                                    response.status ||
-                                    "Save for Later Item Removed!",
-                                    "success"
-                                );
-                            },
-                            error: function (xhr) {
-                                const errorMessage =
-                                    xhr.responseJSON?.error ||
-                                    "Failed to move on Save for Later!";
-                                showMessage(errorMessage, "error");
-                            },
-                        });
-                    });
-
-                    function fetchCart() {
-                        $.ajax({
-                            url: "/cart",
-                            type: "GET",
-                            success: function (response) {
-                                if (response.html) {
-                                    $(".cartIndex").html(response.html);
-                                }
-                            },
-                            error: function () {
-                                showMessage("Failed to update cart!", "error");
-                            },
-                        });
-                    }
-
-                    function savelaterfetchCart() {
-                        $.ajax({
-                            url: "/saveforlater/all",
-                            type: "GET",
-                            success: function (response) {
-                                if (response.html) {
-                                    $(".savelaterIndex").html(response.html);
-                                }
-                            },
-                            error: function () {
-                                showMessage("Failed to update cart!", "error");
-                            },
-                        });
-                    }
-
                     fetchCartDropdown();
                     showMessage(
                         response.status || "Deal added to cart!",
@@ -2267,7 +2157,7 @@ $(document).ready(function () {
                         cartCountElement.text(response.cartItemCount);
                         cartCountElement.css("display", "inline");
                     } else {
-                        cartCountElement.css("display", "none");
+                        cartCountElement.attr("style", "display: none !important;");
                     }
                 }
 
@@ -2414,9 +2304,9 @@ $(document).ready(function () {
                         cartCountElement.text(response.cartItemCount);
                         cartCountElement.css("display", "inline");
                     } else {
-                        cartCountElement.css("display", "none");
+                        cartCountElement.attr("style", "display: none !important;");
                     }
-                }
+                }                
 
                 $(`.cart-item[data-product-id="${productId}"]`).remove();
 
@@ -2512,7 +2402,7 @@ $(document).ready(function () {
                     if ($('.empty-saved-items-message').length === 0) {
                         $('.saved-items').after(`
                             <div class="text-center mb-4 empty-saved-items-message" style="display: block;">
-                                <img src="assets/images/home/empty_savedItems.png" alt="Empty Cart" class="img-fluid mb-2" style="width: 300px;" />
+                                <img src="https://dealsmachi.com/assets/images/home/empty_savedItems.png" alt="Empty Cart" class="img-fluid mb-2" style="width: 300px;" />
                                 <h4 style="color: #ff0060;">Your Saved Wishlists are awaiting your selection!</h4>
                             </div>
                         `);
@@ -2525,6 +2415,60 @@ $(document).ready(function () {
                     $(".saved-items").show();
                 }
 
+                showMessage(response.status || "Save for Later Item Removed!", "success");
+            },
+            error: function (xhr) {
+                showMessage(xhr.responseJSON?.error || "Failed to remove item from Save for Later!", "error");
+            },
+        });
+    });
+
+    $(document).on("click", ".saveLaterToCart", function (e) {
+        e.preventDefault();
+        const productId = $(this).data("product-id");
+
+        $.ajax({
+            url: "/saveforlater/toCart",
+            type: "POST",
+            data: { product_id: productId },
+            headers: {
+                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+            },
+            success: function (response) {
+                if (response.cartItemCount !== undefined) {
+                    const cartCountElement = $("#cart-count");
+                    if (response.cartItemCount > 0) {
+                        cartCountElement.text(response.cartItemCount);
+                        cartCountElement.css("display", "inline");
+                    } else {
+                        cartCountElement.attr("style", "display: none !important;");
+                    }
+                }
+                
+                $(`.saved-item[data-product-id="${productId}"]`).remove();
+
+                const savedItemCount = $(".saved-items").children(".saved-item").length;
+
+                console.log("Remaining saved items count: ", savedItemCount);
+
+                if (savedItemCount === 0) {
+                    if ($('.empty-saved-items-message').length === 0) {
+                        $('.saved-items').after(`
+                            <div class="text-center mb-4 empty-saved-items-message" style="display: block;">
+                                <img src="https://dealsmachi.com/assets/images/home/empty_savedItems.png" alt="Empty Cart" class="img-fluid mb-2" style="width: 300px;" />
+                                <h4 style="color: #ff0060;">Your Saved Wishlists are awaiting your selection!</h4>
+                            </div>
+                        `);
+                    }
+
+                    $(".saved-items").hide();
+                    $(".empty-saved-items-message").show();
+                } else {
+                    $(".empty-saved-items-message").hide();
+                    $(".saved-items").show();
+                }
+
+                fetchCartDropdown();
                 showMessage(response.status || "Save for Later Item Removed!", "success");
             },
             error: function (xhr) {
