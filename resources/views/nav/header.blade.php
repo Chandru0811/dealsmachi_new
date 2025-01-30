@@ -23,7 +23,7 @@
                         </a>
                     </span>
                     &nbsp;&nbsp;&nbsp;
-                    <button class="btn btn-button " style="border: none; position: relative;">
+                    <button class="btn btn-button " style="border: none; position: relative;" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Favourites">
                         <a href="{{ url('/favourites') }}" class="text-decoration-none d-xl-none"
                             style="text-decoration: none;">
                             <i class="fa-regular fa-heart fa-xl icon_size" style="color: #ff0060;"></i>
@@ -68,13 +68,44 @@
                         </div>
                     </button>
                     @auth
-                    <a href="#" class="text-decoration-none d-xl-none" role="button" data-bs-toggle="dropdown"
-                        aria-expanded="false">
+                    {{-- small screen --}}
+                    <div class="dropdown d-xl-none">
+                    <a href="#" class="text-decoration-none d-xl-none" id="userDropdownBtn" role="button" data-bs-toggle="dropdown"
+                        aria-expanded="false" data-bs-toggle="tooltip" data-bs-placement="top" title="Profile">
                         <span class="d-xl-none" data-bs-toggle="offcanvas" data-bs-target="#offcanvasProfile"
                             aria-controls="offcanvasProfile">
                             <i class="fa-regular fa-circle-user fa-xl icon_size" style="color: #ff0060;"></i>
                         </span>
                     </a>
+                    <div class="dropdown-menu user-dropdown_cart custom-dropdown shadow-lg border-0"
+                    >
+                    <div class="dropdown_child p-2">
+                        <div class="d-flex justify-content-start align-items-start mb-2">
+                            <a class="dropdown-item user_list" href="#" data-bs-toggle="modal"
+                                data-bs-target="#profileModal">
+                                <i class="user_list_icon fa-light fa-user"></i>
+                                &nbsp;&nbsp;&nbsp;Profile
+                            </a>
+                        </div>
+                        <div class="d-flex justify-content-start align-items-start mb-2">
+                            <a class="dropdown-item user_list" href="{{ url('orders') }}"><i
+                                    class="user_list_icon fa-light fa-bags-shopping"></i>
+                                &nbsp;&nbsp;Orders</a>
+                        </div>
+                        <div class="d-flex justify-content-start align-items-start mb-2">
+                            <a class="dropdown-item user_list" href="{{ route('savelater.index') }}"><i
+                                    class="user_list_icon fa-light fa-basket-shopping"></i>
+                                &nbsp;&nbsp;Buy later</a>
+                        </div>
+                        <div class="d-flex justify-content-start align-items-start mb-2">
+                            <a class="dropdown-item user_list" href="{{ url('logout') }}"
+                                onclick="event.preventDefault(); document.getElementById('logout-form').submit();"><i
+                                    class="user_list_icon fa-light fa-power-off"></i>
+                                &nbsp;&nbsp;&nbsp;Log Out</a>
+                        </div>
+                    </div>
+                </div>
+                    </div>
                     <!-- Hidden logout form -->
                     <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                         @csrf
@@ -123,9 +154,9 @@
                             </ul>
                         </form>
                     </div>
-                    <button class="btn btn-button" style="border: none; position: relative;">
+                    <button class="btn btn-button" style="border: none; position: relative;" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Favourites">
                         <a href="{{ url('/favourites') }}" class="text-decoration-none px-1 py-1 d-none d-xl-inline"
-                            style="text-decoration: none; position: relative;">
+                            style="text-decoration: none; position: relative;" >
                             <i class="fa-regular fa-heart fa-xl icon_size" style="color: #ff0060;"></i>
                         </a>
                         <span class="totalItemsCount total-count translate-middle d-none d-xl-block"
