@@ -447,50 +447,8 @@
                                 </div>
                             </div>
                             <div class="rating mt-2">
-                                <span></span><span class="stars">
+                                <span>Rating :</span><span class="stars">
                                     @php
-                                        $totalRating = 0;
-                                        $totalReviews = 0;
-                                    @endphp
-
-                                    @foreach ($reviewData as $reviewSet)
-                                        @php
-                                            $totalRating += $reviewSet->rating;
-                                            $totalReviews++;
-                                        @endphp
-                                    @endforeach
-                                    @php
-                                        $averageRating = $totalReviews ? round($totalRating / $totalReviews, 1) : 0;
-                                    @endphp
-
-                                    <!-- Rating Summary -->
-                                    <div class="rating-summary mb-4">
-                                        <div class="d-flex align-items-center">
-                                            <span>Rating :</span>
-                                            &nbsp;&nbsp;
-                                            <span class="average-rating me-2 d-flex align-items-center"
-                                                style="color:#40d128;">
-                                                {{-- {{ $averageRating }} --}}
-                                                @php
-                                                    $fullStars = floor($averageRating);
-                                                    $hasHalfStar = $averageRating - $fullStars >= 0.5;
-                                                @endphp
-                                                @for ($i = 1; $i <= $fullStars; $i++)
-                                                    <i class="fa-solid fa-star fa-lg"
-                                                        style="color: #fdbf46; font-size:12px; margin-left: 5px;"></i>
-                                                @endfor
-                                                @if ($hasHalfStar)
-                                                    <i class="fa-solid fa-star-half-stroke fa-lg"
-                                                        style="color: #fdbf46; font-size:12px; margin-left: 5px;"></i>
-                                                @endif
-                                                @for ($i = $fullStars + ($hasHalfStar ? 1 : 0); $i < 5; $i++)
-                                                    <i class="fa-regular fa-star fa-lg"
-                                                        style="color: #ccc; font-size:12px; margin-left: 5px;"></i>
-                                                @endfor
-                                            </span>
-                                        </div>
-                                    </div>
-                                    {{-- @php
                                         $fullStars = floor($product->shop->shop_ratings);
                                         $hasHalfStar = $product->shop->shop_ratings - $fullStars >= 0.5;
                                         $remaining = 5 - ($hasHalfStar ? $fullStars + 1 : $fullStars);
@@ -503,7 +461,7 @@
                                     @endif
                                     @for ($i = 0; $i < $remaining; $i++)
                                         <i class="fa-regular fa-star" style="color: #ffc200;"></i>
-                                    @endfor --}}
+                                    @endfor
                                 </span>
                             </div>
 
@@ -542,6 +500,7 @@
                                         <span
                                             class="current-price mt-4">₹{{ strpos($product->discounted_price, '.') !== false ? rtrim(rtrim(number_format($product->discounted_price, 2), '0'), '.') : $product->discounted_price }}</span>
                                     </h3>
+                                    &nbsp;&nbsp;
                                     <span
                                         class="original-price">₹{{ strpos($product->discounted_price, '.') !== false ? rtrim(rtrim(number_format($product->original_price, 2), '0'), '.') : $product->original_price }}</span>
                                     <span class="discount-price">-₹{{ number_format($product->discount_percentage, 2) }}%
@@ -604,6 +563,10 @@
                                 @endif
                             </div>
 
+                            <div>
+                                <span> Seller Name: {{ $product->shop->name }}</span>
+                            </div>
+
                             {{-- description  --}}
                             <div class="description-section mt-4">
                                 @if ($product->deal_type == 1)
@@ -632,23 +595,23 @@
                                 </div>
                             </div>
 
-                            {{-- seller Info  --}}
-                            <div class="seller-information mt-4">
-                                <h5 class="media_fonts_headings">Seller Information :</h5>
-                                <div class="card_offers p-3">
-                                    <div class="d-flex justify-content-between align-items-center my-2 mb-3">
-                                        {{-- <a href="#" class="modal_links" data-bs-toggle="modal"
+ {{-- seller Info  --}}
+ {{-- <div class="seller-information mt-4">
+    <h5 class="media_fonts_headings">Seller Information :</h5>
+    <div class="card_offers p-3">
+        <div class="d-flex justify-content-between align-items-center my-2 mb-3">
+            <a href="#" class="modal_links" data-bs-toggle="modal"
                 data-bs-target="#aboutModal">
                 <span>About</span>
-            </a>&nbsp;&nbsp; --}}
-                                        <h5 class="modal-title">{{ $product->shop->name }}</h5>
-                                        <a href="#" class="modal_links" data-bs-toggle="modal"
-                                            data-bs-target="#workingHoursModal">
-                                            <span>Working Hours</span>
-                                        </a>
-                                    </div>
-                                    <p class="quickInfo">{{ $product->shop->description }}</p>
-                                    {{-- <div class="row m-0 py-3 space_ctrl">
+            </a>&nbsp;&nbsp;
+            <h5 class="modal-title">{{ $product->shop->name }}</h5>
+            <a href="#" class="modal_links" data-bs-toggle="modal"
+                data-bs-target="#workingHoursModal">
+                <span>Working Hours</span>
+            </a>
+        </div>
+        <p class="quickInfo">{{ $product->shop->description }}</p>
+        <div class="row m-0 py-3 space_ctrl">
             <h5 class="modal-title">{{ $product->shop->name }}</h5>
             <p class="quickInfo">{{ $product->shop->description }}</p>
             <div class="col-12 space_ctrl">
@@ -721,9 +684,9 @@
                     </div>
                 </div>
             </div>
-        </div> --}}
-                                </div>
-                            </div>
+        </div>
+    </div>
+</div> --}}
 
                             {{-- specification  --}}
                             @if (!empty($product->specifications))
@@ -826,16 +789,14 @@
                                             $hasHalfStar = $averageRating - $fullStars >= 0.5;
                                         @endphp
                                         @for ($i = 1; $i <= $fullStars; $i++)
-                                            <i class="fa-solid fa-star fa-lg"
-                                                style="color: #fdbf46; font-size:12px; margin-left: 5px;"></i>
+                                            <i class="fa-solid fa-star fa-lg" style="color: #fdbf46; font-size:12px; margin-left: 5px;"></i>
                                         @endfor
                                         @if ($hasHalfStar)
                                             <i class="fa-solid fa-star-half-stroke fa-lg"
                                                 style="color: #fdbf46; font-size:12px; margin-left: 5px;"></i>
                                         @endif
                                         @for ($i = $fullStars + ($hasHalfStar ? 1 : 0); $i < 5; $i++)
-                                            <i class="fa-regular fa-star fa-lg"
-                                                style="color: #ccc; font-size:12px; margin-left: 5px;"></i>
+                                            <i class="fa-regular fa-star fa-lg" style="color: #ccc; font-size:12px; margin-left: 5px;"></i>
                                         @endfor
                                     </h2>
                                 </div>

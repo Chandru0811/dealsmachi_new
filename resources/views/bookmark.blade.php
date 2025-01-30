@@ -151,14 +151,15 @@
                                                     <div>
                                                         <p>Regular Price</p>
                                                         @if ($deal->deal_type == 2)
-                                                            <span style="color: #22cb00ab">Standard Rates</span>
+                                                            <span style="color: #22cb00ab !important">Standard Rates</span>
                                                         @else
                                                             <span><s>₹{{ number_format($deal->original_price, 0) }}</s></span>
                                                         @endif
                                                     </div>
                                                     <div>
                                                         <button class="btn card_cart add-to-cart-btn"
-                                                            data-slug="{{ $deal->slug }}" onclick="event.stopPropagation();">
+                                                            data-slug="{{ $deal->slug }}"
+                                                            onclick="event.stopPropagation();">
                                                             Add to Cart
                                                         </button>&nbsp;&nbsp;
                                                     </div>
@@ -191,6 +192,36 @@
             </div>
         </div>
     </section>
+
+    <!-- Order placed-->
+    {{-- <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#orderSuccessModal">
+        Order Popup
+    </button>
+
+    <div class="modal fade" id="orderSuccessModal" tabindex="-1" aria-labelledby="orderSuccessModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered shadow">
+            <div class="modal-content p-3" style="border-radius: 24px !important">
+                <div class="modal-body">
+                    <div class="d-flex justify-content-end align-items-center">
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="mb-1">
+                        <img src="{{ asset('assets/images/home/check.webp') }}" class="img-fluid card-img-top1" />
+                    </div>
+                    <div class="d-flex justify-content-center align-items-center mb-1">
+                        <p style="font-size: 20px">Order Placed Successfully !</p>
+                    </div>
+                    <div class="d-flex justify-content-center align-items-center">
+                        <p style="font-size: 20px">Delivering to</p>
+                    </div>
+                    <div class="d-flex justify-content-center align-items-center">
+                        <p style="font-size: 20px;color: rgb(179, 184, 184)">12B, Cloud Colony, Alwarpet, Chennai</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div> --}}
 @endsection
 
 @section('scripts')
