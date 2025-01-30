@@ -62,7 +62,7 @@ use Carbon\Carbon;
         @endphp
         <!-- Check if carts or cart->items are empty -->
         @if (!$cart || $cart->items->isEmpty())
-        <div class="col-12 text-center d-flex flex-column align-items-center justify-content-center mt-0 cart-empty-message">
+        <div class="col-12 text-center d-flex flex-column align-items-center justify-content-center mt-0">
             <img src="{{ asset('assets/images/home/cart_empty.webp') }}" alt="Empty Cart"
                 class="img-fluid empty_cart_img">
             <p class="pt-5" style="color: #ff0060;font-size: 22px">Your Cart is Currently Empty</p>

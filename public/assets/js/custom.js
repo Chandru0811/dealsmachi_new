@@ -2282,7 +2282,7 @@ $(document).ready(function () {
                     // If item count is 0, show "Your cart is empty"
                     if (response.updatedCart.item_count === 0) {
                         $(".cart-items-container").after(`
-                             <div class="col-12 text-center d-flex flex-column align-items-center justify-content-center mt-0 cart-empty-message">
+                             <div class="col-12 text-center d-flex flex-column align-items-center justify-content-center mt-0">
                                  <img src="assets/images/home/cart_empty.webp" alt="Empty Cart"
                                      class="img-fluid empty_cart_img">
                                  <p class="pt-5" style="color: #ff0060;font-size: 22px">Your Cart is Currently Empty</p>
