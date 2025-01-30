@@ -427,11 +427,11 @@ $(document).ready(function () {
                         if (response.success) {
                             $('#newAddressModal').modal('hide');
                             $('#addressNewForm')[0].reset();
-                            
+
                             if (response.address.default === '1') {
                                 $('#addressID').val(response.address.id);
-                            } 
-                
+                            }
+
                             if (response.address.default === '1') {
                                 var previousDefault = $('.allAddress .badge_primary').closest('.row');
                                 if (previousDefault.length > 0) {
@@ -445,7 +445,7 @@ $(document).ready(function () {
                                     `);
                                 }
                             }
-                
+
                             var finddiv = $('#myAddressModal').find('.allAddress');
                             finddiv.append(`
                                 <div class="row p-2">
@@ -541,14 +541,14 @@ $(document).ready(function () {
                                             <input type="hidden" id="all_products_to_buy" name="all_products_to_buy" value="${productsId}">
                                             <input type="hidden" name="cart_id"  value="${cartId}">
                                             <input type="hidden" name="address_id" id="addressID" value="${response.address.id}">
-                                            <button type="submit" class="btn check_out_btn">
+                                            <button type="submit" class="btn check_out_btn" id="submitBtn">
                                                 Checkout
                                             </button>
                                         </form>
                                     `);
                                 }
                             }
-                    
+
                             showMessage(response.message, 'success');
                         } else {
                             showMessage(response.message, 'error');
@@ -572,7 +572,7 @@ $(document).ready(function () {
             $('#addressEditForm').find('.is-invalid').removeClass('is-invalid');
             $('#addressEditForm').find('label.error').remove();
         });
-        
+
         $('.btn-close').on('click', function () {
             $('#addressNewForm')[0].reset();
             $('#addressNewForm').find('.is-invalid').removeClass('is-invalid');
@@ -684,7 +684,7 @@ $(document).ready(function () {
                 var formData = new FormData(form);
                 var isDefault = $('#default_address').prop('checked') ? 1 : 0;
                 formData.append('default', isDefault);
-            
+
                 $.ajax({
                     url: $(form).attr('action'),
                     type: 'POST',
@@ -695,7 +695,7 @@ $(document).ready(function () {
                         if (response.success) {
                             $('#editAddressModal').modal('hide');
                             $('#addressEditForm')[0].reset();
-            
+
                             if (response.address.default === '1') {
                                 var previousDefault = $('.allAddress .badge_primary').closest('.row');
                                 if (previousDefault.length > 0) {
@@ -709,7 +709,7 @@ $(document).ready(function () {
                                     `);
                                 }
                             }
-            
+
                             var finddiv = $('#myAddressModal').find('.allAddress');
                             finddiv.find(`#selected_id_${response.address.id}`).closest('.row').remove();
                             finddiv.append(`
@@ -753,7 +753,7 @@ $(document).ready(function () {
                                     </div>
                                 </div>
                             `);
-            
+
                             if (response.address.default === '1') {
                                 $('.modal-body p strong:contains("Phone :")').parent().html(`
                                     <strong>Phone :</strong> (+91) ${response.address.phone || '--'}
@@ -769,7 +769,7 @@ $(document).ready(function () {
                                     </p>
                                 `);
                             }
-            
+
                             // Show the updated address modal
                             $('#myAddressModal').modal('show');
                             showMessage(response.message, 'success');
@@ -782,7 +782,7 @@ $(document).ready(function () {
                     }
                 });
             },
-        });             
+        });
 
         $(document).on("click", ".badge_edit", function () {
             const addressId = $(this).closest(".row").find("input[type='radio']").val();
@@ -832,15 +832,15 @@ $(document).ready(function () {
 
         $(document).ready(function () {
             var addressIdToDelete = null;
-        
+
             $(document).on('click', '.badge_del', function () {
                 addressIdToDelete = $(this).data('address-id');
                 $('#deleteAddressModal').modal('show');
             });
-        
+
             $('#confirmDeleteBtn').click(function () {
                 if (!addressIdToDelete) return;
-        
+
                 $.ajax({
                     url: `/address/${addressIdToDelete}`,
                     type: 'DELETE',
@@ -854,7 +854,7 @@ $(document).ready(function () {
                             $('#myAddressModal').modal('show');
                             showMessage(response.message, 'success');
                             addressIdToDelete = null;
-        
+
                             // Check if the deleted address was the selected address and update
                             updateSelectedAddressAfterDelete();
                         } else {
@@ -866,19 +866,19 @@ $(document).ready(function () {
                     }
                 });
             });
-        
-            $('#confirmAddressBtn').on('click', function(e) {
+
+            // Handle confirm address button click
+            $('#confirmAddressBtn').on('click', function (e) {
                 e.preventDefault();
-        
+
                 let selectedId = $('input[name="selected_id"]:checked').val();
-        
                 $('#addressErrorMessage').remove();
-        
+
                 if (!selectedId) {
                     $('#myAddressModal .modal-body').prepend('<div id="addressErrorMessage" class="text-danger">Please select an address.</div>');
                     return;
                 }
-        
+
                 $.ajax({
                     url: "/selectaddress",
                     method: "POST",
@@ -886,53 +886,76 @@ $(document).ready(function () {
                         _token: $('meta[name="csrf-token"]').attr('content'),
                         selected_id: selectedId
                     },
-                    success: function(response) {
+                    success: function (response) {
                         if (response.success) {
                             $('#myAddressModal').modal('hide');
                             updateSelectedAddress(response.selectedAddress);
+
+                            // Store selected address ID in session storage (temporary, until page refresh)
+                            sessionStorage.setItem('selectedAddressId', selectedId);
                         } else {
                             alert(response.message || 'An error occurred.');
                         }
                     },
-                    error: function(xhr) {
+                    error: function (xhr) {
                         alert(xhr.responseJSON.message || 'An error occurred.');
                     }
                 });
             });
-        
-            $('input[name="selected_id"]').on('change', function() {
+
+            // Remove error message when a radio button is selected
+            $('input[name="selected_id"]').on('change', function () {
                 if ($('input[name="selected_id"]:checked').val()) {
                     $('#addressErrorMessage').remove();
                 }
             });
-            
-        
+
+            // Reset radio selection when modal is closed
+            $("#myAddressModal").on("hidden.bs.modal", function () {
+                let storedSelectedId = sessionStorage.getItem('selectedAddressId'); // Get last selected ID (if set)
+                let selectedAddressId = "{{ $selectedAddressId }}"; // PHP session value
+                let defaultAddressId = "{{ $default_address ? $default_address->id : '' }}"; // PHP default value
+
+                $('input[name="selected_id"]').each(function () {
+                    if (storedSelectedId && $(this).val() === storedSelectedId) {
+                        $(this).prop("checked", true);
+                    } else if ($(this).val() === selectedAddressId) {
+                        $(this).prop("checked", true);
+                    } else if (!selectedAddressId && $(this).val() === defaultAddressId) {
+                        $(this).prop("checked", true);
+                    } else {
+                        $(this).prop("checked", false);
+                    }
+                });
+            });
+
+            // Function to update the selected address UI
             function updateSelectedAddress(address) {
                 if (address) {
                     const addressHtml = `
-                        <strong>${address.first_name} ${address.last_name ?? ''} (+91) ${address.phone}</strong><br>
-                        ${address.address} - ${address.postalcode}
-                        ${address.default ? '<span class="badge badge_danger py-1">Default</span>' : ''}
-                    `;
+                            <strong>${address.first_name} ${address.last_name ?? ''} (+91) ${address.phone}</strong><br>
+                            ${address.address} - ${address.postalcode}
+                            ${address.default ? '<span class="badge badge_danger py-1">Default</span>' : ''}
+                        `;
                     $('#addressID').val(address.id);
                     $('.selected-address').html(addressHtml);
-        
+
                     const changeBtnHtml = `<span class="badge badge_infos py-1" data-bs-toggle="modal" data-bs-target="#myAddressModal">Change</span>`;
                     $('.change-address-btn').html(changeBtnHtml);
                 }
             }
-        
+
             function updateSelectedAddressAfterDelete() {
                 $.get('/addresses', function (addresses) {
                     const defaultAddress = addresses.find(address => address.default === 1);
-        
+
                     if (defaultAddress) {
                         updateSelectedAddress(defaultAddress);
                     }
                 });
             }
         });
-        
+
         function showMessage(message, type) {
             var textColor, icon;
 
@@ -1825,7 +1848,7 @@ function handleAddBookmark() {
 
                     handleRemoveBookmark();
                 },
-                error: function (xhr) {},
+                error: function (xhr) { },
             });
         });
 }
@@ -1990,7 +2013,7 @@ function initializeEventListeners() {
 
                                 showMessage(
                                     response.status ||
-                                        "Item moved to Save for Later!",
+                                    "Item moved to Save for Later!",
                                     "success"
                                 );
                             },
@@ -2023,7 +2046,7 @@ function initializeEventListeners() {
                                 savelaterfetchCart();
                                 showMessage(
                                     response.status ||
-                                        "Save for Later Item Removed!",
+                                    "Save for Later Item Removed!",
                                     "success"
                                 );
                             },
@@ -2288,7 +2311,7 @@ $(document).ready(function () {
             error: function (xhr) {
                 showMessage(
                     xhr.responseJSON?.error ||
-                        "Failed to remove item from Save for Later!",
+                    "Failed to remove item from Save for Later!",
                     "error"
                 );
             },
