@@ -418,6 +418,7 @@ class CartController extends Controller
 
         return response()->json([
             'status' => 'Item moved to Cart',
+            'cartItemCount' => $cart->item_count
         ]);
     }
 
