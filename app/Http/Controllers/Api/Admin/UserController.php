@@ -88,7 +88,7 @@ class UserController extends Controller
             ->get(['id', 'name', 'referral_code', 'shop_id']);
 
         if ($referrals->isEmpty()) {
-            return $this->error('No referrals found for this user.', [], 404);
+            return $this->success('Referral list retrieved successfully.', []);
         }
 
         return $this->success('Referral list retrieved successfully.', $referrals);

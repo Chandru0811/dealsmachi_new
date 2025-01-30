@@ -26,7 +26,7 @@ class ReferrerDetailController extends Controller
             'referrer_number' => 'required|string|max:20',
             'vendor_id'      => 'required|integer|exists:users,id',
             'vendor_name'    => 'required|string|max:255',
-            'date'          => 'required|date',
+            'date'          => 'required|string',
             'amount'        => 'required|numeric|min:0',
         ], [
             'referrer_id.required'   => 'Referrer ID is required.',
@@ -75,7 +75,7 @@ class ReferrerDetailController extends Controller
             'referrer_number' => 'sometimes|string|max:20',
             'vendor_id'      => 'sometimes|integer|exists:users,id',
             'vendor_name'    => 'sometimes|string|max:255',
-            'date'          => 'sometimes|date',
+            'date'          => 'sometimes|string',
             'amount'        => 'sometimes|numeric|min:0',
         ]);
 
