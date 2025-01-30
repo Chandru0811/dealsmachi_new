@@ -736,18 +736,18 @@ $(document).ready(function () {
                                     </div>
                                     <div class="col-2">
                                         <div class="d-flex align-items-center justify-content-end">
-                                            <div class="d-flex gap-2">
+                                            <div class="d-flex gap-2 delBadge">
                                                 <button type="button" class="badge_edit" data-bs-toggle="modal"
                                                     data-address-id="${response.address.id}" data-bs-target="#editAddressModal">
                                                     Edit
                                                 </button>
-                                                <button type="button" class="badge_del"
+                                                ${response.address.default === '0' ? `
+                                                    <button type="button" class="badge_del"
                                                         data-bs-toggle="modal"
                                                         data-bs-target="#deleteAddressModal"
-                                                        data-address-id="${response.address.id}"
-                                                        style="${response.address.default === '1' ? 'display: none;' : ''}">
-                                                    Delete
-                                                </button>
+                                                        data-address-id="${response.address.id}">
+                                                        Delete 
+                                                    </button>` : ''}
                                             </div>
                                         </div>
                                     </div>
