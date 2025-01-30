@@ -63,11 +63,42 @@ class ReferrerDetailController extends Controller
 
     public function update(Request $request, string $id)
     {
-        //
+        $ReferrerDetails = ReferrerDetail::find($id);
+
+        if (!$ReferrerDetails) {
+            return $this->error('Referrer Details Not Found.', ['error' => 'Referrer Details Not Found']);
+        }
+
+        $validator = Validator::make($request->all(), [
+            'referrer_id'    => 'sometimes|integer|exists:users,id',
+            'referrer_name'  => 'sometimes|string|max:255',
+            'referrer_number' => 'sometimes|string|max:20',
+            'vendor_id'      => 'sometimes|integer|exists:users,id',
+            'vendor_name'    => 'sometimes|string|max:255',
+            'date'          => 'sometimes|date',
+            'amount'        => 'sometimes|numeric|min:0',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 422);
+        }
+
+        $validatedData = $validator->validated();
+        $ReferrerDetails->update($validatedData);
+
+        return $this->success('Referrer Details Updated Successfully!', $ReferrerDetails);
     }
 
-    public function destroy(string $id)
+    public function delete(string $id)
     {
-        //
+        $ReferrerDetails = ReferrerDetail::find($id);
+
+        if (!$ReferrerDetails) {
+            return $this->error('Referrer Details Not Found.', ['error' => 'Referrer Details Not Found']);
+        }
+
+        $ReferrerDetails->delete();
+
+        return $this->success('Referrer Details Deleted Successfully!', $ReferrerDetails);
     }
 }
