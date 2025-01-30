@@ -676,10 +676,10 @@
                                                                 <div>
                                                                     <p>Regular Price</p>
                                                                     @if ($product->deal_type == 2)
-                                                                        <p style="color: #22cb00abab">Standard Rates</p>
+                                                                        <span style="color: #22cb00abab">Standard Rates</span>
                                                                     @else
-                                                                        <p><s>₹{{ number_format($product->original_price, 0) }}</s>
-                                                                        </p>
+                                                                        <span><s>₹{{ number_format($product->original_price, 0) }}</s>
+                                                                        </span>
                                                                     @endif
                                                                 </div>
                                                                 <div>
@@ -1196,10 +1196,10 @@
                                                                     <div>
                                                                         <p>Regular Price</p>
                                                                         @if ($product->deal_type == 2)
-                                                                            <p style="color: #22cb00abab">Standard Rates</p>
+                                                                            <span style="color: #22cb00abab">Standard Rates</span>
                                                                         @else
-                                                                            <p><s>₹{{ number_format($product->original_price, 0) }}</s>
-                                                                            </p>
+                                                                            <span><s>₹{{ number_format($product->original_price, 0) }}</s>
+                                                                            </span>
                                                                         @endif
                                                                     </div>
                                                                     <div>
