@@ -151,9 +151,9 @@
                                                     <div>
                                                         <p>Regular Price</p>
                                                         @if ($deal->deal_type == 2)
-                                                            <p style="color: #22cb00ab">Standard Rates</p>
+                                                            <span style="color: #22cb00ab">Standard Rates</span>
                                                         @else
-                                                            <p><s>₹{{ number_format($deal->original_price, 0) }}</s></p>
+                                                            <span><s>₹{{ number_format($deal->original_price, 0) }}</s></span>
                                                         @endif
                                                     </div>
                                                     <div>

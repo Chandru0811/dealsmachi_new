@@ -414,30 +414,38 @@ $(document).ready(function () {
             },
             submitHandler: function (form) {
                 var formData = new FormData(form);
-                var isDefault = $('#defaultAddressCheckbox').prop('checked') ? 1 : 0;
-                formData.append('default', isDefault);
+                var isDefault = $("#defaultAddressCheckbox").prop("checked")
+                    ? 1
+                    : 0;
+                formData.append("default", isDefault);
 
                 $.ajax({
-                    url: $(form).attr('action'),
-                    type: 'POST',
+                    url: $(form).attr("action"),
+                    type: "POST",
                     data: formData,
                     processData: false,
                     contentType: false,
                     success: function (response) {
                         if (response.success) {
-                            $('#newAddressModal').modal('hide');
-                            $('#addressNewForm')[0].reset();
+                            $("#newAddressModal").modal("hide");
+                            $("#addressNewForm")[0].reset();
 
-                            if (response.address.default === '1') {
-                                $('#addressID').val(response.address.id);
+                            if (response.address.default === "1") {
+                                $("#addressID").val(response.address.id);
                             }
 
-                            if (response.address.default === '1') {
-                                var previousDefault = $('.allAddress .badge_primary').closest('.row');
+                            if (response.address.default === "1") {
+                                var previousDefault = $(
+                                    ".allAddress .badge_primary"
+                                ).closest(".row");
                                 if (previousDefault.length > 0) {
-                                    previousDefault.find('.badge_primary').remove();
-                                    var oldAddressId = previousDefault.find('input[type=radio]').val();
-                                    previousDefault.find('.delBadge').append(`
+                                    previousDefault
+                                        .find(".badge_primary")
+                                        .remove();
+                                    var oldAddressId = previousDefault
+                                        .find("input[type=radio]")
+                                        .val();
+                                    previousDefault.find(".delBadge").append(`
                                         <button type="button" class="badge_del" data-bs-toggle="modal"
                                             data-bs-target="#deleteAddressModal" data-address-id="${oldAddressId}">
                                             Delete
@@ -446,27 +454,56 @@ $(document).ready(function () {
                                 }
                             }
 
-                            var finddiv = $('#myAddressModal').find('.allAddress');
+                            var finddiv =
+                                $("#myAddressModal").find(".allAddress");
                             finddiv.append(`
                                 <div class="row p-2">
                                     <div class="col-10">
                                         <div class="d-flex text-start">
                                             <div class="px-1">
                                                 <input type="radio" name="selected_id"
-                                                    id="selected_id_${response.address.id}"
-                                                    value="${response.address.id}"
-                                                    ${response.address.default === '1' ? 'checked' : ''} />
+                                                    id="selected_id_${
+                                                        response.address.id
+                                                    }"
+                                                    value="${
+                                                        response.address.id
+                                                    }"
+                                                    ${
+                                                        response.address
+                                                            .default === "1"
+                                                            ? "checked"
+                                                            : ""
+                                                    } />
                                             </div>
                                             <p class="text-turncate fs_common">
                                                 <span class="px-2">
-                                                    ${response.address.first_name} ${response.address.last_name} |
+                                                    ${
+                                                        response.address
+                                                            .first_name
+                                                    } ${
+                                response.address.last_name
+                            } |
                                                     <span style="color: #c7c7c7;">&nbsp;+91
-                                                        ${response.address.phone}</span>
+                                                        ${
+                                                            response.address
+                                                                .phone
+                                                        }</span>
                                                 </span><br>
                                                 <span class="px-2"
-                                                    style="color: #c7c7c7">${response.address.address}, ${response.address.city}, ${response.address.state} - ${response.address.postalcode}.</span>
+                                                    style="color: #c7c7c7">${
+                                                        response.address.address
+                                                    }, ${
+                                response.address.city
+                            }, ${response.address.state} - ${
+                                response.address.postalcode
+                            }.</span>
                                                 <br>
-                                                ${response.address.default === '1' ? '<span class="badge badge_primary">Default</span>' : ''}
+                                                ${
+                                                    response.address.default ===
+                                                    "1"
+                                                        ? '<span class="badge badge_primary">Default</span>'
+                                                        : ""
+                                                }
                                             </p>
                                         </div>
                                     </div>
@@ -474,24 +511,35 @@ $(document).ready(function () {
                                         <div class="d-flex align-items-center justify-content-end">
                                             <div class="d-flex gap-2 delBadge">
                                                 <button type="button" class="badge_edit" data-bs-toggle="modal"
-                                                    data-address-id="${response.address.id}" data-bs-target="#editAddressModal">
+                                                    data-address-id="${
+                                                        response.address.id
+                                                    }" data-bs-target="#editAddressModal">
                                                     Edit
                                                 </button>
-                                                ${response.address.default === '0' ? `
+                                                ${
+                                                    response.address.default ===
+                                                    "0"
+                                                        ? `
                                                     <button type="button" class="badge_del"
                                                         data-bs-toggle="modal"
                                                         data-bs-target="#deleteAddressModal"
                                                         data-address-id="${response.address.id}">
                                                         Delete
-                                                    </button>` : ''}
+                                                    </button>`
+                                                        : ""
+                                                }
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             `);
-                            if (response.address.default === '1') {
-                                $('.modal-body p strong:contains("Phone :")').parent().html(`
-                                    <strong>Phone :</strong> (+91) ${response.address.phone || '--'}
+                            if (response.address.default === "1") {
+                                $(
+                                    '.modal-body p strong:contains("Phone :")'
+                                ).parent().html(`
+                                    <strong>Phone :</strong> (+91) ${
+                                        response.address.phone || "--"
+                                    }
                                 `);
                                 var profileAddress = `
                                     <p>
@@ -503,25 +551,34 @@ $(document).ready(function () {
                                         </span>
                                     </p>
                                 `;
-                                $('.selected-address').html(profileAddress);
-                                $('.defaultAddress .primary_new_btn').hide();
-                                if ($('.defaultAddress .badge_infos').length === 0) {
-                                    $('.defaultAddress').append(`
+                                $(".selected-address").html(profileAddress);
+                                $(".defaultAddress .primary_new_btn").hide();
+                                if (
+                                    $(".defaultAddress .badge_infos").length ===
+                                    0
+                                ) {
+                                    $(".defaultAddress").append(`
                                         <span class="badge badge_infos py-1" data-bs-toggle="modal" data-bs-target="#myAddressModal">Change</span>
                                     `);
                                 }
                             }
-                            $('#myAddressModal').modal('show');
+                            $("#myAddressModal").modal("show");
 
-                            if ($('#cartCheckoutForm').length === 0) {
-                                var cartId = $('#moveCartToCheckout').data('cart-id');
-                                if ($('#moveCartToCheckout').length) {
-                                    $('#moveCartToCheckout').hide();
-                                    $('#moveCartToCheckout').after(`
+                            if ($("#cartCheckoutForm").length === 0) {
+                                var cartId = $("#moveCartToCheckout").data(
+                                    "cart-id"
+                                );
+                                if ($("#moveCartToCheckout").length) {
+                                    $("#moveCartToCheckout").hide();
+                                    $("#moveCartToCheckout").after(`
                                         <form action="/cartCheckout" method="POST" id="cartCheckoutForm">
-                                            <input type="hidden" name="_token" value="${$('meta[name="csrf-token"]').attr('content')}">
+                                            <input type="hidden" name="_token" value="${$(
+                                                'meta[name="csrf-token"]'
+                                            ).attr("content")}">
                                             <input type="hidden" name="cart_id"  value="${cartId}">
-                                            <input type="hidden" name="address_id" id="addressID" value="${response.address.id}">
+                                            <input type="hidden" name="address_id" id="addressID" value="${
+                                                response.address.id
+                                            }">
                                             <button type="submit" class="btn check_out_btn">
                                                 Checkout
                                             </button>
@@ -530,56 +587,55 @@ $(document).ready(function () {
                                 }
                             }
 
-                            if ($('#summaryCheckoutForm').length === 0) {
-                                var cartId = $('#moveToCheckout').data('cart-id');
-                                var productsId = $('#moveToCheckout').data('products-id');
-                                if ($('#moveToCheckout').length) {
-                                    $('#moveToCheckout').hide();
-                                    $('#moveToCheckout').after(`
-                                        <form action="/cartCheckout" method="POST" id="summaryCheckoutForm">
-                                            <input type="hidden" name="_token" value="${$('meta[name="csrf-token"]').attr('content')}">
-                                            <input type="hidden" id="all_products_to_buy" name="all_products_to_buy" value="${productsId}">
-                                            <input type="hidden" name="cart_id"  value="${cartId}">
-                                            <input type="hidden" name="address_id" id="addressID" value="${response.address.id}">
-                                            <button type="submit" class="btn check_out_btn" id="submitBtn">
-                                                Checkout
-                                            </button>
-                                        </form>
+                            if ($("#summaryCheckoutForm").length === 0) {
+                                var cartId =
+                                    $("#moveToCheckout").data("cart-id");
+                                var productsId =
+                                    $("#moveToCheckout").data("products-id");
+                                if ($("#moveToCheckout").length) {
+                                    $("#moveToCheckout").hide();
+                                    $("#checkoutForm").append(`
+                                       <button type="submit" class="btn check_out_btn" id="submitBtn">
+                                            Checkout
+                                       </button>
                                     `);
                                 }
                             }
 
-                            showMessage(response.message, 'success');
+                            showMessage(response.message, "success");
                         } else {
-                            showMessage(response.message, 'error');
+                            showMessage(response.message, "error");
                         }
                     },
                     error: function (xhr, status, error) {
-                        showMessage('There was an issue with the request. Please try again.', 'error');
-                    }
+                        showMessage(
+                            "There was an issue with the request. Please try again.",
+                            "error"
+                        );
+                    },
                 });
             },
         });
 
-        $('#newAddressModal').on('hidden.bs.modal', function () {
-            $('#addressNewForm')[0].reset();
-            $('#addressNewForm').find('.is-invalid').removeClass('is-invalid');
-            $('#addressNewForm').find('label.error').remove();
+        $("#newAddressModal").on("hidden.bs.modal", function () {
+            $("#addressNewForm")[0].reset();
+            $("#addressNewForm").find(".is-invalid").removeClass("is-invalid");
+            $("#addressNewForm").find("label.error").remove();
         });
 
-        $('#editAddressModal').on('hidden.bs.modal', function () {
-            $('#addressEditForm')[0].reset();
-            $('#addressEditForm').find('.is-invalid').removeClass('is-invalid');
-            $('#addressEditForm').find('label.error').remove();
+        $("#editAddressModal").on("hidden.bs.modal", function () {
+            $("#addressEditForm")[0].reset();
+            $("#addressEditForm").find(".is-invalid").removeClass("is-invalid");
+            $("#addressEditForm").find("label.error").remove();
         });
 
-        $('.btn-close').on('click', function () {
-            $('#addressNewForm')[0].reset();
-            $('#addressNewForm').find('.is-invalid').removeClass('is-invalid');
-            $('#addressNewForm').find('label.error').remove();
-            $('#addressEditForm')[0].reset();
-            $('#addressEditForm').find('.is-invalid').removeClass('is-invalid');
-            $('#addressEditForm').find('label.error').remove();
+        $(".btn-close").on("click", function () {
+            $("#addressNewForm")[0].reset();
+            $("#addressNewForm").find(".is-invalid").removeClass("is-invalid");
+            $("#addressNewForm").find("label.error").remove();
+            $("#addressEditForm")[0].reset();
+            $("#addressEditForm").find(".is-invalid").removeClass("is-invalid");
+            $("#addressEditForm").find("label.error").remove();
         });
 
         // Validation for New Address Form
@@ -682,26 +738,32 @@ $(document).ready(function () {
             },
             submitHandler: function (form) {
                 var formData = new FormData(form);
-                var isDefault = $('#default_address').prop('checked') ? 1 : 0;
-                formData.append('default', isDefault);
+                var isDefault = $("#default_address").prop("checked") ? 1 : 0;
+                formData.append("default", isDefault);
 
                 $.ajax({
-                    url: $(form).attr('action'),
-                    type: 'POST',
+                    url: $(form).attr("action"),
+                    type: "POST",
                     data: formData,
                     processData: false,
                     contentType: false,
                     success: function (response) {
                         if (response.success) {
-                            $('#editAddressModal').modal('hide');
-                            $('#addressEditForm')[0].reset();
+                            $("#editAddressModal").modal("hide");
+                            $("#addressEditForm")[0].reset();
 
-                            if (response.address.default === '1') {
-                                var previousDefault = $('.allAddress .badge_primary').closest('.row');
+                            if (response.address.default === "1") {
+                                var previousDefault = $(
+                                    ".allAddress .badge_primary"
+                                ).closest(".row");
                                 if (previousDefault.length > 0) {
-                                    previousDefault.find('.badge_primary').remove();
-                                    var oldAddressId = previousDefault.find('input[type=radio]').val();
-                                    previousDefault.find('.delBadge').append(`
+                                    previousDefault
+                                        .find(".badge_primary")
+                                        .remove();
+                                    var oldAddressId = previousDefault
+                                        .find("input[type=radio]")
+                                        .val();
+                                    previousDefault.find(".delBadge").append(`
                                         <button type="button" class="badge_del" data-bs-toggle="modal"
                                             data-bs-target="#deleteAddressModal" data-address-id="${oldAddressId}">
                                             Delete
@@ -710,27 +772,58 @@ $(document).ready(function () {
                                 }
                             }
 
-                            var finddiv = $('#myAddressModal').find('.allAddress');
-                            finddiv.find(`#selected_id_${response.address.id}`).closest('.row').remove();
+                            var finddiv =
+                                $("#myAddressModal").find(".allAddress");
+                            finddiv
+                                .find(`#selected_id_${response.address.id}`)
+                                .closest(".row")
+                                .remove();
                             finddiv.append(`
                                 <div class="row p-2">
                                     <div class="col-10">
                                         <div class="d-flex text-start">
                                             <div class="px-1">
                                                 <input type="radio" name="selected_id"
-                                                    id="selected_id_${response.address.id}"
-                                                    value="${response.address.id}"
-                                                    ${response.address.default === '1' ? 'checked' : ''} />
+                                                    id="selected_id_${
+                                                        response.address.id
+                                                    }"
+                                                    value="${
+                                                        response.address.id
+                                                    }"
+                                                    ${
+                                                        response.address
+                                                            .default === "1"
+                                                            ? "checked"
+                                                            : ""
+                                                    } />
                                             </div>
                                             <p class="text-turncate fs_common">
                                                 <span class="px-2">
-                                                    ${response.address.first_name} ${response.address.last_name} |
-                                                    <span style="color: #c7c7c7;">&nbsp;+91 ${response.address.phone}</span>
+                                                    ${
+                                                        response.address
+                                                            .first_name
+                                                    } ${
+                                response.address.last_name
+                            } |
+                                                    <span style="color: #c7c7c7;">&nbsp;+91 ${
+                                                        response.address.phone
+                                                    }</span>
                                                 </span><br>
                                                 <span class="px-2"
-                                                    style="color: #c7c7c7">${response.address.address}, ${response.address.city}, ${response.address.state} - ${response.address.postalcode}.</span>
+                                                    style="color: #c7c7c7">${
+                                                        response.address.address
+                                                    }, ${
+                                response.address.city
+                            }, ${response.address.state} - ${
+                                response.address.postalcode
+                            }.</span>
                                                 <br>
-                                                ${response.address.default === '1' ? '<span class="badge badge_primary">Default</span>' : ''}
+                                                ${
+                                                    response.address.default ===
+                                                    "1"
+                                                        ? '<span class="badge badge_primary">Default</span>'
+                                                        : ""
+                                                }
                                             </p>
                                         </div>
                                     </div>
@@ -738,27 +831,38 @@ $(document).ready(function () {
                                         <div class="d-flex align-items-center justify-content-end">
                                             <div class="d-flex gap-2 delBadge">
                                                 <button type="button" class="badge_edit" data-bs-toggle="modal"
-                                                    data-address-id="${response.address.id}" data-bs-target="#editAddressModal">
+                                                    data-address-id="${
+                                                        response.address.id
+                                                    }" data-bs-target="#editAddressModal">
                                                     Edit
                                                 </button>
-                                                ${response.address.default === '0' ? `
+                                                ${
+                                                    response.address.default ===
+                                                    "0"
+                                                        ? `
                                                     <button type="button" class="badge_del"
                                                         data-bs-toggle="modal"
                                                         data-bs-target="#deleteAddressModal"
                                                         data-address-id="${response.address.id}">
-                                                        Delete 
-                                                    </button>` : ''}
+                                                        Delete
+                                                    </button>`
+                                                        : ""
+                                                }
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             `);
 
-                            if (response.address.default === '1') {
-                                $('.modal-body p strong:contains("Phone :")').parent().html(`
-                                    <strong>Phone :</strong> (+91) ${response.address.phone || '--'}
+                            if (response.address.default === "1") {
+                                $(
+                                    '.modal-body p strong:contains("Phone :")'
+                                ).parent().html(`
+                                    <strong>Phone :</strong> (+91) ${
+                                        response.address.phone || "--"
+                                    }
                                 `);
-                                $('.selected-address').html(`
+                                $(".selected-address").html(`
                                     <p>
                                         <strong>${response.address.first_name} ${response.address.last_name} (+91)
                                             ${response.address.phone}</strong>&nbsp;&nbsp;<br>
@@ -771,21 +875,27 @@ $(document).ready(function () {
                             }
 
                             // Show the updated address modal
-                            $('#myAddressModal').modal('show');
-                            showMessage(response.message, 'success');
+                            $("#myAddressModal").modal("show");
+                            showMessage(response.message, "success");
                         } else {
-                            showMessage(response.message, 'error');
+                            showMessage(response.message, "error");
                         }
                     },
                     error: function () {
-                        showMessage('There was an issue with the request. Please try again.', 'error');
-                    }
+                        showMessage(
+                            "There was an issue with the request. Please try again.",
+                            "error"
+                        );
+                    },
                 });
             },
         });
 
         $(document).on("click", ".badge_edit", function () {
-            const addressId = $(this).closest(".row").find("input[type='radio']").val();
+            const addressId = $(this)
+                .closest(".row")
+                .find("input[type='radio']")
+                .val();
 
             $.ajax({
                 url: `/getAddress/${addressId}`, // Adjust the route as necessary
@@ -794,7 +904,10 @@ $(document).ready(function () {
                     populateAddressModal(address);
                 },
                 error: function () {
-                    showMessage("Failed to fetch address details. Please try again.", "error");
+                    showMessage(
+                        "Failed to fetch address details. Please try again.",
+                        "error"
+                    );
                 },
             });
         });
@@ -833,49 +946,56 @@ $(document).ready(function () {
         $(document).ready(function () {
             var addressIdToDelete = null;
 
-            $(document).on('click', '.badge_del', function () {
-                addressIdToDelete = $(this).data('address-id');
-                $('#deleteAddressModal').modal('show');
+            $(document).on("click", ".badge_del", function () {
+                addressIdToDelete = $(this).data("address-id");
+                $("#deleteAddressModal").modal("show");
             });
 
-            $('#confirmDeleteBtn').click(function () {
+            $("#confirmDeleteBtn").click(function () {
                 if (!addressIdToDelete) return;
 
                 $.ajax({
                     url: `/address/${addressIdToDelete}`,
-                    type: 'DELETE',
+                    type: "DELETE",
                     data: {
-                        _token: $('meta[name="csrf-token"]').attr('content'),
+                        _token: $('meta[name="csrf-token"]').attr("content"),
                     },
                     success: function (response) {
                         if (response.success) {
-                            $('#deleteAddressModal').modal('hide');
-                            $(`#selected_id_${addressIdToDelete}`).closest('.row').remove();
-                            $('#myAddressModal').modal('show');
-                            showMessage(response.message, 'success');
+                            $("#deleteAddressModal").modal("hide");
+                            $(`#selected_id_${addressIdToDelete}`)
+                                .closest(".row")
+                                .remove();
+                            $("#myAddressModal").modal("show");
+                            showMessage(response.message, "success");
                             addressIdToDelete = null;
 
                             // Check if the deleted address was the selected address and update
                             updateSelectedAddressAfterDelete();
                         } else {
-                            showMessage(response.message, 'error');
+                            showMessage(response.message, "error");
                         }
                     },
                     error: function (xhr, status, error) {
-                        showMessage('There was an issue with the request. Please try again.', 'error');
-                    }
+                        showMessage(
+                            "There was an issue with the request. Please try again.",
+                            "error"
+                        );
+                    },
                 });
             });
 
             // Handle confirm address button click
-            $('#confirmAddressBtn').on('click', function (e) {
+            $("#confirmAddressBtn").on("click", function (e) {
                 e.preventDefault();
 
                 let selectedId = $('input[name="selected_id"]:checked').val();
-                $('#addressErrorMessage').remove();
+                $("#addressErrorMessage").remove();
 
                 if (!selectedId) {
-                    $('#myAddressModal .modal-body').prepend('<div id="addressErrorMessage" class="text-danger">Please select an address.</div>');
+                    $("#myAddressModal .modal-body").prepend(
+                        '<div id="addressErrorMessage" class="text-danger">Please select an address.</div>'
+                    );
                     return;
                 }
 
@@ -883,45 +1003,56 @@ $(document).ready(function () {
                     url: "/selectaddress",
                     method: "POST",
                     data: {
-                        _token: $('meta[name="csrf-token"]').attr('content'),
-                        selected_id: selectedId
+                        _token: $('meta[name="csrf-token"]').attr("content"),
+                        selected_id: selectedId,
                     },
                     success: function (response) {
                         if (response.success) {
-                            $('#myAddressModal').modal('hide');
+                            $("#myAddressModal").modal("hide");
                             updateSelectedAddress(response.selectedAddress);
 
                             // Store selected address ID in session storage (temporary, until page refresh)
-                            sessionStorage.setItem('selectedAddressId', selectedId);
+                            sessionStorage.setItem(
+                                "selectedAddressId",
+                                selectedId
+                            );
                         } else {
-                            alert(response.message || 'An error occurred.');
+                            alert(response.message || "An error occurred.");
                         }
                     },
                     error: function (xhr) {
-                        alert(xhr.responseJSON.message || 'An error occurred.');
-                    }
+                        alert(xhr.responseJSON.message || "An error occurred.");
+                    },
                 });
             });
 
             // Remove error message when a radio button is selected
-            $('input[name="selected_id"]').on('change', function () {
+            $('input[name="selected_id"]').on("change", function () {
                 if ($('input[name="selected_id"]:checked').val()) {
-                    $('#addressErrorMessage').remove();
+                    $("#addressErrorMessage").remove();
                 }
             });
 
             // Reset radio selection when modal is closed
             $("#myAddressModal").on("hidden.bs.modal", function () {
-                let storedSelectedId = sessionStorage.getItem('selectedAddressId'); // Get last selected ID (if set)
+                let storedSelectedId =
+                    sessionStorage.getItem("selectedAddressId"); // Get last selected ID (if set)
                 let selectedAddressId = "{{ $selectedAddressId }}"; // PHP session value
-                let defaultAddressId = "{{ $default_address ? $default_address->id : '' }}"; // PHP default value
+                let defaultAddressId =
+                    "{{ $default_address ? $default_address->id : '' }}"; // PHP default value
 
                 $('input[name="selected_id"]').each(function () {
-                    if (storedSelectedId && $(this).val() === storedSelectedId) {
+                    if (
+                        storedSelectedId &&
+                        $(this).val() === storedSelectedId
+                    ) {
                         $(this).prop("checked", true);
                     } else if ($(this).val() === selectedAddressId) {
                         $(this).prop("checked", true);
-                    } else if (!selectedAddressId && $(this).val() === defaultAddressId) {
+                    } else if (
+                        !selectedAddressId &&
+                        $(this).val() === defaultAddressId
+                    ) {
                         $(this).prop("checked", true);
                     } else {
                         $(this).prop("checked", false);
@@ -933,21 +1064,29 @@ $(document).ready(function () {
             function updateSelectedAddress(address) {
                 if (address) {
                     const addressHtml = `
-                            <strong>${address.first_name} ${address.last_name ?? ''} (+91) ${address.phone}</strong><br>
+                            <strong>${address.first_name} ${
+                        address.last_name ?? ""
+                    } (+91) ${address.phone}</strong><br>
                             ${address.address} - ${address.postalcode}
-                            ${address.default ? '<span class="badge badge_danger py-1">Default</span>' : ''}
+                            ${
+                                address.default
+                                    ? '<span class="badge badge_danger py-1">Default</span>'
+                                    : ""
+                            }
                         `;
-                    $('#addressID').val(address.id);
-                    $('.selected-address').html(addressHtml);
+                    $("#addressID").val(address.id);
+                    $(".selected-address").html(addressHtml);
 
                     const changeBtnHtml = `<span class="badge badge_infos py-1" data-bs-toggle="modal" data-bs-target="#myAddressModal">Change</span>`;
-                    $('.change-address-btn').html(changeBtnHtml);
+                    $(".change-address-btn").html(changeBtnHtml);
                 }
             }
 
             function updateSelectedAddressAfterDelete() {
-                $.get('/addresses', function (addresses) {
-                    const defaultAddress = addresses.find(address => address.default === 1);
+                $.get("/addresses", function (addresses) {
+                    const defaultAddress = addresses.find(
+                        (address) => address.default === 1
+                    );
 
                     if (defaultAddress) {
                         updateSelectedAddress(defaultAddress);
@@ -1848,7 +1987,7 @@ function handleAddBookmark() {
 
                     handleRemoveBookmark();
                 },
-                error: function (xhr) { },
+                error: function (xhr) {},
             });
         });
 }
@@ -2013,7 +2152,7 @@ function initializeEventListeners() {
 
                                 showMessage(
                                     response.status ||
-                                    "Item moved to Save for Later!",
+                                        "Item moved to Save for Later!",
                                     "success"
                                 );
                             },
@@ -2046,7 +2185,7 @@ function initializeEventListeners() {
                                 savelaterfetchCart();
                                 showMessage(
                                     response.status ||
-                                    "Save for Later Item Removed!",
+                                        "Save for Later Item Removed!",
                                     "success"
                                 );
                             },
@@ -2311,7 +2450,7 @@ $(document).ready(function () {
             error: function (xhr) {
                 showMessage(
                     xhr.responseJSON?.error ||
-                    "Failed to remove item from Save for Later!",
+                        "Failed to remove item from Save for Later!",
                     "error"
                 );
             },
