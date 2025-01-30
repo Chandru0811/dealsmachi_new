@@ -176,13 +176,13 @@
                                         <span class="total ms-1"
                                             style="font-size:12px; color:#00DD21;white-space: nowrap;">
                                             DealsMachi Discount
-                                            &nbsp;-<span
+                                            &nbsp;<span
                                                 class="discount">-₹{{ number_format($cart->items->sum(fn($item) => ($item->product->original_price - $item->product->discounted_price) * $item->quantity), 0) }}</span>
                                         </span>
                                     </h4>
                                 </div>
                                 <div class="d-flex justify-content-end align-items-center ">
-                                    <button type="submit" class="btn placeorder_btn">
+                                    <button type="submit" class="btn placeorder_btn" data-bs-toggle="modal" data-bs-target="#orderSuccessModal">
                                         Place Order
                                     </button>
                                 </div>
@@ -337,7 +337,7 @@
                                 </div>
                                 {{-- <div class="d-flex justify-content-end align-items-center py-3"
                                     style="position:sticky; bottom:10px; background:#fff"> --}}
-                                <button type="submit" class="btn placeorder_btn">
+                                <button type="submit" class="btn placeorder_btn" data-bs-toggle="modal" data-bs-target="#orderSuccessModal">
                                     Place Order
                                 </button>
                                 {{-- </div> --}}

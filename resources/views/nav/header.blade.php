@@ -262,12 +262,12 @@
                                     <div class="col-4 text-start">
                                         <h6 class="mt-2">{{ $user->name ?? '' }}</h6>
                                     </div>
-                                    <div class="col-4 text-end">
+                                    {{-- <div class="col-4 text-end">
                                         <button type="button" class="badge_edit text-end" data-bs-toggle="modal"
                                             data-bs-target="#editProfileModal">
                                             Edit
                                         </button>
-                                    </div>
+                                    </div> --}}
                                 </div>
                                 <hr />
                                 <p><strong>Email :</strong> {{ $user->email ?? '' }}</p>
@@ -550,7 +550,7 @@
         </div>
 
         <!-- Edit Profile Modal -->
-        <div class="modal fade" id="editProfileModal" tabindex="-1" aria-labelledby="editProfileModalLabel"
+        {{-- <div class="modal fade" id="editProfileModal" tabindex="-1" aria-labelledby="editProfileModalLabel"
             aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
@@ -589,7 +589,7 @@
 
                 </div>
             </div>
-        </div>
+        </div> --}}
 
         <!-- New Address Modal -->
         <div class="modal fade" id="newAddressModal" tabindex="-1" aria-labelledby="newAddressModalLabel"
