@@ -234,7 +234,7 @@
                                                     </div>
                                                 @endif
                                                 <div>
-                                                    <span> Seller Name: {{ $item->shop->name }}</span>
+                                                    <span> Seller Company Name: {{ $item->shop->legal_name }}</span>
                                                 </div>
                                                 <p class="mb-0">
                                                     @if ($item->deal_type == 2)

@@ -1365,40 +1365,40 @@
             }
         });
 
-        $(document).ready(function() {
-            if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(showPosition, showError);
-            } else {
-                alert("Geolocation is not supported by this browser.");
-            }
+        // $(document).ready(function() {
+        //     if (navigator.geolocation) {
+        //         navigator.geolocation.getCurrentPosition(showPosition, showError);
+        //     } else {
+        //         alert("Geolocation is not supported by this browser.");
+        //     }
 
-            function showPosition(position) {
-                $('#latitude').val(position.coords.latitude);
-                $('#longitude').val(position.coords.longitude);
+        //     function showPosition(position) {
+        //         $('#latitude').val(position.coords.latitude);
+        //         $('#longitude').val(position.coords.longitude);
 
-                console.log('Latitude:', position.coords.latitude);
-                console.log('Longitude:', position.coords.longitude);
-            }
+        //         console.log('Latitude:', position.coords.latitude);
+        //         console.log('Longitude:', position.coords.longitude);
+        //     }
 
-            function showError(error) {
-                switch (error.code) {
-                    case error.PERMISSION_DENIED:
-                        var permissionDeniedModal = new bootstrap.Modal(document.getElementById(
-                            'permissionDeniedModal'));
-                        permissionDeniedModal.show();
-                        break;
-                    case error.POSITION_UNAVAILABLE:
-                        alert("Location information is unavailable.");
-                        break;
-                    case error.TIMEOUT:
-                        alert("The request to get user location timed out.");
-                        break;
-                    case error.UNKNOWN_ERROR:
-                        alert("An unknown error occurred.");
-                        break;
-                }
-            }
-        });
+        //     function showError(error) {
+        //         switch (error.code) {
+        //             case error.PERMISSION_DENIED:
+        //                 var permissionDeniedModal = new bootstrap.Modal(document.getElementById(
+        //                     'permissionDeniedModal'));
+        //                 permissionDeniedModal.show();
+        //                 break;
+        //             case error.POSITION_UNAVAILABLE:
+        //                 alert("Location information is unavailable.");
+        //                 break;
+        //             case error.TIMEOUT:
+        //                 alert("The request to get user location timed out.");
+        //                 break;
+        //             case error.UNKNOWN_ERROR:
+        //                 alert("An unknown error occurred.");
+        //                 break;
+        //         }
+        //     }
+        // });
 
         const topBar = document.querySelector('.topBar');
         const scrollbar = document.querySelector('.custom-scrollbar');

@@ -62,7 +62,7 @@ use Carbon\Carbon;
         @endphp
         <!-- Check if carts or cart->items are empty -->
         @if (!$cart || $cart->items->isEmpty())
-        <div class="col-12 text-center d-flex flex-column align-items-center justify-content-center mt-0">
+        <div class="empty-cart col-12 text-center d-flex flex-column align-items-center justify-content-center mt-0">
             <img src="{{ asset('assets/images/home/cart_empty.webp') }}" alt="Empty Cart"
                 class="img-fluid empty_cart_img">
             <p class="pt-5" style="color: #ff0060;font-size: 22px">Your Cart is Currently Empty</p>
@@ -70,7 +70,8 @@ use Carbon\Carbon;
                 Your Cart. Go Ahead & Explore Top Categories.</p>
             <a href="/" class="btn showmoreBtn mt-2">Shop More</a>
         </div>
-        @else
+        @endif
+        @if(!$cart->items->isEmpty())
         <div class="cart-items-container">
             @if ($cart)
             <div class="d-flex justify-content-between mb-3">
@@ -81,162 +82,378 @@ use Carbon\Carbon;
                     </button>
                 </a>
             </div>
-            @foreach ($cart->items as $item)
-            <div class="cart-item" data-product-id="{{ $item->product_id }}">
-                @php
-                $product = $item->product;
-                $subtotal += $product->original_price * $item->quantity;
-                $total_discount +=
-                ($product->original_price - $product->discounted_price) * $item->quantity;
-                @endphp
-                @php
-                $currentDate = Carbon::now();
+            <div class="cart-items">
+                @foreach ($cart->items as $item)
+                <div class="cart-item" data-product-id="{{ $item->product_id }}">
+                    @php
+                    $product = $item->product;
+                    $subtotal += $product->original_price * $item->quantity;
+                    $total_discount +=
+                    ($product->original_price - $product->discounted_price) * $item->quantity;
+                    @endphp
+                    @php
+                    $currentDate = Carbon::now();
 
-                $deliveryDays = is_numeric($item->product->delivery_days)
-                ? (int) $item->product->delivery_days
-                : 0;
+                    $deliveryDays = is_numeric($item->product->delivery_days)
+                    ? (int) $item->product->delivery_days
+                    : 0;
 
-                $deliveryDate =
-                $deliveryDays > 0 ? $currentDate->addDays($deliveryDays)->format('d-m-Y') : null;
-                @endphp
-                <div class="row p-4">
-                    <div class="col-md-4 mb-3">
-                        <div class="d-flex justify-content-center align-items-center">
-                            @php
-                            $image = isset($product->productMedia)
-                            ? $product->productMedia->where('order', 1)->where('type', 'image')->first()
-                            : null;
-                            @endphp
-                            <img src="{{ $image ? asset($image->path) : asset('assets/images/home/noImage.webp') }}"
-                                style="max-width: 100%; max-height: 100%;" alt="{{ $product->name }}" />
-                        </div>
-                    </div>
-                    <div class="col-md-8">
-                        <a href="{{ url(path: '/deal/' . $product->id) }}" style="color: #000;"
-                            onclick="clickCount('{{ $product->id }}')">
-                            <p style="font-size: 18px;">
-                                {{ $product->name }}
-                            </p>
-                        </a>
-                        <p class="truncated-description" style="font-size: 16px">
-                            {{ $product->description }}
-                        </p>
-                        <p style="color: #AAAAAA;font-size:14px;">Seller :
-                            {{ $product->shop->legal_name ?? '' }}
-                        </p>
-                        @if ($product->deal_type == 2)
-                        <div class="rating mt-3 mb-3">
-                            <span style="color: #22cb00">Currently Services are free through
-                                DealsMachi</span>
-                        </div>
-                        <span class="ms-1" style="font-size:18px;font-weight:500;color:#ff0060">
-                            ₹{{ number_format($product->discounted_price, 0) }}
-                        </span>
-                        @else
-                        <div class="d-flex">
-                            <div class="">
-                                <img src="{{ asset('assets/images/home/icon_delivery.svg') }}" alt="icon"
-                                    class="img-fluid" />
-                            </div> &nbsp;&nbsp;
-                            <div class="">
-                                <p style="font-size: 16px;">
-                                    Delivery Date :
-                                    @if ($product->deal_type == 1)
-                                    {{ $deliveryDays > 0 ? $deliveryDate : 'No delivery date available' }}
-                                    @else
-                                    No delivery date available
-                                    @endif
-                                </p>
+                    $deliveryDate =
+                    $deliveryDays > 0 ? $currentDate->addDays($deliveryDays)->format('d-m-Y') : null;
+                    @endphp
+                    <div class="row p-4">
+                        <div class="col-md-4 mb-3">
+                            <div class="d-flex justify-content-center align-items-center">
+                                @php
+                                $image = isset($product->productMedia)
+                                ? $product->productMedia->where('order', 1)->where('type', 'image')->first()
+                                : null;
+                                @endphp
+                                <img src="{{ $image ? asset($image->path) : asset('assets/images/home/noImage.webp') }}"
+                                    style="max-width: 100%; max-height: 100%;" alt="{{ $product->name }}" />
                             </div>
                         </div>
-                        <div class="ms-0">
-                            <span style="font-size:15px;text-decoration: line-through; color:#c7c7c7">
-                                ₹{{ number_format($product->original_price, 0) }}
-                            </span>
+                        <div class="col-md-8">
+                            <a href="{{ url(path: '/deal/' . $product->id) }}" style="color: #000;"
+                                onclick="clickCount('{{ $product->id }}')">
+                                <p style="font-size: 18px;">
+                                    {{ $product->name }}
+                                </p>
+                            </a>
+                            <p class="truncated-description" style="font-size: 16px">
+                                {{ $product->description }}
+                            </p>
+                            <p style="color: #AAAAAA;font-size:14px;">Seller :
+                                {{ $product->shop->legal_name ?? '' }}
+                            </p>
+                            @if ($product->deal_type == 2)
+                            <div class="rating mt-3 mb-3">
+                                <span style="color: #22cb00">Currently Services are free through
+                                    DealsMachi</span>
+                            </div>
                             <span class="ms-1" style="font-size:18px;font-weight:500;color:#ff0060">
                                 ₹{{ number_format($product->discounted_price, 0) }}
                             </span>
-                            <span class="ms-1" style="font-size:18px;font-weight:500; color:#28A745">
-                                - {{ round($product->discount_percentage) }}% Off
-                            </span>
-                        </div>
-                        @endif
-
-                    </div>
-                </div>
-                <div class="row d-flex align-items-center">
-                    <div class="col-md-6">
-                        @if ($product->deal_type === 2)
-                        <div class="d-flex align-items-start my-1 mb-3" style="padding-left:24px">
-                            <div class="d-flex flex-column ms-0" style="width: 30%">
-                                <label for="service_date" class="form-label">Service Date</label>
-                                <input type="date" id="service_date" name="service_date"
-                                    class="form-control form-control-sm service-date" value="{{ $item->service_date }}"
-                                    data-cart-id="{{ $cart->id }}" data-product-id="{{ $product->id }}">
-                            </div>
-                            &nbsp;&nbsp;
-                            <div class="d-flex flex-column" style="width: 30%;">
-                                <label for="service_time" class="form-label">Service Time</label>
-                                <input type="time" id="service_time" name="service_time"
-                                    class="form-control form-control-sm service-time"
-                                    value="{{ $item->service_time }}" data-cart-id="{{ $cart->id }}"
-                                    data-product-id="{{ $product->id }}">
-                            </div>
-                        </div>
-                        @else
-                        <div class="d-flex align-items-center my-1 mb-3" style="padding-left: 24px;">
-                            <span>Qty</span> &nbsp;&nbsp;
-                            <button class="btn rounded btn-sm decrease-btn"
-                                data-cart-id="{{ $cart->id }}"
-                                data-product-id="{{ $product->id }}">-</button>
-                            <input type="text"
-                                class="form-control form-control-sm mx-2 text-center quantity-input"
-                                style="width: 50px;background-color:#F9F9F9;border-radius:2px"
-                                value="{{ $item->quantity }}" readonly>
-                            <button class="btn rounded btn-sm increase-btn"
-                                data-cart-id="{{ $cart->id }}"
-                                data-product-id="{{ $product->id }}">+</button>
-                        </div>
-                        @endif
-                    </div>
-                    <div class="col-md-6 d-flex justify-content-md-end" style="padding-left: 24px">
-                        <div class="btn-group" role="group" aria-label="Basic example">
-                            <button type="submit" class="btn save-for-later-btn"
-                                style="color: #ff0060; border: none;" data-product-id="{{ $product->id }}">
-                                <div class="d-inline-flex align-items-center gap-2 buy_later">
-                                    <div>
-                                        <img src="{{ asset('assets/images/home/icon_save_later.svg') }}"
-                                            alt="icon" class="img-fluid" />
-                                    </div>
-                                    <div class="d-inline-flex align-items-center gap-2 buy-for-later-btn">
-                                        <span class="loader spinner-border spinner-border-sm"
-                                            style="display: none;"></span>
-                                        <span>Buy For Later</span>
-                                    </div>
+                            @else
+                            <div class="d-flex">
+                                <div class="">
+                                    <img src="{{ asset('assets/images/home/icon_delivery.svg') }}" alt="icon"
+                                        class="img-fluid" />
+                                </div> &nbsp;&nbsp;
+                                <div class="">
+                                    <p style="font-size: 16px;">
+                                        Delivery Date :
+                                        @if ($product->deal_type == 1)
+                                        {{ $deliveryDays > 0 ? $deliveryDate : 'No delivery date available' }}
+                                        @else
+                                        No delivery date available
+                                        @endif
+                                    </p>
                                 </div>
-                            </button>
-                            &nbsp;&nbsp;
-                            <button type="submit" class="btn cancel-btn cart-remove"
-                                style="color: #ff0060;border: none" data-product-id="{{ $product->id }}"
-                                data-cart-id="{{ $cart->id }}">
-                                <div class="d-inline-flex align-items-center gap-2">
-                                    <div>
-                                        <img src="{{ asset('assets/images/home/icon_delete.svg') }}"
-                                            alt="icon" class="img-fluid" />
+                            </div>
+                            <div class="ms-0">
+                                <span style="font-size:15px;text-decoration: line-through; color:#c7c7c7">
+                                    ₹{{ number_format($product->original_price, 0) }}
+                                </span>
+                                <span class="ms-1" style="font-size:18px;font-weight:500;color:#ff0060">
+                                    ₹{{ number_format($product->discounted_price, 0) }}
+                                </span>
+                                <span class="ms-1" style="font-size:18px;font-weight:500; color:#28A745">
+                                    - {{ round($product->discount_percentage) }}% Off
+                                </span>
+                            </div>
+                            @endif
+                        </div>
+                    </div>
+                    <div class="row d-flex align-items-center">
+                        <div class="col-md-6">
+                            @if ($product->deal_type === 2)
+                            <div class="d-flex align-items-start my-1 mb-3" style="padding-left:24px">
+                                <div class="d-flex flex-column ms-0" style="width: 30%">
+                                    <label for="service_date" class="form-label">Service Date</label>
+                                    <input type="date" id="service_date" name="service_date"
+                                        class="form-control form-control-sm service-date" value="{{ $item->service_date }}"
+                                        data-cart-id="{{ $cart->id }}" data-product-id="{{ $product->id }}">
+                                </div>
+                                &nbsp;&nbsp;
+                                <div class="d-flex flex-column" style="width: 30%;">
+                                    <label for="service_time" class="form-label">Service Time</label>
+                                    <input type="time" id="service_time" name="service_time"
+                                        class="form-control form-control-sm service-time"
+                                        value="{{ $item->service_time }}" data-cart-id="{{ $cart->id }}"
+                                        data-product-id="{{ $product->id }}">
+                                </div>
+                            </div>
+                            @else
+                            <div class="d-flex align-items-center my-1 mb-3" style="padding-left: 24px;">
+                                <span>Qty</span> &nbsp;&nbsp;
+                                <button class="btn rounded btn-sm decrease-btn"
+                                    data-cart-id="{{ $cart->id }}"
+                                    data-product-id="{{ $product->id }}">-</button>
+                                <input type="text"
+                                    class="form-control form-control-sm mx-2 text-center quantity-input"
+                                    style="width: 50px;background-color:#F9F9F9;border-radius:2px"
+                                    value="{{ $item->quantity }}" readonly>
+                                <button class="btn rounded btn-sm increase-btn"
+                                    data-cart-id="{{ $cart->id }}"
+                                    data-product-id="{{ $product->id }}">+</button>
+                            </div>
+                            @endif
+                        </div>
+                        <div class="col-md-6 d-flex justify-content-md-end" style="padding-left: 24px">
+                            <div class="btn-group" role="group" aria-label="Basic example">
+                                <button type="submit" class="btn save-for-later-btn"
+                                    style="color: #ff0060; border: none;" data-product-id="{{ $product->id }}">
+                                    <div class="d-inline-flex align-items-center gap-2 buy_later">
+                                        <div>
+                                            <img src="{{ asset('assets/images/home/icon_save_later.svg') }}"
+                                                alt="icon" class="img-fluid" />
+                                        </div>
+                                        <div class="d-inline-flex align-items-center gap-2 buy-for-later-btn">
+                                            <span class="loader spinner-border spinner-border-sm"
+                                                style="display: none;"></span>
+                                            <span>Buy For Later</span>
+                                        </div>
                                     </div>
+                                </button>
+                                &nbsp;&nbsp;
+                                <button type="submit" class="btn cancel-btn cart-remove"
+                                    style="color: #ff0060;border: none" data-product-id="{{ $product->id }}"
+                                    data-cart-id="{{ $cart->id }}">
                                     <div class="d-inline-flex align-items-center gap-2">
-                                        <span class="loader spinner-border spinner-border-sm me-2"
-                                            style="display: none"></span>
-                                        Remove
+                                        <div>
+                                            <img src="{{ asset('assets/images/home/icon_delete.svg') }}"
+                                                alt="icon" class="img-fluid" />
+                                        </div>
+                                        <div class="d-inline-flex align-items-center gap-2">
+                                            <span class="loader spinner-border spinner-border-sm me-2"
+                                                style="display: none"></span>
+                                            Remove
+                                        </div>
                                     </div>
-                                </div>
-                            </button>
+                                </button>
+                            </div>
                         </div>
                     </div>
+                    <hr>
                 </div>
-                <hr>
+                @endforeach
             </div>
-            @endforeach
+            <div class="card mb-4 order_summary_card p-3">
+                <div class="card-header m-0 py-3" style="background: #fff">
+                    <p class="mb-0" style="font-size:20px;font-weight:400">Order Summary</p>
+                </div>
+                <div class="card-body m-0 p-4 order-summary">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <p style="color: #AAAAAA;font-size:16px">Subtotal (x<span
+                                class="quantity-value">{{ $cart->quantity }}</span>)</p>
+                        <p class="subtotal">₹{{ number_format($subtotal, 0) }}</p>
+                    </div>
+                    <div class="d-flex justify-content-between align-items-center" style="color: #28A745;">
+                        <p style="font-size:16px">Discount (x<span
+                                class="quantity-value">{{ $cart->quantity }}</span>)</p>
+                        <p class="discount">-₹{{ number_format($total_discount, 0) }}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="d-flex justify-content-between align-items-center py-3 mt-4"
+                style="position: sticky; bottom: 0px; background: #fff;border-top: 1px solid #dcdcdc">
+                <div class="d-flex justify-content-end align-items-center">
+                    <h4>
+                        Total Amount (x<span class="quantity-value">{{ $cart->quantity }}</span>)&nbsp;&nbsp;
+                        <span style="text-decoration: line-through; color:#c7c7c7" class="subtotal">
+                            ₹{{ number_format($subtotal, 0) }}
+                        </span>
+                        &nbsp;&nbsp;
+                        <span class="total ms-1" style="color:#000">
+                            ₹{{ number_format($subtotal - $total_discount, 0) }}
+                        </span>
+                        &nbsp;&nbsp;
+                        <span class="ms-1" style="font-size:12px; color:#28A745; white-space: nowrap;">
+                            DealsMachi Discount
+                            &nbsp;<span class="discount">-₹{{ number_format($total_discount, 0) }}</span>
+                        </span>
+                    </h4>
+                </div>
+
+                <div class="d-flex justify-content-end align-items-center p-3"
+                    style="position: sticky; bottom: 0px; background: #fff">
+                    <a href="{{ url('/cartSummary/' . $cart->id) }}" class="btn  order-button">
+                        Checkout
+                    </a>
+                </div>
+            </div>
+            @endif
+        </div>
+        @else
+        <div class="cart-items-container" style="display: none;">
+            @if ($cart)
+            <div class="d-flex justify-content-between mb-3">
+                <h5>Your Cart <span style="color: #ff0060">(<span class="item_count">{{ $cart->items->count() }}</span>)</span></h5>
+                <a href="/" class="text-decoration-none">
+                    <button type="button" class="btn showmoreBtn">
+                        Shop more
+                    </button>
+                </a>
+            </div>
+            <div class="cart-items">
+                @foreach ($cart->items as $item)
+                <div class="cart-item" data-product-id="{{ $item->product_id }}">
+                    @php
+                    $product = $item->product;
+                    $subtotal += $product->original_price * $item->quantity;
+                    $total_discount +=
+                    ($product->original_price - $product->discounted_price) * $item->quantity;
+                    @endphp
+                    @php
+                    $currentDate = Carbon::now();
+
+                    $deliveryDays = is_numeric($item->product->delivery_days)
+                    ? (int) $item->product->delivery_days
+                    : 0;
+
+                    $deliveryDate =
+                    $deliveryDays > 0 ? $currentDate->addDays($deliveryDays)->format('d-m-Y') : null;
+                    @endphp
+                    <div class="row p-4">
+                        <div class="col-md-4 mb-3">
+                            <div class="d-flex justify-content-center align-items-center">
+                                @php
+                                $image = isset($product->productMedia)
+                                ? $product->productMedia->where('order', 1)->where('type', 'image')->first()
+                                : null;
+                                @endphp
+                                <img src="{{ $image ? asset($image->path) : asset('assets/images/home/noImage.webp') }}"
+                                    style="max-width: 100%; max-height: 100%;" alt="{{ $product->name }}" />
+                            </div>
+                        </div>
+                        <div class="col-md-8">
+                            <a href="{{ url(path: '/deal/' . $product->id) }}" style="color: #000;"
+                                onclick="clickCount('{{ $product->id }}')">
+                                <p style="font-size: 18px;">
+                                    {{ $product->name }}
+                                </p>
+                            </a>
+                            <p class="truncated-description" style="font-size: 16px">
+                                {{ $product->description }}
+                            </p>
+                            <p style="color: #AAAAAA;font-size:14px;">Seller :
+                                {{ $product->shop->legal_name ?? '' }}
+                            </p>
+                            @if ($product->deal_type == 2)
+                            <div class="rating mt-3 mb-3">
+                                <span style="color: #22cb00">Currently Services are free through
+                                    DealsMachi</span>
+                            </div>
+                            <span class="ms-1" style="font-size:18px;font-weight:500;color:#ff0060">
+                                ₹{{ number_format($product->discounted_price, 0) }}
+                            </span>
+                            @else
+                            <div class="d-flex">
+                                <div class="">
+                                    <img src="{{ asset('assets/images/home/icon_delivery.svg') }}" alt="icon"
+                                        class="img-fluid" />
+                                </div> &nbsp;&nbsp;
+                                <div class="">
+                                    <p style="font-size: 16px;">
+                                        Delivery Date :
+                                        @if ($product->deal_type == 1)
+                                        {{ $deliveryDays > 0 ? $deliveryDate : 'No delivery date available' }}
+                                        @else
+                                        No delivery date available
+                                        @endif
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="ms-0">
+                                <span style="font-size:15px;text-decoration: line-through; color:#c7c7c7">
+                                    ₹{{ number_format($product->original_price, 0) }}
+                                </span>
+                                <span class="ms-1" style="font-size:18px;font-weight:500;color:#ff0060">
+                                    ₹{{ number_format($product->discounted_price, 0) }}
+                                </span>
+                                <span class="ms-1" style="font-size:18px;font-weight:500; color:#28A745">
+                                    - {{ round($product->discount_percentage) }}% Off
+                                </span>
+                            </div>
+                            @endif
+
+                        </div>
+                    </div>
+                    <div class="row d-flex align-items-center">
+                        <div class="col-md-6">
+                            @if ($product->deal_type === 2)
+                            <div class="d-flex align-items-start my-1 mb-3" style="padding-left:24px">
+                                <div class="d-flex flex-column ms-0" style="width: 30%">
+                                    <label for="service_date" class="form-label">Service Date</label>
+                                    <input type="date" id="service_date" name="service_date"
+                                        class="form-control form-control-sm service-date" value="{{ $item->service_date }}"
+                                        data-cart-id="{{ $cart->id }}" data-product-id="{{ $product->id }}">
+                                </div>
+                                &nbsp;&nbsp;
+                                <div class="d-flex flex-column" style="width: 30%;">
+                                    <label for="service_time" class="form-label">Service Time</label>
+                                    <input type="time" id="service_time" name="service_time"
+                                        class="form-control form-control-sm service-time"
+                                        value="{{ $item->service_time }}" data-cart-id="{{ $cart->id }}"
+                                        data-product-id="{{ $product->id }}">
+                                </div>
+                            </div>
+                            @else
+                            <div class="d-flex align-items-center my-1 mb-3" style="padding-left: 24px;">
+                                <span>Qty</span> &nbsp;&nbsp;
+                                <button class="btn rounded btn-sm decrease-btn"
+                                    data-cart-id="{{ $cart->id }}"
+                                    data-product-id="{{ $product->id }}">-</button>
+                                <input type="text"
+                                    class="form-control form-control-sm mx-2 text-center quantity-input"
+                                    style="width: 50px;background-color:#F9F9F9;border-radius:2px"
+                                    value="{{ $item->quantity }}" readonly>
+                                <button class="btn rounded btn-sm increase-btn"
+                                    data-cart-id="{{ $cart->id }}"
+                                    data-product-id="{{ $product->id }}">+</button>
+                            </div>
+                            @endif
+                        </div>
+                        <div class="col-md-6 d-flex justify-content-md-end" style="padding-left: 24px">
+                            <div class="btn-group" role="group" aria-label="Basic example">
+                                <button type="submit" class="btn save-for-later-btn"
+                                    style="color: #ff0060; border: none;" data-product-id="{{ $product->id }}">
+                                    <div class="d-inline-flex align-items-center gap-2 buy_later">
+                                        <div>
+                                            <img src="{{ asset('assets/images/home/icon_save_later.svg') }}"
+                                                alt="icon" class="img-fluid" />
+                                        </div>
+                                        <div class="d-inline-flex align-items-center gap-2 buy-for-later-btn">
+                                            <span class="loader spinner-border spinner-border-sm"
+                                                style="display: none;"></span>
+                                            <span>Buy For Later</span>
+                                        </div>
+                                    </div>
+                                </button>
+                                &nbsp;&nbsp;
+                                <button type="submit" class="btn cancel-btn cart-remove"
+                                    style="color: #ff0060;border: none" data-product-id="{{ $product->id }}"
+                                    data-cart-id="{{ $cart->id }}">
+                                    <div class="d-inline-flex align-items-center gap-2">
+                                        <div>
+                                            <img src="{{ asset('assets/images/home/icon_delete.svg') }}"
+                                                alt="icon" class="img-fluid" />
+                                        </div>
+                                        <div class="d-inline-flex align-items-center gap-2">
+                                            <span class="loader spinner-border spinner-border-sm me-2"
+                                                style="display: none"></span>
+                                            Remove
+                                        </div>
+                                    </div>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <hr>
+                </div>
+                @endforeach
+            </div>
             <div class="card mb-4 order_summary_card p-3">
                 <div class="card-header m-0 py-3" style="background: #fff">
                     <p class="mb-0" style="font-size:20px;font-weight:400">Order Summary</p>
@@ -376,7 +593,7 @@ use Carbon\Carbon;
                             <div class="btn-group" role="group" aria-label="Basic example">
                                 <button type="submit" class="btn remove-cart-btn removeSaveLater"
                                     style="color: #ff0060;border: none" data-product-id="{{ $savedItem->deal->id }}">
-                                    <div class="d-inline-flex align-items-center gap-2-2">
+                                    <div class="d-inline-flex align-items-center gap-2 buy_later">
                                         <div>
                                             <img src="{{ asset('assets/images/home/icon_delete.svg') }}" alt="icon"
                                                 class="img-fluid" />
@@ -498,22 +715,23 @@ use Carbon\Carbon;
         }
     });
 
-    document.querySelectorAll('.decrease-btn, .increase-btn').forEach((btn) => {
-        btn.addEventListener('click', function() {
-            const cartId = this.getAttribute('data-cart-id');
-            const productId = this.getAttribute('data-product-id');
-            const quantityInput = this.parentElement.querySelector('.quantity-input');
-            let quantity = parseInt(quantityInput.value);
+    // document.querySelectorAll('.decrease-btn, .increase-btn').forEach((btn) => {
+    //     btn.addEventListener('click', function() {
+    //         alert('Hi');
+    //         const cartId = this.getAttribute('data-cart-id');
+    //         const productId = this.getAttribute('data-product-id');
+    //         const quantityInput = this.parentElement.querySelector('.quantity-input');
+    //         let quantity = parseInt(quantityInput.value);
 
-            if (this.classList.contains('decrease-btn') && quantity > 1) {
-                quantity -= 1;
-            } else if (this.classList.contains('increase-btn') && quantity < 10) {
-                quantity += 1;
-            }
-            quantityInput.value = quantity;
-            updateCart(cartId, productId, quantity);
-        });
-    });
+    //         if (this.classList.contains('decrease-btn') && quantity > 1) {
+    //             quantity -= 1;
+    //         } else if (this.classList.contains('increase-btn') && quantity < 10) {
+    //             quantity += 1;
+    //         }
+    //         quantityInput.value = quantity;
+    //         updateCart(cartId, productId, quantity);
+    //     });
+    // });
 
     document.querySelectorAll('.service-date, .service-time').forEach((input) => {
         input.addEventListener('change', function() {

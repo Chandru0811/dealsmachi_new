@@ -77,7 +77,7 @@
             </div>
         @endif
         <div class="row m-0">
-            <div class="col-md-6 col-12 pt-5 bg_login login-text-container text-center" style="background: #ffcbde">
+            <div class="col-md-6 col-12 d-flex flex-column justify-content-center align-items-center pt-5 bg_login login-text-container text-center" style="background: #ffcbde">
                 <div class="px-5 pt-5">
                     <h5 class="py-4" style="color: #CC004D">Forgot Password to your account</h5>
                     <p class="login-text">You're just one step away from securing your awesome purchase!

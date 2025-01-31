@@ -1,5 +1,5 @@
 <div class="container slider-content">
-    <div class="row">
+    <div class="row m-0">
         <div class="col-lg-9 col-md-12 col-12">
             <div class="owl-carousel carousel_slider owl-theme">
                 <div class="item">
