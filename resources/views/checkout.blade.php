@@ -93,17 +93,17 @@
 
                             <!-- Order Summary -->
                             <div class="card p-3 mb-3">
+                                <div class="row">
                                 <h5 class="mb-4" style="color:#ff0060;">Order Summary</h5>
                                 @foreach ($cart->items as $item)
-                                    <div class="d-flex justify-content-between">
-                                        <div>
+                                        <div class="col-md-6 col-12">
                                             @if ($item->deal_type == 1)
                                             <p>{{ $item->product->name }}<span class="text-muted"> (x{{ $item->quantity }})</span></p>
                                             @else
                                             <p>{{ $item->product->name }}<span class="text-muted"> (Service) </span></p>
                                             @endif
                                         </div>
-                                        <div>
+                                        <div class="col-md-6 col-12 checkoutsummary-card2 text-end">
                                             <span style="text-decoration: line-through; color:#c7c7c7">
                                                 ₹{{ number_format($item->product->original_price * $item->quantity, 0) }}
                                             </span>
@@ -115,8 +115,8 @@
                                                 off
                                             </span>
                                         </div>
-                                    </div>
                                 @endforeach
+                            </div>
                             </div>
 
                             <!-- Payment Methods -->
@@ -253,15 +253,14 @@
                                 <div class="row">
                                     <h5 class="mb-4" style="color:#ff0060;">Order Summary</h5>
                                     @foreach ($cart->items as $item)
-                                        <div class="d-flex justify-content-between">
-                                            <div>
+                                            <div class="col-md-6 col-12">
                                                 @if ($item->deal_type == 1)
                                                 <p>{{ $item->product->name }} <span class="text-muted">(x{{ $item->quantity }})</span></p>
                                                 @else
                                                 <p>{{ $item->product->name }} <span class="text-muted">(Service) </span></p>
                                                 @endif
                                             </div>
-                                            <div>
+                                            <div class="col-md-6 col-12 checkoutsummary-card2 text-end">
                                                 <span style="text-decoration: line-through; color:#c7c7c7">
                                                     ₹{{ number_format($item->product->original_price * $item->quantity, 0) }}
                                                 </span>
@@ -273,10 +272,9 @@
                                                     off
                                                 </span>
                                             </div>
-                                        </div>
                                     @endforeach
                                 </div>
-                            </div>
+                                </div>
                             <!-- Payment Methods -->
                             <div class="card p-3 mb-3">
                                 <div>

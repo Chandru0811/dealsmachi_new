@@ -3209,7 +3209,8 @@ footer hr {
         font-size: 20px;
     }
     .media_fonts_conent {
-        font-size: 12px;
+        padding: 10px 17px;
+        font-size: 13px !important;
     }
 
     .space_ctrl {
@@ -3948,6 +3949,18 @@ align-items: center !important;
     font-size: 18px;
 }
 
+@media screen and (max-width: 450px) {
+    .placeorder_btn {
+        font-size: 10px;
+        padding: 4px 10px;
+    }
+}
+@media screen and (max-width: 767px) {
+.checkoutsummary-card2{
+    text-align: start !important;
+
+}}
+
 .custom-loader {
     display: inline-block;
     margin-left: 8px;
@@ -4237,5 +4250,11 @@ align-items: center !important;
 
     .dropdown-menu.show {
         display: block !important;
+    }
+}
+
+@media screen and (min-width: 768px) and (max-width: 992px) {
+    .coupon-align {
+        flex-direction: column;
     }
 }

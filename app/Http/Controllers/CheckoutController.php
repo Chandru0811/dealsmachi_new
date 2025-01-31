@@ -115,7 +115,7 @@ class CheckoutController extends Controller
         $address_id = $request->address_id;
         $cart_id = $request->input('cart_id');
         $address = Address::where('id', $address_id)->first();
- // dd($address);
+        // dd($address);
         $cart = Cart::where('id', $cart_id)->with('items')->first();
         if (!$cart) {
             return redirect()->route('home')->with('error', 'Cart not found.');
@@ -129,14 +129,14 @@ class CheckoutController extends Controller
             $order = Order::where('customer_id', $user->id)->orderBy('id', 'desc')->first();
             $orderoption = 'cart';
 
-            if ($address) {
-                session([
-                    'address' => $address->address,
-                    'city' => $address->city,
-                    'state' => $address->state,
-                    'postalcode' => $address->postalcode,
-                ]);
-            }
+            // if ($address) {
+            //     session([
+            //         'address' => $address->address,
+            //         'city' => $address->city,
+            //         'state' => $address->state,
+            //         'postalcode' => $address->postalcode,
+            //     ]);
+            // }
 
             return view('checkout', compact('cart', 'user', 'address', 'order', 'orderoption'));
         }
@@ -199,7 +199,7 @@ class CheckoutController extends Controller
                 'address' => $address->address,
                 'city' => $address->city,
                 'state' => $address->state,
-                'unit'  => $address->unit
+                'unit' => $address->unit
             ];
 
             // Create the order
@@ -304,7 +304,7 @@ class CheckoutController extends Controller
                 'address' => $address->address,
                 'city' => $address->city,
                 'state' => $address->state,
-                'unit'  => $address->unit
+                'unit' => $address->unit
             ];
 
             $order = Order::create([
@@ -365,7 +365,35 @@ class CheckoutController extends Controller
         // Mail::to($shop->email)->send(new OrderCreated($shop,$customer,$orderdetails));
         // dd($order);
 
-        return redirect()->route('home')->with('status', 'Order Placed Successfully!');
+        $decodedAddress = json_decode($order->delivery_address, true);
+
+        $addressFields = [
+            'address' => $decodedAddress['address'] ?? '',
+            'city' => $decodedAddress['city'] ?? '',
+            'state' => $decodedAddress['state'] ?? '',
+            'postal_code' => $decodedAddress['postal_code'] ?? '',
+            'unit' => $decodedAddress['unit'] ?? ''
+        ];
+
+        $formattedAddress = implode(", ", array_filter([
+            $addressFields['address'],
+            $addressFields['city'],
+            $addressFields['state'],
+            $addressFields['postal_code'],
+        ]));
+
+        if ($addressFields['unit']) {
+            $formattedAddress .= " - " . $addressFields['unit'];
+        }
+
+        $message = [
+            'order' => "Order Placed Successfully !",
+            'delivery' => "Delivering to",
+            'address' => $formattedAddress
+        ];
+
+        return redirect()->route('home')->with('status1', $message);
+
     }
 
     public function getAllOrdersByCustomer()
