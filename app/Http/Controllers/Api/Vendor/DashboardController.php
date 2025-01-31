@@ -222,6 +222,7 @@ class DashboardController extends Controller
 
         $lastSixMonths = collect();
         $currentMonth = now()->startOfMonth();
+        // dd($currentMonth);
 
         for ($i = 5; $i >= 0; $i--) {
             $lastSixMonths->push($currentMonth->copy()->subMonths($i)->format('Y-m'));
@@ -269,6 +270,14 @@ class DashboardController extends Controller
 
         $totalReferralsCount = $groupByName->sum();
 
+        $groupByMonth = collect($lastSixMonths)->map(function ($month) use ($groupByName) {
+            return [
+                'month' => $month,
+                'count' => $groupByName->get($month, 0)
+            ];
+        })->sortByDesc('month')->values();
+
+
         return $this->success('Referrer Dashboard data retrieved successfully.', [
             'current_month_report' => $monthReport,
             'last_six_months_report' => $lastSixMonthsReport,
@@ -277,6 +286,7 @@ class DashboardController extends Controller
                 'total_earnings' => $totalEarnings,
                 'this_month_referrals' => $thisMonthReferrals,
                 'total_referrals' => $totalReferralsCount,
+                'total_count_month' => $groupByMonth
             ]
         ]);
     }
