@@ -416,7 +416,7 @@ class CartController extends Controller
         $cart->shipping_weight = $cart->shipping_weight + 0;
         $cart->save();
 
-        $item->load(['product', 'product.productMedia', 'product.shop']);
+        $item->load(['product.productMedia', 'product.shop']);
 
         return response()->json([
             'status' => 'Item moved to Cart',
