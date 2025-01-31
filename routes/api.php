@@ -138,6 +138,7 @@ Route::middleware('auth:api')->group(function () {
         Route::get('referrer/{id}', [ReferrerDetailController::class, 'show']);
         Route::put('referrer/update/{id}', [ReferrerDetailController::class, 'update']);
         Route::delete('referrer/{id}', [ReferrerDetailController::class, 'delete']);
+        Route::get('getAllReferrer', [ReferrerDetailController::class, 'getAllReferrersAndReferrerVendors']);
     });
 
     //Vendor
@@ -179,6 +180,7 @@ Route::middleware('auth:api')->group(function () {
 
         // All Referral Vendor
         Route::get('referrals/{userId}', [ShopController::class, 'getReferralsByUserId']);
+        Route::get('referrerDashboard', [DashboardController::class, 'referrerDashboard']);
     });
 
     //Customer

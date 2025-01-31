@@ -7,6 +7,7 @@ use App\Models\ReferrerDetail;
 use App\Traits\ApiResponses;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use App\Models\User;
 
 class ReferrerDetailController extends Controller
 {
@@ -45,7 +46,7 @@ class ReferrerDetailController extends Controller
 
         $ReferrerDetails = ReferrerDetail::create($validatedData);
 
-        return $this->success('Category Group Created Successfully!', $ReferrerDetails);
+        return $this->success('Referral Amount Created Successfully!', $ReferrerDetails);
     }
 
 
@@ -66,7 +67,7 @@ class ReferrerDetailController extends Controller
         $ReferrerDetails = ReferrerDetail::find($id);
 
         if (!$ReferrerDetails) {
-            return $this->error('Referrer Details Not Found.', ['error' => 'Referrer Details Not Found']);
+            return $this->error('Referral Amount Not Found.', ['error' => 'Referral Amount Not Found']);
         }
 
         $validator = Validator::make($request->all(), [
@@ -86,7 +87,7 @@ class ReferrerDetailController extends Controller
         $validatedData = $validator->validated();
         $ReferrerDetails->update($validatedData);
 
-        return $this->success('Referrer Details Updated Successfully!', $ReferrerDetails);
+        return $this->success('Referral Amount Updated Successfully!', $ReferrerDetails);
     }
 
     public function delete(string $id)
@@ -100,5 +101,14 @@ class ReferrerDetailController extends Controller
         $ReferrerDetails->delete();
 
         return $this->success('Referrer Details Deleted Successfully!', $ReferrerDetails);
+    }
+
+    public function getAllReferrersAndReferrerVendors()
+    {
+        $users = User::whereIn('type', ['referrer', 'referrer-vendor'])
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        return $this->success('Referrers and Referrer Vendors retrieved successfully.', $users);
     }
 }

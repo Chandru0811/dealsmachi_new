@@ -17,7 +17,11 @@ class ShopController extends Controller
 
     public function index()
     {
-        $shops = Shop::orderBy('id', 'desc')->get();
+        $shops = Shop::orderBy('id', 'desc')
+        ->with(['owner' => function ($query) {
+            $query->select('id', 'type');
+        }])
+            ->get();
         return $this->success('Shops retrieved successfully.', $shops);
     }
 
@@ -103,7 +107,7 @@ class ShopController extends Controller
     public function getlogindetails($id)
     {
         $shop = Shop::where('id',$id)->first();
-        $login_details = User::where('id',$shop->owner_id)->select('id','name','email')->first();
+        $login_details = User::where('id',$shop->owner_id)->select('id','name','email', 'type', 'created_at')->first();
         return $this->success('Shop retrieved successfully.', $login_details);
     }
 }
