@@ -474,6 +474,7 @@
                                     <span class="original-price"></span>
                                     <span class="discount-price"></span>
                                     @if (!empty($product->coupon_code))
+                                    <div>
                                         <p>
                                             <span id="mySpan" class="deal-badge"
                                                 style="cursor: pointer; position:relative;-"
@@ -488,25 +489,28 @@
                                                 </span>
                                             </span>
                                         </p>
+                                    </div>
                                     @endif
 
                                 </div>
-                                <div class="rating mt-3">
+                                <div class="rating mt-3 mb-3">
                                     <span style="color: #22cb00">Currently Services are free through DealsMachi</span>
                                 </div>
                             @else
-                                <div class="price-section mt-4 d-flex align-items-center">
-                                    <h3>
+                                <div class="price-section coupon-align mt-4 d-flex align-items-lg-center">
+                                    <div class="d-flex align-items-center">
+                                        <h3>
+                                            <span
+                                                class="current-price mt-4">₹{{ strpos($product->discounted_price, '.') !== false ? rtrim(rtrim(number_format($product->discounted_price, 2), '0'), '.') : $product->discounted_price }}</span>
+                                        </h3>&nbsp;&nbsp;
                                         <span
-                                            class="current-price mt-4">₹{{ strpos($product->discounted_price, '.') !== false ? rtrim(rtrim(number_format($product->discounted_price, 2), '0'), '.') : $product->discounted_price }}</span>
-                                    </h3>
-                                    &nbsp;&nbsp;
-                                    <span
-                                        class="original-price">₹{{ strpos($product->discounted_price, '.') !== false ? rtrim(rtrim(number_format($product->original_price, 2), '0'), '.') : $product->original_price }}</span>
-                                    <span class="discount-price">-₹{{ number_format($product->discount_percentage, 2) }}%
-                                        off</span>
+                                            class="original-price">₹{{ strpos($product->discounted_price, '.') !== false ? rtrim(rtrim(number_format($product->original_price, 2), '0'), '.') : $product->original_price }}</span>
+                                        <span class="discount-price">-₹{{ number_format($product->discount_percentage, 2) }}%
+                                            off</span>
+                                    </div>
                                     @if (!empty($product->coupon_code))
-                                        <p class="d-flex justify-content-center">
+                                    <div>
+                                        <p class="d-flex justify-content-start">
                                             <span id="mySpan" class="deal-badge mt-3"
                                                 style="cursor: pointer; position:relative;-"
                                                 onclick="copySpan(this, event)" data-bs-toggle="tooltip"
@@ -520,6 +524,7 @@
                                                 </span>
                                             </span>
                                         </p>
+                                    </div>
                                     @endif
 
                                 </div>
@@ -540,7 +545,7 @@
                                             : null;
                                 @endphp
                                 @if ($product->deal_type == 1)
-                                    <div class="rating mt-3">
+                                    <div class="rating mt-3 mb-3">
                                         <span>Delivery Date :</span>
                                         <span class="stars">
                                             <span>
@@ -564,7 +569,7 @@
                             </div>
 
                             <div>
-                                <span> Seller Name: {{ $product->shop->name }}</span>
+                                <span> Seller Company Name: {{ $product->shop->legal_name }}</span>
                             </div>
 
                             {{-- description  --}}

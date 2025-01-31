@@ -424,7 +424,7 @@ class CheckoutController extends Controller
             'items.product.productMedia',
             'items.product.review', // Assuming multiple reviews for a product
             'items.shop' => function ($query) {
-                $query->select('id', 'name', 'email', 'mobile', 'description', 'street', 'street2', 'city', 'zip_code', 'deleted_at')->withTrashed();
+                $query->select('id', 'name', 'email', 'mobile', 'description', 'street', 'street2', 'city', 'zip_code', 'legal_name', 'deleted_at')->withTrashed();
             }
         ])->find($id);
 

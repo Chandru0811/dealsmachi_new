@@ -443,6 +443,14 @@
     -webkit-box-orient: vertical;
 }
 
+.summary-truncated-description {
+    flex-grow: 1; /* Ensures equal height for text */
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 1; /* Limits description to 3 lines */
+    -webkit-box-orient: vertical;
+}
+
 /* Product Card End  */
 
 /* Footer Start  */
