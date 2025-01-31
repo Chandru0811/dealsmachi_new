@@ -567,8 +567,17 @@
                             `);
 
                                 $('#cart_item_' + product.id).remove();
-                                const cartLength = $('#cart_items').children(
-                                    '.cart-item').length;
+
+                                if ($('#cart_items .row').length === 0) {
+                                    $('#cart_items').html(`
+                                        <div class="text-center mb-3" id="no_items">
+                                            <p class="text-muted">No items found in the cart.</p>
+                                        </div>
+                                    `);
+                                    $('#get_cartItems').hide();
+                                }
+                                // const cartLength = $('#cart_items').children(
+                                //     '.cart-item').length;
 
                                 // if (cartLength === 0) {
                                 //     $('#cart_items').html(

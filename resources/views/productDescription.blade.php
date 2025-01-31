@@ -474,22 +474,22 @@
                                     <span class="original-price"></span>
                                     <span class="discount-price"></span>
                                     @if (!empty($product->coupon_code))
-                                    <div>
-                                        <p>
-                                            <span id="mySpan" class="deal-badge"
-                                                style="cursor: pointer; position:relative;-"
-                                                onclick="copySpan(this, event)" data-bs-toggle="tooltip"
-                                                data-bs-placement="bottom" title="Click to Copy">
+                                        <div>
+                                            <p>
+                                                <span id="mySpan" class="deal-badge"
+                                                    style="cursor: pointer; position:relative;-"
+                                                    onclick="copySpan(this, event)" data-bs-toggle="tooltip"
+                                                    data-bs-placement="bottom" title="Click to Copy">
 
-                                                {{ $product->coupon_code }}
+                                                    {{ $product->coupon_code }}
 
-                                                <!-- Tooltip container -->
-                                                <span class="tooltip-text tooltip_dec">
-                                                    Copied!
+                                                    <!-- Tooltip container -->
+                                                    <span class="tooltip-text tooltip_dec">
+                                                        Copied!
+                                                    </span>
                                                 </span>
-                                            </span>
-                                        </p>
-                                    </div>
+                                            </p>
+                                        </div>
                                     @endif
 
                                 </div>
@@ -497,8 +497,35 @@
                                     <span style="color: #22cb00">Currently Services are free through DealsMachi</span>
                                 </div>
                             @else
-                                <div class="price-section coupon-align mt-4 d-flex align-items-lg-center">
-                                    <div class="d-flex align-items-center">
+                                <div class="price-section d-flex align-items-center mt-4">
+                                    <div>
+                                    <span style="font-size: 24px; font-weight: 550;"
+                                        class="current-price mt-4">₹{{ strpos($product->discounted_price, '.') !== false ? rtrim(rtrim(number_format($product->discounted_price, 2), '0'), '.') : $product->discounted_price }}</span>
+                                        &nbsp;&nbsp; <span
+                                        class="original-price">₹{{ strpos($product->discounted_price, '.') !== false ? rtrim(rtrim(number_format($product->original_price, 2), '0'), '.') : $product->original_price }}</span>&nbsp;
+                                    <span class="discount-price">-₹{{ number_format($product->discount_percentage, 2) }}%
+                                        off</span>
+                                    </div>
+                                    @if (!empty($product->coupon_code))
+                                        <div>
+                                            <p class="d-flex justify-content-start">
+                                                <span id="mySpan" class="deal-badge mt-3"
+                                                    style="cursor: pointer; position:relative;-"
+                                                    onclick="copySpan(this, event)" data-bs-toggle="tooltip"
+                                                    data-bs-placement="bottom" title="Click to Copy">
+
+                                                    {{ $product->coupon_code }}
+
+                                                    <!-- Tooltip container -->
+                                                    <span class="tooltip-text tooltip_dec">
+                                                        Copied!
+                                                    </span>
+                                                </span>
+                                            </p>
+                                        </div>
+                                    @endif
+
+                                    {{-- <div class="d-flex align-items-center">
                                         <h3>
                                             <span
                                                 class="current-price mt-4">₹{{ strpos($product->discounted_price, '.') !== false ? rtrim(rtrim(number_format($product->discounted_price, 2), '0'), '.') : $product->discounted_price }}</span>
@@ -525,8 +552,7 @@
                                             </span>
                                         </p>
                                     </div>
-                                    @endif
-
+                                    @endif --}}
                                 </div>
                             @endif
                             <div>
@@ -600,8 +626,8 @@
                                 </div>
                             </div>
 
- {{-- seller Info  --}}
- {{-- <div class="seller-information mt-4">
+                            {{-- seller Info  --}}
+                            {{-- <div class="seller-information mt-4">
     <h5 class="media_fonts_headings">Seller Information :</h5>
     <div class="card_offers p-3">
         <div class="d-flex justify-content-between align-items-center my-2 mb-3">
@@ -794,14 +820,16 @@
                                             $hasHalfStar = $averageRating - $fullStars >= 0.5;
                                         @endphp
                                         @for ($i = 1; $i <= $fullStars; $i++)
-                                            <i class="fa-solid fa-star fa-lg" style="color: #fdbf46; font-size:12px; margin-left: 5px;"></i>
+                                            <i class="fa-solid fa-star fa-lg"
+                                                style="color: #fdbf46; font-size:12px; margin-left: 5px;"></i>
                                         @endfor
                                         @if ($hasHalfStar)
                                             <i class="fa-solid fa-star-half-stroke fa-lg"
                                                 style="color: #fdbf46; font-size:12px; margin-left: 5px;"></i>
                                         @endif
                                         @for ($i = $fullStars + ($hasHalfStar ? 1 : 0); $i < 5; $i++)
-                                            <i class="fa-regular fa-star fa-lg" style="color: #ccc; font-size:12px; margin-left: 5px;"></i>
+                                            <i class="fa-regular fa-star fa-lg"
+                                                style="color: #ccc; font-size:12px; margin-left: 5px;"></i>
                                         @endfor
                                     </h2>
                                 </div>
