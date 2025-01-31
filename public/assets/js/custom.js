@@ -417,7 +417,7 @@ $(document).ready(function () {
                                                 <input type="radio" name="selected_id"
                                                     id="selected_id_${response.address.id}"
                                                     value="${response.address.id}"
-                                                    ${response.address.default === "1" ? "checked" : "" } />
+                                                    ${response.address.default === "1" ? "checked" : ""} />
                                             </div>
                                             <p class="text-turncate fs_common">
                                                 <span class="px-2">
@@ -430,9 +430,9 @@ $(document).ready(function () {
                                                     ${response.address.address}, ${response.address.city}, ${response.address.state} - ${response.address.postalcode}.
                                                 </span>
                                                 <br>
-                                                ${response.address.default === "1" ? 
-                                                    '<span class="badge badge_primary">Default</span>' : ""
-                                                }
+                                                ${response.address.default === "1" ?
+                                    '<span class="badge badge_primary">Default</span>' : ""
+                                }
                                             </p>
                                         </div>
                                     </div>
@@ -450,7 +450,7 @@ $(document).ready(function () {
                                                         data-address-id="${response.address.id}">
                                                         Delete
                                                     </button>` : ""
-                                                }
+                                }
                                             </div>
                                         </div>
                                     </div>
@@ -696,7 +696,7 @@ $(document).ready(function () {
                                                 <input type="radio" name="selected_id"
                                                     id="selected_id_${response.address.id}"
                                                     value="${response.address.id}"
-                                                    ${response.address.default === "1" ? "checked" : "" } />
+                                                    ${response.address.default === "1" ? "checked" : ""} />
                                             </div>
                                             <p class="text-turncate fs_common">
                                                 <span class="px-2">
@@ -707,9 +707,9 @@ $(document).ready(function () {
                                                     style="color: #c7c7c7">${response.address.address}, ${response.address.city}, ${response.address.state} - ${response.address.postalcode}.
                                                 </span>
                                                 <br>
-                                                ${response.address.default === "1" ? 
-                                                    '<span class="badge badge_primary">Default</span>' : ""
-                                                }
+                                                ${response.address.default === "1" ?
+                                    '<span class="badge badge_primary">Default</span>' : ""
+                                }
                                             </p>
                                         </div>
                                     </div>
@@ -727,7 +727,7 @@ $(document).ready(function () {
                                                         data-address-id="${response.address.id}">
                                                         Delete
                                                     </button>` : ""
-                                                }
+                                }
                                             </div>
                                         </div>
                                     </div>
@@ -942,9 +942,9 @@ $(document).ready(function () {
                     const addressHtml = `
                             <strong>${address.first_name} ${address.last_name ?? ""} (+91) ${address.phone}</strong><br>
                             ${address.address}, ${address.city}, ${address.state} - ${address.postalcode}
-                            ${address.default ? 
-                                '<span class="badge badge_danger py-1">Default</span>' : ""
-                            }
+                            ${address.default ?
+                            '<span class="badge badge_danger py-1">Default</span>' : ""
+                        }
                         `;
                     $("#addressID").val(address.id);
                     $(".selected-address").html(addressHtml);
@@ -2123,7 +2123,7 @@ $(document).ready(function () {
 
                 if (response.cartItemCount === 0) {
                     $(".cart-items-container").after(`
-                         <div class="col-12 text-center d-flex flex-column align-items-center justify-content-center mt-0">
+                         <div class="empty-cart col-12 text-center d-flex flex-column align-items-center justify-content-center mt-0">
                              <img src="assets/images/home/cart_empty.webp" alt="Empty Cart"
                                  class="img-fluid empty_cart_img">
                              <p class="pt-5" style="color: #ff0060;font-size: 22px">Your Cart is Currently Empty</p>
@@ -2257,9 +2257,12 @@ $(document).ready(function () {
                     } else {
                         cartCountElement.attr("style", "display: none !important;");
                     }
-                }                
+                }
 
-                $(`.cart-item[data-product-id="${productId}"]`).remove();
+                const cartItemElement = $(`.cart-item[data-product-id="${productId}"]`);
+                if (cartItemElement.length) {
+                    cartItemElement.remove();
+                }
 
                 if (response.updatedCart) {
                     $(".subtotal").text("₹" + response.updatedCart.subtotal.toLocaleString());
@@ -2270,7 +2273,7 @@ $(document).ready(function () {
 
                 if (response.cartItemCount === 0) {
                     $(".cart-items-container").after(`
-                         <div class="col-12 text-center d-flex flex-column align-items-center justify-content-center mt-0">
+                         <div class="empty-cart col-12 text-center d-flex flex-column align-items-center justify-content-center mt-0">
                              <img src="assets/images/home/cart_empty.webp" alt="Empty Cart"
                                  class="img-fluid empty_cart_img">
                              <p class="pt-5" style="color: #ff0060;font-size: 22px">Your Cart is Currently Empty</p>
@@ -2313,9 +2316,169 @@ $(document).ready(function () {
             type: "POST",
             data: { product_id: productId },
             success: function (response) {
-                updateCartCount(response.cartItemCount);
-                fetchCart();
-                savelaterfetchCart();
+                if (response.cartItemCount !== undefined) {
+                    const cartCountElement = $("#cart-count");
+                    if (response.cartItemCount > 0) {
+                        cartCountElement.text(response.cartItemCount);
+                        cartCountElement.css("display", "inline");
+                    } else {
+                        cartCountElement.attr("style", "display: none !important;");
+                    }
+                }
+
+                $(`.saved-item[data-product-id="${productId}"]`).remove();
+
+                if ($(".saved-item").length === 0) {
+                    $(".saved-items").hide();
+                    $(".empty-savedItems").show();
+                    $(".saved-items").after(`
+                        <div class="text-center mb-4 empty-savedItems">
+                                <img src='/assets/images/home/empty_savedItems.png' alt="Empty Cart" class="img-fluid mb-2" style="width: 300px;" />
+                                <h4 style="color: #ff0060;">Your Saved Wishlists are awaiting your selection!</h4>
+                            </div>
+                        `);
+                }
+
+                $(".item_count").text(response.cartItemCount);
+
+                if (response.updatedCart) {
+                    $(".subtotal").text("₹" + response.updatedCart.subtotal.toLocaleString());
+                    $(".discount").text("₹" + response.updatedCart.discount.toLocaleString());
+                    $(".total").text("₹" + response.updatedCart.grand_total.toLocaleString());
+                    $(".quantity-value").text(response.updatedCart.quantity);
+                }
+
+                if (response.item) {
+                    $(".empty-cart").attr("style", "display: none !important;");
+
+                    $(".cart-items-container").css("display", "block");
+
+                    const image = response.item.product.product_media.length > 0
+                        ? response.item.product.product_media.find(media => media.order === 1 && media.type === 'image')?.path
+                        : 'assets/images/home/noImage.webp';
+
+                    const deliveryDate = response.item.product.deal_type === 2
+                        ? (response.deliveryDays > 0 ? response.deliveryDate : 'No delivery date available')
+                        : 'No delivery date available';
+
+                    const discountPercentage = Math.round(response.item.product.discount_percentage);
+
+                    const cartItemHtml = `
+                            <div class="cart-item" data-product-id="${response.item.product_id}">
+    <div class="row p-4">
+        <div class="col-md-4 mb-3">
+            <div class="d-flex justify-content-center align-items-center">
+                <img src="${image}" style="max-width: 100%; max-height: 100%;" alt="${response.item.item_description}" />
+            </div>
+        </div>
+        <div class="col-md-8">
+            <a href="/deal/${response.item.product_id}" style="color: #000;" onclick="clickCount('${response.item.product.id}')">
+                <p style="font-size: 18px;">${response.item.product.name}</p>
+            </a>
+            <p class="truncated-description" style="font-size: 16px">${response.item.product.description}</p>
+            <p style="color: #AAAAAA;font-size:14px;">Seller : ${response.item.product.shop.legal_name}</p>
+            ${response.item.product.deal_type === 2 ? `
+            <div class="rating mt-3 mb-3">
+                <span style="color: #22cb00">Currently Services are free through
+                    DealsMachi
+                </span>
+            </div>
+            <span class="ms-1" style="font-size:18px;font-weight:500;color:#ff0060">
+                ₹${response.item.product.discounted_price}
+            </span>
+            ` : `
+            <div class="d-flex">
+                <div class="">
+                    <img src="assets/images/home/icon_delivery.svg" alt="icon"
+                        class="img-fluid" />
+                </div> &nbsp;&nbsp;
+                <div class="">
+                    <p style="font-size: 16px;">
+                        Delivery Date : ${deliveryDate}
+                    </p>
+                </div>
+            </div>
+            <div class="ms-0">
+                <span style="font-size:15px;text-decoration: line-through; color:#c7c7c7">
+                    ₹${response.item.product.original_price}
+                </span>
+                <span class="ms-1" style="font-size:18px;font-weight:500;color:#ff0060">
+                    ₹${response.item.product.discounted_price}
+                </span>
+                <span class="ms-1" style="font-size:18px;font-weight:500;color:#28A745">
+                    - ${discountPercentage}% Off
+                </span>
+            </div>
+            `}
+        </div>
+    </div>
+    <div class="row d-flex align-items-center">
+        <div class="col-md-6">
+            ${response.item.product.deal_type == 2 ?
+                            `<div class="d-flex align-items-start my-1 mb-3" style="padding-left:24px">
+                <div class="d-flex flex-column ms-0" style="width: 30%">
+                    <label for="service_date" class="form-label">Service Date</label>
+                    <input type="date" id="service_date" name="service_date"
+                        class="form-control form-control-sm service-date" value="${response.item.service_date}"
+                        data-cart-id="${response.item.cart_id}" data-product-id="${response.item.product.id}">
+                </div>
+                <div class="d-flex flex-column" style="width: 30%;">
+                    <label for="service_time" class="form-label">Service Time</label>
+                    <input type="time" id="service_time" name="service_time"
+                        class="form-control form-control-sm service-time"
+                        value="${response.item.service_time}" data-cart-id="${response.item.cart_id}"
+                        data-product-id="${response.item.product.id}">
+                </div>
+            </div>` :
+                            `<div class="d-flex align-items-center my-1 mb-3" style="padding-left: 24px;">
+                <span>Qty</span> &nbsp;&nbsp;
+                <button class="btn rounded btn-sm decrease-btn" data-cart-id="${response.item.cart_id}"
+                    data-product-id="${response.item.product.id}">-</button>
+                <input type="text" class="form-control form-control-sm mx-2 text-center quantity-input"
+                    style="width: 50px;background-color:#F9F9F9;border-radius:2px"
+                    value="${response.item.quantity}" readonly>
+                <button class="btn rounded btn-sm increase-btn" data-cart-id="${response.item.cart_id}"
+                    data-product-id="${response.item.product.id}">+</button>
+            </div>`}
+        </div>
+        <div class="col-md-6 d-flex justify-content-md-end" style="padding-left: 24px">
+            <div class="btn-group" role="group" aria-label="Basic example">
+                <button type="submit" class="btn save-for-later-btn"
+                    style="color: #ff0060; border: none;" data-product-id="${response.item.product.id}">
+                    <div class="d-inline-flex align-items-center gap-2 buy_later">
+                        <div>
+                            <img src="/assets/images/home/icon_save_later.svg" alt="icon" class="img-fluid" />
+                        </div>
+                        <div class="d-inline-flex align-items-center gap-2 buy-for-later-btn">
+                            <span class="loader spinner-border spinner-border-sm" style="display: none;"></span>
+                            <span>Buy For Later</span>
+                        </div>
+                    </div>
+                </button>
+                &nbsp;&nbsp;
+                <button type="submit" class="btn cancel-btn cart-remove" style="color: #ff0060;border: none"
+                    data-product-id="${response.item.product.id}" data-cart-id="${response.item.cart_id}">
+                    <div class="d-inline-flex align-items-center gap-2">
+                        <div>
+                            <img src="/assets/images/home/icon_delete.svg" alt="icon" class="img-fluid" />
+                        </div>
+                        <div class="d-inline-flex align-items-center gap-2">
+                            <span class="loader spinner-border spinner-border-sm me-2" style="display: none"></span>
+                            Remove
+                        </div>
+                    </div>
+                </button>
+            </div>
+        </div>
+    </div>
+    <hr>
+</div>
+                        `;
+
+                    $(".cart-items").append(cartItemHtml);
+
+                }
+
                 fetchCartDropdown();
                 showMessage(
                     response.status || "Item moved to cart!",
@@ -2331,10 +2494,27 @@ $(document).ready(function () {
         });
     });
 
+    $(document).ready(function () {
+        $('.decrease-btn, .increase-btn').on('click', function () {
+            let cartId = $(this).data('cart-id');
+            let productId = $(this).data('product-id');
+            let quantityInput = $(this).parent().find('.quantity-input');
+            let quantity = parseInt(quantityInput.val());
+
+            if ($(this).hasClass('decrease-btn') && quantity > 1) {
+                quantity -= 1;
+            } else if ($(this).hasClass('increase-btn') && quantity < 10) {
+                quantity += 1;
+            }
+            quantityInput.val(quantity);
+            updateCart(cartId, productId, quantity);
+        });
+    });
+
     $(document).on("click", ".removeSaveLater", function (e) {
         e.preventDefault();
         const productId = $(this).data("product-id");
-    
+
         $.ajax({
             url: "/saveforlater/remove",
             type: "POST",
@@ -2344,7 +2524,7 @@ $(document).ready(function () {
             },
             success: function (response) {
                 $(`.saved-item[data-product-id="${productId}"]`).remove();
-                    
+
                 if ($(".saved-item").length === 0) {
                     $(".saved-items").hide();
                     $(".empty-savedItems").show();
@@ -2385,7 +2565,7 @@ $(document).ready(function () {
                         cartCountElement.attr("style", "display: none !important;");
                     }
                 }
-                
+
                 $(`.saved-item[data-product-id="${productId}"]`).remove();
 
                 if ($(".saved-item").length === 0) {

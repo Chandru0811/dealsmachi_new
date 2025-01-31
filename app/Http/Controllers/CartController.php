@@ -388,7 +388,7 @@ class CartController extends Controller
             ], 404);
         }
 
-        CartItem::create([
+        $item = CartItem::create([
             'cart_id' => $cart->id,
             'item_description' => $savedItem->deal->name,
             'quantity' => 1, // Default quantity
@@ -416,9 +416,18 @@ class CartController extends Controller
         $cart->shipping_weight = $cart->shipping_weight + 0;
         $cart->save();
 
+        $item->load(['product', 'product.productMedia', 'product.shop']);
+
         return response()->json([
             'status' => 'Item moved to Cart',
-            'cartItemCount' => $cart->item_count
+            'cartItemCount' => $cart->item_count,
+            'item' => $item,
+            'updatedCart' => [
+                'quantity' => $cart->quantity,
+                'subtotal' => $cart->total,
+                'discount' => $cart->discount,
+                'grand_total' => $cart->grand_total
+            ]
         ]);
     }
 
