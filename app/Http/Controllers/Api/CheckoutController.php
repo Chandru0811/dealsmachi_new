@@ -22,11 +22,10 @@ class CheckoutController extends Controller
     {
         if (!Auth::check()) {
             return $this->error('User is not authenticated. Redirecting to login.', null, 401);
-        }else{
+        } else {
             $user = Auth::user();
             $products = Product::with(['productMedia', 'shop'])->where('id', $id)->where('active', 1)->get();
-            if(!$products)
-            {
+            if (!$products) {
                 return $this->error('Product not found or inactive.', null, 404);
             }
 
@@ -55,12 +54,12 @@ class CheckoutController extends Controller
 
             $addresses = Address::where('user_id', $user->id)->get();
 
-            return $this->success('Summary Details Retrived Successfully',[
-                'products' =>$products,
-                'user'=> $user,
-                'carts'=> $carts,
-                'addresses'=>$addresses,
-                'savedItem'=>$savedItem
+            return $this->success('Summary Details Retrived Successfully', [
+                'products' => $products,
+                'user' => $user,
+                'carts' => $carts,
+                'addresses' => $addresses,
+                'savedItem' => $savedItem
             ]);
         }
     }
@@ -91,8 +90,8 @@ class CheckoutController extends Controller
                 'product_ids' => $product_ids,
                 'user' => $user,
                 'order' => $order,
-                'orderoption'=>$orderoption,
-                'address'=>$address
+                'orderoption' => $orderoption,
+                'address' => $address
             ]);
         }
     }
@@ -119,8 +118,8 @@ class CheckoutController extends Controller
                 'cart' => $cart,
                 'user' => $user,
                 'order' => $order,
-                'orderoption'=>$orderoption,
-                'address'=>$address
+                'orderoption' => $orderoption,
+                'address' => $address
             ]);
         }
     }
@@ -159,6 +158,26 @@ class CheckoutController extends Controller
             $grandTotal = $cart->items->whereIn('product_id', $ids)->sum('grand_total');
             $shippingWeight = $cart->items->whereIn('product_id', $ids)->sum('shipping_weight');
 
+            $address = Address::find($request->address_id);
+            // dd($address);
+
+            if (!$address) {
+                return redirect()->route('home')->with('error', 'Address not found.');
+            }
+
+            $deliveryAddress = [
+                'first_name' => $address->first_name,
+                'last_name' => $address->last_name,
+                'email' => $address->email,
+                'phone' => $address->phone,
+                'postalcode' => $address->postalcode,
+                'address' => $address->address,
+                'city' => $address->city,
+                'state' => $address->state,
+                'unit' => $address->unit
+            ];
+
+
             $order = Order::create([
                 'order_number'     => $orderNumber,
                 'customer_id'      => $user_id,
@@ -175,7 +194,7 @@ class CheckoutController extends Controller
                 'status'           => 1, //created
                 'payment_type'     => $request->input('payment_type'),
                 'payment_status'   => 1,
-                'address_id'       => $request->address_id
+                'delivery_address' => json_encode($deliveryAddress)
             ]);
 
             foreach ($cart->items->whereIn('product_id', $ids) as $item) {
@@ -210,7 +229,6 @@ class CheckoutController extends Controller
             if ($cart->items->count() == 0) {
                 $cart->delete();
             }
-
         } elseif ($cart_id != null && $product_ids == null) {
             // Handle cart order
             $cart = Cart::with('items')->where('id', $cart_id)->first();
