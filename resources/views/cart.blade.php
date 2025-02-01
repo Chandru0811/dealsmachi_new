@@ -71,7 +71,7 @@ use Carbon\Carbon;
             <a href="/" class="btn showmoreBtn mt-2">Shop More</a>
         </div>
         @endif
-        @if(!$cart->items->isEmpty())
+        @if($cart && !$cart->items->isEmpty())
         <div class="cart-items-container">
             @if ($cart)
             <div class="d-flex justify-content-between mb-3">
@@ -714,24 +714,23 @@ use Carbon\Carbon;
             fieldContainer.appendChild(errorMessage);
         }
     });
+    
+    document.querySelectorAll('.decrease-btn, .increase-btn').forEach((btn) => {
+        btn.addEventListener('click', function() {
+            const cartId = this.getAttribute('data-cart-id');
+            const productId = this.getAttribute('data-product-id');
+            const quantityInput = this.parentElement.querySelector('.quantity-input');
+            let quantity = parseInt(quantityInput.value);
 
-    // document.querySelectorAll('.decrease-btn, .increase-btn').forEach((btn) => {
-    //     btn.addEventListener('click', function() {
-    //         alert('Hi');
-    //         const cartId = this.getAttribute('data-cart-id');
-    //         const productId = this.getAttribute('data-product-id');
-    //         const quantityInput = this.parentElement.querySelector('.quantity-input');
-    //         let quantity = parseInt(quantityInput.value);
-
-    //         if (this.classList.contains('decrease-btn') && quantity > 1) {
-    //             quantity -= 1;
-    //         } else if (this.classList.contains('increase-btn') && quantity < 10) {
-    //             quantity += 1;
-    //         }
-    //         quantityInput.value = quantity;
-    //         updateCart(cartId, productId, quantity);
-    //     });
-    // });
+            if (this.classList.contains('decrease-btn') && quantity > 1) {
+                quantity -= 1;
+            } else if (this.classList.contains('increase-btn') && quantity < 10) {
+                quantity += 1;
+            }
+            quantityInput.value = quantity;
+            updateCart(cartId, productId, quantity);
+        });
+    });
 
     document.querySelectorAll('.service-date, .service-time').forEach((input) => {
         input.addEventListener('change', function() {

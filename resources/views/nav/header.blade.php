@@ -734,7 +734,6 @@
                 });
             });
 
-
             document.getElementById('cartButton').addEventListener('click', function(event) {
                 const dropdownMenu = document.querySelector('.dropdown_cart');
                 if (!dropdownMenu.classList.contains('show')) {
