@@ -23,8 +23,8 @@
                             <a href="https://www.youtube.com/channel/UCAyH2wQ2srJE8WqvII8JNrQ" target='_blank'
                                 class="text-decoration-none me-2"><i class="fab fa-youtube"
                                     style="font-size: 15px"></i></a>
-                            <a href="https://chat.whatsapp.com/Ef23qGMU1d6EXYpRvomaLx" class="text-decoration-none me-2" target='_blank'><i
-                                    class="fab fa-whatsapp" style="font-size: 15px"></i></a>
+                            <a href="https://chat.whatsapp.com/Ef23qGMU1d6EXYpRvomaLx" class="text-decoration-none me-2"
+                                target='_blank'><i class="fab fa-whatsapp" style="font-size: 15px"></i></a>
                             <a href="https://x.com/dealsmachi_in" target='_blank' class="text-decoration-none"><i
                                     class="fab fa-x-twitter" style="font-size: 15px"></i></a>
                         </div>
@@ -107,13 +107,16 @@
                         </h6>
                         <ul class="list-unstyled">
                             <li>
-                                <a href="{{ url('/contactus') }}" class="text-light text-decoration-none">Advertising</a>
+                                <a href="{{ url('/contactus') }}"
+                                    class="text-light text-decoration-none">Advertising</a>
                             </li>
                             <li>
-                                <a href="{{ url('/contactus') }}" class="text-light text-decoration-none">Premium Vendor</a>
+                                <a href="{{ url('/contactus') }}" class="text-light text-decoration-none">Premium
+                                    Vendor</a>
                             </li>
                             <li>
-                                <a href="{{ url('/contactus') }}" class="text-light text-decoration-none">Promoted Deals</a>
+                                <a href="{{ url('/contactus') }}" class="text-light text-decoration-none">Promoted
+                                    Deals</a>
                             </li>
                         </ul>
                     </div>
@@ -122,7 +125,7 @@
 
             <hr />
             <div class="text-center text-light">
-                <p class="d-flex justify-content-center termsfooter" style="font-weight: 300">
+                <p class="d-flex justify-content-center termsfooter px-1" style="font-weight: 300">
                     <a href="{{ url('/terms_conditions') }}" class="text-light text-decoration-none me-1">Terms and
                         Conditions | </a>
                     <a href="{{ url('/privacyPolicy') }}" class="text-light text-decoration-none me-1">Privacy Policy |
