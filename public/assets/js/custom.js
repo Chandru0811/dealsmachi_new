@@ -421,7 +421,7 @@ $(document).ready(function () {
                                             </div>
                                             <p class="text-turncate fs_common">
                                                 <span class="px-2">
-                                                    ${response.address.first_name} ${response.address.last_name} |
+                                                    ${response.address.first_name} ${response.address.last_name ?? ""} |
                                                     <span style="color: #c7c7c7;">&nbsp;+91
                                                         ${response.address.phone}
                                                     </span>
@@ -462,7 +462,7 @@ $(document).ready(function () {
                                 `);
                                 var profileAddress = `
                                     <p>
-                                        <strong>${response.address.first_name} ${response.address.last_name} (+91)
+                                        <strong>${response.address.first_name} ${response.address.last_name ?? ""} (+91)
                                             ${response.address.phone}</strong>&nbsp;&nbsp;<br>
                                         ${response.address.address}, ${response.address.city}, ${response.address.state} - ${response.address.postalcode}
                                         <span>
@@ -506,9 +506,7 @@ $(document).ready(function () {
                                     $("#moveToCheckout").data("products-id");
                                 if ($("#moveToCheckout").length) {
                                     $("#moveToCheckout").hide();
-                                    $("#checkoutForm").append(`
-                                         $(".summary_checkout_button").css(="display","block");
-                                    `);
+                                    $(".summary_checkout_button").css("display","block");
                                 }
                             }
 
@@ -700,7 +698,7 @@ $(document).ready(function () {
                                             </div>
                                             <p class="text-turncate fs_common">
                                                 <span class="px-2">
-                                                    ${response.address.first_name} ${response.address.last_name} |
+                                                    ${response.address.first_name} ${response.address.last_name ?? ""} |
                                                     <span style="color: #c7c7c7;">&nbsp;+91 ${response.address.phone}</span>
                                                 </span><br>
                                                 <span class="px-2"
@@ -740,7 +738,7 @@ $(document).ready(function () {
                                 `);
                                 $(".selected-address").html(`
                                     <p>
-                                        <strong>${response.address.first_name} ${response.address.last_name} (+91)
+                                        <strong>${response.address.first_name} ${response.address.last_name ?? ""} (+91)
                                             ${response.address.phone}</strong>&nbsp;&nbsp;<br>
                                         ${response.address.address}, ${response.address.city}, ${response.address.state} - ${response.address.postalcode}
                                         <span>
@@ -818,6 +816,33 @@ $(document).ready(function () {
                 defaultCheckbox.prop("disabled", false);
             }
         }
+
+        // Reset radio selection when modal is closed
+        $("#myAddressModal").on("hidden.bs.modal", function () {
+            let storedSelectedId =
+                sessionStorage.getItem("selectedAddressId"); // Get last selected ID (if set)
+            let selectedAddressId = "{{ $selectedAddressId }}"; // PHP session value
+            let defaultAddressId =
+                "{{ $default_address ? $default_address->id : '' }}"; // PHP default value
+
+            $('input[name="selected_id"]').each(function () {
+                if (
+                    storedSelectedId &&
+                    $(this).val() === storedSelectedId
+                ) {
+                    $(this).prop("checked", true);
+                } else if ($(this).val() === selectedAddressId) {
+                    $(this).prop("checked", true);
+                } else if (
+                    !selectedAddressId &&
+                    $(this).val() === defaultAddressId
+                ) {
+                    $(this).prop("checked", true);
+                } else {
+                    $(this).prop("checked", false);
+                }
+            });
+        });
 
         $(document).ready(function () {
             var addressIdToDelete = null;
@@ -907,33 +932,6 @@ $(document).ready(function () {
                 if ($('input[name="selected_id"]:checked').val()) {
                     $("#addressErrorMessage").remove();
                 }
-            });
-
-            // Reset radio selection when modal is closed
-            $("#myAddressModal").on("hidden.bs.modal", function () {
-                let storedSelectedId =
-                    sessionStorage.getItem("selectedAddressId"); // Get last selected ID (if set)
-                let selectedAddressId = "{{ $selectedAddressId }}"; // PHP session value
-                let defaultAddressId =
-                    "{{ $default_address ? $default_address->id : '' }}"; // PHP default value
-
-                $('input[name="selected_id"]').each(function () {
-                    if (
-                        storedSelectedId &&
-                        $(this).val() === storedSelectedId
-                    ) {
-                        $(this).prop("checked", true);
-                    } else if ($(this).val() === selectedAddressId) {
-                        $(this).prop("checked", true);
-                    } else if (
-                        !selectedAddressId &&
-                        $(this).val() === defaultAddressId
-                    ) {
-                        $(this).prop("checked", true);
-                    } else {
-                        $(this).prop("checked", false);
-                    }
-                });
             });
 
             // Function to update the selected address UI
@@ -2078,7 +2076,6 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 });
 
-// Move to Cart Function
 $(document).ready(function () {
     $.ajaxSetup({
         headers: {
@@ -2086,7 +2083,8 @@ $(document).ready(function () {
         },
     });
     initializeEventListeners();
-
+    
+    // Save Later Add Function
     $(document).on("click", ".save-for-later-btn", function (e) {
         e.preventDefault();
         $.ajaxSetup({
@@ -2143,10 +2141,22 @@ $(document).ready(function () {
                     const imagePath = response.deal.product_media.length > 0
                         ? response.deal.product_media.find(media => media.order === 1 && media.type === 'image')?.path
                         : 'assets/images/home/noImage.webp';
-
-                    const deliveryDate = response.deal.deal_type === 1
-                        ? (response.deliveryDays > 0 ? response.deliveryDate : 'No delivery date available')
-                        : '<span style="color: #22cb00">Currently Services are free through DealsMachi</span>';
+                    
+                   
+                        const deliveryDate = response.deal.deal_type === 1
+                        ? (response.deal.delivery_days && response.deal.delivery_days > 0
+                        ? (() => {
+                           const currentDate = new Date();
+                           currentDate.setTime(currentDate.getTime() + (response.deal.delivery_days * 24 * 60 * 60 * 1000));
+                           const day = String(currentDate.getDate()).padStart(2, '0');
+                           const month = String(currentDate.getMonth() + 1).padStart(2, '0');
+                           const year = currentDate.getFullYear();
+   
+                           return `${day}-${month}-${year}`;
+   
+                         })()
+                         : 'No delivery date available')
+                         : '<span style="color: #22cb00">Currently Services are free through DealsMachi</span>';
 
                     const discountPercentage = Math.round(response.deal.discount_percentage);
 
@@ -2179,10 +2189,10 @@ $(document).ready(function () {
                                     <p style="color: #AAAAAA;font-size:14px;">Seller : ${response.deal.shop.legal_name}</p>
                                     <div class="ms-0">
                                         <span style="font-size:15px;text-decoration: line-through; color:#c7c7c7">
-                                            ₹${response.deal.original_price.toLocaleString()}
+                                            ₹${Math.round(response.deal.original_price).toLocaleString("en-IN", { maximumFractionDigits: 0 })}
                                         </span>
                                         <span class="ms-1" style="font-size:18px;font-weight:500;color:#ff0060">
-                                            ₹${response.deal.discounted_price.toLocaleString()}
+                                             ₹${Math.round(response.deal.discounted_price).toLocaleString("en-IN", { maximumFractionDigits: 0 })}
                                         </span>
                                         <span class="ms-1" style="font-size:18px;font-weight:500; color:#28A745">
                                             - ${discountPercentage}% Off
@@ -2234,6 +2244,7 @@ $(document).ready(function () {
         });
     });
 
+    // Cart Remove Function
     $(document).on("click", ".cart-remove", function (e) {
         $.ajaxSetup({
             headers: {
@@ -2302,6 +2313,7 @@ $(document).ready(function () {
         });
     });
 
+    // Move To Cart Function in Cart Blade
     $(document).on("click", ".moveToCart", function (e) {
         $.ajaxSetup({
             headers: {
@@ -2384,7 +2396,7 @@ $(document).ready(function () {
                 </span>
             </div>
             <span class="ms-1" style="font-size:18px;font-weight:500;color:#ff0060">
-                ₹${response.item.product.discounted_price}
+                ₹${Math.round(response.item.product.discounted_price).toLocaleString("en-IN", { maximumFractionDigits: 0 })}
             </span>
             ` : `
             <div class="d-flex">
@@ -2400,10 +2412,10 @@ $(document).ready(function () {
             </div>
             <div class="ms-0">
                 <span style="font-size:15px;text-decoration: line-through; color:#c7c7c7">
-                    ₹${response.item.product.original_price}
+                    ₹${Math.round(response.item.product.original_price).toLocaleString("en-IN", { maximumFractionDigits: 0 })}
                 </span>
                 <span class="ms-1" style="font-size:18px;font-weight:500;color:#ff0060">
-                    ₹${response.item.product.discounted_price}
+                    ₹${Math.round(response.item.product.discounted_price).toLocaleString("en-IN", { maximumFractionDigits: 0 })}
                 </span>
                 <span class="ms-1" style="font-size:18px;font-weight:500;color:#28A745">
                     - ${discountPercentage}% Off
@@ -2494,23 +2506,7 @@ $(document).ready(function () {
         });
     });
 
-    $(document).ready(function () {
-        $('.decrease-btn, .increase-btn').on('click', function () {
-            let cartId = $(this).data('cart-id');
-            let productId = $(this).data('product-id');
-            let quantityInput = $(this).parent().find('.quantity-input');
-            let quantity = parseInt(quantityInput.val());
-
-            if ($(this).hasClass('decrease-btn') && quantity > 1) {
-                quantity -= 1;
-            } else if ($(this).hasClass('increase-btn') && quantity < 10) {
-                quantity += 1;
-            }
-            quantityInput.val(quantity);
-            updateCart(cartId, productId, quantity);
-        });
-    });
-
+    // Save Later Remove Function
     $(document).on("click", ".removeSaveLater", function (e) {
         e.preventDefault();
         const productId = $(this).data("product-id");
@@ -2544,6 +2540,7 @@ $(document).ready(function () {
         });
     });
 
+    // Move To Cart Function in Save Later Blade
     $(document).on("click", ".saveLaterToCart", function (e) {
         e.preventDefault();
         const productId = $(this).data("product-id");
@@ -2576,6 +2573,89 @@ $(document).ready(function () {
                                 <h4 style="color: #ff0060;">Your Saved Wishlists are awaiting your selection!</h4>
                             </div>
                         `);
+                }
+
+                fetchCartDropdown();
+                showMessage(response.status || "Save for Later Item Removed!", "success");
+            },
+            error: function (xhr) {
+                showMessage(xhr.responseJSON?.error || "Failed to remove item from Save for Later!", "error");
+            },
+        });
+    });
+
+    $(document).on("click", ".saveItemToCart", function (e) {
+        e.preventDefault();
+        const productId = $(this).data("product-id");
+
+        $.ajax({
+            url: "/saveforlater/toCart",
+            type: "POST",
+            data: { product_id: productId },
+            headers: {
+                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+            },
+            success: function (response) {
+                if (response.cartItemCount !== undefined) {
+                    const cartCountElement = $("#cart-count");
+                    if (response.cartItemCount > 0) {
+                        cartCountElement.text(response.cartItemCount);
+                        cartCountElement.css("display", "inline");
+                    } else {
+                        cartCountElement.attr("style", "display: none !important;");
+                    }
+                }
+
+                $(`.saved-item[data-product-id="${productId}"]`).remove();
+
+                if ($(".saved-item").length === 0) {
+                    $(".saved-items").hide();
+                    $(".saved-items").after(`
+                        <div class="text-center">
+                            <p class="text-muted">No items found in the Saved list.</p>
+                        </div>
+                    `);
+                }
+
+                if(response.item){
+                    $("#no_items").hide();
+
+                    $(".cart-item-container").css("display", "block");
+
+                    const image = response.item.product.product_media.length > 0
+                        ? response.item.product.product_media.find(media => media.order === 1 && media.type === 'image')?.path
+                        : 'assets/images/home/noImage.webp';
+
+                        const cartItemHtml = `
+                           <div id="cart_items" class="cart-item">
+                            <div class="row d-flex align-items-center mb-3 mt-2"
+                                id="cart_item_${response.item.product_id}">
+                                <div class="col-1">
+                                    <input type="checkbox" class="cartItem_check" value="${response.item.product_id}"
+                                        class="me-1" />
+                                </div>
+                                <div class="col-3">
+                                    <img src="/${image}"
+                                        class="img-fluid card_img_cont" alt="${response.item.product.name}" />
+                                </div>
+                                <div class="col-8">
+                                    <div class="d-flex flex-column justify-content-start">
+                                        <a href="{{ url(path: '/deal/' . ${response.item.product_id}) }}" style="color: #000;"
+                                            onclick="clickCount('${response.item.product_id}')">
+                                            <h5 class="mb-1 fs_common text-truncate" style="max-width: 100%;">
+                                            ${response.item.product.name}
+                                            </h5>
+                                        </a>
+                                        <p class="mb-0 text-muted fs_common text-truncate" style="max-width: 100%;">
+                                        ${response.item.product.description}
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        `;
+    
+                        $(".cart-items").append(cartItemHtml);
                 }
 
                 fetchCartDropdown();
