@@ -24,12 +24,14 @@
                     <a class="text-decoration-none"
                         href="{{ url('order', ['id' => $order->id, 'product_id' => $item->product_id]) }}">
                         <div class="card orderCard p-3 mb-3">
-                            <div class="d-flex justify-content-between align-items-center">
-                                <p>
-                                    <span class="order-id1">Order Id: {{ $order->order_number ?? 'N/A' }},&nbsp;<span>
-                                            <span class="order-id2">Item Id :
-                                                {{ $item->item_number ?? 'N/A' }}</span>&nbsp;&nbsp;
-                                            <span
+                            <div class="coupon_code_align">
+                                <div class="coupon_code_font">
+                                    <div class="coupon_code_font">
+                                        <p class="text-nowrap mb-1">Order Id: {{ $order->order_number ?? 'N/A' }},</p>
+                                        <p class="text-nowrap mb-1">Item Id : {{ $item->item_number ?? 'N/A' }}</p>
+                                    </div>
+                                    <div class="batch_code">
+                                        <p class="text-nowrap mb-1"><span
                                                 class="badge_payment">{{ $order->status === '1'
                                                     ? 'Created'
                                                     : ($order->status === '2'
@@ -44,17 +46,18 @@
                                                                         ? 'Returned'
                                                                         : ($order->status === '7'
                                                                             ? 'Cancelled'
-                                                                            : 'Unknown Status')))))) }}</span>&nbsp;
-                                            <span class="badge_warning">
+                                                                            : 'Unknown Status')))))) }}</span>
+                                        </p>
+                                        <p class="text-nowrap mb-1"><span class="badge_warning">
                                                 {{ $item->deal_type == 1 ? 'Product' : ($item->deal_type == 2 ? 'Service' : '') }}
-                                            </span>
-                                </p>
-                                <div class="d-flex order-date">
-                                    <p>Date : <span>{{ \Carbon\Carbon::parse($order->created_at)->format('d/m/Y') }}</span>
+                                            </span></p>
+                                    </div>
+                                </div>
+                                <div class="text-start">
+                                    <p class="date_align mb-1">
+                                        Date :
+                                        <span>{{ \Carbon\Carbon::parse($order->created_at)->format('d/m/Y') }}</span>
                                     </p>
-                                    &nbsp;&nbsp;
-                                    {{-- <p>Time : <span>{{ \Carbon\Carbon::parse($order->created_at)->format('h:i A') }}</span></p>
-                    --}}
                                 </div>
                             </div>
                             <div class="d-flex justify-content-between align-items-start">
@@ -86,19 +89,14 @@
                                         </p>
                                         @if ($item->deal_type === '1' || $item->deal_type === 'Product')
                                             <?php
-
+                                            
                                             $currentDate = Carbon::now();
-
+                                            
                                             try {
                                                 if (isset($item->product->delivery_days, $order->created_at) && is_numeric($item->product->delivery_days)) {
                                                     $deliveryDays = (int) $item->product->delivery_days;
-
-                                                    $deliveryDate =
-                                                        $deliveryDays > 0
-                                                            ? Carbon::parse($order->created_at)
-                                                                ->addDays($deliveryDays)
-                                                                ->format('d-m-Y')
-                                                            : null;
+                                            
+                                                    $deliveryDate = $deliveryDays > 0 ? Carbon::parse($order->created_at)->addDays($deliveryDays)->format('d-m-Y') : null;
                                                 } else {
                                                     $deliveryDays = 0;
                                                     $deliveryDate = null;
@@ -144,7 +142,8 @@
                                                 </p>
                                                 <div class="d-flex justify-content-start align-items-center">
                                                     @if ($item->deal_type === '2' || $item->deal_type === 'Product')
-                                                        <p class="mt-1 mb-0">Service Date : {{ $item->service_date }}</p>
+                                                        <p class="mt-1 mb-0">Service Date : {{ $item->service_date }}
+                                                        </p>
                                                     @endif
                                                     &nbsp;&nbsp;
                                                     @if ($item->deal_type === '2' || $item->deal_type === 'Product')

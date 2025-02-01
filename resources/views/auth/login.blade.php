@@ -27,69 +27,71 @@
 <body>
     <section class="container-fluid p-0">
         @if (session('status'))
-        <div class="alert alert-dismissible fade show toast-success" role="alert"
-            style="position: fixed; top: 70px; right: 40px; z-index: 1050;">
-            <div class="toast-content">
-                <div class="toast-icon">
-                    <i class="fa-solid fa-check-circle" style="color: #16A34A"></i>
+            <div class="alert alert-dismissible fade show toast-success" role="alert"
+                style="position: fixed; top: 70px; right: 40px; z-index: 1050;">
+                <div class="toast-content">
+                    <div class="toast-icon">
+                        <i class="fa-solid fa-check-circle" style="color: #16A34A"></i>
+                    </div>
+                    <span class="toast-text"> {!! nl2br(e(session('status'))) !!}</span>&nbsp;&nbsp;
+                    <button class="toast-close-btn"data-bs-dismiss="alert" aria-label="Close">
+                        <i class="fa-thin fa-xmark" style="color: #16A34A"></i>
+                    </button>
                 </div>
-                <span class="toast-text"> {!! nl2br(e(session('status'))) !!}</span>&nbsp;&nbsp;
-                <button class="toast-close-btn"data-bs-dismiss="alert" aria-label="Close">
-                    <i class="fa-thin fa-xmark" style="color: #16A34A"></i>
-                </button>
             </div>
-        </div>
-    @endif
-    @if ($errors->any())
-        <div class="alert  alert-dismissible fade show toast-danger" role="alert"
-            style="position: fixed; top: 70px; right: 40px; z-index: 1050;">
-            <div class="toast-content">
-                <div class="toast-icon">
-                    <i class="fa-solid fa-check-circle" style="color: #EF4444"></i>
+        @endif
+        @if ($errors->any())
+            <div class="alert  alert-dismissible fade show toast-danger" role="alert"
+                style="position: fixed; top: 70px; right: 40px; z-index: 1050;">
+                <div class="toast-content">
+                    <div class="toast-icon">
+                        <i class="fa-solid fa-check-circle" style="color: #EF4444"></i>
+                    </div>
+                    <span class="toast-text">
+                        <ul class="mb-0">
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </span>&nbsp;&nbsp;
+                    <button class="toast-close-btn"data-bs-dismiss="alert" aria-label="Close">
+                        <i class="fa-solid fa-xmark" style="color: #EF4444"></i>
+                    </button>
                 </div>
-                <span class="toast-text">
-                    <ul class="mb-0">
-                        @foreach ($errors->all() as $error)
-                            <li>{{ $error }}</li>
-                        @endforeach
-                    </ul>
-                </span>&nbsp;&nbsp;
-                <button class="toast-close-btn"data-bs-dismiss="alert" aria-label="Close">
-                    <i class="fa-solid fa-xmark" style="color: #EF4444"></i>
-                </button>
             </div>
-        </div>
-    @endif
-    @if (session('error'))
-        <div class="alert  alert-dismissible fade show toast-danger" role="alert"
-            style="position: fixed; top: 70px; right: 40px; z-index: 1050;">
-            <div class="toast-content">
-                <div class="toast-icon">
-                    <i class="fa-solid fa-check-circle" style="color: #EF4444"></i>
+        @endif
+        @if (session('error'))
+            <div class="alert  alert-dismissible fade show toast-danger" role="alert"
+                style="position: fixed; top: 70px; right: 40px; z-index: 1050;">
+                <div class="toast-content">
+                    <div class="toast-icon">
+                        <i class="fa-solid fa-check-circle" style="color: #EF4444"></i>
+                    </div>
+                    <span class="toast-text">
+                        {{ session('error') }}
+                    </span>&nbsp;&nbsp;
+                    <button class="toast-close-btn"data-bs-dismiss="alert" aria-label="Close">
+                        <i class="fa-solid fa-xmark" style="color: #EF4444"></i>
+                    </button>
                 </div>
-                <span class="toast-text">
-                    {{ session('error') }}
-                </span>&nbsp;&nbsp;
-                <button class="toast-close-btn"data-bs-dismiss="alert" aria-label="Close">
-                    <i class="fa-solid fa-xmark" style="color: #EF4444"></i>
-                </button>
             </div>
-        </div>
-    @endif
+        @endif
 
         <div class="row m-0 ">
-            <div class="col-md-6 col-12 d-flex flex-column justify-content-center align-items-center pt-5 bg_login login-text-container text-center order-2 order-md-1" style="background: #ffcbde">
+            <div class="col-md-6 col-12 d-flex flex-column justify-content-center align-items-center pt-5 bg_login login-text-container text-center order-2 order-md-1"
+                style="background: #ffcbde">
                 <div class="px-5 pt-5">
                     <h5 class="py-4" style="color: #CC004D">Login to your account</h5>
                     <p class="login-text">You're just one step away from securing your awesome purchase!
                         Sign up or log in now to complete your order effortlessly</p>
                 </div>
                 <div class="d-flex justify-content-center align-items-center">
-                    <img src="{{ asset('assets/images/bg_intro.webp') }}" alt="header_logo" class="img-fluid" />
+                    <img src="{{ asset('assets/images/bg_img.svg') }}" alt="header_logo" class="img-fluid" />
                 </div>
             </div>
 
-            <div class="col-md-6 col-12 d-flex justify-content-center align-items-center login-container order-1 order-md-2">
+            <div
+                class="col-md-6 col-12 d-flex justify-content-center align-items-center login-container order-1 order-md-2">
                 <div class="d-flex flex-column justify-content-center align-items-center w-100">
                     @if ($errors->has('msg'))
                         <div class="alert alert-danger">
@@ -100,8 +102,10 @@
                     <form id="loginForm" class="w-75" method="POST" action="{{ route('login') }}">
                         @csrf
                         <div class="mb-3 email-container">
-                            <input type="email" class="form-control" id="email" name="email" value="" placeholder="Email" />
-                            <span class="error text-danger" id="emailError" style="display: none; font-size: 12px;"></span>
+                            <input type="email" class="form-control" id="email" name="email" value=""
+                                placeholder="Email" />
+                            <span class="error text-danger" id="emailError"
+                                style="display: none; font-size: 12px;"></span>
                         </div>
                         <div class="mb-3 password-container">
                             <div class="input-group">
@@ -112,7 +116,8 @@
                                     <i class="fa fa-eye" id="eyeIconPassword"></i>
                                 </span>
                             </div>
-                            <span class="error text-danger" id="passwordError" style="display: none; font-size: 12px;"></span>
+                            <span class="error text-danger" id="passwordError"
+                                style="display: none; font-size: 12px;"></span>
                         </div>
 
                         <div class="mb-1">
@@ -152,8 +157,8 @@
                             </div>
                         </div>
                         <div class="text-center">
-                            <p class="mb-0">Don't have an account? &nbsp; <a
-                                    href="{{ url('register') }}" style="color: #FF0060">Register</a></p>
+                            <p class="mb-0">Don't have an account? &nbsp; <a href="{{ url('register') }}"
+                                    style="color: #FF0060">Register</a></p>
                         </div>
                     </form>
                 </div>

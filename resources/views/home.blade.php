@@ -305,154 +305,154 @@
 
 
 
-        $(document).ready(function() {
+        // $(document).ready(function() {
 
-            window.onload = getLocation;
+        //     window.onload = getLocation;
 
-            let lastChild = $('#hotpicks').children().last().find('a');
-            if (lastChild.length) {
-                lastChild.attr('id', 'nearest_deals');
+        //     let lastChild = $('#hotpicks').children().last().find('a');
+        //     if (lastChild.length) {
+        //         lastChild.attr('id', 'nearest_deals');
 
-            } else {
-                console.log("No child element found.");
-            }
+        //     } else {
+        //         console.log("No child element found.");
+        //     }
 
-            function updateDropdownToggle() {
-                if ($(window).width() < 992) {
-                    $(".dropdown-toggle").attr("data-bs-toggle", "dropdown");
-                    $('.dropdown-toggle').on('click', function(event) {
-                        event.preventDefault();
+        //     function updateDropdownToggle() {
+        //         if ($(window).width() < 992) {
+        //             $(".dropdown-toggle").attr("data-bs-toggle", "dropdown");
+        //             $('.dropdown-toggle').on('click', function(event) {
+        //                 event.preventDefault();
 
-                        const $menu = $(this).next('.dropdown-menu');
-                        const isExpanded = $(this).attr('aria-expanded') === 'true';
+        //                 const $menu = $(this).next('.dropdown-menu');
+        //                 const isExpanded = $(this).attr('aria-expanded') === 'true';
 
-                        $(this).toggleClass('show', !isExpanded);
-                        $menu.toggleClass('show', !isExpanded);
-                        $(this).attr('aria-expanded', !isExpanded);
-                    });
-                } else {
-                    $(".dropdown-toggle").removeAttr("data-bs-toggle");
-                }
-            }
+        //                 $(this).toggleClass('show', !isExpanded);
+        //                 $menu.toggleClass('show', !isExpanded);
+        //                 $(this).attr('aria-expanded', !isExpanded);
+        //             });
+        //         } else {
+        //             $(".dropdown-toggle").removeAttr("data-bs-toggle");
+        //         }
+        //     }
 
-            updateDropdownToggle();
+        //     updateDropdownToggle();
 
-            $(window).resize(function() {
-                updateDropdownToggle();
-            });
+        //     $(window).resize(function() {
+        //         updateDropdownToggle();
+        //     });
 
-            function getLocation() {
-                if (navigator.geolocation) {
-                    navigator.geolocation.getCurrentPosition(showPosition, showError);
-                } else {
-                    alert("Geolocation is not supported by this browser.");
-                }
-            }
+        //     function getLocation() {
+        //         if (navigator.geolocation) {
+        //             navigator.geolocation.getCurrentPosition(showPosition, showError);
+        //         } else {
+        //             alert("Geolocation is not supported by this browser.");
+        //         }
+        //     }
 
-            function showPosition(position) {
-                const latitude = position.coords.latitude;
-                const longitude = position.coords.longitude;
+        //     function showPosition(position) {
+        //         const latitude = position.coords.latitude;
+        //         const longitude = position.coords.longitude;
 
-                console.log('Latitude:', latitude);
-                console.log('Longitude:', longitude);
+        //         console.log('Latitude:', latitude);
+        //         console.log('Longitude:', longitude);
 
-                const nearestDealsLink = $('#nearest_deals');
-                const baseUrl = nearestDealsLink.attr('href');
-                const newUrl = `${baseUrl}?latitude=${latitude}&longitude=${longitude}`;
-                nearestDealsLink.attr('href', newUrl);
+        //         const nearestDealsLink = $('#nearest_deals');
+        //         const baseUrl = nearestDealsLink.attr('href');
+        //         const newUrl = `${baseUrl}?latitude=${latitude}&longitude=${longitude}`;
+        //         nearestDealsLink.attr('href', newUrl);
 
 
-                // Initialize the geocoder
-                // const geocoder = new google.maps.Geocoder();
-                // const latlng = {
-                //     lat: latitude,
-                //     lng: longitude
-                // };
+        //         // Initialize the geocoder
+        //         // const geocoder = new google.maps.Geocoder();
+        //         // const latlng = {
+        //         //     lat: latitude,
+        //         //     lng: longitude
+        //         // };
 
-                // geocoder.geocode({
-                //     location: latlng
-                // }, function(results, status) {
-                //     if (status === 'OK') {
-                //         if (results[0]) {
-                //             const address = results[0].formatted_address;
-                //             console.log('User Address:', address);
-                //             $('.user_address').text(address);
-                //         } else {
-                //             console.log('No address found');
-                //         }
-                //     } else {
-                //         console.log('Geocoder failed due to:', status);
-                //     }
-                // });
-            }
+        //         // geocoder.geocode({
+        //         //     location: latlng
+        //         // }, function(results, status) {
+        //         //     if (status === 'OK') {
+        //         //         if (results[0]) {
+        //         //             const address = results[0].formatted_address;
+        //         //             console.log('User Address:', address);
+        //         //             $('.user_address').text(address);
+        //         //         } else {
+        //         //             console.log('No address found');
+        //         //         }
+        //         //     } else {
+        //         //         console.log('Geocoder failed due to:', status);
+        //         //     }
+        //         // });
+        //     }
 
-            function showError(error) {
-                switch (error.code) {
-                    case error.PERMISSION_DENIED:
-                        var permissionDeniedModal = new bootstrap.Modal(document.getElementById(
-                            'permissionDeniedModal'));
-                        permissionDeniedModal.show();
-                        break;
-                    case error.POSITION_UNAVAILABLE:
-                        alert("Location information is unavailable.");
-                        break;
-                    case error.TIMEOUT:
-                        alert("The request to get user location timed out.");
-                        break;
-                    case error.UNKNOWN_ERROR:
-                        alert("An unknown error occurred.");
-                        break;
-                }
-            }
+        //     function showError(error) {
+        //         switch (error.code) {
+        //             case error.PERMISSION_DENIED:
+        //                 var permissionDeniedModal = new bootstrap.Modal(document.getElementById(
+        //                     'permissionDeniedModal'));
+        //                 permissionDeniedModal.show();
+        //                 break;
+        //             case error.POSITION_UNAVAILABLE:
+        //                 alert("Location information is unavailable.");
+        //                 break;
+        //             case error.TIMEOUT:
+        //                 alert("The request to get user location timed out.");
+        //                 break;
+        //             case error.UNKNOWN_ERROR:
+        //                 alert("An unknown error occurred.");
+        //                 break;
+        //         }
+        //     }
 
-            $('#nearest_deals').on('click', function() {
-                event.preventDefault();
-                navigator.permissions.query({
-                    name: 'geolocation'
-                }).then(function(result) {
-                    if (result.state === 'granted') {
-                        if (navigator.geolocation) {
-                            navigator.geolocation.getCurrentPosition(showlocation, showError);
-                        } else {
-                            alert("Geolocation is not supported by this browser.");
-                        }
-                    } else if (result.state === 'prompt') {
-                        if (navigator.geolocation) {
-                            navigator.geolocation.getCurrentPosition(showlocation, showError);
-                        } else {
-                            alert("Geolocation is not supported by this browser.");
-                        }
-                    } else if (result.state === 'denied') {
-                        // Notify the user to enable location permissions manually
-                        alert(
-                            "Location access is denied. Please enable it in your browser settings."
-                        );
-                    }
-                });
-            });
+        //     $('#nearest_deals').on('click', function() {
+        //         event.preventDefault();
+        //         navigator.permissions.query({
+        //             name: 'geolocation'
+        //         }).then(function(result) {
+        //             if (result.state === 'granted') {
+        //                 if (navigator.geolocation) {
+        //                     navigator.geolocation.getCurrentPosition(showlocation, showError);
+        //                 } else {
+        //                     alert("Geolocation is not supported by this browser.");
+        //                 }
+        //             } else if (result.state === 'prompt') {
+        //                 if (navigator.geolocation) {
+        //                     navigator.geolocation.getCurrentPosition(showlocation, showError);
+        //                 } else {
+        //                     alert("Geolocation is not supported by this browser.");
+        //                 }
+        //             } else if (result.state === 'denied') {
+        //                 // Notify the user to enable location permissions manually
+        //                 alert(
+        //                     "Location access is denied. Please enable it in your browser settings."
+        //                 );
+        //             }
+        //         });
+        //     });
 
-            function showlocation(position) {
-                const latitude = position.coords.latitude;
-                const longitude = position.coords.longitude;
+        //     function showlocation(position) {
+        //         const latitude = position.coords.latitude;
+        //         const longitude = position.coords.longitude;
 
-                console.log('Latitude:', latitude);
-                console.log('Longitude:', longitude);
+        //         console.log('Latitude:', latitude);
+        //         console.log('Longitude:', longitude);
 
-                const nearestDealsLink = $('#nearest_deals');
-                const baseUrl = nearestDealsLink.attr('href');
+        //         const nearestDealsLink = $('#nearest_deals');
+        //         const baseUrl = nearestDealsLink.attr('href');
 
-                // Check if the URL already has latitude and longitude to avoid appending them again
-                if (!baseUrl.includes("latitude") && !baseUrl.includes("longitude")) {
-                    const newUrl = `${baseUrl}?latitude=${latitude}&longitude=${longitude}`;
-                    nearestDealsLink.attr('href', newUrl);
+        //         // Check if the URL already has latitude and longitude to avoid appending them again
+        //         if (!baseUrl.includes("latitude") && !baseUrl.includes("longitude")) {
+        //             const newUrl = `${baseUrl}?latitude=${latitude}&longitude=${longitude}`;
+        //             nearestDealsLink.attr('href', newUrl);
 
-                    // Redirect to the updated URL
-                    window.location.href = newUrl;
-                } else {
-                    // If the URL already contains latitude and longitude, just navigate to it
-                    window.location.href = baseUrl;
-                }
-            }
-        });
+        //             // Redirect to the updated URL
+        //             window.location.href = newUrl;
+        //         } else {
+        //             // If the URL already contains latitude and longitude, just navigate to it
+        //             window.location.href = baseUrl;
+        //         }
+        //     }
+        // });
     </script>
 @endsection

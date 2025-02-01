@@ -94,13 +94,16 @@
                             <!-- Order Summary -->
                             <div class="card p-3 mb-3">
                                 <div class="row">
-                                <h5 class="mb-4" style="color:#ff0060;">Order Summary</h5>
-                                @foreach ($cart->items as $item)
+                                    <h5 class="mb-4" style="color:#ff0060;">Order Summary</h5>
+                                    @foreach ($cart->items as $item)
                                         <div class="col-md-6 col-12">
                                             @if ($item->deal_type == 1)
-                                            <p>{{ $item->product->name }}<span class="text-muted"> (x{{ $item->quantity }})</span></p>
+                                                <p>{{ $item->product->name }}<span class="text-muted">
+                                                        (x{{ $item->quantity }})
+                                                    </span></p>
                                             @else
-                                            <p>{{ $item->product->name }}<span class="text-muted"> (Service) </span></p>
+                                                <p>{{ $item->product->name }}<span class="text-muted"> (Service) </span>
+                                                </p>
                                             @endif
                                         </div>
                                         <div class="col-md-6 col-12 checkoutsummary-card2 text-end">
@@ -115,8 +118,8 @@
                                                 off
                                             </span>
                                         </div>
-                                @endforeach
-                            </div>
+                                    @endforeach
+                                </div>
                             </div>
 
                             <!-- Payment Methods -->
@@ -142,18 +145,18 @@
                                         </div>
                                         <div class="col-lg-5 col-10">
                                             <!-- <div class="card payment-option" onclick="selectPaymentOption('online_payment')">
-                                                <div class="d-flex align-items-center p-3 w-100">
-                                                    <input type="radio" name="payment_type" id="online_payment"
-                                                        value="online_payment" class="form-check-input"
-                                                        {{ old('payment_type') == 'online_payment' ? 'checked' : '' }}>
-                                                    <label for="online_payment" class="d-flex align-items-center m-0">
-                                                        <img src="{{ asset('assets/images/home/online_banking.png') }}"
-                                                            alt="Online Payment" class="mx-3"
-                                                            style="width: 24px; height: auto;">
-                                                        <span>Online Payment</span>
-                                                    </label>
-                                                </div>
-                                            </div> -->
+                                                                                        <div class="d-flex align-items-center p-3 w-100">
+                                                                                            <input type="radio" name="payment_type" id="online_payment"
+                                                                                                value="online_payment" class="form-check-input"
+                                                                                                {{ old('payment_type') == 'online_payment' ? 'checked' : '' }}>
+                                                                                            <label for="online_payment" class="d-flex align-items-center m-0">
+                                                                                                <img src="{{ asset('assets/images/home/online_banking.png') }}"
+                                                                                                    alt="Online Payment" class="mx-3"
+                                                                                                    style="width: 24px; height: auto;">
+                                                                                                <span>Online Payment</span>
+                                                                                            </label>
+                                                                                        </div>
+                                                                                    </div> -->
                                         </div>
                                         @error('payment_type')
                                             <span class="text-danger">{{ $message }}</span>
@@ -169,12 +172,10 @@
                                             ₹{{ number_format($cart->items->sum(fn($item) => $item->product->original_price * $item->quantity), 0) }}
                                         </span>
                                         &nbsp;&nbsp;
-                                        <span class="ms-1" style="color:#000">
+                                        <span class="mx-1" style="color:#000">
                                             ₹{{ number_format($cart->items->sum(fn($item) => $item->product->discounted_price * $item->quantity), 0) }}
                                         </span>
-                                        &nbsp;&nbsp;
-                                        <span class="total ms-1"
-                                            style="font-size:12px; color:#00DD21;white-space: nowrap;">
+                                        <span class="total" style="font-size:12px; color:#00DD21;white-space: nowrap;">
                                             DealsMachi Discount
                                             &nbsp;<span
                                                 class="discount">-₹{{ number_format($cart->items->sum(fn($item) => ($item->product->original_price - $item->product->discounted_price) * $item->quantity), 0) }}</span>
@@ -182,7 +183,8 @@
                                     </h4>
                                 </div>
                                 <div class="d-flex justify-content-end align-items-center ">
-                                    <button type="submit" class="btn placeorder_btn" data-bs-toggle="modal" data-bs-target="#orderSuccessModal">
+                                    <button type="submit" class="btn check_out_btn text-nowrap" data-bs-toggle="modal"
+                                        data-bs-target="#orderSuccessModal">
                                         Place Order
                                     </button>
                                 </div>
@@ -253,28 +255,30 @@
                                 <div class="row">
                                     <h5 class="mb-4" style="color:#ff0060;">Order Summary</h5>
                                     @foreach ($cart->items as $item)
-                                            <div class="col-md-6 col-12">
-                                                @if ($item->deal_type == 1)
-                                                <p>{{ $item->product->name }} <span class="text-muted">(x{{ $item->quantity }})</span></p>
-                                                @else
-                                                <p>{{ $item->product->name }} <span class="text-muted">(Service) </span></p>
-                                                @endif
-                                            </div>
-                                            <div class="col-md-6 col-12 checkoutsummary-card2 text-end">
-                                                <span style="text-decoration: line-through; color:#c7c7c7">
-                                                    ₹{{ number_format($item->product->original_price * $item->quantity, 0) }}
-                                                </span>
-                                                <span class="ms-1" style="font-size:22px;color:#ff0060">
-                                                    ₹{{ number_format($item->product->discounted_price * $item->quantity, 0) }}
-                                                </span>
-                                                <span class="ms-1" style="font-size:12px; color:#00DD21">-
-                                                    ({{ number_format($item->product->discount_percentage, 0) }}%)
-                                                    off
-                                                </span>
-                                            </div>
+                                        <div class="col-md-6 col-12">
+                                            @if ($item->deal_type == 1)
+                                                <p>{{ $item->product->name }} <span
+                                                        class="text-muted">(x{{ $item->quantity }})</span></p>
+                                            @else
+                                                <p>{{ $item->product->name }} <span class="text-muted">(Service) </span>
+                                                </p>
+                                            @endif
+                                        </div>
+                                        <div class="col-md-6 col-12 checkoutsummary-card2 text-end">
+                                            <span style="text-decoration: line-through; color:#c7c7c7">
+                                                ₹{{ number_format($item->product->original_price * $item->quantity, 0) }}
+                                            </span>
+                                            <span class="ms-1" style="font-size:22px;color:#ff0060">
+                                                ₹{{ number_format($item->product->discounted_price * $item->quantity, 0) }}
+                                            </span>
+                                            <span class="ms-1" style="font-size:12px; color:#00DD21">-
+                                                ({{ number_format($item->product->discount_percentage, 0) }}%)
+                                                off
+                                            </span>
+                                        </div>
                                     @endforeach
                                 </div>
-                                </div>
+                            </div>
                             <!-- Payment Methods -->
                             <div class="card p-3 mb-3">
                                 <div>
@@ -298,18 +302,18 @@
                                         </div>
                                         <div class="col-lg-5 col-10">
                                             <!-- <div class="card payment-option" onclick="selectPaymentOption('online_payment')">
-                                                <div class="d-flex align-items-center p-3 w-100">
-                                                    <input type="radio" name="payment_type" id="online_payment"
-                                                        value="online_payment" class="form-check-input"
-                                                        {{ old('payment_type') == 'online_payment' ? 'checked' : '' }}>
-                                                    <label for="online_payment" class="d-flex align-items-center m-0">
-                                                        <img src="{{ asset('assets/images/home/online_banking.png') }}"
-                                                            alt="Online Payment" class="mx-3"
-                                                            style="width: 24px; height: auto;">
-                                                        <span>Online Payment</span>
-                                                    </label>
-                                                </div>
-                                            </div> -->
+                                                                                        <div class="d-flex align-items-center p-3 w-100">
+                                                                                            <input type="radio" name="payment_type" id="online_payment"
+                                                                                                value="online_payment" class="form-check-input"
+                                                                                                {{ old('payment_type') == 'online_payment' ? 'checked' : '' }}>
+                                                                                            <label for="online_payment" class="d-flex align-items-center m-0">
+                                                                                                <img src="{{ asset('assets/images/home/online_banking.png') }}"
+                                                                                                    alt="Online Payment" class="mx-3"
+                                                                                                    style="width: 24px; height: auto;">
+                                                                                                <span>Online Payment</span>
+                                                                                            </label>
+                                                                                        </div>
+                                                                                    </div> -->
                                         </div>
                                         @error('payment_type')
                                             <span class="text-danger">{{ $message }}</span>
@@ -326,7 +330,7 @@
                                             ₹{{ number_format($cart->total, 0) }}
                                         </span> &nbsp;&nbsp; <span class="total ms-1" style="color:#000">
                                             ₹{{ number_format($cart->grand_total, 0) }}
-                                        </span> &nbsp;&nbsp; <span class="ms-1"
+                                        </span> <span class="ms-1"
                                             style="font-size:12px; color:#00DD21;white-space: nowrap;">
                                             DealsMachi Discount
                                             &nbsp;<span
@@ -335,7 +339,8 @@
                                 </div>
                                 {{-- <div class="d-flex justify-content-end align-items-center py-3"
                                     style="position:sticky; bottom:10px; background:#fff"> --}}
-                                <button type="submit" class="btn placeorder_btn" data-bs-toggle="modal" data-bs-target="#orderSuccessModal">
+                                <button type="submit" class="btn check_out_btn text-nowrap" data-bs-toggle="modal"
+                                    data-bs-target="#orderSuccessModal">
                                     Place Order
                                 </button>
                                 {{-- </div> --}}

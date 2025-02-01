@@ -2,15 +2,15 @@
 
 @section('content')
     <?php
-
+    
     use Carbon\Carbon;
-
+    
     $currentDate = Carbon::now();
-
+    
     try {
         if (isset($order->items[0]->product->delivery_days, $order->created_at) && is_numeric($order->items[0]->product->delivery_days)) {
             $deliveryDays = (int) $order->items[0]->product->delivery_days;
-
+    
             $deliveryDate = $deliveryDays > 0 ? Carbon::parse($order->created_at)->addDays($deliveryDays)->format('d-m-Y') : null;
         } else {
             $deliveryDays = 0;
@@ -77,28 +77,37 @@
             <div>
                 <div class="container">
                     <div class="row justify-content-between align-items-center mb-2">
-                        <div class="col-12 col-md-auto d-flex align-items-center mb-3 mb-md-0 flex-wrap">
-                            <h4 class="text-dark order_id mb-0 me-2">
-                                Order Item ID: <span>{{ $order->items[0]->item_number ?? 'N/A' }}</span>
-                            </h4>
-                            <span class="badge_warning me-2">
-                                {{ $order->payment_status === '1'
-                                    ? 'Not Paid'
-                                    : ($order->payment_status === '2'
-                                        ? 'Pending'
-                                        : ($order->payment_status === '3'
-                                            ? 'Paid'
-                                            : ($order->payment_status === '4'
-                                                ? 'Refund Initiated'
-                                                : ($order->payment_status === '5'
-                                                    ? 'Refunded'
-                                                    : ($order->payment_status === '6'
-                                                        ? 'Refund Error'
-                                                        : 'Unknown Status'))))) }}
-                            </span>
-                            <span class="{{ $order->order_type === 'service' ? 'badge_default' : 'badge_payment' }}">
-                                {{ $order->items[0]->deal_type == 1 ? 'Product' : ($order->items[0]->deal_type == 2 ? 'Service' : '') }}
-                            </span>
+                        <div class="order_align gap-2">
+                            <div>
+                                <h4 class="text-dark order_id mb-0 me-2 text-nowrap">
+                                    Order Item ID: <span>{{ $order->items[0]->item_number ?? 'N/A' }}</span>
+                                </h4>
+                            </div>
+                            <div class="d-flex gap-2">
+                                <p class="text-nowrap">
+                                    <span class="badge_warning me-2">
+                                        {{ $order->payment_status === '1'
+                                            ? 'Not Paid'
+                                            : ($order->payment_status === '2'
+                                                ? 'Pending'
+                                                : ($order->payment_status === '3'
+                                                    ? 'Paid'
+                                                    : ($order->payment_status === '4'
+                                                        ? 'Refund Initiated'
+                                                        : ($order->payment_status === '5'
+                                                            ? 'Refunded'
+                                                            : ($order->payment_status === '6'
+                                                                ? 'Refund Error'
+                                                                : 'Unknown Status'))))) }}
+                                    </span>
+                                </p>
+                                <p class="text-nowrap">
+                                    <span
+                                        class="{{ $order->order_type === 'service' ? 'badge_default' : 'badge_payment' }}">
+                                        {{ $order->items[0]->deal_type == 1 ? 'Product' : ($order->items[0]->deal_type == 2 ? 'Service' : '') }}
+                                    </span>
+                                </p>
+                            </div>
                         </div>
                         {{-- <a href="{{ route('order.invoice', $order->id) }}" class="text-decoration-none pe-2">
             <button type="button" class="btn invoiceBtn" data-bs-toggle="tooltip" data-bs-placement="top"
@@ -113,13 +122,14 @@
                                             method="POST">
                                             @csrf
                                             <input type="hidden" name="saveoption" id="saveoption" value="buy now">
-                                            <button type="submit" class="btn showmoreBtn">Order again</button>
+                                            <button type="submit" class="btn showmoreBtn sm_screen_btn">Order
+                                                again</button>
                                         </form>
                                     @endif
                                     <div>
                                         <!-- Add Review Button -->
                                         @if (!$orderReviewedByUser)
-                                            <button type="button" class="btn review_btn media_fonts_conent"
+                                            <button type="button" class="btn review_btn media_fonts_conent sm_screen_btn"
                                                 data-bs-toggle="modal" data-bs-target="#reviewModal">
                                                 Add Review
                                             </button>
@@ -142,40 +152,42 @@
                     <div class="col-md-8">
                         {{-- Order Item --}}
                         <div class="card mb-4">
-                            <div class="card-header m-0 p-2 d-flex gap-2 align-items-center justify-content-between"
+                            <div class="card-header m-0 p-2 d-flex gap-2 align-items-start justify-content-between"
                                 style="background: #ffecee">
-                                <p class="mb-0">
-                                    <span>Order Item</span>
-                                    <span class="badge_danger">
-                                        {{ $order->status === '1'
-                                            ? 'Created'
-                                            : ($order->status === '2'
-                                                ? 'Payment Error'
-                                                : ($order->status === '3'
-                                                    ? 'Confirmed'
-                                                    : ($order->status === '4'
-                                                        ? 'Awaiting Delivery'
-                                                        : ($order->status === '5'
-                                                            ? 'Delivered'
-                                                            : ($order->status === '6'
-                                                                ? 'Returned'
-                                                                : ($order->status === '7'
-                                                                    ? 'Cancelled'
-                                                                    : 'Unknown Status')))))) }}
+                                <div class="order_align gap-2">
+                                    <div>
+                                        <p class="mb-0">Order Item</p>
+                                    </div>
+                                    <div class="d-flex gap-2 mt-2">
+                                        <p class="badge_danger">
+                                            {{ $order->status === '1'
+                                                ? 'Created'
+                                                : ($order->status === '2'
+                                                    ? 'Payment Error'
+                                                    : ($order->status === '3'
+                                                        ? 'Confirmed'
+                                                        : ($order->status === '4'
+                                                            ? 'Awaiting Delivery'
+                                                            : ($order->status === '5'
+                                                                ? 'Delivered'
+                                                                : ($order->status === '6'
+                                                                    ? 'Returned'
+                                                                    : ($order->status === '7'
+                                                                        ? 'Cancelled'
+                                                                        : 'Unknown Status')))))) }}
+                                        </p>
+                                        @if ($order->items[0]->coupon_code == null)
+                                            <p class="badge_payment">No Coupon Code</p>
+                                        @else
+                                            <p class="badge_payment">{{ $order->items[0]->coupon_code }}</p>
+                                        @endif
+                                    </div>
+                                </div>
+                                <p class="date_align mb-1">
+                                    <span>
+                                        Date :
+                                        <span>{{ \Carbon\Carbon::parse($order->created_at)->format('d/m/Y') }}</span>
                                     </span>
-                                    @if ($order->items[0]->coupon_code == null)
-                                        <span class="badge_payment">No Coupon Code</span>
-                                    @else
-                                        <span class="badge_payment">{{ $order->items[0]->coupon_code }}</span>
-                                    @endif
-                                </p>
-                                <p class="mb-0">
-                                    <span>Date :
-                                        <span>{{ \Carbon\Carbon::parse($order->created_at)->format('d/m/Y') }}</span></span>
-                                    &nbsp;&nbsp;
-                                    {{-- <span>Time :
-                                        <span>{{ \Carbon\Carbon::parse($order->created_at)->format('h:i A') }}</span></span>
-                            --}}
                                 </p>
                             </div>
                             <div class="card-body m-0 p-4">
@@ -233,7 +245,7 @@
                                                             DealsMachi</span>
                                                     </div>
                                                 @endif
-                                                <div  class="mb-3">
+                                                <div class="mb-3">
                                                     <span> Seller Company Name: {{ $item->shop->legal_name }}</span>
                                                 </div>
                                                 <p class="mb-0">
@@ -327,7 +339,7 @@
                                         @if ($order->items->first()->shop->zip_code)
                                             , {{ $order->items->first()->shop->zip_code }}
                                         @endif --}}
-                                    {{-- </p>
+                        {{-- </p>
                                 @else
                                     <p>No Shop Details Available</p>
                                 @endif
