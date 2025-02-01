@@ -85,7 +85,7 @@ class UserController extends Controller
 
         $referrals = User::where('referral_code', $referralCode)
             ->orderBy('created_at', 'desc')
-            ->get(['id', 'name', 'referral_code', 'shop_id']);
+            ->get(['id', 'name', 'referral_code', 'shop_id', 'created_at']);
 
         if ($referrals->isEmpty()) {
             return $this->success('Referral list retrieved successfully.', []);

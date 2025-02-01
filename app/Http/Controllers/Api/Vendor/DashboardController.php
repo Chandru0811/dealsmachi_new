@@ -16,6 +16,7 @@ use Carbon\Carbon;
 use App\Traits\ApiResponses;
 use Illuminate\Support\Facades\Auth;
 use App\Models\ReferrerDetail;
+use App\Models\User;
 
 class DashboardController extends Controller
 {
@@ -259,23 +260,27 @@ class DashboardController extends Controller
 
         $totalEarnings = ReferrerDetail::where('referrer_id', $user)->sum('amount');
 
-        $thisMonthReferrals = $monthReport['vendors']->count();
+        $thisMonthReferrals = User::where('referral_code', 'DMR500' . $user)
+        ->whereBetween('created_at', [now()->startOfMonth(), now()->endOfMonth()])
+        ->count();
 
-        $totalReferrals = ReferrerDetail::where('referrer_id', $user)
-            ->whereIn('date', $lastSixMonths)->get();
+        $totalReferrals = User::where('referral_code', 'DMR500' . $user)->count();
 
-        $groupByName = $totalReferrals->groupBy('date')->map(function ($items) {
-            return $items->unique('vendor_name')->count();
+        $totalReferralsbyMonth = User::where('referral_code', 'DMR500' . $user)
+        ->whereBetween('created_at', [now()->subMonths(5)->startOfMonth(), now()->endOfMonth()])
+        ->get()
+        ->groupBy(function ($user) {
+            return \Carbon\Carbon::parse($user->created_at)->format('Y-m');
         });
 
-        $totalReferralsCount = $groupByName->sum();
-
-        $groupByMonth = collect($lastSixMonths)->map(function ($month) use ($groupByName) {
+        $referralsByMonth = collect($lastSixMonths)->mapWithKeys(function ($month) use ($totalReferralsbyMonth) {
             return [
-                'month' => $month,
-                'count' => $groupByName->get($month, 0)
+                $month => [
+                    'month' => $month,
+                    'count' => $totalReferralsbyMonth->has($month) ? $totalReferralsbyMonth[$month]->count() : 0
+                ]
             ];
-        })->sortByDesc('month')->values();
+        })->values();
 
 
         return $this->success('Referrer Dashboard data retrieved successfully.', [
@@ -285,8 +290,8 @@ class DashboardController extends Controller
                 'this_month_earnings' => $thisMonthEarnings,
                 'total_earnings' => $totalEarnings,
                 'this_month_referrals' => $thisMonthReferrals,
-                'total_referrals' => $totalReferralsCount,
-                'total_count_month' => $groupByMonth
+                'total_referrals' => $totalReferrals,
+                'total_count_month' => $referralsByMonth
             ]
         ]);
     }
