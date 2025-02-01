@@ -215,7 +215,7 @@
                                                         {{ $item->item_description }}
                                                     </p>
                                                 @endif
-                                                <p class="truncated-description">
+                                                <p class="truncated-description mb-3">
                                                     {{ $item->product->description ?? 'No Description Found' }}
                                                 </p>
                                                 @if ($item->deal_type === '1')
@@ -228,12 +228,12 @@
 
                                                     </div>
                                                 @else
-                                                    <div class="rating mt-3 mb-3">
+                                                    <div class="rating mb-4 mt-4">
                                                         <span style="color: #22cb00">Currently Services are free through
                                                             DealsMachi</span>
                                                     </div>
                                                 @endif
-                                                <div>
+                                                <div  class="mb-3">
                                                     <span> Seller Company Name: {{ $item->shop->legal_name }}</span>
                                                 </div>
                                                 <p class="mb-0">

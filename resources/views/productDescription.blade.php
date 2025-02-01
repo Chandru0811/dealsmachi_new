@@ -502,8 +502,8 @@
                                     <span style="font-size: 24px; font-weight: 550;"
                                         class="current-price mt-4">₹{{ strpos($product->discounted_price, '.') !== false ? rtrim(rtrim(number_format($product->discounted_price, 2), '0'), '.') : $product->discounted_price }}</span>
                                         &nbsp;&nbsp; <span
-                                        class="original-price">₹{{ strpos($product->discounted_price, '.') !== false ? rtrim(rtrim(number_format($product->original_price, 2), '0'), '.') : $product->original_price }}</span>&nbsp;
-                                    <span class="discount-price">-₹{{ number_format($product->discount_percentage, 2) }}%
+                                        class="original-price">₹{{ strpos($product->discounted_price, '.') !== false ? rtrim(rtrim(number_format($product->original_price, 2), '0'), '.') : $product->original_price }}</span>&nbsp;&nbsp;
+                                        <span class="discount-price">-₹{{ number_format($product->discount_percentage, 2) }}%
                                         off</span>
                                     </div>
                                     @if (!empty($product->coupon_code))
@@ -571,7 +571,7 @@
                                             : null;
                                 @endphp
                                 @if ($product->deal_type == 1)
-                                    <div class="rating mt-3 mb-3">
+                                    <div class="rating mt-3 mb-4">
                                         <span>Delivery Date :</span>
                                         <span class="stars">
                                             <span>
@@ -594,7 +594,7 @@
                                 @endif
                             </div>
 
-                            <div>
+                            <div class="">
                                 <span> Seller Company Name: {{ $product->shop->legal_name }}</span>
                             </div>
 
