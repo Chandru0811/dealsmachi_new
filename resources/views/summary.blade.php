@@ -448,7 +448,6 @@ $addresses->firstWhere('id', $selectedAddressId) ?? ($addresses->firstWhere('def
                 <span id="discounted-price" style="color:#000;white-space:nowrap">
                     ₹{{ number_format($product->discounted_price, 0, '.', ',') }}
                 </span>
-                &nbsp;&nbsp;
                 <span class="total ms-1" style="font-size:12px; color:#00DD21;white-space: nowrap;"
                     id="deal-discount">
                     DealsMachi Discount
@@ -725,6 +724,7 @@ $addresses->firstWhere('id', $selectedAddressId) ?? ($addresses->firstWhere('def
         $('#submitBtn').on('click', function(e) {
             let isValid = true;
             let firstInvalidField = null;
+            let errorMessage = "";
 
             $('.service-date').each(function() {
                 const serviceDate = $(this).val();
@@ -741,6 +741,7 @@ $addresses->firstWhere('id', $selectedAddressId) ?? ($addresses->firstWhere('def
                     isValid = false;
                     $(this).next('.error-message').text('Service Date is required');
                     if (!firstInvalidField) firstInvalidField = $(this);
+                    errorMessage += "Service Date is required.<br/>";
                 }
             });
 
@@ -758,6 +759,7 @@ $addresses->firstWhere('id', $selectedAddressId) ?? ($addresses->firstWhere('def
                     isValid = false;
                     $(this).next('.error-message').text('Service Time is required');
                     if (!firstInvalidField) firstInvalidField = $(this);
+                    errorMessage += "Service Time is required.<br/>";
                 }
 
                 // Validate future service time if date is today
@@ -770,12 +772,40 @@ $addresses->firstWhere('id', $selectedAddressId) ?? ($addresses->firstWhere('def
                         $(this).closest('.form-group').find('.error-message').text(
                             'Service Time must be in the future');
                         if (!firstInvalidField) firstInvalidField = $(this);
+                        errorMessage += "Service Time must be in the future.<br/>";
                     }
                 }
             });
 
             if (!isValid) {
                 e.preventDefault();
+
+                 // Show Toaster message
+                 showCustomToast(errorMessage);
+
+                 function showCustomToast(message) {
+                    let toast = `
+                    <div class="alert alert-dismissible fade show toast-danger" role="alert"
+                        style="position: fixed; top: 70px; right: 40px; z-index: 1050;">
+                        <div class="toast-content">
+                            <div class="toast-icon">
+                                <i class="fa-solid fa-xmark-circle" style="color: #EF4444"></i>
+                            </div>
+                            <span class="toast-text">${message}</span>&nbsp;&nbsp;
+                            <button class="toast-close-btn" data-bs-dismiss="alert" aria-label="Close">
+                                <i class="fa-solid fa-xmark" style="color: #EF4444"></i>
+                            </button>
+                        </div>
+                    </div>
+                `;
+
+                    $("body").append(toast);
+                    setTimeout(function() {
+                        $(".toast-danger").fadeOut(500, function() {
+                            $(this).remove();
+                        });
+                    }, 1000);
+                }
 
                 if (firstInvalidField) {
                     $('html, body').animate({
