@@ -1126,12 +1126,14 @@ footer hr {
     font-size: 26px;
     color: #000000;
     cursor: pointer;
+    text-wrap: nowrap;
 }
 
 .selectText {
     font-size: 26px;
     color: #ff0060;
     cursor: pointer;
+    text-wrap: nowrap;
 }
 
 .canvas_topText2 {
@@ -2361,7 +2363,7 @@ footer hr {
     border: 1px solid #e8e9ea;
     position: sticky;
     top: 82px;
-    z-index: 1000;
+    z-index: 998;
     width: 100%;
 }
 
@@ -2373,7 +2375,7 @@ footer hr {
         border: 1px solid #e8e9ea;
         position: sticky;
         top: 60px;
-        z-index: 1000;
+        z-index: 998;
         width: 100%;
     }
 }
@@ -2459,6 +2461,26 @@ footer hr {
     .carousel-item {
         width: 50%;
     }
+    .breadcrumb_section {
+        padding: 0 !important;
+    }
+    .order_heading {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        align-items: start;
+        margin-bottom: 10px;
+    }
+}
+
+.order_heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: start;
+    margin-bottom: 10px;
+}
+.breadcrumb_section {
+    padding: 0 3rem;
 }
 
 .carousel-btn {
@@ -3770,8 +3792,8 @@ footer hr {
     position: absolute;
     z-index: 1;
     bottom: -60%;
-    left: 50%;
-    margin-left: 70px;
+    left: 10%;
+    margin-left: 10px;
 }
 
 @media screen and (max-width: 450px) {

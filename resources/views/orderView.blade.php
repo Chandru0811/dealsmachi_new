@@ -76,7 +76,7 @@
         <div class="container categoryIcons p-3">
             <div>
                 <div class="container">
-                    <div class="row justify-content-between align-items-center mb-2">
+                    <div class="order_heading">
                         <div class="order_align gap-2">
                             <div>
                                 <h4 class="text-dark order_id mb-0 me-2 text-nowrap">
