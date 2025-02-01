@@ -70,40 +70,74 @@ Route::get('/terms_conditions', function () {
 Route::get('/contactus', function () {
     return view('contactus');
 });
+
+//google login
 Route::get('auth/google', function () {
     return Socialite::driver('google')->redirect();
 })->name('google.login');
 
 Route::get('auth/google/callback', function () {
-    $googleUser = Socialite::driver('google')->stateless()->user();
+    try {
+        $user = Socialite::driver('google')->user();
+        $finduser = User::where('auth_provider','google')->where('auth_provider_id', $user->id)->first();
+        if($finduser){
+            Auth::login($finduser);
+            return redirect()->intended('home');
+            
+        }else{
+            $newUser = User::create([
+                'name' => $user->name,
+                'email' => $user->email,
+                'auth_provider_id'=> $user->id,
+                'auth_provider' => 'google',
+                'password' => encrypt('12345678')
+                ]);
+                Auth::login($newUser);
+                return redirect()->intended('home');
+            }
+        } catch (Exception $e) {
 
-    // Check if user already exists
-    $user = User::where('email', $googleUser->getEmail())->first();
+            $e->getMessage();
 
-    if (!$user) {
-        // If the user does not exist, create a new user
-        $user = User::create([
-            'name' => $googleUser->getName(),
-            'email' => $googleUser->getEmail(),
-            'google_id' => $googleUser->getId(),
-            'avatar' => $googleUser->getAvatar(), // Optionally store avatar
-            'password' => bcrypt(12345678), // Set a random password
-        ]);
-    }
-
-    // Log the user in
-    Auth::login($user);
-
-    return redirect('/');
+        }
 });
-// Route::get('/dashboard', function () {
-//     return view('dashboard');
-// })->middleware(['auth', 'verified'])->name('dashboard');
 
-// Route::middleware('auth')->group(function () {
-//     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-//     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-//     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-// });
+//facebook login
+Route::get('auth/facebook', function () {
+    return Socialite::driver('facebook')->redirect();
+})->name('facebook.login');
+
+Route::get('social/facebook/callback', function () {
+    try {
+        
+            $user = Socialite::driver('facebook')->user();
+         
+            $findUser = User::where('auth_provider','facebook')->where('auth_provider_id', $user->id)->first();
+         
+            if($findUser){
+         
+                Auth::login($findUser);
+        
+                return redirect()->intended('home');
+         
+            }else{
+                $newUser = User::updateOrCreate(['email' => $user->email],[
+                        'name' => $user->name,
+                        'auth_provider_id'=> $user->id,
+                        'auth_provider' => 'facebook',
+                        'password' => encrypt('12345678')
+                    ]);
+        
+                Auth::login($newUser);
+        
+                return redirect()->intended('home');
+            }
+        
+        } catch (Exception $e) {
+            dd($e->getMessage());
+        }
+});
+
+
 require __DIR__ . '/auth.php';
 
