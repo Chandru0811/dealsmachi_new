@@ -2369,9 +2369,15 @@ $(document).ready(function () {
                         ? response.item.product.product_media.find(media => media.order === 1 && media.type === 'image')?.path
                         : 'assets/images/home/noImage.webp';
 
-                    const deliveryDate = response.item.product.deal_type === 2
-                        ? (response.deliveryDays > 0 ? response.deliveryDate : 'No delivery date available')
-                        : 'No delivery date available';
+                    const deliveryDate = response.item.product.deal_type === 1 && response.item.product.delivery_days
+                        ? (() => {
+                            const date = new Date();
+                            date.setDate(date.getDate() + parseInt(response.item.product.delivery_days));
+                            return date.getDate().toString().padStart(2, "0") + "-" +
+                                   (date.getMonth() + 1).toString().padStart(2, "0") + "-" +
+                                   date.getFullYear();
+                        })()
+                        : "No delivery date available";                    
 
                     const discountPercentage = Math.round(response.item.product.discount_percentage);
 
