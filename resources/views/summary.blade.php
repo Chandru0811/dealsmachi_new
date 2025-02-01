@@ -919,6 +919,9 @@ $addresses->firstWhere('id', $selectedAddressId) ?? ($addresses->firstWhere('def
                                     <p class="mb-0 text-muted fs_common text-truncate" style="max-width: 100%;">${product.description}</p>
                                 </div>
                             </div>
+                             <div class="d-flex justify-content-end">
+                            <button class="btn btn-orange my-2" id="get_cartItems">Add Selected Items</button>
+                        </div>
                         </div>
                     `);
 

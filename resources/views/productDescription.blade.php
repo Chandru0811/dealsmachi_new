@@ -504,7 +504,7 @@
                                         &nbsp;&nbsp;
                                         <span
                                         class="original-price coupon-align">₹{{ strpos($product->discounted_price, '.') !== false ? rtrim(rtrim(number_format($product->original_price, 2), '0'), '.') : $product->original_price }}</span>
-                                        <span class="discount-price coupon-align1">-₹{{ number_format($product->discount_percentage, 2) }}%
+                                        <span class="discount-price coupon-align1 text-nowrap">-₹{{ number_format($product->discount_percentage, 2) }}%
                                         off</span>
                                     </div>
                                     @if (!empty($product->coupon_code))
