@@ -3811,8 +3811,8 @@ footer hr {
         position: absolute;
         z-index: 1;
         bottom: 90%;
-        left: 50%;
-        margin-left: 60px !important;
+        left: 10%;
+        margin-left: 10px !important;
     }
 }
 
