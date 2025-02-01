@@ -3792,8 +3792,8 @@ footer hr {
     position: absolute;
     z-index: 1;
     bottom: -60%;
-    left: 10%;
-    margin-left: 10px;
+    left: 50%;
+    margin-left: 60px;
 }
 
 @media screen and (max-width: 450px) {
