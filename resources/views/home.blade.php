@@ -24,7 +24,7 @@
         </script>
         <div class="modal fade" id="orderSuccessModal" tabindex="-1" aria-labelledby="orderSuccessModalLabel"
             aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered shadow">
+            <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content p-3" style="border-radius: 24px !important">
                     <div class="modal-body">
                         <div class="d-flex justify-content-end align-items-center">
