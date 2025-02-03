@@ -58,6 +58,15 @@ $addresses->firstWhere('id', $selectedAddressId) ?? ($addresses->firstWhere('def
 @endphp
 @php
 use Carbon\Carbon;
+function formatIndianCurrency($num) {
+    $num = intval($num);
+    $lastThree = substr($num, -3);
+    $rest = substr($num, 0, -3);
+    if ($rest != '') {
+        $rest = preg_replace("/\B(?=(\d{2})+(?!\d))/", ",", $rest) . ',';
+    }
+    return "₹" . $rest . $lastThree;
+}
 @endphp
 
 <section>
@@ -157,14 +166,14 @@ use Carbon\Carbon;
                             <div>
                                 @if ($product->deal_type == 2)
                                 <span class="ms-1" style="font-size:22px;color:#ff0060">
-                                    ₹{{ number_format($product->discounted_price, 0, '.', ',') }}
+                                    {{ formatIndianCurrency($product->discounted_price) }}
                                 </span>
                                 @else
                                 <span style="text-decoration: line-through; color:#c7c7c7">
-                                    ₹{{ number_format($product->original_price, 0, '.', ',') }}
+                                    {{ formatIndianCurrency($product->original_price) }}
                                 </span>
                                 <span class="ms-1" style="font-size:22px;color:#ff0060">
-                                    ₹{{ number_format($product->discounted_price, 0, '.', ',') }}
+                                    {{ formatIndianCurrency($product->discounted_price) }}
                                 </span>
 
                                 <span class="ms-1" style="font-size:12px; color:#00DD21">
@@ -191,11 +200,11 @@ use Carbon\Carbon;
                     <div class="card-body m-0 p-4">
                         <div class="d-flex justify-content-between align-items-center">
                             <p>Subtotal (x{{ $carts->quantity }})</p>
-                            <p>₹{{ number_format($carts->total, 0) }}</p>
+                            <p>{{ formatIndianCurrency($carts->total) }}</p>
                         </div>
                         <div class="d-flex justify-content-between align-items-center" style="color: #00DD21;">
                             <p>Discount (x{{ $carts->quantity }})</p>
-                            <p>-₹{{ number_format($carts->discount, 0) }}</p>
+                            <p>{{ formatIndianCurrency($carts->discount) }}</p>
                         </div>
                         {{-- <hr />
                             <div class="d-flex justify-content-between pb-3">
@@ -210,15 +219,15 @@ use Carbon\Carbon;
                 <div class="d-flex justify-content-end align-items-center">
                     <h4>Total Amount (x{{ $carts->quantity }}) &nbsp;&nbsp;
                         <span style="text-decoration: line-through; color:#c7c7c7" class="subtotal">
-                            ₹{{ number_format($carts->total, 0) }}
+                            {{ formatIndianCurrency($carts->total) }}
                         </span>
                         &nbsp;&nbsp;
                         <span class="total ms-1" style="color:#000">
-                            ₹{{ number_format($carts->grand_total, 0) }} </span>
+                            {{ formatIndianCurrency($carts->grand_total) }}</span>
                         &nbsp;&nbsp;
                         <span class="ms-1" style="font-size:12px; color:#00DD21;white-space: nowrap;">
                             DealsMachi Discount
-                            &nbsp;<span class="discount">-₹{{ number_format($carts->discount, 0) }}</span>
+                            &nbsp;<span class="discount">- {{ formatIndianCurrency($carts->discount) }}</span>
                         </span>
                     </h4>
                 </div>

@@ -53,6 +53,16 @@
     @endif
     @php
         use Carbon\Carbon;
+
+        function formatIndianCurrency($num) {
+    $num = intval($num);
+    $lastThree = substr($num, -3);
+    $rest = substr($num, 0, -3);
+    if ($rest != '') {
+        $rest = preg_replace("/\B(?=(\d{2})+(?!\d))/", ",", $rest) . ',';
+    }
+    return "₹" . $rest . $lastThree;
+}
     @endphp
     <section>
         <div class="container" style="margin-top: 100px">
@@ -139,7 +149,7 @@
                                                         DealsMachi</span>
                                                 </div>
                                                 <span class="ms-1" style="font-size:18px;font-weight:500;color:#ff0060">
-                                                    ₹{{ number_format($product->discounted_price, 0) }}
+                                                    {{ formatIndianCurrency($product->discounted_price) }}
                                                 </span>
                                             @else
                                                 <div class="d-flex">
@@ -161,11 +171,11 @@
                                                 <div class="ms-0">
                                                     <span
                                                         style="font-size:15px;text-decoration: line-through; color:#c7c7c7">
-                                                        ₹{{ number_format($product->original_price, 0) }}
+                                                        {{ formatIndianCurrency($product->original_price) }}
                                                     </span>
                                                     <span class="ms-1"
                                                         style="font-size:18px;font-weight:500;color:#ff0060">
-                                                        ₹{{ number_format($product->discounted_price, 0) }}
+                                                        {{ formatIndianCurrency($product->discounted_price) }}
                                                     </span>
                                                     <span class="ms-1"
                                                         style="font-size:18px;font-weight:500; color:#28A745">
@@ -279,15 +289,15 @@
                                 <h4>
                                     Total Amount (x<span class="quantity-value">{{ $cart->quantity }}</span>)&nbsp;&nbsp;
                                     <span style="text-decoration: line-through; color:#c7c7c7" class="subtotal">
-                                        ₹{{ number_format($subtotal, 0) }}
+                                        {{ formatIndianCurrency($subtotal) }}
                                     </span>
                                     &nbsp;&nbsp;
                                     <span class="total mx-1" style="color:#000">
-                                        ₹{{ number_format($subtotal - $total_discount, 0) }}
+                                        {{ formatIndianCurrency($subtotal - $total_discount) }}
                                     </span>
                                     <span style="font-size:12px; color:#28A745; white-space: nowrap;">
                                         DealsMachi Discount
-                                        &nbsp;<span class="discount">-₹{{ number_format($total_discount, 0) }}</span>
+                                        &nbsp;<span class="discount">-  {{ formatIndianCurrency($total_discount) }}</span>
                                     </span>
                                 </h4>
                             </div>
@@ -510,16 +520,16 @@
                                 <h4>
                                     Total Amount (x<span class="quantity-value">{{ $cart->quantity }}</span>)&nbsp;&nbsp;
                                     <span style="text-decoration: line-through; color:#c7c7c7" class="subtotal">
-                                        ₹{{ number_format($subtotal, 0) }}
+                                        {{ formatIndianCurrency($subtotal) }}
                                     </span>
                                     &nbsp;&nbsp;
                                     <span class="total ms-1" style="color:#000">
-                                        ₹{{ number_format($subtotal - $total_discount, 0) }}
+                                        {{ formatIndianCurrency($subtotal - $total_discount) }}
                                     </span>
                                     &nbsp;&nbsp;
                                     <span class="ms-1" style="font-size:12px; color:#28A745; white-space: nowrap;">
                                         DealsMachi Discount
-                                        &nbsp;<span class="discount">-₹{{ number_format($total_discount, 0) }}</span>
+                                        &nbsp;<span class="discount">- {{ formatIndianCurrency($total_discount) }}</span>
                                     </span>
                                 </h4>
                             </div>
