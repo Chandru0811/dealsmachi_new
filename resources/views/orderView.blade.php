@@ -2,15 +2,15 @@
 
 @section('content')
     <?php
-    
+
     use Carbon\Carbon;
-    
+
     $currentDate = Carbon::now();
-    
+
     try {
         if (isset($order->items[0]->product->delivery_days, $order->created_at) && is_numeric($order->items[0]->product->delivery_days)) {
             $deliveryDays = (int) $order->items[0]->product->delivery_days;
-    
+
             $deliveryDate = $deliveryDays > 0 ? Carbon::parse($order->created_at)->addDays($deliveryDays)->format('d-m-Y') : null;
         } else {
             $deliveryDays = 0;
@@ -20,6 +20,16 @@
         $deliveryDays = 0;
         $deliveryDate = null;
     }
+
+    function formatIndianCurrency($num) {
+    $num = intval($num);
+    $lastThree = substr($num, -3);
+    $rest = substr($num, 0, -3);
+    if ($rest != '') {
+        $rest = preg_replace("/\B(?=(\d{2})+(?!\d))/", ",", $rest) . ',';
+    }
+    return "₹" . $rest . $lastThree;
+}
     ?>
 
     @if (session('status'))
@@ -251,14 +261,23 @@
                                                 <p class="mb-0">
                                                     @if ($item->deal_type == 2)
                                                         <span
-                                                            style="color:#ff0060; font-size:24px">₹{{ number_format($item->discount, 0) }}</span>
+                                                            style="color:#ff0060; font-size:24px">
+                                                            {{-- ₹{{ number_format($item->discount, 0) }} --}}
+                                                            {{ formatIndianCurrency($item->discount) }}
+                                                        </span>
                                                         &nbsp;&nbsp;
                                                         &nbsp;&nbsp;
                                                     @else
-                                                        <del>₹{{ number_format($item->unit_price, 0) }}</del>
+                                                        <del>
+                                                            {{-- ₹{{ number_format($item->unit_price, 0) }} --}}
+                                                            {{ formatIndianCurrency($item->unit_price) }}
+                                                        </del>
                                                         &nbsp;&nbsp;
                                                         <span
-                                                            style="color:#ff0060; font-size:24px">₹{{ number_format($item->discount, 0) }}</span>
+                                                            style="color:#ff0060; font-size:24px">
+                                                            {{-- ₹{{ number_format($item->discount, 0) }} --}}
+                                                            {{ formatIndianCurrency($item->discount) }}
+                                                        </span>
                                                         &nbsp;&nbsp;
                                                         <span
                                                             class="badge_danger">{{ number_format($item->discount_percent, 0) }}%
@@ -601,11 +620,13 @@
             let discount = subtotal - total;
 
             const formattedSubtotal =
-                `₹{{ number_format($order->items->reduce(fn($sum, $item) => $sum + $item['unit_price'] * $item['quantity'], 0), 0) }}`;
+                `{{ formatIndianCurrency($order->items->reduce(fn($sum, $item) => $sum + $item['unit_price'] * $item['quantity'], 0)) }}`;
             const formattedTotal =
-                `₹{{ number_format($order->items->reduce(fn($sum, $item) => $sum + $item['discount'] * $item['quantity'], 0), 0) }}`;
+             `{{ formatIndianCurrency($order->items->reduce(fn($sum, $item) => $sum + $item['discount'] * $item['quantity'], 0)) }}`;
+                // `₹{{ number_format($order->items->reduce(fn($sum, $item) => $sum + $item['discount'] * $item['quantity'], 0), 0) }}`;
             const formattedDiscount =
-                `-₹{{ number_format($order->items->reduce(fn($sum, $item) => $sum + $item['unit_price'] * $item['quantity'], 0) - $order->items->reduce(fn($sum, $item) => $sum + $item['discount'] * $item['quantity'], 0), 0) }}`;
+            `-{{ formatIndianCurrency($order->items->reduce(fn($sum, $item) => $sum + $item['unit_price'] * $item['quantity'], 0) - $order->items->reduce(fn($sum, $item) => $sum + $item['discount'] * $item['quantity'], 0)) }}`;
+                // `-₹{{ number_format($order->items->reduce(fn($sum, $item) => $sum + $item['unit_price'] * $item['quantity'], 0) - $order->items->reduce(fn($sum, $item) => $sum + $item['discount'] * $item['quantity'], 0), 0) }}`;
 
             document.getElementById('subtotal').innerText = formattedSubtotal;
             document.getElementById('discount').innerText = formattedDiscount;

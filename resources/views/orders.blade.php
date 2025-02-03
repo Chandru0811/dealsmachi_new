@@ -3,6 +3,15 @@
 @section('content')
     @php
         use Carbon\Carbon;
+        function formatIndianCurrency($num) {
+    $num = intval($num);
+    $lastThree = substr($num, -3);
+    $rest = substr($num, 0, -3);
+    if ($rest != '') {
+        $rest = preg_replace("/\B(?=(\d{2})+(?!\d))/", ",", $rest) . ',';
+    }
+    return "₹" . $rest . $lastThree;
+}
     @endphp
     <div class="container categoryIcons p-3">
         <div class="d-flex justify-content-between mb-3">
@@ -89,13 +98,13 @@
                                         </p>
                                         @if ($item->deal_type === '1' || $item->deal_type === 'Product')
                                             <?php
-                                            
+
                                             $currentDate = Carbon::now();
-                                            
+
                                             try {
                                                 if (isset($item->product->delivery_days, $order->created_at) && is_numeric($item->product->delivery_days)) {
                                                     $deliveryDays = (int) $item->product->delivery_days;
-                                            
+
                                                     $deliveryDate = $deliveryDays > 0 ? Carbon::parse($order->created_at)->addDays($deliveryDays)->format('d-m-Y') : null;
                                                 } else {
                                                     $deliveryDays = 0;
@@ -119,13 +128,19 @@
                                                     </p>
                                                 </div>
                                                 <p>
-                                                    <del>₹{{ number_format($item->unit_price * $item->quantity, 0) }}</del>
+                                                    <del>
+                                                        {{-- ₹{{ number_format($item->unit_price * $item->quantity, 0) }} --}}
+                                                        {{ formatIndianCurrency($item->unit_price * $item->quantity) }}
+                                                    </del>
                                                     &nbsp;
                                                     <span style="color: #ff0060; font-size:24px">
-                                                        ₹{{ number_format($item->discount * $item->quantity, 0) }}
+                                                        {{-- ₹{{ number_format($item->discount * $item->quantity, 0) }} --}}
+                                                        {{ formatIndianCurrency($item->discount * $item->quantity) }}
                                                     </span> &nbsp;
                                                     <span
-                                                        class="badge_payment">{{ number_format($item->discount_percent, 0) }}%
+                                                        class="badge_payment">
+                                                        {{-- {{ number_format($item->discount_percent, 0) }}% --}}
+                                                        {{ formatIndianCurrency($item->discount_percent) }}%
                                                         saved</span>
                                                 </p>
                                             </div>
@@ -137,7 +152,8 @@
                                                 </div>
                                                 <p>
                                                     <span style="color: #ff0060; font-size:24px">
-                                                        ₹{{ number_format($item->discount * $item->quantity, 0) }}
+                                                        {{-- ₹{{ number_format($item->discount * $item->quantity, 0) }} --}}
+                                                        {{ formatIndianCurrency($item->discount * $item->quantity) }}
                                                     </span> &nbsp;
                                                 </p>
                                                 <div class="d-flex justify-content-start align-items-center">

@@ -1,4 +1,16 @@
 @extends('layouts.master')
+@php
+   function formatIndianCurrency($num) {
+    $num = intval($num);
+    $lastThree = substr($num, -3);
+    $rest = substr($num, 0, -3);
+    if ($rest != '') {
+        $rest = preg_replace("/\B(?=(\d{2})+(?!\d))/", ",", $rest) . ',';
+    }
+    return "₹" . $rest . $lastThree;
+}
+
+@endphp
 
 @section('content')
     @if (session('status'))
@@ -633,8 +645,7 @@
                                                             <div class="card-divider"></div>
                                                             <p class="ps-3 fw-medium d-flex align-items-center justify-content-between"
                                                                 style="color: #ff0060">
-                                                                <span>₹
-                                                                    {{ number_format($product->discounted_price, 0) }}</span>
+                                                                <span>{{ formatIndianCurrency($product->discounted_price) }}</span>
                                                                 @if (!empty($product->coupon_code))
                                                                     <span id="mySpan" class="mx-3 px-2 couponBadge"
                                                                         onclick="copySpanText(this, event)"
@@ -663,7 +674,7 @@
                                                                         <span style="color: #22cb00ab !important">Standard
                                                                             Rates</span>
                                                                     @else
-                                                                        <span><s>₹{{ number_format($product->original_price, 0) }}</s>
+                                                                        <span><s>{{ formatIndianCurrency($product->original_price) }}</s>
                                                                         </span>
                                                                     @endif
                                                                 </div>
@@ -1169,8 +1180,7 @@
                                                                     <div class="card-divider"></div>
                                                                     <p class="ps-3 fw-medium d-flex align-items-center justify-content-between"
                                                                         style="color: #ff0060">
-                                                                        <span>₹
-                                                                            {{ number_format($product->discounted_price, 0) }}</span>
+                                                                        <span>{{ formatIndianCurrency($product->discounted_price) }}</span>
                                                                         @if (!empty($product->coupon_code))
                                                                             <span id="mySpan"
                                                                                 class="mx-3 px-2 couponBadge"
@@ -1202,7 +1212,7 @@
                                                                                     style="color: #22cb00ab !important">Standard
                                                                                     Rates</span>
                                                                             @else
-                                                                                <span><s>₹{{ number_format($product->original_price, 0) }}</s>
+                                                                                <span><s>{{ formatIndianCurrency($product->original_price) }}</s>
                                                                                 </span>
                                                                             @endif
                                                                         </div>
