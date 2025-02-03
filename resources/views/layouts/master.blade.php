@@ -10,6 +10,7 @@
             content="Save money with discount coupons and exclusive deals. Deals that you cannot find elsewhere. Special deals, festive deals, discount offers and more." />
         <link rel="canonical" href="https://dealsmachi.com/" />
         <link rel="icon" href="{{ asset('assets/images/home/favicon.ico') }}" />
+        <meta name="google-site-verification" content="epg22d0eiryofP3td_QFU2i7_Vwj8O8CdWoICn1MpsQ" />
 
         <meta property="og:title" content="{{ $pagetitle ?? 'DealsMachi – Deals that matter in India' }}" />
         <meta property="og:description"
