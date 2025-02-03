@@ -1,4 +1,17 @@
 @extends('layouts.master')
+@php
+   function formatIndianCurrency($num) {
+    $num = intval($num);
+    $lastThree = substr($num, -3);
+    $rest = substr($num, 0, -3);
+    if ($rest != '') {
+        $rest = preg_replace("/\B(?=(\d{2})+(?!\d))/", ",", $rest) . ',';
+    }
+    return "₹" . $rest . $lastThree;
+}
+
+@endphp
+
 
 @section('content')
     @if (session('status'))
@@ -469,7 +482,7 @@
                                 <div class="price-section mt-4 d-flex align-items-center">
                                     <h3>
                                         <span
-                                            class="current-price mt-2">₹{{ strpos($product->discounted_price, '.') !== false ? rtrim(rtrim(number_format($product->discounted_price, 2), '0'), '.') : $product->discounted_price }}</span>
+                                            class="current-price mt-2">{{ formatIndianCurrency($product->discounted_price) }}</span>
                                     </h3>
                                     <span class="original-price"></span>
                                     <span class="discount-price"></span>
@@ -500,10 +513,10 @@
                                 <div class="price-section d-flex align-items-center mt-4">
                                     <div>
                                     <span
-                                        class="current-price mt-4">₹{{ strpos($product->discounted_price, '.') !== false ? rtrim(rtrim(number_format($product->discounted_price, 2), '0'), '.') : $product->discounted_price }}</span>
+                                        class="current-price mt-4">{{ formatIndianCurrency($product->original_price) }}</span>
                                         &nbsp;&nbsp;
                                         <span
-                                        class="original-price coupon-align">₹{{ strpos($product->discounted_price, '.') !== false ? rtrim(rtrim(number_format($product->original_price, 2), '0'), '.') : $product->original_price }}</span>
+                                        class="original-price coupon-align">{{ formatIndianCurrency($product->discounted_price) }}</span>
                                         <span class="discount-price coupon-align1 text-nowrap">-₹{{ number_format($product->discount_percentage, 2) }}%
                                         off</span>
                                     </div>
