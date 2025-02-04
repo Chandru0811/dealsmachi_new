@@ -98,7 +98,7 @@
                                     <h5>{{ $savedItem->deal->name }}</h5>
                                     <h6 class="truncated-description">{{ $savedItem->deal->description }}</h6>
                                     <p class="mb-1">Delivery Date :</p>
-                                    <p>Seller : {{ $savedItem->deal->shop->email }}</p>
+                                    <p>Seller : {{ $savedItem->deal->shop->legal_name }}</p>
                                     <div>
                                         <span style="text-decoration: line-through; color:#c7c7c7">
                                             {{-- ₹{{ $savedItem->deal->original_price }} --}}
