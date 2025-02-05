@@ -36,8 +36,8 @@
                             <div class="coupon_code_align">
                                 <div class="coupon_code_font">
                                     <div class="coupon_code_font">
-                                        <p class="text-nowrap mb-1">Order Id: {{ $order->order_number ?? 'N/A' }},</p>
-                                        <p class="text-nowrap mb-1">Item Id : {{ $item->item_number ?? 'N/A' }}</p>
+                                        {{-- <p class="text-nowrap mb-1">Order Id: {{ $order->order_number ?? 'N/A' }},</p> --}}
+                                        <p class="text-nowrap mb-1">Order Id : {{ $item->item_number ?? 'N/A' }}</p>
                                     </div>
                                     <div class="batch_code">
                                         <p class="text-nowrap mb-1"><span

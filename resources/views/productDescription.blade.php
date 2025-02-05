@@ -33,7 +33,7 @@
             style="position: fixed; top: 70px; right: 40px; z-index: 1050;">
             <div class="toast-content">
                 <div class="toast-icon">
-                    <i class="fa-solid fa-check-circle" style="color: #EF4444"></i>
+                    <i class="fa-solid fa-triangle-exclamation" style="color: #ff0060"></i>
                 </div>
                 <span class="toast-text">
                     <ul class="mb-0">
@@ -43,7 +43,7 @@
                     </ul>
                 </span>&nbsp;&nbsp;
                 <button class="toast-close-btn"data-bs-dismiss="alert" aria-label="Close">
-                    <i class="fa-solid fa-xmark" style="color: #EF4444"></i>
+                    <i class="fa-solid fa-xmark" style="color: #ff0060"></i>
                 </button>
             </div>
         </div>
@@ -53,13 +53,13 @@
             style="position: fixed; top: 70px; right: 40px; z-index: 1050;">
             <div class="toast-content">
                 <div class="toast-icon">
-                    <i class="fa-solid fa-check-circle" style="color: #EF4444"></i>
+                    <i class="fa-solid fa-triangle-exclamation" style="color: #ff0060"></i>
                 </div>
                 <span class="toast-text">
                     {{ session('error') }}
                 </span>&nbsp;&nbsp;
                 <button class="toast-close-btn"data-bs-dismiss="alert" aria-label="Close">
-                    <i class="fa-solid fa-xmark" style="color: #EF4444"></i>
+                    <i class="fa-solid fa-xmark" style="color: #ff0060"></i>
                 </button>
             </div>
         </div>
@@ -421,13 +421,13 @@
                                 <h2 class="d-flex text-start mb-0">
                                     {{ $product->name }}
                                 </h2>
-                                <p style="color: #000000" class="media_fonts_headings text-nowrap">
+                                <p style="color: #000000" class="media_fonts_headings text-nowrap mb-0">
                                     <span>
                                         @if ($bookmarkedProducts->contains($product->id))
                                             <button type="button" class="bookmark-button remove-bookmark"
                                                 data-deal-id="{{ $product->id }}"
                                                 style="border: none; background: none; font-size:24px; padding: 20px 0 0 30px">
-                                                <p style="height: fit-content; cursor: pointer;" class="p-1 px-2 mb-0"
+                                                <p style="height: fit-content; cursor: pointer;" class="p-1 px-2"
                                                     data-bs-toggle="tooltip" data-bs-placement="top" title="Favourite">
                                                     <i class="fa-solid fa-heart bookmark-icon"
                                                         style="color: #ff0060;"></i>
@@ -437,7 +437,7 @@
                                             <button type="button" class="bookmark-button add-bookmark"
                                                 data-deal-id="{{ $product->id }}"
                                                 style="border: none; background: none; font-size:24px; padding: 20px 0 0 20px">
-                                                <p style="height: fit-content; cursor: pointer;" class="p-1 px-2 mb-0"
+                                                <p style="height: fit-content; cursor: pointer;" class="p-1 px-2"
                                                     data-bs-toggle="tooltip" data-bs-placement="top" title="Favourite">
                                                     <i class="fa-regular fa-heart bookmark-icon"
                                                         style="color: #ff0060;"></i>
