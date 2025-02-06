@@ -9,6 +9,7 @@ use Laravel\Socialite\Facades\Socialite;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\CartController;
+use App\Http\Controllers\AuthController;
 
 Route::fallback(function () {
     return redirect()->route('home');
@@ -71,72 +72,46 @@ Route::get('/contactus', function () {
     return view('contactus');
 });
 
-//google login
-Route::get('auth/google', function () {
-    return Socialite::driver('google')->redirect();
-})->name('google.login');
+//social login
+Route::get('auth/{socialprovider}',[AuthController::class,'socialLogin'])->name('google.login');
 
-Route::get('auth/google/callback', function () {
-    try {
-        $user = Socialite::driver('google')->user();
-        $finduser = User::where('auth_provider','google')->where('auth_provider_id', $user->id)->first();
-        if($finduser){
-            Auth::login($finduser);
-            return redirect()->intended('home');
-            
-        }else{
-            $newUser = User::create([
-                'name' => $user->name,
-                'email' => $user->email,
-                'auth_provider_id'=> $user->id,
-                'auth_provider' => 'google',
-                'password' => encrypt('12345678')
-                ]);
-                Auth::login($newUser);
-                return redirect()->intended('home');
-            }
-        } catch (Exception $e) {
-
-            $e->getMessage();
-
-        }
-});
+Route::get('auth/{socialprovider}/callback',[AuthController::class,'socailLoginResponse']);
 
 //facebook login
-Route::get('auth/facebook', function () {
-    return Socialite::driver('facebook')->redirect();
-})->name('facebook.login');
+// Route::get('auth/facebook', function () {
+//     return Socialite::driver('facebook')->redirect();
+// })->name('facebook.login');
 
-Route::get('social/facebook/callback', function () {
-    try {
+// Route::get('social/facebook/callback', function () {
+//     try {
         
-            $user = Socialite::driver('facebook')->user();
+//             $user = Socialite::driver('facebook')->user();
          
-            $findUser = User::where('auth_provider','facebook')->where('auth_provider_id', $user->id)->first();
+//             $findUser = User::where('auth_provider','facebook')->where('auth_provider_id', $user->id)->first();
          
-            if($findUser){
+//             if($findUser){
          
-                Auth::login($findUser);
+//                 Auth::login($findUser);
         
-                return redirect()->intended('home');
+//                 return redirect()->intended('home');
          
-            }else{
-                $newUser = User::updateOrCreate(['email' => $user->email],[
-                        'name' => $user->name,
-                        'auth_provider_id'=> $user->id,
-                        'auth_provider' => 'facebook',
-                        'password' => encrypt('12345678')
-                    ]);
+//             }else{
+//                 $newUser = User::updateOrCreate(['email' => $user->email],[
+//                         'name' => $user->name,
+//                         'auth_provider_id'=> $user->id,
+//                         'auth_provider' => 'facebook',
+//                         'password' => encrypt('12345678')
+//                     ]);
         
-                Auth::login($newUser);
+//                 Auth::login($newUser);
         
-                return redirect()->intended('home');
-            }
+//                 return redirect()->intended('home');
+//             }
         
-        } catch (Exception $e) {
-            dd($e->getMessage());
-        }
-});
+//         } catch (Exception $e) {
+//             dd($e->getMessage());
+//         }
+// });
 
 
 require __DIR__ . '/auth.php';
