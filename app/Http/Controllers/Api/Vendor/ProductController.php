@@ -16,6 +16,8 @@ use App\Mail\AdminProductAddedNotification;
 use App\Mail\ProductAddedSuccessfully;
 use App\Models\ProductMedia;
 use Illuminate\Support\Facades\File;
+use Intervention\Image\ImageManager;
+use Intervention\Image\Drivers\Gd\Driver;
 
 class ProductController extends Controller
 {
@@ -119,19 +121,31 @@ class ProductController extends Controller
                 File::makeDirectory($publicPath, $mode = 0777, true, true);
             }
 
+            $imageManager = new ImageManager(new Driver());
+
             foreach ($images as $order => $image) {
-                $imageName = $image->getClientOriginalName();
-                $imageSize = $image->getSize();
+                $originalImageName = time() . '_' . $image->getClientOriginalName();
+                $resizedImageName = time() . '_resize_' . pathinfo($originalImageName, PATHINFO_FILENAME) . '.webp';
 
-                $image->move($publicPath, $imageName);
+                $image->move($publicPath, $originalImageName);
 
-                $product->productMedia()->create([
-                    'path' => $publicPath . '/' . $imageName,
-                    'order' => $order,
-                    'type' => 'image',
-                    'imageable_id' => $product->id,
-                    'imageable_type' => get_class($product)
-                ]);
+                try {
+                    $imageInstance = $imageManager->read($publicPath . '/' . $originalImageName);
+                    $imageInstance->cover(320, 240)
+                        ->toWebp(90)
+                        ->save($publicPath . '/' . $resizedImageName);
+
+                    $product->productMedia()->create([
+                        'path' => $publicPath . '/' . $originalImageName,
+                        'resize_path' => $publicPath . '/' . $resizedImageName,
+                        'order' => $order,
+                        'type' => 'image',
+                        'imageable_id' => $product->id,
+                        'imageable_type' => get_class($product)
+                    ]);
+                } catch (\Exception $e) {
+                    return response()->json(['error' => 'Error processing image: ' . $e->getMessage()], 500);
+                }
             }
         }
 
@@ -139,6 +153,7 @@ class ProductController extends Controller
             foreach ($video_urls as $order => $video_url) {
                 $product->productMedia()->create([
                     'path' => $video_url,
+                    'resize_path' =>  $video_url,
                     'order' => $order,
                     'type' => 'video',
                     'imageable_id' => $product->id,
@@ -273,28 +288,41 @@ class ProductController extends Controller
                 File::makeDirectory($publicPath, $mode = 0777, true, true);
             }
 
+            $imageManager = new ImageManager(new Driver());
+
             foreach ($images as $order => $image) {
-                $imageName = $image->getClientOriginalName();
-                $imagePath = $publicPath . '/' . $imageName;
+                $originalImageName = time() . '_' . $image->getClientOriginalName();
+                $resizedImageName = time() . '_resize_' . pathinfo($originalImageName, PATHINFO_FILENAME) . '.webp';
 
-                $existingMedia = $product->productMedia()->where('order', $order)->first();
+                $image->move($publicPath, $originalImageName);
 
-                if ($existingMedia && file_exists($existingMedia->path)) {
-                    unlink($existingMedia->path);
+                try {
+                    $imageInstance = $imageManager->read($publicPath . '/' . $originalImageName);
+                    $imageInstance->cover(320, 240)
+                        ->toWebp(90)
+                        ->save($publicPath . '/' . $resizedImageName);
+
+                    // Delete existing image if any
+                    $existingMedia = $product->productMedia()->where('order', $order)->first();
+                    if ($existingMedia && file_exists($existingMedia->path)) {
+                        unlink($existingMedia->path);
+                        unlink($existingMedia->resize_path); // Delete resized image too
+                    }
+
+                    $product->productMedia()->updateOrCreate(
+                        ['order' => $order],
+                        [
+                            'path' => $publicPath . '/' . $originalImageName,
+                            'resize_path' => $publicPath . '/' . $resizedImageName,
+                            'order' => $order,
+                            'type' => 'image',
+                            'imageable_id' => $product->id,
+                            'imageable_type' => get_class($product)
+                        ]
+                    );
+                } catch (\Exception $e) {
+                    return response()->json(['error' => 'Error processing image: ' . $e->getMessage()], 500);
                 }
-
-                $image->move($publicPath, $imageName);
-
-                $product->productMedia()->updateOrCreate(
-                    ['order' => $order],
-                    [
-                        'path' => $imagePath,
-                        'order' => $order,
-                        'type' => 'image',
-                        'imageable_id' => $product->id,
-                        'imageable_type' => get_class($product),
-                    ]
-                );
             }
         }
 
@@ -304,18 +332,27 @@ class ProductController extends Controller
             foreach ($video_urls as $order => $video_url) {
                 $existingMedia = $product->productMedia()->where('order', $order)->first();
 
-                if ($existingMedia && $existingMedia->type === 'image' && file_exists($existingMedia->path)) {
-                    unlink($existingMedia->path);
+                if ($existingMedia && $existingMedia->type === 'image') {
+                    // Delete original image
+                    if (file_exists($existingMedia->path)) {
+                        unlink($existingMedia->path);
+                    }
+                    
+                    // Delete resized image
+                    if (file_exists($existingMedia->resize_path)) {
+                        unlink($existingMedia->resize_path);
+                    }
                 }
 
                 $product->productMedia()->updateOrCreate(
                     ['order' => $order],
                     [
                         'path' => $video_url,
+                        'resize_path' =>  $video_url,
                         'order' => $order,
                         'type' => 'video',
                         'imageable_id' => $product->id,
-                        'imageable_type' => get_class($product),
+                        'imageable_type' => get_class($product)
                     ]
                 );
             }
@@ -339,6 +376,10 @@ class ProductController extends Controller
 
         if (file_exists($productMedia->path)) {
             unlink($productMedia->path);
+        }
+
+        if (file_exists($productMedia->resize_path)) {
+            unlink($productMedia->resize_path);
         }
 
         $productMedia->delete();
