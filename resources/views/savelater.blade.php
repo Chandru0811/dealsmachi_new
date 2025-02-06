@@ -90,7 +90,7 @@
                                                     ->first()
                                                 : null;
                                         @endphp
-                                        <img src="{{ $image ? asset($image->path) : asset('assets/images/home/noImage.webp') }}"
+                                        <img src="{{ $image ? asset($image->resize_path) : asset('assets/images/home/noImage.webp') }}"
                                             style="max-width: 100%; max-height: 100%;" alt="{{ $savedItem->deal->name }}" />
                                     </div>
                                 </div>

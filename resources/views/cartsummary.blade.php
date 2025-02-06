@@ -125,7 +125,7 @@ function formatIndianCurrency($num) {
                     <div class="row px-4 pt-4">
                         <div class="col-md-3 d-flex flex-column justify-content-center align-items-center">
                             <div class="d-flex justify-content-center align-items-center">
-                                <img src="{{ $image ? asset($image->path) : asset('assets/images/home/noImage.webp') }}"
+                                <img src="{{ $image ? asset($image->resize_path) : asset('assets/images/home/noImage.webp') }}"
                                     style="max-width: 100%; max-height: 100%;" alt="{{ $product->name }}" />
                             </div>
                         </div>

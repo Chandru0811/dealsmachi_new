@@ -137,7 +137,7 @@ class BookmarkController extends Controller
                   ->whereNull('deleted_at');
         })
         ->with(['deal' => function($query) {
-            $query->where('active', 1)->whereNull('deleted_at')->with(['productMedia']);
+            $query->where('active', 1)->whereNull('deleted_at')->with(['productMedia:id,resize_path,order,type,imageable_id']);
         }, 'deal.shop'])
         ->paginate(10);
 

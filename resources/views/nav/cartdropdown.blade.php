@@ -20,7 +20,7 @@
                 ->where('type', 'image')
                 ->first() : null;
         @endphp
-        <img src="{{ $image ? asset($image->path) : asset('assets/images/home/noImage.webp') }}"
+        <img src="{{ $image ? asset($image->resize_path) : asset('assets/images/home/noImage.webp') }}"
             class="img-fluid dropdown_img" alt="{{ $item->product->name }}" />
         <div class="text-start">
             <p class="text-start px-1 text-wrap m-0 p-0" style="font-size: 12px; white-space: normal;">

@@ -36,7 +36,7 @@ class AppServiceProvider extends ServiceProvider
                 $carts = $carts->orWhere('customer_id', Auth::id());
             }
 
-            $carts = $carts->with(['items.product.shop', 'items.product.productMedia'])
+            $carts = $carts->with(['items.product.shop', 'items.product.productMedia:id,resize_path,order,type,imageable_id'])
                 ->first();
 
             // Cleanup invalid items for each cart

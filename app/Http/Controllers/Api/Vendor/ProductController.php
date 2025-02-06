@@ -191,7 +191,7 @@ class ProductController extends Controller
 
     public function show($id)
     {
-        $product = Product::with(['category', 'category.categoryGroup', 'productMedia'])->find($id);
+        $product = Product::with(['category', 'category.categoryGroup', 'productMedia:id,resize_path,order,type,imageable_id'])->find($id);
 
         if (!$product) {
             return $this->error('Product Not Found.', ['error' => 'Product Not Found']);

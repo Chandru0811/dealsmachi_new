@@ -212,7 +212,7 @@
                                                         ->first()
                                                     : null;
                                             @endphp
-                                            <img src="{{ $image ? asset($image->path) : asset('assets/images/home/noImage.webp') }}"
+                                            <img src="{{ $image ? asset($image->resize_path) : asset('assets/images/home/noImage.webp') }}"
                                                 class="img-fluid" alt="{{ $item->item_description }}" />
                                         </div>
                                         <div class="col">

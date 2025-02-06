@@ -33,7 +33,7 @@ class HomeController extends Controller
         $categoryGroups = CategoryGroup::where('active', 1)->with('categories')->take(10)->get();
         $hotpicks = DealCategory::where('active', 1)->get();
         $products = Product::where('active', 1)
-            ->with(['productMedia', 'shop:id,country,city,shop_ratings' ])
+            ->with(['productMedia:id,resize_path,order,type,imageable_id', 'shop:id,country,city,shop_ratings' ])
             ->orderBy('created_at', 'desc')
             ->paginate(8);
         // dd($products);
@@ -157,7 +157,7 @@ class HomeController extends Controller
         $today = now()->toDateString();
         $deals = collect();
 
-        $query = Product::where('active', 1)->with('productMedia', 'shop:id,country,state,city,street,street2,zip_code,shop_ratings');
+        $query = Product::where('active', 1)->with('productMedia:id,resize_path,order,type,imageable_id', 'shop:id,country,state,city,street,street2,zip_code,shop_ratings');
 
         if ($slug == 'trending') {
             $query->withCount([
@@ -294,7 +294,7 @@ class HomeController extends Controller
     public function subcategorybasedproducts(Request $request, $slug)
     {
         $perPage = $request->input('per_page', 10);
-        $query = Product::with(['productMedia', 'shop:id,country,state,city,street,street2,zip_code,shop_ratings'])
+        $query = Product::with(['productMedia:id,resize_path,order,type,imageable_id', 'shop:id,country,state,city,street,street2,zip_code,shop_ratings'])
             ->where('active', 1);
 
         if ($slug === 'all') {
@@ -472,7 +472,7 @@ class HomeController extends Controller
         $term = $request->input('q');
         $perPage = $request->input('per_page', 10);
 
-        $query = Product::with('productMedia', 'shop')->where('active', 1);
+        $query = Product::with('productMedia:id,resize_path,order,type,imageable_id', 'shop')->where('active', 1);
 
         if (!empty($term)) {
             $query->where(function ($subQuery) use ($term) {
