@@ -51,6 +51,19 @@
             </div>
         </div>
     @endif
+    @php
+    function formatIndianCurrency($num)
+    {
+        $num = intval($num);
+        $lastThree = substr($num, -3);
+        $rest = substr($num, 0, -3);
+        if ($rest != '') {
+            $rest = preg_replace('/\B(?=(\d{2})+(?!\d))/', ',', $rest) . ',';
+        }
+        return '₹' . $rest . $lastThree;
+    }
+
+@endphp
     <section>
         <div class="container" style="margin-top: 100px">
             <h2 class="my-4">Buy Later</h2>
@@ -81,19 +94,6 @@
                                             style="max-width: 100%; max-height: 100%;" alt="{{ $savedItem->deal->name }}" />
                                     </div>
                                 </div>
-                                @php
-                                    function formatIndianCurrency($num)
-                                    {
-                                        $num = intval($num);
-                                        $lastThree = substr($num, -3);
-                                        $rest = substr($num, 0, -3);
-                                        if ($rest != '') {
-                                            $rest = preg_replace('/\B(?=(\d{2})+(?!\d))/', ',', $rest) . ',';
-                                        }
-                                        return '₹' . $rest . $lastThree;
-                                    }
-
-                                @endphp
                                 <div class="col-md-6">
                                     <h5>{{ $savedItem->deal->name }}</h5>
                                     <h6 class="truncated-description">{{ $savedItem->deal->description }}</h6>
