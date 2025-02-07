@@ -2139,7 +2139,7 @@ $(document).ready(function () {
                     $(".empty-savedItems").hide();
 
                     const imagePath = response.deal.product_media.length > 0
-                        ? response.deal.product_media.find(media => media.order === 1 && media.type === 'image')?.path
+                        ? response.deal.product_media.find(media => media.order === 1 && media.type === 'image')?.resize_path
                         : 'assets/images/home/noImage.webp';
                     
                    
@@ -2366,7 +2366,7 @@ $(document).ready(function () {
                     $(".cart-items-container").css("display", "block");
 
                     const image = response.item.product.product_media.length > 0
-                        ? response.item.product.product_media.find(media => media.order === 1 && media.type === 'image')?.path
+                        ? response.item.product.product_media.find(media => media.order === 1 && media.type === 'image')?.resize_path
                         : 'assets/images/home/noImage.webp';
 
                     const deliveryDate = response.item.product.deal_type === 1 && response.item.product.delivery_days
@@ -2627,9 +2627,10 @@ $(document).ready(function () {
                     $("#no_items").hide();
 
                     $(".cart-item-container").css("display", "block");
+                    $("#get_cartItems").css("display", "block");
 
                     const image = response.item.product.product_media.length > 0
-                        ? response.item.product.product_media.find(media => media.order === 1 && media.type === 'image')?.path
+                        ? response.item.product.product_media.find(media => media.order === 1 && media.type === 'image')?.resize_path
                         : 'assets/images/home/noImage.webp';
 
                         const cartItemHtml = `
@@ -2646,7 +2647,7 @@ $(document).ready(function () {
                                 </div>
                                 <div class="col-8">
                                     <div class="d-flex flex-column justify-content-start">
-                                        <a href="{{ url(path: '/deal/' . ${response.item.product_id}) }}" style="color: #000;"
+                                        <a href="/deal/${response.item.product_id}" style="color: #000;"
                                             onclick="clickCount('${response.item.product_id}')">
                                             <h5 class="mb-1 fs_common text-truncate" style="max-width: 100%;">
                                             ${response.item.product.name}
