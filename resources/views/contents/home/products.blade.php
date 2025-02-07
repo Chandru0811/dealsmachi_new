@@ -35,7 +35,7 @@
                                     ? $product->productMedia->where('order', 1)->where('type', 'image')->first()
                                     : null;
                             @endphp
-                            <img src="{{ $image ? asset($image->path) : asset('assets/images/home/noImage.webp') }}"
+                            <img src="{{ $image ? asset($image->resize_path) : asset('assets/images/home/noImage.webp') }}"
                                 class="img-fluid card-img-top1" alt="{{ $product->name }}" />
                         </div>
 

@@ -20,7 +20,7 @@
     style="position: fixed; top: 70px; right: 40px; z-index: 1050;">
     <div class="toast-content">
         <div class="toast-icon">
-            <i class="fa-solid fa-check-circle" style="color: #EF4444"></i>
+            <i class="fa-solid fa-triangle-exclamation" style="color: #EF4444"></i>
         </div>
         <span class="toast-text">
             <ul class="mb-0">
@@ -40,7 +40,7 @@
     style="position: fixed; top: 70px; right: 40px; z-index: 1050;">
     <div class="toast-content">
         <div class="toast-icon">
-            <i class="fa-solid fa-check-circle" style="color: #EF4444"></i>
+            <i class="fa-solid fa-triangle-exclamation" style="color: #EF4444"></i>
         </div>
         <span class="toast-text">
             {{ session('error') }}
@@ -125,7 +125,7 @@ function formatIndianCurrency($num) {
                     <div class="row px-4 pt-4">
                         <div class="col-md-3 d-flex flex-column justify-content-center align-items-center">
                             <div class="d-flex justify-content-center align-items-center">
-                                <img src="{{ $image ? asset($image->path) : asset('assets/images/home/noImage.webp') }}"
+                                <img src="{{ $image ? asset($image->resize_path) : asset('assets/images/home/noImage.webp') }}"
                                     style="max-width: 100%; max-height: 100%;" alt="{{ $product->name }}" />
                             </div>
                         </div>

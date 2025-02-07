@@ -9,7 +9,7 @@ class ProductMedia extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['path', 'order', 'imageable_id', 'imageable_type','type'];
+    protected $fillable = ['path', 'resize_path', 'order', 'imageable_id', 'imageable_type','type'];
 
     public function imageable()
     {

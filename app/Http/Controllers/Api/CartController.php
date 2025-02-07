@@ -106,7 +106,7 @@ class CartController extends Controller
 
         $carts = $carts->get();
 
-        $carts->load(['items.product.productMedia', 'items.product.shop']);
+        $carts->load(['items.product.productMedia:id,resize_path,order,type,imageable_id', 'items.product.shop']);
 
         return $this->success('Cart Items Retrieved Successfully!', $carts);
     }
@@ -306,9 +306,9 @@ class CartController extends Controller
         $user_id = Auth::check() ? Auth::user()->id : null;
 
         if(!$user_id){
-            $savedItems = SavedItem::where('ip_address', request()->ip())->with('deal.productMedia', 'deal.shop')->get();
+            $savedItems = SavedItem::where('ip_address', request()->ip())->with('deal.productMedia:id,resize_path,order,type,imageable_id', 'deal.shop')->get();
         }else{
-            $savedItems = SavedItem::where('user_id', $user_id)->with('deal.productMedia', 'deal.shop')->get();
+            $savedItems = SavedItem::where('user_id', $user_id)->with('deal.productMedia:id,resize_path,order,type,imageable_id', 'deal.shop')->get();
         }
 
         return $this->success('Item Retrieved from Save for Later!', $savedItems);
@@ -344,7 +344,7 @@ class CartController extends Controller
         } else {
             $user = Auth::user();
 
-            $carts = Cart::where('id', $cart_id)->with(['items.product.productMedia'])->first();
+            $carts = Cart::where('id', $cart_id)->with(['items.product.productMedia:id,resize_path,order,type,imageable_id'])->first();
 
             $addresses = Address::where('user_id', $user->id)->get();
 
@@ -354,27 +354,5 @@ class CartController extends Controller
                 'addresses'=>$addresses,
             ]);
         }
-    }
-
-    public function getCartItem(Request $request)
-    {
-        $product_ids = $request->input('product_ids');
-
-
-        if (is_string($product_ids)) {
-            $product_ids = json_decode($product_ids, true);
-        }
-        $products = Product::whereIn('id', $product_ids)->with('shop')->with('productMedia')->get();
-        $products = $products->map(function ($product) {
-            $image = $product->productMedia->isNotEmpty() ? $product->productMedia->first() : null;
-            $product->image = $image ? asset($image->path) : asset('assets/images/home/noImage.webp');
-            return $product;
-        });
-
-        return response()->json([
-            'status' => 'success',
-            'message' => 'Cart Items Fetched Successfully!',
-            'data' => $products,
-        ]);
     }
 }

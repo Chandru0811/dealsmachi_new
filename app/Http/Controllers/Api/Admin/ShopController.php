@@ -75,7 +75,7 @@ class ShopController extends Controller
 
     public function showproduct(string $id)
     {
-        $product = Product::with(['category', 'category.categoryGroup', 'shop', 'productMedia'])->find($id);
+        $product = Product::with(['category', 'category.categoryGroup', 'shop', 'productMedia:id,resize_path,order,type,imageable_id'])->find($id);
 
         if (!$product) {
             return $this->error('Product Not Found.', ['error' => 'Product Not Found']);

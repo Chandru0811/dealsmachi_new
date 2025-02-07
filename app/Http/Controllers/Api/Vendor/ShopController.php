@@ -292,7 +292,7 @@ class ShopController extends Controller
     public function showOrderById($order_id, $product_id)
     {
         $orderItem = OrderItems::with([
-            'product.productMedia',
+            'product.productMedia:id,resize_path,order,type,imageable_id',
             'shop',
             'order.customer',
             'order.address'

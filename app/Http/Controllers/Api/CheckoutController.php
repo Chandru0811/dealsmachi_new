@@ -24,7 +24,7 @@ class CheckoutController extends Controller
             return $this->error('User is not authenticated. Redirecting to login.', null, 401);
         } else {
             $user = Auth::user();
-            $products = Product::with(['productMedia', 'shop'])->where('id', $id)->where('active', 1)->get();
+            $products = Product::with(['productMedia:id,resize_path,order,type,imageable_id', 'shop'])->where('id', $id)->where('active', 1)->get();
             if (!$products) {
                 return $this->error('Product not found or inactive.', null, 404);
             }
@@ -39,7 +39,7 @@ class CheckoutController extends Controller
             if ($carts) {
                 $carts->load(['items' => function ($query) use ($id) {
                     $query->where('product_id', '!=', $id);
-                }, 'items.product.productMedia', 'items.product.shop']);
+                }, 'items.product.productMedia:id,resize_path,order,type,imageable_id', 'items.product.shop']);
             }
 
             $savedItem = SavedItem::whereNull('user_id')->where('ip_address', $request->ip());
@@ -309,7 +309,7 @@ class CheckoutController extends Controller
         $orders = Order::where('customer_id', $customerId)
             ->with([
                 'items.product' => function ($query) {
-                    $query->select('id', 'name', 'description', 'original_price', 'discounted_price', 'discount_percentage', 'delivery_days')->with('productMedia');
+                    $query->select('id', 'name', 'description', 'original_price', 'discounted_price', 'discount_percentage', 'delivery_days')->with('productMedia:id,resize_path,order,type,imageable_id');
                 },
                 'items.shop' => function ($query) {
                     $query->select('id', 'name')->withTrashed();
@@ -327,7 +327,7 @@ class CheckoutController extends Controller
             'items' => function ($query) use ($product_id) {
                 $query->where('product_id', $product_id);
             },
-            'items.product.productMedia',
+            'items.product.productMedia:id,resize_path,order,type,imageable_id',
             'items.product.review',
             'items.shop' => function ($query) {
                 $query->select('id', 'name', 'email', 'mobile', 'description', 'street', 'street2', 'city', 'zip_code', 'deleted_at')->withTrashed();

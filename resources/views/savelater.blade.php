@@ -20,7 +20,7 @@
             style="position: fixed; top: 70px; right: 40px; z-index: 1050;">
             <div class="toast-content">
                 <div class="toast-icon">
-                    <i class="fa-solid fa-check-circle" style="color: #EF4444"></i>
+                    <i class="fa-solid fa-triangle-exclamation" style="color: #EF4444"></i>
                 </div>
                 <span class="toast-text">
                     <ul class="mb-0">
@@ -40,7 +40,7 @@
             style="position: fixed; top: 70px; right: 40px; z-index: 1050;">
             <div class="toast-content">
                 <div class="toast-icon">
-                    <i class="fa-solid fa-check-circle" style="color: #EF4444"></i>
+                    <i class="fa-solid fa-triangle-exclamation" style="color: #EF4444"></i>
                 </div>
                 <span class="toast-text">
                     {{ session('error') }}
@@ -51,6 +51,19 @@
             </div>
         </div>
     @endif
+    @php
+    function formatIndianCurrency($num)
+    {
+        $num = intval($num);
+        $lastThree = substr($num, -3);
+        $rest = substr($num, 0, -3);
+        if ($rest != '') {
+            $rest = preg_replace('/\B(?=(\d{2})+(?!\d))/', ',', $rest) . ',';
+        }
+        return '₹' . $rest . $lastThree;
+    }
+
+@endphp
     <section>
         <div class="container" style="margin-top: 100px">
             <h2 class="my-4">Buy Later</h2>
@@ -77,23 +90,10 @@
                                                     ->first()
                                                 : null;
                                         @endphp
-                                        <img src="{{ $image ? asset($image->path) : asset('assets/images/home/noImage.webp') }}"
+                                        <img src="{{ $image ? asset($image->resize_path) : asset('assets/images/home/noImage.webp') }}"
                                             style="max-width: 100%; max-height: 100%;" alt="{{ $savedItem->deal->name }}" />
                                     </div>
                                 </div>
-                                @php
-                                    function formatIndianCurrency($num)
-                                    {
-                                        $num = intval($num);
-                                        $lastThree = substr($num, -3);
-                                        $rest = substr($num, 0, -3);
-                                        if ($rest != '') {
-                                            $rest = preg_replace('/\B(?=(\d{2})+(?!\d))/', ',', $rest) . ',';
-                                        }
-                                        return '₹' . $rest . $lastThree;
-                                    }
-
-                                @endphp
                                 <div class="col-md-6">
                                     <h5>{{ $savedItem->deal->name }}</h5>
                                     <h6 class="truncated-description">{{ $savedItem->deal->description }}</h6>

@@ -42,7 +42,7 @@ class CartController extends Controller
         }
 
         if ($cart) {
-            $cart->load(['items.product.shop', 'items.product.productMedia']);
+            $cart->load(['items.product.shop', 'items.product.productMedia:id,resize_path,order,type,imageable_id']);
         }
 
         $savedItems = collect();
@@ -54,14 +54,14 @@ class CartController extends Controller
                 ->whereHas('deal', function ($query) {
                     $query->where('active', 1)->whereNull('deleted_at');
                 })
-                ->with('deal.productMedia', 'deal.shop')
+                ->with('deal.productMedia:id,resize_path,order,type,imageable_id', 'deal.shop')
                 ->get();
         } else {
             $savedItems = SavedItem::where('user_id', $user_id)
                 ->whereHas('deal', function ($query) {
                     $query->where('active', 1)->whereNull('deleted_at');
                 })
-                ->with('deal.productMedia', 'deal.shop')
+                ->with('deal.productMedia:id,resize_path,order,type,imageable_id', 'deal.shop')
                 ->get();
         }
 
@@ -284,7 +284,7 @@ class CartController extends Controller
             $carts = $carts->orWhere('customer_id', Auth::id());
         }
 
-        $carts = $carts->with(['items.product.productMedia'])->first();
+        $carts = $carts->with(['items.product.productMedia:id,resize_path,order,type,imageable_id'])->first();
 
         // Cleanup invalid items for each cart
         if ($carts) {
@@ -329,7 +329,7 @@ class CartController extends Controller
                 'deal_id' => $cartItem->product_id,
             ]);
 
-            $deal = Product::with(['productMedia', 'shop'])->find($cartItem->product_id);
+            $deal = Product::with(['productMedia:id,resize_path,order,type,imageable_id', 'shop'])->find($cartItem->product_id);
 
             // Remove from Cart
             $cartItem->delete();
@@ -416,7 +416,7 @@ class CartController extends Controller
         $cart->shipping_weight = $cart->shipping_weight + 0;
         $cart->save();
 
-        $item->load(['product.productMedia', 'product.shop']);
+        $item->load(['product.productMedia:id,resize_path,order,type,imageable_id', 'product.shop']);
 
         return response()->json([
             'status' => 'Item moved to Cart',
@@ -440,14 +440,14 @@ class CartController extends Controller
                 ->whereHas('deal', function ($query) {
                     $query->where('active', 1)->whereNull('deleted_at');
                 })
-                ->with('deal.productMedia', 'deal.shop')
+                ->with('deal.productMedia:id,resize_path,order,type,imageable_id', 'deal.shop')
                 ->get();
         } else {
             $savedItems = SavedItem::where('user_id', $user_id)
                 ->whereHas('deal', function ($query) {
                     $query->where('active', 1)->whereNull('deleted_at');
                 })
-                ->with('deal.productMedia', 'deal.shop')
+                ->with('deal.productMedia:id,resize_path,order,type,imageable_id', 'deal.shop')
                 ->get();
         }
         if ($request->ajax()) {
@@ -489,13 +489,33 @@ class CartController extends Controller
         if (!Auth::check()) {
             session(['url.intended' => route('cart.address')]);
             return redirect()->route("login");
-        } else {
-            $user = Auth::user();
-            $carts = Cart::where('id', $cart_id)->with(['items'])->first();
-            $addresses = Address::where('user_id', $user->id)->get();
-            return view('cartsummary', compact('carts', 'user', 'addresses'));
         }
-    }
+    
+        $user = Auth::user();
+        $carts = Cart::where('id', $cart_id)->with(['items.product'])->first();
+    
+        if (!$carts) {
+            return redirect()->route('cart')->with('error', 'Cart not found.');
+        }
+    
+        $minServiceDate = now()->addDays(2)->format('Y-m-d');
+
+        foreach ($carts->items as $item) {
+            if ($item->product->deal_type == 2) {
+                if (empty($item->service_date) || empty($item->service_time)) {
+                    return redirect()->route('cart.index')->with('error', 'Please select a service date and time for all service-type products.');
+                }
+    
+                if ($item->service_date < $minServiceDate) {
+                    return redirect()->route('cart.index')->with('error', 'Service date must be at least 2 days from today.');
+                }
+            }
+        }
+    
+        $addresses = Address::where('user_id', $user->id)->get();
+        
+        return view('cartsummary', compact('carts', 'user', 'addresses'));
+    }    
 
     public function getCartItem(Request $request)
     {
@@ -505,7 +525,7 @@ class CartController extends Controller
 
         $products = $products->map(function ($product) {
             $image = $product->productMedia->isNotEmpty() ? $product->productMedia->first() : null;
-            $product->image = $image ? asset($image->path) : asset('assets/images/home/noImage.webp');
+            $product->image = $image ? asset($image->resize_path) : asset('assets/images/home/noImage.webp');
             return $product;
         });
 

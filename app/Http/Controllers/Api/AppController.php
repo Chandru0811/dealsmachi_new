@@ -44,7 +44,7 @@ class AppController extends Controller
         $sliders = Slider::get();
         $cashBackDeals = DealCategory::where('active', 1)->take(5)->get();
 
-        $products = Product::where('active', 1)->with(['productMedia', 'shop:id,city,shop_ratings'])->orderBy('created_at', 'desc')->get();
+        $products = Product::where('active', 1)->with(['productMedia:id,resize_path,order,type,imageable_id', 'shop:id,city,shop_ratings'])->orderBy('created_at', 'desc')->get();
 
         $treandingdeals = DealViews::whereDate('viewed_at', Carbon::today())->get();
         $populardeals = DealViews::select('deal_id', DB::raw('count(*) as total_views'))->groupBy('deal_id')->limit(5)->orderBy('total_views', 'desc')->having('total_views', '>', 10)->get();
@@ -92,7 +92,7 @@ class AppController extends Controller
 
     public function getDeals($category_id, Request $request)
     {
-        $deals = Product::with('productMedia', 'shop')->where('category_id', $category_id)->where('active', 1)->get();
+        $deals = Product::with('productMedia:id,resize_path,order,type,imageable_id', 'shop')->where('category_id', $category_id)->where('active', 1)->get();
         $brands = Product::where('active', 1)->where('category_id', $category_id)->whereNotNull('brand')->where('brand', '!=', '')->distinct()->orderBy('brand', 'asc')->pluck('brand');
         $discounts = Product::where('active', 1)->where('category_id', $category_id)->pluck('discount_percentage')->map(function ($discount) {
             return round($discount);
@@ -145,7 +145,7 @@ class AppController extends Controller
 
     public function dealDescription($id, Request $request)
     {
-        $deal = Product::with(['productMedia', 'shop', 'shop.hour', 'shop.policy'])
+        $deal = Product::with(['productMedia:id,resize_path,order,type,imageable_id', 'shop', 'shop.hour', 'shop.policy'])
             ->where('id', $id)
             ->first();
 
@@ -174,7 +174,7 @@ class AppController extends Controller
     {
         $term = $request->input('q');
 
-        $query = Product::with('productMedia', 'shop')->where('active', 1);
+        $query = Product::with('productMedia:id,resize_path,order,type,imageable_id', 'shop')->where('active', 1);
 
         if (!empty($term)) {
             $query->where(function ($subQuery) use ($term) {
@@ -355,7 +355,7 @@ class AppController extends Controller
         $today = now()->toDateString();
         $deals = collect();
 
-        $query = Product::where('active', 1)->with('productMedia', 'shop:id,country,state,city,street,street2,zip_code,shop_ratings');
+        $query = Product::where('active', 1)->with('productMedia:id,resize_path,order,type,imageable_id', 'shop:id,country,state,city,street,street2,zip_code,shop_ratings');
 
         if ($slug == 'trending') {
             $query->withCount(['views' => function ($query) use ($today) {
@@ -522,7 +522,7 @@ class AppController extends Controller
 
     public function subcategorybasedproductsformobile($id, Request $request)
     {
-        $query = Product::with('productMedia', 'shop')
+        $query = Product::with('productMedia:id,resize_path,order,type,imageable_id', 'shop')
             ->with(['shop:id,country,state,city,street,street2,zip_code,shop_ratings'])
             ->where('active', 1);
 
@@ -774,7 +774,7 @@ class AppController extends Controller
             } else {
                 $query->whereNull('user_id')->where('ip_address', $request->ip());
             }
-        })->with('deal.productMedia')->paginate(10);
+        })->with('deal.productMedia:id,resize_path,order,type,imageable_id')->paginate(10);
 
         return $this->success('Item Added SuccessFully!', $bookmarks);
     }
