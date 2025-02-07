@@ -1361,11 +1361,13 @@
 
         mainImage.addEventListener("mouseenter", () => {
             detailsContainer.style.pointerEvents = "auto";
+            detailsContainer.style.border = "1px solid #f5f5f5";
         });
 
 
         mainImage.addEventListener("mouseleave", () => {
             detailsContainer.style.pointerEvents = "none";
+            detailsContainer.style.border = "none";
         });
 
         let driftInstance = new Drift(mainImage, {

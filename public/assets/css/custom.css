@@ -3315,11 +3315,10 @@ footer hr {
 }
 
 .details {
-    width: 650px !important;
-    height: 90%;
+    width: 645px !important;
+    height: 80%;
     float: left;
     z-index: 1999;
-    border-radius: 4px;
 }
 
 @media screen and (min-width: 1200px) {
