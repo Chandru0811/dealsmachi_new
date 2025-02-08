@@ -342,17 +342,17 @@
                                         @if ($media->type == 'image')
                                             <div>
                                                 <img class="thumb-img" data-zoom="{{ asset($media->path) }}"
-                                                    src="{{ asset($media->path) }}" alt="Image" />
+                                                    src="{{ asset($media->resize_path) }}" alt="Image" />
                                             </div>
                                         @elseif ($media->type == 'video')
                                             @php
                                                 $videoId = preg_match(
                                                     '/(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=))([\w-]+)/',
-                                                    $media->path,
+                                                    $media->resize_path,
                                                     $matches,
                                                 )
                                                     ? $matches[1]
-                                                    : $media->path;
+                                                    : $media->resize_path;
                                             @endphp
                                             <div>
                                                 <img src="https://img.youtube.com/vi/{{ $videoId }}/0.jpg"
@@ -386,7 +386,7 @@
                                     @endphp
                                     <img id="main-image" alt="Product Image" class="drift-demo-trigger image-fluid"
                                         data-zoom="{{ $firstImage ? asset($firstImage->path) : asset('assets/images/home/noImage.webp') }}"
-                                        src="{{ $firstImage ? asset($firstImage->path) : asset('assets/images/home/noImage.webp') }}" />
+                                        src="{{ $firstImage ? asset($firstImage->resize_path) : asset('assets/images/home/noImage.webp') }}" />
                                 </div>
                             </div>
                             <div class="col-md-2 col-3  d-none d-md-block"></div>
@@ -775,11 +775,11 @@
                                         @php
                                             $videoId = preg_match(
                                                 '/(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=))([\w-]+)/',
-                                                $video->path,
+                                                $video->resize_path,
                                                 $matches,
                                             )
                                                 ? $matches[1]
-                                                : $video->path;
+                                                : $video->resize_path;
                                         @endphp
 
                                         <img src="https://img.youtube.com/vi/{{ $videoId }}/0.jpg"
@@ -1361,11 +1361,13 @@
 
         mainImage.addEventListener("mouseenter", () => {
             detailsContainer.style.pointerEvents = "auto";
+            detailsContainer.style.border = "1px solid #f5f5f5";
         });
 
 
         mainImage.addEventListener("mouseleave", () => {
             detailsContainer.style.pointerEvents = "none";
+            detailsContainer.style.border = "none";
         });
 
         let driftInstance = new Drift(mainImage, {

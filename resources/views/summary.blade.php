@@ -209,13 +209,13 @@ $default_address = $addresses->firstWhere('id', $selectedAddressId) ?? ($address
                             <div class="d-flex align-items-center my-1">
                                 <span class="">Qty</span> &nbsp;&nbsp;
                                 <button class="btn rounded btn-sm decrease-btn"
-                                    style="background: #fffff; border:1px solid #0000001f; border-radius-10px"
+                                    style="background: #ffffff; border:1px solid #0000001f; border-radius:10px;"
                                     data-product-id="{{ $product->id }}">-</button>
                                 <input type="text" id="quantityInput_{{ $product->id }}" value="1"
                                     class="form-control form-control-sm mx-2 text-center quantity-input"
                                     style="width: 50px;" readonly>
                                 <button class="btn rounded btn-sm increase-btn"
-                                    style="background: #fffff; border:1px solid #0000001f; border-radius-10px"
+                                    style="background: #ffffff; border:1px solid #0000001f; border-radius: 10px;"
                                     data-product-id="{{ $product->id }}">+</button>
                             </div>
                             @endif
@@ -895,6 +895,7 @@ $default_address = $addresses->firstWhere('id', $selectedAddressId) ?? ($address
         updateCartTotals();
         updateProductsToBuy();
     });
+    
     document.addEventListener('DOMContentLoaded', () => {
         const today = new Date();
         const currentDate = today.toISOString().split('T')[0]; // Format 'YYYY-MM-DD'
