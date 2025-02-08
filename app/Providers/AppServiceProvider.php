@@ -40,10 +40,8 @@ class AppServiceProvider extends ServiceProvider
                 $carts = $carts->with(relations: ['items.product.shop', 'items.product.productMedia:id,resize_path,order,type,imageable_id'])
                     ->first();
                     
-            
                 // Cleanup invalid items for each cart
-                
-                    CartHelper::cleanUpCart($carts);
+                CartHelper::cleanUpCart($carts);
                 
                 $address = Address::where('user_id', Auth::id())->get();
     
@@ -54,8 +52,8 @@ class AppServiceProvider extends ServiceProvider
                     $address = Address::where('user_id', Auth::id())->get();
 
                     $view->with('carts', null)
-                    ->with('address', $address)
-                    ->with('user', $user);
+                        ->with('address', $address)
+                        ->with('user', $user);
                 }
         });
     }
