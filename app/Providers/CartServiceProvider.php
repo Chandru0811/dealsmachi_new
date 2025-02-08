@@ -31,11 +31,12 @@ class CartServiceProvider extends ServiceProvider
         View::composer('*', function ($view) {
             $cartItemCount = 0;
 
-            if (Auth::check()) {
-                $cart = Cart::where('customer_id', Auth::id())->first();
-            } else {
-                $cart = Cart::where('ip_address', request()->ip())->first();
+            $cart = Cart::whereNull('customer_id')->where('ip_address',request()->ip());
+            if(Auth::guard('web')->check()){
+                $cart = $cart->orwhere('customer_id',Auth::guard('web')->user()->id);
             }
+
+            $cart = $cart->first();
 
             if ($cart) {
                 $cartItemCount = $cart->items()
@@ -49,13 +50,13 @@ class CartServiceProvider extends ServiceProvider
             $view->with('cartItemCount', $cartItemCount);
         });
 
-        Event::listen(Login::class, function ($event) {
-            $cart = Cart::where('ip_address', request()->ip())->first();
+        // Event::listen(Login::class, function ($event) {
+        //     $cart = Cart::where('ip_address', request()->ip())->first();
 
-            if ($cart) {
-                $cart->customer_id = Auth::id();
-                $cart->save();
-            }
-        });
+        //     if ($cart) {
+        //         $cart->customer_id = Auth::id();
+        //         $cart->save();
+        //     }
+        // });
     }
 }

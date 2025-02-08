@@ -31,19 +31,19 @@ class AppServiceProvider extends ServiceProvider
             $user = Auth::user();
 
             $carts = Cart::where('ip_address', request()->ip());
-
-            if (Auth::check()) {
-                $carts = $carts->orWhere('customer_id', Auth::id());
+            
+            if (Auth::guard()->check()) {
+                $carts = $carts->orWhere('customer_id', Auth::guard()->user()->id)->first();
             }
 
             $carts = $carts->with(['items.product.shop', 'items.product.productMedia:id,resize_path,order,type,imageable_id'])
                 ->first();
-
+                
+        
             // Cleanup invalid items for each cart
             if ($carts) {
                 CartHelper::cleanUpCart($carts);
             }
-
             $address = Address::where('user_id', Auth::id())->get();
 
             $view->with('carts', $carts)

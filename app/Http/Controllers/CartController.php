@@ -18,7 +18,7 @@ class CartController extends Controller
 {
     public function index(Request $request)
     {
-        $carts = Cart::whereNull('customer_id')->where('ip_address', $request->ip());
+        $carts = Cart::where('ip_address', $request->ip());
 
         if (Auth::guard()->check()) {
             $carts = $carts->orWhere('customer_id', Auth::guard()->user()->id);
