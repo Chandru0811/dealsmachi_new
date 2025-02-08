@@ -1,7 +1,7 @@
     <!-- Header Start -->
     @php
-        $selectedAddressId = session('selectedId');
-        $default_address = $address->firstWhere('default', true) ?? null; // Add fallback to null
+    $selectedAddressId = session('selectedId');
+    $default_address = $address->firstWhere('default', true) ?? null; // Add fallback to null
     @endphp
 
     <section class="header">
@@ -69,54 +69,54 @@
                         </div>
                     </button>
                     @auth
-                        {{-- small screen --}}
-                        <div class="dropdown d-xl-none">
-                            <a href="#" class="text-decoration-none d-xl-none" id="userDropdownBtn" role="button"
-                                data-bs-toggle="dropdown" aria-expanded="false" data-bs-toggle="tooltip"
-                                data-bs-placement="top" title="Profile">
-                                <span class="d-xl-none" data-bs-toggle="offcanvas" data-bs-target="#offcanvasProfile"
-                                    aria-controls="offcanvasProfile">
-                                    <i class="fa-regular fa-circle-user fa-xl icon_size" style="color: #ff0060;"></i>
-                                </span>
-                            </a>
-                            <div class="dropdown-menu user-dropdown_cart custom-dropdown shadow-lg border-0">
-                                <div class="dropdown_child p-2">
-                                    <div class="d-flex justify-content-start align-items-start mb-2">
-                                        <a class="dropdown-item user_list" href="#" data-bs-toggle="modal"
-                                            data-bs-target="#profileModal">
-                                            <i class="user_list_icon fa-light fa-user"></i>
-                                            &nbsp;&nbsp;&nbsp;Profile
-                                        </a>
-                                    </div>
-                                    <div class="d-flex justify-content-start align-items-start mb-2">
-                                        <a class="dropdown-item user_list" href="{{ url('orders') }}"><i
-                                                class="user_list_icon fa-light fa-bags-shopping"></i>
-                                            &nbsp;&nbsp;Orders</a>
-                                    </div>
-                                    <div class="d-flex justify-content-start align-items-start mb-2">
-                                        <a class="dropdown-item user_list" href="{{ route('savelater.index') }}"><i
-                                                class="user_list_icon fa-light fa-basket-shopping"></i>
-                                            &nbsp;&nbsp;Buy later</a>
-                                    </div>
-                                    <div class="d-flex justify-content-start align-items-start mb-2">
-                                        <a class="dropdown-item user_list" href="{{ url('logout') }}"
-                                            onclick="event.preventDefault(); document.getElementById('logout-form').submit();"><i
-                                                class="user_list_icon fa-light fa-power-off"></i>
-                                            &nbsp;&nbsp;&nbsp;Log Out</a>
-                                    </div>
+                    {{-- small screen --}}
+                    <div class="dropdown d-xl-none">
+                        <a href="#" class="text-decoration-none d-xl-none" id="userDropdownBtn" role="button"
+                            data-bs-toggle="dropdown" aria-expanded="false" data-bs-toggle="tooltip"
+                            data-bs-placement="top" title="Profile">
+                            <span class="d-xl-none" data-bs-toggle="offcanvas" data-bs-target="#offcanvasProfile"
+                                aria-controls="offcanvasProfile">
+                                <i class="fa-regular fa-circle-user fa-xl icon_size" style="color: #ff0060;"></i>
+                            </span>
+                        </a>
+                        <div class="dropdown-menu user-dropdown_cart custom-dropdown shadow-lg border-0">
+                            <div class="dropdown_child p-2">
+                                <div class="d-flex justify-content-start align-items-start mb-2">
+                                    <a class="dropdown-item user_list" href="#" data-bs-toggle="modal"
+                                        data-bs-target="#profileModal">
+                                        <i class="user_list_icon fa-light fa-user"></i>
+                                        &nbsp;&nbsp;&nbsp;Profile
+                                    </a>
+                                </div>
+                                <div class="d-flex justify-content-start align-items-start mb-2">
+                                    <a class="dropdown-item user_list" href="{{ url('orders') }}"><i
+                                            class="user_list_icon fa-light fa-bags-shopping"></i>
+                                        &nbsp;&nbsp;Orders</a>
+                                </div>
+                                <div class="d-flex justify-content-start align-items-start mb-2">
+                                    <a class="dropdown-item user_list" href="{{ route('savelater.index') }}"><i
+                                            class="user_list_icon fa-light fa-basket-shopping"></i>
+                                        &nbsp;&nbsp;Buy later</a>
+                                </div>
+                                <div class="d-flex justify-content-start align-items-start mb-2">
+                                    <a class="dropdown-item user_list" href="{{ url('logout') }}"
+                                        onclick="event.preventDefault(); document.getElementById('logout-form').submit();"><i
+                                            class="user_list_icon fa-light fa-power-off"></i>
+                                        &nbsp;&nbsp;&nbsp;Log Out</a>
                                 </div>
                             </div>
                         </div>
-                        <!-- Hidden logout form -->
-                        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                            @csrf
-                        </form>
+                    </div>
+                    <!-- Hidden logout form -->
+                    <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                        @csrf
+                    </form>
                     @else
-                        <a href="{{ url('login') }}" class="text-decoration-none d-xl-none">
-                            <span class="d-xl-none" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Login">
-                                <i class="fa-regular fa-circle-user fa-xl icon_size text-muted"></i>
-                            </span>
-                        </a>
+                    <a href="{{ url('login') }}" class="text-decoration-none d-xl-none">
+                        <span class="d-xl-none" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Login">
+                            <i class="fa-regular fa-circle-user fa-xl icon_size text-muted"></i>
+                        </span>
+                    </a>
                     @endauth
                     &nbsp;&nbsp;&nbsp;
                     <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
@@ -178,53 +178,77 @@
                         </button>
                         <div class="dropdown_cart dropdown-menu shadow-lg" aria-labelledby="cartButton"
                             style="left: 0; transform: translate(-85%, 0);">
-                            @include('nav.cartdropdown')
-                        </div>
-                    </div>
-                    @auth
-                        <div class="dropdown d-none d-xl-inline">
-                            <a href="#" class="text-decoration-none d-none d-xl-inline" role="button"
-                                data-bs-toggle="dropdown" aria-expanded="false">
-                                <span class="d-none d-xl-block">
-                                    <i class="fa-regular fa-circle-user fa-xl icon_size" style="color: #ff0060;"></i>
-                                </span>
-                            </a>
-                            <div class="dropdown-menu user-dropdown_cart custom-dropdown shadow-lg border-0"
-                                style="left: 45%; top:35px; transform: translate(-85%, 0);">
-                                <div class="dropdown_child p-2">
-                                    <div class="d-flex justify-content-start align-items-start mb-2">
-                                        <a class="dropdown-item user_list" href="#" data-bs-toggle="modal"
-                                            data-bs-target="#profileModal">
-                                            <i class="user_list_icon fa-light fa-user"></i>
-                                            &nbsp;&nbsp;&nbsp;Profile
-                                        </a>
+                            <div class="child">
+                                <p class="text_size" style="color: #cbcbcb">Recently Added Products</p>
+                                <div class="d-flex">
+                                    <img src="{{ asset('assets/images/home/card_image_2.webp') }}"
+                                        alt="House Moving" class="img-fluid dropdown_img">
+                                    <div class="text-start">
+                                        <p class="text-start px-1 text-wrap m-0 p-0" style="font-size: 12px; white-space: normal;">Shirt</p>
+                                        <p class="px-1 text_size" style="color: #ff0060">₹70</p>
                                     </div>
-                                    <div class="d-flex justify-content-start align-items-start mb-2">
-                                        <a class="dropdown-item user_list" href="{{ url('orders') }}"><i
-                                                class="user_list_icon fa-light fa-bags-shopping"></i>
-                                            &nbsp;&nbsp;Orders</a>
+                                </div>
+                                <div class="d-flex">
+                                    <img src="{{ asset('assets/images/home/card_image_2.webp') }}"
+                                        alt="House Moving" class="img-fluid dropdown_img">
+                                    <div class="text-start">
+                                        <p class="text-start px-1 text-wrap m-0 p-0" style="font-size: 12px; white-space: normal;">T-Shirt</p>
+                                        <p class="px-1 text_size" style="color: #ff0060">₹70</p>
                                     </div>
-                                    <div class="d-flex justify-content-start align-items-start mb-2">
-                                        <a class="dropdown-item user_list" href="{{ route('savelater.index') }}"><i
-                                                class="user_list_icon fa-light fa-basket-shopping"></i>
-                                            &nbsp;&nbsp;Buy later</a>
-                                    </div>
-                                    <div class="d-flex justify-content-start align-items-start mb-2">
-                                        <a class="dropdown-item user_list" href="{{ url('logout') }}"
-                                            onclick="event.preventDefault(); document.getElementById('logout-form').submit();"><i
-                                                class="user_list_icon fa-light fa-power-off"></i>
-                                            &nbsp;&nbsp;&nbsp;Log Out</a>
-                                    </div>
+                                </div>
+                                <div class="dropdown_cart_view d-flex justify-content-end">
+                                    <a href="{{ route('cart.index') }}"
+                                        class="text_size text-decoration-none d-none d-xl-inline"
+                                        style="text-decoration: none;">View My Shopping Cart
+                                    </a>
                                 </div>
                             </div>
                         </div>
-                    @else
-                        <a href="{{ url('login') }}" class="text-decoration-none d-none d-xl-inline">
-                            <span class="d-none d-xl-block" data-bs-toggle="tooltip" data-bs-placement="bottom"
-                                title="Login">
-                                <i class="fa-regular fa-circle-user fa-xl icon_size text-muted"></i>
+                    </div>
+                    @auth
+                    <div class="dropdown d-none d-xl-inline">
+                        <a href="#" class="text-decoration-none d-none d-xl-inline" role="button"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                            <span class="d-none d-xl-block">
+                                <i class="fa-regular fa-circle-user fa-xl icon_size" style="color: #ff0060;"></i>
                             </span>
                         </a>
+                        <div class="dropdown-menu user-dropdown_cart custom-dropdown shadow-lg border-0"
+                            style="left: 45%; top:35px; transform: translate(-85%, 0);">
+                            <div class="dropdown_child p-2">
+                                <div class="d-flex justify-content-start align-items-start mb-2">
+                                    <a class="dropdown-item user_list" href="#" data-bs-toggle="modal"
+                                        data-bs-target="#profileModal">
+                                        <i class="user_list_icon fa-light fa-user"></i>
+                                        &nbsp;&nbsp;&nbsp;Profile
+                                    </a>
+                                </div>
+                                <div class="d-flex justify-content-start align-items-start mb-2">
+                                    <a class="dropdown-item user_list" href="{{ url('orders') }}"><i
+                                            class="user_list_icon fa-light fa-bags-shopping"></i>
+                                        &nbsp;&nbsp;Orders</a>
+                                </div>
+                                <div class="d-flex justify-content-start align-items-start mb-2">
+                                    <a class="dropdown-item user_list" href="{{ route('savelater.index') }}"><i
+                                            class="user_list_icon fa-light fa-basket-shopping"></i>
+                                        &nbsp;&nbsp;Buy later</a>
+                                </div>
+                                <div class="d-flex justify-content-start align-items-start mb-2">
+                                    <a class="dropdown-item user_list" href="{{ url('logout') }}"
+                                        onclick="event.preventDefault(); document.getElementById('logout-form').submit();"><i
+                                            class="user_list_icon fa-light fa-power-off"></i>
+                                        &nbsp;&nbsp;&nbsp;Log Out</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    @else
+                    <a href="{{ url('login') }}" class="text-decoration-none d-none d-xl-inline">
+                        <span class="d-none d-xl-block" data-bs-toggle="tooltip" data-bs-placement="bottom"
+                            title="Login">
+                            <i class="fa-regular fa-circle-user fa-xl icon_size text-muted"></i>
+                        </span>
+                    </a>
                     @endauth
                     <span class="navbar-text d-none d-xl-inline align-items-center justify-content-end"
                         style="margin-left: 10px">
@@ -278,37 +302,37 @@
                                 <div class="d-flex justify-content-between align-items-center defaultAddress">
                                     <h6 class="fw-bold">Delivery Addresses</h6>
                                     @if ($default_address)
-                                        <span class="badge badge_infos py-1" data-bs-toggle="modal"
-                                            data-bs-target="#myAddressModal">Change</span>
+                                    <span class="badge badge_infos py-1" data-bs-toggle="modal"
+                                        data-bs-target="#myAddressModal">Change</span>
                                     @else
-                                        <button type="button" class="btn primary_new_btn" style="font-size: 12px"
-                                            data-bs-toggle="modal" data-bs-target="#newAddressModal"
-                                            onclick="checkAddressAndOpenModal()">
-                                            <i class="fa-light fa-plus"></i> Add New Address
-                                        </button>
+                                    <button type="button" class="btn primary_new_btn" style="font-size: 12px"
+                                        data-bs-toggle="modal" data-bs-target="#newAddressModal"
+                                        onclick="checkAddressAndOpenModal()">
+                                        <i class="fa-light fa-plus"></i> Add New Address
+                                    </button>
                                     @endif
                                 </div>
                                 <div class="mt-2">
                                     <div class="selected-address">
                                         @if ($default_address)
-                                            <p>
-                                                <strong>{{ $default_address->first_name ?? '' }}
-                                                    {{ $default_address->last_name ?? '' }} (+91)
-                                                    {{ $default_address->phone ?? '' }}</strong>&nbsp;&nbsp;<br>
-                                                {{ $default_address->address ?? '' }},
-                                                {{ $default_address->city ?? '' }},
-                                                {{ $default_address->state ?? '' }} -
-                                                {{ $default_address->postalcode ?? '' }}
-                                                <span>
-                                                    @if ($default_address->default)
-                                                        <span
-                                                            class="badge badge_danger py-1">Default</span>&nbsp;&nbsp;
-                                                    @endif
-                                                </span>
-                                            </p>
+                                        <p>
+                                            <strong>{{ $default_address->first_name ?? '' }}
+                                                {{ $default_address->last_name ?? '' }} (+91)
+                                                {{ $default_address->phone ?? '' }}</strong>&nbsp;&nbsp;<br>
+                                            {{ $default_address->address ?? '' }},
+                                            {{ $default_address->city ?? '' }},
+                                            {{ $default_address->state ?? '' }} -
+                                            {{ $default_address->postalcode ?? '' }}
+                                            <span>
+                                                @if ($default_address->default)
+                                                <span
+                                                    class="badge badge_danger py-1">Default</span>&nbsp;&nbsp;
+                                                @endif
+                                            </span>
+                                        </p>
                                         @else
-                                            <p>Your address details are missing. Add one now to make checkout faster
-                                                and easier!</p>
+                                        <p>Your address details are missing. Add one now to make checkout faster
+                                            and easier!</p>
                                         @endif
                                     </div>
                                 </div>
@@ -334,51 +358,51 @@
                         <div class="modal-body" style="min-height: 24rem">
                             <div class="allAddress">
                                 @foreach ($address as $addr)
-                                    <div class="row p-2">
-                                        <div class="col-10">
-                                            <div class="d-flex text-start">
-                                                <div class="px-1">
-                                                    <input type="radio" name="selected_id"
-                                                        id="selected_id_{{ $addr->id }}"
-                                                        value="{{ $addr->id }}"
-                                                        {{ $selectedAddressId == $addr->id ? 'checked' : ($default_address && $addr->id == $default_address->id && !$selectedAddressId ? 'checked' : '') }} />
-                                                </div>
-                                                <p class="text-turncate fs_common">
-                                                    <span class="px-2">
-                                                        {{ $addr->first_name }} {{ $addr->last_name ?? '' }} |
-                                                        <span style="color: #c7c7c7;">&nbsp;+91
-                                                            {{ $addr->phone }}</span>
-                                                    </span><br>
-                                                    <span class="px-2" style="color: #c7c7c7">{{ $addr->address }},
-                                                        {{ $addr->city }},
-                                                        {{ $addr->state }}-{{ $addr->postalcode }}.</span>
-                                                    <br>
-                                                    @if ($addr->default)
-                                                        <span class="badge badge_primary">Default</span>
-                                                    @endif
-                                                </p>
+                                <div class="row p-2">
+                                    <div class="col-10">
+                                        <div class="d-flex text-start">
+                                            <div class="px-1">
+                                                <input type="radio" name="selected_id"
+                                                    id="selected_id_{{ $addr->id }}"
+                                                    value="{{ $addr->id }}"
+                                                    {{ $selectedAddressId == $addr->id ? 'checked' : ($default_address && $addr->id == $default_address->id && !$selectedAddressId ? 'checked' : '') }} />
                                             </div>
+                                            <p class="text-turncate fs_common">
+                                                <span class="px-2">
+                                                    {{ $addr->first_name }} {{ $addr->last_name ?? '' }} |
+                                                    <span style="color: #c7c7c7;">&nbsp;+91
+                                                        {{ $addr->phone }}</span>
+                                                </span><br>
+                                                <span class="px-2" style="color: #c7c7c7">{{ $addr->address }},
+                                                    {{ $addr->city }},
+                                                    {{ $addr->state }}-{{ $addr->postalcode }}.</span>
+                                                <br>
+                                                @if ($addr->default)
+                                                <span class="badge badge_primary">Default</span>
+                                                @endif
+                                            </p>
                                         </div>
-                                        <div class="col-2">
-                                            <div class="d-flex align-items-center justify-content-end">
-                                                <div class="d-flex gap-2 delBadge">
-                                                    <button type="button" class="badge_edit" data-bs-toggle="modal"
-                                                        data-address-id="{{ $addr->id }}"
-                                                        data-bs-target="#editAddressModal">
-                                                        Edit
-                                                    </button>
-                                                    @if (!$addr->default)
-                                                        <button type="button" class="badge_del"
-                                                            data-bs-toggle="modal"
-                                                            data-bs-target="#deleteAddressModal"
-                                                            data-address-id="{{ $addr->id }}">
-                                                            Delete
-                                                        </button>
-                                                    @endif
-                                                </div>
+                                    </div>
+                                    <div class="col-2">
+                                        <div class="d-flex align-items-center justify-content-end">
+                                            <div class="d-flex gap-2 delBadge">
+                                                <button type="button" class="badge_edit" data-bs-toggle="modal"
+                                                    data-address-id="{{ $addr->id }}"
+                                                    data-bs-target="#editAddressModal">
+                                                    Edit
+                                                </button>
+                                                @if (!$addr->default)
+                                                <button type="button" class="badge_del"
+                                                    data-bs-toggle="modal"
+                                                    data-bs-target="#deleteAddressModal"
+                                                    data-address-id="{{ $addr->id }}">
+                                                    Delete
+                                                </button>
+                                                @endif
                                             </div>
                                         </div>
                                     </div>
+                                </div>
                                 @endforeach
                             </div>
                         </div>
@@ -561,34 +585,34 @@
                     </div>
                     <div class="modal-body">
                         <form id="profileFormModal" action="{{ route('user.update') }}" method="POST">
-                            @csrf
-                            @method('PUT')
-                            <div class="row">
-                                <div class="col-md-6 col-12 mb-3">
-                                    <label for="name" class="form-label address_lable">Name <span
-                                            class="text-danger">*</span></label>
-                                    <input type="text" class="form-control address_input" name="name"
-                                        id="name" placeholder="Enter your name" value="{{ $user->name ?? '' }}"
-                                        required />
-                                </div>
-
-                                <div class="col-md-6 col-12 mb-3">
-                                    <label for="email" class="form-label address_lable">Email <span
-                                            class="text-danger">*</span></label>
-                                    <input type="email" class="form-control address_input" name="email"
-                                        id="email" placeholder="Enter your email"
-                                        value="{{ $user->email ?? '' }}" />
-                                </div>
-                            </div>
-                            <div class="d-flex justify-content-end">
-                                <button type="submit" class="btn outline_primary_btn">Save
-                                    Changes</button>
-                            </div>
-                        </form>
-                    </div>
-
-                </div>
+        @csrf
+        @method('PUT')
+        <div class="row">
+            <div class="col-md-6 col-12 mb-3">
+                <label for="name" class="form-label address_lable">Name <span
+                        class="text-danger">*</span></label>
+                <input type="text" class="form-control address_input" name="name"
+                    id="name" placeholder="Enter your name" value="{{ $user->name ?? '' }}"
+                    required />
             </div>
+
+            <div class="col-md-6 col-12 mb-3">
+                <label for="email" class="form-label address_lable">Email <span
+                        class="text-danger">*</span></label>
+                <input type="email" class="form-control address_input" name="email"
+                    id="email" placeholder="Enter your email"
+                    value="{{ $user->email ?? '' }}" />
+            </div>
+        </div>
+        <div class="d-flex justify-content-end">
+            <button type="submit" class="btn outline_primary_btn">Save
+                Changes</button>
+        </div>
+        </form>
+        </div>
+
+        </div>
+        </div>
         </div> --}}
 
         <!-- New Address Modal -->
