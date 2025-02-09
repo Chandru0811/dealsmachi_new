@@ -180,6 +180,8 @@
                             style="left: 0; transform: translate(-85%, 0);">
                             <div class="child">
                                 <p class="text_size" style="color: #cbcbcb">Recently Added Products</p>
+                                @if($cartItems)
+                                @foreach($cartItems as $item)
                                 <div class="d-flex">
                                     <img src="{{ asset('assets/images/home/card_image_2.webp') }}"
                                         alt="House Moving" class="img-fluid dropdown_img">
@@ -188,14 +190,8 @@
                                         <p class="px-1 text_size" style="color: #ff0060">₹70</p>
                                     </div>
                                 </div>
-                                <div class="d-flex">
-                                    <img src="{{ asset('assets/images/home/card_image_2.webp') }}"
-                                        alt="House Moving" class="img-fluid dropdown_img">
-                                    <div class="text-start">
-                                        <p class="text-start px-1 text-wrap m-0 p-0" style="font-size: 12px; white-space: normal;">T-Shirt</p>
-                                        <p class="px-1 text_size" style="color: #ff0060">₹70</p>
-                                    </div>
-                                </div>
+                                @endforeach
+                                @endif
                                 <div class="dropdown_cart_view d-flex justify-content-end">
                                     <a href="{{ route('cart.index') }}"
                                         class="text_size text-decoration-none d-none d-xl-inline"

@@ -31,23 +31,31 @@ class CartServiceProvider extends ServiceProvider
         View::composer('*', function ($view) {
             $cartItemCount = 0;
 
-            $cart = Cart::whereNull('customer_id')->where('ip_address',request()->ip());
-            if(Auth::guard('web')->check()){
-                $cart = $cart->orwhere('customer_id',Auth::guard('web')->user()->id);
+            $cart = Cart::where('ip_address', request()->ip());
+            
+            if (Auth::guard()->check()) {
+                $cart = $cart->orWhere('customer_id', Auth::guard()->user()->id);
             }
-
             $cart = $cart->first();
 
             if ($cart) {
-                $cartItemCount = $cart->items()
+                $cartItems = $cart->items()
                     ->whereHas('product', function ($query) {
                         $query->where('active', 1)
                             ->whereNull('deleted_at');
                     })
-                    ->count();
-            }
+                    ->get();
 
-            $view->with('cartItemCount', $cartItemCount);
+                $cartItemCount = $cartItems->count();
+                $view->with('cartItems', $cartItems);
+                $view->with('cartItemCount', $cartItemCount);
+                
+            }else{
+                $view->with('cartItems', []);
+                $view->with('cartItemCount', 0);
+            }
+            
+            
         });
 
         // Event::listen(Login::class, function ($event) {

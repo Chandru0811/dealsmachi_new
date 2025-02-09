@@ -147,7 +147,7 @@
                                 </a>
                             </div>
                             <div class="col-12 col-md-6">
-                                <a href="/sociallogin/facebook/customer">
+                                <a href="auth/facebook">
                                     <button type="button" class="btn btn-light social-btn w-100 ">
                                         <img src="{{ asset('assets/images/home/facebook.webp') }}" class="img-fluid "
                                             alt="facebook_logo" width="22px">

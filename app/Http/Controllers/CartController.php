@@ -301,17 +301,13 @@ class CartController extends Controller
     public function saveForLater(Request $request)
     {
         $customer_id = Auth::check() ? Auth::user()->id : null;
-
-        $cart = null;
-
-        if ($customer_id) {
-            $cart = Cart::where('customer_id', $customer_id)->first();
-        } else {
-            $cart = Cart::where(function ($query) {
-                $query->whereNull('customer_id')
-                    ->where('ip_address', request()->ip());
-            })->first();
+        
+        $cart = Cart::where('ip_address', request()->ip());
+            
+        if (Auth::guard()->check()) {
+            $cart = $cart->orWhere('customer_id', Auth::guard()->user()->id);
         }
+        $cart = $cart->first();
 
         $cartItem = null;
 
@@ -367,6 +363,16 @@ class CartController extends Controller
 
     public function moveToCart(Request $request)
     {
+        $product_id = $request->input('product_id');
+        
+        $product = Product::where('id', $product_id)->first();
+        if (!$product) {
+            return response()->json(['error' => 'Deal not found!'], 404);
+        }
+        $qtt = $request->quantity;
+        if ($qtt == null) {
+            $qtt = 1;
+        }
         $user_id = Auth::check() ? Auth::user()->id : null;
 
         if (!$user_id) {
@@ -382,42 +388,83 @@ class CartController extends Controller
 
             $cart = Cart::where('customer_id', $user_id)->first();
         }
+       
         if (!$cart) {
-            return response()->json([
-                'error' => 'No cart found',
-            ], 404);
-        }
+            $grand_total = $product->discounted_price * $qtt + $request->shipping + $request->packaging + $request->handling + $request->taxes;
+            $discount = ($product->original_price - $product->discounted_price) * $qtt;
 
-        $item = CartItem::create([
-            'cart_id' => $cart->id,
-            'item_description' => $savedItem->deal->name,
-            'quantity' => 1, // Default quantity
-            'unit_price' => $savedItem->deal->original_price,
-            'coupon_code' => $savedItem->deal->coupon_code,
-            'discount' => $savedItem->deal->discounted_price,
-            'discount_percent' => $savedItem->deal->discount_percentage,
-            'seller_id' => $savedItem->deal->shop_id,
-            'product_id' => $savedItem->deal_id,
-            'deal_type' => $savedItem->deal->deal_type,
-        ]);
+            $cart = new Cart();
+            $cart->customer_id  = Auth::user()->id;
+            $cart->ip_address = $request->ip();
+            $cart->item_count = 1;
+            $cart->quantity = $qtt;
+            $cart->total = $product->original_price * $qtt;
+            $cart->discount =  $discount;
+            $cart->shipping = $request->shipping;
+            $cart->packaging = $request->packaging;
+            $cart->handling = $request->handling;
+            $cart->taxes = $request->taxes;
+            $cart->grand_total = $grand_total;
+            $cart->shipping_weight = $request->shipping_weight;
+            $cart->save();
 
-        $savedItem->delete();
+            $item = new CartItem;
+            $item->cart_id = $cart->id;
+            $item->product_id = $product->id;
+            $item->item_description = $product->name;
+            $item->quantity = $qtt;
+            $item->unit_price = $product->original_price;
+            $item->delivery_date = $request->delivery_date;
+            $item->coupon_code = $product->coupon_code;
+            $item->discount = $product->discounted_price;
+            $item->discount_percent = $product->discount_percentage;
+            $item->seller_id = $product->shop_id;
+            $item->deal_type = $product->deal_type;
+            $item->service_date = $request->service_date;
+            $item->service_time = $request->service_time;
+            $item->shipping = $request->shipping;
+            $item->packaging = $request->packaging;
+            $item->handling = $request->handling;
+            $item->taxes = $request->taxes;
+            $item->shipping_weight = $request->shipping_weight;
+            $item->save();
 
-        //update cart
-        $cart->item_count = $cart->item_count + 1;
-        $cart->quantity = $cart->quantity + 1;
-        $cart->total = $cart->total + $savedItem->deal->original_price;
-        $cart->discount = $cart->discount + ($savedItem->deal->original_price - $savedItem->deal->discounted_price);
-        $cart->shipping = $cart->shipping + 0;
-        $cart->packaging = $cart->packaging + 0;
-        $cart->handling = $cart->handling + 0;
-        $cart->taxes = $cart->taxes + 0;
-        $cart->grand_total = $cart->grand_total + $savedItem->deal->discounted_price;
-        $cart->shipping_weight = $cart->shipping_weight + 0;
-        $cart->save();
+            $savedItem->delete();
 
-        $item->load(['product.productMedia:id,resize_path,order,type,imageable_id', 'product.shop']);
+            $item->load(['product.productMedia:id,resize_path,order,type,imageable_id', 'product.shop']);
+            
+        }else{
+            $item = CartItem::create([
+                'cart_id' => $cart->id,
+                'item_description' => $savedItem->deal->name,
+                'quantity' => 1, // Default quantity
+                'unit_price' => $savedItem->deal->original_price,
+                'coupon_code' => $savedItem->deal->coupon_code,
+                'discount' => $savedItem->deal->discounted_price,
+                'discount_percent' => $savedItem->deal->discount_percentage,
+                'seller_id' => $savedItem->deal->shop_id,
+                'product_id' => $savedItem->deal_id,
+                'deal_type' => $savedItem->deal->deal_type,
+            ]);
+    
+            $savedItem->delete();
 
+            //update cart
+            $cart->item_count = $cart->item_count + 1;
+            $cart->quantity = $cart->quantity + 1;
+            $cart->total = $cart->total + $savedItem->deal->original_price;
+            $cart->discount = $cart->discount + ($savedItem->deal->original_price - $savedItem->deal->discounted_price);
+            $cart->shipping = $cart->shipping + 0;
+            $cart->packaging = $cart->packaging + 0;
+            $cart->handling = $cart->handling + 0;
+            $cart->taxes = $cart->taxes + 0;
+            $cart->grand_total = $cart->grand_total + $savedItem->deal->discounted_price;
+            $cart->shipping_weight = $cart->shipping_weight + 0;
+            $cart->save();
+
+            $item->load(['product.productMedia:id,resize_path,order,type,imageable_id', 'product.shop']);
+            }
+        
         return response()->json([
             'status' => 'Item moved to Cart',
             'cartItemCount' => $cart->item_count,
