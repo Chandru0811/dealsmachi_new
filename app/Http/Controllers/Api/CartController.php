@@ -98,15 +98,18 @@ class CartController extends Controller
 
     public function getCart(Request $request)
     {
-        $carts = Cart::whereNull('customer_id')->where('ip_address', $request->ip());
-
-        if (Auth::guard('api')->check()) {
-            $carts = $carts->orWhere('customer_id', Auth::guard('api')->user()->id);
+        $carts = Cart::where('ip_address', request()->ip());
+            
+        if (Auth::guard()->check()) {
+            $carts = $carts->orWhere('customer_id', Auth::guard()->user()->id);
         }
-
-        $carts = $carts->get();
-
-        $carts->load(['items.product.productMedia:id,resize_path,order,type,imageable_id', 'items.product.shop']);
+        $carts = $carts->first();
+        if($carts)
+        {
+            $carts->load(['items.product.productMedia:id,resize_path,order,type,imageable_id', 'items.product.shop']);
+        }else{
+            $carts = [];
+        }
 
         return $this->success('Cart Items Retrieved Successfully!', $carts);
     }

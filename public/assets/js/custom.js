@@ -2593,6 +2593,10 @@ $(document).ready(function () {
                                 }
                             });
                         });
+
+                        $('.service-date, .service-time').on('input', function() {
+                            $(this).closest('.d-flex').find('.error-message').remove();
+                            });
                     
 
                 }

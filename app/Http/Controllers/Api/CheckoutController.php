@@ -352,7 +352,7 @@ class CheckoutController extends Controller
                 }
             }
         }
-        $order['reviewed'] = $orderReviewedByUser;
+        $order->setAttribute('reviewed', $orderReviewedByUser);
 
         return $this->success('Order Retrieved Successfully!', $order);
     }
