@@ -2494,6 +2494,106 @@ $(document).ready(function () {
                         `;
 
                     $(".cart-items").append(cartItemHtml);
+                    $('.decrease-btn, .increase-btn').on('click', function() {
+                        const cartId = $(this).data('cart-id');
+                        const productId = $(this).data('product-id');
+                        const quantityInput = $(this).closest('.cart-item').find('.quantity-input');
+                        let quantity = parseInt(quantityInput.val());
+
+                        if ($(this).hasClass('decrease-btn') && quantity > 1) {
+                            quantity -= 1;
+                        } else if ($(this).hasClass('increase-btn') && quantity < 10) {
+                            quantity += 1;
+                        }
+                        quantityInput.val(quantity);
+                        updateCart(cartId, productId, quantity);
+                    });
+                    $('.service-date, .service-time').on('change', function() {
+                        const cartId = $(this).data('cart-id');
+                        const productId = $(this).data('product-id');
+                        const serviceDate = $(`.service-date[data-product-id="${productId}"]`).val();
+                        const serviceTime = $(`.service-time[data-product-id="${productId}"]`).val();
+                        updateCart(cartId, productId, null, serviceDate, serviceTime);
+                    });
+                    function updateCart(cartId, productId, quantity, serviceDate = null, serviceTime = null) {
+                        const csrfToken = $('meta[name="csrf-token"]').attr('content');
+                        const data = {
+                            cart_id: cartId,
+                            product_id: productId,
+                            quantity: quantity,
+                            service_date: serviceDate,
+                            service_time: serviceTime,
+                            _token: csrfToken,
+                        };
+
+                        $.ajax({
+                            url: "{{ route('cart.update') }}",
+                            type: 'POST',
+                            contentType: 'application/json',
+                            data: JSON.stringify(data),
+                            success: function (data) {
+                                if (data.status === 'success') {
+                                    const indianCurrencyFormatter = new Intl.NumberFormat('en-IN', {
+                                        style: 'currency',
+                                        currency: 'INR',
+                                        minimumFractionDigits: 0,
+                                        maximumFractionDigits: 0,
+                                    });
+
+                                    $('.quantity-value').each(function () {
+                                        $(this).text(data.updatedCart.quantity);
+                                    });
+
+                                    $('.subtotal').each(function () {
+                                        $(this).text(indianCurrencyFormatter.format(data.updatedCart.subtotal));
+                                    });
+
+                                    $('.discount').each(function () {
+                                        let discountValue = data.updatedCart.discount;
+                                        if (discountValue < 0) {
+                                            $(this).text(`- ${indianCurrencyFormatter.format(Math.abs(discountValue))}`);
+                                        } else {
+                                            $(this).text(`- ${indianCurrencyFormatter.format(discountValue)}`);
+                                        }
+                                    });
+
+                                    $('.total').each(function () {
+                                        $(this).text(indianCurrencyFormatter.format(data.updatedCart.grand_total));
+                                    });
+                                } else {
+                                    alert(data.message);
+                                }
+                            },
+                            error: function (error) {
+                                console.error('Error updating cart:', error);
+                            }
+                        });
+                    }
+                    
+                        const today = new Date();
+                        const currentDate = today.toISOString().split('T')[0]; // Format 'YYYY-MM-DD'
+
+                        // Calculate the next date
+                        const nextDate = new Date(today);
+                        nextDate.setDate(today.getDate() + 1);
+                        const nextDateString = nextDate.toISOString().split('T')[0];
+
+                        $('.service-date').each(function () {
+                            // Set the minimum date to the day after tomorrow
+                            const restrictedMinDate = new Date(nextDate);
+                            restrictedMinDate.setDate(nextDate.getDate() + 1);
+
+                            $(this).attr('min', restrictedMinDate.toISOString().split('T')[0]);
+
+                            // Handle user-typed values (if they bypass the UI)
+                            $(this).on('change', function () {
+                                const selectedDate = $(this).val();
+                                if (selectedDate === currentDate || selectedDate === nextDateString) {
+                                    $(this).val(''); // Clear invalid date
+                                }
+                            });
+                        });
+                    
 
                 }
 
