@@ -2439,7 +2439,7 @@ $(document).ready(function () {
                     <input type="date" id="service_date" name="service_date"
                         class="form-control form-control-sm service-date" value="${response.item.service_date}"
                         data-cart-id="${response.item.cart_id}" data-product-id="${response.item.product.id}">
-                </div>
+                </div>&nbsp;&nbsp;
                 <div class="d-flex flex-column" style="width: 30%;">
                     <label for="service_time" class="form-label">Service Time</label>
                     <input type="time" id="service_time" name="service_time"
