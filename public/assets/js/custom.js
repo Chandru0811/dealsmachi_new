@@ -2450,12 +2450,12 @@ $(document).ready(function () {
             </div>` :
                             `<div class="d-flex align-items-center my-1 mb-3" style="padding-left: 24px;">
                 <span>Qty</span> &nbsp;&nbsp;
-                <button class="btn rounded btn-sm decrease-btn" data-cart-id="${response.item.cart_id}"
+                <button class="btn rounded btn-sm decrease-btn1" data-cart-id="${response.item.cart_id}"
                     data-product-id="${response.item.product.id}">-</button>
                 <input type="text" class="form-control form-control-sm mx-2 text-center quantity-input"
                     style="width: 50px;background-color:#F9F9F9;border-radius:2px"
                     value="${response.item.quantity}" readonly>
-                <button class="btn rounded btn-sm increase-btn" data-cart-id="${response.item.cart_id}"
+                <button class="btn rounded btn-sm increase-btn1" data-cart-id="${response.item.cart_id}"
                     data-product-id="${response.item.product.id}">+</button>
             </div>`}
         </div>
@@ -2494,15 +2494,15 @@ $(document).ready(function () {
                         `;
 
                     $(".cart-items").append(cartItemHtml);
-                    $('.decrease-btn, .increase-btn').on('click', function() {
+                    $('.decrease-btn1, .increase-btn1').on('click', function() {
                         const cartId = $(this).data('cart-id');
                         const productId = $(this).data('product-id');
                         const quantityInput = $(this).closest('.cart-item').find('.quantity-input');
                         let quantity = parseInt(quantityInput.val());
 
-                        if ($(this).hasClass('decrease-btn') && quantity > 1) {
+                        if ($(this).hasClass('decrease-btn1') && quantity > 1) {
                             quantity -= 1;
-                        } else if ($(this).hasClass('increase-btn') && quantity < 10) {
+                        } else if ($(this).hasClass('increase-btn1') && quantity < 10) {
                             quantity += 1;
                         }
                         quantityInput.val(quantity);
@@ -2527,7 +2527,7 @@ $(document).ready(function () {
                         };
 
                         $.ajax({
-                            url: "{{ route('cart.update') }}",
+                            url: "/cart/update",
                             type: 'POST',
                             contentType: 'application/json',
                             data: JSON.stringify(data),
