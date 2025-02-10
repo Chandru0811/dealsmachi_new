@@ -565,23 +565,56 @@ class CartController extends Controller
     }    
 
     public function getCartItem(Request $request)
-    {
-        $product_ids = $request->input('product_ids');
+{
+    $product_ids = $request->input('product_ids');
 
-        $products = Product::whereIn('id', $product_ids)->with('shop')->with('productMedia')->get();
-
-        $products = $products->map(function ($product) {
-            $image = $product->productMedia->isNotEmpty() ? $product->productMedia->first() : null;
-            $product->image = $image ? asset($image->resize_path) : asset('assets/images/home/noImage.webp');
-            return $product;
-        });
-
+    if (!$product_ids) {
         return response()->json([
-            'status' => 'success',
-            'message' => 'Cart Items Fetched Successfully!',
-            'data' => $products,
+            'status' => 'error',
+            'message' => 'No product IDs provided.',
         ]);
     }
+
+    // Get products with related shop and media
+    $products = Product::whereIn('id', $product_ids)
+        ->with(['shop', 'productMedia'])
+        ->get();
+
+    // Retrieve the cart based on user authentication or IP address
+    $cartQuery = Cart::whereNull('customer_id')->where('ip_address', $request->ip());
+
+    if (Auth::guard()->check()) {
+        $cartQuery = $cartQuery->orWhere('customer_id', Auth::guard()->user()->id);
+    }
+
+    $cart = $cartQuery->first();
+
+    // Map products with quantity
+    $products = $products->map(function ($product) use ($cart) {
+        $image = $product->productMedia->isNotEmpty() ? $product->productMedia->first() : null;
+        $product->image = $image ? asset($image->resize_path) : asset('assets/images/home/noImage.webp');
+
+        // Default quantity to 1 if not found in cart
+        $product->quantity = 1;
+
+        // If cart exists, check if the product is in the cart and set the quantity
+        if ($cart) {
+            $cartItem = $cart->items()->where('product_id', $product->id)->first();
+            if ($cartItem) {
+                $product->quantity = $cartItem->quantity;
+            }
+        }
+
+        return $product;
+    });
+
+    return response()->json([
+        'status' => 'success',
+        'message' => 'Cart Items Fetched Successfully!',
+        'data' => $products,
+    ]);
+}
+
 
     private function cleanUpCart($cart)
     {

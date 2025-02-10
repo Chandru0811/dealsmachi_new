@@ -54,6 +54,12 @@ class CheckoutController extends Controller
 
             if ($carts) {
                 $this->cleanUpCart($carts);
+                $matchedItem = $carts->items()->where('product_id', $id)->first();
+                if ($matchedItem) {
+                    $products->each(function ($product) use ($matchedItem) {
+                        $product->quantity = $matchedItem->quantity;
+                    });
+                }
 
                 $carts->load([
                     'items' => function ($query) use ($id) {
@@ -62,6 +68,10 @@ class CheckoutController extends Controller
                     'items.product.productMedia:id,resize_path,order,type,imageable_id',
                     'items.product.shop'
                 ]);
+            } else {
+                $products->each(function ($product) {
+                    $product->quantity = 1;
+                });
             }
 
             $savedItem = SavedItem::whereNull('user_id')->where('ip_address', $request->ip());
