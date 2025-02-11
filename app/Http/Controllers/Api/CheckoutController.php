@@ -158,11 +158,11 @@ class CheckoutController extends Controller
             $grandTotal = $cart->items->whereIn('product_id', $ids)->sum('grand_total');
             $shippingWeight = $cart->items->whereIn('product_id', $ids)->sum('shipping_weight');
 
-            $address = Address::find($request->address_id);
-            // dd($address);
+            $addressId = $request->input('address_id');
+            $address = Address::find($addressId);
 
             if (!$address) {
-                return redirect()->route('home')->with('error', 'Address not found.');
+                return $this->error('Cart not found.', [], 400);
             }
 
             $deliveryAddress = [
@@ -176,7 +176,6 @@ class CheckoutController extends Controller
                 'state' => $address->state,
                 'unit' => $address->unit
             ];
-
 
             $order = Order::create([
                 'order_number'     => $orderNumber,
@@ -240,6 +239,24 @@ class CheckoutController extends Controller
             $latestOrder = Order::orderBy('id', 'desc')->first();
             $customOrderId = $latestOrder ? intval(Str::after($latestOrder->id, '-')) + 1 : 1;
             $orderNumber = 'DEALSMACHI_O' . $customOrderId;
+            $addressId = $request->input('address_id');
+            $address = Address::find($addressId);
+
+            if (!$address) {
+                return $this->error('Cart not found.', [], 400);
+            }
+
+            $deliveryAddress = [
+                'first_name' => $address->first_name,
+                'last_name' => $address->last_name,
+                'email' => $address->email,
+                'phone' => $address->phone,
+                'postalcode' => $address->postalcode,
+                'address' => $address->address,
+                'city' => $address->city,
+                'state' => $address->state,
+                'unit' => $address->unit
+            ];
 
             $order = Order::create([
                 'order_number'     => $orderNumber,
@@ -257,7 +274,7 @@ class CheckoutController extends Controller
                 'status'           => 1, //created
                 'payment_type'     => $request->input('payment_type'),
                 'payment_status'   => 1,
-                'address_id'       => $request->address_id
+                'delivery_address' => json_encode($deliveryAddress)
             ]);
 
             foreach ($cart->items as $item) {
