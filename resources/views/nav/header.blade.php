@@ -1,7 +1,7 @@
     <!-- Header Start -->
     @php
     $selectedAddressId = session('selectedId');
-    $default_address = $address->firstWhere('default', true) ?? null; // Add fallback to null
+    $default_address = $addresses->firstWhere('default', true) ?? null; // Add fallback to null
     @endphp
 
     <section class="header">
@@ -333,7 +333,7 @@
                         </div>
                         <div class="modal-body" style="min-height: 24rem">
                             <div class="allAddress">
-                                @foreach ($address as $addr)
+                                @foreach ($addresses as $addr)
                                 <div class="row p-2">
                                     <div class="col-10">
                                         <div class="d-flex text-start">

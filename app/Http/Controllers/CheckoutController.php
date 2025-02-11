@@ -124,7 +124,6 @@ class CheckoutController extends Controller
         $address_id = $request->address_id;
         $cart_id = $request->input('cart_id');
         $address = Address::where('id', $address_id)->first();
-        // dd($address);
         $cart = Cart::where('id', $cart_id)->with('items')->first();
         if (!$cart) {
             return redirect()->route('home')->with('error', 'Cart not found.');
@@ -135,22 +134,10 @@ class CheckoutController extends Controller
             return redirect()->route("login");
         } else {
             $user = Auth::user();
-            $order = Order::where('customer_id', $user->id)->orderBy('id', 'desc')->first();
             $orderoption = 'cart';
-
-            // if ($address) {
-            //     session([
-            //         'address' => $address->address,
-            //         'city' => $address->city,
-            //         'state' => $address->state,
-            //         'postalcode' => $address->postalcode,
-            //     ]);
-            // }
-
-            return view('checkout', compact('cart', 'user', 'address', 'order', 'orderoption'));
+            return view('checkout', compact('cart', 'user', 'address', 'orderoption'));
         }
     }
-
 
     public function createorder(Request $request)
     {

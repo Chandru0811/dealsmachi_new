@@ -6,8 +6,7 @@ use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Cart;
-use Illuminate\Support\Facades\Event;
-use Illuminate\Auth\Events\Login;
+use App\Models\Address;
 
 class CartServiceProvider extends ServiceProvider
 {
@@ -30,14 +29,16 @@ class CartServiceProvider extends ServiceProvider
     {
         View::composer('*', function ($view) {
             $cartItemCount = 0;
-
             $cart = Cart::where('ip_address', request()->ip());
+            
+            $user = Auth::user();
             
             if (Auth::guard()->check()) {
                 $cart = $cart->orWhere('customer_id', Auth::guard()->user()->id);
             }
+            
             $cart = $cart->first();
-
+            
             if ($cart) {
                 $cartItems = $cart->items()
                     ->whereHas('product', function ($query) {
@@ -49,13 +50,15 @@ class CartServiceProvider extends ServiceProvider
                 $cartItemCount = $cartItems->count();
                 $view->with('cartItems', $cartItems);
                 $view->with('cartItemCount', $cartItemCount);
-                
             }else{
                 $view->with('cartItems', []);
                 $view->with('cartItemCount', 0);
             }
-            
-            
+            // dd(Auth::id());
+            $address = Address::where('user_id', Auth::id())->get();
+            // dd($address);
+            $view->with('user', $user)
+                ->with('addresses', $address);
         });
 
         // Event::listen(Login::class, function ($event) {

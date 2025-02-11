@@ -301,9 +301,9 @@ class CartController extends Controller
     public function saveForLater(Request $request)
     {
         $customer_id = Auth::check() ? Auth::user()->id : null;
-        
+
         $cart = Cart::where('ip_address', request()->ip());
-            
+
         if (Auth::guard()->check()) {
             $cart = $cart->orWhere('customer_id', Auth::guard()->user()->id);
         }
@@ -364,7 +364,7 @@ class CartController extends Controller
     public function moveToCart(Request $request)
     {
         $product_id = $request->input('product_id');
-        
+
         $product = Product::where('id', $product_id)->first();
         if (!$product) {
             return response()->json(['error' => 'Deal not found!'], 404);
@@ -388,7 +388,7 @@ class CartController extends Controller
 
             $cart = Cart::where('customer_id', $user_id)->first();
         }
-       
+
         if (!$cart) {
             $grand_total = $product->discounted_price * $qtt + $request->shipping + $request->packaging + $request->handling + $request->taxes;
             $discount = ($product->original_price - $product->discounted_price) * $qtt;
@@ -432,8 +432,7 @@ class CartController extends Controller
             $savedItem->delete();
 
             $item->load(['product.productMedia:id,resize_path,order,type,imageable_id', 'product.shop']);
-            
-        }else{
+        } else {
             $item = CartItem::create([
                 'cart_id' => $cart->id,
                 'item_description' => $savedItem->deal->name,
@@ -446,7 +445,7 @@ class CartController extends Controller
                 'product_id' => $savedItem->deal_id,
                 'deal_type' => $savedItem->deal->deal_type,
             ]);
-    
+
             $savedItem->delete();
 
             //update cart
@@ -463,8 +462,8 @@ class CartController extends Controller
             $cart->save();
 
             $item->load(['product.productMedia:id,resize_path,order,type,imageable_id', 'product.shop']);
-            }
-        
+        }
+
         return response()->json([
             'status' => 'Item moved to Cart',
             'cartItemCount' => $cart->item_count,
@@ -537,14 +536,14 @@ class CartController extends Controller
             session(['url.intended' => route('cart.address')]);
             return redirect()->route("login");
         }
-    
+
         $user = Auth::user();
         $carts = Cart::where('id', $cart_id)->with(['items.product'])->first();
-    
+
         if (!$carts) {
             return redirect()->route('cart')->with('error', 'Cart not found.');
         }
-    
+
         $minServiceDate = now()->addDays(2)->format('Y-m-d');
 
         foreach ($carts->items as $item) {
@@ -552,69 +551,63 @@ class CartController extends Controller
                 if (empty($item->service_date) || empty($item->service_time)) {
                     return redirect()->route('cart.index')->with('error', 'Please select a service date and time for all service-type products.');
                 }
-    
+
                 if ($item->service_date < $minServiceDate) {
                     return redirect()->route('cart.index')->with('error', 'Service date must be at least 2 days from today.');
                 }
             }
         }
-    
+
         $addresses = Address::where('user_id', $user->id)->get();
-        
+
         return view('cartsummary', compact('carts', 'user', 'addresses'));
-    }    
+    }
 
     public function getCartItem(Request $request)
-{
-    $product_ids = $request->input('product_ids');
+    {
+        $product_ids = $request->input('product_ids');
 
-    if (!$product_ids) {
-        return response()->json([
-            'status' => 'error',
-            'message' => 'No product IDs provided.',
-        ]);
-    }
-
-    // Get products with related shop and media
-    $products = Product::whereIn('id', $product_ids)
-        ->with(['shop', 'productMedia'])
-        ->get();
-
-    // Retrieve the cart based on user authentication or IP address
-    $cartQuery = Cart::whereNull('customer_id')->where('ip_address', $request->ip());
-
-    if (Auth::guard()->check()) {
-        $cartQuery = $cartQuery->orWhere('customer_id', Auth::guard()->user()->id);
-    }
-
-    $cart = $cartQuery->first();
-
-    // Map products with quantity
-    $products = $products->map(function ($product) use ($cart) {
-        $image = $product->productMedia->isNotEmpty() ? $product->productMedia->first() : null;
-        $product->image = $image ? asset($image->resize_path) : asset('assets/images/home/noImage.webp');
-
-        // Default quantity to 1 if not found in cart
-        $product->quantity = 1;
-
-        // If cart exists, check if the product is in the cart and set the quantity
-        if ($cart) {
-            $cartItem = $cart->items()->where('product_id', $product->id)->first();
-            if ($cartItem) {
-                $product->quantity = $cartItem->quantity;
-            }
+        if (!$product_ids) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'No product IDs provided.',
+            ]);
         }
 
-        return $product;
-    });
+        $products = Product::whereIn('id', $product_ids)
+            ->with(['shop', 'productMedia'])
+            ->get();
 
-    return response()->json([
-        'status' => 'success',
-        'message' => 'Cart Items Fetched Successfully!',
-        'data' => $products,
-    ]);
-}
+        $cartQuery = Cart::whereNull('customer_id')->where('ip_address', $request->ip());
 
+        if (Auth::guard()->check()) {
+            $cartQuery = $cartQuery->orWhere('customer_id', Auth::guard()->user()->id);
+        }
+
+        $cart = $cartQuery->first();
+
+        $products = $products->map(function ($product) use ($cart) {
+            $image = $product->productMedia->isNotEmpty() ? $product->productMedia->first() : null;
+            $product->image = $image ? asset($image->resize_path) : asset('assets/images/home/noImage.webp');
+
+            $product->quantity = 1;
+
+            if ($cart) {
+                $cartItem = $cart->items()->where('product_id', $product->id)->first();
+                if ($cartItem) {
+                    $product->quantity = $cartItem->quantity;
+                }
+            }
+
+            return $product;
+        });
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Cart Items Fetched Successfully!',
+            'data' => $products,
+        ]);
+    }
 
     private function cleanUpCart($cart)
     {
