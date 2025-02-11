@@ -565,7 +565,7 @@ $default_address = $addresses->firstWhere('id', $selectedAddressId) ?? ($address
 
                             if ($('#cart_items .row').length === 0) {
                                 $('#cart_items').html(`
-                                        <div class="text-center mb-3" id="no_items">
+                                        <div class="text-center mb-3 no_items" id="no_items">
                                             <p class="text-muted">No items found in the cart.</p>
                                         </div>
                                     `);
@@ -743,7 +743,7 @@ $default_address = $addresses->firstWhere('id', $selectedAddressId) ?? ($address
                         style="position: fixed; top: 70px; right: 40px; z-index: 1050;">
                         <div class="toast-content">
                             <div class="toast-icon">
-                                <i class="fa-solid fa-xmark-circle" style="color: #EF4444"></i>
+                                <i class="fa-solid fa-triangle-exclamation" style="color: #EF4444"></i>
                             </div>
                             <span class="toast-text">${message}</span>&nbsp;&nbsp;
                             <button class="toast-close-btn" data-bs-dismiss="alert" aria-label="Close">

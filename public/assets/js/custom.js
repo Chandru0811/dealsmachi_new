@@ -2729,7 +2729,7 @@ $(document).ready(function () {
 
                 if(response.item){
                     $("#no_items").hide();
-
+                    $(".no_items").hide();
                     $(".cart-item-container").css("display", "block");
                     $("#get_cartItems").css("display", "block");
 
