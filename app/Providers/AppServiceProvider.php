@@ -27,14 +27,6 @@ class AppServiceProvider extends ServiceProvider
     {
         Paginator::useBootstrap();
 
-        View::composer('nav.header', function ($view) {
-            $user = Auth::user();
-
-            $address = Address::where('user_id', Auth::id())->get();
-
-            $view->with('carts', null)
-                ->with('address', $address)
-                ->with('user', $user);
-        });
+        //
     }
 }
