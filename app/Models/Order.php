@@ -25,7 +25,17 @@ class Order extends Model
         'status',
         'payment_type',
         'payment_status',
-        'delivery_address'
+        'delivery_address',
+        'bdorderid',
+        'mercid',
+        'order_date',
+        'request_token',
+        'response_token',
+        'payment_method_type',
+        'transactionid',
+        'charge_amount',
+        'transaction_token',
+        'transaction_status'
     ];
 
     public function items()

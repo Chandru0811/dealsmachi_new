@@ -19,8 +19,11 @@ use App\Http\Controllers\Api\Vendor\DashboardController;
 use App\Http\Controllers\Api\CartController;
 use App\Http\Controllers\Api\CheckoutController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\Api\WebhookController;
+use App\Http\Controllers\Api\PaymentController;
 
 Route::post('login', [AuthController::class, 'login']);
+Route::post('social-login/{socialprovider}', [AuthController::class, 'socialLoginResponse']);
 Route::post('register', [AuthController::class, 'register']);
 Route::post('forgot-password', [AuthController::class, 'forgetpassword']);
 Route::post('reset-password', [AuthController::class, 'resetpassword']);
@@ -31,6 +34,7 @@ Route::post('checkotp', [AppController::class, 'checkotp']);
 
 //user
 Route::get('appHome', [AppController::class, 'homepage']);
+Route::get('newappHome', [AppController::class, 'newhomepage']);
 Route::get('get/{id}/categories', [AppController::class, 'categories']);
 Route::get('deals/{category_id}', [AppController::class, 'getDeals']);
 Route::get('deal/details/{id}', [AppController::class, 'dealDescription']);
@@ -138,6 +142,11 @@ Route::middleware('auth:api')->group(function () {
         Route::put('referrer/update/{id}', [ReferrerDetailController::class, 'update']);
         Route::delete('referrer/{id}', [ReferrerDetailController::class, 'delete']);
         Route::get('getAllReferrer', [ReferrerDetailController::class, 'getAllReferrersAndReferrerVendors']);
+        
+        //Product
+        Route::get('getAllProductList', [UserController::class, 'getAllProductWithIds']);
+        Route::post('update-product-order', [UserController::class, 'updateProductOrder']);
+        Route::get('getOrderedProducts', [UserController::class, 'getOrderedProducts']);
     });
 
     //Vendor
@@ -180,6 +189,8 @@ Route::middleware('auth:api')->group(function () {
         // All Referral Vendor
         Route::get('referrals/{userId}', [ShopController::class, 'getReferralsByUserId']);
         Route::get('referrerDashboard', [DashboardController::class, 'referrerDashboard']);
+        Route::get('referrer/commission', [DashboardController::class, 'getAllVendorCommission']);
+        
     });
 
     //Customer
@@ -204,9 +215,11 @@ Route::middleware('auth:api')->group(function () {
     });
 });
 
-// //Announcements
-// Route::get('announcements', [AnnouncementController::class, 'index']);
-// Route::post('announcements', [AnnouncementController::class, 'store']);
-// Route::get('announcements/{id}', [AnnouncementController::class, 'show']);
-// Route::put('announcements/{id}', [AnnouncementController::class, 'update']);
-// Route::delete('announcements/{id}', [AnnouncementController::class, 'destroy']);
+Route::post('/webhook/billdesk', [WebhookController::class, 'handle']);
+Route::post('/billdesh/testing', [PaymentController::class, 'authtest']);
+Route::get('/get/transaction', [PaymentController::class, 'gettranscationdetails']);
+Route::post('/order/refund', [PaymentController::class, 'refundtrans']);
+
+//app testing
+Route::post('/billdesh/create/order', [PaymentController::class, 'createOrder']);
+Route::post('/billdesh/transaction/response', [PaymentController::class, 'transresponse']);

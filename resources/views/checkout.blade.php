@@ -67,12 +67,7 @@ function formatIndianCurrency($num) {
             @endif
             <div class="container" style="margin-top: 100px;">
                 <!-- <h2 class="text-center">Checkout</h2> -->
-                <form id="checkoutForm" action="{{ route('checkout.checkout') }}" method="POST">
-                    @csrf
-                    <!-- Hidden Fields -->
-                    <input type="hidden" name="cart_id" value="{{ $cart->id }}" id="cart_id">
-                    <input type="hidden" name="address_id" value="{{ $address->id }}" id="address_id">
-                    <input type="hidden" name="product_ids" value="{{ $product_ids }}" id="product_id">
+               
                     <div class="row my-5">
                         <div class="col-12">
 
@@ -127,7 +122,7 @@ function formatIndianCurrency($num) {
                                                 {{-- ₹{{ number_format($item->product->discounted_price * $item->quantity, 0) }} --}}
                                                 {{ formatIndianCurrency($item->product->discounted_price * $item->quantity) }}
                                             </span>
-                                            <span class="ms-1" style="font-size:12px; color:#00DD21">-
+                                            <span class="ms-1" style="font-size:12px; color:#00DD21">
                                                 {{-- ({{ number_format($item->product->discount_percentage, 0) }}%) --}}
                                                 {{ formatIndianCurrency($item->product->discount_percentage) }}%
                                                 off
@@ -143,13 +138,12 @@ function formatIndianCurrency($num) {
                                     <h5 style="color:#ff0060;">Payment Methods</h5>
                                     <div class="row justify-content-center mt-3">
                                         <div class="col-lg-5 col-10 mb-3">
-                                            <div class="card payment-option"
-                                                onclick="selectPaymentOption('cash_on_delivery')">
-                                                <div class="d-flex align-items-center p-3 w-100">
+                                            <div class="card payment-option">
+                                                <div class="d-flex align-items-center  w-100">
                                                     <input type="radio" name="payment_type" id="cash_on_delivery"
-                                                        value="cash_on_delivery" class="form-check-input"
+                                                        value="cash_on_delivery" class="form-check-input m-3"
                                                         {{ old('payment_type') == 'cash_on_delivery' ? 'checked' : '' }}>
-                                                    <label for="cash_on_delivery" class="d-flex align-items-center m-0">
+                                                    <label for="cash_on_delivery" class="d-flex align-items-center m-0 py-3" style="width: 100%;">
                                                         <img src="{{ asset('assets/images/home/cash_payment.png') }}"
                                                             alt="Cash on Delivery" class="mx-3"
                                                             style="width: 24px; height: auto;">
@@ -159,19 +153,19 @@ function formatIndianCurrency($num) {
                                             </div>
                                         </div>
                                         <div class="col-lg-5 col-10">
-                                            <!-- <div class="card payment-option" onclick="selectPaymentOption('online_payment')">
-                                                                                        <div class="d-flex align-items-center p-3 w-100">
+                                             <div class="card payment-option">
+                                                                                        <div class="d-flex align-items-center w-100">
                                                                                             <input type="radio" name="payment_type" id="online_payment"
-                                                                                                value="online_payment" class="form-check-input"
+                                                                                                value="online_payment" class="form-check-input m-3"
                                                                                                 {{ old('payment_type') == 'online_payment' ? 'checked' : '' }}>
-                                                                                            <label for="online_payment" class="d-flex align-items-center m-0">
+                                                                                            <label for="online_payment" class="d-flex align-items-center m-0 py-3" style="width: 100%;>
                                                                                                 <img src="{{ asset('assets/images/home/online_banking.png') }}"
                                                                                                     alt="Online Payment" class="mx-3"
                                                                                                     style="width: 24px; height: auto;">
                                                                                                 <span>Online Payment</span>
                                                                                             </label>
                                                                                         </div>
-                                                                                    </div> -->
+                                                                                    </div> 
                                         </div>
                                         @error('payment_type')
                                             <span class="text-danger">{{ $message }}</span>
@@ -183,6 +177,7 @@ function formatIndianCurrency($num) {
                                 style="position: sticky; bottom: 0px; background: #fff;border-top: 1px solid #dcdcdc">
                                 <div class="d-flex justify-content-end align-items-center">
                                     <h4>Total Amount &nbsp;&nbsp;
+                                    <input type="hidden" name="total_amount" id="total_amount" value="{{ number_format($cart->items->sum(fn($item) => $item->product->original_price * $item->quantity), 0) }}">
                                         <span style="text-decoration: line-through; color:#c7c7c7" class="subtotal">
                                             {{-- ₹{{ number_format($cart->items->sum(fn($item) => $item->product->original_price * $item->quantity), 0) }} --}}
                                             {{ formatIndianCurrency($cart->items->sum(fn($item) => $item->product->original_price * $item->quantity)) }}
@@ -202,15 +197,17 @@ function formatIndianCurrency($num) {
                                         </span>
                                     </h4>
                                 </div>
+                                <input type="hidden" name="cart_id" id="cart_id" value="{{ $cart->id }}">
+                                <input type="hidden" name="address_id" class="address_id" value="{{$address->id}}">
+                                <input type="hidden" name="grandtotal" class="grandtotal" value="{{$cart->items->sum(fn($item) => $item->product->discounted_price * $item->quantity)}}">
                                 <div class="d-flex justify-content-end align-items-center ">
-                                    <button type="submit" class="btn check_out_btn text-nowrap" data-bs-toggle="modal"
-                                        data-bs-target="#orderSuccessModal">
+                                    <button type="submit" class="btn check_out_btn text-nowrap">
                                         Place Order
                                     </button>
                                 </div>
                             </div>
                         </div>
-                </form>
+                
 
             </div>
         </section>
@@ -268,11 +265,6 @@ function formatIndianCurrency($num) {
             @endif
             <div class="container" style="margin-top: 100px;">
                 {{-- <h2 class="text-center">Checkout</h2> --}}
-                <form id="checkoutForm" action="{{ route('checkout.checkout') }}" method="POST">
-                    @csrf
-                    <!-- Hidden Fields -->
-                    <input type="hidden" name="cart_id" value="{{ $cart->id }}" id="cart_id">
-                    <input type="hidden" name="address_id" value="{{ $address->id }}" id="address_id">
                     <div class="row my-5">
                         <div class="col-12">
                             <!-- Customer Info Section -->
@@ -318,7 +310,7 @@ function formatIndianCurrency($num) {
                                                 {{-- ₹{{ number_format($item->product->discounted_price * $item->quantity, 0) }} --}}
                                                 {{ formatIndianCurrency($item->product->discounted_price * $item->quantity) }}
                                             </span>
-                                            <span class="ms-1" style="font-size:12px; color:#00DD21">-
+                                            <span class="ms-1" style="font-size:12px; color:#00DD21">
                                                 {{-- ({{ number_format($item->product->discount_percentage, 0) }}%) --}}
                                                 {{ formatIndianCurrency($item->product->discount_percentage) }}
                                                 off
@@ -333,13 +325,12 @@ function formatIndianCurrency($num) {
                                     <h5 style="color:#ff0060;">Payment Methods</h5>
                                     <div class="row justify-content-center mt-3">
                                         <div class="col-lg-5 col-10 mb-3">
-                                            <div class="card payment-option"
-                                                onclick="selectPaymentOption('cash_on_delivery')">
-                                                <div class="d-flex align-items-center p-3 w-100">
+                                            <div class="card payment-option">
+                                                <div class="d-flex align-items-center w-100">
                                                     <input type="radio" name="payment_type" id="cash_on_delivery"
-                                                        value="cash_on_delivery" class="form-check-input"
+                                                        value="cash_on_delivery" class="form-check-input m-3"
                                                         {{ old('payment_type') == 'cash_on_delivery' ? 'checked' : '' }}>
-                                                    <label for="cash_on_delivery" class="d-flex align-items-center m-0">
+                                                    <label for="cash_on_delivery" class="d-flex align-items-center m-0 py-3"  style="width: 100%;>
                                                         <img src="{{ asset('assets/images/home/cash_payment.png') }}"
                                                             alt="Cash on Delivery" class="mx-3"
                                                             style="width: 24px; height: auto;">
@@ -349,19 +340,19 @@ function formatIndianCurrency($num) {
                                             </div>
                                         </div>
                                         <div class="col-lg-5 col-10">
-                                            <!-- <div class="card payment-option" onclick="selectPaymentOption('online_payment')">
-                                                                                        <div class="d-flex align-items-center p-3 w-100">
+                                             <div class="card payment-option">
+                                                                                        <div class="d-flex align-items-center w-100">
                                                                                             <input type="radio" name="payment_type" id="online_payment"
-                                                                                                value="online_payment" class="form-check-input"
+                                                                                                value="online_payment" class="form-check-input m-3"
                                                                                                 {{ old('payment_type') == 'online_payment' ? 'checked' : '' }}>
-                                                                                            <label for="online_payment" class="d-flex align-items-center m-0">
+                                                                                            <label for="online_payment" class="d-flex align-items-center m-0 py-3"  style="width: 100%;>
                                                                                                 <img src="{{ asset('assets/images/home/online_banking.png') }}"
                                                                                                     alt="Online Payment" class="mx-3"
                                                                                                     style="width: 24px; height: auto;">
                                                                                                 <span>Online Payment</span>
                                                                                             </label>
                                                                                         </div>
-                                                                                    </div> -->
+                                                                                    </div> 
                                         </div>
                                         @error('payment_type')
                                             <span class="text-danger">{{ $message }}</span>
@@ -392,15 +383,151 @@ function formatIndianCurrency($num) {
                                 </div>
                                 {{-- <div class="d-flex justify-content-end align-items-center py-3"
                                     style="position:sticky; bottom:10px; background:#fff"> --}}
-                                <button type="submit" class="btn check_out_btn text-nowrap" data-bs-toggle="modal"
-                                    data-bs-target="#orderSuccessModal">
-                                    Place Order
-                                </button>
+                                <!--<button type="submit" class="btn check_out_btn text-nowrap" data-bs-toggle="modal"-->
+                                <!--    data-bs-target="#orderSuccessModal">-->
+                                <!--    Place Order-->
+                                <!--</button>-->
+                                <input type="hidden" name="grandtotal" class="grandtotal" value="{{$cart->items->sum(fn($item) => $item->product->discounted_price * $item->quantity)}}">
+                                <input type="hidden" name="cart_id" id="cart_id" value="{{$cart->id}}">
+                                <input type="hidden" name="address_id" class="address_id" value="{{$address->id}}">
+                                
+                                <button type="submit" class="btn check_out_btn text-nowrap">
+                                        Place Order
+                                    </button>
                                 {{-- </div> --}}
                             </div>
                         </div>
-                </form>
+       
             </div>
         </section>
     @endif
+            <!-- Online Payment Form -->
+<form name="sdklaunch" id="sdklaunch" action="{{ route('new.payment') }}" method="POST" style="display: none;">
+    @csrf
+    <input type="hidden" id="bdorderid" name="bdorderid" value="">
+    <input type="hidden" id="merchantid" name="merchantid" value="">
+    <input type="hidden" id="rdata" name="rdata" value="">
+</form>
+
+<!-- Cash on Delivery Form -->
+<form name="cod_form" id="cod_form" action="{{ route('new.codorder') }}" method="POST" style="display: none;">
+    @csrf
+    <input type="hidden" name="cart_id" value="{{ $cart->id }}" id="cartId">
+    <input type="hidden" name="address_id" value="{{ $address->id }}" id="addressId">
+</form>
+        
+@endsection
+@section('scripts')
+<script>
+    $(document).ready(function() {
+        
+        // $('.check_out_btn').prop('disabled', true).css({
+        //     'background-color': '#00dd21',
+        //     'opacity': '0.5'
+        // });
+        
+        let totalAmount = parseFloat($(".grandtotal").val());
+
+        if (totalAmount === 0) {
+            $("#online_payment").closest(".col-lg-5").hide(); // Hide online payment option
+        }
+    
+        $('input[name="payment_type"]').change(function () {
+            if ($(this).val() == 'online_payment') {
+                var totalamount = $('#total_amount').val();
+                
+                if (totalamount == '0') {
+                    $('.check_out_btn').prop('disabled', true).css({
+                        'background-color': '#00dd21',
+                        'opacity': '0.5'
+                    });
+                } else {
+                    $('.check_out_btn').prop('disabled', true).css({
+                        'background-color': '#00dd21',
+                        'opacity': '0.5'
+                    });
+        
+                    // Show spinner inside the button
+                    $('.check_out_btn').html(
+                        `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Place Order`
+                    );
+        
+                    $.ajax({
+                        url: "{{ route('new.payment') }}",
+                        type: "POST",
+                        data: {
+                            "cart_id": $('#cart_id').val(),
+                            "address_id": $('.address_id').val(),
+                            "amount":totalAmount
+                        },
+                        success: function (response) {
+                            $('.check_out_btn').prop('disabled', false).css({
+                                'background-color': '#00dd21',
+                                'opacity': '1'
+                            }).html(`Place Order`); // Restore button text
+        
+                            $('#bdorderid').val(response.bdorderid);
+                            $('#merchantid').val(response.mercid);
+                            $('#rdata').val(response.rdata);
+                            $('#sdklaunch').attr('action', response.href);
+                            // $('#sdklaunch').submit();
+                        },
+                        error: function () {
+                            $('.check_out_btn').prop('disabled', false).css({
+                                'background-color': '#00dd21',
+                                'opacity': '1'
+                            }).html(`Place Order`); // Restore button text
+                        }
+                    });
+                }
+            } else {
+                $('.check_out_btn').prop('disabled', false).css({
+                    'background-color': '#00dd21',
+                    'opacity': '1'
+                }).html(`Place Order`); // Restore button text
+            }
+        });
+
+
+        
+       $('.check_out_btn').on('click', function () {
+            var paymenttype = $('input[name="payment_type"]:checked').val();
+            
+            if (!paymenttype) {
+                showToast("Please select a payment method before proceeding.");
+                return false; // Prevent further execution
+            }
+        
+            if (paymenttype === "online_payment") {
+                $('#sdklaunch').submit();
+            } else {
+                $('#cod_form').submit();
+            }
+        });
+    
+
+    function showToast(message) {
+        var toastHtml = `
+            <div class="alert alert-dismissible fade show toast-danger" role="alert"
+                style="position: fixed; top: 70px; right: 40px; z-index: 1050;">
+                <div class="toast-content">
+                    <div class="toast-icon">
+                        <i class="fa-solid fa-triangle-exclamation" style="color: #EF4444"></i>
+                    </div>
+                    <span class="toast-text"> ${message} </span>&nbsp;&nbsp;
+                    <button class="toast-close-btn" data-bs-dismiss="alert" aria-label="Close">
+                        <i class="fa-solid fa-xmark" style="color: #EF4444"></i>
+                    </button>
+                </div>
+            </div>`;
+    
+        // Append the toast to the body and auto-remove after 3 seconds
+        $('body').append(toastHtml);
+        setTimeout(function () {
+            $(".toast-danger").fadeOut(500, function () { $(this).remove(); });
+        }, 3000);
+    }
+
+    });
+</script>
 @endsection

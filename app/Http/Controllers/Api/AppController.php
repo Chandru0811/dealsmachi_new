@@ -4,8 +4,6 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Bookmark;
-use App\Models\Cart;
-use App\Models\CartItem;
 use Illuminate\Http\Request;
 use App\Models\CategoryGroup;
 use App\Models\Category;
@@ -22,14 +20,11 @@ use App\Models\DealClick;
 use App\Models\Dealenquire;
 use App\Models\DealShare;
 use App\Models\DealViews;
-use App\Models\Order;
-use App\Models\OrderItems;
 use App\Models\User;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Hash;
-use App\Mail\OrderCreated;
 use App\Models\Review;
 
 class AppController extends Controller
@@ -54,8 +49,8 @@ class AppController extends Controller
 
         $bookmarkedProducts = collect();
 
-        if (Auth::check()) {
-            $userId = Auth::id();
+        if (Auth::guard('api')->check()) {
+            $userId = Auth::guard('api')->id();
             $bookmarkedProducts = Bookmark::where('user_id', $userId)->pluck('deal_id');
         } else {
             $ipAddress = $request->ip();
@@ -77,6 +72,57 @@ class AppController extends Controller
 
         return $this->success('HomePage Retrieved Successfully!', $homePageData);
     }
+    
+    public function newhomepage(Request $request)
+    {
+        $today = now()->toDateString();
+
+        $categoryGroups = CategoryGroup::where('active', 1)->take(10)->get();
+        $sliders = Slider::get();
+        $cashBackDeals = DealCategory::where('active', 1)->take(5)->get();
+
+        $products = Product::where('active', 1)
+            ->with(['productMedia:id,resize_path,order,type,imageable_id', 'shop:id,city,shop_ratings'])
+            ->orderBy('created_at', 'desc')
+            ->paginate(8); // Paginate with 8 products per page
+
+        $treandingdeals = DealViews::whereDate('viewed_at', Carbon::today())->get();
+        $populardeals = DealViews::select('deal_id', DB::raw('count(*) as total_views'))
+            ->groupBy('deal_id')
+            ->limit(5)
+            ->orderBy('total_views', 'desc')
+            ->having('total_views', '>', 10)
+            ->get();
+        $earlybirddeals = Product::where('active', 1)->whereDate('start_date', now())->get();
+        $lastchancedeals = Product::where('active', 1)->whereDate('end_date', now())->get();
+        $limitedtimedeals = Product::where('active', 1)->whereRaw('DATEDIFF(end_date, start_date) <= ?', [2])->get();
+
+        $bookmarkedProducts = collect();
+
+        if (Auth::guard('api')->check()) {
+            $userId = Auth::guard('api')->id();
+            $bookmarkedProducts = Bookmark::where('user_id', $userId)->pluck('deal_id');
+        } else {
+            $ipAddress = $request->ip();
+            $bookmarkedProducts = Bookmark::where('ip_address', $ipAddress)->pluck('deal_id');
+        }
+
+        $homePageData = [
+            'categoryGroups' => $categoryGroups,
+            'sliders' => $sliders,
+            'cashBackDeals' => $cashBackDeals,
+            'products' => $products,
+            'bookmarkedProducts' => $bookmarkedProducts,
+            'treandingdeals' => $treandingdeals,
+            'populardeals' => $populardeals,
+            'earlybirddeals' => $earlybirddeals,
+            'lastchancedeals' => $lastchancedeals,
+            'limitedtimedeals' => $limitedtimedeals
+        ];
+
+        return $this->success('HomePage Retrieved Successfully!', $homePageData);
+    }
+
 
     public function categories($id)
     {
@@ -121,8 +167,8 @@ class AppController extends Controller
 
         $bookmarkedProducts = collect();
 
-        if (Auth::check()) {
-            $userId = Auth::id();
+        if (Auth::guard('api')->check()) {
+            $userId = Auth::guard('api')->id();
             $bookmarkedProducts = Bookmark::where('user_id', $userId)->pluck('deal_id');
         } else {
             $ipAddress = $request->ip();
@@ -155,8 +201,8 @@ class AppController extends Controller
 
         $isBookmarked = false;
 
-        if (Auth::check()) {
-            $userId = Auth::id();
+        if (Auth::guard('api')->check()) {
+            $userId = Auth::guard('api')->id();
             $isBookmarked = Bookmark::where('user_id', $userId)->where('deal_id', $id)->exists();
         } else {
             $ipAddress = $request->ip();
@@ -221,7 +267,7 @@ class AppController extends Controller
             $query->where(function ($priceQuery) use ($priceRanges) {
                 foreach ($priceRanges as $range) {
                     // Clean and split the price range
-                    $cleanRange = str_replace(['$', ',', ' '], '', $range);
+                    $cleanRange = str_replace(['Rs', ',', ' '], '', $range);
                     $priceRange = explode('-', $cleanRange);
 
                     $minPrice = isset($priceRange[0]) ? (float)$priceRange[0] : null;
@@ -309,12 +355,12 @@ class AppController extends Controller
 
             if ($end > $maxPrice) {
                 $priceRanges[] = [
-                    'label' => '$' . number_format($start, 2) . ' - $' . number_format($end, 2)
+                    'label' => 'Rs' . number_format($start, 2) . ' - Rs' . number_format($end, 2)
                 ];
                 break;
             }
             $priceRanges[] = [
-                'label' => '$' . number_format($start, 2) . ' - $' . number_format($end, 2)
+                'label' => 'Rs' . number_format($start, 2) . ' - Rs' . number_format($end, 2)
             ];
         }
 
@@ -322,8 +368,8 @@ class AppController extends Controller
         $totaldeals = $deals->count();
         $bookmarkedProducts = collect();
 
-        if (Auth::check()) {
-            $userId = Auth::id();
+        if (Auth::guard('api')->check()) {
+            $userId = Auth::guard('api')->id();
             $bookmarkedProducts = Bookmark::where('user_id', $userId)->pluck('deal_id');
         } else {
             $ipAddress = $request->ip();
@@ -441,7 +487,7 @@ class AppController extends Controller
             $query->where(function ($priceQuery) use ($priceRanges) {
                 foreach ($priceRanges as $range) {
                     // Clean and split the price range
-                    $cleanRange = str_replace(['$', ',', ' '], '', $range);
+                    $cleanRange = str_replace(['Rs', ',', ' '], '', $range);
                     $priceRange = explode('-', $cleanRange);
 
                     $minPrice = isset($priceRange[0]) ? (float)$priceRange[0] : null;
@@ -484,12 +530,12 @@ class AppController extends Controller
 
             if ($end > $maxPrice) {
                 $priceRanges[] = [
-                    'label' => '$' . number_format($start, 2) . ' - $' . number_format($end, 2)
+                    'label' => 'Rs' . number_format($start, 2) . ' - Rs' . number_format($end, 2)
                 ];
                 break;
             }
             $priceRanges[] = [
-                'label' => '$' . number_format($start, 2) . ' - $' . number_format($end, 2)
+                'label' => 'Rs' . number_format($start, 2) . ' - Rs' . number_format($end, 2)
             ];
         }
 
@@ -498,8 +544,8 @@ class AppController extends Controller
 
         $bookmarkedProducts = collect();
 
-        if (Auth::check()) {
-            $userId = Auth::id();
+        if (Auth::guard('api')->check()) {
+            $userId = Auth::guard('api')->id();
             $bookmarkedProducts = Bookmark::where('user_id', $userId)->pluck('deal_id');
         } else {
             $ipAddress = $request->ip();
@@ -682,8 +728,8 @@ class AppController extends Controller
         $shortby = DealCategory::where('active', 1)->take(5)->get();
         $totaldeals = $deals->count();
         $bookmarkedProducts = collect();
-        if (Auth::check()) {
-            $userId = Auth::id();
+        if (Auth::guard('api')->check()) {
+            $userId = Auth::guard('api')->id();
             $bookmarkedProducts = Bookmark::where('user_id', $userId)->pluck('deal_id');
         } else {
             $ipAddress = $request->ip();
@@ -707,57 +753,143 @@ class AppController extends Controller
     public function addBookmark(Request $request, $deal_id)
     {
         $deal = Product::findOrFail($deal_id);
+        $user_id = Auth::guard('api')->check() ? Auth::guard('api')->id() : null;
+        $bookmarknumber = $request->input("bookmarknumber");
 
-        $user_id = Auth::check() ? Auth::id() : null;
+        if ($bookmarknumber == null) {
+            $bookmarknumber = session()->get('bookmarknumber');
+        }
 
-        if ($user_id) {
-            $existing_bookmark = Bookmark::where('deal_id', $deal->id)->where('user_id', $user_id)->first();
+        if ($user_id == null) {
+            if ($bookmarknumber == null) {
+
+                $bookmarknumber = Str::uuid();
+                session(['bookmarknumber' => $bookmarknumber]);
+                //create bookmark
+                $bookmark = Bookmark::create([
+                    'bookmark_number' => $bookmarknumber,
+                    'user_id' => null, // Guest user
+                    'ip_address' => $request->ip(),
+                    'deal_id' => $deal->id,
+                ]);
+
+
+                $bookmarkCount = $this->getBookmarkCount($request);
+                return response()->json(['message' => 'Deal added to bookmarks successfully!', 'total_items' => $bookmarkCount, 'bookmarknumber' => $bookmarknumber]);
+            } else {
+                $existing_bookmark = Bookmark::where('deal_id', $deal->id)->where('bookmark_number', $bookmarknumber)->first();
+                if ($existing_bookmark) {
+
+                    return response()->json(['message' => 'Deal already bookmarked']);
+                } else {
+                    Bookmark::updateOrCreate(
+                        [
+                            'deal_id' => $deal->id,
+                            'user_id' => $user_id,
+                            'ip_address' => $request->ip(),
+                            'bookmark_number' => $bookmarknumber,
+                        ]
+                    );
+
+
+                    $bookmarkCount = $this->getBookmarkCount($request);
+                    return response()->json(['message' => 'Deal added to bookmarks successfully!', 'total_items' => $bookmarkCount, 'bookmarknumber' => $bookmarknumber]);
+                }
+            }
         } else {
-            $existing_bookmark = Bookmark::where('deal_id', $deal->id)->whereNull('user_id')->where('ip_address', $request->ip())->first();
+            $existing_bookmark = Bookmark::where('deal_id', $deal->id)->where('user_id', $user_id)->first();
+            if ($existing_bookmark) {
+                Bookmark::updateOrCreate(
+                    [
+                        'deal_id' => $deal->id,
+                        'user_id' => $user_id,
+                        'ip_address' => $request->ip(),
+                        'bookmark_number' => $bookmarknumber,
+                    ]
+                );
+
+
+                $bookmarkCount = $this->getBookmarkCount($request);
+                return response()->json(['message' => 'Deal added to bookmarks successfully!', 'total_items' => $bookmarkCount, 'bookmarknumber' => $bookmarknumber]);
+            } else {
+                if ($bookmarknumber == null) {
+                    $bookmarknumber = Str::uuid();
+                    session(['bookmarknumber' => $bookmarknumber]);
+                }
+                $bookmark = Bookmark::create([
+                    'bookmark_number' => $bookmarknumber,
+                    'user_id' => $user_id, // Guest user
+                    'ip_address' => $request->ip(),
+                    'deal_id' => $deal->id,
+                ]);
+
+
+                $bookmarkCount = $this->getBookmarkCount($request);
+                return response()->json([
+                    'message' => 'Deal added to bookmarks successfully!',
+                    'total_items' => $bookmarkCount,
+                    'bookmarknumber' => $bookmarknumber
+                ]);
+            }
         }
-
-        if ($existing_bookmark) {
-            return response()->json(['message' => 'Deal already bookmarked'], 409);
-        }
-
-        Bookmark::updateOrCreate(
-            [
-                'deal_id' => $deal->id,
-                'user_id' => $user_id,
-                'ip_address' => $request->ip(),
-            ]
-        );
-
-        return $this->ok('Item Added SuccessFully!');
     }
+
 
     public function removeBookmark(Request $request, $deal_id)
     {
-        $user_id = Auth::check() ? Auth::id() : null;
+
+        $bookmarknumber = $request->input("bookmarknumber");
+
+        if ($bookmarknumber == null) {
+            $bookmarknumber = session()->get('bookmarknumber');
+        }
+
+        $user_id = Auth::guard('api')->check() ? Auth::guard('api')->id() : null;
 
         if ($user_id) {
             $bookmark = Bookmark::where('deal_id', $deal_id)->where('user_id', $user_id)->first();
         } else {
-            $bookmark = Bookmark::where('deal_id', $deal_id)->whereNull('user_id')->where('ip_address', $request->ip())->first();
+            $bookmark = Bookmark::where('deal_id', $deal_id)->whereNull('user_id')->where('bookmark_number', $bookmarknumber)->first();
         }
 
         if ($bookmark) {
             $bookmark->delete();
-            return $this->ok('Item Removed from Bookmark!');
-        } else {
-            return $this->error('Bookmark Not Found.', ['error' => 'Bookmark Not Found']);
+
+
+            $bookmarkCount = $this->getBookmarkCount($request);
+            return response()->json(['message' => 'Item removed from bookmarks!', 'total_items' => $bookmarkCount]);
         }
+
+
+        return response()->json(['message' => 'Bookmark not found'], 404);
+    }
+
+    private function getBookmarkCount(Request $request)
+    {
+        $user_id = Auth::guard('api')->check() ? Auth::guard('api')->id() : null;
+        $bookmarknumber = $request->input("bookmarknumber") ?? session()->get('bookmarknumber');
+
+        return Bookmark::where(function ($query) use ($user_id, $bookmarknumber) {
+            if ($user_id) {
+                $query->where('user_id', $user_id);
+            } else {
+                $query->whereNull('user_id')->where('bookmark_number', $bookmarknumber);
+            }
+        })
+            ->whereHas('deal', fn($query) => $query->where('active', 1)->whereNull('deleted_at'))
+            ->count();
     }
 
     public function totalItems(Request $request)
     {
-        $user_id = Auth::check() ? Auth::id() : null;
+        $user_id = Auth::guard('api')->check() ? Auth::guard('api')->id() : null;
+        $bookmarknumber = $request->input("bookmarknumber") ?? session()->get('bookmarknumber');
 
-        $bookmarkCount = Bookmark::where(function ($query) use ($user_id, $request) {
+        $bookmarkCount = Bookmark::where(function ($query) use ($user_id, $bookmarknumber) {
             if ($user_id) {
                 $query->where('user_id', $user_id);
             } else {
-                $query->whereNull('user_id')->where('ip_address', $request->ip());
+                $query->whereNull('user_id')->where('bookmark_number', $bookmarknumber);
             }
         })->count();
 
@@ -766,23 +898,62 @@ class AppController extends Controller
 
     public function getBookmarks(Request $request)
     {
-        $user_id = Auth::check() ? Auth::id() : null;
+        $bookmarknumber = $request->input("bookmarknumber") ?? session()->get('bookmarknumber');
 
-        $bookmarks = Bookmark::where(function ($query) use ($user_id, $request) {
+        $user_id = Auth::guard('api')->check() ? Auth::guard('api')->id() : null;
+
+        if ($user_id) {
+            Bookmark::whereNull('user_id')
+            ->where('bookmark_number', $bookmarknumber)
+                ->update(['user_id' => $user_id]);
+        }
+
+        $bookmarks = Bookmark::where(function ($query) use ($user_id, $bookmarknumber) {
             if ($user_id) {
                 $query->where('user_id', $user_id);
             } else {
-                $query->whereNull('user_id')->where('ip_address', $request->ip());
+                $query->where('bookmark_number', $bookmarknumber);
             }
-        })->with('deal.productMedia:id,resize_path,order,type,imageable_id')->paginate(10);
+        })
+            ->whereHas('deal', function ($query) {
+                $query->where('active', 1)
+                ->whereNull('deleted_at');
+            })
+            ->with(['deal' => function ($query) {
+                $query->where('active', 1)
+                ->whereNull('deleted_at')
+                ->with(['productMedia:id,resize_path,order,type,imageable_id']);
+            }, 'deal.shop'])
+            ->paginate(10);
 
-        return $this->success('Item Added SuccessFully!', $bookmarks);
+        return response()->json([
+            'success' => true,
+            'data' => $bookmarks,
+        ], 200);
     }
+
+
+    // public function getBookmarks(Request $request)
+    // {
+    //     $user_id = Auth::guard('api')->check() ? Auth::guard('api')->id() : null;
+
+    //     $bookmarknumber = $request->input("bookmarknumber") ?? session()->get('bookmarknumber');
+
+    //     $bookmarks = Bookmark::where(function ($query) use ($user_id, $bookmarknumber) {
+    //         if ($user_id) {
+    //             $query->where('user_id', $user_id);
+    //         } else {
+    //             $query->whereNull('user_id')->where('bookmark_number', $bookmarknumber);
+    //         }
+    //     })->with('deal.productMedia:id,resize_path,order,type,imageable_id')->paginate(10);
+
+    //     return $this->success('Items Retrieved Successfully!', $bookmarks);
+    // }
 
     public function clickcounts(Request $request)
     {
         $dealId = $request->id;
-        $userId = Auth::check() ? Auth::id() : null;
+        $userId = Auth::guard('api')->check() ? Auth::guard('api')->id() : null;
 
         DealClick::create([
             'deal_id' => $dealId,
@@ -797,7 +968,7 @@ class AppController extends Controller
     public function viewcounts(Request $request)
     {
         $dealId = $request->id;
-        $userId = Auth::check() ? Auth::id() : null;
+        $userId = Auth::guard('api')->check() ? Auth::guard('api')->id() : null;
         $ipAddress = $request->ip();
 
         DealViews::create([
@@ -813,7 +984,7 @@ class AppController extends Controller
     public function couponCopied(Request $request)
     {
         $dealId = $request->id;
-        $userId = Auth::check() ? Auth::id() : null;
+        $userId = Auth::guard('api')->check() ? Auth::guard('api')->id() : null;
         $ipAddress = $request->ip();
 
         CouponCodeUsed::create([
@@ -830,7 +1001,7 @@ class AppController extends Controller
     public function dealshare(Request $request)
     {
         $dealId = $request->id;
-        $userId = Auth::check() ? Auth::id() : null;
+        $userId = Auth::guard('api')->check() ? Auth::guard('api')->id() : null;
         $ipAddress = $request->ip();
 
         DealShare::create([
@@ -846,7 +1017,7 @@ class AppController extends Controller
     public function dealenquire(Request $request)
     {
         $dealId = $request->id;
-        $userId = Auth::check() ? Auth::id() : null;
+        $userId = Auth::guard('api')->check() ? Auth::guard('api')->id() : null;
         $ipAddress = $request->ip();
 
         Dealenquire::create([
@@ -928,7 +1099,7 @@ class AppController extends Controller
 
     public function updateUser(Request $request)
     {
-        $userId = Auth::id();
+        $userId = Auth::guard('api')->id();
 
         $user = User::find($userId);
 
@@ -954,7 +1125,7 @@ class AppController extends Controller
 
     public function getUser()
     {
-        $userId = Auth::id();
+        $userId = Auth::guard('api')->id();
 
         $user = User::find($userId);
 
@@ -967,7 +1138,8 @@ class AppController extends Controller
 
     public function softDeleteUser()
     {
-        $userId = Auth::id();
+        $userId = Auth::guard('api')->id();
+        
         $user = User::find($userId);
 
         if (!$user) {
@@ -1004,14 +1176,14 @@ class AppController extends Controller
             return response()->json(['errors' => $validator->errors()], 422);
         }
 
-       $review =  Review::updateOrCreate(
-            ['user_id' => Auth::id(), 'product_id' => $request->product_id],
+        $review =  Review::updateOrCreate(
+            ['user_id' => Auth::guard('api')->id(), 'product_id' => $request->product_id],
             [
                 'title' => $request->input('title'),
                 'body'  => $request->input('body'),
                 'rating' => $request->input('rating'),
                 'product_id' => $request->input('product_id'),
-                'user_id' => Auth::id(),
+                'user_id' => Auth::guard('api')->id(),
             ]
         );
 

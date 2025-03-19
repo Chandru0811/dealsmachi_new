@@ -7,7 +7,23 @@
 
 /* Category & Banner Start  */
 .categorySection {
+    margin-top: 100px;
     margin-bottom: 1rem;
+}
+
+.h2-styling{
+    font-size: 12px;
+    text-align: center;
+    color: #000;
+}
+
+.h1-styling{
+    font-size: 16px;
+    color: #ff0060;
+}
+
+.h3-styling{
+    font-size: 1.25rem;
 }
 
 .categorySection {
@@ -25,6 +41,12 @@
 @media screen and (max-width: 320px) {
     .categoryIcons {
         margin-top: 100px;
+    }
+}
+
+@media (min-width: 320px) and (max-width: 500px) {
+     .categoryIcons {
+        margin-top: 50px !important;
     }
 }
 
@@ -157,6 +179,7 @@
     }
 
     .categorySection {
+        margin-top: 50px;
         margin-bottom: 2rem;
     }
 }
@@ -313,7 +336,7 @@
 .topCard:hover {
     transform: translateY(-2px);
     box-shadow: 0 5px 5px rgba(0, 0, 0, 0);
-    border: 1px solid #ff0060;
+    /*border: 1px solid #ff0060;*/
     cursor: pointer;
 }
 
@@ -513,10 +536,14 @@ footer hr {
     width: 34%;
     border-radius: 50%;
     text-align: center;
-    border: 1px solid #ff0060;
+    /*border: 1px solid #ff0060;*/
     background-color: #fff;
     color: #ff0060;
     margin-left: 45%;
+}
+
+.cart-border {
+    border: 1px solid #ff0060 !important;
 }
 
 @media screen and (max-width: 1199px) and (min-width: 320px) {
@@ -622,7 +649,7 @@ footer hr {
     }
 
     .header-logo {
-        max-width: 60px;
+        max-width: 115px;
         padding-left: 0 !important;
     }
 
@@ -4393,4 +4420,65 @@ footer hr {
     overflow-wrap: break-word;
     white-space: normal;
     max-width: 100%;
+}
+
+.retry-button{
+    border: 2px solid #ff0060;
+    background-color: #ff0060;
+    color: #fff;
+    font-size: 14px;
+    font-family: "Kanit", system-ui;
+}
+
+.retry-button:hover{
+    border: 2px solid #ff0060;
+    background-color: #fff;
+    color: #ff0060;
+    font-size: 14px;
+    font-family: "Kanit", system-ui;
+}
+
+.special-price{
+  background-color: #d6e3ff;
+  color: #6294ff;
+  border: 0.5px solid #6294ff;
+  border-radius: 3px;
+  font-size: 10px;
+  padding: 0px 7px;
+}
+
+.stock-badge{
+    background-color: #d6ffd8;
+    color: #00dd1a;
+    border: 0.5px solid #00dd1a;
+    border-radius: 3px;
+    font-size: 10px;
+    padding: 0px 10px;
+}
+
+.out-of-stock{
+    background-color: #ffdddd;
+    color: #ff8989;
+    border: 0.5px solid #ff8989;
+    border-radius: 3px;
+    font-size: 10px;
+    padding: 3px 10px;
+}
+
+.product-stock-badge{
+    background-color: #d6ffd8;
+    color: #00dd1a;
+    border: 0.5px solid #00dd1a;
+    border-radius: 3px;
+    font-size: 12px;
+    padding: 0px 10px;
+}
+
+.product-out-of-stock{
+    background-color: #ffdddd;
+    color: #ff8989;
+    border: 0.5px solid #ff8989;
+    border-radius: 3px;
+    font-size: 12px;
+    padding: 3px 10px;
 }

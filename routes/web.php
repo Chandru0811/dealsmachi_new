@@ -10,6 +10,8 @@ use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\NewCartController;
+use App\Http\Controllers\NewcheckoutController;
 
 Route::fallback(function () {
     return redirect()->route('home');
@@ -20,6 +22,10 @@ Route::fallback(function () {
 // });
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
+// Route::match(['get', 'post'],get('/payment/redirect', function (Request $request) {
+//     return redirect()->route('home');
+// });
+Route::match(['get', 'post'], '/payment/redirect', [NewcheckoutController::class, 'handleRedirect']);
 Route::get('hotpick/{slug}', [HomeController::class, 'dealcategorybasedproducts'])->name('deals.categorybased');
 Route::get('categories/{slug}', [HomeController::class, 'subcategorybasedproducts'])->name('deals.subcategorybased');
 Route::get('deal/{id}', [HomeController::class, 'productdescription']);
@@ -50,13 +56,19 @@ Route::middleware('auth')->group(function () {
     Route::get('/order/invoice/{id}', [CheckoutController::class, 'orderInvoice'])->name('order.invoice');
     Route::put('/updateUser', [HomeController::class, 'updateUser'])->name('user.update');
     Route::post('/review', [HomeController::class, 'createReview'])->name('review.create');
+    
+    //newcheckout
+    Route::post('/proceed/payment', [NewcheckoutController::class, 'proceedonlinepayment'])->name('new.payment');
+    Route::post('/proceed/cod', [NewcheckoutController::class, 'confirmcod'])->name('new.codorder');
 });
+Route::get('cart/details', [NewCartController::class, 'cartdetails'])->name('cart.details');
+Route::post('addtocart/{slug}', [NewCartController::class, 'addToCart'])->name('cart.add');
+Route::get('cart', [NewCartController::class, 'index'])->name('cart.index');
+
 Route::get('get/cartitems', [CartController::class, 'getCartItem'])->name('cartitems.get');
-Route::post('addtocart/{slug}', [CartController::class, 'addToCart'])->name('cart.add');
-Route::get('cart', [CartController::class, 'index'])->name('cart.index');
 Route::Post('cart/remove', [CartController::class, 'removeItem'])->name('cart.remove');
 Route::post('cart/update', [CartController::class, 'updateCart'])->name('cart.update');
-Route::get('cart/dropdown', [CartController::class, 'getCartDropdown'])->name('cart.dropdown');
+// Route::get('cart/dropdown', [CartController::class, 'getCartDropdown'])->name('cart.dropdown');
 Route::post('saveforlater/add', [CartController::class, 'saveForLater'])->name('savelater.add');
 // Route::post('saveforlater/multiple', [CartController::class, 'multipleMoveToCart'])->name('savelater.multiple');
 Route::post('saveforlater/toCart', [CartController::class, 'moveToCart'])->name('movetocart');
@@ -71,6 +83,7 @@ Route::get('/terms_conditions', function () {
 Route::get('/contactus', function () {
     return view('contactus');
 });
+
 
 //social login
 Route::get('auth/{socialprovider}',[AuthController::class,'socialLogin'])->name('google.login');

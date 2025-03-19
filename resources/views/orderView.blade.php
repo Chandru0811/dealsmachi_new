@@ -93,7 +93,7 @@
                                     Order Item ID: <span>{{ $order->items[0]->item_number ?? 'N/A' }}</span>
                                 </h4>
                             </div>
-                            <div class="d-flex gap-2">
+                            <div class="d-flex gap-2 mt-2">
                                 <p class="text-nowrap">
                                     <span class="badge_warning me-2">
                                         {{ $order->payment_status === '1'
@@ -173,9 +173,9 @@
                                             {{ $order->status === '1'
                                                 ? 'Created'
                                                 : ($order->status === '2'
-                                                    ? 'Payment Error'
+                                                    ? 'Confirmed'
                                                     : ($order->status === '3'
-                                                        ? 'Confirmed'
+                                                        ? 'Payment Error'
                                                         : ($order->status === '4'
                                                             ? 'Awaiting Delivery'
                                                             : ($order->status === '5'
@@ -195,8 +195,8 @@
                                 </div>
                                 <p class="date_align mb-1">
                                     <span>
-                                        Date :
-                                        <span>{{ \Carbon\Carbon::parse($order->created_at)->format('d/m/Y') }}</span>
+                                        Dates :
+                                        <span>{{ \Carbon\Carbon::parse($order->created_at)->setTimezone('Asia/Kolkata')->format('d/m/Y h:i:s A') }}</span>
                                     </span>
                                 </p>
                             </div>
@@ -370,10 +370,14 @@
                                 style="background: #ffecee">
                                 <p class="mb-0">Order Summary</p>
                                 <p>
-                                    <span
-                                        class="{{ $order->payment_type === 'online_payment' ? 'badge_default' : 'badge_payment' }}">
+                                    <span class="badge_default">
+                                    @if($order->payment_type === "online_payment")
+                                        {{ ucfirst(str_replace('_', ' ', $order->payment_method_type ?? 'Pending')) }}
+                                    @else
                                         {{ ucfirst(str_replace('_', ' ', $order->payment_type ?? 'Pending')) }}
-                                    </span>&nbsp;
+                                    @endif
+                                </span>
+                                &nbsp;
                                     <span
                                         class="badge_warning">{{ $order->payment_status === '1'
                                             ? 'Not Paid'
@@ -478,6 +482,20 @@
                                 </p>
                             </div>
                         </div>
+                       @if($order->payment_type === "online_payment")
+                            <div class="card mb-4">
+                                <div class="card-header m-0 p-2" style="background: #ffecee">
+                                    <p class="mb-0">Payment Information</p>
+                                </div>
+                                <div class="card-body m-0 p-4">
+                                    <p>Transaction Id: {{ $order->transactionid ?? '--' }}</p>
+                                    <p>Payment Time: 
+                                        {{ \Carbon\Carbon::parse($order->created_at)->setTimezone('Asia/Kolkata')->format('d/m/Y h:i:s A') }}
+                                    </p>
+                                </div>
+                            </div>
+                        @endif
+
                     </div>
                 </div>
             </div>

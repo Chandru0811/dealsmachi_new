@@ -21,6 +21,11 @@ use App\Models\Shop;
 use App\Models\User;
 use Barryvdh\DomPDF\Facade\Pdf;
 use DB;
+use App\Http\Controllers\Api\PaymentController;
+use Illuminate\Support\Facades\App;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Http;
 
 class CheckoutController extends Controller
 {
@@ -144,6 +149,7 @@ class CheckoutController extends Controller
         $user_id = Auth::check() ? Auth::id() : null;
         $cart_id = $request->input('cart_id');
         $product_ids = $request->input('product_ids');
+        $payment_type = $request->input('payment_type');
 
         if ($product_ids != null && $cart_id != null) {
             $ids = json_decode($product_ids);
@@ -267,6 +273,12 @@ class CheckoutController extends Controller
                 $cart_item->delete(); // Delete the cart item
             }
 
+            $product = Product::find($item->product_id);
+            if ($product) {
+                $product->stock -= $item->quantity;
+                $product->save();
+            }
+
             // Save updated cart or delete if empty
             if ($cart->item_count <= 0 || $cart->quantity <= 0) {
                 $cart->delete();
@@ -283,7 +295,7 @@ class CheckoutController extends Controller
             // Create order for the cart items
             $latestOrder = Order::orderBy('id', 'desc')->first();
             $customOrderId = $latestOrder ? intval(Str::after($latestOrder->id, '-')) + 1 : 1;
-            $orderNumber = 'DEALSMACHI_O' . $customOrderId;
+            $orderNumber = 'DEALSMACHI_O' . now()->format('His') . $customOrderId;
             $addressId = $request->input('address_id');
             $address = Address::find($addressId);
 
@@ -350,6 +362,87 @@ class CheckoutController extends Controller
             // Delete cart and cart items
             $cart->items()->delete();
             $cart->delete();
+
+            $decodedAddress = json_decode($order->delivery_address, true);
+
+            $addressFields = [
+                'address' => $decodedAddress['address'] ?? '',
+                'city' => $decodedAddress['city'] ?? '',
+                'state' => $decodedAddress['state'] ?? '',
+                'postal_code' => $decodedAddress['postal_code'] ?? '',
+                'unit' => $decodedAddress['unit'] ?? ''
+            ];
+
+            $formattedAddress = implode(", ", array_filter([
+                $addressFields['address'],
+                $addressFields['city'],
+                $addressFields['state'],
+                $addressFields['postal_code'],
+            ]));
+
+            $product = Product::find($item->product_id);
+            if ($product) {
+                $product->stock -= $item->quantity;
+                $product->save();
+            }
+
+            if ($addressFields['unit']) {
+                $formattedAddress .= " - " . $addressFields['unit'];
+            }
+
+            if ($payment_type == "online_payment") {
+                $date = Carbon::now('Asia/Kolkata')->format('Y-m-d\TH:i:sP');
+                $userAgent = $request->header('User-Agent');
+                if ($userAgent === 'Symfony') {
+                    $userAgent = $_SERVER['HTTP_USER_AGENT'] ?? 'Unknown';
+                }
+
+
+                $requestPayload = [
+                    "mercid" => env('UAT_BILLDESK_MERCHANT_ID'),
+                    "orderid" => $orderNumber,
+                    "amount" => $order->grand_total,
+                    "order_date" => $date,
+                    "currency" => "356",
+                    "ru" => env('UAT_BILLDESK_RETURN_URL'),
+                    "additional_info" => [
+                        "additional_info1" => $formattedAddress,
+                        "additional_info2" => "NA",
+                        "additional_info3" => "NA",
+                        "additional_info4" => "NA",
+                        "additional_info5" => "NA",
+                        "additional_info6" => "NA",
+                        "additional_info7" => "NA"
+                    ],
+                    "itemcode" => "DIRECT",
+                    "device" => [
+                        "init_channel" => "internet",
+                        "ip" => $request->ip(),
+                        "user_agent" => $userAgent,
+                        "accept_header" => $request->header('Accept'),
+                        "browser_tz" => $request->input('browser_tz', '-330'), // Default: -330 (IST Offset)
+                        "browser_color_depth" => $request->input('browser_color_depth', '32'),
+                        "browser_java_enabled" => $request->input('browser_java_enabled', 'false'),
+                        "browser_screen_height" => $request->input('browser_screen_height', '601'),
+                        "browser_screen_width" => $request->input('browser_screen_width', '657'),
+                        "browser_language" => $request->header('Accept-Language', 'en-US'),
+                        "browser_javascript_enabled" => $request->input('browser_javascript_enabled', 'true'),
+                    ]
+                ];
+
+                $datas = [
+                    'id' => $order->id,
+                    'ordernumber' => $orderNumber,
+                    'amount' => $order->grand_total,
+                    'address' => $formattedAddress,
+                    'requestPayload' => $requestPayload
+                ];
+
+                $transaction = $this->startpayment($datas);
+                return view('paymentscreen', $transaction);
+            } else {
+                return view('orders.success', ['address' => $formattedAddress]);
+            }
         } else {
             return redirect()->route('home')->with('error', 'Invalid request.');
         }
@@ -361,35 +454,163 @@ class CheckoutController extends Controller
         // Mail::to($shop->email)->send(new OrderCreated($shop,$customer,$orderdetails));
         // dd($order);
 
-        $decodedAddress = json_decode($order->delivery_address, true);
+        // $decodedAddress = json_decode($order->delivery_address, true);
 
-        $addressFields = [
-            'address' => $decodedAddress['address'] ?? '',
-            'city' => $decodedAddress['city'] ?? '',
-            'state' => $decodedAddress['state'] ?? '',
-            'postal_code' => $decodedAddress['postal_code'] ?? '',
-            'unit' => $decodedAddress['unit'] ?? ''
+        // $addressFields = [
+        //     'address' => $decodedAddress['address'] ?? '',
+        //     'city' => $decodedAddress['city'] ?? '',
+        //     'state' => $decodedAddress['state'] ?? '',
+        //     'postal_code' => $decodedAddress['postal_code'] ?? '',
+        //     'unit' => $decodedAddress['unit'] ?? ''
+        // ];
+
+        // $formattedAddress = implode(", ", array_filter([
+        //     $addressFields['address'],
+        //     $addressFields['city'],
+        //     $addressFields['state'],
+        //     $addressFields['postal_code'],
+        // ]));
+
+        // if ($addressFields['unit']) {
+        //     $formattedAddress .= " - " . $addressFields['unit'];
+        // }
+
+        // $message = [
+        //     'order' => "Order Placed Successfully !",
+        //     'delivery' => "Delivering to",
+        //     'address' => $formattedAddress
+        // ];
+
+        // return redirect()->route('home')->with('status1', $message);
+
+    }
+
+    public function startpayment(array $requestData)
+    {
+        $orderId = $requestData['id'] ?? null;
+        $orderNumber = $requestData['ordernumber'] ?? null;
+        $amount = $requestData['amount'] ?? null;
+        $address = $requestData['address'] ?? null;
+        $requestPayload = $requestData['requestPayload'] ?? null;
+        $merchantKey = env('UAT_BILLDESK_SECRET_KEY');
+        // Generate HMAC Signature
+        $signature = $this->generateHmacSignature($requestPayload, $merchantKey);
+
+        // Add to Authorization Header
+        $headers = [
+            "Content-Type" => "application/jose",
+            "Accept" => "application/jose",
+            "BD-Timestamp" => time(),
+            "BD-Traceid" => uniqid()
         ];
 
-        $formattedAddress = implode(", ", array_filter([
-            $addressFields['address'],
-            $addressFields['city'],
-            $addressFields['state'],
-            $addressFields['postal_code'],
-        ]));
 
-        if ($addressFields['unit']) {
-            $formattedAddress .= " - " . $addressFields['unit'];
+        $billDeskUrl = env('UAT_BILLDESK_ORDER_URL');
+
+        $response = Http::withHeaders($headers)->withBody($signature, 'application/jose')->post($billDeskUrl);
+
+        if ($response->successful()) {
+            $responseData = $response->body();
+            $tokenParts = explode('.', $responseData);
+            $header = json_decode(base64_decode($tokenParts[0]), true);
+            $payload = json_decode(base64_decode($tokenParts[1]), true);
+            $bdorderid = $payload['bdorderid'] ?? null;
+            $mercid = $payload['mercid'] ?? null;
+            $order_date = $payload['order_date'] ?? null;
+            $request_token = $signature;
+            $response_token = $responseData;
+            $links = $payload['links'];
+            $rdata = $links[1]['parameters']['rdata'] ?? null;
+            $href = $links[1]['href'] ?? null;
+            $order = Order::find($orderId);
+            if ($order) {
+                $order->bdorderid      = $payload['bdorderid'] ?? null;
+                $order->mercid         = $payload['mercid'] ?? null;
+                $order->order_date     = $payload['order_date'] ?? null;
+                $order->request_token  = $signature;
+                $order->response_token = $responseData;
+                $order->save();
+
+                $returndatas = [
+                    "rdata" => $rdata,
+                    "href" => $href,
+                    "mercid" => $mercid,
+                    "bdorderid" => $bdorderid,
+                ];
+                return $returndatas;
+            } else {
+                Log::error("Order with ID $order_id not found.");
+            }
+        } else {
+            Log::error("BillDesk API Error: " . $response->body());
+            return [
+                "status" => "error",
+                "message" => "BillDesk Order API failed",
+                "response" => $response->json()
+            ];
+        }
+    }
+
+    function generateHmacSignature($requestPayload, $merchantKey)
+    {
+        try {
+            $jwsHeader = [
+                "alg" => "HS256",
+                "clientid" => env('UAT_BILLDESK_CLIENT_ID')
+            ];
+
+            $base64UrlHeader = rtrim(strtr(base64_encode(json_encode($jwsHeader)), '+/', '-_'), '=');
+            $base64UrlPayload = rtrim(strtr(base64_encode(json_encode($requestPayload)), '+/', '-_'), '=');
+
+            $signature = hash_hmac('sha256', "$base64UrlHeader.$base64UrlPayload", $merchantKey, true);
+            $base64UrlSignature = rtrim(strtr(base64_encode($signature), '+/', '-_'), '=');
+
+            $jwsToken = "$base64UrlHeader.$base64UrlPayload.$base64UrlSignature";
+
+            return $jwsToken;
+        } catch (\Exception $e) {
+            Log::error("HMAC Generation Error: " . $e->getMessage());
+            return null;
+        }
+    }
+
+    public function handleRedirect(Request $request)
+    {
+        // Get transaction response (for GET or POST requests)
+        if ($request->status == 409) {
+            $message = $request->message;
+            $currentDateTime = now();
+            Log::error('Payment Failed', [
+                'message' => $message,
+                'date_time' => $currentDateTime,
+            ]);
+
+            return view('orders.error');
         }
 
-        $message = [
-            'order' => "Order Placed Successfully !",
-            'delivery' => "Delivering to",
-            'address' => $formattedAddress
-        ];
+        $transactionResponse = $request->input('transaction_response');
+        $transactiondetails = explode('.', $transactionResponse);
+        $header = json_decode(base64_decode($transactiondetails[0]), true);
+        $payload = json_decode(base64_decode($transactiondetails[1]), true);
+        $payment_method_type = $payload['payment_method_type'] ?? null;
+        $transactionid = $payload['transactionid'] ?? null;
+        $charge_amount = $payload['charge_amount'] ?? null;
+        $transaction_error_type = $payload['transaction_error_type'] ?? null;
+        $orderid = $payload['orderid'] ?? null;
+        $additional_info = $payload['additional_info'];
+        $delivery_address = $additional_info['additional_info1'] ?? null;
+        $order_id = Order::where('order_number', $orderid)->first();
+        $order = Order::find($order_id->id);
+        if ($order) {
+            $order->payment_method_type      = $payload['payment_method_type'] ?? null;
+            $order->transactionid = $payload['transactionid'] ?? null;
+            $order->charge_amount     = $payload['charge_amount'] ?? null;
+            $order->transaction_token  = $transactionResponse;
+            $order->transaction_status  = $transaction_error_type;
+            $order->save();
+        }
 
-        return redirect()->route('home')->with('status1', $message);
-
+        return view('orders.success', ['address' => $delivery_address]);
     }
 
     public function getAllOrdersByCustomer()

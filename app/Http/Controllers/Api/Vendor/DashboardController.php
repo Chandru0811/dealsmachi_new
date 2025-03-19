@@ -193,6 +193,7 @@ class DashboardController extends Controller
 
     public function referrerDashboard(Request $request)
     {
+        // dd($request->all());
         $user = Auth::id();
         $month = $request->input('month');
 
@@ -294,5 +295,22 @@ class DashboardController extends Controller
                 'total_count_month' => $referralsByMonth
             ]
         ]);
+    }
+    
+     public function getAllVendorCommission(Request $request)
+    {
+        $user = Auth::user();
+        $query = ReferrerDetail::where('referrer_id', $user->id);
+
+        if ($request->has('month')) {
+            $query->where('date', $request->month);
+        } elseif ($request->has(['start_date', 'end_date'])) {
+            $startMonth = Carbon::parse($request->start_date)->format('Y-m');
+            $endMonth = Carbon::parse($request->end_date)->format('Y-m');
+            $query->whereBetween('date', [$startMonth, $endMonth]);
+        }
+
+        $referrerDetails = $query->get();
+        return $this->success('Referrer commissions retrieved successfully.', $referrerDetails);
     }
 }

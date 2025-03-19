@@ -13,10 +13,9 @@ class AddressController extends Controller
 {
     use ApiResponses;
 
-
     public function index()
     {
-        $userId = Auth::id();
+        $userId = Auth::guard('api')->id();
 
         if (!$userId) {
             return $this->error('Unauthorized access. User authentication is required.', null, 401);
@@ -63,14 +62,14 @@ class AddressController extends Controller
         }
 
         if ($request->has('default') && $request->default == 1) {
-            Address::where('user_id', Auth::id())
+            Address::where('user_id', Auth::guard('api')->id())
                 ->where('default', 1)
                 ->update(['default' => 0]);
         }
 
         $addressData = $request->all();
-        $addressData['user_id'] = Auth::id();
-        $addressData['default'] = $request->has('default') ? 1 : 0;
+        
+        $addressData['user_id'] = Auth::guard('api')->id();
 
         $address = Address::create($addressData);
 
@@ -119,7 +118,7 @@ class AddressController extends Controller
             return $this->error($validator->errors()->first(), 422);
         }
 
-        $address = Address::where('id', $id)->where('user_id', Auth::id())->first();
+        $address = Address::where('id', $id)->where('user_id', Auth::guard('api')->id())->first();
 
         if (!$address) {
             return $this->error('Address not found!', 404);
@@ -127,7 +126,7 @@ class AddressController extends Controller
 
         $default = $request->has('default') ? $request->default : $request->default_hidden;
         if ($default == "1") {
-            Address::where('user_id', Auth::id())
+            Address::where('user_id', Auth::guard('api')->id())
                 ->where('default', 1)
                 ->where('id', '!=', $id)
                 ->update(['default' => 0]);
@@ -135,7 +134,7 @@ class AddressController extends Controller
 
         $address->update([
             'first_name' => $request->first_name,
-            'last_name' => $request->last_name,
+            'last_name'  => $request->last_name,
             'email'      => $request->email,
             'phone'      => $request->phone,
             'postalcode' => $request->postalcode,
@@ -143,6 +142,8 @@ class AddressController extends Controller
             'type'       => $request->type,
             'unit'       => $request->unit,
             'default'    => $default,
+            'state'      => $request->state,
+            'city'       => $request->city,
         ]);
 
         return $this->success('Address updated successfully!', $address);

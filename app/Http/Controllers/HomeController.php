@@ -33,8 +33,8 @@ class HomeController extends Controller
         $categoryGroups = CategoryGroup::where('active', 1)->with('categories')->take(10)->get();
         $hotpicks = DealCategory::where('active', 1)->get();
         $products = Product::where('active', 1)
-            ->with(['productMedia:id,resize_path,order,type,imageable_id', 'shop:id,country,city,shop_ratings' ])
-            ->orderBy('created_at', 'desc')
+            ->with(['productMedia:id,resize_path,order,type,imageable_id', 'shop:id,country,city,shop_ratings'])
+            ->orderByRaw("CASE WHEN `order` IS NULL THEN 1 ELSE 0 END, `order` ASC, `created_at` DESC")
             ->paginate(8);
         // dd($products);
         $treandingdeals = DealViews::whereDate('viewed_at', Carbon::today())->get();
@@ -44,15 +44,19 @@ class HomeController extends Controller
         $limitedtimedeals = Product::where('active', 1)->whereRaw('DATEDIFF(end_date, start_date) <= ?', [2])->get();
 
         $bookmarkedProducts = collect();
-
+        
         if (Auth::check()) {
             $userId = Auth::id();
             $bookmarkedProducts = Bookmark::where('user_id', $userId)->pluck('deal_id');
         } else {
-            $ipAddress = $request->ip();
-            $bookmarkedProducts = Bookmark::where('ip_address', $ipAddress)->pluck('deal_id');
+            $bookmarkNumber = session()->get('bookmarknumber');
+            if ($bookmarkNumber) {
+                $bookmarkedProducts = Bookmark::where('bookmark_number', $bookmarkNumber)->pluck('deal_id');
+            } else {
+                $bookmarkedProducts = collect(); // Empty collection if no bookmark number exists
+            }
         }
-
+        
         if ($request->ajax()) {
             if ($products->isEmpty()) {
                 return response('', 204);
@@ -120,20 +124,24 @@ class HomeController extends Controller
             $userId = Auth::id();
             $bookmarkedProducts = Bookmark::where('user_id', $userId)->pluck('deal_id');
         } else {
-            $ipAddress = $request->ip();
-            $bookmarkedProducts = Bookmark::where('ip_address', $ipAddress)->pluck('deal_id');
+            $bookmarkNumber = session()->get('bookmarknumber');
+            if ($bookmarkNumber) {
+                $bookmarkedProducts = Bookmark::where('bookmark_number', $bookmarkNumber)->pluck('deal_id');
+            } else {
+                $bookmarkedProducts = collect(); // Empty collection if no bookmark number exists
+            }
         }
 
 
         $url = url()->current(); // Get the current URL
-        $title = $product->name; // Fetch the product's title dynamically
+        $title = $product->name . ' | ₹ ' . $product->discounted_price;
         $description = $product->description; // Fetch the product's description
-        $image = $product->image_url1;
+        $image = optional($product->productMedia->first())->resize_path;
 
         $pageurl = url()->current();
-        $pagetitle = $product->name;
+        $pagetitle = $product->name . ' | ₹ ' . $product->discounted_price;
         $pagedescription = $product->description;
-        $pageimage = $product->image_url1;
+        $pageimage = optional($product->productMedia->first())->resize_path;
         $vedios = $product->additional_details;
         // $reviewData = $product->review;
         $reviewData = $product->review()->with('user')->orderBy('created_at', 'desc')->get();
@@ -280,12 +288,17 @@ class HomeController extends Controller
         $shortby = DealCategory::where('active', 1)->get();
         $totaldeals = $deals->total();
         $bookmarkedProducts = collect();
+        
         if (Auth::check()) {
             $userId = Auth::id();
             $bookmarkedProducts = Bookmark::where('user_id', $userId)->pluck('deal_id');
         } else {
-            $ipAddress = $request->ip();
-            $bookmarkedProducts = Bookmark::where('ip_address', $ipAddress)->pluck('deal_id');
+            $bookmarkNumber = session()->get('bookmarknumber');
+            if ($bookmarkNumber) {
+                $bookmarkedProducts = Bookmark::where('bookmark_number', $bookmarkNumber)->pluck('deal_id');
+            } else {
+                $bookmarkedProducts = collect(); // Empty collection if no bookmark number exists
+            }
         }
 
         return view('productfilter', compact('deals', 'brands', 'discounts', 'rating_items', 'priceRanges', 'shortby', 'totaldeals', 'bookmarkedProducts'));
@@ -460,8 +473,12 @@ class HomeController extends Controller
             $userId = Auth::id();
             $bookmarkedProducts = Bookmark::where('user_id', $userId)->pluck('deal_id');
         } else {
-            $ipAddress = $request->ip();
-            $bookmarkedProducts = Bookmark::where('ip_address', $ipAddress)->pluck('deal_id');
+            $bookmarkNumber = session()->get('bookmarknumber');
+            if ($bookmarkNumber) {
+                $bookmarkedProducts = Bookmark::where('bookmark_number', $bookmarkNumber)->pluck('deal_id');
+            } else {
+                $bookmarkedProducts = collect(); // Empty collection if no bookmark number exists
+            }
         }
 
         return view('productfilter', compact('deals', 'brands', 'discounts', 'rating_items', 'priceRanges', 'shortby', 'totaldeals', 'category', 'categorygroup', 'bookmarkedProducts'));
@@ -620,8 +637,12 @@ class HomeController extends Controller
             $userId = Auth::id();
             $bookmarkedProducts = Bookmark::where('user_id', $userId)->pluck('deal_id');
         } else {
-            $ipAddress = $request->ip();
-            $bookmarkedProducts = Bookmark::where('ip_address', $ipAddress)->pluck('deal_id');
+            $bookmarkNumber = session()->get('bookmarknumber');
+            if ($bookmarkNumber) {
+                $bookmarkedProducts = Bookmark::where('bookmark_number', $bookmarkNumber)->pluck('deal_id');
+            } else {
+                $bookmarkedProducts = collect(); // Empty collection if no bookmark number exists
+            }
         }
 
         return view('productfilter', compact('deals', 'brands', 'discounts', 'rating_items', 'priceRanges', 'shortby', 'totaldeals', 'bookmarkedProducts'));

@@ -1,14 +1,15 @@
 @extends('layouts.master')
 @php
-   function formatIndianCurrency($num) {
-    $num = intval($num);
-    $lastThree = substr($num, -3);
-    $rest = substr($num, 0, -3);
-    if ($rest != '') {
-        $rest = preg_replace("/\B(?=(\d{2})+(?!\d))/", ",", $rest) . ',';
+    function formatIndianCurrency($num)
+    {
+        $num = intval($num);
+        $lastThree = substr($num, -3);
+        $rest = substr($num, 0, -3);
+        if ($rest != '') {
+            $rest = preg_replace('/\B(?=(\d{2})+(?!\d))/', ',', $rest) . ',';
+        }
+        return '₹' . $rest . $lastThree;
     }
-    return "₹" . $rest . $lastThree;
-}
 
 @endphp
 
@@ -640,13 +641,36 @@
                                                             <p class="px-3 fw-normal truncated-description">
                                                                 {{ $product->description }}
                                                             </p>
+                                                            @if (!empty($product->special_price) && $product->special_price)
+                                                                <div class="px-2">
+                                                                    <button type="button"
+                                                                        style="height: fit-content; cursor: pointer;"
+                                                                        class="p-1 text-nowrap special-price">
+                                                                        <span>&nbsp;<i
+                                                                                class="fa-solid fa-stopwatch-20"></i>&nbsp;
+                                                                            &nbsp;Special Price
+                                                                            &nbsp; &nbsp;</span>
+                                                                    </button>
+                                                                </div>
+                                                            @endif
                                                         </div>
                                                         <div>
                                                             <div class="card-divider"></div>
                                                             <p class="ps-3 fw-medium d-flex align-items-center justify-content-between"
                                                                 style="color: #ff0060">
                                                                 <span>{{ formatIndianCurrency($product->discounted_price) }}</span>
-                                                                @if (!empty($product->coupon_code))
+                                                            <div class="ms-2">
+                                                                @if (empty($product->stock) || $product->stock == 0)
+                                                                    <span class="out-of-stock">
+                                                                        Out of Stock
+                                                                    </span>
+                                                                @else
+                                                                    <span class="stock-badge">
+                                                                        In Stock
+                                                                    </span>
+                                                                @endif
+                                                            </div>
+                                                            {{-- @if (!empty($product->coupon_code))
                                                                     <span id="mySpan" class="mx-3 px-2 couponBadge"
                                                                         onclick="copySpanText(this, event)"
                                                                         data-bs-toggle="tooltip"
@@ -663,7 +687,7 @@
                                                                             Copied!
                                                                         </span>
                                                                     </span>
-                                                                @endif
+                                                                @endif --}}
                                                             </p>
                                                             <div class="card-divider"></div>
                                                             <div

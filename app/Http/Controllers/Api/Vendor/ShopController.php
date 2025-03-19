@@ -19,7 +19,7 @@ class ShopController extends Controller
 
     public function showshopdetails($id)
     {
-        $shop = Shop::select('name', 'legal_name', 'company_registeration_no', 'slug', 'email', 'mobile', 'external_url', 'shop_type', 'logo', 'banner', 'shop_ratings', 'description')->where('id', $id)->first();
+        $shop = Shop::select('name', 'legal_name', 'company_registeration_no', 'slug', 'email', 'mobile', 'external_url', 'shop_type', 'logo', 'banner', 'shop_ratings', 'description', 'show_name_on_website')->where('id', $id)->first();
         return $this->success('Shop Details Retrieved Successfully!', $shop);
     }
 
@@ -52,6 +52,7 @@ class ShopController extends Controller
             'description' => 'sometimes|required|string',
             'external_url' => 'nullable',
             'logo' => (!$shop->logo ? 'required|' : 'sometimes|') . 'image|mimes:jpeg,png,jpg,gif,svg,webp|max:2048',
+            'show_name_on_website' => 'nullable|required|boolean', // Added validation
             // 'banner' => (!$shop->banner ? 'required|' : 'sometimes|') . 'image|mimes:jpeg,png,jpg,gif,svg,webp|max:2048',
             // 'map_url' => (!$shop->map_url ? 'required|' : 'sometimes|') . 'url'
         ], [
@@ -72,6 +73,8 @@ class ShopController extends Controller
             'logo.image' => 'The logo must be an image.',
             'logo.mimes' => 'The logo must be a file of type: jpeg, png, jpg, gif, svg, or webp file.',
             'logo.max' => 'The logo may not be greater than 2048 kilobytes.',
+            'show_name_on_website.required' => 'The show name on website field is required.',
+            'show_name_on_website.boolean' => 'The show name on website must be true or false.',
             // 'banner.required' => 'The banner field is required.',
             // 'banner.image' => 'The banner must be an image.',
             // 'banner.mimes' => 'The banner must be a file of type: jpeg, png, jpg, gif, svg, or webp file.',
@@ -96,7 +99,7 @@ class ShopController extends Controller
             'logo',
             'banner',
             'shop_ratings',
-            'description',
+            'description','show_name_on_website',
         ]), fn($value) => !is_null($value));
 
         if ($request->hasFile('logo')) {

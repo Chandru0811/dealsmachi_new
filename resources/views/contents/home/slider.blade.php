@@ -28,9 +28,10 @@
                         class="img-fluid p-2 rounded-5 banner_image" />
                 </div>
             </div>
+            <h1 class="h1-styling mb-3">DealsMachi - Super, Money Saver, Discount Deals in Chennai & India, Machi</h1>
         </div>
 
-        <div class="col-lg-3 col-md-12 col-12 p-0 d-flex justify-content-center align-items-center">
+        <div class="col-lg-3 col-md-12 col-12 p-0 d-flex justify-content-center align-items-center pb-5">
             <div class="card p-2 d-flex justify-content-center align-items-center" style="border-radius: 7px;border: none;">
                 <div class="row justify-content-center">
                     <div class="col-4 p-1">

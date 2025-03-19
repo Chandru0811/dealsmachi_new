@@ -65,118 +65,6 @@
             </div>
         </div>
     @endif
-    {{-- @php
-        $reviewData = [
-            [
-                'productId' => '1',
-                'reviews' => [
-                    [
-                        'reviewerName' => 'Sangeetha',
-                        'review' =>
-                            'Thank you Trucklah for the wonderful job. I am very much happy with your service. I got track updates regularly and everything went well!',
-                        'rating' => 4.3,
-                        'reviewDate' => '2024-09-10',
-                        'advertisement' => 'assets/images/product_view/trucklah_add.png',
-                    ],
-                    [
-                        'reviewerName' => 'Mari Muthu',
-                        'review' =>
-                            'Thank you Trucklah for your prompt service. We were in difficulty with lack of space in our apartment. Thankfully, Trucklah managed it well and were on time and budget friendly.',
-                        'rating' => 5,
-                        'reviewDate' => '2024-09-12',
-                        'advertisement' => 'assets/images/product_view/trucklah_add.png',
-                    ],
-                ],
-            ],
-            [
-                'productId' => '3',
-                'reviews' => [
-                    [
-                        'reviewerName' => 'Chandru',
-                        'review' =>
-                            'I did an item move last week with Trucklah. The service was excellent. I recommend their service, they are professional in approach.',
-                        'rating' => 4,
-                        'reviewDate' => '2024-09-15',
-                        'advertisement' => 'assets/images/product_view/trucklah_add.png',
-                    ],
-                    [
-                        'reviewerName' => 'Leela',
-                        'review' =>
-                            'Trucklah helped us to move our office last week. Their service was really appreciable. The best thing I noted is that they were professional in approach and they did really well to relocate our office. I am really thankful for their effort!',
-                        'rating' => 5,
-                        'reviewDate' => '2024-09-17',
-                        'advertisement' => 'assets/images/product_view/trucklah_add.png',
-                    ],
-                ],
-            ],
-            [
-                'productId' => '4',
-                'reviews' => [
-                    [
-                        'reviewerName' => 'Suriya',
-                        'review' =>
-                            'We were in a hurry and there was no one we trust. Thanks to Trucklah, for helping us on time like a friend. Their delivery experts handled everything without errors.',
-                        'rating' => 5,
-                        'reviewDate' => '2024-09-20',
-                        'advertisement' => 'assets/images/product_view/trucklah_add.png',
-                    ],
-                    [
-                        'reviewerName' => 'Kishore',
-                        'review' =>
-                            'As a business, we never rely much on third party services. But Trucklah changed us. We are full partnership with Trucklah now. Complete peace of mind.',
-                        'rating' => 5,
-                        'reviewDate' => '2024-09-22',
-                        'advertisement' => 'assets/images/product_view/trucklah_add.png',
-                    ],
-                ],
-            ],
-            [
-                'productId' => '6',
-                'reviews' => [
-                    [
-                        'reviewerName' => 'Manikandan',
-                        'review' =>
-                            'E-commerce is tricky. But if you have a logistics partner like Trucklah, life is more easy than we expect. Timely delivery, on schedule, all the time.',
-                        'rating' => 4,
-                        'reviewDate' => '2024-09-25',
-                        'advertisement' => 'assets/images/product_view/trucklah_add.png',
-                    ],
-                    [
-                        'reviewerName' => 'Saravanan',
-                        'review' =>
-                            'We never thought moving would be this easy. Not until we had our move scheduled with Trucklah. App booking, online payment, everything went well.',
-                        'rating' => 5,
-                        'reviewDate' => '2024-09-27',
-                        'advertisement' => 'assets/images/product_view/trucklah_add.png',
-                    ],
-                ],
-            ],
-            [
-                'productId' => '11',
-                'reviews' => [
-                    [
-                        'reviewerName' => 'Manoj',
-                        'review' =>
-                            'Space issues were too much for us. Until Trucklah cleared it for us without any headaches. For any moving work, I recommend Trucklah.',
-                        'rating' => 4,
-                        'reviewDate' => '2024-09-30',
-                        'advertisement' => 'assets/images/product_view/trucklah_add.png',
-                    ],
-                    [
-                        'reviewerName' => 'Siva',
-                        'review' =>
-                            'Moving is not easy in India. But with Trucklah by your side, nothing is impossible. Faster, reliable and safe delivery from Trucklah has changed the scene.',
-                        'rating' => 5,
-                        'reviewDate' => '2024-10-02',
-                        'advertisement' => 'assets/images/product_view/trucklah_add.png',
-                    ],
-                ],
-            ],
-        ];
-    @endphp --}}
-
-
-
 
     <section class="categoryIcons container-fluid p-0">
 
@@ -332,7 +220,7 @@
                                             style="border:none; background-color: #eaeaea; font-size:10px"
                                             id="scrollUpBtn" title="Scroll up" aria-label="Scroll up"
                                             onclick="scrollUp()">
-                                            <i class="fa fa-angle-up"></i>
+                                            <i class="fa fa-angle-up" style="line-height:2;"></i>
                                         </button>
                                     </div>
                                 @endif
@@ -371,7 +259,7 @@
                                             style="border:none; background-color: #eaeaea; font-size:10px"
                                             id="scrollDownBtn" title="Scroll down" aria-label="Scroll down"
                                             onclick="scrollDown()">
-                                            <i class="fa fa-angle-down"></i>
+                                            <i class="fa fa-angle-down" style="line-height:2;"></i>
                                         </button>
                                     </div>
                                 @endif
@@ -400,13 +288,19 @@
                                     <form action="{{ route('cart.add', ['slug' => $product->slug]) }}" method="POST">
                                         @csrf
                                         @if ($product->deal_type == 1)
-                                            <input type="hidden" name="saveoption" id="saveoption" value="buy now">
-                                            <button type="submit" class="Buy_btn media_fonts_conent text-nowrap">
+                                            <input type="hidden" name="saveoption" id="saveoption" value="buy now" />
+
+                                            <button type="submit"
+                                                class="Buy_btn media_fonts_conent text-nowrap buy-now-direct-btn"
+                                                data-slug="{{ $product->slug }}">
                                                 <i class="fa-thin fa-bag-shopping"></i>&nbsp;&nbsp;Buy Now
                                             </button>
                                         @elseif ($product->deal_type == 2)
-                                            <input type="hidden" name="saveoption" id="saveoption" value="buy now">
-                                            <button type="submit" class="Buy_btn media_fonts_conent text-nowrap">
+                                            <input type="hidden" name="saveoption" id="saveoption" value="buy now" />
+
+                                            <button type="submit"
+                                                class="Buy_btn media_fonts_conent text-nowrap buy-now-direct-btn"
+                                                data-slug="{{ $product->slug }}">
                                                 <i class="fa-thin fa-bag-shopping"></i>&nbsp;&nbsp;Book Now
                                             </button>
                                         @endif
@@ -447,20 +341,17 @@
                                         @endif
                                     </span>
                                 </p>
-                                <div class="share px-2">
-                                    <button type="button" id="share_btn" style="height: fit-content; cursor: pointer;"
-                                        class="p-1  text-nowrap media_fonts_conent"
-                                        onclick="copyLinkToClipboard(this, event, '{{ $product->id }}')"
-                                        data-bs-toggle="tooltip" data-bs-placement="bottom" title="Share">
-                                        <span>&nbsp; &nbsp;Share &nbsp; &nbsp;<i class="fa-regular fa-share"></i></span>
-
-                                        <span class="tooltip-text">
-                                            Link Copied!
-                                        </span>
-                                    </button>
-                                </div>
+                                 @if (!empty($product->special_price) && $product->special_price)
+                                    <div class="px-2">
+                                        <button type="button" style="height: fit-content; cursor: pointer;"
+                                            class="p-1 text-nowrap special-price">
+                                            <span>&nbsp;<i class="fa-solid fa-stopwatch-20"></i>&nbsp; &nbsp;Special Price
+                                                &nbsp; &nbsp;</span>
+                                        </button>
+                                    </div>
+                                @endif
                             </div>
-                            <div class="rating mt-2">
+                            <div class="d-flex align-items-center rating mt-2">
                                 <span>Rating :</span><span class="stars">
                                     @php
                                         $fullStars = floor($product->shop->shop_ratings);
@@ -477,6 +368,18 @@
                                         <i class="fa-regular fa-star" style="color: #ffc200;"></i>
                                     @endfor
                                 </span>
+                                 <div class="share px-2 ms-md-3">
+                                    <button type="button" id="share_btn" style="height: fit-content; cursor: pointer;"
+                                        class="p-1  text-nowrap media_fonts_conent"
+                                        onclick="copyLinkToClipboard(this, event, '{{ $product->id }}')"
+                                        data-bs-toggle="tooltip" data-bs-placement="bottom" title="Share">
+                                        <span>&nbsp; &nbsp;Share &nbsp; &nbsp;<i class="fa-regular fa-share"></i></span>
+
+                                        <span class="tooltip-text">
+                                            Link Copied!
+                                        </span>
+                                    </button>
+                                </div>
                             </div>
 
                             @if ($product->deal_type == 2)
@@ -491,7 +394,7 @@
                                         <div>
                                             <p>
                                                 <span id="mySpan" class="deal-badge"
-                                                    style="cursor: pointer; position:relative;-"
+                                                    style="cursor: pointer; position:relative;"
                                                     onclick="copySpan(this, event)" data-bs-toggle="tooltip"
                                                     data-bs-placement="bottom" title="Click to Copy">
 
@@ -514,19 +417,30 @@
                                 <div class="price-section d-flex align-items-center mt-4">
                                     <div>
                                         <span
-                                            class="current-price mt-4">{{ formatIndianCurrency($product->original_price) }}</span>
+                                            class="current-price mt-4">{{ formatIndianCurrency($product->discounted_price) }}</span>
                                         &nbsp;&nbsp;
                                         <span
-                                            class="original-price coupon-align">{{ formatIndianCurrency($product->discounted_price) }}</span>
+                                            class="original-price coupon-align">{{ formatIndianCurrency($product->original_price) }}</span>
                                         <span
-                                            class="discount-price coupon-align1 text-nowrap">-₹{{ number_format($product->discount_percentage, 2) }}%
+                                            class="discount-price coupon-align1 text-nowrap">{{ number_format($product->discount_percentage, 2) }}%
                                             off</span>
                                     </div>
-                                    @if (!empty($product->coupon_code))
+                                    <div class="ms-2">
+                                        @if (empty($product->stock) || $product->stock == 0)
+                                            <span class="out-of-stock">
+                                                Out of Stock
+                                            </span>
+                                        @else
+                                            <span class="stock-badge">
+                                                In Stock
+                                            </span>
+                                        @endif
+                                    </div>
+                                    {{-- @if (!empty($product->coupon_code))
                                         <div>
                                             <p class="d-flex justify-content-start">
                                                 <span id="mySpan" class="deal-badge mt-3"
-                                                    style="cursor: pointer; position:relative;-"
+                                                    style="cursor: pointer; position:relative;"
                                                     onclick="copySpan(this, event)" data-bs-toggle="tooltip"
                                                     data-bs-placement="bottom" title="Click to Copy">
 
@@ -539,7 +453,7 @@
                                                 </span>
                                             </p>
                                         </div>
-                                    @endif
+                                    @endif --}}
 
                                     {{-- <div class="d-flex align-items-center">
                                         <h3>
@@ -555,7 +469,7 @@
                                     <div>
                                         <p class="d-flex justify-content-start">
                                             <span id="mySpan" class="deal-badge mt-3"
-                                                style="cursor: pointer; position:relative;-"
+                                                style="cursor: pointer; position:relative;"
                                                 onclick="copySpan(this, event)" data-bs-toggle="tooltip"
                                                 data-bs-placement="bottom" title="Click to Copy">
 
@@ -610,9 +524,11 @@
                                 @endif
                             </div>
 
-                            <div class="">
-                                <span> Seller Company Name: {{ $product->shop->legal_name }}</span>
-                            </div>
+                            @if ($product->shop->show_name_on_website)
+                                <div class="">
+                                    <span> Seller Company Name: {{ $product->shop->legal_name }}</span>
+                                </div>
+                            @endif
 
                             {{-- description  --}}
                             <div class="description-section mt-4">
@@ -739,8 +655,8 @@
                             @if (!empty($product->specifications))
                                 <div class="specification-section mt-4">
                                     <h5>Specifications :</h5>
-                                    <div class="card_offers">
-                                        <p class="p-2 media_fonts_conent">
+                                    <div class="">
+                                        <p class="media_fonts_conent">
                                             {{ $product->specifications ?? 'No Specifications Found' }}
                                         </p>
                                     </div>

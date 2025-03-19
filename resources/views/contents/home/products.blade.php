@@ -1,18 +1,19 @@
 @php
-   function formatIndianCurrency($num) {
-    $num = intval($num);
-    $lastThree = substr($num, -3);
-    $rest = substr($num, 0, -3);
-    if ($rest != '') {
-        $rest = preg_replace("/\B(?=(\d{2})+(?!\d))/", ",", $rest) . ',';
+    function formatIndianCurrency($num)
+    {
+        $num = intval($num);
+        $lastThree = substr($num, -3);
+        $rest = substr($num, 0, -3);
+        if ($rest != '') {
+            $rest = preg_replace('/\B(?=(\d{2})+(?!\d))/', ',', $rest) . ',';
+        }
+        return '₹' . $rest . $lastThree;
     }
-    return "₹" . $rest . $lastThree;
-}
 
 @endphp
 
 <div class="container">
-    <div class="row pb-4">
+    <div class="row">
         @foreach ($products as $product)
             <div class="col-md-4 col-lg-3 col-12 mb-3 d-flex align-items-stretch justify-content-center">
                 <a href="{{ url('/deal/' . $product->id) }}" style="text-decoration: none;"
@@ -42,7 +43,7 @@
                         <div class="card-body card_section flex-grow-1 d-flex flex-column justify-content-between">
                             <div>
                                 <div class="mt-3 d-flex align-items-center justify-content-between">
-                                    <h5 class="card-title ps-3">{{ $product->name }}</h5>
+                                    <h4 class="card-title ps-3 h3-styling">{{ $product->name }}</h4>
                                     <span class="badge mx-3 p-0 trending-bookmark-badge"
                                         onclick="event.stopPropagation();">
                                         @if ($bookmarkedProducts->contains($product->id))
@@ -86,13 +87,36 @@
                                 </span>
 
                                 <p class="px-3 fw-normal truncated-description">{{ $product->description }}</p>
+                                <div class="d-flex justify-content-end">
+                                    @if (!empty($product->special_price) && $product->special_price)
+                                        <div class="px-2">
+                                            <button type="button" style="height: fit-content; cursor: pointer;"
+                                                class="p-1 text-nowrap special-price">
+                                                <span>&nbsp;<i class="fa-solid fa-stopwatch-20"></i>&nbsp;
+                                                    &nbsp;Special Price
+                                                    &nbsp; &nbsp;</span>
+                                            </button>
+                                        </div>
+                                    @endif
+                                </div>
                             </div>
                             <div>
                                 <div class="card-divider"></div>
                                 <p class="ps-3 fw-medium d-flex align-items-center justify-content-between"
                                     style="color: #ff0060">
                                     <span>{{ formatIndianCurrency($product->discounted_price) }}</span>
-                                    @if (!empty($product->coupon_code))
+                                    <span class="me-2">
+                                        @if (empty($product->stock) || $product->stock == 0)
+                                            <span class="product-out-of-stock">
+                                                Out of Stock
+                                            </span>
+                                        @else
+                                            <span class="product-stock-badge">
+                                                In Stock
+                                            </span>
+                                        @endif
+                                    </span>
+                                    {{-- @if (!empty($product->coupon_code))
                                         <span id="mySpan" class="mx-3 px-2 couponBadge"
                                             onclick="copySpanText(this, event)" data-bs-toggle="tooltip"
                                             data-bs-placement="bottom" title="Click to Copy" style="position:relative;">
@@ -107,20 +131,22 @@
                                                 Copied!
                                             </span>
                                         </span>
-                                    @endif
+                                    @endif --}}
                                 </p>
                                 <div class="card-divider"></div>
                                 <div class="ps-3 d-flex justify-content-between align-items-center pe-2">
                                     <div>
                                         <p>Regular Price</p>
                                         @if ($product->deal_type == 2)
-                                            <span class="fw-light" style="color: #22cb00ab; !important">Standard Rates</span>
+                                            <span class="fw-light" style="color: #22cb00ab; !important">Standard
+                                                Rates</span>
                                         @else
-                                        <span><s>{{ formatIndianCurrency($product->original_price) }}</s></span>
+                                            <span><s>{{ formatIndianCurrency($product->original_price) }}</s></span>
                                         @endif
                                     </div>
                                     <div>
-                                        <button class="btn card_cart add-to-cart-btn" data-slug="{{ $product->slug }}" onclick="event.stopPropagation();">
+                                        <button class="btn card_cart add-to-cart-btn" data-slug="{{ $product->slug }}"
+                                            data-qty="1" onclick="event.stopPropagation();">
                                             Add to Cart
                                         </button>&nbsp;&nbsp;
                                     </div>

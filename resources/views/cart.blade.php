@@ -179,7 +179,7 @@
                                                     </span>
                                                     <span class="ms-1"
                                                         style="font-size:18px;font-weight:500; color:#28A745">
-                                                        - {{ round($product->discount_percentage) }}% Off
+                                                         {{ round($product->discount_percentage) }}% Off
                                                     </span>
                                                 </div>
                                             @endif
@@ -238,7 +238,7 @@
                                                             class="d-inline-flex align-items-center gap-2 buy-for-later-btn">
                                                             <span class="loader spinner-border spinner-border-sm"
                                                                 style="display: none;"></span>
-                                                            <span>Buy For Later</span>
+                                                            <span>Buy Later</span>
                                                         </div>
                                                     </div>
                                                 </button>
@@ -409,7 +409,7 @@
                                                     </span>
                                                     <span class="ms-1"
                                                         style="font-size:18px;font-weight:500; color:#28A745">
-                                                        - {{ round($product->discount_percentage) }}% Off
+                                                         {{ round($product->discount_percentage) }}% Off
                                                     </span>
                                                 </div>
                                             @endif
@@ -469,7 +469,7 @@
                                                             class="d-inline-flex align-items-center gap-2 buy-for-later-btn">
                                                             <span class="loader spinner-border spinner-border-sm"
                                                                 style="display: none;"></span>
-                                                            <span>Buy For Later</span>
+                                                            <span>Buy Later</span>
                                                         </div>
                                                     </div>
                                                 </button>
@@ -552,7 +552,7 @@
                         class="img-fluid" />
                 </div> &nbsp;&nbsp;
                 <div class="my-4">
-                    <p style="font-size:20px;font-weight:400">Buy For Later</p>
+                    <p style="font-size:20px;font-weight:400">Buy Later</p>
                 </div>
             </div>
             <div class="saved-item-container">
@@ -631,7 +631,7 @@
                                                 ₹{{ number_format($savedItem->deal->discounted_price, 0) }}
                                             </span>
                                             <span class="ms-1" style="font-size:18px;font-weight:500; color:#28A745">
-                                                - {{ round($savedItem->deal->discount_percentage) }}% Off
+                                                 {{ round($savedItem->deal->discount_percentage) }}% Off
                                             </span>
                                         </div>
                                     </div>

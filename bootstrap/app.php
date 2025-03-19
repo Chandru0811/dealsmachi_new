@@ -16,6 +16,9 @@ return Application::configure(basePath: dirname(__DIR__))
             'role' => \App\Http\Middleware\CheckRole::class,
             'cart-item-count' => \App\Http\Middleware\CartItemCount::class,
         ]);
+        $middleware->validateCsrfTokens(except: [
+        '/payment/redirect',
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //

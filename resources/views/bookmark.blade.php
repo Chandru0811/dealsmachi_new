@@ -1,18 +1,19 @@
 @extends('layouts.master')
 
 @section('content')
-@php
-   function formatIndianCurrency($num) {
-    $num = intval($num);
-    $lastThree = substr($num, -3);
-    $rest = substr($num, 0, -3);
-    if ($rest != '') {
-        $rest = preg_replace("/\B(?=(\d{2})+(?!\d))/", ",", $rest) . ',';
-    }
-    return "₹" . $rest . $lastThree;
-}
+    @php
+        function formatIndianCurrency($num)
+        {
+            $num = intval($num);
+            $lastThree = substr($num, -3);
+            $rest = substr($num, 0, -3);
+            if ($rest != '') {
+                $rest = preg_replace('/\B(?=(\d{2})+(?!\d))/', ',', $rest) . ',';
+            }
+            return '₹' . $rest . $lastThree;
+        }
 
-@endphp
+    @endphp
 
     @if (session('status'))
         <div class="alert alert-dismissible fade show toast-success" role="alert"
@@ -135,13 +136,37 @@
                                                     @endfor
                                                 </span>
                                                 <p class="px-3 fw-normal truncated-description">{{ $deal->description }}</p>
+                                                <div class="d-flex justify-content-end">
+                                                    @if (!empty($deal->special_price) && $deal->special_price)
+                                                        <div class="px-2">
+                                                            <button type="button"
+                                                                style="height: fit-content; cursor: pointer;"
+                                                                class="p-1 text-nowrap special-price">
+                                                                <span>&nbsp;<i class="fa-solid fa-stopwatch-20"></i>&nbsp;
+                                                                    &nbsp;Special Price
+                                                                    &nbsp; &nbsp;</span>
+                                                            </button>
+                                                        </div>
+                                                    @endif
+                                                </div>
                                             </div>
                                             <div>
                                                 <div class="card-divider"></div>
                                                 <p class="ps-3 fw-medium d-flex align-items-center justify-content-between"
                                                     style="color: #ff0060">
                                                     <span>{{ formatIndianCurrency($deal->discounted_price) }}</span>
-                                                    @if (!empty($deal->coupon_code))
+                                                    <span class="me-2">
+                                                        @if (empty($deal->stock) || $deal->stock == 0)
+                                                            <span class="product-out-of-stock">
+                                                                Out of Stock
+                                                            </span>
+                                                        @else
+                                                            <span class="product-stock-badge">
+                                                                In Stock
+                                                            </span>
+                                                        @endif
+                                                    </span>
+                                                    {{-- @if (!empty($deal->coupon_code))
                                                         <span id="mySpan" class="mx-3 px-2 couponBadge"
                                                             onclick="copySpanText(this, event)" data-bs-toggle="tooltip"
                                                             data-bs-placement="bottom" title="Click to Copy"
@@ -157,7 +182,7 @@
                                                                 Copied!
                                                             </span>
                                                         </span>
-                                                    @endif
+                                                    @endif --}}
                                                 </p>
                                                 <div class="card-divider"></div>
                                                 <div class="ps-3 d-flex justify-content-between align-items-center pe-2">

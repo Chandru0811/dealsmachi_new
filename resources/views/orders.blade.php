@@ -39,14 +39,14 @@
                                         {{-- <p class="text-nowrap mb-1">Order Id: {{ $order->order_number ?? 'N/A' }},</p> --}}
                                         <p class="text-nowrap mb-1">Order Id : {{ $item->item_number ?? 'N/A' }}</p>
                                     </div>
-                                    <div class="batch_code">
+                                    <div class="batch_code mt-1">
                                         <p class="text-nowrap mb-1"><span
                                                 class="badge_payment">{{ $order->status === '1'
                                                     ? 'Created'
                                                     : ($order->status === '2'
-                                                        ? 'Payment Error'
+                                                        ? 'Confirmed'
                                                         : ($order->status === '3'
-                                                            ? 'Confirmed'
+                                                            ? 'Payment Error'
                                                             : ($order->status === '4'
                                                                 ? 'Awaiting Delivery'
                                                                 : ($order->status === '5'
@@ -175,8 +175,13 @@
                                 </div>
                             </div>
                             <div class="d-flex justify-content-end align-items-center">
-                                <span
-                                    class="badge_warning">{{ ucfirst(str_replace('_', ' ', $order->payment_type ?? 'N/A')) }}</span>
+                               <span class="badge_warning">
+                                    @if($order->payment_type === "online_payment")
+                                        {{ ucfirst(str_replace('_', ' ', $order->payment_method_type ?? 'Pending')) }}
+                                    @else
+                                        {{ ucfirst(str_replace('_', ' ', $order->payment_type ?? 'Pending')) }}
+                                    @endif
+                                </span>
                             </div>
                         </div>
                     </a>

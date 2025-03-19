@@ -337,7 +337,7 @@ class ProductController extends Controller
                     if (file_exists($existingMedia->path)) {
                         unlink($existingMedia->path);
                     }
-                    
+
                     // Delete resized image
                     if (file_exists($existingMedia->resize_path)) {
                         unlink($existingMedia->resize_path);

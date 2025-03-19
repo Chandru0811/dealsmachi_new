@@ -17,13 +17,90 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Hash;
 use App\Mail\AdminProductAddedNotification;
 use App\Mail\ProductAddedSuccessfully;
+use App\Models\Cart;
+use App\Models\CartItem;
 use Illuminate\Validation\Rule;
 
 class AuthController extends Controller
 {
     use ApiResponses;
 
-    public function login(Request $request)
+    // public function login(Request $request)
+    // {
+    //     $validator = Validator::make($request->all(), [
+    //         'email' => 'required|email',
+    //         'password' => 'required',
+    //         'role' => 'required',
+    //     ]);
+
+    //     if ($validator->fails()) {
+    //         return response()->json(['error' => $validator->errors()], 422);
+    //     }
+
+    //     $credentials = $request->only('email', 'password');
+    //     $role = $request->input('role');
+
+    //     $user = User::where('email', $credentials['email'])
+    //     ->where('role', $role)->whereNull('deleted_at')->first();
+    //     if($user){
+    //     if($request->role == 3)
+    //     {
+    //         if ($user && Auth::attempt($credentials)) {
+    //             $token = $user->createToken('Personal Access Token')->accessToken;
+    //             $cartnumber = $request->input('cartnumber') ?? session()->get('cartnumber');
+    //             if ($cartnumber) {
+    //                 $guest_cart = Cart::where('cart_number', $cartnumber)->whereNull('customer_id')->first();
+
+    //                 if ($guest_cart) {
+    //                     // Assign guest cart to the registered user
+    //                     $guest_cart->customer_id = $user->id;
+    //                     $guest_cart->save();
+        
+    //                     // Update session cartnumber
+    //                     session(['cartnumber' => $guest_cart->cart_number]);
+    //                 }
+    //             } 
+                
+    //             $success['token'] = $token;
+    //             $success['userDetails'] =  $user;
+    //             $success['cart_number'] = $cartnumber;
+    //             $message = "Welcome {$user->name}, You have successfully logged in. Grab the latest DealsMachi offers now!";
+    //         }else{
+    //             return $this->error('Invalid email or password. Please check your credentials and try again.,Email.', ['error' => 'Invalid email or password. Please check your credentials and try again.,Email']);
+    //         }
+    //     }elseif($request->role == 2)
+    //     {
+    //         if ($user && Auth::attempt($credentials)) {
+    //             $token = $user->createToken('Personal Access Token')->accessToken;
+    //             $referreralCode = 'DMR500' . $user->id;
+                
+    //             $success['referrer_code'] = $referreralCode;
+    //             $success['token'] = $token;
+    //             $success['userDetails'] =  $user;
+    //             $message = 'LoggedIn Successfully!';
+    //         }else{
+    //             return $this->error('Invalid email or password. Please check your credentials and try again.,Email.', ['error' => 'Invalid email or password. Please check your credentials and try again.,Email']);
+    //         }
+    //     }else{
+    //         if ($user && Auth::attempt($credentials)) {
+    //             $token = $user->createToken('Personal Access Token')->accessToken;
+    //         }else{
+    //             return $this->error('Invalid email or password. Please check your credentials and try again.,Email.', ['error' => 'Invalid email or password. Please check your credentials and try again.,Email']);
+    //         }
+            
+    //         $success['token'] = $token;
+    //         $success['userDetails'] =  $user;
+    //         $message = 'LoggedIn Successfully!';
+    //     }
+    //     }else{
+    //         return $this->error('User not registered, Please register a new account.', 404);
+    //     }
+
+
+    //     return $this->success($message, $success);
+    // }
+    
+        public function login(Request $request)
     {
         $validator = Validator::make($request->all(), [
             'email' => 'required|email',
@@ -39,30 +116,90 @@ class AuthController extends Controller
         $role = $request->input('role');
 
         $user = User::where('email', $credentials['email'])
-        ->where('role', $role)->whereNull('deleted_at')->first();
+            ->where('role', $role)
+            ->whereNull('deleted_at')
+            ->first();
 
-        if ($user && Auth::attempt($credentials)) {
-            $token = $user->createToken('Personal Access Token')->accessToken;
-            $referreralCode = 'DMR500' . $user->id;
-            $success['referrer_code'] = $referreralCode;
-            $success['token'] = $token;
-            $success['userDetails'] =  $user;
-
-            if ($user->role == 3) {
-                $message = "Welcome {$user->name}, You have successfully logged in. Grab the latest Dealslah offers now!";
-            } else {
-                $message = 'LoggedIn Successfully!';
-            }
-
-            return $this->success($message, $success);
+        if (!$user) {
+            return $this->error('User not registered, Please register a new account.', 404);
         }
 
-        return $this->error('Invalid email or password. Please check your credentials and try again.,Email.', ['error' => 'Invalid email or password. Please check your credentials and try again.,Email']);
+        if (!Auth::attempt($credentials)) {
+            return $this->error('Invalid email or password. Please check your credentials and try again.', ['error' => 'Invalid email or password.']);
+        }
+
+        $token = $user->createToken('Personal Access Token')->accessToken;
+        $cartnumber = $request->input('cartnumber') ?? session()->get('cartnumber');
+
+        $existing_cart = Cart::where('customer_id', $user->id)->first();
+
+        $guest_cart = $cartnumber ? Cart::where('cart_number', $cartnumber)->whereNull('customer_id')->first() : null;
+
+        if ($existing_cart && $guest_cart) {
+            foreach ($guest_cart->items as $item) {
+                $existing_cart_item = CartItem::where('cart_id', $existing_cart->id)
+                    ->where('product_id', $item->product_id)
+                    ->first();
+
+                if ($existing_cart_item) {
+                    $existing_cart_item->quantity += $item->quantity;
+                    $existing_cart_item->save();
+                } else {
+                    $item->cart_id = $existing_cart->id;
+                    $item->save();
+                }
+            }
+
+            // Update totals
+            $existing_cart->update([
+                'item_count' => $existing_cart->item_count + $guest_cart->item_count,
+                'quantity' => $existing_cart->quantity + $guest_cart->quantity,
+                'total' => $existing_cart->total + $guest_cart->total,
+                'discount' => $existing_cart->discount + $guest_cart->discount,
+                'shipping' => $existing_cart->shipping + $guest_cart->shipping,
+                'packaging' => $existing_cart->packaging + $guest_cart->packaging,
+                'handling' => $existing_cart->handling + $guest_cart->handling,
+                'taxes' => $existing_cart->taxes + $guest_cart->taxes,
+                'grand_total' => $existing_cart->grand_total + $guest_cart->grand_total,
+                'shipping_weight' => $existing_cart->shipping_weight + $guest_cart->shipping_weight,
+            ]);
+
+            $guest_cart->delete();
+
+            $final_cart = $existing_cart;
+        } elseif (!$existing_cart) {
+            if ($guest_cart) {
+                $guest_cart->update(['customer_id' => $user->id]);
+                $final_cart = $guest_cart;
+            } else {
+                $final_cart = (object) [
+                    'id' => null,
+                    'cart_number' => $request->cartnumber,
+                ];
+            }
+        } else {
+            // Use existing user cart
+            $final_cart = $existing_cart;
+        }
+
+        // Update session cartnumber
+        session(['cartnumber' => $final_cart->cart_number]);
+
+        // Response Data
+        $success = [
+            'token' => $token,
+            'userDetails' => $user,
+            'cart_number' => $final_cart->cart_number,
+            'cart_id' => $final_cart->id
+        ];
+
+        $message = "Welcome {$user->name}, You have successfully logged in. Grab the latest DealsMachi offers now!";
+
+        return $this->success($message, $success);
     }
 
     public function register(Request $request)
     {
-        // dd($request->all());
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
             'email' => [
@@ -94,14 +231,32 @@ class AuthController extends Controller
         Auth::login($user);
 
         $referrerCode = 'DMR500' . $user->id;
-
         $token = $user->createToken('Personal Access Token')->accessToken;
+
+        // Handle cart assignment
+        $cartnumber = $request->input('cartnumber') ?? session()->get('cartnumber');
+
+        if ($cartnumber) {
+            $guest_cart = Cart::where('cart_number', $cartnumber)->whereNull('customer_id')->first();
+
+            if ($guest_cart) {
+                // Assign guest cart to the registered user
+                $guest_cart->customer_id = $user->id;
+                $guest_cart->save();
+
+                // Update session cartnumber
+                session(['cartnumber' => $guest_cart->cart_number]);
+            }
+        }
+
         $success['token'] = $token;
-        $success['userDetails'] =  $user;
+        $success['userDetails'] = $user;
         $success['referrer_code'] = $referrerCode;
+        $success['cart_number'] = $cartnumber;
 
         return $this->success('Registered Successfully!', $success);
     }
+
 
     public function shopregistration(Request $request)
     {
@@ -237,5 +392,115 @@ class AuthController extends Controller
         }
 
         return response()->json(['message' => 'User not found or already verified.'], 404);
+    }
+    
+    public function socialLoginResponse(Request $request, $socialprovider)
+    {
+        try {
+            $validatedData = $request->validate([
+                'name' => 'required|string',
+                'email' => 'required|email',
+                'profile_id' => 'required|string',
+                'role'=> 'required|string',
+            ]);
+
+            $findUser = User::where('auth_provider', $socialprovider)
+                ->where('auth_provider_id', $validatedData['profile_id'])
+                ->first();
+
+            if ($findUser) {
+                Auth::login($findUser);
+                $message = "Welcome {$findUser->name}, You have successfully logged in. \nGrab the latest Dealslah offers now!";
+                $loggedInUser = $findUser;
+            } else {
+                $existingUser = User::where('email', $validatedData['email'])->first();
+
+                if ($existingUser) {
+                    Auth::login($existingUser);
+                    $message = "Welcome {$existingUser->name}, You have successfully logged in. \nGrab the latest Dealslah offers now!";
+                    $loggedInUser = $existingUser;
+                } else {
+                    $newUser = User::create([
+                        'name' => $validatedData['name'],
+                        'email' => $validatedData['email'],
+                        'auth_provider_id' => $validatedData['profile_id'],
+                        'auth_provider' => $socialprovider,
+                        'password' => Hash::make('12345678'),
+                        'role' => $validatedData['role']
+                    ]);
+
+                    Auth::login($newUser);
+                    $message = "Welcome {$newUser->name}, You have successfully registered. \nGrab the latest Dealslah offers now!";
+                    $loggedInUser = $newUser;
+                }
+            }
+
+            // Generate token
+            $token = $loggedInUser->createToken('Personal Access Token')->accessToken;
+
+            // Handle cart merging
+            $cartnumber = $request->input('cartnumber') ?? session()->get('cartnumber');
+            $existing_cart = Cart::where('customer_id', $loggedInUser->id)->first();
+            $guest_cart = $cartnumber ? Cart::where('cart_number', $cartnumber)->whereNull('customer_id')->first() : null;
+
+            if ($existing_cart && $guest_cart) {
+                foreach ($guest_cart->items as $item) {
+                    $existing_cart_item = CartItem::where('cart_id', $existing_cart->id)
+                        ->where('product_id', $item->product_id)
+                        ->first();
+
+                    if ($existing_cart_item) {
+                        $existing_cart_item->quantity += $item->quantity;
+                        $existing_cart_item->save();
+                    } else {
+                        $item->cart_id = $existing_cart->id;
+                        $item->save();
+                    }
+                }
+
+                // Update totals
+                $existing_cart->update([
+                    'item_count' => $existing_cart->item_count + $guest_cart->item_count,
+                    'quantity' => $existing_cart->quantity + $guest_cart->quantity,
+                    'total' => $existing_cart->total + $guest_cart->total,
+                    'discount' => $existing_cart->discount + $guest_cart->discount,
+                    'shipping' => $existing_cart->shipping + $guest_cart->shipping,
+                    'packaging' => $existing_cart->packaging + $guest_cart->packaging,
+                    'handling' => $existing_cart->handling + $guest_cart->handling,
+                    'taxes' => $existing_cart->taxes + $guest_cart->taxes,
+                    'grand_total' => $existing_cart->grand_total + $guest_cart->grand_total,
+                    'shipping_weight' => $existing_cart->shipping_weight + $guest_cart->shipping_weight,
+                ]);
+
+                $guest_cart->delete();
+                $final_cart = $existing_cart;
+            } elseif (!$existing_cart) {
+                if ($guest_cart) {
+                    $guest_cart->update(['customer_id' => $loggedInUser->id]);
+                    $final_cart = $guest_cart;
+                } else {
+                    $final_cart = (object)[
+                        'id' => null,
+                        'cart_number' => $cartnumber,
+                    ];
+                }
+            } else {
+                $final_cart = $existing_cart;
+            }
+
+            // Update session cart number
+            session(['cartnumber' => $final_cart->cart_number]);
+
+            return response()->json([
+                'success' => true,
+                'message' => $message,
+                'token' => $token,
+                'user' => $loggedInUser,
+                'cart_number' => $final_cart->cart_number,
+                'cart_id' => $final_cart->id,
+            ], 200);
+        } catch (Exception $e) {
+            return response()->json(['success' => false, 'error' => $e->getMessage()], 500);
+        }
     }
 }

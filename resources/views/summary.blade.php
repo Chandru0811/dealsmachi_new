@@ -179,7 +179,7 @@ $default_address = $addresses->firstWhere('id', $selectedAddressId) ?? ($address
                                     {{ formatIndianCurrency($product->discounted_price) }}
                                 </span>
                                 <span class="ms-1" style="font-size:12px; color:#00DD21">
-                                    -{{ round($product->discount_percentage) }}% off
+                                    {{ round($product->discount_percentage) }}% off
                                 </span>
                             </div>
                         </div>
@@ -518,7 +518,7 @@ $default_address = $addresses->firstWhere('id', $selectedAddressId) ?? ($address
                                                 ₹${formatIndianNumber(product.discounted_price)}
                                             </span>
                                             <span class="ms-1" style="font-size:12px; color:#00DD21">
-                                                -${Math.round(product.discount_percentage)}% off
+                                                ${Math.round(product.discount_percentage)}% off
                                             </span>
                                         </div>
                                     </div>
@@ -895,7 +895,7 @@ $default_address = $addresses->firstWhere('id', $selectedAddressId) ?? ($address
         updateCartTotals();
         updateProductsToBuy();
     });
-    
+
     document.addEventListener('DOMContentLoaded', () => {
         const today = new Date();
         const currentDate = today.toISOString().split('T')[0]; // Format 'YYYY-MM-DD'

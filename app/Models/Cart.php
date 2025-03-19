@@ -19,7 +19,12 @@ class Cart extends Model
         'packaging',
         'handling',
         'taxes',
-        'grand_total'
+        'grand_total',
+        'request_token',
+        'response_token',
+        'bdorderid',
+        'mercid',
+        'order_date'
     ];
 
     public function customer()

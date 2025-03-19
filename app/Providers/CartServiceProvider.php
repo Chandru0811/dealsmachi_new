@@ -25,49 +25,47 @@ class CartServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    public function boot()
-    {
-        View::composer('*', function ($view) {
+   public function boot()
+{
+    View::composer('*', function ($view) {
+        $cartnumber = request()->input('cartnumber') ?? session()->get('cartnumber');
+        $customer_id = Auth::check() ? Auth::id() : null;
+
+        if ($cartnumber !== null && $customer_id === null) {
+            $cart = Cart::where('cart_number', $cartnumber)->first();
+        } elseif ($cartnumber !== null && $customer_id !== null) {
+            $cart = Cart::where('customer_id', $customer_id)->first();
+        } elseif ($cartnumber === null && $customer_id === null) {
+            $cart = null;
+        } else {
+            $cart = Cart::where('customer_id', $customer_id)
+                ->orWhere(function ($q) use ($cartnumber) {
+                    $q->whereNull('customer_id')
+                        ->where('cart_number', $cartnumber);
+                })
+                ->first();
+        }
+
+        if ($cart) {
+            $cart->load(['items.product.shop', 'items.product.productMedia:id,resize_path,order,type,imageable_id']);
+            $cartItems = $cart->items()
+                ->whereHas('product', function ($query) {
+                    $query->where('active', 1)
+                        ->whereNull('deleted_at');
+                })
+                ->get();
+
+            $cartItemCount = $cartItems->count();
+        } else {
+            $cartItems = [];
             $cartItemCount = 0;
-            $cart = Cart::where('ip_address', request()->ip());
-            
-            $user = Auth::user();
-            
-            if (Auth::guard()->check()) {
-                $cart = $cart->orWhere('customer_id', Auth::guard()->user()->id);
-            }
-            
-            $cart = $cart->first();
-            
-            if ($cart) {
-                $cartItems = $cart->items()
-                    ->whereHas('product', function ($query) {
-                        $query->where('active', 1)
-                            ->whereNull('deleted_at');
-                    })
-                    ->get();
+        }
 
-                $cartItemCount = $cartItems->count();
-                $view->with('cartItems', $cartItems);
-                $view->with('cartItemCount', $cartItemCount);
-            }else{
-                $view->with('cartItems', []);
-                $view->with('cartItemCount', 0);
-            }
-            // dd(Auth::id());
-            $address = Address::where('user_id', Auth::id())->get();
-            // dd($address);
-            $view->with('user', $user)
-                ->with('addresses', $address);
-        });
+        $view->with('cartItems', $cartItems)
+            ->with('cartItemCount', $cartItemCount)
+            ->with('user', Auth::user())
+            ->with('addresses', Address::where('user_id', Auth::id())->get());
+    });
+}
 
-        // Event::listen(Login::class, function ($event) {
-        //     $cart = Cart::where('ip_address', request()->ip())->first();
-
-        //     if ($cart) {
-        //         $cart->customer_id = Auth::id();
-        //         $cart->save();
-        //     }
-        // });
-    }
 }

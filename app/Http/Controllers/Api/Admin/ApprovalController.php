@@ -22,9 +22,16 @@ class ApprovalController extends Controller
         $shop_id = $product->shop_id;
         $shop = Shop::where('id',$shop_id)->first();
 
+        if ($request->special_price) {
+            $product->update([
+                'special_price' => $request->special_price,
+                'end_date' => $request->end_date,
+            ]);
+        }
+
         Mail::to($shop->email)->send(new ProductApprovedSuccessfully($shop,$product));
 
-        
+
         return $this->ok('Product Approved Successfully!');
     }
 
