@@ -14,15 +14,15 @@ return new class extends Migration
         Schema::create('sub_categories', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('category_id');
-            $table->string('name',200);
-            $table->string('slug',200)->unique();
+            $table->string('name', 200);
+            $table->string('slug', 200)->unique();
             $table->text('description')->nullable();
             $table->string('path');
             $table->boolean('active')->default(1);
             $table->softDeletes();
             $table->timestamps();
 
-            $table->foreign('category_id')->references('id')->on('category')->onDelete('cascade');
+            $table->foreign('category_id')->references('id')->on('categories')->onDelete('cascade');
         });
     }
 
