@@ -1902,9 +1902,13 @@ $(document).ready(function () {
 
     // Initial Load of Bookmark Count
     function loadBookmarkCount() {
+        let bookmarknumber = localStorage.getItem("bookmarknumber") || null;
         $.ajax({
             url: "totalbookmark",
             method: "GET",
+            data: {
+                bookmarknumber: bookmarknumber,
+            },
             success: function (response) {
                 updateBookmarkCount(response.total_items);
             },
@@ -1952,7 +1956,6 @@ function handleAddBookmark() {
             e.preventDefault();
             let dealId = $(this).data("deal-id");
             let bookmarknumber = localStorage.getItem("bookmarknumber") || null;
-            console.log(bookmarknumber);
             $.ajax({
                 url: `bookmark/${dealId}/add`,
                 method: "POST",
@@ -1991,10 +1994,13 @@ function handleRemoveBookmark() {
         .on("click", function (e) {
             e.preventDefault();
             let dealId = $(this).data("deal-id");
-
+            let bookmarknumber = localStorage.getItem("bookmarknumber") || null;
             $.ajax({
                 url: `bookmark/${dealId}/remove`,
                 method: "DELETE",
+                data: {
+                    bookmarknumber: bookmarknumber,
+                },
                 success: function (response) {
                     updateBookmarkCount(response.total_items);
 
@@ -2026,25 +2032,9 @@ $(document).ready(function () {
         },
     });
     initializeEventListeners();
-    //fetchCartDropdown();
     handleAddBookmark();
     handleRemoveBookmark();
 });
-
-// function fetchCartDropdown() {
-//     $.ajax({
-//         url: "/cart/dropdown",
-//         type: "GET",
-//         success: function (response) {
-//             if (response.html) {
-//                 $(".dropdown_cart").html(response.html);
-//             }
-//         },
-//         error: function () {
-//             showMessage("Failed to update cart dropdown!", "error");
-//         },
-//     });
-// }
 
 function showMessage(message, type) {
     var textColor, icon;
@@ -2080,50 +2070,6 @@ function showMessage(message, type) {
         $(".alert").alert("close");
     }, 5000);
 }
-// Loading initializeEventListeners Data
-// function initializeEventListeners() {
-//     $(".add-to-cart-btn")
-//         .off("click")
-//         .on("click", function (e) {
-//             e.preventDefault();
-
-//             let slug = $(this).data("slug");
-
-//             $.ajax({
-//                 url: `/addtocart/${slug}`,
-//                 type: "POST",
-//                 data: {
-//                     quantity: 1,
-//                     saveoption: "add to cart",
-//                 },
-//                 success: function (response) {
-//                     if (response.cartItemCount !== undefined) {
-//                         const cartCountElement = $("#cart-count");
-
-//                         if (response.cartItemCount > 0) {
-//                             cartCountElement.text(response.cartItemCount);
-//                             cartCountElement.css("display", "inline");
-//                         } else {
-//                             cartCountElement.css("display", "none");
-//                         }
-//                     }
-
-//                     fetchCartDropdown();
-//                     showMessage(
-//                         response.status || "Deal added to cart!",
-//                         "success"
-//                     );
-//                 },
-//                 error: function (xhr) {
-//                     const errorMessage =
-//                         xhr.responseJSON?.error || "Something went wrong!";
-//                     showMessage(errorMessage, "error");
-//                 },
-//             });
-//         });
-// }
-
-//localStorage.clear();
 
 function initializeEventListeners() {
     $(".add-to-cart-btn")
@@ -2159,14 +2105,8 @@ function initializeEventListeners() {
                         $("#cart-count").text(newCount);
                         $("#cart-count").addClass("cart-border");
 
-                        if (newCount > 0 && newCount <= 6) {
+                        if (newCount > 0) {
                             updateCartUI(data.cartItems);
-                        } else {
-                            $(".cart_items").append(`
-                                <div class="text-end mb-2">
-                                    <a style="font-size: 13px" class="cart-screen">View All</a>
-                                </div>
-                            `);
                         }
                         localStorage.setItem("cartnumber", data.cart_number);
                         saveCartNumber(data.cart_number);
@@ -2193,8 +2133,8 @@ function updateCartUI(cartItems) {
     const imagePath =
         cartItems.product.product_media.length > 0
             ? cartItems.product.product_media.find(
-                  (media) => media.order === 1 && media.type === "image"
-              )?.resize_path
+                (media) => media.order === 1 && media.type === "image"
+            )?.resize_path
             : "assets/images/home/noImage.webp";
 
     const productName =
@@ -2202,21 +2142,35 @@ function updateCartUI(cartItems) {
             ? cartItems.product.name.substring(0, 20) + "..."
             : cartItems.product.name;
 
-    $(".cart_items").append(`
-        <div class="d-flex">
-            <img src="${imagePath}" class="img-fluid dropdown_img" alt="${
-        cartItems.product.name
-    }" />
+    const newCartItem = `
+        <div class="d-flex cart-item-drop">
+            <img src="http://127.0.0.1:8000/${imagePath}" class="img-fluid dropdown_img" alt="${cartItems.product.name}" />
             <div class="text-start">
                 <p class="text-start px-1 text-wrap m-0 p-0" style="font-size: 12px; white-space: normal;">
                     ${productName}
                 </p>
-                <p class="px-1 text_size" style="color: #ff0060">
-                    ₹ ${cartItems.discount.toLocaleString()}
+                <p class="px-1 text_size" style="color: #EF4444">
+                    ₹${cartItems.discount.toLocaleString()}
                 </p>
             </div>
         </div>
-    `);
+    `;
+
+    $(".cart_items").prepend(newCartItem);
+
+    let cartItemCount = $(".cart_items .cart-item-drop").length;
+
+    if (cartItemCount > 6) {
+        $(".cart_items .cart-item-drop").last().remove();
+    }
+
+    if (cartItemCount > 6 && $(".cart_items .cartButton2").length === 0) {
+        $(".cart_items").append(`
+            <div class="text-end mb-2 cartButton2" style="cursor: pointer;">
+                <a style="font-size: 13px" class="cart-screen">View All</a>
+            </div>
+        `);
+    }
 }
 
 function isLocalStorageAvailable() {
@@ -2426,6 +2380,15 @@ $(document).ready(function () {
                         response.deal.discount_percentage
                     );
 
+                    const stockStatus =
+                        response.deal &&
+                        response.deal.shop &&
+                        response.deal.shop.is_direct === 1
+                            ? response.deal.stock === 0
+                                ? '<span class="product-out-of-stock">Out of Stock</span>'
+                                : '<span class="product-stock-badge">In Stock</span>'
+                            : "";
+
                     const savedItemHtml = `
                         <div class="saved-item" data-product-id="${
                             response.deal.id
@@ -2469,7 +2432,7 @@ $(document).ready(function () {
                                     <p style="color: #AAAAAA;font-size:14px;">Seller : ${
                                         response.deal.shop.legal_name
                                     }</p>
-                                    <div class="ms-0">
+                                    <div class="d-flex ms-0 mb-3">
                                         <span style="font-size:15px;text-decoration: line-through; color:#c7c7c7">
                                             ₹${Math.round(
                                                 response.deal.original_price
@@ -2487,7 +2450,26 @@ $(document).ready(function () {
                                         <span class="ms-1" style="font-size:18px;font-weight:500; color:#28A745">
                                              ${discountPercentage}% Off
                                         </span>
+                                        <div class="ms-2 mt-2" id="totalStock">${stockStatus}</div>
                                     </div>
+                                    ${
+                                        response.deal.shop.is_direct === 1
+                                            ? response.deal.special_price ===
+                                                  1 &&
+                                              new Date(response.deal.end_date) >
+                                                  new Date()
+                                                ? `
+                                                    <button type="button" style="height: fit-content;" id="servicePrice"
+                                                        data-id=""
+                                                        class="p-1 text-nowrap special-price">
+                                                        <span>&nbsp;<i class="fa-solid fa-stopwatch-20"></i>&nbsp;
+                                                            &nbsp;Special Price
+                                                            &nbsp; &nbsp;
+                                                        </span>
+                                                    </button>`
+                                                : ""
+                                            : ""
+                                    }
                                 </div>
                                 <div class="col-md-4 d-flex flex-column justify-content-end align-items-end mb-3">
                                     <div class="btn-group" role="group">
@@ -2528,7 +2510,6 @@ $(document).ready(function () {
                     $(".saved-item-container").append(savedItemHtml);
                 }
 
-                //fetchCartDropdown();
                 showMessage(
                     response.status || "Item moved to Buy Later!",
                     "success"
@@ -2608,7 +2589,6 @@ $(document).ready(function () {
                     $(".item_count").text(response.cartItemCount);
                 }
 
-                // fetchCartDropdown();
                 showMessage(
                     response.status || "Item moved to Buy Later!",
                     "success"
@@ -2727,6 +2707,14 @@ $(document).ready(function () {
                         response.item.product.discount_percentage
                     );
 
+                    const stockStatus =
+                    response.item.product.shop &&
+                    response.item.product.shop.is_direct === 1
+                        ? response.item.product.stock === 0
+                            ? `<span class="product-out-of-stock">Out of Stock</span>`
+                            : `<span class="product-stock-badge">In Stock</span>`
+                        : "";
+
                     const cartItemHtml = `
                             <div class="cart-item" data-product-id="${
                                 response.item.product_id
@@ -2779,7 +2767,7 @@ $(document).ready(function () {
                     </p>
                 </div>
             </div>
-            <div class="ms-0">
+            <div class="d-flex mb-3 ms-0">
                 <span style="font-size:15px;text-decoration: line-through; color:#c7c7c7">
                     ₹${Math.round(
                         response.item.product.original_price
@@ -2793,7 +2781,24 @@ $(document).ready(function () {
                 <span class="ms-1" style="font-size:18px;font-weight:500;color:#28A745">
                      ${discountPercentage}% Off
                 </span>
+                <div class="ms-2 mt-2" id="totalStock">${stockStatus}</div>
             </div>
+            ${
+                response.item.product.shop.is_direct === 1
+                    ? response.item.product.special_price === 1 &&
+                      new Date(response.item.product.end_date) > new Date()
+                        ? `
+                       <button type="button" style="height: fit-content;" id="servicePrice"
+                      data-id=""
+                      class="p-1 text-nowrap special-price">
+                      <span>&nbsp;<i class="fa-solid fa-stopwatch-20"></i>&nbsp;
+                      &nbsp;Special Price
+                      &nbsp; &nbsp;
+                     </span>
+                     </button>`
+                        : ""
+                    : ""
+            }
             `
             }
         </div>
@@ -3029,7 +3034,6 @@ $(document).ready(function () {
                     });
                 }
 
-                // fetchCartDropdown();
                 showMessage(
                     response.status || "Item moved to cart!",
                     "success"
@@ -3123,7 +3127,6 @@ $(document).ready(function () {
                         `);
                 }
 
-                //fetchCartDropdown();
                 showMessage(
                     response.status || "Save for Later Item Removed!",
                     "success"
@@ -3222,7 +3225,6 @@ $(document).ready(function () {
                     $(".cart-items").append(cartItemHtml);
                 }
 
-                // fetchCartDropdown();
                 showMessage(
                     response.status || "Save for Later Item Removed!",
                     "success"
@@ -3237,21 +3239,6 @@ $(document).ready(function () {
             },
         });
     });
-
-    // function fetchCartDropdown() {
-    //     $.ajax({
-    //         url: "/cart/dropdown",
-    //         type: "GET",
-    //         success: function (response) {
-    //             if (response.html) {
-    //                 $(".dropdown_cart").html(response.html);
-    //             }
-    //         },
-    //         error: function () {
-    //             showMessage("Failed to update cart dropdown!", "error");
-    //         },
-    //     });
-    // }
 
     function showMessage(message, type) {
         var textColor = type === "success" ? "#16A34A" : "#EF4444";
@@ -3278,8 +3265,6 @@ $(document).ready(function () {
             $(".alert").alert("close");
         }, 5000);
     }
-
-    // fetchCartDropdown();
 });
 
 // Function to check if user has address data and open modal
@@ -3375,4 +3360,43 @@ $("#totalStock").click(function (event) {
     });
 
     $(".servicePriceModal").modal("show");
+});
+
+$(document).ready(function () {
+    $('.productCard').on('click', function () {
+        var bookmarknumber = localStorage.getItem('bookmarknumber');
+        var productId = $(this).data('product-id');
+        window.location.href = "/deal/" + productId + "?dmbk=" + bookmarknumber;
+    });
+
+    $('.category-link').on('click', function () {
+        var bookmarknumber = localStorage.getItem('bookmarknumber');
+        var categoryUrl = $(this).data('category-url');
+        var separator = categoryUrl.includes('?') ? '&' : '?';
+        window.location.href = categoryUrl + separator + "dmbk=" + bookmarknumber;
+    });
+
+    $('.hotpick').on('click', function () {
+        var bookmarknumber = localStorage.getItem('bookmarknumber');
+        var hotpickUrl = $(this).data('hotpick-url');
+        window.location.href = hotpickUrl + "?dmbk=" + bookmarknumber;
+    });
+
+    $('.search-dmbk').on('keypress', function (event) {
+        var bookmarknumber = localStorage.getItem('bookmarknumber');
+        if (event.which === 13) {
+            event.preventDefault();
+
+            var form = $(this).closest('form');
+            var searchUrl = form.attr('action');
+            var query = $(this).val();
+            var separator = searchUrl.includes('?') ? '&' : '?';
+            var newAction = searchUrl + separator + "q=" + encodeURIComponent(query) + "&dmbk=" + bookmarknumber;
+
+            window.location.href = newAction;
+        }
+    });
+
+    var bookmarknumber = localStorage.getItem('bookmarknumber');
+    $('#dmbkInput').val(bookmarknumber).attr('value', bookmarknumber);
 });

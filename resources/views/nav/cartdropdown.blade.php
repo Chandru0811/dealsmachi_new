@@ -3,7 +3,7 @@
     <div class="cart_items">
         @if($cartItems && $cartItems->count() > 0)
         @foreach($cartItems->take(6) as $item)
-        <div class="d-flex">
+        <div class="d-flex cart-item-drop" data-product-id="{{ $item->product_id }}">
             @php
             $image = isset($item->product->productMedia)
             ? $item->product->productMedia
@@ -30,14 +30,14 @@
         @endif
         @else
         <div class="text-center cartEmpty">
-            <img src="{{ asset('assets/images/home/empty_cart.webp') }}" alt="Empty Cart"
+            <img src="{{ asset('assets/images/home/cart_empty.webp') }}" alt="Empty Cart"
                 class="img-fluid" width="75">
             <p class="text_size" style="color: #cbcbcb">Your cart is empty</p>
         </div>
         @endif
     </div>
     <div class="dropdown_cart_view d-flex justify-content-end">
-        <a class="cartButton2 text_size text-decoration-none d-none d-xl-inline cart-screen"
+        <a class="cartButton1 text_size text-decoration-none d-none d-xl-inline cart-screen"
             style="text-decoration: none;cursor: pointer;" >View My Shopping Cart</a>
     </div>
 </div>

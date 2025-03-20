@@ -16,8 +16,8 @@
     <div class="row">
         @foreach ($products as $product)
             <div class="col-md-4 col-lg-3 col-12 mb-3 d-flex align-items-stretch justify-content-center">
-                <a href="{{ url('/deal/' . $product->id) }}" style="text-decoration: none;"
-                    onclick="clickCount('{{ $product->id }}')">
+            <a data-product-id="{{ $product->id }}" class="productCard" style="text-decoration: none;"
+                onclick="clickCount('{{ $product->id }}')">
                     <div class="card sub_topCard h-100 d-flex flex-column">
                         <div style="min-height: 50px">
                             @if ($treandingdeals->contains('deal_id', $product->id))
@@ -160,7 +160,7 @@
                                     <div>
                                         <p>Regular Price</p>
                                         @if ($product->deal_type == 2)
-                                            <span class="fw-light" style="color: #22cb00ab; !important">Standard
+                                            <span class="fw-light" style="color: #22cb00ab !important;">Standard
                                                 Rates</span>
                                         @else
                                             <span><s>{{ formatIndianCurrency($product->original_price) }}</s></span>

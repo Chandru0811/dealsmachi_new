@@ -21,8 +21,8 @@ use App\Models\Dealenquire;
 use App\Models\DealShare;
 use App\Models\Review;
 use App\Models\User;
-use Stevebauman\Location\Facades\Location;
 use Illuminate\Support\Facades\Validator;
+use App\Models\SubCategory;
 
 class HomeController extends Controller
 {
@@ -31,7 +31,8 @@ class HomeController extends Controller
     public function index(Request $request)
     {
         $categoryGroups = CategoryGroup::where('active', 1)->with('categories')->take(10)->get();
-        $hotpicks = DealCategory::where('active', 1)->get();
+        // $hotpicks = DealCategory::where('active', 1)->get();
+        $subCategories = SubCategory::where("category_id", 2)->select('name', 'slug', 'path')->get();
         $products = Product::where('active', 1)
             ->with(['productMedia:id,resize_path,order,type,imageable_id', 'shop:id,country,city,shop_ratings,is_direct'])
             ->orderByRaw("CASE WHEN `order` IS NULL THEN 1 ELSE 0 END, `order` ASC, `created_at` DESC")
@@ -42,19 +43,32 @@ class HomeController extends Controller
         $earlybirddeals = Product::where('active', 1)->whereDate('start_date', now())->get();
         $lastchancedeals = Product::where('active', 1)->whereDate('end_date', now())->get();
         $limitedtimedeals = Product::where('active', 1)->whereRaw('DATEDIFF(end_date, start_date) <= ?', [2])->get();
+        $bookmarknumber = $request->input("bookmarknumber") ?? session('bookmarknumber') ?? $request->cookie('bookmarknumber') ?? null;
+        $user = Auth::user();
 
         $bookmarkedProducts = collect();
+        if ($user) {
+            $guestBookmarks = Bookmark::whereNull('user_id')
+                ->where('bookmark_number', $bookmarknumber)
+                ->get();
 
-        if (Auth::check()) {
-            $userId = Auth::id();
-            $bookmarkedProducts = Bookmark::where('user_id', $userId)->pluck('deal_id');
-        } else {
-            $bookmarkNumber = session()->get('bookmarknumber');
-            if ($bookmarkNumber) {
-                $bookmarkedProducts = Bookmark::where('bookmark_number', $bookmarkNumber)->pluck('deal_id');
-            } else {
-                $bookmarkedProducts = collect(); // Empty collection if no bookmark number exists
+            foreach ($guestBookmarks as $guestBookmark) {
+                $existingBookmark = Bookmark::where('user_id', $user->id)
+                    ->where('deal_id', $guestBookmark->deal_id)
+                    ->first();
+
+                if ($existingBookmark) {
+                    $guestBookmark->delete();
+                } else {
+                    $guestBookmark->update(['user_id' => $user->id]);
+                }
             }
+
+            $bookmarkedProducts = Bookmark::where('user_id', $user->id)
+                ->pluck('deal_id');
+        } else {
+            $bookmarkedProducts = Bookmark::where('bookmark_number', $bookmarknumber)
+                ->pluck('deal_id');
         }
 
         if ($request->ajax()) {
@@ -76,7 +90,7 @@ class HomeController extends Controller
             )->render();
         }
 
-        return view('home', compact('categoryGroups', 'hotpicks', 'products', 'bookmarkedProducts', 'treandingdeals', 'populardeals', 'earlybirddeals', 'lastchancedeals', 'limitedtimedeals'));
+        return view('home', compact('categoryGroups', 'subCategories', 'products', 'bookmarkedProducts', 'treandingdeals', 'populardeals', 'earlybirddeals', 'lastchancedeals', 'limitedtimedeals'));
     }
 
     public function clickcounts(Request $request)
@@ -118,20 +132,22 @@ class HomeController extends Controller
         $product = Product::with(['productMedia', 'shop', 'shop.hour', 'shop.policy'])->where('id', $id)
             ->first();
 
+        $bookmarknumber = $request->input("dmbk") ?? session('bookmarknumber') ?? $request->cookie('bookmarknumber') ?? null;
+
         $bookmarkedProducts = collect();
 
         if (Auth::check()) {
             $userId = Auth::id();
-            $bookmarkedProducts = Bookmark::where('user_id', $userId)->pluck('deal_id');
+
+            $bookmarkedProducts = Bookmark::where('user_id', $userId)
+                ->orWhere('bookmark_number', $bookmarknumber)
+                ->pluck('deal_id');
         } else {
-            $bookmarkNumber = session()->get('bookmarknumber');
-            if ($bookmarkNumber) {
-                $bookmarkedProducts = Bookmark::where('bookmark_number', $bookmarkNumber)->pluck('deal_id');
-            } else {
-                $bookmarkedProducts = collect(); // Empty collection if no bookmark number exists
+            if ($bookmarknumber) {
+                $bookmarkedProducts = Bookmark::where('bookmark_number', $bookmarknumber)
+                    ->pluck('deal_id');
             }
         }
-
 
         $url = url()->current(); // Get the current URL
         $title = $product->name . ' | ₹ ' . $product->discounted_price;
@@ -157,8 +173,16 @@ class HomeController extends Controller
     public function dealcategorybasedproducts($slug, Request $request)
     {
         $shortBy = $request->input('short_by');
+        $bookmarknumber = $request->input("dmbk") ?? session('bookmarknumber') ?? $request->cookie('bookmarknumber') ?? null;
+
+        if ($bookmarknumber === null) {
+            $bookmarknumber = session()->get('bookmark');
+        }
         if ($shortBy) {
-            return redirect()->route('deals.categorybased', ['slug' => $shortBy] + $request->except('short_by'));
+            return redirect()->route('deals.categorybased', [
+                'slug' =>  $shortBy,
+                'dmbk' => $bookmarknumber
+            ] + $request->except('short_by', 'dmbk'));
         }
 
         $perPage = $request->input('per_page', 10);
@@ -287,17 +311,18 @@ class HomeController extends Controller
 
         $shortby = DealCategory::where('active', 1)->get();
         $totaldeals = $deals->total();
-        $bookmarkedProducts = collect();
 
+        $bookmarkedProducts = collect();
         if (Auth::check()) {
             $userId = Auth::id();
-            $bookmarkedProducts = Bookmark::where('user_id', $userId)->pluck('deal_id');
+
+            $bookmarkedProducts = Bookmark::where('user_id', $userId)
+                ->orWhere('bookmark_number', $bookmarknumber)
+                ->pluck('deal_id');
         } else {
-            $bookmarkNumber = session()->get('bookmarknumber');
-            if ($bookmarkNumber) {
-                $bookmarkedProducts = Bookmark::where('bookmark_number', $bookmarkNumber)->pluck('deal_id');
-            } else {
-                $bookmarkedProducts = collect(); // Empty collection if no bookmark number exists
+            if ($bookmarknumber) {
+                $bookmarkedProducts = Bookmark::where('bookmark_number', $bookmarknumber)
+                    ->pluck('deal_id');
             }
         }
 
@@ -306,6 +331,7 @@ class HomeController extends Controller
 
     public function subcategorybasedproducts(Request $request, $slug)
     {
+        $subCategories = collect();
         $perPage = $request->input('per_page', 10);
         $query = Product::with(['productMedia:id,resize_path,order,type,imageable_id', 'shop:id,country,state,city,street,street2,zip_code,shop_ratings,is_direct'])
             ->where('active', 1);
@@ -345,7 +371,7 @@ class HomeController extends Controller
         } else {
             $category = Category::where('slug', $slug)->first();
             $categorygroup = CategoryGroup::where('id', $category->category_group_id)->first();
-
+            $subCategories = SubCategory::where('category_id', $category->id)->get();
             $query->whereHas('category', function ($query) use ($slug) {
                 $query->where('slug', $slug);
             });
@@ -357,6 +383,14 @@ class HomeController extends Controller
 
         if ($request->has('brand') && is_array($request->brand)) {
             $query->whereIn('brand', $request->brand);
+        }
+
+        if ($request->has('sub_category')) {
+            $subcategory = SubCategory::where('slug', $request->sub_category)->first();
+
+            if ($subcategory) {
+                $query->whereJsonContains('sub_category_id', (string) $subcategory->id);
+            }
         }
 
         if ($request->has('discount') && is_array($request->discount)) {
@@ -481,7 +515,7 @@ class HomeController extends Controller
             }
         }
 
-        return view('productfilter', compact('deals', 'brands', 'discounts', 'rating_items', 'priceRanges', 'shortby', 'totaldeals', 'category', 'categorygroup', 'bookmarkedProducts'));
+        return view('productfilter', compact('deals', 'brands', 'discounts', 'rating_items', 'priceRanges', 'shortby', 'totaldeals', 'category', 'categorygroup', 'subCategories', 'bookmarkedProducts'));
     }
 
     public function search(Request $request)
@@ -632,16 +666,22 @@ class HomeController extends Controller
 
         $shortby = DealCategory::where('active', 1)->get();
         $totaldeals = $deals->total();
+        $bookmarknumber = $request->input("dmbk") ?? session('bookmarknumber') ?? $request->cookie('bookmarknumber') ?? null;
+
+        if ($bookmarknumber === null) {
+            $bookmarknumber = session()->get('bookmark');
+        }
         $bookmarkedProducts = collect();
         if (Auth::check()) {
             $userId = Auth::id();
-            $bookmarkedProducts = Bookmark::where('user_id', $userId)->pluck('deal_id');
+
+            $bookmarkedProducts = Bookmark::where('user_id', $userId)
+                ->orWhere('bookmark_number', $bookmarknumber)
+                ->pluck('deal_id');
         } else {
-            $bookmarkNumber = session()->get('bookmarknumber');
-            if ($bookmarkNumber) {
-                $bookmarkedProducts = Bookmark::where('bookmark_number', $bookmarkNumber)->pluck('deal_id');
-            } else {
-                $bookmarkedProducts = collect(); // Empty collection if no bookmark number exists
+            if ($bookmarknumber) {
+                $bookmarkedProducts = Bookmark::where('bookmark_number', $bookmarknumber)
+                    ->pluck('deal_id');
             }
         }
 
@@ -803,5 +843,4 @@ class HomeController extends Controller
 
         return response()->json(['product' => $product], 200);
     }
-
 }

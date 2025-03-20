@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Controllers;
 
 use App\Helpers\CartHelper;
@@ -245,6 +246,17 @@ class CartController extends Controller
 
         $cart_item->delete();
 
+        $nextItem = CartItem::where('cart_id', $cart->id)
+            ->orderBy('created_at', 'desc')
+            ->skip(5)
+            ->first();
+
+        if ($nextItem) {
+            $nextItem->load(
+                'product.productMedia:id,resize_path,order,type,imageable_id'
+            );
+        }
+
         return response()->json([
             'status'        => 'Deal Removed from Cart!',
             'cartItemCount' => $cart->item_count,
@@ -254,6 +266,7 @@ class CartController extends Controller
                 'discount'    => $cart->discount,
                 'grand_total' => $cart->grand_total,
             ],
+            'nextItem' => $nextItem ? $nextItem : null
         ]);
     }
 
@@ -317,6 +330,17 @@ class CartController extends Controller
             // Remove from Cart
             $cartItem->delete();
 
+            $nextItem = CartItem::where('cart_id', $cart->id)
+                ->orderBy('created_at', 'desc')
+                ->skip(5)
+                ->first();
+
+            if ($nextItem) {
+                $nextItem->load(
+                    'product.productMedia:id,resize_path,order,type,imageable_id'
+                );
+            }
+
             //update cart
             $cart->item_count      = $cart->item_count - 1;
             $cart->quantity        = $cart->quantity - $cartItem->quantity;
@@ -340,6 +364,7 @@ class CartController extends Controller
                     'discount'    => $cart->discount,
                     'grand_total' => $cart->grand_total,
                 ],
+                'nextItem' => $nextItem ? $nextItem : null
             ]);
         }
 
@@ -522,24 +547,24 @@ class CartController extends Controller
         ]);
     }
 
+
     public function cartSummary($cart_id, Request $request)
     {
-        if (! Auth::check()) {
+        if (!Auth::check()) {
             session(['url.intended' => route('cart.address')]);
             return redirect()->route("login");
         }
 
-        $user  = Auth::user();
+        $user = Auth::user();
         $carts = Cart::where('id', $cart_id)->with(['items.product'])->first();
         // dd($carts);
-        if (! $carts) {
+        if (!$carts) {
             return redirect()->route('cart.index')->with('error', 'Cart not found.');
         }
 
         $minServiceDate = now()->addDays(2)->format('Y-m-d');
 
         foreach ($carts->items as $item) {
-
             if (!empty($item->product) && !empty($item->product->shop) && $item->product->shop->is_direct == 1) {
                 if (isset($item->product->stock) && $item->product->stock == 0) {
                     return redirect()->route('cart.index')->with('error', "Product '{$item->product->name}' is not available in stock.");
