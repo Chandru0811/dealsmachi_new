@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\Address;
 use App\Models\Cart;
+use App\Models\CartItem;
 use App\Models\Order;
 use App\Models\OrderItems;
 use App\Models\Product;
@@ -22,46 +23,65 @@ class CheckoutController extends Controller
     {
         if (!Auth::guard('api')->check()) {
             return $this->error('User is not authenticated. Redirecting to login.', null, 401);
-        } else {
-            $user = Auth::guard('api')->user();
-            $products = Product::with(['productMedia:id,resize_path,order,type,imageable_id', 'shop'])->where('id', $id)->where('active', 1)->get();
-            if (!$products) {
-                return $this->error('Product not found or inactive.', null, 404);
-            }
-
-            $carts = Cart::whereNull('customer_id')->where('cart_number', $request->cartnumber);
-            if (Auth::guard('api')->check()) {
-                $carts = $carts->orWhere('customer_id', Auth::guard('api')->user()->id);
-            }
-
-            $carts = $carts->first();
-
-            if ($carts) {
-                $carts->load(['items' => function ($query) use ($id) {
-                    $query->where('product_id', '!=', $id);
-                }, 'items.product.productMedia:id,resize_path,order,type,imageable_id', 'items.product.shop']);
-            }
-
-            $savedItem = SavedItem::whereNull('user_id')->where('ip_address', $request->ip());
-
-            if (Auth::guard('api')->check()) {
-                $savedItem = $savedItem->orWhere('user_id', Auth::guard('api')->user()->id);
-            }
-
-            $savedItem = $savedItem->get();
-
-            $savedItem->load(['deal']);
-
-            $addresses = Address::where('user_id', $user->id)->get();
-
-            return $this->success('Summary Details Retrived Successfully', [
-                'products' => $products,
-                'user' => $user,
-                'carts' => $carts,
-                'addresses' => $addresses,
-                'savedItem' => $savedItem
-            ]);
         }
+
+        $user = Auth::guard('api')->user();
+
+        $product = Product::with(['productMedia:id,resize_path,order,type,imageable_id', 'shop'])
+            ->where('id', $id)
+            ->where('active', 1)
+            ->first();
+
+        if (!$product) {
+            return $this->error('Product not found or inactive.', null, 404);
+        }
+
+        $carts = Cart::whereNull('customer_id')->where('cart_number', $request->cartnumber);
+
+        if (Auth::guard('api')->check()) {
+            $carts = $carts->orWhere('customer_id', Auth::guard('api')->user()->id);
+        }
+
+        $carts = $carts->first();
+
+        $cartItem = null;
+        if ($carts) {
+            $cartItem = CartItem::where('cart_id', $carts->id)
+                ->where('product_id', $id)
+                ->select('service_date', 'service_time', 'quantity')
+                ->first();
+        }
+
+        if ($product) {
+            $product->service_date = $cartItem->service_date ?? null;
+            $product->service_time = $cartItem->service_time ?? null;
+            $product->quantity = $cartItem->quantity ?? 0;
+        }
+
+        if ($carts) {
+            $carts->load(['items' => function ($query) use ($id) {
+                $query->where('product_id', '!=', $id);
+            }, 'items.product.productMedia:id,resize_path,order,type,imageable_id', 'items.product.shop']);
+        }
+
+        $savedItem = SavedItem::whereNull('user_id')->where('ip_address', $request->ip());
+
+        if (Auth::guard('api')->check()) {
+            $savedItem = $savedItem->orWhere('user_id', Auth::guard('api')->user()->id);
+        }
+
+        $savedItem = $savedItem->get();
+        $savedItem->load(['deal']);
+
+        $addresses = Address::where('user_id', $user->id)->get();
+
+        return $this->success('Summary Details Retrieved Successfully', [
+            'products' => $product,
+            'user' => $user,
+            'carts' => $carts,
+            'addresses' => $addresses,
+            'savedItem' => $savedItem
+        ]);
     }
 
     public function directCheckout(Request $request)
