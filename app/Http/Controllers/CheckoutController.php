@@ -43,7 +43,10 @@ class CheckoutController extends Controller
         } else {
             $user = Auth::user();
 
-            $products = Product::with(['productMedia:id,resize_path,order,type,imageable_id', 'shop'])->where('id', $id)->where('active', 1)->get();
+            $products = Product::with(['productMedia:id,resize_path,order,type,imageable_id', 'shop'])->where('id', $id)
+            ->where('active', 1)
+            ->where('stock','>',0)
+            ->get();
 
             if (!$products) {
                 return redirect()->route('home')->with('error', 'Product not found or inactive.');
@@ -68,7 +71,10 @@ class CheckoutController extends Controller
 
                 $carts->load([
                     'items' => function ($query) use ($id) {
-                        $query->where('product_id', '!=', $id);
+                        $query->where('product_id', '!=', $id)
+                        ->whereHas('product', function ($query) {
+                            $query->where('stock', '>', 0);
+                        });
                     },
                     'items.product.productMedia:id,resize_path,order,type,imageable_id',
                     'items.product.shop'
@@ -80,7 +86,6 @@ class CheckoutController extends Controller
             }
 
             $savedItem = SavedItem::whereNull('user_id')->where('ip_address', $request->ip());
-
             if (Auth::guard()->check()) {
                 $savedItem = $savedItem->orWhere('user_id', Auth::guard()->user()->id);
             }
@@ -98,6 +103,8 @@ class CheckoutController extends Controller
 
     public function directcheckout(Request $request)
     {
+
+        // dd($request->all());
         $product_ids = $request->input('all_products_to_buy');
         $ids = json_decode($product_ids);
         $address_id = $request->input('address_id');
@@ -146,6 +153,7 @@ class CheckoutController extends Controller
 
     public function createorder(Request $request)
     {
+        // dd($request->all());
         $user_id = Auth::check() ? Auth::id() : null;
         $cart_id = $request->input('cart_id');
         $product_ids = $request->input('product_ids');

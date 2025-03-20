@@ -33,7 +33,7 @@ class HomeController extends Controller
         $categoryGroups = CategoryGroup::where('active', 1)->with('categories')->take(10)->get();
         $hotpicks = DealCategory::where('active', 1)->get();
         $products = Product::where('active', 1)
-            ->with(['productMedia:id,resize_path,order,type,imageable_id', 'shop:id,country,city,shop_ratings'])
+            ->with(['productMedia:id,resize_path,order,type,imageable_id', 'shop:id,country,city,shop_ratings,is_direct'])
             ->orderByRaw("CASE WHEN `order` IS NULL THEN 1 ELSE 0 END, `order` ASC, `created_at` DESC")
             ->paginate(8);
         // dd($products);
@@ -44,7 +44,7 @@ class HomeController extends Controller
         $limitedtimedeals = Product::where('active', 1)->whereRaw('DATEDIFF(end_date, start_date) <= ?', [2])->get();
 
         $bookmarkedProducts = collect();
-        
+
         if (Auth::check()) {
             $userId = Auth::id();
             $bookmarkedProducts = Bookmark::where('user_id', $userId)->pluck('deal_id');
@@ -56,7 +56,7 @@ class HomeController extends Controller
                 $bookmarkedProducts = collect(); // Empty collection if no bookmark number exists
             }
         }
-        
+
         if ($request->ajax()) {
             if ($products->isEmpty()) {
                 return response('', 204);
@@ -165,7 +165,7 @@ class HomeController extends Controller
         $today = now()->toDateString();
         $deals = collect();
 
-        $query = Product::where('active', 1)->with('productMedia:id,resize_path,order,type,imageable_id', 'shop:id,country,state,city,street,street2,zip_code,shop_ratings');
+        $query = Product::where('active', 1)->with('productMedia:id,resize_path,order,type,imageable_id', 'shop:id,country,state,city,street,street2,zip_code,shop_ratings,is_direct');
 
         if ($slug == 'trending') {
             $query->withCount([
@@ -288,7 +288,7 @@ class HomeController extends Controller
         $shortby = DealCategory::where('active', 1)->get();
         $totaldeals = $deals->total();
         $bookmarkedProducts = collect();
-        
+
         if (Auth::check()) {
             $userId = Auth::id();
             $bookmarkedProducts = Bookmark::where('user_id', $userId)->pluck('deal_id');
@@ -307,7 +307,7 @@ class HomeController extends Controller
     public function subcategorybasedproducts(Request $request, $slug)
     {
         $perPage = $request->input('per_page', 10);
-        $query = Product::with(['productMedia:id,resize_path,order,type,imageable_id', 'shop:id,country,state,city,street,street2,zip_code,shop_ratings'])
+        $query = Product::with(['productMedia:id,resize_path,order,type,imageable_id', 'shop:id,country,state,city,street,street2,zip_code,shop_ratings,is_direct'])
             ->where('active', 1);
 
         if ($slug === 'all') {
@@ -782,4 +782,26 @@ class HomeController extends Controller
 
         return redirect()->back()->with(['status' => 'Review has been successfully added.'], 200);
     }
+
+    public function showSpecialPrice($id)
+    {
+        $product = Product::where("id", $id)->first();
+        if (!$product) {
+            return response()->json(['error' => 'Product not found'], 404);
+        }
+
+        return response()->json(['product' => $product], 200);
+    }
+
+    public function stock($id)
+    {
+        $product = Product::where("id", $id)->first();
+
+        if (!$product) {
+            return response()->json(['error' => 'Product not found'], 404);
+        }
+
+        return response()->json(['product' => $product], 200);
+    }
+
 }

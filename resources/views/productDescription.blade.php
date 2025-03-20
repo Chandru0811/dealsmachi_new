@@ -341,14 +341,18 @@
                                         @endif
                                     </span>
                                 </p>
-                                 @if (!empty($product->special_price) && $product->special_price)
-                                    <div class="px-2">
-                                        <button type="button" style="height: fit-content; cursor: pointer;"
-                                            class="p-1 text-nowrap special-price">
-                                            <span>&nbsp;<i class="fa-solid fa-stopwatch-20"></i>&nbsp; &nbsp;Special Price
-                                                &nbsp; &nbsp;</span>
-                                        </button>
-                                    </div>
+                                @if (!empty($product->shop->is_direct) && $product->shop->is_direct == 1)
+                                    @if (!empty($product->special_price) && $product->special_price && \Carbon\Carbon::parse($product->end_date)->isFuture())
+                                        <div class="px-3">
+                                            <button type="button" style="height: fit-content;" id="servicePrice"
+                                                data-id="{{ $product->id }}" class="p-1 text-nowrap special-price">
+                                                <span>&nbsp;<i class="fa-solid fa-stopwatch-20"></i>&nbsp;
+                                                    &nbsp;Special Price
+                                                    &nbsp; &nbsp;
+                                                </span>
+                                            </button>
+                                        </div>
+                                    @endif
                                 @endif
                             </div>
                             <div class="d-flex align-items-center rating mt-2">
@@ -368,7 +372,7 @@
                                         <i class="fa-regular fa-star" style="color: #ffc200;"></i>
                                     @endfor
                                 </span>
-                                 <div class="share px-2 ms-md-3">
+                                <div class="share px-2 ms-md-3">
                                     <button type="button" id="share_btn" style="height: fit-content; cursor: pointer;"
                                         class="p-1  text-nowrap media_fonts_conent"
                                         onclick="copyLinkToClipboard(this, event, '{{ $product->id }}')"
@@ -425,7 +429,36 @@
                                             class="discount-price coupon-align1 text-nowrap">{{ number_format($product->discount_percentage, 2) }}%
                                             off</span>
                                     </div>
-                                    <div class="ms-2">
+                                    @if (!empty($product->shop->is_direct) && $product->shop->is_direct == 1)
+                                        <div class="ms-2 mt-2" id="totalStock">
+                                            @if (empty($product->stock) || $product->stock == 0)
+                                                <span class="product-out-of-stock">
+                                                    Out of Stock
+                                                </span>
+                                            @else
+                                                <span class="product-stock-badge">
+                                                    In Stock
+                                                </span>
+                                            @endif
+                                        </div>
+                                    @else
+                                        @if (!empty($product->coupon_code))
+                                            <span id="mySpan" class="mx-3 px-2 couponBadge"
+                                                onclick="copySpanText(this, event)" data-bs-toggle="tooltip"
+                                                data-bs-placement="bottom" title="Click to Copy"
+                                                style="position:relative;">
+                                                {{ $product->coupon_code }}
+                                                <!-- Tooltip container -->
+                                                <span class="tooltip-text"
+                                                    style="visibility: hidden; background-color: black; color: #fff; text-align: center;
+                                            border-radius: 6px; padding: 5px; position: absolute; z-index: 1;
+                                            bottom: 125%; left: 50%; margin-left: -60px;">
+                                                    Copied!
+                                                </span>
+                                            </span>
+                                        @endif
+                                    @endif
+                                    {{-- <div class="ms-2 mt-2">
                                         @if (empty($product->stock) || $product->stock == 0)
                                             <span class="out-of-stock">
                                                 Out of Stock
@@ -435,7 +468,7 @@
                                                 In Stock
                                             </span>
                                         @endif
-                                    </div>
+                                    </div> --}}
                                     {{-- @if (!empty($product->coupon_code))
                                         <div>
                                             <p class="d-flex justify-content-start">

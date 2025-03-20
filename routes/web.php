@@ -39,6 +39,11 @@ Route::post('deals/count/views', [HomeController::class, 'viewcounts']);
 Route::post('deals/coupon/copied', [HomeController::class, 'couponCodeCopied']);
 Route::post('deals/count/share', [HomeController::class, 'dealshare']);
 Route::post('deals/count/enquire', [HomeController::class, 'dealenquire']);
+
+Route::get('/service/price/{id}', [HomeController::class, 'showSpecialPrice'])->name('service.price');
+Route::get('/stock/{id}', [HomeController::class, 'stock'])->name('stock.unit');
+
+
 Route::middleware('auth')->group(function () {
     Route::get('/checkoutSummary/{product_id}', [CheckoutController::class, 'checkoutsummary'])->name('checkout.summary');
     Route::post('/cartCheckout', [CheckoutController::class, 'cartcheckout'])->name('checkout.cart');
@@ -56,7 +61,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/order/invoice/{id}', [CheckoutController::class, 'orderInvoice'])->name('order.invoice');
     Route::put('/updateUser', [HomeController::class, 'updateUser'])->name('user.update');
     Route::post('/review', [HomeController::class, 'createReview'])->name('review.create');
-    
+
     //newcheckout
     Route::post('/proceed/payment', [NewcheckoutController::class, 'proceedonlinepayment'])->name('new.payment');
     Route::post('/proceed/cod', [NewcheckoutController::class, 'confirmcod'])->name('new.codorder');
@@ -97,17 +102,17 @@ Route::get('auth/{socialprovider}/callback',[AuthController::class,'socailLoginR
 
 // Route::get('social/facebook/callback', function () {
 //     try {
-        
+
 //             $user = Socialite::driver('facebook')->user();
-         
+
 //             $findUser = User::where('auth_provider','facebook')->where('auth_provider_id', $user->id)->first();
-         
+
 //             if($findUser){
-         
+
 //                 Auth::login($findUser);
-        
+
 //                 return redirect()->intended('home');
-         
+
 //             }else{
 //                 $newUser = User::updateOrCreate(['email' => $user->email],[
 //                         'name' => $user->name,
@@ -115,12 +120,12 @@ Route::get('auth/{socialprovider}/callback',[AuthController::class,'socailLoginR
 //                         'auth_provider' => 'facebook',
 //                         'password' => encrypt('12345678')
 //                     ]);
-        
+
 //                 Auth::login($newUser);
-        
+
 //                 return redirect()->intended('home');
 //             }
-        
+
 //         } catch (Exception $e) {
 //             dd($e->getMessage());
 //         }

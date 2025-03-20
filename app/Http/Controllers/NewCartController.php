@@ -27,6 +27,11 @@ class NewCartController extends Controller
             return response()->json(['error' => 'Deal not found!'], 404);
         }
 
+        if (!empty($product->shop->is_direct) && $product->shop->is_direct == 1 && $product->stock == 0) {
+            return redirect()->back()->with('error', 'Not available in stock.');
+        }
+
+
         $customer_id = Auth::check() ? Auth::user()->id : null;
 
         if ($customer_id == null) {
@@ -169,7 +174,6 @@ class NewCartController extends Controller
             ]);
         }
     }
-    
     public function index(Request $request)
     {
         //dd($request->all());
@@ -180,13 +184,10 @@ class NewCartController extends Controller
         {
             $cartnumber = session()->get('cartnumber');
         }
-        
         $customer_id = Auth::check() ? Auth::user()->id : null;
-        
         if($customer_id == null)
         {
             $cart = Cart::where('cart_number',$cartnumber)->first();
-            
         }else{
            $cart = Cart::where('customer_id', $customer_id)->first();
            if($cart == null)
@@ -198,12 +199,9 @@ class NewCartController extends Controller
         if($cart)
         {
             $cart->load(['items.product.shop', 'items.product.productMedia:id,resize_path,order,type,imageable_id']);
-           
         }else{
             $cart = [];
         }
-            
-            
         $bookmarkedProducts = [];
         // $savedItems = collect([]);
          if ($customer_id == null) {
@@ -228,9 +226,7 @@ class NewCartController extends Controller
         //         'bookmarkedProducts' => $bookmarkedProducts,
         //         'savedItems' => $savedItems
         //     ]);
-        
     }
-    
     public function cartdetails(Request $request)
     {
         $cartnumber = $request->input('cartnumber');
@@ -239,7 +235,6 @@ class NewCartController extends Controller
         {
             $cartnumber = session()->get('cartnumber');
         }
-        
         if($cartnumber != null && $customer_id == null)
         {
             $cart = Cart::where('cart_number',$cartnumber)->first();
@@ -256,7 +251,6 @@ class NewCartController extends Controller
                                           ->where('cart_number', $cartnumber);
                                     })->first();
         }
-        
         if($cart != null)
         {
             $cart->load(['items.product.shop', 'items.product.productMedia:id,resize_path,order,type,imageable_id']);
@@ -267,16 +261,10 @@ class NewCartController extends Controller
             $cartcount = 0;
             $html = view('nav.cartdropdown', compact('cart'))->render();
         }
-        
         return response()->json([
                 'status' => 'Cart Details Successfully!',
                 'cartcount' => $cartcount,
                 'html' => $html
             ]);
-        
-        
     }
-    
-   
-    
 }

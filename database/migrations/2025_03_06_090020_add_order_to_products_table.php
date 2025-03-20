@@ -8,14 +8,18 @@ return new class extends Migration {
     public function up(): void
     {
         Schema::table('products', function (Blueprint $table) {
-            $table->integer('order')->nullable()->after('id');
+            if (!Schema::hasColumn('products', 'order')) {
+                $table->integer('order')->nullable()->after('id');
+            }
         });
     }
 
     public function down(): void
     {
         Schema::table('products', function (Blueprint $table) {
-            $table->dropColumn('order');
+            if (Schema::hasColumn('products', 'order')) {
+                $table->dropColumn('order');
+            }
         });
     }
 };

@@ -3298,3 +3298,81 @@ function checkAddressAndOpenModal() {
         })
         .catch((error) => console.error("Error fetching address:", error));
 }
+
+$("#servicePrice").click(function (event) {
+    event.preventDefault();
+
+    let productId = $(this).data("id");
+
+    if (!productId) {
+        console.error("Product ID is missing!");
+        return;
+    }
+    $.ajax({
+        url: `http://127.0.0.1:8000/service/price/${productId}`,
+        type: "GET",
+        contentType: "application/json",
+        success: function (response) {
+            console.log("Response :",response)
+            if (response.product) {
+                let product = response.product;
+
+                let discountAmount =
+                    product.original_price && product.discounted_price
+                        ? product.original_price - product.discounted_price
+                        : "--";
+
+                $("#productDiscount").text(discountAmount);
+
+                let formattedDate = product.end_date
+                    ? new Date(product.end_date).toLocaleDateString()
+                    : "--";
+                $("#productExpiry").text(formattedDate);
+            } else {
+                console.error("No product data found!");
+            }
+        },
+        error: function (xhr, status, error) {
+            console.error("API call failed:", error);
+        },
+    });
+
+    $(".servicePriceModal").modal("show");
+});
+
+$("#totalStock").click(function (event) {
+    event.preventDefault();
+
+    let productId = $(this).data("id");
+
+    if (!productId) {
+        console.error("Product ID is missing!");
+        return;
+    }
+
+    $.ajax({
+        url: `stock/${productId}`,
+        type: "GET",
+        contentType: "application/json",
+        success: function (response) {
+            if (response.product) {
+                let product = response.product;
+                $("#productDiscount").text(
+                    product.discounted_price ? product.discounted_price : "--"
+                );
+
+                let formattedDate = product.end_date
+                    ? new Date(product.end_date).toLocaleDateString()
+                    : "--";
+                $("#productExpiry").text(formattedDate);
+            } else {
+                console.error("No product data found!");
+            }
+        },
+        error: function (xhr, status, error) {
+            console.error("API call failed:", error);
+        },
+    });
+
+    $(".servicePriceModal").modal("show");
+});
