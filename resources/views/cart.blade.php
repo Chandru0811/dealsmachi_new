@@ -54,15 +54,16 @@
     @php
         use Carbon\Carbon;
 
-        function formatIndianCurrency($num) {
-    $num = intval($num);
-    $lastThree = substr($num, -3);
-    $rest = substr($num, 0, -3);
-    if ($rest != '') {
-        $rest = preg_replace("/\B(?=(\d{2})+(?!\d))/", ",", $rest) . ',';
-    }
-    return "₹" . $rest . $lastThree;
-}
+        function formatIndianCurrency($num)
+        {
+            $num = intval($num);
+            $lastThree = substr($num, -3);
+            $rest = substr($num, 0, -3);
+            if ($rest != '') {
+                $rest = preg_replace('/\B(?=(\d{2})+(?!\d))/', ',', $rest) . ',';
+            }
+            return '₹' . $rest . $lastThree;
+        }
     @endphp
     <section>
         <div class="container" style="margin-top: 100px">
@@ -168,7 +169,7 @@
                                                         </p>
                                                     </div>
                                                 </div>
-                                                <div class="ms-0">
+                                                <div class="ms-0 d-flex mb-3">
                                                     <span
                                                         style="font-size:15px;text-decoration: line-through; color:#c7c7c7">
                                                         {{ formatIndianCurrency($product->original_price) }}
@@ -179,9 +180,41 @@
                                                     </span>
                                                     <span class="ms-1"
                                                         style="font-size:18px;font-weight:500; color:#28A745">
-                                                         {{ round($product->discount_percentage) }}% Off
+                                                        {{ round($product->discount_percentage) }}% Off
                                                     </span>
+
+                                                    @if (!empty($product->shop->is_direct) && $product->shop->is_direct == 1)
+                                                        <div class="ms-2 mt-1" id="totalStock">
+                                                            @if (empty($product->stock) || $product->stock == 0)
+                                                                <span class="product-out-of-stock">
+                                                                    Out of Stock
+                                                                </span>
+                                                            @else
+                                                                <span class="product-stock-badge">
+                                                                    In Stock
+                                                                </span>
+                                                            @endif
+                                                        </div>
+                                                    @else
+                                                    @endif
                                                 </div>
+                                                @php
+                                                    // dd($product->id )
+                                                @endphp
+                                                @if (!empty($product->shop->is_direct) && $product->shop->is_direct == 1)
+                                                    @if (!empty($product->special_price) && $product->special_price && \Carbon\Carbon::parse($product->end_date)->isFuture())
+                                                        <div class="px-3">
+                                                            <button type="button" style="height: fit-content;"
+                                                                id="servicePrice" data-id="{{ $product->id }}"
+                                                                class="p-1 text-nowrap special-price">
+                                                                <span>&nbsp;<i class="fa-solid fa-stopwatch-20"></i>&nbsp;
+                                                                    &nbsp;Special Price
+                                                                    &nbsp; &nbsp;
+                                                                </span>
+                                                            </button>
+                                                        </div>
+                                                    @endif
+                                                @endif
                                             @endif
                                         </div>
                                     </div>
@@ -297,7 +330,7 @@
                                     </span>
                                     <span style="font-size:12px; color:#28A745; white-space: nowrap;">
                                         DealsMachi Discount
-                                        &nbsp;<span class="discount">-  {{ formatIndianCurrency($total_discount) }}</span>
+                                        &nbsp;<span class="discount">- {{ formatIndianCurrency($total_discount) }}</span>
                                     </span>
                                 </h4>
                             </div>
@@ -409,7 +442,7 @@
                                                     </span>
                                                     <span class="ms-1"
                                                         style="font-size:18px;font-weight:500; color:#28A745">
-                                                         {{ round($product->discount_percentage) }}% Off
+                                                        {{ round($product->discount_percentage) }}% Off
                                                     </span>
                                                 </div>
                                             @endif
@@ -623,7 +656,7 @@
                                         </p>
 
                                         <div></div>
-                                        <div class="ms-0">
+                                        <div class="ms-0 d-flex mb-3">
                                             <span style="font-size:15px;text-decoration: line-through; color:#c7c7c7">
                                                 ₹{{ number_format($savedItem->deal->original_price, 0) }}
                                             </span>
@@ -631,9 +664,43 @@
                                                 ₹{{ number_format($savedItem->deal->discounted_price, 0) }}
                                             </span>
                                             <span class="ms-1" style="font-size:18px;font-weight:500; color:#28A745">
-                                                 {{ round($savedItem->deal->discount_percentage) }}% Off
+                                                {{ round($savedItem->deal->discount_percentage) }}% Off
                                             </span>
+                                            @if (!empty($savedItem->deal->shop->is_direct) && $savedItem->deal->shop->is_direct == 1)
+                                                <div class="ms-2 mt-2" id="totalStock">
+                                                    @if (empty($savedItem->deal->stock) || $savedItem->deal->stock == 0)
+                                                        <span class="product-out-of-stock">
+                                                            Out of Stock
+                                                        </span>
+                                                    @else
+                                                        <span class="product-stock-badge">
+                                                            In Stock
+                                                        </span>
+                                                    @endif
+                                                </div>
+                                            @else
+                                            @endif
                                         </div>
+                                        @if (!empty($savedItem->deal->shop->is_direct) && $savedItem->deal->shop->is_direct == 1)
+                                            @if (
+                                                !empty($savedItem->deal->special_price) &&
+                                                    $savedItem->deal->special_price &&
+                                                    \Carbon\Carbon::parse($savedItem->deal->end_date)->isFuture())
+                                                <div class="px-3">
+                                                    @php
+                                                        // dd($product->id );
+                                                    @endphp
+                                                    <button type="button" style="height: fit-content;" id="servicePrice"
+                                                        data-id="{{ $product->id ?? '' }}"
+                                                        class="p-1 text-nowrap special-price">
+                                                        <span>&nbsp;<i class="fa-solid fa-stopwatch-20"></i>&nbsp;
+                                                            &nbsp;Special Price
+                                                            &nbsp; &nbsp;
+                                                        </span>
+                                                    </button>
+                                                </div>
+                                            @endif
+                                        @endif
                                     </div>
                                     <div class="col-md-4 d-flex flex-column justify-content-end align-items-end mb-3">
                                         <div class="btn-group" role="group" aria-label="Basic example">

@@ -173,6 +173,7 @@
             $isCategory = !empty($category);
             $isHotpick = request()->is('hotpick/*');
             $isAll = request('slug') === 'all';
+            $isSubCategory = request()->is('subCategory/*');
         @endphp
         <form method="GET"
             action="{{ $isAll
@@ -189,6 +190,7 @@
             @endif
             <input type="hidden" id="latitude" name="latitude">
             <input type="hidden" id="longitude" name="longitude">
+            <input type="hidden" name="dmbk" id="dmbkInput" value="">
             <div class="p-4 topFilter">
                 <div class="row d-flex align-items-center">
                     <!-- Beauty Spa and Hair Section -->
@@ -541,13 +543,13 @@
                             <div class="container mb-3 topbarContainer">
                                 <div class="scroll-container">
                                     <div class="d-flex overflow-auto topBar" style="width: 100%; white-space: nowrap;">
-                                        <a href="{{ route('deals.subcategorybased', ['slug' => 'all', 'category_group_id' => $categorygroup->id]) }}"
-                                            class="btn me-2 {{ request('slug') === 'all' && request('category_group_id') == $categorygroup->id ? 'active' : '' }}">
+                                        <a data-category-url="{{ url('categories/all?category_group_id=' . $categorygroup->id) }}"
+                                            class="btn me-2 category-link {{ request('slug') === 'all' && request('category_group_id') == $categorygroup->id ? 'active' : '' }}">
                                             All
                                         </a>
                                         @foreach ($categorygroup->categories as $cat)
-                                            <a href="{{ route('deals.subcategorybased', ['slug' => $cat->slug]) }}"
-                                                class="btn mx-2 {{ request('slug') === $cat->slug && request('slug') !== 'all' ? 'active' : '' }}">
+                                            <a data-category-url="{{ url('categories/' . $cat->slug) }}"
+                                                class="btn mx-2 category-link {{ request('slug') === $cat->slug && request('slug') !== 'all' ? 'active' : '' }}">
                                                 {{ $cat->name }}
                                             </a>
                                         @endforeach
@@ -557,13 +559,51 @@
                                 </div>
                             </div>
                         @endif
-                        <div class="row">
+                        @if (request()->routeIs('deals.subcategorybased'))
+                            <div class="container mb-3 topbarContainer">
+                                <div class="scroll-container">
+                                    <div class="d-flex overflow-auto topBar" style="width: 100%; white-space: nowrap;">
+                                        <a data-category-url="{{ url('categories/all?category_group_id=' . $categorygroup->id) }}"
+                                            class="btn me-2 category-link {{ request('slug') === 'all' && request('category_group_id') == $categorygroup->id ? 'active' : '' }}">
+                                            All
+                                        </a>
+                                        @foreach ($categorygroup->categories as $cat)
+                                            <a data-category-url="{{ url('categories/' . $cat->slug) }}"
+                                                class="btn mx-2 category-link {{ request('slug') === $cat->slug && request('slug') !== 'all' ? 'active' : '' }}">
+                                                {{ $cat->name }}
+                                            </a>
+                                        @endforeach
+                                    </div>
+                                    <div class="custom-scrollbar">
+                                    </div>
+                                </div>
+                            </div>
+                        @endif
+                        @if (request()->routeIs('deals.subcategorybased') && request('slug') !== 'all' && !empty($subCategories))
+                            <div class="container topbarContainers">
+                                <div class="scroll-container">
+                                    <div class="d-flex overflow-auto topBar" style="width: 100%; white-space: nowrap;">
+                                        @foreach ($subCategories as $subCat)
+                                            <label
+                                                class="btn {{ request()->input('sub_category') == $subCat->slug ? 'active' : '' }}">
+                                                <input type="radio" name="sub_category" value="{{ $subCat->slug }}"
+                                                    class="d-none" onchange="this.form.submit()"
+                                                    {{ request()->input('sub_category') == $subCat->slug ? 'checked' : '' }}>
+                                                {{ $subCat->name }}
+                                            </label>
+                                        @endforeach
+                                    </div>
+                                </div>
+                            </div>
+                        @endif
+                        <div class="row mt-3">
                             <div class="col-md-12 col-lg-12 col-12">
                                 <div class="row pb-4">
                                     @foreach ($deals as $product)
                                         <div
                                             class="col-md-4 col-lg-4 col-xxl-3 col-12 mb-3 d-flex justify-content-center align-items-stretch">
-                                            <a href="{{ url('/deal/' . $product->id) }}" style="text-decoration: none;"
+                                            <a data-product-id="{{ $product->id }}" class="productCard"
+                                                style="text-decoration: none;"
                                                 onclick="clickCount('{{ $product->id }}')">
                                                 <div class="card sub_topCard h-100 d-flex flex-column">
                                                     <div style="min-height: 50px">
@@ -642,23 +682,24 @@
                                                                 {{ $product->description }}
                                                             </p>
                                                             <div class="d-flex justify-content-end">
-                                                            @if (!empty($product->shop->is_direct) && $product->shop->is_direct == 1)
-                                                                @if (!empty($product->special_price) && $product->special_price && \Carbon\Carbon::parse($product->end_date)->isFuture())
-                                                                    <div class="px-3">
-                                                                        <button type="button"
-                                                                            style="height: fit-content;" id="servicePrice"
-                                                                            data-id="{{ $product->id }}"
-                                                                            class="p-1 text-nowrap special-price">
-                                                                            <span>&nbsp;<i
-                                                                                    class="fa-solid fa-stopwatch-20"></i>&nbsp;
-                                                                                &nbsp;Special Price
-                                                                                &nbsp; &nbsp;
-                                                                            </span>
-                                                                        </button>
-                                                                    </div>
+                                                                @if (!empty($product->shop->is_direct) && $product->shop->is_direct == 1)
+                                                                    @if (!empty($product->special_price) && $product->special_price && \Carbon\Carbon::parse($product->end_date)->isFuture())
+                                                                        <div class="px-3">
+                                                                            <button type="button"
+                                                                                style="height: fit-content;"
+                                                                                id="servicePrice"
+                                                                                data-id="{{ $product->id }}"
+                                                                                class="p-1 text-nowrap special-price">
+                                                                                <span>&nbsp;<i
+                                                                                        class="fa-solid fa-stopwatch-20"></i>&nbsp;
+                                                                                    &nbsp;Special Price
+                                                                                    &nbsp; &nbsp;
+                                                                                </span>
+                                                                            </button>
+                                                                        </div>
+                                                                    @endif
                                                                 @endif
-                                                            @endif
-                                                        </div>
+                                                            </div>
                                                         </div>
                                                         <div>
                                                             <div class="card-divider"></div>
@@ -1111,13 +1152,13 @@
                                         <div class="scroll-container">
                                             <div class="d-flex overflow-auto topBar"
                                                 style="width: 100%; white-space: nowrap;">
-                                                <a href="{{ route('deals.subcategorybased', ['slug' => 'all', 'category_group_id' => $categorygroup->id]) }}"
-                                                    class="btn me-2 {{ request('slug') === 'all' && request('category_group_id') == $categorygroup->id ? 'active' : '' }}">
+                                                <a data-category-url="{{ url('categories/all?category_group_id=' . $categorygroup->id) }}"
+                                                    class="btn me-2 category-link {{ request('slug') === 'all' && request('category_group_id') == $categorygroup->id ? 'active' : '' }}">
                                                     All
                                                 </a>
                                                 @foreach ($categorygroup->categories as $cat)
-                                                    <a href="{{ route('deals.subcategorybased', ['slug' => $cat->slug]) }}"
-                                                        class="btn mx-2 {{ request('slug') === $cat->slug && request('slug') !== 'all' ? 'active' : '' }}">
+                                                    <a data-category-url="{{ url('categories/' . $cat->slug) }}"
+                                                        class="btn mx-2 category-link {{ request('slug') === $cat->slug && request('slug') !== 'all' ? 'active' : '' }}">
                                                         {{ $cat->name }}
                                                     </a>
                                                 @endforeach
@@ -1127,13 +1168,32 @@
                                         </div>
                                     </div>
                                 @endif
-                                <div class="row">
+                                @if (request()->routeIs('deals.subcategorybased') && request('slug') !== 'all' && !empty($subCategories))
+                                    <div class="container topbarContainers">
+                                        <div class="scroll-container">
+                                            <div class="d-flex overflow-auto topBar"
+                                                style="width: 100%; white-space: nowrap;">
+                                                @foreach ($subCategories as $subCat)
+                                                    <label
+                                                        class="btn  {{ request()->input('sub_category') == $subCat->slug ? 'active' : '' }}">
+                                                        <input type="radio" name="sub_category"
+                                                            value="{{ $subCat->slug }}" class="d-none"
+                                                            onchange="this.form.submit()"
+                                                            {{ request()->input('sub_category') == $subCat->slug ? 'checked' : '' }}>
+                                                        {{ $subCat->name }}
+                                                    </label>
+                                                @endforeach
+                                            </div>
+                                        </div>
+                                    </div>
+                                @endif
+                                <div class="row mt-3">
                                     <div class="col-md-12 col-lg-12 col-12">
                                         <div class="row pb-4">
                                             @foreach ($deals as $product)
                                                 <div
                                                     class="col-md-4 col-lg-4 col-xxl-3 col-12 mb-3 d-flex justify-content-center align-items-stretch">
-                                                    <a href="{{ url('/deal/' . $product->id) }}"
+                                                    <a data-product-id="{{ $product->id }}" class="productCard"
                                                         style="text-decoration: none;"
                                                         onclick="clickCount('{{ $product->id }}')">
                                                         <div class="card sub_topCard h-100 d-flex flex-column">
@@ -1419,8 +1479,13 @@
             const categoryGroupId = "{{ request('category_group_id') }}";
             const latitude = document.getElementById('latitude').value;
             const longitude = document.getElementById('longitude').value;
+            const bookmarknumber = localStorage.getItem('bookmarknumber') || 'null';
 
             let url = new URL(clearUrl, window.location.origin);
+
+            if (bookmarknumber) {
+                url.searchParams.set('dmbk', bookmarknumber);
+            }
 
             if (categoryGroupId) {
                 url.searchParams.set('category_group_id', categoryGroupId);

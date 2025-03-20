@@ -52,18 +52,18 @@
         </div>
     @endif
     @php
-    function formatIndianCurrency($num)
-    {
-        $num = intval($num);
-        $lastThree = substr($num, -3);
-        $rest = substr($num, 0, -3);
-        if ($rest != '') {
-            $rest = preg_replace('/\B(?=(\d{2})+(?!\d))/', ',', $rest) . ',';
+        function formatIndianCurrency($num)
+        {
+            $num = intval($num);
+            $lastThree = substr($num, -3);
+            $rest = substr($num, 0, -3);
+            if ($rest != '') {
+                $rest = preg_replace('/\B(?=(\d{2})+(?!\d))/', ',', $rest) . ',';
+            }
+            return '₹' . $rest . $lastThree;
         }
-        return '₹' . $rest . $lastThree;
-    }
 
-@endphp
+    @endphp
     <section>
         <div class="container" style="margin-top: 100px">
             <h2 class="my-4">Buy Later</h2>
@@ -99,7 +99,7 @@
                                     <h6 class="truncated-description">{{ $savedItem->deal->description }}</h6>
                                     <p class="mb-1">Delivery Date :</p>
                                     <p>Seller : {{ $savedItem->deal->shop->legal_name }}</p>
-                                    <div>
+                                    <div class="d-flex mb-3 ms-0">
                                         <span style="text-decoration: line-through; color:#c7c7c7">
                                             {{-- ₹{{ $savedItem->deal->original_price }} --}}
                                             {{ formatIndianCurrency($savedItem->deal->original_price) }}
@@ -111,7 +111,38 @@
                                         <span class="ms-1" style="font-size:12px; color:#00DD21">
                                             {{ round($savedItem->deal->discount_percentage) }}% off
                                         </span>
+                                        @if (!empty($savedItem->deal->shop->is_direct) && $savedItem->deal->shop->is_direct == 1)
+                                            <div class="ms-2 mt-2" id="totalStock">
+                                                @if (empty($savedItem->deal->stock) || $savedItem->deal->stock == 0)
+                                                    <span class="product-out-of-stock">
+                                                        Out of Stock
+                                                    </span>
+                                                @else
+                                                    <span class="product-stock-badge">
+                                                        In Stock
+                                                    </span>
+                                                @endif
+                                            </div>
+                                        @else
+                                        @endif
                                     </div>
+                                    @if (!empty($savedItem->deal->shop->is_direct) && $savedItem->deal->shop->is_direct == 1)
+                                        @if (
+                                            !empty($savedItem->deal->special_price) &&
+                                                $savedItem->deal->special_price &&
+                                                \Carbon\Carbon::parse($savedItem->deal->end_date)->isFuture())
+                                            <div class="px-3">
+                                                <button type="button" style="height: fit-content;" id="servicePrice"
+                                                    data-id="{{ $savedItem->deal->id }}"
+                                                    class="p-1 text-nowrap special-price">
+                                                    <span>&nbsp;<i class="fa-solid fa-stopwatch-20"></i>&nbsp;
+                                                        &nbsp;Special Price
+                                                        &nbsp; &nbsp;
+                                                    </span>
+                                                </button>
+                                            </div>
+                                        @endif
+                                    @endif
                                 </div>
                                 <div class="col-md-3 d-flex flex-column justify-content-end align-items-end mb-3">
                                     <div class="btn-group" role="group" aria-label="Basic example">

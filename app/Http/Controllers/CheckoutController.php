@@ -43,10 +43,7 @@ class CheckoutController extends Controller
         } else {
             $user = Auth::user();
 
-            $products = Product::with(['productMedia:id,resize_path,order,type,imageable_id', 'shop'])->where('id', $id)
-            ->where('active', 1)
-            ->where('stock','>',0)
-            ->get();
+            $products = Product::with(['productMedia:id,resize_path,order,type,imageable_id', 'shop'])->where('id', $id)->where('active', 1)->get();
 
             if (!$products) {
                 return redirect()->route('home')->with('error', 'Product not found or inactive.');
@@ -71,14 +68,24 @@ class CheckoutController extends Controller
 
                 $carts->load([
                     'items' => function ($query) use ($id) {
-                        $query->where('product_id', '!=', $id)
-                        ->whereHas('product', function ($query) {
-                            $query->where('stock', '>', 0);
-                        });
+                        $query->where('product_id', '!=', $id);
                     },
                     'items.product.productMedia:id,resize_path,order,type,imageable_id',
                     'items.product.shop'
                 ]);
+
+                if (!empty($carts->items) && $carts->items->isNotEmpty()) {
+                    $carts->items = $carts->items->filter(function ($item) {
+                        return !(
+                            !empty($item->product) &&
+                            !empty($item->product->shop) &&
+                            $item->product->shop->is_direct == 1 &&
+                            isset($item->product->stock) &&
+                            $item->product->stock == 0
+                        );
+                    });
+                }
+
             } else {
                 $products->each(function ($product) {
                     $product->quantity = 1;
@@ -103,7 +110,6 @@ class CheckoutController extends Controller
 
     public function directcheckout(Request $request)
     {
-
         // dd($request->all());
         $product_ids = $request->input('all_products_to_buy');
         $ids = json_decode($product_ids);
