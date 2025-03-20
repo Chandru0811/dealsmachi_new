@@ -110,6 +110,8 @@ Route::middleware('auth:api')->group(function () {
         Route::get('shop/{id}/products', [AdminShopController::class, 'getshopproducts']);
         Route::post('shop/{id}/activate', [AdminShopController::class, 'activateshop']);
         Route::post('shop/{id}/deactivate', [AdminShopController::class, 'deactivateshop']);
+        Route::post('shop/{id}/direct', [AdminShopController::class, 'directshop']);
+        Route::post('shop/{id}/indirect', [AdminShopController::class, 'indirectshop']);
 
         // Sliders
         Route::get('sliders', [SliderController::class, 'index']);

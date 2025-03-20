@@ -50,7 +50,7 @@ class ProductController extends Controller
             'name' => 'required|string',
             'deal_type' => 'required|integer|in:1,2,3',
             'category_id' => 'required|exists:categories,id',
-            'sub_category_id' => 'required|array',
+            'sub_category_id' => 'nullable|array',
             'sub_category_id.*' => 'exists:sub_categories,id',
             'brand' => 'nullable|string',
             'description' => 'nullable|string',
@@ -111,7 +111,7 @@ class ProductController extends Controller
         $validatedData = $validator->validated();
         $shopId = $request->input('shop_id');
 
-        $validatedData['sub_category_id'] = json_encode($validatedData['sub_category_id']);
+        $validatedData['sub_category_id'] = json_encode($validatedData['sub_category_id'] ?? []);
         $validatedData['active'] = 0;
         $validatedData['specifications'] = $request->specifications;
         $validatedData['varient'] = $request->varient;
@@ -204,9 +204,25 @@ class ProductController extends Controller
             return $this->error('Product Not Found.', ['error' => 'Product Not Found']);
         }
 
-        $subCategoryIds = json_decode($product->sub_category_id, true);
+        $subCategoryIds = json_decode($product->sub_category_id, true) ?? [];
 
-        $subCategoryNames = SubCategory::whereIn('id', $subCategoryIds)->pluck('name')->toArray();
+        if (!empty($subCategoryIds)) {
+            $subCategoryNames = SubCategory::whereIn('id', $subCategoryIds)
+                ->select('name', 'id')
+                ->get()
+                ->map(function ($subCategory) {
+                    return [
+                        'label' => $subCategory->name,
+                        'value' => (string) $subCategory->id
+                    ];
+                })
+                ->toArray();
+        } else {
+            $subCategoryNames = [];
+        }
+
+        $product->subCategoryNames = $subCategoryNames;
+
 
         $product->subCategoryNames = $subCategoryNames;
 
@@ -226,7 +242,7 @@ class ProductController extends Controller
             'name' => 'required|string',
             'deal_type' => 'required|integer|in:1,2,3',
             'category_id' => 'required|exists:categories,id',
-            'sub_category_id' => 'required|array',
+            'sub_category_id' => 'nullable|array',
             'sub_category_id.*' => 'exists:sub_categories,id',
             'brand' => 'nullable|string',
             'description' => 'nullable|string',
@@ -290,7 +306,7 @@ class ProductController extends Controller
         }
 
         $validatedData = $validator->validated();
-        $validatedData['sub_category_id'] = json_encode($validatedData['sub_category_id']);
+        $validatedData['sub_category_id'] = json_encode($validatedData['sub_category_id'] ?? []);
         $validatedData['specifications'] = $request->specifications;
         $validatedData['varient'] = $request->varient;
         $validatedData['delivery_days'] = $request->delivery_days;

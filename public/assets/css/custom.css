@@ -10,19 +10,23 @@
     margin-bottom: 1rem;
 }
 
-
-.h2-styling{
+.h2-styling {
     font-size: 12px;
     text-align: center;
     color: #000;
 }
+.h2-stylings {
+    font-size: 14px;
+    text-align: center;
+    color: #000;
+}
 
-.h1-styling{
+.h1-styling {
     font-size: 16px;
     color: #ff0060;
 }
 
-.h3-styling{
+.h3-styling {
     font-size: 1.25rem;
 }
 
@@ -45,7 +49,7 @@
 }
 
 @media (min-width: 320px) and (max-width: 500px) {
-     .categoryIcons {
+    .categoryIcons {
         margin-top: 50px !important;
     }
 }
@@ -1801,12 +1805,14 @@ footer hr {
 }
 
 .shareInsta {
-    background: linear-gradient(45deg,
-            #f09433,
-            #e6683c,
-            #dc2743,
-            #cc2366,
-            #bc1888);
+    background: linear-gradient(
+        45deg,
+        #f09433,
+        #e6683c,
+        #dc2743,
+        #cc2366,
+        #bc1888
+    );
     border: none;
     color: #fff;
     border-radius: 5px;
@@ -2072,12 +2078,14 @@ footer hr {
     }
 
     .social-link-container .fa-instagram {
-        background: linear-gradient(45deg,
-                #f09433,
-                #e6683c,
-                #dc2743,
-                #cc2366,
-                #bc1888);
+        background: linear-gradient(
+            45deg,
+            #f09433,
+            #e6683c,
+            #dc2743,
+            #cc2366,
+            #bc1888
+        );
         padding: 8px 5px;
         width: 30px;
         height: 28px;
@@ -2172,12 +2180,14 @@ footer hr {
 }
 
 .social-link-container .fa-instagram {
-    background: linear-gradient(45deg,
-            #f09433,
-            #e6683c,
-            #dc2743,
-            #cc2366,
-            #bc1888);
+    background: linear-gradient(
+        45deg,
+        #f09433,
+        #e6683c,
+        #dc2743,
+        #cc2366,
+        #bc1888
+    );
     padding: 7px 5px;
     width: 30px;
     height: 28px;
@@ -2388,6 +2398,15 @@ footer hr {
     z-index: 998;
     width: 100%;
 }
+.topbarContainers {
+    white-space: nowrap;
+    background-color: #fff;
+    border-radius: 2px;
+    position: relative;
+    top: 2px;
+    z-index: 998;
+    width: 100%;
+}
 
 @media screen and (max-width: 1200px) {
     .topbarContainer {
@@ -2395,7 +2414,7 @@ footer hr {
         background-color: #fff;
         border-radius: 2px;
         border: 1px solid #e8e9ea;
-        position: sticky;
+        position: sticky !important;
         top: 60px;
         z-index: 998;
         width: 100%;
@@ -2422,6 +2441,13 @@ footer hr {
     left: 0;
     width: 100%;
     height: 10px;
+    background-color: #fff;
+}
+.custom-scrollbar-new {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
     background-color: #fff;
 }
 
@@ -2998,7 +3024,7 @@ footer hr {
 
 #starRating .star.selected,
 #starRating .star:hover,
-#starRating .star:hover~.star {
+#starRating .star:hover ~ .star {
     color: #ffc033;
 }
 
@@ -3048,11 +3074,11 @@ footer hr {
 }
 
 /* Show dropdown on hover */
-.social_links i:hover+.dropdown_items {
+.social_links i:hover + .dropdown_items {
     display: block;
 }
 
-.filter_social_links i:hover+.filter_dropdown_items {
+.filter_social_links i:hover + .filter_dropdown_items {
     display: block;
 }
 
@@ -3303,8 +3329,8 @@ footer hr {
     border-color: #ff0060;
 }
 
-.card.card_style .form-check-input:checked~div,
-.card.card_style .form-check-input:checked+label {
+.card.card_style .form-check-input:checked ~ div,
+.card.card_style .form-check-input:checked + label {
     border-color: #ff0060;
     color: #ff0060;
 }
@@ -3869,7 +3895,6 @@ footer hr {
 }
 
 @media (max-width: 576px) {
-
     .total,
     .subtotal,
     .discount {
@@ -4422,7 +4447,7 @@ footer hr {
     max-width: 100%;
 }
 
-.retry-button{
+.retry-button {
     border: 2px solid #ff0060;
     background-color: #ff0060;
     color: #fff;
@@ -4430,7 +4455,7 @@ footer hr {
     font-family: "Kanit", system-ui;
 }
 
-.retry-button:hover{
+.retry-button:hover {
     border: 2px solid #ff0060;
     background-color: #fff;
     color: #ff0060;
@@ -4438,16 +4463,16 @@ footer hr {
     font-family: "Kanit", system-ui;
 }
 
-.special-price{
-  background-color: #d6e3ff;
-  color: #6294ff;
-  border: 0.5px solid #6294ff;
-  border-radius: 3px;
-  font-size: 10px;
-  padding: 0px 7px;
+.special-price {
+    background-color: #d6e3ff;
+    color: #6294ff;
+    border: 0.5px solid #6294ff;
+    border-radius: 3px;
+    font-size: 10px;
+    padding: 0px 7px;
 }
 
-.stock-badge{
+.stock-badge {
     background-color: #d6ffd8;
     color: #00dd1a;
     border: 0.5px solid #00dd1a;
@@ -4456,7 +4481,7 @@ footer hr {
     padding: 0px 10px;
 }
 
-.out-of-stock{
+.out-of-stock {
     background-color: #ffdddd;
     color: #ff8989;
     border: 0.5px solid #ff8989;
@@ -4465,7 +4490,7 @@ footer hr {
     padding: 3px 10px;
 }
 
-.product-stock-badge{
+.product-stock-badge {
     background-color: #d6ffd8;
     color: #00dd1a;
     border: 0.5px solid #00dd1a;
@@ -4474,7 +4499,7 @@ footer hr {
     padding: 0px 10px;
 }
 
-.product-out-of-stock{
+.product-out-of-stock {
     background-color: #ffdddd;
     color: #ff8989;
     border: 0.5px solid #ff8989;
