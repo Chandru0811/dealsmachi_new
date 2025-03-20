@@ -13,6 +13,7 @@ use App\Http\Controllers\Api\Admin\SliderController;
 use App\Http\Controllers\Api\Vendor\ProductController;
 use App\Http\Controllers\Api\Admin\ApprovalController;
 use App\Http\Controllers\Api\Admin\ReferrerDetailController;
+use App\Http\Controllers\Api\Admin\SubCategoryController;
 use App\Http\Controllers\Api\Admin\UserController;
 use App\Http\Controllers\Api\AppController;
 use App\Http\Controllers\Api\Vendor\DashboardController;
@@ -90,6 +91,14 @@ Route::middleware('auth:api')->group(function () {
         Route::post('categories/restore/{id}', [CategoriesController::class, 'restore']);
         Route::post('category/{id}/approve', [ApprovalController::class, 'approveCategory']);
 
+
+        // SubCategory
+        Route::get('subcategories', [SubCategoryController::class, 'index']);
+        Route::post('subcategory', [SubCategoryController::class, 'store']);
+        Route::get('subcategory/{id}', [SubCategoryController::class, 'show']);
+        Route::put('subcategory/update/{id}', [SubCategoryController::class, 'update']);
+        Route::delete('subcategory/{id}', [SubCategoryController::class, 'destroy']);
+
         //Shops
         Route::get('shops', [AdminShopController::class, 'index']);
         Route::get('shop/{id}/details', [AdminShopController::class, 'getshopbasics']);
@@ -142,7 +151,7 @@ Route::middleware('auth:api')->group(function () {
         Route::put('referrer/update/{id}', [ReferrerDetailController::class, 'update']);
         Route::delete('referrer/{id}', [ReferrerDetailController::class, 'delete']);
         Route::get('getAllReferrer', [ReferrerDetailController::class, 'getAllReferrersAndReferrerVendors']);
-        
+
         //Product
         Route::get('getAllProductList', [UserController::class, 'getAllProductWithIds']);
         Route::post('update-product-order', [UserController::class, 'updateProductOrder']);
@@ -180,6 +189,7 @@ Route::middleware('auth:api')->group(function () {
         // Category Group and Categories
         Route::get('categorygroups', [ProductController::class, 'getAllCategoryGroups']);
         Route::get('categories/categorygroups/{id}', [ProductController::class, 'getAllCategoriesByCategoryGroupId']);
+        Route::get('subcategories/category/{id}', [ProductController::class, 'getAllSubCategoriesByCategoryId']);
         Route::post('categories/create', [ProductController::class, 'categoriesCreate']);
 
         // Order
@@ -190,7 +200,6 @@ Route::middleware('auth:api')->group(function () {
         Route::get('referrals/{userId}', [ShopController::class, 'getReferralsByUserId']);
         Route::get('referrerDashboard', [DashboardController::class, 'referrerDashboard']);
         Route::get('referrer/commission', [DashboardController::class, 'getAllVendorCommission']);
-        
     });
 
     //Customer
