@@ -37,7 +37,13 @@
         @endif
     </div>
     <div class="dropdown_cart_view d-flex justify-content-end">
-        <a class="text_size text-decoration-none d-none d-xl-inline cart-screen"
+        <a class="cartButton2 text_size text-decoration-none d-none d-xl-inline cart-screen"
             style="text-decoration: none;cursor: pointer;" >View My Shopping Cart</a>
     </div>
 </div>
+<script>
+    $('.cartButton2').on('click', function(event) {
+        var cartNumber = localStorage.getItem('cartnumber');
+        window.location.href = "{{ route('cart.index') }}" + '?dmc=' + cartNumber;
+    });
+</script>
