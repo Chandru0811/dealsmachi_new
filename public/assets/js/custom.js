@@ -2308,6 +2308,8 @@ $(document).ready(function () {
 
                 $(`.cart-item[data-product-id="${productId}"]`).remove();
 
+                $(`.cart_items .d-flex[data-product-id="${productId}"]`).remove();
+
                 if (response.updatedCart) {
                     $(".subtotal").text(
                         "₹" + response.updatedCart.subtotal.toLocaleString()
@@ -2319,6 +2321,51 @@ $(document).ready(function () {
                         "₹" + response.updatedCart.grand_total.toLocaleString()
                     );
                     $(".quantity-value").text(response.updatedCart.quantity);
+                }
+
+                if (response.cartItemCount <= 6) {
+                    $(".cartButton2").hide();
+                }
+
+                if (response.cartItemCount >= 6) {
+                    console.log("Next Item : ", response.nextItem);
+                    if (response.nextItem) {
+                        $(".cartButton2").hide();
+
+                        if ($(`.cart_items .d-flex[data-product-id="${response.nextItem.product.id}"]`).length === 0) {
+                            const imagePath = response.nextItem.product.product_media.length > 0
+                                ? response.nextItem.product.product_media.find(
+                                    (media) => media.order === 1 && media.type === "image"
+                                )?.resize_path
+                                : "assets/images/home/noImage.webp";
+
+                            const productName = response.nextItem.product.name.length > 20
+                                ? response.nextItem.product.name.substring(0, 20) + "..."
+                                : response.nextItem.product.name;
+
+                            $(".cart_items").append(`
+                                <div class="d-flex" data-product-id="${response.nextItem.product.id}">
+                                    <img src="http://127.0.0.1:8000/${imagePath}" class="img-fluid dropdown_img" alt="${response.nextItem.product.name}" />
+                                    <div class="text-start">
+                                        <p class="text-start px-1 text-wrap m-0 p-0" style="font-size: 12px; white-space: normal;">
+                                            ${productName}
+                                        </p>
+                                        <p class="px-1 text_size" style="color: #ff0060">
+                                            ₹${parseFloat(response.nextItem.discount).toFixed(0)}
+                                        </p>
+                                    </div>
+                                </div>
+                            `);
+
+                            if (response.cartItemCount > 6) {
+                                $(".cart_items").append(`
+                                    <div class="text-end mb-2 cartButton2" style="cursor: pointer;">
+                                        <a style="font-size: 13px" class="cart-screen">View All</a>
+                                    </div>
+                                `);
+                            }
+                        }
+                    }
                 }
 
                 if (response.cartItemCount === 0) {
@@ -2333,6 +2380,12 @@ $(document).ready(function () {
                          </div>
                     `);
                     $(".cart-items-container").hide();
+                    $(".cart_items").html(`
+                        <div class="text-center cartEmpty">
+                            <img src="assets/images/home/cart_empty.webp" alt="Empty Cart" class="img-fluid" width="75">
+                            <p class="text_size" style="color: #cbcbcb">Your cart is empty</p>
+                        </div>
+                    `);
                 } else {
                     $(".item_count").text(response.cartItemCount);
                 }
@@ -2556,8 +2609,14 @@ $(document).ready(function () {
                 const cartItemElement = $(
                     `.cart-item[data-product-id="${productId}"]`
                 );
+
+                const cartDropElement = $(
+                    `.cart_items .d-flex[data-product-id="${productId}"]`
+                );
+
                 if (cartItemElement.length) {
                     cartItemElement.remove();
+                    cartDropElement.remove();
                 }
 
                 if (response.updatedCart) {
@@ -2573,6 +2632,51 @@ $(document).ready(function () {
                     $(".quantity-value").text(response.updatedCart.quantity);
                 }
 
+                if (response.cartItemCount <= 6) {
+                    $(".cartButton2").hide();
+                }
+
+                if (response.cartItemCount >= 6) {
+                    console.log("Next Item : ", response.nextItem);
+                    if (response.nextItem) {
+                        $(".cartButton2").hide();
+
+                        if ($(`.cart_items .d-flex[data-product-id="${response.nextItem.product.id}"]`).length === 0) {
+                            const imagePath = response.nextItem.product.product_media.length > 0
+                                ? response.nextItem.product.product_media.find(
+                                    (media) => media.order === 1 && media.type === "image"
+                                )?.resize_path
+                                : "assets/images/home/noImage.webp";
+
+                            const productName = response.nextItem.product.name.length > 20
+                                ? response.nextItem.product.name.substring(0, 20) + "..."
+                                : response.nextItem.product.name;
+
+                            $(".cart_items").append(`
+                                <div class="d-flex cart-item-drop" data-product-id="${response.nextItem.product.id}">
+                                    <img src="http://127.0.0.1:8000/${imagePath}" class="img-fluid dropdown_img" alt="${response.nextItem.product.name}" />
+                                    <div class="text-start">
+                                        <p class="text-start px-1 text-wrap m-0 p-0" style="font-size: 12px; white-space: normal;">
+                                            ${productName}
+                                        </p>
+                                        <p class="px-1 text_size" style="color: #ff0060">
+                                            ₹${parseFloat(response.nextItem.discount).toFixed(0)}
+                                        </p>
+                                    </div>
+                                </div>
+                            `);
+
+                            if (response.cartItemCount > 6) {
+                                $(".cart_items").append(`
+                                    <div class="text-end mb-2 cartButton2" style="cursor: pointer;">
+                                        <a style="font-size: 13px" class="cart-screen">View All</a>
+                                    </div>
+                                `);
+                            }
+                        }
+                    }
+                }
+
                 if (response.cartItemCount === 0) {
                     $(".cart-items-container").after(`
                          <div class="empty-cart col-12 text-center d-flex flex-column align-items-center justify-content-center mt-0">
@@ -2585,6 +2689,12 @@ $(document).ready(function () {
                          </div>
                     `);
                     $(".cart-items-container").hide();
+                    $(".cart_items").html(`
+                        <div class="text-center cartEmpty">
+                            <img src="assets/images/home/cart_empty.webp" alt="Empty Cart" class="img-fluid" width="75">
+                            <p class="text_size" style="color: #cbcbcb">Your cart is empty</p>
+                        </div>
+                    `);
                 } else {
                     $(".item_count").text(response.cartItemCount);
                 }
@@ -2625,7 +2735,13 @@ $(document).ready(function () {
                     const cartCountElement = $("#cart-count");
                     if (response.cartItemCount > 0) {
                         cartCountElement.text(response.cartItemCount);
-                        cartCountElement.css("display", "inline");
+                        cartCountElement.css({
+                            "display": "inline",
+                            "position": "absolute",
+                            "top": "16px",
+                            "right": "5px",
+                            "border": "1px solid #ff0060"
+                        });
                     } else {
                         cartCountElement.attr(
                             "style",
@@ -2666,6 +2782,63 @@ $(document).ready(function () {
                     $(".empty-cart").attr("style", "display: none !important;");
 
                     $(".cart-items-container").css("display", "block");
+
+                    if (response.cartItemCount > 0) {
+                        updateCartDrop(response.item);
+                    }
+
+                    function updateCartDrop(item) {
+                        $(".cartEmpty").hide();
+
+                        const imagePath = (item.product.product_media.length > 0)
+                            ? item.product.product_media.find(
+                                (media) => media.order === 1 && media.type === "image"
+                            )?.resize_path
+                            : "assets/images/home/noImage.webp";
+
+                        const productName = item.product.name.length > 20
+                            ? item.product.name.substring(0, 20) + "..."
+                            : item.product.name;
+
+                        // Ensure discount is always a number
+                        const formattedDiscount = parseFloat(item.discount).toFixed(0);
+
+                        const newCart = `
+                            <div class="d-flex cart-item-drop" data-product-id="${item.product.id}">
+                                <img src="http://127.0.0.1:8000/${imagePath}" class="dropdown_img img-fluid" alt="${item.product.name}" />
+                                <div class="text-start">
+                                    <p class="m-0 p-0 text-start text-wrap px-1" style="font-size: 12px; white-space: normal;">
+                                        ${productName}
+                                    </p>
+                                    <p class="px-1 text_size" style="color: #ff0060">
+                                        ₹${formattedDiscount}
+                                    </p>
+                                </div>
+                            </div>
+                        `;
+
+                        $(".cart_items").prepend(newCart);
+
+                        let cartItemCount = $(".cart_items .cart-item-drop").length;
+
+                        if (cartItemCount > 6) {
+                            $(".cart_items .cart-item-drop").last().remove();
+                        }
+
+                        if (cartItemCount >= 6) {
+                            let cartButton = $(".cart_items .cartButton2");
+
+                            if (cartButton.length === 0) {
+                                $(".cart_items").append(`
+                                    <div class="text-end cartButton2 mb-2" style="cursor: pointer;">
+                                        <a style="font-size: 13px" class="cart-screen">View All</a>
+                                    </div>
+                                `);
+                            } else if (cartButton.css("display") === "none") {
+                                cartButton.show();
+                            }
+                        }
+                    }
 
                     const image =
                         response.item.product.product_media.length > 0
