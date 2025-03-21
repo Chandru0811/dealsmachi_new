@@ -12,7 +12,9 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('saved_items', function (Blueprint $table) {
-            $table->string('cart_number')->unique()->after('id');
+            if (!Schema::hasColumn('saved_items', 'cart_number')) {
+                $table->string('cart_number')->unique()->after('id');
+            }
         });
     }
 
@@ -22,7 +24,9 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('saved_items', function (Blueprint $table) {
-            //
+            if (Schema::hasColumn('saved_items', 'cart_number')) {
+                $table->dropColumn('cart_number');
+            }
         });
     }
 };

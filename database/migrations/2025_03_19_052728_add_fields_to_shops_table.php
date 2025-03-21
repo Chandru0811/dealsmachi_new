@@ -12,19 +12,20 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('shops', function (Blueprint $table) {
-            $table->string('shop_lattitude')->nullable();
-            $table->string('shop_longtitude')->nullable();
+            if (!Schema::hasColumn('shops', 'shop_lattitude')) {
+                $table->string('shop_lattitude')->nullable();
+            }
+            if (!Schema::hasColumn('shops', 'shop_longtitude')) {
+                $table->string('shop_longtitude')->nullable();
+            }
         });
 
-        // If "active" means setting a default value
+        // Modify default value only if the column already exists
         Schema::table('shops', function (Blueprint $table) {
             $table->string('shop_lattitude')->nullable()->default('active')->change();
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::table('shops', function (Blueprint $table) {

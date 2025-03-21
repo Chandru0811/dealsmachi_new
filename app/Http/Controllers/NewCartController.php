@@ -27,10 +27,6 @@ class NewCartController extends Controller
             return response()->json(['error' => 'Deal not found!'], 404);
         }
 
-        if (!empty($product->shop->is_direct) && $product->shop->is_direct == 1 && $product->stock == 0) {
-            return redirect()->back()->with('error', 'Not available in stock.');
-        }
-
         $customer_id = Auth::check() ? Auth::user()->id : null;
 
         if ($customer_id == null) {
@@ -116,7 +112,6 @@ class NewCartController extends Controller
             $savedItem->delete();
         }
 
-        // Check if the item is already in the cart
         if ($old_cart) {
             $item_in_cart = CartItem::where('cart_id', $old_cart->id)->where('product_id', $product->id)->first();
             if ($item_in_cart && $request->saveoption == "buy now") {

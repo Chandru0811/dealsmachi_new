@@ -2133,8 +2133,8 @@ function updateCartUI(cartItems) {
     const imagePath =
         cartItems.product.product_media.length > 0
             ? cartItems.product.product_media.find(
-                (media) => media.order === 1 && media.type === "image"
-            )?.resize_path
+                  (media) => media.order === 1 && media.type === "image"
+              )?.resize_path
             : "assets/images/home/noImage.webp";
 
     const productName =
@@ -2144,7 +2144,9 @@ function updateCartUI(cartItems) {
 
     const newCartItem = `
         <div class="d-flex cart-item-drop">
-            <img src="http://127.0.0.1:8000/${imagePath}" class="img-fluid dropdown_img" alt="${cartItems.product.name}" />
+            <img src="http://127.0.0.1:8000/${imagePath}" class="img-fluid dropdown_img" alt="${
+        cartItems.product.name
+    }" />
             <div class="text-start">
                 <p class="text-start px-1 text-wrap m-0 p-0" style="font-size: 12px; white-space: normal;">
                     ${productName}
@@ -2285,6 +2287,11 @@ $(document).ready(function () {
         const productId = $(this).data("product-id");
         let cartnumber = localStorage.getItem("cartnumber") || null;
 
+        $(document).on("click", ".servicePriceBtn", function () {
+            const dealId = $(this).data("id");
+            fetchServicePrice(dealId);
+        });
+
         $.ajax({
             url: "/saveforlater/add",
             type: "POST",
@@ -2308,7 +2315,9 @@ $(document).ready(function () {
 
                 $(`.cart-item[data-product-id="${productId}"]`).remove();
 
-                $(`.cart_items .d-flex[data-product-id="${productId}"]`).remove();
+                $(
+                    `.cart_items .d-flex[data-product-id="${productId}"]`
+                ).remove();
 
                 if (response.updatedCart) {
                     $(".subtotal").text(
@@ -2332,26 +2341,44 @@ $(document).ready(function () {
                     if (response.nextItem) {
                         $(".cartButton2").hide();
 
-                        if ($(`.cart_items .d-flex[data-product-id="${response.nextItem.product.id}"]`).length === 0) {
-                            const imagePath = response.nextItem.product.product_media.length > 0
-                                ? response.nextItem.product.product_media.find(
-                                    (media) => media.order === 1 && media.type === "image"
-                                )?.resize_path
-                                : "assets/images/home/noImage.webp";
+                        if (
+                            $(
+                                `.cart_items .d-flex[data-product-id="${response.nextItem.product.id}"]`
+                            ).length === 0
+                        ) {
+                            const imagePath =
+                                response.nextItem.product.product_media.length >
+                                0
+                                    ? response.nextItem.product.product_media.find(
+                                          (media) =>
+                                              media.order === 1 &&
+                                              media.type === "image"
+                                      )?.resize_path
+                                    : "assets/images/home/noImage.webp";
 
-                            const productName = response.nextItem.product.name.length > 20
-                                ? response.nextItem.product.name.substring(0, 20) + "..."
-                                : response.nextItem.product.name;
+                            const productName =
+                                response.nextItem.product.name.length > 20
+                                    ? response.nextItem.product.name.substring(
+                                          0,
+                                          20
+                                      ) + "..."
+                                    : response.nextItem.product.name;
 
                             $(".cart_items").append(`
-                                <div class="d-flex" data-product-id="${response.nextItem.product.id}">
-                                    <img src="http://127.0.0.1:8000/${imagePath}" class="img-fluid dropdown_img" alt="${response.nextItem.product.name}" />
+                                <div class="d-flex" data-product-id="${
+                                    response.nextItem.product.id
+                                }">
+                                    <img src="http://127.0.0.1:8000/${imagePath}" class="img-fluid dropdown_img" alt="${
+                                response.nextItem.product.name
+                            }" />
                                     <div class="text-start">
                                         <p class="text-start px-1 text-wrap m-0 p-0" style="font-size: 12px; white-space: normal;">
                                             ${productName}
                                         </p>
                                         <p class="px-1 text_size" style="color: #ff0060">
-                                            ₹${parseFloat(response.nextItem.discount).toFixed(0)}
+                                            ₹${parseFloat(
+                                                response.nextItem.discount
+                                            ).toFixed(0)}
                                         </p>
                                     </div>
                                 </div>
@@ -2513,8 +2540,8 @@ $(document).ready(function () {
                                                   new Date()
                                                 ? `
                                                     <button type="button" style="height: fit-content;" id="servicePrice"
-                                                        data-id=""
-                                                        class="p-1 text-nowrap special-price">
+                                                          data-id="${response.deal.id}"
+                                                        class="p-1 text-nowrap special-price servicePriceBtn">
                                                         <span>&nbsp;<i class="fa-solid fa-stopwatch-20"></i>&nbsp;
                                                             &nbsp;Special Price
                                                             &nbsp; &nbsp;
@@ -2641,26 +2668,44 @@ $(document).ready(function () {
                     if (response.nextItem) {
                         $(".cartButton2").hide();
 
-                        if ($(`.cart_items .d-flex[data-product-id="${response.nextItem.product.id}"]`).length === 0) {
-                            const imagePath = response.nextItem.product.product_media.length > 0
-                                ? response.nextItem.product.product_media.find(
-                                    (media) => media.order === 1 && media.type === "image"
-                                )?.resize_path
-                                : "assets/images/home/noImage.webp";
+                        if (
+                            $(
+                                `.cart_items .d-flex[data-product-id="${response.nextItem.product.id}"]`
+                            ).length === 0
+                        ) {
+                            const imagePath =
+                                response.nextItem.product.product_media.length >
+                                0
+                                    ? response.nextItem.product.product_media.find(
+                                          (media) =>
+                                              media.order === 1 &&
+                                              media.type === "image"
+                                      )?.resize_path
+                                    : "assets/images/home/noImage.webp";
 
-                            const productName = response.nextItem.product.name.length > 20
-                                ? response.nextItem.product.name.substring(0, 20) + "..."
-                                : response.nextItem.product.name;
+                            const productName =
+                                response.nextItem.product.name.length > 20
+                                    ? response.nextItem.product.name.substring(
+                                          0,
+                                          20
+                                      ) + "..."
+                                    : response.nextItem.product.name;
 
                             $(".cart_items").append(`
-                                <div class="d-flex cart-item-drop" data-product-id="${response.nextItem.product.id}">
-                                    <img src="http://127.0.0.1:8000/${imagePath}" class="img-fluid dropdown_img" alt="${response.nextItem.product.name}" />
+                                <div class="d-flex cart-item-drop" data-product-id="${
+                                    response.nextItem.product.id
+                                }">
+                                    <img src="http://127.0.0.1:8000/${imagePath}" class="img-fluid dropdown_img" alt="${
+                                response.nextItem.product.name
+                            }" />
                                     <div class="text-start">
                                         <p class="text-start px-1 text-wrap m-0 p-0" style="font-size: 12px; white-space: normal;">
                                             ${productName}
                                         </p>
                                         <p class="px-1 text_size" style="color: #ff0060">
-                                            ₹${parseFloat(response.nextItem.discount).toFixed(0)}
+                                            ₹${parseFloat(
+                                                response.nextItem.discount
+                                            ).toFixed(0)}
                                         </p>
                                     </div>
                                 </div>
@@ -2723,6 +2768,12 @@ $(document).ready(function () {
         e.preventDefault();
         const productId = $(this).data("product-id");
         let cartnumber = localStorage.getItem("cartnumber") || null;
+
+        $(document).on("click", ".servicePriceBtn", function () {
+            const itemId = $(this).data("id");
+            fetchServicePrice(itemId);
+        });
+
         $.ajax({
             url: "/saveforlater/toCart",
             type: "POST",
@@ -2736,11 +2787,11 @@ $(document).ready(function () {
                     if (response.cartItemCount > 0) {
                         cartCountElement.text(response.cartItemCount);
                         cartCountElement.css({
-                            "display": "inline",
-                            "position": "absolute",
-                            "top": "16px",
-                            "right": "5px",
-                            "border": "1px solid #ff0060"
+                            display: "inline",
+                            position: "absolute",
+                            top: "16px",
+                            right: "5px",
+                            border: "1px solid #ff0060",
                         });
                     } else {
                         cartCountElement.attr(
@@ -2790,18 +2841,24 @@ $(document).ready(function () {
                     function updateCartDrop(item) {
                         $(".cartEmpty").hide();
 
-                        const imagePath = (item.product.product_media.length > 0)
-                            ? item.product.product_media.find(
-                                (media) => media.order === 1 && media.type === "image"
-                            )?.resize_path
-                            : "assets/images/home/noImage.webp";
+                        const imagePath =
+                            item.product.product_media.length > 0
+                                ? item.product.product_media.find(
+                                      (media) =>
+                                          media.order === 1 &&
+                                          media.type === "image"
+                                  )?.resize_path
+                                : "assets/images/home/noImage.webp";
 
-                        const productName = item.product.name.length > 20
-                            ? item.product.name.substring(0, 20) + "..."
-                            : item.product.name;
+                        const productName =
+                            item.product.name.length > 20
+                                ? item.product.name.substring(0, 20) + "..."
+                                : item.product.name;
 
                         // Ensure discount is always a number
-                        const formattedDiscount = parseFloat(item.discount).toFixed(0);
+                        const formattedDiscount = parseFloat(
+                            item.discount
+                        ).toFixed(0);
 
                         const newCart = `
                             <div class="d-flex cart-item-drop" data-product-id="${item.product.id}">
@@ -2819,7 +2876,9 @@ $(document).ready(function () {
 
                         $(".cart_items").prepend(newCart);
 
-                        let cartItemCount = $(".cart_items .cart-item-drop").length;
+                        let cartItemCount = $(
+                            ".cart_items .cart-item-drop"
+                        ).length;
 
                         if (cartItemCount > 6) {
                             $(".cart_items .cart-item-drop").last().remove();
@@ -2881,12 +2940,12 @@ $(document).ready(function () {
                     );
 
                     const stockStatus =
-                    response.item.product.shop &&
-                    response.item.product.shop.is_direct === 1
-                        ? response.item.product.stock === 0
-                            ? `<span class="product-out-of-stock">Out of Stock</span>`
-                            : `<span class="product-stock-badge">In Stock</span>`
-                        : "";
+                        response.item.product.shop &&
+                        response.item.product.shop.is_direct === 1
+                            ? response.item.product.stock === 0
+                                ? `<span class="product-out-of-stock">Out of Stock</span>`
+                                : `<span class="product-stock-badge">In Stock</span>`
+                            : "";
 
                     const cartItemHtml = `
                             <div class="cart-item" data-product-id="${
@@ -2962,17 +3021,17 @@ $(document).ready(function () {
                       new Date(response.item.product.end_date) > new Date()
                         ? `
                        <button type="button" style="height: fit-content;" id="servicePrice"
-                      data-id=""
-                      class="p-1 text-nowrap special-price">
-                      <span>&nbsp;<i class="fa-solid fa-stopwatch-20"></i>&nbsp;
-                      &nbsp;Special Price
-                      &nbsp; &nbsp;
-                     </span>
-                     </button>`
+                            data-id="${response.item.product.id}"
+                            class="p-1 text-nowrap special-price servicePriceBtn">
+                            <span>&nbsp;<i class="fa-solid fa-stopwatch-20"></i>&nbsp;
+                            &nbsp;Special Price
+                            &nbsp; &nbsp;
+                            </span>
+                            </button>`
                         : ""
                     : ""
             }
-            `
+                `
             }
         </div>
     </div>
@@ -3052,21 +3111,29 @@ $(document).ready(function () {
                             const cartId = $(this).data("cart-id");
                             const productId = $(this).data("product-id");
                             const quantityInput = $(this)
-                                .closest(".cart-item")
+                                .closest(".d-flex")
                                 .find(".quantity-input");
                             let quantity = parseInt(quantityInput.val());
 
-                            if (
-                                $(this).hasClass("decrease-btn1") &&
-                                quantity > 1
-                            ) {
-                                quantity -= 1;
-                            } else if (
-                                $(this).hasClass("increase-btn1") &&
-                                quantity < 10
-                            ) {
-                                quantity += 1;
+                            // Fetch stock from the element (Ensure you have data-stock set in HTML)
+                            const stock = parseInt($(this).data("stock"));
+
+                            if ($(this).hasClass("decrease-btn")) {
+                                if (quantity > 1) {
+                                    quantity -= 1;
+                                } else {
+                                    toastr.error("Minimum quantity is 1");
+                                    return;
+                                }
+                            } else if ($(this).hasClass("increase-btn")) {
+                                if (quantity < stock) {
+                                    quantity += 1;
+                                } else {
+                                    toastr.error("Stock limit reached");
+                                    return;
+                                }
                             }
+
                             quantityInput.val(quantity);
                             updateCart(cartId, productId, quantity);
                         }
@@ -3457,21 +3524,17 @@ function checkAddressAndOpenModal() {
         .catch((error) => console.error("Error fetching address:", error));
 }
 
-$("#servicePrice").click(function (event) {
-    event.preventDefault();
-
-    let productId = $(this).data("id");
-
+function fetchServicePrice(productId) {
     if (!productId) {
         console.error("Product ID is missing!");
         return;
     }
+
     $.ajax({
         url: `http://127.0.0.1:8000/service/price/${productId}`,
         type: "GET",
         contentType: "application/json",
         success: function (response) {
-            console.log("Response :",response)
             if (response.product) {
                 let product = response.product;
 
@@ -3496,6 +3559,13 @@ $("#servicePrice").click(function (event) {
     });
 
     $(".servicePriceModal").modal("show");
+}
+
+// Attach event listener
+$(document).on("click", "#servicePrice", function (event) {
+    event.preventDefault();
+    let productId = $(this).data("id");
+    fetchServicePrice(productId);
 });
 
 $("#totalStock").click(function (event) {
@@ -3536,40 +3606,47 @@ $("#totalStock").click(function (event) {
 });
 
 $(document).ready(function () {
-    $('.productCard').on('click', function () {
-        var bookmarknumber = localStorage.getItem('bookmarknumber');
-        var productId = $(this).data('product-id');
+    $(".productCard").on("click", function () {
+        var bookmarknumber = localStorage.getItem("bookmarknumber");
+        var productId = $(this).data("product-id");
         window.location.href = "/deal/" + productId + "?dmbk=" + bookmarknumber;
     });
 
-    $('.category-link').on('click', function () {
-        var bookmarknumber = localStorage.getItem('bookmarknumber');
-        var categoryUrl = $(this).data('category-url');
-        var separator = categoryUrl.includes('?') ? '&' : '?';
-        window.location.href = categoryUrl + separator + "dmbk=" + bookmarknumber;
+    $(".category-link").on("click", function () {
+        var bookmarknumber = localStorage.getItem("bookmarknumber");
+        var categoryUrl = $(this).data("category-url");
+        var separator = categoryUrl.includes("?") ? "&" : "?";
+        window.location.href =
+            categoryUrl + separator + "dmbk=" + bookmarknumber;
     });
 
-    $('.hotpick').on('click', function () {
-        var bookmarknumber = localStorage.getItem('bookmarknumber');
-        var hotpickUrl = $(this).data('hotpick-url');
+    $(".hotpick").on("click", function () {
+        var bookmarknumber = localStorage.getItem("bookmarknumber");
+        var hotpickUrl = $(this).data("hotpick-url");
         window.location.href = hotpickUrl + "?dmbk=" + bookmarknumber;
     });
 
-    $('.search-dmbk').on('keypress', function (event) {
-        var bookmarknumber = localStorage.getItem('bookmarknumber');
+    $(".search-dmbk").on("keypress", function (event) {
+        var bookmarknumber = localStorage.getItem("bookmarknumber");
         if (event.which === 13) {
             event.preventDefault();
 
-            var form = $(this).closest('form');
-            var searchUrl = form.attr('action');
+            var form = $(this).closest("form");
+            var searchUrl = form.attr("action");
             var query = $(this).val();
-            var separator = searchUrl.includes('?') ? '&' : '?';
-            var newAction = searchUrl + separator + "q=" + encodeURIComponent(query) + "&dmbk=" + bookmarknumber;
+            var separator = searchUrl.includes("?") ? "&" : "?";
+            var newAction =
+                searchUrl +
+                separator +
+                "q=" +
+                encodeURIComponent(query) +
+                "&dmbk=" +
+                bookmarknumber;
 
             window.location.href = newAction;
         }
     });
 
-    var bookmarknumber = localStorage.getItem('bookmarknumber');
-    $('#dmbkInput').val(bookmarknumber).attr('value', bookmarknumber);
+    var bookmarknumber = localStorage.getItem("bookmarknumber");
+    $("#dmbkInput").val(bookmarknumber).attr("value", bookmarknumber);
 });

@@ -569,6 +569,9 @@ class CartController extends Controller
                 if (isset($item->product->stock) && $item->product->stock == 0) {
                     return redirect()->route('cart.index')->with('error', "Product '{$item->product->name}' is not available in stock.");
                 }
+                if (isset($item->product->stock) && $item->quantity > $item->product->stock) {
+                    return redirect()->route('cart.index')->with('error', "Product '{$item->product->name}' has only {$item->product->stock} units in stock, but you requested {$item->quantity}.");
+                }
             }
             //  dd($item->product->shop);
 
