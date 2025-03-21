@@ -15,7 +15,7 @@ class ApprovalController extends Controller
 {
     use ApiResponses;
 
-    public function approveProduct($id)
+    public function approveProduct($id, Request $request)
     {
         $UpdatableProduct = Product::where('id',$id)->update(['active' => '1']);
         $product = Product::where('id',$id)->first();

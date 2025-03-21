@@ -559,26 +559,6 @@
                                 </div>
                             </div>
                         @endif
-                        @if (request()->routeIs('deals.subcategorybased'))
-                            <div class="container mb-3 topbarContainer">
-                                <div class="scroll-container">
-                                    <div class="d-flex overflow-auto topBar" style="width: 100%; white-space: nowrap;">
-                                        <a data-category-url="{{ url('categories/all?category_group_id=' . $categorygroup->id) }}"
-                                            class="btn me-2 category-link {{ request('slug') === 'all' && request('category_group_id') == $categorygroup->id ? 'active' : '' }}">
-                                            All
-                                        </a>
-                                        @foreach ($categorygroup->categories as $cat)
-                                            <a data-category-url="{{ url('categories/' . $cat->slug) }}"
-                                                class="btn mx-2 category-link {{ request('slug') === $cat->slug && request('slug') !== 'all' ? 'active' : '' }}">
-                                                {{ $cat->name }}
-                                            </a>
-                                        @endforeach
-                                    </div>
-                                    <div class="custom-scrollbar">
-                                    </div>
-                                </div>
-                            </div>
-                        @endif
                         @if (request()->routeIs('deals.subcategorybased') && request('slug') !== 'all' && !empty($subCategories))
                             <div class="container topbarContainers">
                                 <div class="scroll-container">
